@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
     selector: 'app-menu',
     template: `
         <div class="layout-menu-container" (click)="app.onMenuClick($event)">
-            <div class="overlay-menu-button">
+            <div class="overlay-menu-button" (click)="app.onMenuButtonClick($event)">
                 <div class="overlay-menu-button-bars">
                     <span></span>
                     <span></span>
@@ -18,13 +18,13 @@ import { AppComponent } from './app.component';
                     <span></span>
                 </div>
             </div>
-            <div class="layout-menu-wrapper">
+            <div class="layout-menu-wrapper fadeInDown">
                 <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"></ul>
             </div>
         </div>
     `
 })
-export class AppMenuComponent implements OnInit, AfterViewInit {
+export class AppMenuComponent implements OnInit {
 
     @Input() reset: boolean;
 
@@ -116,10 +116,6 @@ export class AppMenuComponent implements OnInit, AfterViewInit {
                 label: 'Buy Now', icon: 'pi pi-fw pi-money-bill', url: ['https://www.primefaces.org/store']
             }
         ];
-    }
-
-    ngAfterViewInit() {
-       // setTimeout(() => { this.app.layoutMenuScrollerViewChild.moveBar(); }, 100);
     }
 }
 
@@ -221,6 +217,7 @@ export class AppSubMenuComponent {
             }
 
             this.app.overlayMenuActive = false;
+            this.app.overlayMenuMobileActive = false;
             this.app.menuHoverActive = !this.app.menuHoverActive;
         }
     }
