@@ -1,0 +1,177 @@
+import {Component, AfterViewInit, ElementRef, Renderer2, ViewChild, OnDestroy} from '@angular/core';
+import {ScrollPanel} from 'primeng/primeng';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html'
+})
+export class AppComponent implements AfterViewInit {
+    
+    layout = 'layout-canvas';
+    
+    layoutMode = 'horizontal';
+    
+    configDialogActive = false;
+    
+    theme = 'deepblue';
+    
+    scheme = 'light';
+    
+    topbarItemClick: boolean;
+    
+    activeTopbarItem: any;
+    
+    resetMenu: boolean;
+    
+    menuHoverActive: boolean;
+    
+    topbarMenuActive: boolean;
+    
+    overlayMenuActive: boolean;
+    
+    menuClick: boolean;
+    
+    
+    
+    
+    
+    
+    
+    
+    rotateMenuButton: boolean;
+    
+    overlayMenuMobileActive: boolean;
+    
+    layoutMenuScroller: HTMLDivElement;
+    @ViewChild('layoutMenuScroller', { static: true }) layoutMenuScrollerViewChild: ScrollPanel;
+    
+    constructor(public renderer: Renderer2) {}
+    
+    ngAfterViewInit() {
+        // setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 100);
+    }
+    
+    onLayoutClick() {
+        if (!this.topbarItemClick) {
+            this.activeTopbarItem = null;
+            this.topbarMenuActive = false;
+        }
+        
+        if (!this.menuClick) {
+            if (this.isHorizontal()) {
+                this.resetMenu = true;
+            }
+            
+            if (this.overlayMenuActive || this.overlayMenuMobileActive) {
+                this.hideOverlayMenu();
+            }
+            
+            this.menuHoverActive = false;
+        }
+        
+        this.topbarItemClick = false;
+        this.menuClick = false;
+    }
+    
+    onTopbarItemClick(event, item) {
+        this.topbarItemClick = true;
+        
+        if (this.activeTopbarItem === item) {
+            this.activeTopbarItem = null; } else {
+            this.activeTopbarItem = item; }
+        
+        event.preventDefault();
+    }
+    
+    onTopbarSubItemClick(event) {
+        event.preventDefault();
+    }
+    
+    changeComponentTheme(event, theme, scheme) {
+        this.theme = theme;
+        this.scheme = scheme;
+        const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
+        themeLink.href = 'assets/theme/' + theme + '/theme-' + scheme + '.css';
+        
+        event.preventDefault();
+    }
+    
+    changeLayoutTheme(event, color) {
+        this.layout = color;
+        const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
+        layoutLink.href = 'assets/layout/css/' + color + '.css';
+        
+        event.preventDefault();
+    }
+    
+    changeLayoutMode(event, mode) {
+        this.layoutMode = mode;
+        event.preventDefault();
+    }
+    
+    
+    
+    
+    
+    onMenuButtonClick(event) {
+        this.menuClick = true;
+        this.rotateMenuButton = !this.rotateMenuButton;
+        this.topbarMenuActive = false;
+        
+        if (this.layoutMode === 'overlay' && !this.isMobile()) {
+            this.overlayMenuActive = !this.overlayMenuActive;
+        } else {
+            if (!this.isDesktop()) {
+                this.overlayMenuMobileActive = !this.overlayMenuMobileActive;
+            }
+        }
+        
+        event.preventDefault();
+    }
+    
+    onMenuClick($event) {
+        this.menuClick = true;
+        this.resetMenu = false;
+        
+        if (!this.isHorizontal()) {
+            setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 450);
+        }
+    }
+    
+    onTopbarMenuButtonClick(event) {
+        this.topbarItemClick = true;
+        this.topbarMenuActive = !this.topbarMenuActive;
+        
+        this.hideOverlayMenu();
+        
+        event.preventDefault();
+    }
+    
+    hideOverlayMenu() {
+        this.rotateMenuButton = false;
+        this.overlayMenuActive = false;
+        this.overlayMenuMobileActive = false;
+    }
+    
+    isTablet() {
+        const width = window.innerWidth;
+        return width <= 1024 && width > 640;
+    }
+    
+    isDesktop() {
+        return window.innerWidth > 1024;
+    }
+    
+    isMobile() {
+        return window.innerWidth <= 640;
+    }
+    
+    isOverlay() {
+        return this.layoutMode === 'overlay';
+    }
+    
+    isHorizontal() {
+        return this.layoutMode === 'horizontal';
+    }
+    
+}
