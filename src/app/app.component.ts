@@ -91,10 +91,12 @@ export class AppComponent {
         event.preventDefault();
     }
 
-    changeLayoutTheme(event, color) {
+    changeLayoutTheme(event, color, theme, scheme) {
         this.layout = color;
         const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
         layoutLink.href = 'assets/layout/css/' + color + '.css';
+
+        this.changeComponentTheme(event, theme, scheme );
 
         event.preventDefault();
     }

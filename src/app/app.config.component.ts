@@ -32,7 +32,7 @@ import {AppComponent} from './app.component';
                         <div class="p-grid">
                             <div class="p-col p-xl-2" *ngFor="let layoutTheme of layoutThemes">
                                 <a href="#" class="layout-config-option layout-config-option-image ui-shadow-1"
-                                   (click)="app.changeLayoutTheme($event,layoutTheme.file)">
+                                   (click)="app.changeLayoutTheme($event,layoutTheme.file, layoutTheme.componentTheme, layoutTheme.scheme)">
                                     <img src="assets/layout/images/configurator/layout/{{layoutTheme.image}}"
                                          alt="{{layoutTheme.name}}"/>
                                     <i class="pi pi-check" *ngIf="layoutTheme.file === app.layout"></i>
@@ -138,36 +138,36 @@ export class AppConfigComponent implements OnInit {
         ];
 
         this.layoutThemes = [
-            {name: 'Aloe', file: 'layout-aloe', image: 'aloe.png', componentTheme: 'turquoise-accent'},
-            {name: 'Aqua', file: 'layout-aqua', image: 'aqua.png', componentTheme: 'cyan-dark'},
-            {name: 'Bangkok', file: 'layout-bangkok', image: 'bangkok.png', componentTheme: 'turquoise-accent'},
-            {name: 'Canvas', file: 'layout-canvas', image: 'canvas.png', componentTheme: 'deepblue-light'},
-            {name: 'Cross', file: 'layout-cross', image: 'cross.png', componentTheme: 'purple-dark'},
-            {name: 'Dream', file: 'layout-dream', image: 'dream.png', componentTheme: 'teal-light'},
-            {name: 'Emerald', file: 'layout-emerald', image: 'emerald.png', componentTheme: 'teal-light'},
-            {name: 'Focus', file: 'layout-focus', image: 'focus.png', componentTheme: 'turquoise-dark'},
-            {name: 'Forest', file: 'layout-forest', image: 'forest.png', componentTheme: 'turquoise-light'},
-            {name: 'Fractal', file: 'layout-fractal', image: 'fractal.png', componentTheme: 'teal-dark'},
-            {name: 'Gem', file: 'layout-gem', image: 'gem.png', componentTheme: 'amber-accent'},
-            {name: 'Green', file: 'layout-green', image: 'green.png', componentTheme: 'green-light'},
-            {name: 'Indigo', file: 'layout-indigo', image: 'indigo.png', componentTheme: 'indigo-light'},
-            {name: 'Joshua', file: 'layout-joshua', image: 'joshua.png', componentTheme: 'pink-dark'},
-            {name: 'Laser', file: 'layout-laser', image: 'laser.png', componentTheme: 'indigo-light'},
-            {name: 'Lime', file: 'layout-lime', image: 'lime.png', componentTheme: 'lime-dark'},
-            {name: 'Maze', file: 'layout-maze', image: 'maze.png', componentTheme: 'deeporange-dark'},
-            {name: 'Metro', file: 'layout-metro', image: 'metro.png', componentTheme: 'gray-light'},
-            {name: 'Milan', file: 'layout-milan', image: 'milan.png', componentTheme: 'gray-dark'},
-            {name: 'Night', file: 'layout-night', image: 'night.png', componentTheme: 'bluegray-light'},
-            {name: 'Osterreich', file: 'layout-osterreich', image: 'osterreich.png', componentTheme: 'cyan-light'},
-            {name: 'Palm', file: 'layout-palm', image: 'palm.png', componentTheme: 'teal-dark'},
-            {name: 'Deep Purple', file: 'layout-deeppurple', image: 'deeppurple.png', componentTheme: 'deeppurple-light'},
-            {name: 'Petroleum', file: 'layout-petroleum', image: 'petroleum.png', componentTheme: 'gray-accent'},
-            {name: 'Rose', file: 'layout-rose', image: 'rose.png', componentTheme: 'pink-light'},
-            {name: 'Sand', file: 'layout-sand', image: 'sand.png', componentTheme: 'brown-dark'},
-            {name: 'Steel', file: 'layout-steel', image: 'steel.png', componentTheme: 'blue-light'},
-            {name: 'Summer', file: 'layout-summer', image: 'summer.png', componentTheme: 'teal-accent'},
-            {name: 'Turquoise', file: 'layout-turquoise', image: 'turquoise.png', componentTheme: 'turquoise-accent'},
-            {name: 'Urban', file: 'layout-urban', image: 'urban.png', componentTheme: 'deepblue-accent'},
+            {name: 'Aloe', file: 'layout-aloe', image: 'aloe.png', componentTheme: 'turquoise', scheme: 'accent'},
+            {name: 'Aqua', file: 'layout-aqua', image: 'aqua.png', componentTheme: 'cyan', scheme: 'dark'},
+            {name: 'Bangkok', file: 'layout-bangkok', image: 'bangkok.png', componentTheme: 'turquoise', scheme: 'accent'},
+            {name: 'Canvas', file: 'layout-canvas', image: 'canvas.png', componentTheme: 'deepblue', scheme: 'light'},
+            {name: 'Cross', file: 'layout-cross', image: 'cross.png', componentTheme: 'purple', scheme: 'dark'},
+            {name: 'Dream', file: 'layout-dream', image: 'dream.png', componentTheme: 'teal', scheme: 'light'},
+            {name: 'Emerald', file: 'layout-emerald', image: 'emerald.png', componentTheme: 'teal', scheme: 'light'},
+            {name: 'Focus', file: 'layout-focus', image: 'focus.png', componentTheme: 'turquoise', scheme: 'dark'},
+            {name: 'Forest', file: 'layout-forest', image: 'forest.png', componentTheme: 'turquoise', scheme: 'light'},
+            {name: 'Fractal', file: 'layout-fractal', image: 'fractal.png', componentTheme: 'teal', scheme: 'dark'},
+            {name: 'Gem', file: 'layout-gem', image: 'gem.png', componentTheme: 'amber', scheme: 'accent'},
+            {name: 'Green', file: 'layout-green', image: 'green.png', componentTheme: 'green', scheme: 'light'},
+            {name: 'Indigo', file: 'layout-indigo', image: 'indigo.png', componentTheme: 'indigo', scheme: 'light'},
+            {name: 'Joshua', file: 'layout-joshua', image: 'joshua.png', componentTheme: 'pink', scheme: 'dark'},
+            {name: 'Laser', file: 'layout-laser', image: 'laser.png', componentTheme: 'indigo', scheme: 'light'},
+            {name: 'Lime', file: 'layout-lime', image: 'lime.png', componentTheme: 'lime', scheme: 'dark'},
+            {name: 'Maze', file: 'layout-maze', image: 'maze.png', componentTheme: 'deeporange', scheme: 'dark'},
+            {name: 'Metro', file: 'layout-metro', image: 'metro.png', componentTheme: 'gray', scheme: 'light'},
+            {name: 'Milan', file: 'layout-milan', image: 'milan.png', componentTheme: 'gray', scheme: 'dark'},
+            {name: 'Night', file: 'layout-night', image: 'night.png', componentTheme: 'bluegray', scheme: 'light'},
+            {name: 'Osterreich', file: 'layout-osterreich', image: 'osterreich.png', componentTheme: 'cyan', scheme: 'light'},
+            {name: 'Palm', file: 'layout-palm', image: 'palm.png', componentTheme: 'teal', scheme: 'dark'},
+            {name: 'Deep Purple', file: 'layout-deeppurple', image: 'deeppurple.png', componentTheme: 'deeppurple', scheme: 'light'},
+            {name: 'Petroleum', file: 'layout-petroleum', image: 'petroleum.png', componentTheme: 'gray', scheme: 'accent'},
+            {name: 'Rose', file: 'layout-rose', image: 'rose.png', componentTheme: 'pink', scheme: 'light'},
+            {name: 'Sand', file: 'layout-sand', image: 'sand.png', componentTheme: 'brown', scheme: 'dark'},
+            {name: 'Steel', file: 'layout-steel', image: 'steel.png', componentTheme: 'blue', scheme: 'light'},
+            {name: 'Summer', file: 'layout-summer', image: 'summer.png', componentTheme: 'teal', scheme: 'accent'},
+            {name: 'Turquoise', file: 'layout-turquoise', image: 'turquoise.png', componentTheme: 'turquoise', scheme: 'accent'},
+            {name: 'Urban', file: 'layout-urban', image: 'urban.png', componentTheme: 'deepblue', scheme: 'accent'},
         ];
     }
 
