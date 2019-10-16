@@ -127,7 +127,9 @@ export class AppMenuComponent implements OnInit {
     /* tslint:enable:component-selector */
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
-            <li [ngClass]="{'active-rootmenuitem': isActive(i), 'active-menuitem': routeItems && child.label === routeItems[0].label}"
+            <li [ngClass]="{'active-rootmenuitem': isActive(i) && app.isHorizontal(),
+            'active-menuitem': ((routeItems && child.label === routeItems[0].label && app.isHorizontal())
+            || (isActive(i) && !app.isHorizontal()))}"
                 [class]="child.badgeStyleClass" *ngIf="child.visible === false ? false : true">
                 <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" (mouseenter)="onMouseEnter(i)"
                    *ngIf="!child.routerLink" [ngClass]="child.styleClass"
