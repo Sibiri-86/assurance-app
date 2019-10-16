@@ -9,8 +9,7 @@ import {AppComponent} from './app.component';
             <i class="pi pi-cog"></i>
         </a>
         <div id="layout-config" class="layout-config" [ngClass]="{'layout-config-exit-done': !app.configDialogActive,
-        'layout-config-enter-done': app.configDialogActive}"
-             [@children]="app.configDialogActive ? 'visibleAnimated' : 'hiddenAnimated'">
+        'layout-config-enter-done': app.configDialogActive}" [@children]="app.configDialogActive ? 'visibleAnimated' : 'hiddenAnimated'">
             <div class="layout-config-content">
                 <a href="#" class="layout-config-close" (click)="onConfigCloseClick($event)">
                     <i class="pi pi-times"></i>
