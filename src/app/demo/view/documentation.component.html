@@ -6,20 +6,20 @@
             <p>Angular 8 and PrimeNG 8</p>
 
             <h1>Dependencies</h1>
-            <p>Babylon has no direct dependency other than PrimeNG. More information about dependencies is available at <a href="https://www.primefaces.org/why-primeng-templates/">Why PrimeNG Templates</a> article.</p>
+            <p>Prestige has no direct dependency other than PrimeNG. More information about dependencies is available at <a href="https://www.primefaces.org/why-primeng-templates/">Why PrimeNG Templates</a> article.</p>
 
             <h1>Getting Started</h1>
-            <p>Babylon is a true native application template for Angular and is distributed as a CLI project. In case CLI is not installed already, use
+            <p>Prestige is a true native application template for Angular and is distributed as a CLI project. In case CLI is not installed already, use
                 the command below to set it up.</p>
 
 <pre class="doc-command">
 npm install -g @angular/cli
 </pre>
 
-            <p>Once CLI is ready in your system, extract the contents of the Babylon zip file distribution, cd to the directory,
+            <p>Once CLI is ready in your system, extract the contents of the Prestige zip file distribution, cd to the directory,
             install the libraries from npm and then execute "ng serve" to run the application in your local environment.</p>
 <pre class="doc-command">
-cd babylon
+cd prestige
 npm install
 ng serve
 </pre>
@@ -43,7 +43,7 @@ Run 'ng help' for more options.
 </pre>
 
             <h1>Structure</h1>
-            <p>Babylon consists of 3 main parts; the application layout, layout resources and theme resources for PrimeNG components. <i>app.component.html</i> inside app folder is the html template for the base layout,
+            <p>Prestige consists of 3 main parts; the application layout, layout resources and theme resources for PrimeNG components. <i>app.component.html</i> inside app folder is the html template for the base layout,
                 required resources for the layout are placed inside the <i>src/assets/layout</i> folder and similarly theme resources are inside <i>src/assets/theme</i> folder.
             </p>
 
@@ -54,46 +54,27 @@ Run 'ng help' for more options.
 <pre>
 <code class="language-markup" pCode>
 &lt;div class="layout-wrapper" (click)="onLayoutClick()"
-    [ngClass]="&#123;'layout-static': isStatic(),
-                'layout-overlay': isOverlay(),
-                'layout-overlay-active': overlayMenuActive,
-                'layout-horizontal': isHorizontal(),
-                'layout-slim': isSlim(),
-                'layout-static-inactive': staticMenuDesktopInactive,
-                'layout-mobile-active': staticMenuMobileActive,
-                'layout-menu-dark':darkMenu,
-                'layout-menu-light':!darkMenu&#125;"&gt;
+    [ngClass]="&#123;'layout-menu-overlay': isOverlay(),
+               'layout-menu-overlay-active': overlayMenuActive,
+               'layout-menu-horizontal': isHorizontal(),
+               'layout-mobile-active': overlayMenuMobileActive&#125;" [class]="layout"&gt;
 
-    &lt;app-topbar&gt;&lt;/app-topbar&gt;
+   &lt;app-topbar&gt;&lt;/app-topbar&gt;
 
-    &lt;div class="layout-menu-container" (click)="onMenuClick($event)"&gt;
-        &lt;div class="layout-menu-logo"&gt;
-            &lt;a href="#"&gt;
-                &lt;img src="assets/layout/images/logo-white.png" library="babylon-layout" /&gt;
-            &lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class="layout-menu-wrapper"&gt;
-            &lt;p-scrollPanel #layoutMenuScroller [style]="&#123;height: '100%' &#125;"&gt;
-                &lt;div class="menu-scroll-content"&gt;
-                    &lt;app-inline-profile *ngIf="profileMode=='inline'&&!isHorizontal()"&gt;&lt;/app-inline-profile&gt;
-                    &lt;app-menu [reset]="resetMenu"&gt;&lt;/app-menu&gt;
-                &lt;/div&gt;
-            &lt;/p-scrollPanel&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+   &lt;app-menu [reset]="resetMenu"&gt;&lt;/app-menu&gt;
 
-    &lt;div class="layout-main"&gt;
-        &lt;app-breadcrumb&gt;&lt;/app-breadcrumb&gt;
+   &lt;app-actionbar&gt;&lt;/app-actionbar&gt;
 
-        &lt;div class="layout-content"&gt;
-            &lt;router-outlet&gt;&lt;/router-outlet&gt;
-        &lt;/div&gt;
+   &lt;div class="layout-content"&gt;
+       &lt;router-outlet&gt;&lt;/router-outlet&gt;
+   &lt;/div&gt;
 
-    &lt;/div&gt;
+   &lt;app-footer&gt;&lt;/app-footer&gt;
 
-    &lt;app-footer&gt;&lt;/app-footer&gt;
+   &lt;app-config&gt;&lt;/app-config&gt;
 
-    &lt;div class="layout-mask"&gt;&lt;/div&gt;
+   &lt;div class="layout-mask"&gt;&lt;/div&gt;
+
 &lt;/div&gt;
 </code>
 </pre>
@@ -102,360 +83,49 @@ Run 'ng help' for more options.
             <p>Menu is a separate component defined in app.menu.component.ts file based on PrimeNG MenuModel API. In order to define the menuitems,
             navigate to this file and define your own model as a nested structure. Here is the menu component from the sample application. The helper
             app-submenu component is also available in the same file.</p>
+
 <div style="height:400px;overflow: auto;">
 <pre>
 <code class="language-javascript" pCode>
-import &#123;Component, Input,&#125; from '@angular/core';
-import &#123;trigger, state, style, transition, animate&#125; from '@angular/animations';
-import &#123;MenuItem&#125; from 'primeng/api';
-import &#123;AppComponent&#125; from './app.component';
+import &#123;Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy&#125; from '@angular/core';
+import &#123; trigger, state, style, transition, animate &#125; from '@angular/animations';
+import &#123; MenuItem &#125; from 'primeng/api';
+import &#123; AppComponent &#125; from './app.component';
+import &#123;BreadcrumbService&#125; from './breadcrumb.service';
+import &#123;Subscription&#125; from 'rxjs';
 
 @Component(&#123;
     selector: 'app-menu',
     template: `
-        &lt;ul app-submenu [item]="app.grouped ? modelGrouped : modelUngrouped" root="true" class="layout-menu"
-            visible="true" [reset]="reset" parentActive="true"&gt;&lt;/ul&gt;
+        &lt;div class="layout-menu-container" (click)="app.onMenuClick($event)"&gt;
+            &lt;div class="overlay-menu-button" (click)="app.onMenuButtonClick($event)"&gt;
+                &lt;div class="overlay-menu-button-bars"&gt;
+                    &lt;span&gt;&lt;/span&gt;
+                    &lt;span&gt;&lt;/span&gt;
+                    &lt;span&gt;&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class="overlay-menu-button-times"&gt;
+                    &lt;span&gt;&lt;/span&gt;
+                    &lt;span&gt;&lt;/span&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="layout-menu-wrapper fadeInDown"&gt;
+                &lt;ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"&gt;&lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
     `
 &#125;)
-export class AppMenuComponent implements OnInit, AfterViewInit &#123;
+export class AppMenuComponent implements OnInit &#123;
 
     @Input() reset: boolean;
 
-    modelGrouped: any[];
-
-    modelUngrouped: any[];
+    model: any[];
 
     constructor(public app: AppComponent) &#123; &#125;
 
     ngOnInit() &#123;
-        this.modelGrouped = [
-            &#123; label: 'Home Page', icon: 'pi pi-fw pi-home',
-                items: [
-                    &#123;label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']&#125;
-                ]
-            &#125;,
-            &#123; label: 'Customization', icon: 'pi pi-fw pi-cog',
-                items: [
-                    &#123;
-                        label: 'Menu Layouts', icon: 'pi pi-fw pi-th-large', badge: 2,
-                        items: [
-                            &#123; label: 'Static', icon: 'pi pi-fw pi-bars', command: () => this.app.layoutMode = 'static' &#125;,
-                            &#123; label: 'Overlay', icon: 'pi pi-fw pi-bars', command: () => this.app.layoutMode = 'overlay' &#125;,
-                            &#123; label: 'Slim', icon: 'pi pi-fw pi-bars', command: () => this.app.layoutMode = 'slim' &#125;,
-                            &#123; label: 'Horizontal', icon: 'pi pi-fw pi-bars', command: () => this.app.layoutMode = 'horizontal' &#125;,
-                            &#123; label: 'Grouped Menu', icon: 'pi pi-fw pi-bars', command: () => this.app.grouped = true &#125;,
-                            &#123; label: 'Ungrouped Menu', icon: 'pi pi-fw pi-bars', command: () => this.app.grouped = false &#125;
-                        ]
-                    &#125;,
-                    &#123;
-                        label: 'Menu Colors', icon: 'pi pi-fw pi-list', badge: 2,
-                        items: [
-                            &#123; label: 'Light', icon: 'pi pi-fw pi-circle-off', command: () => this.app.darkMenu = false &#125;,
-                            &#123; label: 'Dark', icon: 'pi pi-fw pi-circle-on', command: () => this.app.darkMenu = true &#125;
-                        ]
-                    &#125;,
-                    &#123;label: 'User Profile', icon: 'pi pi-fw pi-user', badge: 2,
-                        items: [
-                            &#123;label: 'Popup Profile', icon: 'pi pi-fw pi-user',  command: () => this.app.profileMode = 'popup'&#125;,
-                            &#123;label: 'Inline Profile', icon: 'pi pi-fw pi-user',  command: () => this.app.profileMode = 'inline'&#125;
-                        ]
-                    &#125;,
-                    &#123;
-                        label: 'Themes', icon: 'pi pi-fw pi-pencil', badge: 17,
-                        items: [
-                            &#123;
-                                label: 'Blue', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('blue', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('blue', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('blue', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Blue Grey', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('bluegrey', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('bluegrey', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('bluegrey', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Light Blue', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightblue', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightblue', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightblue', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Indigo', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('indigo', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('indigo', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('indigo', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Pink', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('pink', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('pink', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('pink', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Green', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('green', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('green', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('green', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Light Green', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightgreen', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightgreen', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lightgreen', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Teal', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('teal', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('teal', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('teal', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Cyan', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('cyan', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('cyan', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('cyan', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Lime', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lime', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lime', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('lime', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Amber', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('amber', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('amber', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('amber', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Orange', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('orange', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('orange', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('orange', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Deep Orange', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeporange', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeporange', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeporange', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Yellow', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('yellow', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('yellow', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('yellow', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Purple', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('purple', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('purple', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('purple', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Deep Purple', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeppurple', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeppurple', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('deeppurple', 'dark')
-                                    &#125;
-                                ]
-                            &#125;,
-                            &#123;
-                                label: 'Brown', icon: 'pi pi-fw pi-pencil',
-                                items: [
-                                    &#123;
-                                        label: 'Accent', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('brown', 'accent')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Light', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('brown', 'light')
-                                    &#125;,
-                                    &#123;
-                                        label: 'Dark', icon: 'pi pi-fw pi-pencil',
-                                        command: () => this.changeTheme('brown', 'dark')
-                                    &#125;
-                                ]
-                            &#125;
-                        ]
-                    &#125;
-                ]
-            &#125;,
+        this.model = [
+            &#123;label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']&#125;,
             &#123;
                 label: 'Components', icon: 'pi pi-fw pi-star',
                 items: [
@@ -530,23 +200,11 @@ export class AppMenuComponent implements OnInit, AfterViewInit &#123;
                     &#125;
                 ]
             &#125;,
-            &#123; label: 'Get Started', icon: 'pi pi-fw pi-download',
-                items: [
-                    &#123;
-                        label: 'Documentation', icon: 'pi pi-fw pi-file', routerLink: ['/documentation']
-                    &#125;,
-                    &#123;
-                        label: 'Buy Now', icon: 'pi pi-fw pi-money-bill', url: ['https://www.primefaces.org/store']
-                    &#125;
-                ]
-            &#125;
-        ];
-
-        this.modelUngrouped = [
             &#123;
-                label: 'Main Menu', 
-                icon: 'pi pi-fw pi-home',
-                items: this.modelGrouped
+                label: 'Documentation', icon: 'pi pi-fw pi-file', routerLink: ['/documentation']
+            &#125;,
+            &#123;
+                label: 'Buy Now', icon: 'pi pi-fw pi-money-bill', url: ['https://www.primefaces.org/store']
             &#125;
         ];
     &#125;
@@ -556,10 +214,10 @@ export class AppMenuComponent implements OnInit, AfterViewInit &#123;
 </div>
 
             <h1>Integration with an Existing CLI Project</h1>
-            <p>To setup Babylon in an existing project, follow the steps below;</p>
+            <p>To setup Prestige in an existing project, follow the steps below;</p>
 
 <ul>
-    <li>Copy the <i>src/assets</i> folder to your projects folder with the same name</li>
+    <li>Copy the <i>src/assets</i> folder to your projects folder with the same name.</li>
     <li>Copy all app.* files and breadcrumb.service.ts to the src/app folder of your application.</li>
 </ul>
 
@@ -584,31 +242,63 @@ npm install primeicons@latest --save
             <p>Last part is adding theme and layout css files, in the CLI app they are defined using link tags in index.html so the demo can switch them on
             the fly by changing the path however if this is not a requirement, you may also add them to the styles configuration above so they go inside the bundle.</p>
 
-            <h1>Theme</h1>
+            
+            <h1>Component Themes</h1>
 
-            <p>Babylon provides 51 PrimeNG theme colors out of the box. Setup of a theme is simple by including the css of theme to your bundle that are located inside assets/theme folder such as assets/theme/pink/theme-light.css.
+            <p>Prestige provides 48 PrimeNG theme colors out of the box. Setup of a theme is simple by including the css of theme to your bundle that are located inside assets/theme folder such as assets/theme/pink/theme-light.css.
                     A theme color offers 3 alternatives, in "accent" mode a secondary color is used for highlighted elements
                     and headers are displayed with the primary color. In "light" and "dark" alternatives, highlighted elements use the primary color and header elements
                     are displayed as light or dark. Full list of available themes are;</p>
 
             <ul>
-                <li>amber</li>
-                <li>blue</li>
-                <li>bluegrey</li>
-                <li>brown</li>
-                <li>cyan</li>
-                <li>deeporange</li>
-                <li>deeppurple</li>
-                <li>green</li>
-                <li>indigo</li>
-                <li>lightblue</li>
-                <li>lightgreen</li>
-                <li>lime</li>
-                <li>orange</li>
-                <li>pink</li>
-                <li>purple</li>
-                <li>teal</li>
-                <li>yellow</li>
+                <li>amber-accent</li>
+                <li>amber-dark</li>
+                <li>amber-light</li>
+                <li>blue-accent</li>
+                <li>blue-dark</li>
+                <li>blue-light</li>
+                <li>bluegray-accent</li>
+                <li>bluegray-dark</li>
+                <li>bluegray-light</li>
+                <li>brown-accent</li>
+                <li>brown-dark</li>
+                <li>brown-light</li>
+                <li>cyan-accent</li>
+                <li>cyan-dark</li>
+                <li>cyan-light</li>
+                <li>deepblue-accent</li>
+                <li>deepblue-dark</li>
+                <li>deepblue-light</li>
+                <li>deeporange-accent</li>
+                <li>deeporange-dark</li>
+                <li>deeporange-light</li>
+                <li>deeppurple-accent</li>
+                <li>deeppurple-dark</li>
+                <li>deeppurple-light</li>
+                <li>gray-accent</li>
+                <li>gray-dark</li>
+                <li>gray-light</li>
+                <li>green-accent</li>
+                <li>green-dark</li>
+                <li>green-light</li>
+                <li>indigo-accent</li>
+                <li>indigo-dark</li>
+                <li>indigo-light</li>
+                <li>lime-accent</li>
+                <li>lime-dark</li>
+                <li>lime-light</li>
+                <li>pink-accent</li>
+                <li>pink-dark</li>
+                <li>pink-light</li>
+                <li>purple-accent</li>
+                <li>purple-dark</li>
+                <li>purple-light</li>
+                <li>teal-accent</li>
+                <li>teal-dark</li>
+                <li>teal-light</li>
+                <li>turquoise-accent</li>
+                <li>turquoise-dark</li>
+                <li>turquoise-light</li>
             </ul>
 
             <p>A custom theme can be developed by the following steps.</p>
@@ -625,43 +315,44 @@ npm install primeicons@latest --save
 <div style="height:400px;overflow: auto;">
 <pre>
 <code class="language-css" pCode>
-$primaryLighterColor:#BBDEFB;
-$primaryColor:#2196F3;
-$primaryDarkerColor:#1976D2;
-$primaryDarkestColor:#1565C0;
+$primaryLighterColor:#BCD6EF;
+$primaryColor:#4C78A4;
+$primaryDarkerColor:#2A537B;
+$primaryDarkestColor:#15314C;
 $primaryColorText:#ffffff;
 
-$accentColor:#FFC107;
-$accentDarkerColor:#FFA000;
-$accentColorText:#000000;
+$accentColor:$primaryColor;
+$accentDarkerColor:$primaryDarkerColor;
+$accentColorText:$primaryColorText;
 
-$containerHeaderBgColor:$primaryColor;
-$containerHeaderBorder:1px solid $primaryColor;
-$containerHeaderTextColor:$primaryColorText;
-$containerHeaderIconColor:$primaryLighterColor;
-$containerHeaderIconHoverColor:$primaryColorText;
+$containerHeaderBgColor:#eeeeee;
+$containerHeaderBorder:1px solid #e0e0e0;
+$containerHeaderTextColor:#212121;
+$containerHeaderIconColor:#757575;
+$containerHeaderIconHoverColor:#212121;
 
-$clickableContainerHeaderBgColor:$primaryColor;
-$clickableContainerHeaderBorder:1px solid $primaryColor;
-$clickableContainerHeaderTextColor:$primaryColorText;
-$clickableContainerHeaderIconColor:$primaryColorText;
+$clickableContainerHeaderBgColor:#eeeeee;
+$clickableContainerHeaderBorder:1px solid #e0e0e0;
+$clickableContainerHeaderTextColor:#212121;
+$clickableContainerHeaderIconColor:#757575;
 
-$clickableContainerHeaderHoverBgColor:$primaryDarkerColor;
-$clickableContainerHeaderHoverBorder:1px solid $primaryDarkerColor;
-$clickableContainerHeaderHoverTextColor:$primaryColorText;
-$clickableContainerHeaderHoverIconColor:$primaryColorText;
+$clickableContainerHeaderHoverBgColor:#e0e0e0;
+$clickableContainerHeaderHoverBorder:1px solid #bdbdbd;
+$clickableContainerHeaderHoverTextColor:#212121;
+$clickableContainerHeaderHoverIconColor:#757575;
 
-$clickableContainerHeaderActiveBgColor:$accentColor;
-$clickableContainerHeaderActiveBorder:1px solid $accentColor;
-$clickableContainerHeaderActiveTextColor:$accentColorText;
-$clickableContainerHeaderActiveIconColor:$accentColorText;
+$clickableContainerHeaderActiveBgColor:$primaryColor;
+$clickableContainerHeaderActiveBorder:1px solid $primaryColor;
+$clickableContainerHeaderActiveTextColor:$primaryColorText;
+$clickableContainerHeaderActiveIconColor:$primaryColorText;
 
-$clickableContainerHeaderActiveHoverBgColor:$accentColor;
-$clickableContainerHeaderActiveHoverHoverBorder:1px solid $accentColor;
-$clickableContainerHeaderActiveHoverTextColor:$accentColorText;
-$clickableContainerHeaderActiveHoverIconColor:$accentColorText;
+$clickableContainerHeaderActiveHoverBgColor:$primaryDarkerColor;
+$clickableContainerHeaderActiveHoverHoverBorder:1px solid $primaryDarkerColor;
+$clickableContainerHeaderActiveHoverTextColor:$primaryColorText;
+$clickableContainerHeaderActiveHoverIconColor:$primaryColorText;
 
-@import '../../sass/theme/_theme';
+@import '../../sass/theme/_variables';
+@import '../../sass/theme_core/_core';
 </code>
 </pre>
 </div>
@@ -678,7 +369,43 @@ sass src/assets/theme/mytheme/theme.scss src/assets/theme/mytheme/theme.css
 sass --watch src/:src/ --no-source-map
 </pre>
 
-            <p>Same can also be applied to layout itself;</p>
+            <h1>Layout Themes</h1>
+            <p>Prestige offers 30 built-in theme alternatives for the layout which is enabled by including the layout-*.css file to the project such as <i>layout-canvas.css.</i></p>
+
+            <ul>
+                <li>aloe</li>
+                <li>aqua</li>
+                <li>bangkok</li>
+                <li>canvas</li>
+                <li>cross</li>
+                <li>deeppurple</li>
+                <li>dream</li>
+                <li>emerald</li>
+                <li>focus</li>
+                <li>forest</li>
+                <li>fractal</li>
+                <li>gem</li>
+                <li>green</li>
+                <li>indigo</li>
+                <li>joshua</li>
+                <li>laser</li>
+                <li>lime</li>
+                <li>maze</li>
+                <li>metro</li>
+                <li>milan</li>
+                <li>night</li>
+                <li>osterreich</li>
+                <li>palm</li>
+                <li>petroleum</li>
+                <li>rose</li>
+                <li>sand</li>
+                <li>steel</li>
+                <li>summer</li>
+                <li>turquoise</li>
+                <li>urban</li>
+            </ul>
+
+            <p>Creating a custom layout theme is similar to creating a custom PrimeNG Component Theme.</p>
             <ul>
                 <li>Choose a layout name such as layout-myown.</li>
                 <li>Create an empty file named layout-myown.scss inside <i>assets/layout/css</i> folder.</li>
@@ -687,78 +414,189 @@ sass --watch src/:src/ --no-source-map
                 <li>Serve the css by importing it using a link tag or a bundler.</li>
             </ul>
 
-            <p>Here are the variables required to create a layout.</p>
+            <p>Here are the variables required to create a layout that uses gradients for the background.</p>
 <pre>
 <code class="language-css" pCode>
-$logoBgColor:#42A5F5;
-$topbarBgColor:#2196F3;
-$topbarIconColor:#ffffff;
-$topbarIconHoverBgColor:#64b5f6;
-$lightMenuitemActiveTextColor:#2196F3;
-$darkMenuitemActiveTextColor:#2196F3;
-$horizontalMenuitemActiveBgColor:#2196F3;
-$horizontalMenuitemActiveTextColor:#ffffff;
-$badgeBgColor:#2196F3;
-$badgeTextColor:#ffffff;
+$primaryColor:#43cbff;
+$primaryHiglightColor:#39299d;
+$primaryTextColor:#3796bc;
+
+/* background */
+$backgroundLeftColor:#3796BC;
+$backgroundRightColor:#302677;
+
+/* horizontal menu */
+$horizontalMenuItemBgColor: rgba(255,255,255,0.2);
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
+$horizontalMenuItemHoverTextColor: #ffffff;
+
+/* topbar */
+$topbarItemBgColor:rgba(255,255,255,0.2);
+$topbarItemHoverBgColor:rgba(255,255,255,0.4);
+$topbarItemIconColor:rgba(255,255,255,0.72);
+$topbarItemTextColor:rgba(255,255,255,0.72);
+$topbarChildItemHoverColor:#FFD312;
+$topbarSearchInputTextColor:#dddee1;
+$topbarSearchPlaceholderTextColor:#dddee1;
+
+/* user profile */
+$userProfileTextColor:#f0f0f0;
+
+/* overlay menu */
+$overlayMenuItemHoverBgColor:#A8E6FF;
+$overlayMenuItemActiveTextColor:#3796BC;
+
+/* overlay menu button */
+$overlayMenuButtonColor:#277695;
+$overlayMenuButtonHoverBgColor:#A8E6FF;
+
+/* mobile menu button */
+$mobileMenuIconColor:#ffffff;
+
+/* actionbar */
+$actionItemBgColor:#EEEDF3;
+$actionItemIconColor:#302677;
+$actionItemHoverBgColor:#C7C5D3;
+$actionItemActiveBgColor:#302677;
+$actionItemActiveIconColor:#ffffff;
+
+//footer
+$footerTextColor:rgba(255, 255, 255, 0.7);
+$footerTextHoverColor:#ffffff;
+
+/* spinner color */
+$spinnerColor:#3796BC;
 
 @import '../../sass/layout/_layout';
 </code>
 </pre>
 
-            <h1>Common SASS Variables</h1>
-            <p>In case you'd like to customize the shared variables, the _variables.scss files are where the options are defined for both layout and theme.</p>
+<p>If you prefer to use an image for the background, use the variables below. Notice the replacement of <i>$backgroundLeftColor</i> and <i>$backgroundRightColor</i> with <i>$backgroundImage</i>.</p>
+<pre>
+$primaryColor:#677A87;
+$primaryHiglightColor:#2D3940;
+$primaryTextColor:#677A87;
 
-<h3>sass/_variables.scss</h3>
+/* background */
+$backgroundImage:'metro.jpg';
+
+/* horizontal menu */
+$horizontalMenuItemBgColor: rgba(255,255,255,0.2);
+$horizontalMenuItemTextColor: rgba(255,255,255,0.9);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
+$horizontalMenuItemHoverTextColor: #ffffff;
+
+/* topbar */
+$topbarItemBgColor:rgba(255,255,255,0.2);
+$topbarItemHoverBgColor:rgba(255,255,255,0.4);
+$topbarItemIconColor:rgba(255,255,255,0.9);
+$topbarItemTextColor:rgba(255,255,255,0.9);
+$topbarChildItemHoverColor:#D8CF84;
+$topbarSearchInputTextColor:#f0f1f5;
+$topbarSearchPlaceholderTextColor:#f0f1f5;
+
+/* user profile */
+$userProfileTextColor:#f0f0f0;
+
+/* overlay menu */
+$overlayMenuItemHoverBgColor:#E4EDF4;
+$overlayMenuItemActiveTextColor:#677A87;
+
+/* overlay menu button */
+$overlayMenuButtonColor:#313842;
+$overlayMenuButtonHoverBgColor:#E4EDF4;
+
+/* mobile menu button */
+$mobileMenuIconColor:#ffffff;
+
+/* actionbar */
+$actionItemBgColor:#E4EDF4;
+$actionItemIconColor:#2D3940;
+$actionItemHoverBgColor:#CAE4F6;
+$actionItemActiveBgColor:#677A87;
+$actionItemActiveIconColor:#ffffff;
+
+//footer
+$footerTextColor:rgba(255, 255, 255, 0.67);
+$footerTextHoverColor:#ffffff;
+
+/* spinner color */
+$spinnerColor:#677A87;
+
+@import '../../sass/layout/_layout';
+</pre>
+
+            <h1>Common SASS Variables</h1>
+            <p>Layout and Theme have their own variables file that is shared between each layout and component themes respectively. In addition, the main variables file defines the common configuration.</p>
+
+            <h3>sass/_variables.scss</h3>
+<pre>
+<code class="language-css" pCode>
+$fontFamily:'Sarabun',sans-serif;
+$fontSize:14px;
+$textColor:#1b1c1e;
+$textSecondaryColor:#657587;
+$borderRadius:3px;
+$transitionDuration:.3s;    
+</code>
+</pre>
+
+            <h3>sass/layout/_variables.scss</h3>
 <pre>
 <code class="language-css" pCode>
 @import '../_variables';
 
-//main
-$bodyBgColor:#f2f2f2;
-$dividerColor:#E0E0E0;
+$bodyPadding:25px 50px;
+$mobileBodyPadding:5px 15px;
+$contentBgColor:#f2f2f2;
+$responsiveLayoutBreakpoint:991px;
+$maskBgColor:#24262e;
 
-$footerBgColor:#ffffff;
-$footerBorderColor:#e8e8e8;
+/* horizontal menu */
+$horizontalMenuItemActiveBgColor: #ffffff;
+$horizontalMenuItemActiveTextColor: #1b1c1e;
 
-//breadcrumb
-$breadcrumbBgColor:#ffffff;
-$breadcrumbBorder: 1px solid #e8e8e8;
+/* overlay menu */
+$overlayMenuBgColor:#ffffff;
+$overlayMenuShadow:0 2px 4px 0 rgba(0, 0, 0, 0.3);
+$overlayMenuItemTextColor:#313842;
+$overlayMenuItemBorderRadius:3px;
 
-//light menu
-$menuBgColor:#ffffff;
-$menuBorder: 1px solid #E0E0E0;
-$menuSeparator:1px solid $dividerColor;
-$rootMenuitemTextColor:$textSecondaryColor;
-$menuitemTextColor:$textSecondaryColor;
-$menuitemIconColor:$textSecondaryColor;
-$menuitemHoverBgColor:#e0e0e0;
+/* mobile menu */
+$mobileMenuBgColor:#24262e;
+$mobileMenuItemBgColor: rgba(255, 255, 255, 0.2);
+$mobileMenuItemHoverBgColor: rgba(255,255,255, 0.4);
+$mobileMenuItemActiveBgColor:#ffffff;
+$mobileMenuItemTextColor:rgba(255,255,255,0.72);
+$mobileMenuItemActiveTextColor:#1b1c1e;
 
-//dark menu
-$darkMenuBgColor:#212121;
-$darkMenuBorder: 1px solid #212121;
-$darkMenuSeparator:1px solid #373737;
-$darkMenuRootMenuitemTextColor:#757575;
-$darkMenuitemTextColor:#BDBDBD;
-$darkMenuitemIconColor:#BDBDBD;
-$darkMenuitemHoverBgColor:#373737;
+/* tooltip */
+$tooltipBgColor:#313842;
+$tooltipColor:#ffffff;
 
-//topbar
-$topbarMenuBgColor:#ffffff;
-$topbarMenuBorderColor:#e0e0e0;
-$topbarBadgeBgColor:#e0284f;
-$topbarBadgeTextColor:#ffffff;
+/* user profile menu */
+$userProfileMenuInfoBgColor:#f9fafc;
+$userProfileMenuInfoNameTextColor:#646a74;
+$userProfileMenuInfoRoleTextColor:#313842;
+$userProfileMenuLinkIconColor:#9ba8b8;
+$userProfileMenuLinkItemTitleColor:#313842;
+$userProfileMenuLinkItemSubTitleColor:#457fca;
 
-//card
+//actionbar
+$actionBarBgColor:#ffffff;
+$breadcrumbSeparatorColor:rgba(176, 186, 196, 0.4);
+$breadcrumbItemTextColor:#313842;
+$breadcrumbLinkTextColor:#b0bac4;
+$breadcrumbLinkHoverTextColor:#3ca4e7;
+
+//misc
 $cardBgColor:#ffffff;
-$cardBorder:1px solid #EEEEEE;
-
-//tooltip
-$tooltipBgColor:#212121;
-$tooltipTextColor:#ffffff;
+$cardBorder:solid 1px #dfe6ee;     
 </code>
 </pre>
 
-<h3>sass/theme/_variables</h3>
+            <h3>sass/theme/_variables.scss</h3>
 <div style="height:400px;overflow: auto;">
 <pre>
 <code class="language-css" pCode>
@@ -923,7 +761,7 @@ $checkboxActiveFocusTextColor:$primaryColorText;
 $checkboxActiveFocusBorderColor:$primaryDarkerColor;
 $checkboxFocusBgColor:$inputBgColor;
 $checkboxFocusTextColor:$primaryColor;
-$checkboxFocusBorderColor:$inputHoverBorderColor;
+$checkboxFocusBorderColor:$inputFocusBorderColor;
 $checkboxTransition:background-color $transitionDuration, border-color $transitionDuration;
 
 //radiobutton
@@ -957,7 +795,7 @@ $toggleButtonActiveBorderColor:$primaryColor;
 $toggleButtonActiveTextColor:$primaryColorText;
 $toggleButtonActiveIconColor:$primaryColorText;
 $toggleButtonActiveHoverBgColor:$primaryDarkerColor;
-$toggleButtonActiveHoverBorderColor:$primaryDarkestColor;
+$toggleButtonActiveHoverBorderColor:$primaryDarkerColor;
 $toggleButtonActiveHoverTextColor:$primaryColorText;
 $toggleButtonActiveHoverIconColor:$primaryColorText;
 $toggleButtonFocusOutline:2px dotted $primaryColor;
@@ -971,7 +809,7 @@ $toggleButtonActiveFocusTextColor:$primaryColorText;
 $toggleButtonActiveFocusIconColor:$primaryColorText;
 
 //inplace
-$inplacePadding:$inputPadding;
+$inplacePadding:.429em;
 $inplaceHoverBgColor:$primaryLighterColor;
 $inplaceHoverTextColor:$primaryDarkestColor;
 $inplaceTransition:background-color $transitionDuration;
@@ -1060,6 +898,7 @@ $panelFooterBorder:1px solid #e0e0e0;
 $panelFooterBgColor:#ffffff;
 $panelFooterTextColor:$textColor;
 $panelFooterPadding:.571em 1em;
+$panelContentLineHeight:1.5;
 $clickablePanelHeaderBorder:$clickableContainerHeaderBorder;
 $clickablePanelHeaderBgColor:$clickableContainerHeaderBgColor;
 $clickablePanelHeaderTextColor:$clickableContainerHeaderTextColor;
@@ -1159,7 +998,7 @@ $infoMessageTextColor:#000000;
 $infoMessageIconColor:#000000;
 
 $successMessageBgColor:#4CAF50;
-$successMessageBorder:0 none;
+$successMessageBorder:1px solid #4CAF50;
 $successMessageTextColor:#ffffff;
 $successMessageIconColor:#ffffff;
 
@@ -1253,22 +1092,20 @@ $dialogHeaderPadding:.5em;
 $confirmDialogPadding:1.5em;
 
 //general
-$disabledOpacity:.5;   
+$disabledOpacity:.5;     
 </code>
 </pre>
 </div>
 
             <h1>Menu Modes</h1>
-            <p>Menu has 4 modes, static, overlay, slim and horizontal. Layout container element in app.component.html is used to define which mode to use by adding specific classes. List
-            below indicates the style classes for each mode. </p>
+            <p>Menu has 2 modes; horizontal and overlay. Layout wrapper element in template.xhtml is used to define which mode to use by adding specific classes. Default
+            is static and here is the list of classes for each mode.</p>
             <ul>
-                <li>Static: "layout-wrapper layout-static"</li>
-                <li>Overlay: "layout-wrapper layout-overlay"</li>
-                <li>Slim: "layout-wrapper layout-slim"</li>
-                <li>Horizontal: "layout-wrapper layout-horizontal"</li>
+                <li>Horizontal: "layout-menu-horizontal"</li>
+                <li>Overlay: "layout-menu-overlay"</li>
             </ul>
 
-            <p>For example to create a horizontal menu, the div element should be in following form;</p>
+            <p>For example to create a horizontal menu, the container element of the layout should be in the following form;</p>
 <pre>
 <code class="language-markup" pCode>
 &lt;div class="layout-wrapper layout-menu-horizontal"&gt;
@@ -1279,7 +1116,7 @@ $disabledOpacity:.5;
                     application has an example implementation of such use case. Refer to app.component.ts for an example.</p>
 
             <h1>Breadcrumb</h1>
-            <p>Babylon has an optional built-in breadcrumb section right below the topbar.
+            <p>Prestige has an optional built-in breadcrumb section right below the topbar.
                 The items are dynamically generated using a BreadcrumbService where each main page that goes into the router-outlet should provide a collection of MenuItem instances.
                 Here is an example component that updates the breadcrumb.</p>
 <pre>
@@ -1304,7 +1141,7 @@ export class ControlPanelComponent &#123;
 </pre>
 
             <h1>Grid CSS</h1>
-            <p>Babylon uses PrimeFlex CSS throughout the demos such as Dashboard, however any Grid library can be used with it since Babylon itself does not depend on PrimeFlex except demo pages.</p>
+            <p>Prestige uses PrimeFlex CSS throughout the demos such as Dashboard, however any Grid library can be used with it since Prestige itself does not depend on PrimeFlex except demo pages.</p>
 
             <h1>Customizing Styles</h1>
             <p>It is suggested to add your customizations in the following sass files under the override folder instead of adding them to the
@@ -1315,28 +1152,6 @@ export class ControlPanelComponent &#123;
                 <li><b>_layout_styles</b>: Styles for the layout.</li>
                 <li><b>_theme_variables</b>: Variables of the theme.</li>
                 <li><b>_theme_styles</b>: Styles for the theme.</li>
-            </ul>
-
-            <h1>Migration Guide</h1>
-            <h4>7.0.1 to 8.0.0</h4>
-            <ul>
-                <li>Update your project to Angular 8 with ng update. View the official update guide -<a href="https://update.angular.io/">https://update.angular.io/</a>- for more information.</li>
-                <li>Update app.component.ts.</li>
-                <li>Update app.menu.component.ts.</li>
-                <li>Update layout css files.</li>
-                <li>Update theme css files.</li>
-            </ul>
-
-            <h4>7.0.0 to 7.0.1</h4>
-            <ul>
-                <li>Update layout css files.</li>
-                <li>Update theme css files.</li>
-            </ul>
-
-            <h4>1.0.0 to 7.0.0</h4>
-            <ul>
-                <li>Update layout css files.</li>
-                <li>Update theme css files.</li>
             </ul>
         </div>
     </div>
