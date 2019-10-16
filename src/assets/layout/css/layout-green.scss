@@ -1,0 +1,52 @@
+$primaryColor:#79f1a4;
+$primaryHiglightColor:#34797f;
+$primaryTextColor:#5cb17b;
+
+/* background */
+$backgroundLeftColor:#2C5C62;
+$backgroundRightColor:#5CB17C;
+
+/* horizontal menu */
+$horizontalMenuItemBgColor: rgba(255,255,255,0.2);
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
+$horizontalMenuItemHoverTextColor: #ffffff;
+
+/* topbar */
+$topbarItemBgColor:rgba(255,255,255,0.2);
+$topbarItemHoverBgColor:rgba(255,255,255,0.4);
+$topbarItemIconColor:rgba(255,255,255,0.72);
+$topbarItemTextColor:rgba(255,255,255,0.72);
+$topbarChildItemHoverColor:#FCCF10;
+$topbarSearchInputTextColor:#dddee1;
+$topbarSearchPlaceholderTextColor:#dddee1;
+
+/* user profile */
+$userProfileTextColor:#f0f0f0;
+
+/* overlay menu */
+$overlayMenuItemHoverBgColor:#DAFBE6;
+$overlayMenuItemActiveTextColor:#5CB17B;
+
+/* overlay menu button */
+$overlayMenuButtonColor:#277695;
+$overlayMenuButtonHoverBgColor:#DAFBE6;
+
+/* mobile menu button */
+$mobileMenuIconColor:#ffffff;
+
+/* actionbar */
+$actionItemBgColor:#DAFBE6;
+$actionItemIconColor:#2C5C62;
+$actionItemHoverBgColor:#B1E4C4;
+$actionItemActiveBgColor:#5CB17B;
+$actionItemActiveIconColor:#ffffff;
+
+//footer
+$footerTextColor:rgba(255, 255, 255, 0.7);
+$footerTextHoverColor:#ffffff;
+
+/* spinner color */
+$spinnerColor:#5CB17B;
+
+@import '../../sass/layout/_layout';

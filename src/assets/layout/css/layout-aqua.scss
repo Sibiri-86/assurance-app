@@ -1,0 +1,51 @@
+$primaryColor:#0FB4C6;
+$primaryHiglightColor:#088A98;
+$primaryTextColor:#088A98;
+
+/* background */
+$backgroundImage:'aqua.jpg';
+
+/* horizontal menu */
+$horizontalMenuItemBgColor: rgba(0,0,0,0.3);
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(0,0,0,0.6);
+$horizontalMenuItemHoverTextColor: #ffffff;
+
+/* topbar */
+$topbarItemBgColor:rgba(0,0,0,0.3);
+$topbarItemHoverBgColor:rgba(0,0,0,0.6);
+$topbarItemIconColor:rgba(255,255,255,0.72);
+$topbarItemTextColor:rgba(255,255,255,0.72);
+$topbarChildItemHoverColor:#E03279;
+$topbarSearchInputTextColor:#dddee1;
+$topbarSearchPlaceholderTextColor:#dddee1;
+
+/* user profile */
+$userProfileTextColor:#f0f0f0;
+
+/* overlay menu */
+$overlayMenuItemHoverBgColor:#D7F1F4;
+$overlayMenuItemActiveTextColor:#0FB4C6;
+
+/* overlay menu button */
+$overlayMenuButtonColor:#313842;
+$overlayMenuButtonHoverBgColor:#D7F1F4;
+
+/* mobile menu button */
+$mobileMenuIconColor:#ffffff;
+
+/* actionbar */
+$actionItemBgColor:#D7F1F4;
+$actionItemIconColor:#1b1c1e;
+$actionItemHoverBgColor:#AEE2E8;
+$actionItemActiveBgColor:#088A98;
+$actionItemActiveIconColor:#ffffff;
+
+//footer
+$footerTextColor:rgba(255, 255, 255, 0.67);
+$footerTextHoverColor:#ffffff;
+
+/* spinner color */
+$spinnerColor:#0FB4C6;
+
+@import '../../sass/layout/_layout';

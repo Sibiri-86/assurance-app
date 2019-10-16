@@ -6,13 +6,13 @@ import {Component, Renderer2} from '@angular/core';
 })
 export class AppComponent {
 
-    layout = 'layout-canvas';
+    layout = 'layout-turquoise';
 
     layoutMode = 'horizontal';
 
     configDialogActive = false;
 
-    theme = 'deepblue';
+    theme = 'turquoise';
 
     scheme = 'light';
 
