@@ -1,7 +1,9 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import {Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MenuItem } from 'primeng/api';
 import { AppComponent } from './app.component';
+import {BreadcrumbService} from './breadcrumb.service';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-menu',
@@ -125,7 +127,7 @@ export class AppMenuComponent implements OnInit {
     /* tslint:enable:component-selector */
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
-            <li [ngClass]="{'active-rootmenuitem': isActive(i), 'active-menuitem': isActive(i)}"
+            <li [ngClass]="{'active-rootmenuitem': isActive(i), 'active-menuitem': routeItems && child.label === routeItems[0].label}"
                 [class]="child.badgeStyleClass" *ngIf="child.visible === false ? false : true">
                 <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" (mouseenter)="onMouseEnter(i)"
                    *ngIf="!child.routerLink" [ngClass]="child.styleClass"
@@ -169,7 +171,7 @@ export class AppMenuComponent implements OnInit {
         ])
     ]
 })
-export class AppSubMenuComponent {
+export class AppSubMenuComponent implements OnDestroy {
 
     @Input() item: MenuItem;
 
@@ -183,7 +185,21 @@ export class AppSubMenuComponent {
 
     activeIndex: number;
 
-    constructor(public app: AppComponent, public appMenu: AppMenuComponent) { }
+    subscription: Subscription;
+
+    routeItems: MenuItem[];
+
+    constructor(public app: AppComponent, public appMenu: AppMenuComponent, public breadcrumbService: BreadcrumbService) {
+        this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
+            this.routeItems = response;
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
 
     itemClick(event: Event, item: MenuItem, index: number) {
         if (this.root) {
