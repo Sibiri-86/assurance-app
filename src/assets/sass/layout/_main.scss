@@ -57,7 +57,10 @@ a {
 @media screen and (max-width: $responsiveLayoutBreakpoint )  {
     body {
         padding: $mobileBodyPadding;
-        background: none;
+
+        @if variable-exists(backgroundImage) {
+            background: none;
+        }
 
         &.blocked-scroll {
             overflow: hidden;
