@@ -894,6 +894,10 @@ body {
                     a:not(.ui-state-active):not(.ui-state-highlight):hover {
                         background-color: $calendarCellDateHoverBgColor;
                     }
+
+                    &.ui-datepicker-today a:not(.ui-state-active):hover {
+                        background-color: $calendarCellDateHoverBgColor;
+                    }
                 }
             }
 
@@ -979,6 +983,11 @@ body {
                         background-color: $calendarCellDateTodayBgColor;
                         color: $calendarCellDateTodayTextColor;
                         font-weight: 600;
+
+                        &.ui-state-active {
+                            color: $calendarCellDateSelectedTextColor;
+                            background-color: $calendarCellDateSelectedBgColor;
+                        }
                     }
                 }
             }
