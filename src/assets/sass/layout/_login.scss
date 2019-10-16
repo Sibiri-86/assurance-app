@@ -31,29 +31,6 @@
 
         .logo {
               margin-top: 40px; 
-        }   
-
-        .back-icon {
-            position: absolute;
-            bottom: 40px;
-            left: 20px;
-
-            button {
-                font-size: 24px;
-                width: 46px;
-                line-height: 40px;
-                height: 46px;
-                background-color: #657587;
-                color: #d7dbe8;
-                @include border-radius(50%);
-                border: none;
-                outline: none;
-                cursor: pointer;
-
-                &:hover {
-                    background-color: #939eab;
-                }
-            }
         }
     }
 
