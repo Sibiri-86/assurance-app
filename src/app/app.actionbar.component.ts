@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { BreadcrumbService } from './breadcrumb.service';
 import { Subscription } from 'rxjs';
-import { MenuItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-actionbar',

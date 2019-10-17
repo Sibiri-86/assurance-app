@@ -3,7 +3,7 @@ import { CarService } from '../service/carservice';
 import { CountryService } from '../service/countryservice';
 import { NodeService } from '../service/nodeservice';
 import { Car } from '../domain/car';
-import { SelectItem, MenuItem, TreeNode } from 'primeng/primeng';
+import { SelectItem, MenuItem, TreeNode } from 'primeng/api';
 import { BreadcrumbService } from '../../breadcrumb.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/api';
 import { BreadcrumbService } from '../../breadcrumb.service';
 
 @Component({
