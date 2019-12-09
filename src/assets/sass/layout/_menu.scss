@@ -11,7 +11,7 @@
         position: absolute;
         z-index: 1011;
         width: 45px;
-        height: 45px;	    	
+        height: 45px;
         border: solid 5px transparent;
         background-color: $actionBarBgColor;
         @include border-radius(50%);
@@ -83,7 +83,7 @@
         margin: 0;
         padding: 0;
         list-style-type: none;
-        
+
         li {
             margin: .5em 0 0;
 
@@ -91,12 +91,13 @@
                 display: block;
                 position: relative;
                 padding: .5em;
-                color: $overlayMenuItemTextColor;      
+                color: $overlayMenuItemTextColor;
                 @include border-radius($overlayMenuItemBorderRadius);
                 @include transition(background-color $transitionDuration);
 
                 .layout-menuitem-text {
                     display: inline-block;
+                    vertical-align: top;
                 }
 
                 .layout-menuitem-icon {
@@ -121,7 +122,7 @@
                     color: $overlayMenuItemActiveTextColor;
 
                     .layout-submenu-toggler {
-                        @include rotate(-180deg);   
+                        @include rotate(-180deg);
                     }
                 }
             }
@@ -132,7 +133,7 @@
                 padding: 0;
                 overflow: hidden;
             }
-        }        
+        }
     }
 }
 
@@ -148,7 +149,7 @@
                     position: relative;
                     text-transform: uppercase;
                     margin: 0 .5em 0 0;
-                    
+
                     > a {
                         padding: .8em 1em;
                         font-weight: 700;
@@ -166,7 +167,7 @@
                         .layout-menuitem-icon {
                             margin-right: .5em;
                         }
-    
+
                         .layout-submenu-toggler {
                             position: static;
                             margin-left: .4em;
@@ -262,7 +263,7 @@
                 position: absolute;
                 z-index: 999;
                 min-width: 250px;
-                background-color: $overlayMenuBgColor;                  
+                background-color: $overlayMenuBgColor;
                 @include shadow($overlayMenuShadow);
                 top: 124px;
                 animation-duration: .5s;
@@ -287,7 +288,7 @@
                             }
                         }
                     }
-                      
+
                     .overlay-menu-button-times {
                         span {
                             &:nth-child(1){
@@ -295,16 +296,16 @@
                                 transition-delay:.425s;
                             }
                         }
-                        
+
                         span {
                             &:nth-child(2){
                                 width:80%;
                                 transition-delay:.375s;
                             }
-                        }    
+                        }
                     }
                 }
-                
+
                 .layout-menu-wrapper {
                     display: block;
                 }
@@ -365,8 +366,8 @@
         .layout-menu {
             > li {
                 margin-bottom: .5em;
-                @include border-radius($overlayMenuItemBorderRadius);     
-                background-color: $mobileMenuItemBgColor; 
+                @include border-radius($overlayMenuItemBorderRadius);
+                background-color: $mobileMenuItemBgColor;
 
                 > a {
                     padding: 1em;
@@ -380,13 +381,13 @@
                     }
 
                     &:hover {
-                        background-color:$mobileMenuItemHoverBgColor;                                         
+                        background-color:$mobileMenuItemHoverBgColor;
                     }
                 }
 
                 &.active-menuitem,
                 &.active-rootmenuitem {
-                    background-color: $mobileMenuItemActiveBgColor;  
+                    background-color: $mobileMenuItemActiveBgColor;
 
                     > a {
                         color: $mobileMenuItemActiveTextColor;
@@ -415,7 +416,7 @@
                     a {
                         padding-left: 2em;
                     }
-                    
+
                     li {
                         a {
                             padding-left: 3em;
@@ -446,7 +447,7 @@
         }
 
         &.layout-mobile-active {
-            &.layout-menu-horizontal { 
+            &.layout-menu-horizontal {
                 .layout-menu {
                     > li {
                         &.active-menuitem {
@@ -457,7 +458,7 @@
                                     color: $mobileMenuItemTextColor;
 
                                     .layout-submenu-toggler {
-                                        @include rotate(0deg); 
+                                        @include rotate(0deg);
                                     }
                                 }
                             }
@@ -466,13 +467,13 @@
                 }
             }
 
-            .layout-menu-container { 
-                display: block;          
-            } 
+            .layout-menu-container {
+                display: block;
+            }
 
             .layout-mask {
                 display: block;
             }
-        }  
+        }
     }
 }
