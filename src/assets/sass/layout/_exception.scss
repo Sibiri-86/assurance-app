@@ -1,4 +1,5 @@
 .exception-body {
+    height: 100vh;
 
     &.notfound {
         background: url("../../layout/images/pages/bg-404.jpg");
@@ -109,7 +110,7 @@
 
         .exception-card {
             width: 100%;
-            min-width: 100%;           
+            min-width: 100%;
             left: 0;
             bottom: 0;
             top: auto;
@@ -119,5 +120,5 @@
                 padding: 30px 30px;
             }
         }
-    }    
+    }
 }

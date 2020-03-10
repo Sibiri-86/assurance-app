@@ -13,21 +13,36 @@ import { EmptyDemoComponent } from './demo/view/emptydemo.component';
 import { ChartsDemoComponent } from './demo/view/chartsdemo.component';
 import { FileDemoComponent } from './demo/view/filedemo.component';
 import { DocumentationComponent } from './demo/view/documentation.component';
+import { AppMainComponent } from './app.main.component';
+import { AppNotfoundComponent } from './pages/app.notfound.component';
+import { AppErrorComponent } from './pages/app.error.component';
+import { AppAccessdeniedComponent } from './pages/app.accessdenied.component';
+import { AppLoginComponent } from './pages/app.login.component';
 
 export const routes: Routes = [
-    { path: '', component: DashboardDemoComponent },
-    { path: 'sample', component: SampleDemoComponent },
-    { path: 'forms', component: FormsDemoComponent },
-    { path: 'data', component: DataDemoComponent },
-    { path: 'panels', component: PanelsDemoComponent },
-    { path: 'overlays', component: OverlaysDemoComponent },
-    { path: 'menus', component: MenusDemoComponent },
-    { path: 'messages', component: MessagesDemoComponent },
-    { path: 'misc', component: MiscDemoComponent },
-    { path: 'empty', component: EmptyDemoComponent },
-    { path: 'charts', component: ChartsDemoComponent },
-    { path: 'file', component: FileDemoComponent },
-    { path: 'documentation', component: DocumentationComponent }
+    { path: '', component: AppMainComponent,
+        children: [
+            { path: '', component: DashboardDemoComponent },
+            { path: 'sample', component: SampleDemoComponent },
+            { path: 'forms', component: FormsDemoComponent },
+            { path: 'data', component: DataDemoComponent },
+            { path: 'panels', component: PanelsDemoComponent },
+            { path: 'overlays', component: OverlaysDemoComponent },
+            { path: 'menus', component: MenusDemoComponent },
+            { path: 'messages', component: MessagesDemoComponent },
+            { path: 'misc', component: MiscDemoComponent },
+            { path: 'empty', component: EmptyDemoComponent },
+            { path: 'charts', component: ChartsDemoComponent },
+            { path: 'file', component: FileDemoComponent },
+            { path: 'documentation', component: DocumentationComponent }
+        ]
+    },
+    {path: 'error', component: AppErrorComponent},
+    {path: 'accessdenied', component: AppAccessdeniedComponent},
+    {path: 'notfound', component: AppNotfoundComponent},
+    {path: 'login', component: AppLoginComponent},
+    {path: '**', redirectTo: '/notfound'},
+
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'});

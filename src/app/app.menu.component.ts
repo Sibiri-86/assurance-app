@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MenuItem } from 'primeng/api';
-import { AppComponent } from './app.component';
-import {BreadcrumbService} from './breadcrumb.service';
-import {Subscription} from 'rxjs';
+import { AppMainComponent } from './app.main.component';
+import { BreadcrumbService } from './breadcrumb.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-menu',
@@ -32,7 +32,7 @@ export class AppMenuComponent implements OnInit {
 
     model: any[];
 
-    constructor(public app: AppComponent) { }
+    constructor(public app: AppMainComponent) { }
 
     ngOnInit() {
         this.model = [
@@ -57,13 +57,10 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Empty Page', icon: 'pi pi-fw pi-clone', routerLink: ['/empty'] },
                     { label: 'Landing Page', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank' },
-                    { label: 'Login Page', icon: 'pi pi-fw pi-sign-in', url: 'assets/pages/login.html', target: '_blank' },
-                    { label: 'Error Page', icon: 'pi pi-fw pi-exclamation-triangle', url: 'assets/pages/error.html', target: '_blank' },
-                    { label: '404 Page', icon: 'pi pi-fw pi-times', url: 'assets/pages/404.html', target: '_blank' },
-                    {
-                        label: 'Access Denied', icon: 'pi pi-fw pi-ban',
-                        url: 'assets/pages/access.html', target: '_blank'
-                    }
+                    { label: 'Login Page', icon: 'pi pi-fw pi-sign-in', routerLink: ['/login'], target: '_blank' },
+                    { label: 'Error Page', icon: 'pi pi-fw pi-exclamation-triangle', routerLink: ['/error'], target: '_blank' },
+                    { label: '404 Page', icon: 'pi pi-fw pi-times', routerLink: ['/notfound'], target: '_blank' },
+                    { label: 'Access Denied', icon: 'pi pi-fw pi-ban', routerLink: ['/accessdenied'], target: '_blank' }
                 ]
             },
             {
@@ -127,9 +124,9 @@ export class AppMenuComponent implements OnInit {
     /* tslint:enable:component-selector */
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
-            <li [ngClass]="{'active-rootmenuitem': isActive(i) && app.isHorizontal(),
+            <li [ngClass]="{'active-rootmenuitem': isActive(i) && root && app.isHorizontal(),
             'active-menuitem': ((routeItems && child.label === routeItems[0].label && app.isHorizontal())
-            || (isActive(i) && !app.isHorizontal()))}"
+            || (isActive(i) && !app.isHorizontal()) || (isActive(i) && !root && app.isHorizontal()))}"
                 [class]="child.badgeStyleClass" *ngIf="child.visible === false ? false : true">
                 <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" (mouseenter)="onMouseEnter(i)"
                    *ngIf="!child.routerLink" [ngClass]="child.styleClass"
@@ -191,7 +188,7 @@ export class AppSubMenuComponent implements OnDestroy {
 
     routeItems: MenuItem[];
 
-    constructor(public app: AppComponent, public appMenu: AppMenuComponent, public breadcrumbService: BreadcrumbService) {
+    constructor(public app: AppMainComponent, public appMenu: AppMenuComponent, public breadcrumbService: BreadcrumbService) {
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             this.routeItems = response;
         });

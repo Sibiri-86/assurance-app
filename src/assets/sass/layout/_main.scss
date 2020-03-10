@@ -14,7 +14,7 @@ body {
     font-weight: 400;
     color: $textColor;
     -webkit-font-smoothing: antialiased;
-    padding: $bodyPadding; 
+    padding: 0;
     margin: 0;
     min-height: 100%;
     letter-spacing:.2px;
@@ -27,6 +27,10 @@ body {
     }
     @else {
         @include background-gradient-left2right($backgroundLeftColor,$backgroundRightColor);
+    }
+
+    .layout-wrapper {
+        padding: $bodyPadding;
     }
 
     &.blocked-scroll{
@@ -52,18 +56,20 @@ a {
     animation-duration: $transitionDuration;
     @include opacity(.8);
     cursor: pointer;
-}  
+}
 
 @media screen and (max-width: $responsiveLayoutBreakpoint )  {
     body {
-        padding: $mobileBodyPadding;
-
         @if variable-exists(backgroundImage) {
             background: none;
         }
 
         &.blocked-scroll {
             overflow: hidden;
+        }
+
+        .layout-wrapper {
+            padding: $mobileBodyPadding;
         }
 
         &:not(.exception-body):not(.login-body):before {
