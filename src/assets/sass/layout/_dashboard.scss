@@ -326,6 +326,10 @@
                 color:$primaryTextColor;
                 font-weight: 500;
 
+                i {
+                    vertical-align: bottom;
+                }
+
                 &:hover {
                     color:$primaryHiglightColor;
                 }
@@ -573,7 +577,7 @@
         span {
             padding: 6px 7px;
 
-            .fa-user {
+            .pi-user {
                 font-size: 14px;
             }
         }

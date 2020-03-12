@@ -477,6 +477,22 @@ $submenuPadding: 0;
 $overlayMenuBorder:1px solid #e0e0e0;
 $overlayMenuShadow:0 3px 6px 0 rgba(0, 0, 0, 0.16);
 
+//carousel
+$carouselNavButtonsBgColor: $buttonBgColor;
+$carouselNavButtonsBorder: $buttonBorder;
+$carouselNavButtonsBorderRadius: 3px;
+$carouselNavButtonsMargin: .2em;
+$carouselNavButtonsColor: $buttonTextColor;
+$carouselNavButtonsHoverBgColor: $buttonHoverBgColor;
+$carouselNavButtonsHoverColor: $buttonHoverTextColor;
+$carouselNavButtonsHoverBorderColor: $buttonHoverBorderColor;
+$carouselNavButtonsTransition: color $transitionDuration;
+$carouselDotIconWidth: 20px;
+$carouselDotIconHeight: 6px;
+$carouselDotIconBgColor: #b2c1cd;
+$carouselDotIconMargin: 0 .2em;
+$carouselActiveDotIconBgColor: $primaryColor;
+
 //misc
 $maskBgColor:rgba(139, 139, 144, 0.72);
 $inlineSpacing:.429em;
