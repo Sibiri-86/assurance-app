@@ -86,7 +86,9 @@ export class AppMainComponent {
         this.theme = theme;
         this.scheme = scheme;
         const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
-        themeLink.href = 'assets/theme/' + theme + '/theme-' + scheme + '.css';
+        const href = 'assets/theme/' + theme + '/theme-' + scheme + '.css';
+
+        this.replaceLink(themeLink, href);
 
         event.preventDefault();
     }
@@ -94,11 +96,36 @@ export class AppMainComponent {
     changeLayoutTheme(event, color, theme, scheme) {
         this.layout = color;
         const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
-        layoutLink.href = 'assets/layout/css/' + color + '.css';
+        const href = 'assets/layout/css/' + color + '.css';
+
+        this.replaceLink(layoutLink, href);
 
         this.changeComponentTheme(event, theme, scheme );
 
         event.preventDefault();
+    }
+
+    isIE() {
+        return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent);
+    }
+
+    replaceLink(linkElement, href) {
+        if (this.isIE()) {
+            linkElement.setAttribute('href', href);
+        } else {
+            const id = linkElement.getAttribute('id');
+            const cloneLinkElement = linkElement.cloneNode(true);
+
+            cloneLinkElement.setAttribute('href', href);
+            cloneLinkElement.setAttribute('id', id + '-clone');
+
+            linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
+
+            cloneLinkElement.addEventListener('load', () => {
+                linkElement.remove();
+                cloneLinkElement.setAttribute('id', id);
+            });
+        }
     }
 
     changeLayoutMode(event, mode) {
