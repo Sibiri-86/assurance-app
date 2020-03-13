@@ -1153,6 +1153,16 @@ export class ControlPanelComponent &#123;
                 <li><b>_theme_variables</b>: Variables of the theme.</li>
                 <li><b>_theme_styles</b>: Styles for the theme.</li>
             </ul>
+
+            <h1>Migration Guide</h1>
+            <p>Angular 9 and PrimeNG 9</p>
+            <ul>
+                <li>Update dependencies with <a href="https://angular.io/cli/update">ng update</a>.</li>
+                <li>Update theme.css and layout.css files.</li>
+                <li>Update app.menu.component.ts and app.menu.component.html while retaining your MenuModel.</li>
+                <li>Include app.menuitem.component.ts under app folder and define it app.module.ts with declarations property.</li>
+                <li>Include app.menu.service.ts under app folder and define it app.module.ts with providers property.</li>
+            </ul>
         </div>
     </div>
 </div>
