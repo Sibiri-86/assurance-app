@@ -1,0 +1,18 @@
+<div class="layout-menu-container" (click)="app.onMenuClick($event)">
+    <div class="overlay-menu-button" (click)="app.onMenuButtonClick($event)">
+        <div class="overlay-menu-button-bars">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="overlay-menu-button-times">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="layout-menu-wrapper fadeInDown">
+        <ul class="layout-menu">
+            <li app-menuitem *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true"></li>
+        </ul>
+    </div>
+</div>

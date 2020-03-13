@@ -1,4 +1,5 @@
 import {Component, Renderer2} from '@angular/core';
+import { MenuService } from './app.menu.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -32,8 +33,6 @@ export class AppMainComponent {
 
     activeTopbarItem: any;
 
-    resetMenu: boolean;
-
     menuHoverActive: boolean;
 
     topbarMenuActive: boolean;
@@ -44,7 +43,7 @@ export class AppMainComponent {
 
     overlayMenuMobileActive: boolean;
 
-    constructor(public renderer: Renderer2) {}
+    constructor(public renderer: Renderer2, private menuService: MenuService) {}
 
     onLayoutClick() {
         if (!this.topbarItemClick) {
@@ -54,7 +53,7 @@ export class AppMainComponent {
 
         if (!this.menuClick) {
             if (this.isHorizontal()) {
-                this.resetMenu = true;
+                this.menuService.reset();
             }
 
             if (this.overlayMenuActive || this.overlayMenuMobileActive) {
@@ -150,7 +149,6 @@ export class AppMainComponent {
 
     onMenuClick($event) {
         this.menuClick = true;
-        this.resetMenu = false;
     }
 
     hideOverlayMenu() {
