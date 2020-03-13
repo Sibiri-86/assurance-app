@@ -27,7 +27,8 @@ import { AppMainComponent } from './app.main.component';
               </a>
               <ul *ngIf="item.items && (active || animating || selectedKey)"
                   (@children.done)="onAnimationDone()" [ngStyle]="{'padding': active && root ? '':'0'}"
-                  [@children]="(app.isHorizontal() && root && !app.isMobile()) ? (active? 'visible' : 'hidden') : (active ? 'visibleAnimated' : 'hiddenAnimated')">
+                  [@children]="(app.isHorizontal() && root && !app.isMobile()) ? (active? 'visible' : 'hidden')
+                  : (active ? 'visibleAnimated' : 'hiddenAnimated')">
                   <ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
                       <li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeClass"></li>
                   </ng-template>
@@ -35,9 +36,9 @@ import { AppMainComponent } from './app.main.component';
           </ng-container>
       `,
     host: {
-        ['[class.active-menuitem]']: '(selectedKey && app.isHorizontal()) || (active && !app.isHorizontal()) ' +
+        '[class.active-menuitem]': '(selectedKey && app.isHorizontal()) || (active && !app.isHorizontal()) ' +
         '|| (active && !root && app.isHorizontal())',
-        ['[class.active-rootmenuitem]']: 'active && root && app.isHorizontal()'
+        '[class.active-rootmenuitem]': 'active && root && app.isHorizontal()'
     },
     animations: [
         trigger('children', [
