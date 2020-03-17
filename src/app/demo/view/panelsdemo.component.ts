@@ -22,8 +22,7 @@ export class PanelsDemoComponent implements OnInit {
     constructor(private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
             { label: 'Components' },
-            { label: 'Core' },
-            { label: 'Panels', routerLink: ['/components/core/panels'] }
+            { label: 'Panels', routerLink: ['/components/panels'] }
         ]);
     }
 

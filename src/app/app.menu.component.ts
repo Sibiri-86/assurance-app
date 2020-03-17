@@ -18,15 +18,10 @@ export class AppMenuComponent implements OnInit {
                 label: 'Components', icon: 'pi pi-fw pi-star', routerLink: ['/components'],
                 items: [
                     { label: 'Sample Page', icon: 'pi pi-fw pi-th-large', routerLink: ['/components/sample']},
-                    {
-                        label: 'Core', icon: 'pi pi-fw pi-star', routerLink: ['/components/core'],
-                        items: [
-                            { label: 'Forms', icon: 'pi pi-fw pi-file', routerLink: ['/components/core/forms'] },
-                            { label: 'Data', icon: 'pi pi-fw pi-table', routerLink: ['/components/core/data'] },
-                            { label: 'Panels', icon: 'pi pi-fw pi-list', routerLink: ['/components/core/panels'] },
-                            { label: 'Overlays', icon: 'pi pi-fw pi-clone', routerLink: ['/components/core/overlays'] },
-                        ]
-                    },
+                            { label: 'Forms', icon: 'pi pi-fw pi-file', routerLink: ['/components/forms'] },
+                            { label: 'Data', icon: 'pi pi-fw pi-table', routerLink: ['/components/data'] },
+                            { label: 'Panels', icon: 'pi pi-fw pi-list', routerLink: ['/components/panels'] },
+                            { label: 'Overlays', icon: 'pi pi-fw pi-clone', routerLink: ['/components/overlays'] },
                     { label: 'Menus', icon: 'pi pi-fw pi-plus', routerLink: ['/components/menus'] },
                     { label: 'Messages', icon: 'pi pi-fw pi-envelope', routerLink: ['/components/messages'] },
                     { label: 'Charts', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/components/charts'] },

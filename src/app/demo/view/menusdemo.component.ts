@@ -30,7 +30,7 @@ export class MenusDemoComponent implements OnInit {
     constructor(private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
             { label: 'Components' },
-            { label: 'Menus', routerLink: ['/menus'] }
+            { label: 'Menus', routerLink: ['/components/menus'] }
         ]);
     }
 
