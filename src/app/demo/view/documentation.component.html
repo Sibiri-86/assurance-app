@@ -61,7 +61,7 @@ Run 'ng help' for more options.
 
    &lt;app-topbar&gt;&lt;/app-topbar&gt;
 
-   &lt;app-menu [reset]="resetMenu"&gt;&lt;/app-menu&gt;
+   &lt;app-menu&gt;&lt;/app-menu&gt;
 
    &lt;app-actionbar&gt;&lt;/app-actionbar&gt;
 
@@ -81,43 +81,19 @@ Run 'ng help' for more options.
 
             <h1>Menu</h1>
             <p>Menu is a separate component defined in app.menu.component.ts file based on PrimeNG MenuModel API. In order to define the menuitems,
-            navigate to this file and define your own model as a nested structure. Here is the menu component from the sample application. The helper
-            app-submenu component is also available in the same file.</p>
+            navigate to this file and define your own model as a nested structure. Here is the menu component from the sample application.</p>
 
 <div style="height:400px;overflow: auto;">
 <pre>
 <code class="language-javascript" pCode>
-import &#123;Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy&#125; from '@angular/core';
-import &#123; trigger, state, style, transition, animate &#125; from '@angular/animations';
-import &#123; MenuItem &#125; from 'primeng/api';
-import &#123; AppComponent &#125; from './app.component';
-import &#123;BreadcrumbService&#125; from './breadcrumb.service';
-import &#123;Subscription&#125; from 'rxjs';
+import &#123; Component, OnInit &#125; from '@angular/core';
+import &#123; AppMainComponent &#125; from './app.main.component';
 
 @Component(&#123;
     selector: 'app-menu',
-    template: `
-        &lt;div class="layout-menu-container" (click)="app.onMenuClick($event)"&gt;
-            &lt;div class="overlay-menu-button" (click)="app.onMenuButtonClick($event)"&gt;
-                &lt;div class="overlay-menu-button-bars"&gt;
-                    &lt;span&gt;&lt;/span&gt;
-                    &lt;span&gt;&lt;/span&gt;
-                    &lt;span&gt;&lt;/span&gt;
-                &lt;/div&gt;
-                &lt;div class="overlay-menu-button-times"&gt;
-                    &lt;span&gt;&lt;/span&gt;
-                    &lt;span&gt;&lt;/span&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="layout-menu-wrapper fadeInDown"&gt;
-                &lt;ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"&gt;&lt;/ul&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    `
+    templateUrl: './app.menu.component.html'
 &#125;)
 export class AppMenuComponent implements OnInit &#123;
-
-    @Input() reset: boolean;
 
     model: any[];
 
@@ -127,24 +103,24 @@ export class AppMenuComponent implements OnInit &#123;
         this.model = [
             &#123;label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']&#125;,
             &#123;
-                label: 'Components', icon: 'pi pi-fw pi-star',
+                label: 'Components', icon: 'pi pi-fw pi-star', routerLink: ['/components'],
                 items: [
-                    &#123; label: 'Sample Page', icon: 'pi pi-fw pi-th-large', routerLink: ['/sample']  &#125;,
-                    &#123; label: 'Forms', icon: 'pi pi-fw pi-file', routerLink: ['/forms'] &#125;,
-                    &#123; label: 'Data', icon: 'pi pi-fw pi-table', routerLink: ['/data'] &#125;,
-                    &#123; label: 'Panels', icon: 'pi pi-fw pi-list', routerLink: ['/panels'] &#125;,
-                    &#123; label: 'Overlays', icon: 'pi pi-fw pi-clone', routerLink: ['/overlays'] &#125;,
-                    &#123; label: 'Menus', icon: 'pi pi-fw pi-plus', routerLink: ['/menus'] &#125;,
-                    &#123; label: 'Messages', icon: 'pi pi-fw pi-spinner', routerLink: ['/messages'] &#125;,
-                    &#123; label: 'Charts', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/charts'] &#125;,
-                    &#123; label: 'File', icon: 'pi pi-fw pi-upload', routerLink: ['/file'] &#125;,
-                    &#123; label: 'Misc', icon: 'pi pi-fw pi-briefcase', routerLink: ['/misc'] &#125;
+                    &#123; label: 'Sample Page', icon: 'pi pi-fw pi-th-large', routerLink: ['/components/sample']  &#125;,
+                    &#123; label: 'Forms', icon: 'pi pi-fw pi-file', routerLink: ['/components/forms'] &#125;,
+                    &#123; label: 'Data', icon: 'pi pi-fw pi-table', routerLink: ['/components/data'] &#125;,
+                    &#123; label: 'Panels', icon: 'pi pi-fw pi-list', routerLink: ['/components/panels'] &#125;,
+                    &#123; label: 'Overlays', icon: 'pi pi-fw pi-clone', routerLink: ['/components/overlays'] &#125;,
+                    &#123; label: 'Menus', icon: 'pi pi-fw pi-plus', routerLink: ['/components/menus'] &#125;,
+                    &#123; label: 'Messages', icon: 'pi pi-fw pi-spinner', routerLink: ['/components/messages'] &#125;,
+                    &#123; label: 'Charts', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/components/charts'] &#125;,
+                    &#123; label: 'File', icon: 'pi pi-fw pi-upload', routerLink: ['/components/file'] &#125;,
+                    &#123; label: 'Misc', icon: 'pi pi-fw pi-briefcase', routerLink: ['/components/misc'] &#125;
                 ]
             &#125;,
             &#123;
-                label: 'Pages', icon: 'pi pi-fw pi-copy',
+                label: 'Pages', icon: 'pi pi-fw pi-copy', routerLink: ['/pages'],
                 items: [
-                    &#123; label: 'Empty Page', icon: 'pi pi-fw pi-clone', routerLink: ['/empty'] &#125;,
+                    &#123; label: 'Empty Page', icon: 'pi pi-fw pi-clone', routerLink: ['/pages/empty'] &#125;,
                     &#123; label: 'Landing Page', icon: 'pi pi-fw pi-globe', url: 'assets/pages/landing.html', target: '_blank' &#125;,
                     &#123; label: 'Login Page', icon: 'pi pi-fw pi-sign-in', url: 'assets/pages/login.html', target: '_blank' &#125;,
                     &#123; label: 'Error Page', icon: 'pi pi-fw pi-exclamation-triangle', url: 'assets/pages/error.html', target: '_blank' &#125;,
@@ -1078,6 +1054,22 @@ $submenuHeaderMargin: 0;
 $submenuPadding: 0;
 $overlayMenuBorder:1px solid #e0e0e0;
 $overlayMenuShadow:0 3px 6px 0 rgba(0, 0, 0, 0.16);
+
+//carousel
+$carouselNavButtonsBgColor: $buttonBgColor;
+$carouselNavButtonsBorder: $buttonBorder;
+$carouselNavButtonsBorderRadius: 3px;
+$carouselNavButtonsMargin: .2em;
+$carouselNavButtonsColor: $buttonTextColor;
+$carouselNavButtonsHoverBgColor: $buttonHoverBgColor;
+$carouselNavButtonsHoverColor: $buttonHoverTextColor;
+$carouselNavButtonsHoverBorderColor: $buttonHoverBorderColor;
+$carouselNavButtonsTransition: color $transitionDuration;
+$carouselDotIconWidth: 20px;
+$carouselDotIconHeight: 6px;
+$carouselDotIconBgColor: #b2c1cd;
+$carouselDotIconMargin: 0 .2em;
+$carouselActiveDotIconBgColor: $primaryColor;
 
 //misc
 $maskBgColor:rgba(139, 139, 144, 0.72);
