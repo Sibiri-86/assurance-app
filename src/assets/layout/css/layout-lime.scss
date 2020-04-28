@@ -1,52 +1,34 @@
-$primaryColor:#91B10B;
-$primaryHiglightColor:#809AAC;
-$primaryTextColor:#91B10B;
+$primaryLighterColor:#F0F4C3;
+$primaryColor:#C0CA33;
+$primaryDarkerColor:#827717;
+$primaryTextColor:#ffffff;
 
 /* background */
-$backgroundLeftColor:#4F5943;
-$backgroundRightColor:#677454;
+$backgroundLeftColor:$primaryColor;
+$backgroundRightColor:$primaryDarkerColor;
 
 /* horizontal menu */
 $horizontalMenuItemBgColor: rgba(255,255,255,0.2);
 $horizontalMenuItemTextColor: rgba(255,255,255,0.72);
-$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
-$horizontalMenuItemHoverTextColor: #ffffff;
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.3);
+$horizontalMenuItemHoverTextColor: rgba(255,255,255,1);
 
 /* topbar */
 $topbarItemBgColor:rgba(255,255,255,0.2);
-$topbarItemHoverBgColor:rgba(255,255,255,0.4);
-$topbarItemIconColor:rgba(255,255,255,0.72);
 $topbarItemTextColor:rgba(255,255,255,0.72);
-$topbarChildItemHoverColor:#A5BBCB;
-$topbarSearchInputTextColor:#dddee1;
-$topbarSearchPlaceholderTextColor:#dddee1;
-
-/* user profile */
-$userProfileTextColor:#f0f0f0;
+$topbarItemHoverBgColor:rgba(255,255,255,0.2);
+$topbarUserProfileTextColor:rgba(255,255,255,0.72);
 
 /* overlay menu */
-$overlayMenuItemHoverBgColor:#ECF6BE;
-$overlayMenuItemActiveTextColor:#91B10B;
+$overlayMenuItemHoverBgColor:$primaryLighterColor;
+$overlayMenuItemActiveTextColor:$primaryDarkerColor;
 
 /* overlay menu button */
-$overlayMenuButtonColor:#4E6003;
-$overlayMenuButtonHoverBgColor:#ECF6BE;
-
-/* mobile menu button */
-$mobileMenuIconColor:#ffffff;
-
-/* actionbar */
-$actionItemBgColor:#ECF6BE;
-$actionItemIconColor:#4E6003;
-$actionItemHoverBgColor:#D1DAA9;
-$actionItemActiveBgColor:#91B10B;
-$actionItemActiveIconColor:#ffffff;
+$overlayMenuButtonColor:$primaryDarkerColor;
+$overlayMenuButtonHoverBgColor:$primaryLighterColor;
 
 //footer
-$footerTextColor:rgba(255, 255, 255, 0.7);
-$footerTextHoverColor:#ffffff;
-
-/* spinner color */
-$spinnerColor:#91B10B;
+$footerTextColor:rgba(255,255,255,0.7);
+$footerTextHoverColor:rgba(255,255,255,1);
 
 @import '../../sass/layout/_layout';

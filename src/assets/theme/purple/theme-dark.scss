@@ -1,12 +1,12 @@
-$primaryLighterColor:#E7D8F5;
-$primaryColor:#A054E5;
-$primaryDarkerColor:#793BB1;
-$primaryDarkestColor:#532C75;
-$primaryColorText:#ffffff;
+$primaryLighterColor:#E1BEE7;
+$primaryColor:#9C27B0;
+$primaryDarkerColor:#7B1FA2;
+$primaryDarkestColor:#6A1B9A;
+$primaryTextColor:#ffffff;
 
 $accentColor:$primaryColor;
 $accentDarkerColor:$primaryDarkerColor;
-$accentColorText:$primaryColorText;
+$accentColorText:$primaryTextColor;
 
 $containerHeaderBgColor:#212121;
 $containerHeaderBorder:1px solid #212121;
@@ -26,12 +26,12 @@ $clickableContainerHeaderHoverIconColor:#BDBDBD;
 
 $clickableContainerHeaderActiveBgColor:$primaryColor;
 $clickableContainerHeaderActiveBorder:1px solid $primaryColor;
-$clickableContainerHeaderActiveTextColor:$primaryColorText;
-$clickableContainerHeaderActiveIconColor:$primaryColorText;
+$clickableContainerHeaderActiveTextColor:$primaryTextColor;
+$clickableContainerHeaderActiveIconColor:$primaryTextColor;
 
 $clickableContainerHeaderActiveHoverBgColor:$primaryDarkerColor;
 $clickableContainerHeaderActiveHoverHoverBorder:1px solid $primaryDarkerColor;
-$clickableContainerHeaderActiveHoverTextColor:$primaryColorText;
-$clickableContainerHeaderActiveHoverIconColor:$primaryColorText;
+$clickableContainerHeaderActiveHoverTextColor:$primaryTextColor;
+$clickableContainerHeaderActiveHoverIconColor:$primaryTextColor;
 
-@import '../../sass/theme/theme';
+@import '../../sass/theme/_theme';

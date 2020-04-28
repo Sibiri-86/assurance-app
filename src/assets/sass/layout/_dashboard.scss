@@ -1,6 +1,4 @@
-.layout-dashboard {
-    padding-top: 1em;
-
+.dashboard {
     .overview-box {
         text-align: center;
         position: relative;
@@ -309,7 +307,7 @@
 
                 .progress {
                     height: 10px;
-                    background-image: linear-gradient(to right, $primaryColor, $primaryHiglightColor);
+                    background-image: linear-gradient(to right, $primaryColor, darken($primaryColor, 15%));
                     border-radius: 5px;
                 }
             }
@@ -323,16 +321,7 @@
             a {
                 text-decoration: none;
                 cursor: pointer;
-                color:$primaryTextColor;
                 font-weight: 500;
-
-                i {
-                    vertical-align: bottom;
-                }
-
-                &:hover {
-                    color:$primaryHiglightColor;
-                }
 
                 &:nth-child(1) {
                     float: left;
@@ -588,13 +577,8 @@
                 float: right;
                 cursor: pointer;
                 padding: 5px 0;
-                color: $primaryTextColor;
                 background: none;
                 border: none;
-
-                &:hover {
-                    color:$primaryHiglightColor;
-                }
             }
         }
     }
@@ -671,10 +655,6 @@
             cursor: pointer;
             transition-duration: $transitionDuration;
 
-            a {
-                color: $primaryTextColor;
-            }
-
             &:hover {
                 background-color: $overlayMenuItemHoverBgColor;
                  transition-duration: $transitionDuration;
@@ -700,7 +680,7 @@
                 width: 3px;
                 height: 100%;
                 z-index: 400;
-                background: linear-gradient(to bottom,$primaryHiglightColor,$primaryColor);
+                background: linear-gradient(to bottom, darken($primaryColor, 15%),$primaryColor);
             }
 
             li {
@@ -716,14 +696,14 @@
                         border-radius: 50%;
 
                         i {
-                             font-size: 22px;
+                             font-size: 17px;
                         }
                     }
                 }
 
                 &:nth-child(1) {
                     .timeline-icon {
-                        padding: 5px;
+                        padding: 9px;
 
                         i {
                         color: #e73c3c;
@@ -733,7 +713,7 @@
 
                 &:nth-child(2) {
                     .timeline-icon{
-                        padding: 5px;
+                        padding: 7px;
 
                         i {
                         color: #fd4a85;
@@ -743,7 +723,7 @@
 
                 &:nth-child(3) {
                     .timeline-icon {
-                        padding: 5px;
+                        padding: 9px;
 
                         i {
                         color: #e73c3c;
@@ -753,7 +733,7 @@
 
                 &:nth-child(4) {
                     .timeline-icon {
-                        padding: 5px;
+                        padding: 8px;
 
                         i {
                         color: #f4a22e;
@@ -763,7 +743,7 @@
 
                 &:nth-child(5) {
                     .timeline-icon {
-                        padding: 5px;
+                        padding: 8px;
 
                         i {
                         color: #2fc5b3;
@@ -875,10 +855,6 @@
             text-align: center;
             cursor: pointer;
             transition-duration: $transitionDuration;
-
-            a {
-                color: $primaryTextColor;
-            }
 
             &:hover {
                 background-color: $overlayMenuItemHoverBgColor;

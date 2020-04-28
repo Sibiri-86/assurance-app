@@ -1,23 +1,24 @@
 .layout-topbar {
     @include clearfix();
     margin-bottom: 25px;
-    
+
     .layout-topbar-logo {
         display: inline-block;
         padding: 1em 0;
+        cursor: pointer;
 
         .logo {
             height: 37px;
-        }   
+        }
     }
 
     .layout-menu-button {
-        display: none;                  
+        display: none;
         width: 45px;
-        color: $mobileMenuIconColor;
+        color: $topbarItemTextColor;
         float: right;
         margin-top: 14px;
-        text-align: center;   
+        text-align: center;
 
         i {
             line-height: inherit;
@@ -33,16 +34,16 @@
         float: right;
         padding: 0;
 
-        > li {        
+        > li {
             margin-left: 10px;
             display: inline-block;
-        
+
             &.layout-topbar-item {
-                background-color: $topbarItemBgColor;  
+                background-color: $topbarItemBgColor;
                 border-radius: 24px;
                 height: 44px;
                 overflow: hidden;
-               
+
 
                 a {
                     display: inline-block;
@@ -53,12 +54,12 @@
                     @include transition(background-color $transitionDuration);
 
 
-                    &:first-child {                                
+                    &:first-child {
                         i{
                             padding-bottom: 4px;
                             vertical-align: middle;
-                        }                                
-                    } 
+                        }
+                    }
 
                     &:hover {
                         background-color: $topbarItemHoverBgColor;
@@ -67,26 +68,26 @@
                             display: block;
                         }
                     }
-                  
+
                     .topbar-icon {
-                        color: $topbarItemIconColor;
+                        color: $topbarItemTextColor;
                         font-size: 1.5em;
                     }
 
                     &.layout-topbar-text {
                         color: $topbarItemTextColor;
                     }
-                }  
-                       
+                }
+
                 .layout-quickmenu-tooltip {
                     display: none;
                     padding: 0 5px;
-                    position: absolute;                                 
-                    line-height: 1;  
+                    position: absolute;
+                    line-height: 1;
                     z-index: 999;
                     margin-left: -22px;
                     @include transition($transitionDuration);
-                 
+
                     .layout-quickmenu-tooltip-text {
                        padding: 6px 8px;
                        font-weight: 600;
@@ -97,7 +98,7 @@
                        text-align: center;
                        @include shadow(0 3px 6px 0 rgba(0, 0, 0, 0.16));
                     }
-                    
+
                     .layout-quickmenu-tooltip-arrow {
                         position: absolute;
                         width: 0;
@@ -118,7 +119,7 @@
                     max-width: 0px;
                     padding: 0;
                     @include transition(max-width $transitionDuration cubic-bezier(0.86, 0, 0.07, 1));
-                    
+
                     > li {
                         display: inline-block;
                         visibility: hidden;
@@ -129,14 +130,12 @@
                 ul {
                     a {
                         @include transition(background-color $transitionDuration);
-                        &:hover {                                           
+                        &:hover {
                             .topbar-icon {
-                                color: $topbarChildItemHoverColor;
-                                font-weight: 700;                           
+                                font-weight: 700;
                             }
 
                             &.layout-topbar-text {
-                                color: $topbarChildItemHoverColor;
                                 font-weight: 700;
                             }
                         }
@@ -145,7 +144,7 @@
 
                 &.topbar-search {
                     max-width: 500px;
-                    
+
 
                     .layout-topbar-icon {
                         float: right;
@@ -154,16 +153,16 @@
                     input {
                         display: block;
                         background-color: transparent;
-                        color: $topbarSearchInputTextColor;
+                        color: $topbarItemTextColor;
                         line-height: 20px;
                         padding-top: 12px;
                         padding-bottom: 12px;
-                        line-height: 20px;                    
+                        line-height: 20px;
                         text-indent: 15px;
                         border: none;
                         outline: none;
-                        float: left;          
-                        @include input-placeholder($topbarSearchPlaceholderTextColor);
+                        float: left;
+                        @include input-placeholder($topbarItemTextColor);
                         @include transition(max-width $transitionDuration cubic-bezier(0.86, 0, 0.07, 1));
                     }
                 }
@@ -198,7 +197,7 @@
                         margin-left: 14px;
                         vertical-align: top;
                         font-size: 16px;
-                        color: $userProfileTextColor;
+                        color: $topbarUserProfileTextColor;
 
                         .user-profile-name {
                             display: block;
@@ -217,16 +216,16 @@
                     position: absolute;
                     z-index: 1000;
                     top: 90px;
-                    right: 50px;               
+                    right: 50px;
                     min-width: 250px;
-                    background-color: $overlayMenuBgColor; 
+                    background-color: $overlayMenuBgColor;
                     list-style-type: none;
                     margin: 0;
                     padding:0;
                     border-radius: 2px;
                     animation-duration: $transitionDuration;
                     @include shadow($overlayMenuShadow);
-                
+
                     &:before, &:after {
                         bottom: 100%;
                         border: solid transparent;
@@ -248,10 +247,10 @@
                         border-width: 9px;
                         margin-left: -9px;
                     }
-                    
-                    > li {    
+
+                    > li {
                         margin: 0;
-                        @include clearfix();      
+                        @include clearfix();
 
                         &.profile-detail {
                             background-color: $userProfileMenuInfoBgColor;
@@ -261,7 +260,7 @@
                                 float: left;
                                 width: 100%;
 
-                                img { 
+                                img {
                                     float: left;
                                     width: 44px;
                                     height: 44px;
@@ -273,7 +272,7 @@
                                 .profile-info {
                                     margin-top: 4px;
                                     margin-left: 8px;
-                                    float: left; 
+                                    float: left;
 
                                    .user-profile-name {
                                        display:block;
@@ -284,7 +283,7 @@
                                    .user-profile-role {
                                        color: $userProfileMenuInfoRoleTextColor;
                                    }
-                                }  
+                                }
 
                                 .profile-detail-icon {
                                     float: right;
@@ -296,9 +295,9 @@
                                     }
                                 }
                             }
-                        } 
+                        }
 
-                        > a {    
+                        > a {
                             @include clearfix();
                             padding: 10px;
                             text-align: left;
@@ -308,29 +307,29 @@
                             position: relative;
                             @include transition(background-color $transitionDuration);
                             @include  border-radius($borderRadius);
-                            
-                            > i { 
+
+                            > i {
                                 float: left;
-                                margin-top: 12px;                        
-                                margin-right: 8px;  
+                                margin-top: 12px;
+                                margin-right: 8px;
                                 font-size: 1.25em;
 
                                 &.right-icon {
-                                    margin-right: 0px;  
+                                    margin-right: 0px;
                                     float: right;
                                     font-size: 1.25em;
                                     color: $userProfileMenuLinkIconColor;
-                                }                
-                            }      
+                                }
+                            }
 
-                            .menu-text { 
+                            .menu-text {
                                 margin-left: 5px;
                                 display: inline-block;
 
-                                .menu-title {  
-                                    display: block; 
-                                    color: #313842;   
-                                    font-weight: 700;                   
+                                .menu-title {
+                                    display: block;
+                                    color: #313842;
+                                    font-weight: 700;
                                 }
 
                                 .menu-subtitle {
@@ -342,37 +341,37 @@
                                         display: inline-block;
                                         color: $userProfileMenuLinkItemSubTitleColor;
                                     }
-                                }                         
-                            }       
+                                }
+                            }
 
                             &:hover {
                                 background-color: $overlayMenuItemHoverBgColor;
-                            }                   
-                        }  
-                        
+                            }
+                        }
+
                         &:nth-child(2) {
                             i {
                                 color: #00bcd4;
-                            }                       
+                            }
                         }
 
                         &:nth-child(3) {
                             i {
                                 color: #f8c336;
-                            }                       
+                            }
                         }
 
                         &:nth-child(4) {
                             i {
                                 color: #a054e5;
-                            }                     
+                            }
                         }
 
                         &:nth-child(5) {
                             i {
                                 color: #12aeee;
-                            }                      
-                        }  
+                            }
+                        }
                     }
                 }
 
@@ -382,7 +381,7 @@
                     }
                 }
             }
-        }      
+        }
     }
 }
 
@@ -397,8 +396,8 @@
             float: left;
 
             li {
-                margin-left: 8px; 
-                float:right;    
+                margin-left: 8px;
+                float:right;
 
                 &:last-child{
                     margin-left: 0;
@@ -409,11 +408,11 @@
                         display: none;
                        }
                     }
-                    
+
                     ul {
                         width: 250px;
                         top: 160px;
-                        right: 15px;   
+                        right: 15px;
 
                         li {
                             width: 100%;
@@ -426,11 +425,11 @@
                 }
 
                 &.layout-topbar-item {
-                    float: left;  
+                    float: left;
 
-                    &.topbar-search {   
+                    &.topbar-search {
                         input{
-                            max-width: 0px; 
+                            max-width: 0px;
                             display: none;
                             margin-left: -2px;
                         }
@@ -440,9 +439,9 @@
                                 display: block;
                                 max-width: 500px;
                             }
-                        }                      
-                    }                               
-                }           
+                        }
+                    }
+                }
             }
         }
     }

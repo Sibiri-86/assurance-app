@@ -1,15 +1,15 @@
 <div class="layout-actionbar">
-    <div class="breadcrumb">
+    <div class="layout-breadcrumb">
         <div class="route-bar-breadcrumb">
             <ng-template ngFor let-item let-last="last" [ngForOf]="items">
-                <li>
-                    <a [routerLink]="item.routerLink" class="ui-link ui-widget" *ngIf="item.routerLink">{{item.label}}</a>
-                    <ng-container *ngIf="!item.routerLink">{{item.label}}</ng-container>
-                </li>
+                <span>
+                    <ng-container *ngIf="!item.routerLink">{{item.label}} | </ng-container>
+                    <span *ngIf="item.routerLink">{{item.label}}</span>
+                </span>
             </ng-template>
         </div>
     </div>
-    <div class="actions ">
+    <div class="layout-actions">
         <ul>
             <li>
                 <button><i class="pi pi-compass icon"></i></button>

@@ -6,6 +6,7 @@ body {
         border: $buttonBorder;
         font-size: $fontSize;
         @include transition($buttonTransition);
+        @include border-radius($borderRadius);
 
         &:enabled:hover {
             background-color: $buttonHoverBgColor;
@@ -16,7 +17,7 @@ body {
         &:enabled:focus {
             outline: $buttonFocusOutline;
             outline-offset: $buttonFocusOutlineOffset;
-            background-color: lighten($buttonBgColor, 5%);
+            @include focused();
         }
 
         &:enabled:active  {
@@ -87,14 +88,7 @@ body {
         }
 
         &:not(.ui-state-disabled):not(.ui-state-active).ui-state-focus {
-            background-color: $toggleButtonFocusBgColor;
-            border-color: $toggleButtonFocusBorderColor;
-            color: $toggleButtonFocusTextColor;
-            outline: $toggleButtonFocusOutline;
-
-            .ui-button-icon-left {
-                color: $toggleButtonFocusIconColor;
-            }
+            @include focused();
         }
 
         &.ui-state-active {
@@ -117,14 +111,7 @@ body {
             }
 
             &.ui-state-focus {
-                background-color: $toggleButtonActiveFocusBgColor;
-                border-color: $toggleButtonActiveFocusBorderColor;
-                color: $toggleButtonActiveFocusTextColor;
-                outline: $toggleButtonFocusOutline;
-    
-                .ui-button-icon-left {
-                    color: $toggleButtonActiveFocusIconColor;
-                }
+                @include focused();
             }
         }
     }
@@ -134,38 +121,34 @@ body {
             background-color: $toggleButtonBgColor;
             border: $toggleButtonBorder;
             color: $toggleButtonTextColor;
+            outline: 0 none;
             @include transition($buttonTransition);
-    
+            @include border-radius(0);
+
             .ui-button-icon-left {
                 color: $toggleButtonIconColor;
             }
-    
+
             &:not(.ui-state-disabled):not(.ui-state-active):hover {
                 background-color: $toggleButtonHoverBgColor;
                 border-color: $toggleButtonHoverBorderColor;
                 color: $toggleButtonHoverTextColor;
-    
+
                 .ui-button-icon-left {
                     color: $toggleButtonHoverIconColor;
                 }
             }
-    
+
             &:not(.ui-state-disabled):not(.ui-state-active).ui-state-focus {
-                background-color: $toggleButtonFocusBgColor;
-                border-color: $toggleButtonFocusBorderColor;
-                color: $toggleButtonFocusTextColor;
-                outline: $toggleButtonFocusOutline;
-    
-                .ui-button-icon-left {
-                    color: $toggleButtonFocusIconColor;
-                }
+                @include focused();
+                z-index: 1;
             }
-    
+
             &.ui-state-active {
                 background-color: $toggleButtonActiveBgColor;
                 border-color: $toggleButtonActiveBorderColor;
                 color: $toggleButtonActiveTextColor;
-    
+
                 .ui-button-icon-left {
                     color: $toggleButtonActiveIconColor;
                 }
@@ -174,21 +157,15 @@ body {
                     background-color: $toggleButtonActiveHoverBgColor;
                     border-color: $toggleButtonActiveHoverBorderColor;
                     color: $toggleButtonActiveHoverTextColor;
-    
+
                     .ui-button-icon-left {
                         color: $toggleButtonActiveHoverIconColor;
                     }
                 }
-    
+
                 &.ui-state-focus {
-                    background-color: $toggleButtonActiveFocusBgColor;
-                    border-color: $toggleButtonActiveFocusBorderColor;
-                    color: $toggleButtonActiveFocusTextColor;
-                    outline: $toggleButtonFocusOutline;
-        
-                    .ui-button-icon-left {
-                        color: $toggleButtonActiveFocusIconColor;
-                    }
+                    @include focused();
+                    z-index: 1;
                 }
             }
 
@@ -214,6 +191,18 @@ body {
     .ui-splitbutton.ui-buttonset {
         .ui-button {
             border: 1px solid transparent;
+
+            &:first-child {
+                @include border-radius-right(0);
+            }
+
+            &.ui-splitbutton-menubutton {
+                @include border-radius-left(0);
+            }
+
+            &:focus {
+                z-index: 1;
+            }
         }
 
         .ui-menu {
@@ -238,10 +227,6 @@ body {
             border-color: $secondaryButtonHoverBorderColor;
         }
 
-        &:enabled:focus {
-            outline-color: $secondaryButtonTextColor;
-        }
-
         &:enabled:active {
             background-color: $secondaryButtonActiveBgColor;
             color: $secondaryButtonActiveTextColor;
@@ -258,10 +243,6 @@ body {
             background-color: $infoButtonHoverBgColor;
             color: $infoButtonHoverTextColor;
             border-color: $infoButtonHoverBorderColor;
-        }
-
-        &:enabled:focus {
-            outline-color: $infoButtonBgColor;
         }
 
         &:enabled:active {
@@ -282,10 +263,6 @@ body {
             border-color: $successButtonHoverBorderColor;
         }
 
-        &:enabled:focus {
-            outline-color: $successButtonBgColor;
-        }
-
         &:enabled:active {
             background-color: $successButtonActiveBgColor;
             color: $successButtonActiveTextColor;
@@ -304,10 +281,6 @@ body {
             border-color: $warningButtonHoverBorderColor;
         }
 
-        &:enabled:focus {
-            outline-color: $warningButtonBgColor;
-        }
-
         &:enabled:active {
             background-color: $warningButtonActiveBgColor;
             color: $warningButtonActiveTextColor;
@@ -324,10 +297,6 @@ body {
             background-color: $dangerButtonHoverBgColor;
             color: $dangerButtonHoverTextColor;
             border-color: $dangerButtonHoverBorderColor;
-        }
-
-        &:enabled:focus {
-            outline-color: $dangerButtonBgColor;
         }
 
         &:enabled:active  {

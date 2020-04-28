@@ -7,6 +7,7 @@ body {
         border: $inputBorder;
         @include transition($inputTransition);
         @include appearance(none);
+        @include border-radius($borderRadius);
 
         &:enabled:hover:not(.ui-state-error) {
             border-color: $inputHoverBorderColor;
@@ -38,9 +39,7 @@ body {
             }
 
             &.ui-state-focus {
-                border-color: $checkboxFocusBorderColor;
-                background-color: $checkboxFocusBgColor;
-                color: $checkboxFocusTextColor;
+                @include focused-input();
             }
 
             &.ui-state-active {
@@ -55,9 +54,7 @@ body {
                 }
 
                 &.ui-state-focus {
-                    border-color: $checkboxActiveFocusBorderColor;
-                    background-color: $checkboxActiveFocusBgColor;
-                    color: $checkboxActiveFocusTextColor;
+                    @include focused-input();
                 }
             }
 
@@ -95,9 +92,7 @@ body {
             }
 
             &.ui-state-focus {
-                border-color: $radiobuttonFocusBorderColor;
-                background-color: $radiobuttonFocusBgColor;
-                color: $radiobuttonFocusTextColor;
+                @include focused-input();
             }
 
             &.ui-state-active {
@@ -116,9 +111,7 @@ body {
                 }
 
                 &.ui-state-focus {
-                    border-color: $radiobuttonActiveFocusBorderColor;
-                    background-color: $radiobuttonActiveFocusBgColor;
-                    color: $radiobuttonActiveFocusTextColor;
+                    @include focused-input();
                 }
             }
 
@@ -147,8 +140,8 @@ body {
     }
 
     .ui-inputswitch {
-        width: 34px;
-        height: 14px;
+        width: $inputSwitchWidth;
+        height: $inputSwitchHeight;
 
         .ui-inputswitch-slider {
             @include transition($inputSwitchTransition);
@@ -158,10 +151,10 @@ body {
 
             &:before {
                 background-color: $inputSwitchHandleOffBgColor;
-                height: 1.429em;
-                width: 1.429em;
+                height: 1.250em;
+                width: 1.250em;
                 left: 0;
-                bottom: -.3em;
+                bottom: -.2em;
                 border-radius: 50%;
                 -webkit-transition: $transitionDuration;
                 transition: $transitionDuration;
@@ -170,15 +163,15 @@ body {
 
         &.ui-inputswitch-checked {
             .ui-inputswitch-slider:before {
-                -webkit-transform: translateX(1.429em);
-                -ms-transform: translateX(1.429em);
-                transform: translateX(1.429em);
+                -webkit-transform: translateX(1.250em);
+                -ms-transform: translateX(1.250em);
+                transform: translateX(1.250em);
             }
         }
 
         &.ui-inputswitch-focus {
             .ui-inputswitch-slider {
-                background: $inputSwitchSliderOffFocusBgColor;
+                @include focused-input();
                 &:before {
                     background-color: $inputSwitchHandleOffFocusBgColor;
                 }
@@ -203,12 +196,6 @@ body {
             &:not(.ui-state-disabled):hover {
                 .ui-inputswitch-slider {
                     background-color: $inputSwitchSliderOnHoverBgColor;
-                }
-            }
-
-            &.ui-inputswitch-focus {
-                .ui-inputswitch-slider {
-                    background: $inputSwitchSliderOnFocusBgColor;
                 }
             }
         }
@@ -256,6 +243,7 @@ body {
                     margin: $chipsItemMargin;
                     background: $highlightBgColor;
                     color: $highlightColorText;
+                    @include border-radius($borderRadius);
                 }
             }
         }
@@ -276,7 +264,13 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
                 @include border-radius(0);
+
+                &:hover {
+                    color: $inputListItemHighlightTextColor;
+                    background-color: $inputListItemHighlightBgColor;
+                }
 
                 &.ui-state-highlight {
                     color: $inputListItemHighlightTextColor;
@@ -353,6 +347,7 @@ body {
                 margin: $chipsItemMargin;
                 background: $highlightBgColor;
                 color: $highlightColorText;
+                @include border-radius($borderRadius);
             }
         }
     }
@@ -361,13 +356,23 @@ body {
         background: $inputBgColor;
         border: $inputBorder;
         @include transition($inputTransition);
+        @include border-radius($borderRadius);
 
         &:not(.ui-state-disabled):hover {
             border-color: $inputHoverBorderColor;
         }
 
+        &:not(.ui-state-disabled).ui-state-focus {
+            @include focused-input();
+        }
+
         .ui-dropdown-label {
             padding-right: 2em;
+
+            &:focus {
+                outline: 0 none;
+                @include shadow(none);
+            }
         }
 
         .ui-dropdown-trigger {
@@ -377,6 +382,7 @@ body {
             text-align: center;
             padding: 0;
             color: $inputDropdownIconColor;
+            @include border-radius($borderRadius);
 
             .ui-dropdown-trigger-icon {
                 @include icon_override("\e902");
@@ -385,10 +391,6 @@ body {
 
         .ui-dropdown-clear-icon {
             color: $inputDropdownIconColor;
-        }
-
-        &:not(.ui-state-disabled).ui-state-focus {
-            @include focused-input();
         }
     }
 
@@ -427,6 +429,7 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
                 @include border-radius(0);
 
                 &.ui-state-highlight {
@@ -446,6 +449,7 @@ body {
         background: $inputBgColor;
         border: $inputBorder;
         @include transition($inputTransition);
+        @include border-radius($borderRadius);
 
         &:not(.ui-state-disabled):hover {
             border-color: $inputHoverBorderColor;
@@ -458,6 +462,7 @@ body {
         .ui-multiselect-label {
             padding: $inputPadding;
             padding-right: 2em;
+            font-weight: 400;
             color: $textColor;
         }
 
@@ -536,11 +541,16 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
                 @include border-radius(0);
 
                 &.ui-state-highlight {
                     color: $inputListItemHighlightTextColor;
                     background-color: $inputListItemHighlightBgColor;
+                }
+
+                &:focus {
+                    @include focused-listitem();
                 }
 
                 &:not(.ui-state-highlight):not(.ui-state-disabled):hover {
@@ -593,6 +603,7 @@ body {
             color: $inputListHeaderTextColor;
             background-color: $inputListHeaderBgColor;
             margin: $inputListHeaderMargin;
+            @include border-radius-top($borderRadius);
 
             .ui-listbox-filter-container {
                 width: calc(100% - (#{$inputListHeaderPaddingLeft} + #{$inputListHeaderPaddingLeft} + #{$inlineSpacing}));
@@ -621,11 +632,16 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
                 @include border-radius(0);
 
                 &.ui-state-highlight {
                     color: $inputListItemHighlightTextColor;
                     background-color: $inputListItemHighlightBgColor;
+                }
+
+                &:focus {
+                    @include focused-listitem();
                 }
 
                 .ui-chkbox {
@@ -744,11 +760,17 @@ body {
         a {
             text-align: center;
             display: inline-block;
+            cursor: pointer;
             color: $ratingStarIconColor;
+            @include border-radius($borderRadius);
             @include transition($ratingTransition);
 
             &.ui-rating-cancel {
                 color: $ratingCancelIconColor;
+            }
+
+            &:focus {
+                @include focused();
             }
 
             .ui-rating-icon {
@@ -779,14 +801,6 @@ body {
         .ui-spinner-button {
             width: $spinnerButtonWidth;
 
-            &.ui-spinner-up {
-                @include border-radius-top-right($borderRadius);
-            }
-
-            &.ui-spinner-down {
-                @include border-radius-bottom-right($borderRadius);
-            }
-
             .ui-spinner-button-icon {
                 position: absolute;
                 top: 50%;
@@ -794,6 +808,22 @@ body {
                 margin-top: -.5em;
                 margin-left: -.5em;
                 width: 1em;
+            }
+
+            &.ui-spinner-button {
+                @include border-radius(0);
+
+                &.ui-spinner-up {
+                    @include border-radius-top-right($borderRadius);
+                }
+
+                &.ui-spinner-down {
+                    @include border-radius-bottom-right($borderRadius);
+                }
+
+                &:focus {
+                    z-index: 1;
+                }
             }
         }
     }
@@ -843,6 +873,10 @@ body {
             border: $sliderHandleBorder;
             @include border-radius($sliderHandleBorderRadius);
             @include transition($sliderHandleTransition);
+
+            &:focus {
+                @include focused-input();
+            }
         }
 
         .ui-slider-range {
@@ -854,16 +888,6 @@ body {
                 background-color: $sliderHandleHoverBgColor;
                 border: $sliderHandleHoverBorder;
             }
-            .ui-slider-handle:focus{
-                border: $sliderHandleFocusBorder;
-                background-color: $sliderHandleFocusBgColor;
-                outline: 0 none;
-            }
-            .ui-slider-handle:active{
-                border: $sliderHandleFocusBorder;
-                background-color: $sliderHandleFocusBgColor;
-                outline: 0 none;
-            }
         }
     }
 
@@ -873,6 +897,7 @@ body {
         background-color: $inputContentPanelBgColor;
         color: $inputContentPanelTextColor;
         border: $inputListBorder;
+        @include border-radius($borderRadius);
 
         &:not(.ui-datepicker-inline) {
             border: $inputOverlayBorder;
@@ -960,6 +985,7 @@ body {
                     display: block;
                     text-align: center;
                     color: $textColor;
+                    cursor: pointer;
                     border: 1px solid transparent;
                     padding: $calendarCellDatePadding;
                     @include border-radius($calendarCellDateBorderRadius);
@@ -1007,6 +1033,7 @@ body {
             a {
                 color:$calendarTimePickerIconColor;
                 font-size: $calendarTimePickerIconFontSize;
+                @include transition($calendarNavIconTransition);
 
                 &:hover {
                     color: $calendarTimePickerIconHoverColor;
@@ -1089,9 +1116,14 @@ body {
             border: $panelHeaderBorder;
             color: $panelHeaderTextColor;
             border-bottom: 0 none;
+            @include border-radius-top($borderRadius);
 
             .ui-button {
                 margin-right: 8px;
+
+                &.ui-fileupload-choose.ui-state-focus {
+                    @include focused();
+                }
             }
         }
 
@@ -1100,6 +1132,7 @@ body {
             padding: $panelContentPadding;
             border: $panelContentBorder;
             color: $panelContentTextColor;
+            @include border-radius-bottom($borderRadius);
         }
 
         .ui-progressbar {
@@ -1118,11 +1151,6 @@ body {
             background-color: $buttonActiveBgColor;
             color: $buttonActiveTextColor;
             border-color: $buttonActiveBorderColor;
-        }
-
-        &.ui-state-focus {
-            outline: $buttonFocusOutline;
-            outline-offset: $buttonFocusOutlineOffset;
         }
     }
 
@@ -1184,6 +1212,10 @@ body {
               @include border-radius-right($borderRadius);
             }
         }
+
+        .ui-inputtext:focus {
+            z-index: 1;
+        }
     }
 
     .ui-fluid {
@@ -1222,6 +1254,6 @@ body {
     p-spinner.ng-dirty.ng-invalid > .ui-inputtext,
     p-selectbutton.ng-dirty.ng-invalid .ui-button,
     p-togglebutton.ng-dirty.ng-invalid .ui-button {
-        border: 1px solid $inputErrorBorderColor;
+        border: $inputErrorBorder;
     }
 }

@@ -65,6 +65,10 @@ export class SampleDemoComponent implements OnInit {
 
     selectedType: string;
 
+    brands: SelectItem[];
+
+    colors: SelectItem[];
+
     constructor(private carService: CarService, private countryService: CountryService, private nodeService: NodeService,
                 private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
@@ -218,6 +222,30 @@ export class SampleDemoComponent implements OnInit {
             { vin: 'ybw5fsd', year: 2012, brand: 'Ford', color: 'Yellow' },
             { vin: '45665e5', year: 2011, brand: 'Mercedes', color: 'Brown' },
             { vin: 'he6sb5v', year: 2015, brand: 'Ford', color: 'Black' }
+        ];
+
+        this.brands = [
+            { label: 'Audi', value: 'Audi' },
+            { label: 'BMW', value: 'BMW' },
+            { label: 'Fiat', value: 'Fiat' },
+            { label: 'Honda', value: 'Honda' },
+            { label: 'Jaguar', value: 'Jaguar' },
+            { label: 'Mercedes', value: 'Mercedes' },
+            { label: 'Renault', value: 'Renault' },
+            { label: 'VW', value: 'VW' },
+            { label: 'Volvo', value: 'Volvo' }
+        ];
+
+        this.colors = [
+            { label: 'White', value: 'White' },
+            { label: 'Green', value: 'Green' },
+            { label: 'Silver', value: 'Silver' },
+            { label: 'Black', value: 'Black' },
+            { label: 'Red', value: 'Red' },
+            { label: 'Maroon', value: 'Maroon' },
+            { label: 'Brown', value: 'Brown' },
+            { label: 'Orange', value: 'Orange' },
+            { label: 'Blue', value: 'Blue' }
         ];
     }
 

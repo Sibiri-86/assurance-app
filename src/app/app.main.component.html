@@ -2,7 +2,8 @@
      [ngClass]="{'layout-menu-overlay': isOverlay(),
                 'layout-menu-overlay-active': overlayMenuActive,
                 'layout-menu-horizontal': isHorizontal(),
-                'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
+                'layout-mobile-active': overlayMenuMobileActive,
+                'layout-fullwidth': wrapperMode}" [class]="layout">
 
     <app-topbar></app-topbar>
 
@@ -19,7 +20,4 @@
     <app-config></app-config>
 
     <div class="layout-mask"></div>
-
-    <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
-
 </div>

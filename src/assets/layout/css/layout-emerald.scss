@@ -1,51 +1,33 @@
-$primaryColor:#0FB4C6;
-$primaryHiglightColor:#0FB4C6;
-$primaryTextColor:#0FB4C6;
+$primaryLighterColor:#CFD8DC;
+$primaryColor:#455A64;
+$primaryDarkerColor:#263238;
+$primaryTextColor:#ffffff;
 
 /* background */
 $backgroundImage:'emerald.jpg';
 
 /* horizontal menu */
 $horizontalMenuItemBgColor: rgba(255,255,255,0.2);
-$horizontalMenuItemTextColor: rgba(255,255,255,0.8);
-$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
-$horizontalMenuItemHoverTextColor: #ffffff;
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.3);
+$horizontalMenuItemHoverTextColor: rgba(255,255,255,1);
 
 /* topbar */
 $topbarItemBgColor:rgba(255,255,255,0.2);
-$topbarItemHoverBgColor:rgba(255,255,255,0.4);
-$topbarItemIconColor:rgba(255,255,255,0.72);
 $topbarItemTextColor:rgba(255,255,255,0.72);
-$topbarChildItemHoverColor:#ECAA28;
-$topbarSearchInputTextColor:#dddee1;
-$topbarSearchPlaceholderTextColor:#dddee1;
-
-/* user profile */
-$userProfileTextColor:#f0f0f0;
+$topbarItemHoverBgColor:rgba(255,255,255,0.2);
+$topbarUserProfileTextColor:rgba(255,255,255,0.72);
 
 /* overlay menu */
-$overlayMenuItemHoverBgColor:#D7F1F4;
-$overlayMenuItemActiveTextColor:#0FB4C6;
+$overlayMenuItemHoverBgColor:$primaryLighterColor;
+$overlayMenuItemActiveTextColor:$primaryDarkerColor;
 
 /* overlay menu button */
-$overlayMenuButtonColor:#0b0f11;
-$overlayMenuButtonHoverBgColor:#D7F1F4;
-
-/* mobile menu button */
-$mobileMenuIconColor:#ffffff;
-
-/* actionbar */
-$actionItemBgColor:#D7F1F4;
-$actionItemIconColor:#045F69;
-$actionItemHoverBgColor:#AAC7CA;
-$actionItemActiveBgColor:#0FB4C6;
-$actionItemActiveIconColor:#ffffff;
+$overlayMenuButtonColor:$primaryDarkerColor;
+$overlayMenuButtonHoverBgColor:$primaryLighterColor;
 
 //footer
-$footerTextColor:rgba(255, 255, 255, 0.67);
-$footerTextHoverColor:#ffffff;
-
-/* spinner color */
-$spinnerColor:#0FB4C6;
+$footerTextColor:rgba(255,255,255,0.7);
+$footerTextHoverColor:rgba(255,255,255,1);
 
 @import '../../sass/layout/_layout';

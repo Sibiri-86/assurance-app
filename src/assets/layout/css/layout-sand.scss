@@ -1,51 +1,33 @@
-$primaryColor:#8A6D61;
-$primaryHiglightColor:#44322A;
-$primaryTextColor:#8A6D61;
+$primaryLighterColor:#D7CCC8;
+$primaryColor:#5D4037;
+$primaryDarkerColor:#3E2723;
+$primaryTextColor:#ffffff;
 
 /* background */
 $backgroundImage:'sand.jpg';
 
 /* horizontal menu */
-$horizontalMenuItemBgColor: rgba(255,255,255,0.25);
-$horizontalMenuItemTextColor: rgba(255,255,255,0.95);
-$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
-$horizontalMenuItemHoverTextColor: #ffffff;
+$horizontalMenuItemBgColor: rgba(255,255,255,0.2);
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.3);
+$horizontalMenuItemHoverTextColor: rgba(255,255,255,1);
 
 /* topbar */
-$topbarItemBgColor:rgba(255,255,255,0.25);
-$topbarItemHoverBgColor:rgba(255,255,255,0.4);
-$topbarItemIconColor:rgba(255,255,255,0.95);
-$topbarItemTextColor:rgba(255,255,255,0.95);
-$topbarChildItemHoverColor:#88DCF7;
-$topbarSearchInputTextColor:#dddee1;
-$topbarSearchPlaceholderTextColor:#dddee1;
-
-/* user profile */
-$userProfileTextColor:#f0f0f0;
+$topbarItemBgColor:rgba(255,255,255,0.2);
+$topbarItemTextColor:rgba(255,255,255,0.72);
+$topbarItemHoverBgColor:rgba(255,255,255,0.2);
+$topbarUserProfileTextColor:rgba(255,255,255,0.72);
 
 /* overlay menu */
-$overlayMenuItemHoverBgColor:#FAD6C7;
-$overlayMenuItemActiveTextColor:#44322A;
+$overlayMenuItemHoverBgColor:$primaryLighterColor;
+$overlayMenuItemActiveTextColor:$primaryDarkerColor;
 
 /* overlay menu button */
-$overlayMenuButtonColor:#44322A;
-$overlayMenuButtonHoverBgColor:#FAD6C7;
-
-/* mobile menu button */
-$mobileMenuIconColor:#ffffff;
-
-/* actionbar */
-$actionItemBgColor:#FBF0EB;
-$actionItemIconColor:#44322A;
-$actionItemHoverBgColor:#FAD6C7;
-$actionItemActiveBgColor:#8A6D61;
-$actionItemActiveIconColor:#ffffff;
+$overlayMenuButtonColor:$primaryDarkerColor;
+$overlayMenuButtonHoverBgColor:$primaryLighterColor;
 
 //footer
-$footerTextColor:rgba(255, 255, 255, 0.67);
-$footerTextHoverColor:#ffffff;
-
-/* spinner color */
-$spinnerColor:#8A6D61;
+$footerTextColor:rgba(255,255,255,0.7);
+$footerTextHoverColor:rgba(255,255,255,1);
 
 @import '../../sass/layout/_layout';

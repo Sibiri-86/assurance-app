@@ -22,10 +22,6 @@ body {
                 background-color: $paginatorElementHoverBgColor;
                 color: $paginatorElementHoverIconColor;
             }
-
-            &:focus {
-                outline: 0 none;
-            }
         }
 
         .ui-dropdown {
@@ -69,6 +65,15 @@ body {
             }
         }
 
+        .ui-paginator-current {
+            vertical-align: top;
+            display: inline-block;
+            height: $paginatorElementHeight;
+            min-width: $paginatorElementWidth;
+            border: $paginatorElementBorder;
+            line-height: $paginatorElementHeight;
+        }
+
         .ui-paginator-pages {
             vertical-align: top;
             display: inline-block;
@@ -83,6 +88,7 @@ body {
                 padding: $paginatorElementPadding;
                 margin: $paginatorElementMargin;
                 vertical-align: top;
+                @include transition(box-shadow $transitionDuration);
                 @include border-radius($paginatorElementBorderRadius);
 
                 &.ui-state-active {
@@ -132,10 +138,7 @@ body {
             font-weight: $tableHeaderCellFontWeight;
             color: $tableHeaderCellTextColor;
             background-color: $tableHeaderCellBgColor;
-        }
-
-        .ui-table-tbody > tr > td {
-            padding: $tableBodyCellPadding;
+            text-align: center;
         }
 
         .ui-table-tfoot > tr > td {
@@ -144,6 +147,12 @@ body {
             font-weight: $tableFooterCellFontWeight;
             color: $tableFooterCellTextColor;
             background-color: $tableFooterCellBgColor;
+            text-align: center;
+        }
+
+        .ui-column-filter {
+            width: 100%;
+            margin-top: .5em;
         }
 
         p-sortIcon {
@@ -151,9 +160,11 @@ body {
         }
 
         .ui-sortable-column {
+            @include transition(box-shadow $transitionDuration);
+
             .ui-sortable-column-icon {
                 vertical-align: middle;
-                color: $tableHeaderCellTextColor;
+                color: $tableHeaderCellIconColor;
             }
 
             &:not(.ui-state-highlight):hover {
@@ -163,6 +174,10 @@ body {
                 .ui-sortable-column-icon {
                     color: $tableHeaderCellHoverTextColor;
                 }
+            }
+
+            &:focus {
+                @include focused-listitem();
             }
 
             &.ui-state-highlight {
@@ -195,15 +210,24 @@ body {
                 > td {
                     background: inherit;
                     border: $tableBodyCellBorder;
+                    padding: $tableBodyCellPadding;
                 }
 
                 &.ui-state-highlight {
                     background-color: $highlightBgColor;
                     color: $highlightColorText;
+
+                    .ui-row-toggler {
+                        color: $highlightColorText;
+
+                        &:hover {
+                            color: $highlightColorText;
+                        }
+                    }
                 }
 
                 &.ui-contextmenu-selected {
-                    background-color: $highlightBgColor;
+                    background-color: lighten($highlightBgColor, 25%);
                     color: $highlightColorText;
                 }
 
@@ -218,11 +242,27 @@ body {
                 &.ui-state-highlight {
                     background-color: $highlightBgColor;
                     color: $highlightColorText;
+
+                    .ui-row-toggler {
+                        color: $highlightColorText;
+
+                        &:hover {
+                            color: $highlightColorText;
+                        }
+                    }
                 }
 
                 &.ui-contextmenu-selected {
                     background-color: $highlightBgColor;
                     color: $highlightColorText;
+
+                    .ui-row-toggler {
+                        color: $highlightColorText;
+
+                        &:hover {
+                            color: $highlightColorText;
+                        }
+                    }
                 }
             }
         }
@@ -237,6 +277,23 @@ body {
 
         .ui-column-resizer-helper {
             background-color: $tableResizerHelperBgColor;
+        }
+
+        &.ui-table-borderless {
+            .ui-table-thead > tr > th,
+            .ui-table-tbody > tr > td,
+            .ui-table-tfoot > tr > td {
+                border: 0 none;
+            }
+
+            .ui-paginator {
+                border: 0 none;
+            }
+
+            .ui-table-caption,
+            .ui-table-summary {
+                border: 0 none;
+            }
         }
     }
 
@@ -377,6 +434,11 @@ body {
             padding: $panelHeaderPadding;
             font-weight: $panelHeaderFontWeight;
             border-bottom: 0 none;
+            @include border-radius-top($borderRadius);
+
+            .ui-inputtext {
+                width: auto;
+            }
         }
 
         .ui-dataview-content {
@@ -384,6 +446,14 @@ body {
             border: $panelContentBorder;
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
+
+            > .p-grid > div {
+                border-bottom: $panelContentBorder;
+
+                &:last-child {
+                    border-bottom: 0 none;
+                }
+            }
         }
 
         .ui-dataview-footer {
@@ -392,6 +462,7 @@ body {
             border: $panelFooterBorder;
             padding: $panelFooterPadding;
             border-top: 0 none;
+            @include border-radius-bottom($borderRadius);
         }
     }
 
@@ -432,17 +503,31 @@ body {
 
         .fc-toolbar {
             .fc-button {
-                color: $buttonTextColor;
-                background-color: $buttonBgColor;
-                border: $buttonBorder;
+                background-color: $primaryColor;
+                color: $primaryTextColor;
                 font-size: $fontSize;
-                @include transition($buttonTransition);
-                @include border-radius($borderRadius);
+                font-family: $fontFamily;
+                height: 2.25em;
+                padding: 0 1em;
+                border: 0 none;
 
-                &:enabled:hover {
-                    background-color: $buttonHoverBgColor;
-                    color: $buttonHoverTextColor;
-                    border-color: $buttonHoverBorderColor;
+                &:enabled:not(:focus):not(.fc-button-active):hover {
+                    background-color: darken($primaryColor,5%);
+                }
+
+                &:enabled:not(.fc-button-active):focus {
+                    outline: 0 none;
+                    background-color: darken($primaryColor,5%);
+                    box-shadow: none;
+                }
+
+                &.fc-button-active {
+                    background-color: darken($primaryColor,10%);
+                    @include shadow(inset 0 3px 5px rgba(0,0,0,.125));
+
+                    &:focus {
+                        box-shadow: none;
+                    }
                 }
 
                 .fc-icon-chevron-left{
@@ -455,12 +540,6 @@ body {
                     font-family: 'PrimeIcons' !important;
                     text-indent: 0;
                     @include icon_override("\e901");
-                }
-
-                &:focus {
-                    outline: $buttonFocusOutline;
-                    outline-offset: $buttonFocusOutlineOffset;
-                    background-color: lighten($buttonBgColor, 5%);
                 }
             }
 
@@ -514,6 +593,7 @@ body {
 
         .ui-picklist-filter-container {
             padding: $inputListHeaderPaddingTop $inputListHeaderPaddingRight $inputListHeaderPaddingBottom $inputListHeaderPaddingLeft;
+            border: $panelHeaderBorder;
             color: $inputListHeaderTextColor;
             background-color: $inputListHeaderBgColor;
             margin: $inputListHeaderMargin;
@@ -543,6 +623,7 @@ body {
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
             padding: $inputListPadding;
+            @include border-radius-bottom($borderRadius);
 
             .ui-picklist-item {
                 padding: $inputListItemPadding;
@@ -550,10 +631,15 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
 
                 &:not(.ui-state-highlight):hover {
                     background-color: $inputListItemHoverBgColor;
                     color: $inputListItemHoverTextColor;
+                }
+
+                &:focus {
+                    @include focused-listitem();
                 }
 
                 &.ui-state-highlight {
@@ -597,6 +683,7 @@ body {
 
         .ui-orderlist-filter-container {
             padding: $inputListHeaderPaddingTop $inputListHeaderPaddingRight $inputListHeaderPaddingBottom $inputListHeaderPaddingLeft;
+            border: $panelHeaderBorder;
             color: $inputListHeaderTextColor;
             background-color: $inputListHeaderBgColor;
             margin: $inputListHeaderMargin;
@@ -622,6 +709,7 @@ body {
             background-color: $panelContentBgColor;
             color: $panelContentTextColor;
             padding: $inputListPadding;
+            @include border-radius-bottom($borderRadius);
 
             .ui-orderlist-item {
                 padding: $inputListItemPadding;
@@ -629,10 +717,15 @@ body {
                 border: $inputListItemBorder;
                 color: $inputListItemTextColor;
                 background-color: $inputListItemBgColor;
+                @include transition($inputListItemTransition);
 
                 &:not(.ui-state-highlight):hover {
                     background-color: $inputListItemHoverBgColor;
                     color: $inputListItemHoverTextColor;
+                }
+
+                &:focus {
+                    @include focused-listitem();
                 }
 
                 &.ui-state-highlight {
@@ -648,9 +741,10 @@ body {
         background-color: $panelContentBgColor;
         color: $panelContentTextColor;
         padding: $panelContentPadding;
+        @include border-radius($borderRadius);
 
         .ui-tree-container {
-            padding: 0;
+            padding: 0.286em;
             margin: 0;
 
             .ui-treenode {
@@ -658,6 +752,8 @@ body {
 
                 .ui-treenode-content {
                     padding: 0;
+                    border: 1px solid transparent;
+                    @include border-radius($borderRadius);
 
                     .ui-tree-toggler {
                         vertical-align: middle;
@@ -665,6 +761,10 @@ body {
                         float: none;
                         margin: 0 $treeNodeContentSpacing 0 0;
                         color: $dataIconColor;
+
+                        .ui-tree-toggler-icon {
+                            line-height: $primeIconFontSize;
+                        }
                     }
 
                     .ui-treenode-icon {
@@ -694,10 +794,18 @@ body {
                         }
                     }
 
+                    &:focus {
+                        @include focused();
+                    }
+
                     &.ui-treenode-selectable {
                         .ui-treenode-label:not(.ui-state-highlight):hover {
                             background-color: $inputListItemHoverBgColor;
                             color: $inputListItemHoverTextColor;
+
+                            .ui-treenode-icon {
+                                color: $inputListItemHoverTextColor;
+                            }
                         }
                     }
 
@@ -730,6 +838,7 @@ body {
                     background-color: $panelContentBgColor;
                     color: $panelContentTextColor;
                     padding: $panelContentPadding;
+                    @include border-radius($borderRadius);
 
                     &.ui-state-highlight {
                         background-color: $highlightBgColor;
@@ -800,6 +909,7 @@ body {
             bottom: -.7em;
             margin-left: -.46em;
             color: $dataIconColor;
+            @include border-radius($borderRadius);
         }
     }
 
@@ -864,11 +974,13 @@ body {
         .ui-treetable-caption {
             border-bottom: 0 none;
             font-weight: $panelHeaderFontWeight;
+            @include border-radius-top($borderRadius);
         }
 
         .ui-treetable-summary {
             border-top: 0 none;
             font-weight: $panelHeaderFontWeight;
+            @include border-radius-bottom($borderRadius);
         }
 
         .ui-treetable-thead > tr > th {
@@ -877,10 +989,7 @@ body {
             font-weight: $tableHeaderCellFontWeight;
             color: $tableHeaderCellTextColor;
             background-color: $tableHeaderCellBgColor;
-        }
-
-        .ui-treetable-tbody > tr > td {
-            padding: $tableBodyCellPadding;
+            text-align: center;
         }
 
         .ui-treetable-tfoot > tr > td {
@@ -889,6 +998,7 @@ body {
             font-weight: $tableFooterCellFontWeight;
             color: $tableFooterCellTextColor;
             background-color: $tableFooterCellBgColor;
+            text-align: center;
         }
 
         p-treeTableToggler {
@@ -907,6 +1017,10 @@ body {
                 .ui-sortable-column-icon {
                     color: $tableHeaderCellHoverTextColor;
                 }
+            }
+
+            &:focus {
+                @include focused-listitem();
             }
 
             &.ui-state-highlight {
@@ -938,6 +1052,7 @@ body {
                 > td {
                     background: inherit;
                     border: $tableBodyCellBorder;
+                    padding: $tableBodyCellPadding;
 
                     .ui-treetable-toggler {
                         color: $dataIconColor;
@@ -985,6 +1100,10 @@ body {
                 cursor: pointer;
                 background-color: $tableBodyRowHoverBgColor;
                 color: $tableBodyRowHoverTextColor;
+
+                .ui-treetable-toggler {
+                    color: $tableBodyRowHoverTextColor;
+                }
             }
         }
 

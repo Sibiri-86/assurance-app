@@ -12,45 +12,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 @Component({
     templateUrl: './datademo.component.html',
     styles: [`
-		/* Table */
-		.ui-table.ui-table-cars .ui-table-caption.ui-widget-header {
-			border: 0 none;
-			padding: 12px;
-			text-align: left;
-			font-size: 20px;
-		}
-
-		.ui-column-filter {
-			margin-top: 1em;
-		}
-
-		.ui-column-filter .ui-multiselect-label {
-			font-weight: 500;
-		}
-
-		.ui-table.ui-table-cars .ui-table-thead > tr > th {
-			border: 0 none;
-			text-align: left;
-		}
-
-		.ui-table-globalfilter-container {
-			float: right;
-			display: inline;
-		}
-
-		.ui-table.ui-table-cars .ui-table-tbody > tr > td {
-			border: 0 none;
-		}
-
-		.ui-table.ui-table-cars .ui-table-tbody .ui-column-title {
-			font-size: 16px;
-		}
-
-		.ui-table.ui-table-cars .ui-paginator {
-			border: 0 none;
-			padding: 1em;
-		}
-
 		/* Dataview */
 		.filter-container {
 			text-align: center;
@@ -199,6 +160,8 @@ export class DataDemoComponent implements OnInit {
 
     cars3: Car[];
 
+    cars4: Car[];
+
     carsVirtual: Car[] = [];
 
     cols: any[];
@@ -208,6 +171,8 @@ export class DataDemoComponent implements OnInit {
     data: TreeNode[];
 
     selectedCar: Car;
+
+    selectedCar2: Car;
 
     sourceCars: Car[];
 
@@ -263,6 +228,7 @@ export class DataDemoComponent implements OnInit {
 
     ngOnInit() {
         this.carService.getCarsLarge().then(cars => this.cars1 = cars);
+        this.carService.getCarsMedium().then(cars => this.cars4 = cars);
         this.cols = [
             { field: 'vin', header: 'Vin' },
             { field: 'year', header: 'Year' },

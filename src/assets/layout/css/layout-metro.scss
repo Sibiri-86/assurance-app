@@ -1,51 +1,33 @@
-$primaryColor:#677A87;
-$primaryHiglightColor:#2D3940;
-$primaryTextColor:#677A87;
+$primaryLighterColor:#CFD8DC;
+$primaryColor:#455A64;
+$primaryDarkerColor:#263238;
+$primaryTextColor:#ffffff;
 
 /* background */
 $backgroundImage:'metro.jpg';
 
 /* horizontal menu */
 $horizontalMenuItemBgColor: rgba(255,255,255,0.2);
-$horizontalMenuItemTextColor: rgba(255,255,255,0.9);
-$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.4);
-$horizontalMenuItemHoverTextColor: #ffffff;
+$horizontalMenuItemTextColor: rgba(255,255,255,0.72);
+$horizontalMenuItemHoverBgColor: rgba(255,255,255,0.3);
+$horizontalMenuItemHoverTextColor: rgba(255,255,255,1);
 
 /* topbar */
 $topbarItemBgColor:rgba(255,255,255,0.2);
-$topbarItemHoverBgColor:rgba(255,255,255,0.4);
-$topbarItemIconColor:rgba(255,255,255,0.9);
-$topbarItemTextColor:rgba(255,255,255,0.9);
-$topbarChildItemHoverColor:#D8CF84;
-$topbarSearchInputTextColor:#f0f1f5;
-$topbarSearchPlaceholderTextColor:#f0f1f5;
-
-/* user profile */
-$userProfileTextColor:#f0f0f0;
+$topbarItemTextColor:rgba(255,255,255,0.72);
+$topbarItemHoverBgColor:rgba(255,255,255,0.2);
+$topbarUserProfileTextColor:rgba(255,255,255,0.72);
 
 /* overlay menu */
-$overlayMenuItemHoverBgColor:#E4EDF4;
-$overlayMenuItemActiveTextColor:#677A87;
+$overlayMenuItemHoverBgColor:$primaryLighterColor;
+$overlayMenuItemActiveTextColor:$primaryDarkerColor;
 
 /* overlay menu button */
-$overlayMenuButtonColor:#313842;
-$overlayMenuButtonHoverBgColor:#E4EDF4;
-
-/* mobile menu button */
-$mobileMenuIconColor:#ffffff;
-
-/* actionbar */
-$actionItemBgColor:#E4EDF4;
-$actionItemIconColor:#2D3940;
-$actionItemHoverBgColor:#CAE4F6;
-$actionItemActiveBgColor:#677A87;
-$actionItemActiveIconColor:#ffffff;
+$overlayMenuButtonColor:$primaryDarkerColor;
+$overlayMenuButtonHoverBgColor:$primaryLighterColor;
 
 //footer
-$footerTextColor:rgba(255, 255, 255, 0.67);
-$footerTextHoverColor:#ffffff;
-
-/* spinner color */
-$spinnerColor:#677A87;
+$footerTextColor:rgba(255,255,255,0.7);
+$footerTextHoverColor:rgba(255,255,255,1);
 
 @import '../../sass/layout/_layout';

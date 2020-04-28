@@ -1,4 +1,4 @@
-.landing-body {   
+.landing-body {
     padding: 30px 8%;
 
     .layout-mask {
@@ -10,7 +10,7 @@
         height: 100%;
         padding: 0;
         margin: 0;
-        
+
         #landing-menu {
             list-style-type: none;
             float: right;
@@ -31,27 +31,47 @@
                     color: #ffffff;
                     opacity: 0.67;
                     padding: 4px 11px;
-                    border-left:8px solid transparent; 
+                    border-left:8px solid transparent;
                     @include border-radius($borderRadius);
 
                     &:hover {
                         color: #ffffff;
                         opacity: 1;
-                        border-left:8px solid #dfe6ee;                      
+                        border-left:8px solid #dfe6ee;
                     }
 
                     &:active {
                         color: #ffffff;
-                        opacity: 1;                       
-                        border-left:8px solid #dfe6ee;                         
+                        opacity: 1;
+                        border-left:8px solid #dfe6ee;
                     }
                 }
             }
         }
-        
+
         button{
             padding: 3px 46px;
-        } 
+        }
+
+        .landing-button {
+            background-color: #4C78A4;
+            color: #ffffff;
+            border: 1px solid #4C78A4;
+            padding: 3px 46px;
+            border-radius: 3px;
+            cursor: pointer;
+            @include transition(background-color $transitionDuration);
+
+            span {
+                padding: 0.429em 1em;
+                display: block;
+            }
+
+            &:hover {
+                background-color: #2A537B;
+
+            }
+        }
 
         #header {
             .header-top {
@@ -62,14 +82,14 @@
                     height: 40px;
                 }
 
-                #landing-menu-button {  
-                    display: none;   
+                #landing-menu-button {
+                    display: none;
                     height: 28px;
                     line-height: 28px;
                     color: #ffffff;
                     float: right;
                     margin-top: 5px;
-                    text-align: center;  
+                    text-align: center;
 
                     i {
                         line-height: inherit;
@@ -100,21 +120,21 @@
                         color: #313842;
                         margin-top: 10px;
                         margin-bottom: 44px;
-                    }   
+                    }
 
                     button {
                         font-size: 14px;
-                    }                 
+                    }
                 }
-               
+
                 .header-content-img {
                     float: right;
 
                     img {
                         margin-bottom: -3px;
                         height: 100%;
-                    }                   
-                }               
+                    }
+                }
             }
         }
 
@@ -143,7 +163,7 @@
 
                 .feature-box {
                     padding: 24px;
-                    
+
                     .feature-icon {
                         background-color: rgba(234, 240, 246, 0.1);
                         width: 180px;
@@ -160,13 +180,13 @@
                             background-color: rgba(234, 240, 246, 0.3);
                         }
                     }
-    
+
                     h3 {
                         font-size: 20px;
                         font-weight: 700;
                         margin: 8px 0;
                     }
-    
+
                     p {
                         margin: 0;
                         font-size: 15px;
@@ -183,7 +203,7 @@
             background: url("../images/landing/bg-hero@2x.jpg");
             background-size: cover;
             background-position: bottom;
-            
+
             h1 {
                 font-size: 35px;
                 color: #313842;
@@ -194,11 +214,11 @@
                 font-size: 17px;
                 color: #313842;
                 margin: 0 0 25px 0;
-            }  
+            }
 
             button{
                 font-size: 14px;
-            }   
+            }
         }
 
         #pricing {
@@ -235,9 +255,9 @@
                 font-weight: 700;
                 width: 100px;
                 background-color: #eaf0f6;
-                border-radius: 5px 5px 0 0;               
+                border-radius: 5px 5px 0 0;
                 margin: auto;
-                margin-top: -24px;          
+                margin-top: -24px;
 
             }
 
@@ -249,13 +269,13 @@
                 background-color: rgba(234, 240, 246, 0.9);
                 border-radius: 2px;
                 box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-                
+
                 h1 {
                     margin-top: 0;
-                    padding: 15px; 
-                    color:#ffffff;  
+                    padding: 15px;
+                    color:#ffffff;
                     font-size: 20px;
-                    font-weight: 700;         
+                    font-weight: 700;
                 }
 
                 &.basic {
@@ -275,7 +295,7 @@
                         background-image: linear-gradient(to right, #e73c87, #c620a1);
                     }
                 }
-                
+
                 .pricing-intro {
                     color: #657587;
                     font-size: 17px;
@@ -287,7 +307,7 @@
                 }
 
                 p {
-                    font-size: 14px;                  
+                    font-size: 14px;
                     padding: 0 15px;
                     margin: 15px 0;
                 }
@@ -311,21 +331,21 @@
                             i {
                                 @include border-radius(50%);
                                 background-color: #ffffff;
-                                color: #3fdb2c;               
+                                color: #3fdb2c;
                             }
                         }
 
                         .list-item-text {
                             text-align: center;
                             padding: 7px;
-                        }                      
+                        }
                     }
                 }
 
                 &:hover {
                     border-color: gray;
-                }            
-            }       
+                }
+            }
         }
 
         #multimedia {
@@ -365,35 +385,35 @@
         background: #363c4e;
 
        .landing-wrapper {
-            #landing-menu {               
-                top:85px;   
-                width: 100%;         
-                height: 0;               
-                background-color: #252529;   
-                @include transition(height 0.3s); 
+            #landing-menu {
+                top:85px;
+                width: 100%;
+                height: 0;
+                background-color: #252529;
+                @include transition(height 0.3s);
 
-                > li {                        
-                    display: block; 
+                > li {
+                    display: block;
                     opacity: 0;
                     margin: 0;
                     padding: 10px 0;
-                    @include transition( opacity 0.3s); 
+                    @include transition( opacity 0.3s);
 
                     &:first-child {
                         margin-top: 25px;
                     }
-                    
+
                     &:last-child {
                         margin-bottom: 25px;
                     }
-                    
+
                     a {
                         font-size: 18px;
-                        color: #8b8b90;  
-                        padding: 0 14px;                                             
+                        color: #8b8b90;
+                        padding: 0 14px;
                     }
                 }
-               
+
             }
 
             #header{
@@ -403,13 +423,13 @@
                     #landing-menu-button {
                         display: inline-block;
                     }
-                }        
+                }
                 .header-content {
-                    @include transition( 0.4s); 
+                    @include transition( 0.4s);
                     padding:85px 0px 0 10px;
-                                    
+
                     .header-content-text {
-                        float: none;                
+                        float: none;
                         text-align: center;
                         position: relative;
 
@@ -420,7 +440,7 @@
 
                     .header-content-img {
                         height: 170px;
-                    }               
+                    }
                 }
             }
 
@@ -433,9 +453,9 @@
             }
 
             #pricing {
-                padding: 45px 15px;             
+                padding: 45px 15px;
             }
-            
+
             #multimedia {
                 padding: 40px 30px 70px 30px;
 
@@ -444,38 +464,38 @@
                     height: 350px;
                 }
             }
-        }      
+        }
 
         &.landing-menu-active {
             .landing-wrapper {
-                #landing-menu {               
-                    height: 350px;    
+                #landing-menu {
+                    height: 350px;
 
-                    li {                     
+                    li {
                       opacity: 1;
-                      @include transition( opacity 0.9s); 
+                      @include transition( opacity 0.9s);
                     }
-                }         
+                }
             }
-        }     
+        }
     }
 }
 
 @media screen and (max-width: 575px) {
     .landing-body {
         padding: 30px 20px;
-   
+
 
         .landing-wrapper {
-            #landing-menu {              
+            #landing-menu {
                 left: 20px;
-                right: 20px;       
+                right: 20px;
             }
 
             #pricing {
-                padding: 45px 0px;             
-            }   
-        }       
+                padding: 45px 0px;
+            }
+        }
     }
 }
 

@@ -1,31 +1,21 @@
 import {Component, Renderer2} from '@angular/core';
 import { MenuService } from './app.menu.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.main.component.html',
-    animations: [
-        trigger('mask-anim', [
-            state('void', style({
-                opacity: 0
-            })),
-            state('visible', style({
-                opacity: 0.8
-            })),
-            transition('* => *', animate('250ms cubic-bezier(0, 0, 0.2, 1)'))
-        ])
-    ]
+    templateUrl: './app.main.component.html'
 })
 export class AppMainComponent {
 
-    layout = 'layout-turquoise';
+    layout = 'layout-blue';
 
     layoutMode = 'horizontal';
 
+    wrapperMode = false;
+
     configDialogActive = false;
 
-    theme = 'turquoise';
+    theme = 'blue';
 
     scheme = 'light';
 
@@ -41,6 +31,8 @@ export class AppMainComponent {
 
     menuClick: boolean;
 
+    configClick: boolean;
+
     overlayMenuMobileActive: boolean;
 
     constructor(public renderer: Renderer2, private menuService: MenuService) {}
@@ -49,6 +41,10 @@ export class AppMainComponent {
         if (!this.topbarItemClick) {
             this.activeTopbarItem = null;
             this.topbarMenuActive = false;
+        }
+
+        if (!this.configClick) {
+            this.configDialogActive = false;
         }
 
         if (!this.menuClick) {
@@ -65,6 +61,7 @@ export class AppMainComponent {
 
         this.topbarItemClick = false;
         this.menuClick = false;
+        this.configClick = false;
     }
 
     onTopbarItemClick(event, item) {
@@ -127,6 +124,11 @@ export class AppMainComponent {
         }
     }
 
+    changeWrapperMode(event, mode) {
+        this.wrapperMode = mode;
+        event.preventDefault();
+    }
+
     changeLayoutMode(event, mode) {
         this.layoutMode = mode;
         event.preventDefault();
@@ -156,17 +158,12 @@ export class AppMainComponent {
         this.overlayMenuMobileActive = false;
     }
 
-    isTablet() {
-        const width = window.innerWidth;
-        return width <= 1024 && width > 640;
-    }
-
     isDesktop() {
-        return window.innerWidth > 1024;
+        return window.innerWidth > 990;
     }
 
     isMobile() {
-        return window.innerWidth <= 640;
+        return window.innerWidth <= 990;
     }
 
     isOverlay() {

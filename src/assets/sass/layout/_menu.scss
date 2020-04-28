@@ -91,6 +91,8 @@
                 display: block;
                 position: relative;
                 padding: .5em;
+                cursor: pointer;
+                user-select: none;
                 color: $overlayMenuItemTextColor;
                 @include border-radius($overlayMenuItemBorderRadius);
                 @include transition(background-color $transitionDuration);
@@ -224,6 +226,10 @@
                         > a {
                             color: $horizontalMenuItemHoverTextColor;
                             background-color: $horizontalMenuItemHoverBgColor;
+
+                            .layout-submenu-toggler {
+                                @include rotate(0deg);
+                            }
                         }
                     }
 

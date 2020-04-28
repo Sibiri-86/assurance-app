@@ -1,3 +1,4 @@
+
 @mixin icon-override($icon) {
     &:before {
         content: $icon;
@@ -17,14 +18,25 @@
     transition:         $transition;
 }
 
+@mixin focused() {
+    outline: $focusOutline;
+    outline-offset: $focusOutlineOffset;
+    @include shadow($focusShadow);
+}
+
 @mixin focused-input() {
+    @include focused();
     border-color: $inputFocusBorderColor;
-    outline: 0 none;
-    @include shadow($inputFocusShadow);
+}
+
+@mixin focused-listitem() {
+    outline: $focusOutline;
+    outline-offset: $focusOutlineOffset;
+    @include shadow($inputListItemFocusShadow);
 }
 
 @mixin disabled-input() {
-	border-color: $inputDisabledBorderColor;
+    border-color: $inputDisabledBorderColor;
     background-color: $inputDisabledBgColor;
     color: $inputDisabledTextColor;
     cursor: default !important;
@@ -49,7 +61,7 @@
     border-top-right-radius: $val;
     -moz-border-radius-bottomright: $val;
     -webkit-border-bottom-right-radius: $val;
-    border-bottom-right-radius: $val; 
+    border-bottom-right-radius: $val;
 }
 
 @mixin border-radius-left($val) {
@@ -70,15 +82,6 @@
     border-top-right-radius: $val;
 }
 
-@mixin border-radius-bottom($val) {
-    -moz-border-radius-bottomleft: $val;
-    -webkit-border-bottom-left-radius: $val;
-    border-bottom-left-radius: $val;
-    -moz-border-radius-bottomright: $val;
-    -webkit-border-bottom-right-radius: $val;
-    border-bottom-right-radius: $val;
-}
-
 @mixin border-radius-top-right($val) {
     -moz-border-radius-topright: $val;
     -webkit-border-top-right-radius: $val;
@@ -88,23 +91,32 @@
 @mixin border-radius-bottom-right($val) {
     -moz-border-radius-bottomright: $val;
     -webkit-border-bottom-right-radius: $val;
-    border-bottom-right-radius: $val; 
+    border-bottom-right-radius: $val;
+}
+
+@mixin border-radius-bottom($val) {
+    -moz-border-radius-bottomleft: $val;
+    -webkit-border-bottom-left-radius: $val;
+    border-bottom-left-radius: $val;
+    -moz-border-radius-bottomright: $val;
+    -webkit-border-bottom-right-radius: $val;
+    border-bottom-right-radius: $val;
 }
 
 @mixin opacity($opacity) {
-  opacity: $opacity;
-  $opacity-ie: $opacity * 100;
-  filter: alpha(opacity=$opacity-ie);
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie);
 }
 
 @mixin placeholder {
     ::-webkit-input-placeholder {@content}
     :-moz-placeholder           {@content}
     ::-moz-placeholder          {@content}
-    :-ms-input-placeholder      {@content}  
+    :-ms-input-placeholder      {@content}
 }
 
-@mixin rotate($deg) {    
+@mixin rotate($deg) {
     -webkit-transform: rotate($deg);
     -moz-transform: rotate($deg);
     -o-transform: rotate($deg);
@@ -112,10 +124,18 @@
     transform: rotate($deg);
 }
 
-@mixin scale($deg) {    
+@mixin scale($deg) {
     -webkit-transform: scale($deg);
     -moz-transform: scale($deg);
     -o-transform: scale($deg);
     -ms-transform: scale($deg);
     transform: scale($deg);
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
 }
