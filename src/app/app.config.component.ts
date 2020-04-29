@@ -54,8 +54,8 @@ import {AppMainComponent} from './app.main.component';
                         <div class="p-grid">
                             <div class="p-col p-col-fixed colors" *ngFor="let l of layoutThemesColored">
                                 <a href="#" class="layout-config-option" [ngClass]="{'selected': app.layout === l.file}" [title]="l.name"
+								   [ngStyle]="{'background-image': 'linear-gradient(to right, ' + l.color1 +','+ l.color2+')'} "
 								   (click)="app.changeLayoutTheme($event,l.file, l.componentTheme, l.scheme)">
-                                   <!--[style]="{'backgroundImage': 'linear-gradient(to right, {{l.color1}},{{l.color2}})'}"-->
                                     <i class="pi pi-check" *ngIf="l.file === app.layout"></i>
                                 </a>
                             </div>
