@@ -358,6 +358,12 @@
 
 @media screen and (max-width: $responsiveLayoutBreakpoint )  {
     .layout-wrapper {
+        &.layout-fullwidth {
+            .layout-menu-container {
+                width: 100%;
+            }
+        }
+
         .layout-menu-container {
             position: absolute;
             width: calc(100% - 30px);
@@ -383,10 +389,6 @@
                     font-weight: 700;
                     color: $mobileMenuItemTextColor;
 
-                    .layout-menuitem-text, .layout-menuitem-icon {
-                        font-size: 15px;
-                    }
-
                     &:hover {
                         background-color:$mobileMenuItemHoverBgColor;
                     }
@@ -402,14 +404,6 @@
 
                     > ul:last-child {
                         padding-bottom: .5em;
-                    }
-                }
-
-                > ul {
-                    a {
-                        .layout-menuitem-text, .layout-menuitem-icon {
-                            font-size: 14px;
-                        }
                     }
                 }
 

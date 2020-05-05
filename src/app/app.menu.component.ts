@@ -86,7 +86,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Docs', icon: 'pi pi-fw pi-file', routerLink: ['/documentation']
+                label: 'Documentation', icon: 'pi pi-fw pi-file', routerLink: ['/documentation']
             },
             {
                 label: 'Buy Now', icon: 'pi pi-fw pi-money-bill', url: ['https://www.primefaces.org/store']

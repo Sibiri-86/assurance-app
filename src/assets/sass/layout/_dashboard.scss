@@ -479,16 +479,16 @@
             button {
                 padding: 7px;
                 height: 100%;
-                margin-right: -2px;
+                margin-right: 1px;
                 background-color:#dfe6ee;
                 border:solid 1px #dfe6ee;
 
                 &:first-of-type {
-                    margin-right: -3px;
+                    margin-right: 1px;
                 }
 
                 &:last-of-type {
-                    margin-left: 0px;
+                    margin-right: 0px;
                 }
 
 
