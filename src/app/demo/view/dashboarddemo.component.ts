@@ -1,41 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { CarService } from '../service/carservice';
-import { Car } from '../domain/car';
 import { MenuItem } from 'primeng/api';
-import { BreadcrumbService } from '../../breadcrumb.service';
+import {Product} from '../domain/product';
+import {ProductService} from '../service/productservice';
+import { BreadcrumbService } from '../../app.breadcrumb.service';
 
 @Component({
     templateUrl: './dashboard.component.html'
 })
 export class DashboardDemoComponent implements OnInit {
 
-    cars: Car[];
-
-    cols: any[];
-
     chartData: any;
 
     chartOptions: any;
 
-    selectedCar: Car;
-
     items: MenuItem[];
 
-    constructor(private carService: CarService, private breadcrumbService: BreadcrumbService) {
+    products: Product[];
+
+    constructor(private productService: ProductService, private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
             { label: 'Dashboard', routerLink: [''] }
         ]);
     }
 
     ngOnInit() {
-        this.carService.getCarsMedium().then(cars => this.cars = cars);
-
-        this.cols = [
-            { field: 'vin', header: 'Vin' },
-            { field: 'year', header: 'Year' },
-            { field: 'brand', header: 'Brand' },
-            { field: 'color', header: 'Color' }
-        ];
+        this.productService.getProducts().then(data => this.products = data);
 
         this.chartData = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

@@ -3,8 +3,8 @@
         <div class="route-bar-breadcrumb">
             <ng-template ngFor let-item let-last="last" [ngForOf]="items">
                 <span>
-                    <ng-container *ngIf="!item.routerLink">{{item.label}} | </ng-container>
-                    <span *ngIf="item.routerLink">{{item.label}}</span>
+                    <ng-container *ngIf="!item.routerLink">{{item.label}}</ng-container>
+                    <span *ngIf="!last"> | </span>
                 </span>
             </ng-template>
         </div>

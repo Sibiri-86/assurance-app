@@ -8,7 +8,7 @@
     z-index: 1000;
     height: 100vh;
     transform: translate3d(550px, 0px, 0px);
-    @include transition(transform $transitionDuration);
+    transition: transform $transitionDuration;
 
     &.layout-config-active {
         transform: translate3d(0px, 0px, 0px);
@@ -16,7 +16,7 @@
         .layout-config-content {
             .layout-config-button {
                 i {
-                    @include rotate(360deg);
+                    transform: rotate(360deg);
                 }
             }
         }
@@ -44,7 +44,7 @@
             cursor: pointer;
             color: $primaryColor;
             @include border-radius-left($borderRadius);
-            @include transition(background-color $transitionDuration);
+            transition: background-color $transitionDuration;
             box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
             0 5px 22px 4px rgba(0, 0, 0, 0.12),
             0 12px 17px 2px rgba(0, 0, 0, 0.14);
@@ -53,8 +53,8 @@
                 font-size: 36px;
                 line-height: inherit;
                 cursor: pointer;
-                @include rotate(0deg);
-                @include transition(transform 1s);
+                transform: rotate(0deg);
+                transition: transform 1s;
             }
 
             &:hover {
@@ -73,8 +73,8 @@
         top: 10px;
         background-color: #e0284f;
         cursor: pointer;
-        @include border-radius(50%);
-        @include transition(background-color $transitionDuration);
+        border-radius: 50%;
+        transition: background-color $transitionDuration;
 
         i {
             color: #ffffff;
@@ -91,25 +91,16 @@
         text-align: center;
     }
 
-    .ui-tabview.ui-tabview-top {
+    .p-tabview {
         border: 0 none;
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        height: 100%;
-        @include shadow( 0 2px 10px 0 rgba(0, 0, 0, 0.24));
         background-color: #ffffff;
         padding: 0;
+        flex-direction: column;
+        height: 100%;
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.24);
 
-        > .ui-tabview-nav {
-            display: flex;
-            margin-right: 44px;
-            flex-wrap: wrap;
-
+        > .p-tabview-nav {
             li {
                 vertical-align: bottom;
                 top: auto;
@@ -120,10 +111,10 @@
                 border-bottom: 3px solid transparent;
                 cursor: pointer;
 
-                &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                &:not(.p-highlight):not(.p-disabled):hover {
                     border-color: lighten($color: $primaryColor, $amount: 25);
                     background-color: #ffffff;
-                    @include transition(background-color $transitionDuration);
+                    transition: background-color $transitionDuration;
 
                     > a {
                         background-color: transparent;
@@ -132,10 +123,10 @@
                     }
                 }
 
-                &.ui-state-active {
+                &.p-highlight {
                     border-color: $primaryColor;
                     background-color: #ffffff;
-                    @include transition(background-color $transitionDuration);
+                    transition: background-color $transitionDuration;
 
                     > a {
                         background-color: transparent;
@@ -145,7 +136,7 @@
 
                     &:hover {
                         background-color: lighten($color: $primaryColor, $amount: 45);
-                        @include transition(background-color $transitionDuration);
+                        transition: background-color $transitionDuration;
 
                         > a {
                             background-color: transparent;
@@ -165,7 +156,7 @@
             }
         }
 
-        .ui-tabview-panels {
+        .p-tabview-panels {
             padding: 0;
             height: 100%;
             overflow: auto;
@@ -173,7 +164,7 @@
             color: #1b1c1e;
             @include border-radius-bottom(4px);
 
-            .ui-tabview-panel {
+            .p-tabview-panel {
                 padding: 2em ;
             }
 
@@ -193,20 +184,21 @@
                 overflow: hidden;
                 justify-content: center;
                 align-items: center;
-                @include transition(transform $transitionDuration);
+                transition: transform $transitionDuration;
 
                 &:hover {
-                    @include scale(1.1);
+                    transform: scale(1.1);
                 }
+
                 i {
-                    font-size: 32px;
+                    font-size: 20px;
                     color: $primaryColor;
                     position: absolute;
-                    @include border-radius(50%);
+                    border-radius: 50%;
                     background-color: #ffffff;
-                    width: 40px;
-                    line-height: 40px;
-                    height: 40px;
+                    width: 30px;
+                    line-height: 30px;
+                    height: 30px;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
                 }
 
@@ -221,7 +213,7 @@
                     cursor: pointer;
 
                     &:hover {
-                        @include scale(1.1);
+                        transform: scale(1.1);
                     }
 
                     &.layout-config-option-light {
@@ -232,23 +224,28 @@
                 }
             }
 
-            h1 {
-                font-size: 18px;
-                font-weight: 500;
-                margin: 1em 0 .75em 0;
+            .p-disabled {
+                display: flex;
+                width: auto;
+                height: auto;
+                position: relative;
+                overflow: hidden;
+                justify-content: center;
+                align-items: center;
+                pointer-events: none;
+                cursor: default;
 
-                &:first-child {
-                    margin-top: 0;
+                i {
+                    font-size: 20px;
+                    color: $primaryColor;
+                    position: absolute;
+                    border-radius: 50%;
+                    background-color: #ffffff;
+                    width: 30px;
+                    line-height: 30px;
+                    height: 30px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
                 }
-            }
-
-            span {
-                color: #000000;
-                font-size: 13px;
-                font-weight: 500;
-                display: block;
-                margin-top: 6px;
-                margin-bottom: 15px;
             }
         }
     }
@@ -262,6 +259,37 @@
 
 .blocked-scroll-config{
     overflow: hidden;
+}
+
+.layout-rtl {
+    .layout-config {
+        direction: rtl;
+        right: auto;
+        left: 0;
+        width:  550px;
+        transform: translate3d(-550px, 0px, 0px);
+
+        &.layout-config-active {
+            transform: translate3d(0px, 0px, 0px);
+        }
+
+        .layout-config-button {
+            left: auto;
+            right: -51px;
+        }
+
+        .layout-config-close {
+            right: auto;
+            left: 7px;
+        }
+
+        .p-tabview {
+            &.p-tabview-top > .p-tabview-nav {
+                margin-left: 44px;
+                margin-right: 0;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 896px) {
@@ -284,9 +312,10 @@
     }
 }
 
+
 @media screen and (min-width: 1200px) {
     .layout-config {
-        .ui-tabview-panels{
+        .p-tabview-panels{
             a {
                 &.layout-config-option {
                     img {

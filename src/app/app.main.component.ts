@@ -1,11 +1,12 @@
-import {Component, Renderer2} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { MenuService } from './app.menu.service';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.main.component.html'
 })
-export class AppMainComponent {
+export class AppMainComponent implements OnInit{
 
     layout = 'layout-blue';
 
@@ -16,8 +17,6 @@ export class AppMainComponent {
     configDialogActive = false;
 
     theme = 'blue';
-
-    scheme = 'light';
 
     topbarItemClick: boolean;
 
@@ -35,7 +34,15 @@ export class AppMainComponent {
 
     overlayMenuMobileActive: boolean;
 
-    constructor(public renderer: Renderer2, private menuService: MenuService) {}
+    inputStyle = 'outlined';
+
+    ripple: boolean;
+
+    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig) { }
+
+    ngOnInit() {
+        this.primengConfig.ripple = true;
+    }
 
     onLayoutClick() {
         if (!this.topbarItemClick) {
@@ -78,25 +85,28 @@ export class AppMainComponent {
         event.preventDefault();
     }
 
-    changeComponentTheme(event, theme, scheme) {
+    onRippleChange(event) {
+        this.ripple = event.checked;
+    }
+
+    changeComponentTheme(theme) {
         this.theme = theme;
-        this.scheme = scheme;
         const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
-        const href = 'assets/theme/' + theme + '/theme-' + scheme + '.css';
+        const href = 'assets/theme/theme-' + theme + '.css';
 
         this.replaceLink(themeLink, href);
 
         event.preventDefault();
     }
 
-    changeLayoutTheme(event, color, theme, scheme) {
+    changeLayoutTheme(event, color, theme) {
         this.layout = color;
         const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
         const href = 'assets/layout/css/' + color + '.css';
 
         this.replaceLink(layoutLink, href);
 
-        this.changeComponentTheme(event, theme, scheme );
+        this.changeComponentTheme(theme);
 
         event.preventDefault();
     }

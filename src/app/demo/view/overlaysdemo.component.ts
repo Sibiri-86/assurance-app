@@ -1,40 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { Car } from '../domain/car';
-import { CarService } from '../service/carservice';
-import { ConfirmationService } from 'primeng/api';
-import { BreadcrumbService } from '../../breadcrumb.service';
+import {Component, OnInit} from '@angular/core';
+import {ConfirmationService} from 'primeng/api';
+import {Product} from '../domain/product';
+import {ProductService} from '../service/productservice';
+import {BreadcrumbService} from '../../app.breadcrumb.service';
 
 @Component({
     templateUrl: './overlaysdemo.component.html',
+    styleUrls: ['./overlaysdemo.scss'],
     providers: [ConfirmationService]
 })
 export class OverlaysDemoComponent implements OnInit {
-
-    cars: Car[];
-
-    cols: any[];
 
     images: any[];
 
     display: boolean;
 
-    constructor(private carService: CarService, private confirmationService: ConfirmationService,
+    products: Product[];
+
+    selectedProduct: Product;
+
+    visibleSidebar1;
+
+    visibleSidebar2;
+
+    visibleSidebar3;
+
+    visibleSidebar4;
+
+    visibleSidebar5;
+
+    constructor(private productService: ProductService, private confirmationService: ConfirmationService,
                 private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
-            { label: 'Components' },
-            { label: 'Overlays', routerLink: ['/components/overlays'] }
+            {label: 'UI Kit'},
+            {label: 'Overlay'}
         ]);
     }
 
     ngOnInit() {
-        this.carService.getCarsSmall().then(cars => this.cars = cars.splice(0, 5));
-
-        this.cols = [
-            { field: 'vin', header: 'Vin' },
-            { field: 'year', header: 'Year' },
-            { field: 'brand', header: 'Brand' },
-            { field: 'color', header: 'Color' }
-        ];
+        this.productService.getProductsSmall().then(products => this.products = products);
 
         this.images = [];
         this.images.push({

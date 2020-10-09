@@ -99,18 +99,16 @@
 
                 .layout-menuitem-text {
                     display: inline-block;
-                    vertical-align: top;
                 }
 
                 .layout-menuitem-icon {
-                    font-size: 1.429em;
-                    vertical-align: bottom;
                     margin-right: .5em;
                 }
 
                 .layout-submenu-toggler {
                     position: absolute;
                     right: 4px;
+                    vertical-align: bottom;
                     font-size: 16px;
                     @include transition(transform $transitionDuration);
                 }
@@ -156,6 +154,7 @@
                     > a {
                         padding: .8em 1em;
                         font-weight: 700;
+                        margin-bottom: -3px;
                         color: $horizontalMenuItemTextColor;
                         background-color: $horizontalMenuItemBgColor;
                         @include transition(background-color $transitionDuration);
@@ -186,6 +185,7 @@
                         padding: 0 .5em;
                         padding-bottom: .5em;
                         z-index: 999;
+                        margin-top: 3px;
                         background-color: $overlayMenuBgColor;
                         text-transform: capitalize;
                         @include shadow($overlayMenuShadow);

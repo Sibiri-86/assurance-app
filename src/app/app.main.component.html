@@ -3,21 +3,23 @@
                 'layout-menu-overlay-active': overlayMenuActive,
                 'layout-menu-horizontal': isHorizontal(),
                 'layout-mobile-active': overlayMenuMobileActive,
-                'layout-fullwidth': wrapperMode}" [class]="layout">
+                'layout-fullwidth': wrapperMode, 'p-input-filled': inputStyle === 'filled', 'p-ripple-disabled': !ripple}" [class]="layout">
 
-    <app-topbar></app-topbar>
+    <div class="layout-content-wrapper">
+        <app-topbar></app-topbar>
 
-    <app-menu></app-menu>
+        <app-menu></app-menu>
 
-    <app-actionbar></app-actionbar>
+        <app-actionbar></app-actionbar>
 
-    <div class="layout-content">
-        <router-outlet></router-outlet>
+        <div class="layout-content">
+            <router-outlet></router-outlet>
+        </div>
+
+        <app-footer></app-footer>
+
+        <app-config></app-config>
+
+        <div class="layout-mask"></div>
     </div>
-
-    <app-footer></app-footer>
-
-    <app-config></app-config>
-
-    <div class="layout-mask"></div>
 </div>

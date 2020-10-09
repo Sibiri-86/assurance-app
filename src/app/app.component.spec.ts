@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppTopBarComponent } from './app.topbar.component';
 import { AppActionBarComponent } from './app.actionbar.component';
 import { AppConfigComponent } from './app.config.component';
-import { BreadcrumbService } from './breadcrumb.service';
+import { BreadcrumbService } from './app.breadcrumb.service';
 import { AppFooterComponent } from './app.footer.component';
 import { AppMenuComponent } from './app.menu.component';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
