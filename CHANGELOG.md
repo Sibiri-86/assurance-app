@@ -1,6 +1,16 @@
 # Changelog
 
-##10.0.0
+##10.0.1
+
+**Migration Guide**
+- Update theme files and layout files.
+
+**Fixed bugs:**
+
+- Misalignment topbar items in Prestige NG on Safari 
+
+###10.0.0
+
 **Migration Guide**
 - Update your project to Angular 10.
 - Update theme files and layout files.
@@ -27,3 +37,4 @@ Angular 9 and PrimeNG 9
 - Update app.menu.component.ts and app.menu.component.html while retaining your MenuModel.
 - Include app.menuitem.component.ts under app folder and define it app.module.ts with declarations property.
 - Include app.menu.service.ts under app folder and define it app.module.ts with providers property.
+
