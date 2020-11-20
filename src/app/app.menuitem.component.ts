@@ -53,7 +53,7 @@ import { AppMainComponent } from './app.main.component';
             })),
             state('visible', style({
                 height: '*',
-                'z-index': 100
+                'z-index': 999
             })),
             state('hidden', style({
                 height: '0px',
