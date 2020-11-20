@@ -37,6 +37,7 @@
         > li {
             margin-left: 10px;
             display: inline-block;
+            vertical-align: bottom;
 
             &.layout-topbar-item {
                 background-color: $topbarItemBgColor;
