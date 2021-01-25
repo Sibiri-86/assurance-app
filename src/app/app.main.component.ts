@@ -1,22 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { MenuService } from './app.menu.service';
 import { PrimeNGConfig } from 'primeng/api';
+import { AppComponent } from './app.component';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.main.component.html'
 })
-export class AppMainComponent implements OnInit{
-
-    layout = 'layout-blue';
-
-    layoutMode = 'horizontal';
-
-    wrapperMode = false;
+export class AppMainComponent {
 
     configDialogActive = false;
-
-    theme = 'blue';
 
     topbarItemClick: boolean;
 
@@ -34,14 +27,11 @@ export class AppMainComponent implements OnInit{
 
     overlayMenuMobileActive: boolean;
 
-    inputStyle = 'outlined';
+    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig, public app: AppComponent) { }
 
-    ripple: boolean;
-
-    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig) { }
-
-    ngOnInit() {
-        this.primengConfig.ripple = true;
+    onRippleChange(event) {
+        this.app.ripple = event.checked;
+        this.primengConfig = event.checked;
     }
 
     onLayoutClick() {
@@ -85,70 +75,11 @@ export class AppMainComponent implements OnInit{
         event.preventDefault();
     }
 
-    onRippleChange(event) {
-        this.ripple = event.checked;
-    }
-
-    changeComponentTheme(theme) {
-        this.theme = theme;
-        const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
-        const href = 'assets/theme/theme-' + theme + '.css';
-
-        this.replaceLink(themeLink, href);
-
-        event.preventDefault();
-    }
-
-    changeLayoutTheme(event, color, theme) {
-        this.layout = color;
-        const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
-        const href = 'assets/layout/css/' + color + '.css';
-
-        this.replaceLink(layoutLink, href);
-
-        this.changeComponentTheme(theme);
-
-        event.preventDefault();
-    }
-
-    isIE() {
-        return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent);
-    }
-
-    replaceLink(linkElement, href) {
-        if (this.isIE()) {
-            linkElement.setAttribute('href', href);
-        } else {
-            const id = linkElement.getAttribute('id');
-            const cloneLinkElement = linkElement.cloneNode(true);
-
-            cloneLinkElement.setAttribute('href', href);
-            cloneLinkElement.setAttribute('id', id + '-clone');
-
-            linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
-
-            cloneLinkElement.addEventListener('load', () => {
-                linkElement.remove();
-                cloneLinkElement.setAttribute('id', id);
-            });
-        }
-    }
-
-    changeWrapperMode(event, mode) {
-        this.wrapperMode = mode;
-        event.preventDefault();
-    }
-
-    changeLayoutMode(event, mode) {
-        this.layoutMode = mode;
-        event.preventDefault();
-    }
-
     onMenuButtonClick(event) {
         this.menuClick = true;
         this.topbarMenuActive = false;
 
-        if (this.layoutMode === 'overlay' && !this.isMobile()) {
+        if (this.app.layoutMode === 'overlay' && !this.isMobile()) {
             this.overlayMenuActive = !this.overlayMenuActive;
         } else {
             if (!this.isDesktop()) {
@@ -159,7 +90,7 @@ export class AppMainComponent implements OnInit{
         event.preventDefault();
     }
 
-    onMenuClick($event) {
+    onMenuClick() {
         this.menuClick = true;
     }
 
@@ -177,11 +108,11 @@ export class AppMainComponent implements OnInit{
     }
 
     isOverlay() {
-        return this.layoutMode === 'overlay';
+        return this.app.layoutMode === 'overlay';
     }
 
     isHorizontal() {
-        return this.layoutMode === 'horizontal';
+        return this.app.layoutMode === 'horizontal';
     }
 
 }

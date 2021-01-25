@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
+import { AppComponent } from './app.component';
 import {AppMainComponent} from './app.main.component';
 
 @Component({
     selector: 'app-config',
     template: `
-        <div id="layout-config" class="layout-config" [ngClass]="{'layout-config-active': app.configDialogActive}" (click)="app.configClick=true">
+        <div id="layout-config" class="layout-config" [ngClass]="{'layout-config-active': appMain.configDialogActive}" (click)="appMain.configClick=true">
             <div class="layout-config-content">
 				<a href="#" id="layout-config-button" class="layout-config-button" (click)="onConfigButtonClick($event)">
 					<i class="pi pi-cog"></i>
@@ -18,14 +19,14 @@ import {AppMainComponent} from './app.main.component';
 						<div class="p-grid">
 							<div class="p-col p-col-fixed">
 								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.wrapperMode === false}"
-								   (click)="app.changeWrapperMode($event, false)">
+								   (click)="changeWrapperMode($event, false)">
 									<img src="assets/layout/images/configurator/wrapper/Boxed.png" alt="prestige"  style="width:100%"/>
 									<i class="pi pi-check" *ngIf="app.wrapperMode === false"></i>
 								</a>
 							</div>
 							<div class="p-col p-col-fixed">
 								<a href="#" class="layout-config-option"  [ngClass]="{'selected': app.wrapperMode === true}"
-								   (click)="app.changeWrapperMode($event, true)">
+								   (click)="changeWrapperMode($event, true)">
 									<img src="assets/layout/images/configurator/wrapper/FullWidth.png" alt="prestige"  style="width:100%"/>
 									<i class="pi pi-check" *ngIf="app.wrapperMode === true"></i>
 								</a>
@@ -36,14 +37,14 @@ import {AppMainComponent} from './app.main.component';
 						<div class="p-grid">
 							<div class="p-col p-col-fixed">
 								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.layoutMode === 'horizontal'}"
-								   (click)="app.changeLayoutMode($event,'horizontal')">
+								   (click)="changeLayoutMode($event,'horizontal')">
 									<img src="assets/layout/images/configurator/menu/horizontal.png" alt="prestige"  style="width:100%"/>
 									<i class="pi pi-check" *ngIf="app.layoutMode === 'horizontal'"></i>
 								</a>
 							</div>
 							<div class="p-col p-col-fixed">
 								<a href="#" class="layout-config-option"  [ngClass]="{'selected': app.layoutMode === 'overlay'}"
-								   (click)="app.changeLayoutMode($event,'overlay')">
+								   (click)="changeLayoutMode($event,'overlay')">
 									<img src="assets/layout/images/configurator/menu/overlay.png" alt="prestige"  style="width:100%"/>
 									<i class="pi pi-check" *ngIf="app.layoutMode !== 'horizontal'"></i>
 								</a>
@@ -55,7 +56,7 @@ import {AppMainComponent} from './app.main.component';
                             <div class="p-col p-col-fixed colors" *ngFor="let l of layoutThemesColored">
                                 <a href="#" class="layout-config-option" [ngClass]="{'selected': app.layout === l.file}" [title]="l.name"
 								   [ngStyle]="{'background-image': 'linear-gradient(to right, ' + l.color1 +','+ l.color2+')'} "
-								   (click)="app.changeLayoutTheme($event,l.file, l.componentTheme)">
+								   (click)="changeLayoutTheme($event,l.file, l.componentTheme)">
                                     <i class="pi pi-check" *ngIf="l.file === app.layout"></i>
                                 </a>
                             </div>
@@ -65,7 +66,7 @@ import {AppMainComponent} from './app.main.component';
 						<div class="p-grid">
 							<div class="p-col p-col-fixed colors" *ngFor="let l of layoutThemesImage">
 								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.layout === l.file}" [title]="l.name"
-								   (click)="app.changeLayoutTheme($event,l.file, l.componentTheme)">
+								   (click)="changeLayoutTheme($event,l.file, l.componentTheme)">
 									<img src="assets/layout/images/configurator/layout/{{l.image}}" alt="{{l.name}}"/>
 									<i class="pi pi-check" *ngIf="l.file === app.layout"></i>
 								</a>
@@ -88,12 +89,12 @@ import {AppMainComponent} from './app.main.component';
 						</div>
 
 						<h5>Ripple Effect</h5>
-						<p-inputSwitch [ngModel]="app.ripple" (onChange)="app.onRippleChange($event)"></p-inputSwitch>
+						<p-inputSwitch [ngModel]="app.ripple" (onChange)="appMain.onRippleChange($event)"></p-inputSwitch>
 
 						<h5>Theme Colors</h5>
 						<div class="p-grid">
 							<div class="p-col p-col-fixed colors" *ngFor="let t of componentThemes">
-								<a (click)="app.changeComponentTheme(t.file)" [ngClass]="{'selected': app.theme === t.file}" class="layout-config-option"
+								<a (click)="changeComponentTheme(t.file)" [ngClass]="{'selected': app.theme === t.file}" class="layout-config-option"
 								   [ngStyle]="{'background-color': t.color}">
 									<i class="pi pi-check" *ngIf="app.theme === t.file"></i>
 								</a>
@@ -113,7 +114,7 @@ export class AppConfigComponent implements OnInit {
 
     componentThemes: any;
 
-    constructor(public app: AppMainComponent) {}
+    constructor(public appMain: AppMainComponent, public app: AppComponent) {}
 
     ngOnInit() {
         this.componentThemes = [
@@ -194,14 +195,70 @@ export class AppConfigComponent implements OnInit {
         ];
     }
 
+    changeWrapperMode(event, mode) {
+        this.app.wrapperMode = mode;
+        console.log(this.app.wrapperMode)
+        event.preventDefault();
+    }
+
+    changeLayoutMode(event, mode) {
+        this.app.layoutMode = mode;
+        event.preventDefault();
+    }
+
+    changeComponentTheme(theme) {
+        this.app.theme = theme;
+        const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
+        const href = 'assets/theme/theme-' + theme + '.css';
+
+        this.replaceLink(themeLink, href);
+
+        event.preventDefault();
+    }
+
+    changeLayoutTheme(event, color, theme) {
+        this.app.layout = color;
+        const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
+        const href = 'assets/layout/css/' + color + '.css';
+
+        this.replaceLink(layoutLink, href);
+
+        this.changeComponentTheme(theme);
+
+        event.preventDefault();
+    }
+
+    isIE() {
+        return /(MSIE|Trident\/|Edge\/)/i.test(window.navigator.userAgent);
+    }
+
+    replaceLink(linkElement, href) {
+        if (this.isIE()) {
+            linkElement.setAttribute('href', href);
+        } else {
+            const id = linkElement.getAttribute('id');
+            const cloneLinkElement = linkElement.cloneNode(true);
+
+            cloneLinkElement.setAttribute('href', href);
+            cloneLinkElement.setAttribute('id', id + '-clone');
+
+            linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
+
+            cloneLinkElement.addEventListener('load', () => {
+                linkElement.remove();
+                cloneLinkElement.setAttribute('id', id);
+            });
+        }
+    }
+
     onConfigButtonClick(event) {
-        this.app.configDialogActive = !this.app.configDialogActive;
-        this.app.configClick = true;
+        this.appMain.configDialogActive = !this.appMain.configDialogActive;
+        this.appMain.configClick = true;
         event.preventDefault();
     }
 
     onConfigCloseClick(event) {
-        this.app.configDialogActive = false;
+        this.appMain.configDialogActive = false;
         event.preventDefault();
     }
 }
