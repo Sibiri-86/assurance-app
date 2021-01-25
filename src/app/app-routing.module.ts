@@ -18,6 +18,7 @@ import {AppErrorComponent} from './pages/app.error.component';
 import {AppAccessdeniedComponent} from './pages/app.accessdenied.component';
 import {AppLoginComponent} from './pages/app.login.component';
 import {InputDemoComponent} from './demo/view/inputdemo.component';
+import {FloatLabelDemoComponent} from './demo/view/floatlabeldemo.component';
 import {ButtonDemoComponent} from './demo/view/buttondemo.component';
 import {TableDemoComponent} from './demo/view/tabledemo.component';
 import {ListDemoComponent} from './demo/view/listdemo.component';
@@ -45,6 +46,7 @@ import {AppHelpComponent} from './pages/app.help.component';
                     {path: '', component: DashboardDemoComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
+                    {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
                     {path: 'uikit/button', component: ButtonDemoComponent},
                     {path: 'uikit/table', component: TableDemoComponent},
                     {path: 'uikit/list', component: ListDemoComponent},
