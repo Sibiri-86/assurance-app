@@ -53,8 +53,7 @@ export class MediaDemoComponent implements OnInit{
 
     constructor(private productService: ProductService, private photoService: PhotoService, private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
-            {label: 'UI Kit'},
-            {label: 'Tree'}
+            {label: 'Media'}
         ]);
     }
 
