@@ -35,6 +35,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {LightboxModule} from 'primeng/lightbox';
+import {KnobModule} from 'primeng/knob';
 import {ListboxModule} from 'primeng/listbox';
 import {MegaMenuModule} from 'primeng/megamenu';
 import {MenuModule} from 'primeng/menu';
@@ -169,6 +170,7 @@ import {MenuService} from './app.menu.service';
         InputSwitchModule,
         InputTextModule,
         InputTextareaModule,
+        KnobModule,
         LightboxModule,
         ListboxModule,
         MegaMenuModule,
