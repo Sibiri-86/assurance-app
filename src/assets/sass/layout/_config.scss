@@ -1,17 +1,20 @@
 .layout-config {
+    width: $rightSidebarWidth;
+    height: 100%;
     position: fixed;
-    padding: 0;
-    top: 0px;
-    display: block;
     right: 0;
-    width: 550px;
-    z-index: 1000;
-    height: 100vh;
-    transform: translate3d(550px, 0px, 0px);
-    transition: transform $transitionDuration;
+    top: 0;
+    padding: 1rem;
+    overflow: auto;
+    background: $rightSidebarBg;
+    z-index: 999;
+    border-left: $overlayBorder;
+    transform: translateX(100%);
+    transition: transform $animationDuration $animationTimingFunction;
 
     &.layout-config-active {
-        transform: translate3d(0px, 0px, 0px);
+        transform: translateX(0);
+        box-shadow: $overlayShadow;
 
         .layout-config-content {
             .layout-config-button {
@@ -22,308 +25,80 @@
         }
     }
 
-    .layout-config-content {
-        position: relative;
-        height: 100%;
+    p {
+        line-height: 1.5rem;
+        color: $textSecondaryColor;
+    }
 
-        > form {
-            height: 100%;
+    .layout-themes {
+        @include flex();
+        @include flex-wrap(wrap);
+
+        > div {
+            padding: .25rem;
         }
 
-        .layout-config-button {
+
+        a {
+            width: 2rem;
+            height: 2rem;
+            border-radius: $borderRadius;
             display: block;
-            position: absolute;
-            width: 52px;
-            height: 52px;
-            line-height: 52px;
-            background-color: #fafafa;
-            text-align: center;
-            top: 230px;
-            left: -51px;
-            z-index: -1;
-            cursor: pointer;
-            color: $primaryColor;
-            @include border-radius-left($borderRadius);
-            transition: background-color $transitionDuration;
-            box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
-            0 5px 22px 4px rgba(0, 0, 0, 0.12),
-            0 12px 17px 2px rgba(0, 0, 0, 0.14);
+            position: relative;
+            @include flex-align-center();
+            @include flex-justify-center();
+            transition: transform $transitionDuration;
+            box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+
+            img {
+                width: 2rem;
+                height: 2rem;
+            }
 
             i {
-                font-size: 36px;
-                line-height: inherit;
-                cursor: pointer;
-                transform: rotate(0deg);
-                transition: transform 1s;
+                font-size: 1rem;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-left: -.5rem;
+                margin-top: -.5rem;
             }
 
             &:hover {
-                background-color: $primaryLighterColor;
+                transform: scale(1.1);
             }
         }
-    }
-
-    .layout-config-close {
-        position: absolute;
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-        text-align: center;
-        right: 32px;
-        top: 10px;
-        background-color: #e0284f;
-        cursor: pointer;
-        border-radius: 50%;
-        transition: background-color $transitionDuration;
-
-        i {
-            color: #ffffff;
-            line-height: inherit;
-            font-size: 16px;
-        }
-
-        &:hover {
-            background-color: #d44d69;
-        }
-    }
-
-    .p-col {
-        text-align: center;
-    }
-
-    .p-tabview {
-        border: 0 none;
-        display: flex;
-        background-color: #ffffff;
-        padding: 0;
-        flex-direction: column;
-        height: 100%;
-        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.24);
-
-        > .p-tabview-nav {
-            li {
-                vertical-align: bottom;
-                top: auto;
-                margin: 0;
-                background-color: transparent;
-                border: 0 none;
-                border-radius: 0;
-                border-bottom: 3px solid transparent;
-                cursor: pointer;
-
-                &:not(.p-highlight):not(.p-disabled):hover {
-                    border-color: lighten($color: $primaryColor, $amount: 25);
-                    background-color: #ffffff;
-                    transition: background-color $transitionDuration;
-
-                    > a {
-                        background-color: transparent;
-                        border-color: transparent;
-                        color: #1b1c1e;
-                    }
-                }
-
-                &.p-highlight {
-                    border-color: $primaryColor;
-                    background-color: #ffffff;
-                    transition: background-color $transitionDuration;
-
-                    > a {
-                        background-color: transparent;
-                        border-color: transparent;
-                        color: #1b1c1e;
-                    }
-
-                    &:hover {
-                        background-color: lighten($color: $primaryColor, $amount: 45);
-                        transition: background-color $transitionDuration;
-
-                        > a {
-                            background-color: transparent;
-                            border-color: transparent;
-                            color: #1b1c1e;
-                        }
-                    }
-                }
-
-                > a {
-                    background-color: transparent;
-                    border-color: transparent;
-                    margin: 0;
-                    color: #1b1c1e;
-                    padding: 13px 15px 10px;
-                }
-            }
-        }
-
-        .p-tabview-panels {
-            padding: 0;
-            height: 100%;
-            overflow: auto;
-            border-width: 1px 0 0 0;
-            color: #1b1c1e;
-            @include border-radius-bottom(4px);
-
-            .p-tabview-panel {
-                padding: 2em ;
-            }
-
-            img {
-                max-height: 100px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                display: flex;
-                flex-grow: 1;
-                flex-shrink: 0;
-            }
-
-            a {
-                display: flex;
-                width: auto;
-                height: auto;
-                position: relative;
-                overflow: hidden;
-                justify-content: center;
-                align-items: center;
-                transition: transform $transitionDuration;
-
-                &:hover {
-                    transform: scale(1.1);
-                }
-
-                i {
-                    font-size: 20px;
-                    color: $primaryColor;
-                    position: absolute;
-                    border-radius: 50%;
-                    background-color: #ffffff;
-                    width: 30px;
-                    line-height: 30px;
-                    height: 30px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                }
-
-                &.layout-config-option {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: hidden;
-                    text-align: center;
-                    width: 65px;
-                    height: 56px;
-                    cursor: pointer;
-
-                    &:hover {
-                        transform: scale(1.1);
-                    }
-
-                    &.layout-config-option-light {
-                        i {
-                            color: #000000;
-                        }
-                    }
-                }
-            }
-
-            .p-disabled {
-                display: flex;
-                width: auto;
-                height: auto;
-                position: relative;
-                overflow: hidden;
-                justify-content: center;
-                align-items: center;
-                pointer-events: none;
-                cursor: default;
-
-                i {
-                    font-size: 20px;
-                    color: $primaryColor;
-                    position: absolute;
-                    border-radius: 50%;
-                    background-color: #ffffff;
-                    width: 30px;
-                    line-height: 30px;
-                    height: 30px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-                }
-            }
-        }
-    }
-
-    p {
-        line-height: 1.5;
-        margin-top: 0;
-        color: $textSecondaryColor;
     }
 }
 
-.blocked-scroll-config{
+.layout-config-button {
+    display: block;
+    position: fixed;
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    background: $accentColor;
+    color: $accentTextColor;
+    text-align: center;
+    top: 50%;
+    right: 0;
+    margin-top: -1.5rem;
+    border-top-left-radius: $borderRadius;
+    border-bottom-left-radius: $borderRadius;
+    transition: background-color $transitionDuration;
     overflow: hidden;
-}
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: -.25rem 0 1rem rgba(0,0,0,.15);
 
-.layout-rtl {
-    .layout-config {
-        direction: rtl;
-        right: auto;
-        left: 0;
-        width:  550px;
-        transform: translate3d(-550px, 0px, 0px);
-
-        &.layout-config-active {
-            transform: translate3d(0px, 0px, 0px);
-        }
-
-        .layout-config-button {
-            left: auto;
-            right: -51px;
-        }
-
-        .layout-config-close {
-            right: auto;
-            left: 7px;
-        }
-
-        .p-tabview {
-            &.p-tabview-top > .p-tabview-nav {
-                margin-left: 44px;
-                margin-right: 0;
-            }
-        }
+    i {
+        font-size: 2rem;
+        line-height: inherit;
+        transform: rotate(0deg);
+        transition: transform 1s;
     }
-}
 
-@media screen and (max-width: 896px) {
-    .layout-config {
-        transform: translate3d(100%, 0px, 0px);
-
-        &.layout-config-active {
-            width: 100%;
-            transform: translate3d(0px, 0px, 0px);
-        }
-
-        .layout-config-button {
-            left: auto;
-            right: -52px;
-        }
-
-        .layout-config-close {
-            right: 10px;
-        }
-    }
-}
-
-
-@media screen and (min-width: 1200px) {
-    .layout-config {
-        .p-tabview-panels{
-            a {
-                &.layout-config-option {
-                    img {
-                        width: 65px;
-                        height: 56px;
-                    }
-                }
-            }
-        }
+    &:hover {
+        background: lighten($accentColor, 5%);
     }
 }

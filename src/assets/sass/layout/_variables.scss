@@ -13,6 +13,14 @@ $contentBgColor:#f2f2f2;
 $responsiveLayoutBreakpoint:991px;
 $maskBgColor:#24262e;
 
+//accent
+$accentColor: #1976D2 !default;
+$accentTextColor: #ffffff !default;
+
+/* common */
+$animationDuration:.4s !default;
+$animationTimingFunction:cubic-bezier(.05,.74,.2,.99) !default;
+
 /* horizontal menu */
 $horizontalMenuItemActiveBgColor: #ffffff;
 $horizontalMenuItemActiveTextColor: #1b1c1e;
@@ -22,6 +30,8 @@ $overlayMenuBgColor:#ffffff;
 $overlayMenuShadow:0 2px 4px 0 rgba(0, 0, 0, 0.3);
 $overlayMenuItemTextColor:#313842;
 $overlayMenuItemBorderRadius:3px;
+$overlayBorder:0 none !default;
+$overlayShadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12) !default;
 
 /* actionbar */
 $actionItemBgColor:#f8f9fa;
@@ -58,3 +68,7 @@ $breadcrumbLinkHoverTextColor:#3ca4e7;
 //misc
 $cardBgColor:#ffffff;
 $cardBorder:solid 1px #dfe6ee;
+
+//sidebar right
+$rightSidebarWidth: 16rem !default;
+$rightSidebarBg: #ffffff !default;

@@ -94,6 +94,10 @@ export class AppMainComponent {
         this.menuClick = true;
     }
 
+    onConfigClick() {
+        this.configClick = true;
+    }
+
     hideOverlayMenu() {
         this.overlayMenuActive = false;
         this.overlayMenuMobileActive = false;

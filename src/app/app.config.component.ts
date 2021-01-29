@@ -5,105 +5,73 @@ import {AppMainComponent} from './app.main.component';
 @Component({
     selector: 'app-config',
     template: `
-        <div id="layout-config" class="layout-config" [ngClass]="{'layout-config-active': appMain.configDialogActive}" (click)="appMain.configClick=true">
-            <div class="layout-config-content">
-				<a href="#" id="layout-config-button" class="layout-config-button" (click)="onConfigButtonClick($event)">
-					<i class="pi pi-cog"></i>
-				</a>
-                <a href="#" class="layout-config-close" (click)="onConfigCloseClick($event)">
-                    <i class="pi pi-times"></i>
-                </a>
-                <p-tabView id="config-form-tabs">
-                    <p-tabPanel header="Layout Customization">
-						<h5>Wrapper Modes</h5>
-						<div class="p-grid">
-							<div class="p-col p-col-fixed">
-								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.wrapperMode === false}"
-								   (click)="changeWrapperMode($event, false)">
-									<img src="assets/layout/images/configurator/wrapper/Boxed.png" alt="prestige"  style="width:100%"/>
-									<i class="pi pi-check" *ngIf="app.wrapperMode === false"></i>
-								</a>
-							</div>
-							<div class="p-col p-col-fixed">
-								<a href="#" class="layout-config-option"  [ngClass]="{'selected': app.wrapperMode === true}"
-								   (click)="changeWrapperMode($event, true)">
-									<img src="assets/layout/images/configurator/wrapper/FullWidth.png" alt="prestige"  style="width:100%"/>
-									<i class="pi pi-check" *ngIf="app.wrapperMode === true"></i>
-								</a>
-							</div>
-						</div>
-
-						<h5>Menu Modes</h5>
-						<div class="p-grid">
-							<div class="p-col p-col-fixed">
-								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.layoutMode === 'horizontal'}"
-								   (click)="changeLayoutMode($event,'horizontal')">
-									<img src="assets/layout/images/configurator/menu/horizontal.png" alt="prestige"  style="width:100%"/>
-									<i class="pi pi-check" *ngIf="app.layoutMode === 'horizontal'"></i>
-								</a>
-							</div>
-							<div class="p-col p-col-fixed">
-								<a href="#" class="layout-config-option"  [ngClass]="{'selected': app.layoutMode === 'overlay'}"
-								   (click)="changeLayoutMode($event,'overlay')">
-									<img src="assets/layout/images/configurator/menu/overlay.png" alt="prestige"  style="width:100%"/>
-									<i class="pi pi-check" *ngIf="app.layoutMode !== 'horizontal'"></i>
-								</a>
-							</div>
-						</div>
-
-						<h5>Colored Themes</h5>
-                        <div class="p-grid">
-                            <div class="p-col p-col-fixed colors" *ngFor="let l of layoutThemesColored">
-                                <a href="#" class="layout-config-option" [ngClass]="{'selected': app.layout === l.file}" [title]="l.name"
-								   [ngStyle]="{'background-image': 'linear-gradient(to right, ' + l.color1 +','+ l.color2+')'} "
-								   (click)="changeLayoutTheme($event,l.file, l.componentTheme)">
-                                    <i class="pi pi-check" *ngIf="l.file === app.layout"></i>
-                                </a>
-                            </div>
-                        </div>
-
-						<h5>Image Themes</h5>
-						<div class="p-grid">
-							<div class="p-col p-col-fixed colors" *ngFor="let l of layoutThemesImage">
-								<a href="#" class="layout-config-option" [ngClass]="{'selected': app.layout === l.file}" [title]="l.name"
-								   (click)="changeLayoutTheme($event,l.file, l.componentTheme)">
-									<img src="assets/layout/images/configurator/layout/{{l.image}}" alt="{{l.name}}"/>
-									<i class="pi pi-check" *ngIf="l.file === app.layout"></i>
-								</a>
-							</div>
-						</div>
-                    </p-tabPanel>
-
-                    <p-tabPanel header="Theme Customization">
-
-						<h5 style="margin-top: 0">Input Style</h5>
-						<div class="p-formgroup-inline">
-							<div class="p-field-radiobutton">
-								<p-radioButton name="inputStyle" value="outlined" [(ngModel)]="app.inputStyle" inputId="inputStyle1"></p-radioButton>
-								<label for="inputStyle1">Outlined</label>
-							</div>
-							<div class="p-field-radiobutton">
-								<p-radioButton name="inputStyle" value="filled" [(ngModel)]="app.inputStyle" inputId="inputStyle2"></p-radioButton>
-								<label for="inputStyle2">Filled</label>
-							</div>
-						</div>
-
-						<h5>Ripple Effect</h5>
-						<p-inputSwitch [ngModel]="app.ripple" (onChange)="appMain.onRippleChange($event)"></p-inputSwitch>
-
-						<h5>Theme Colors</h5>
-						<div class="p-grid">
-							<div class="p-col p-col-fixed colors" *ngFor="let t of componentThemes">
-								<a (click)="changeComponentTheme(t.file)" [ngClass]="{'selected': app.theme === t.file}" class="layout-config-option"
-								   [ngStyle]="{'background-color': t.color}">
-									<i class="pi pi-check" *ngIf="app.theme === t.file"></i>
-								</a>
-							</div>
-						</div>
-                    </p-tabPanel>
-                </p-tabView>
+         <a style="cursor: pointer" id="layout-config-button" class="layout-config-button" (click)="onConfigButtonClick($event)">
+            <i class="pi pi-cog"></i>
+        </a>
+        <div class="layout-config" [ngClass]="{'layout-config-active': appMain.configDialogActive}" (click)="appMain.onConfigClick()">
+            <h5>Menu Type</h5>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="menuMode" value="horizontal" [(ngModel)]="app.layoutMode" inputId="mode1"></p-radioButton>
+                <label for="mode1">Horizontal</label>
             </div>
-        </div>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="menuMode" value="overlay" [(ngModel)]="app.layoutMode" inputId="mode2"></p-radioButton>
+                <label for="mode2">Overlay</label>
+            </div>
+            <hr />
+
+            <h5>Wrapper Mode</h5>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="wrapMode" [value]="false" [(ngModel)]="app.wrapperMode" inputId="wrapMode1"></p-radioButton>
+                <label for="wrapMode1">Boxed</label>
+            </div>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="wrapMode" [value]="true" [(ngModel)]="app.wrapperMode" inputId="wrapMode2"></p-radioButton>
+                <label for="wrapMode2">Filled</label>
+            </div>
+
+            <hr />
+
+            <h5>Input Style</h5>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="inputStyle" value="outlined" [(ngModel)]="app.inputStyle" inputId="inputStyle1"></p-radioButton>
+                <label for="inputStyle1">Outlined</label>
+            </div>
+            <div class="p-field-radiobutton">
+                <p-radioButton name="inputStyle" value="filled" [(ngModel)]="app.inputStyle" inputId="inputStyle2"></p-radioButton>
+                <label for="inputStyle2">Filled</label>
+            </div>
+
+            <hr />
+
+            <h5>Ripple Effect</h5>
+			<p-inputSwitch [ngModel]="app.ripple" (onChange)="appMain.onRippleChange($event)"></p-inputSwitch>
+
+            <hr />
+
+            <h5>Layout Theme</h5>
+
+            <div class="p-field-radiobutton">
+                <p-radioButton inputId="layoutColored" name="menuColor"  value="color" [(ngModel)]="layoutColorMode" (onClick)="changeMenuColorMode('color')"></p-radioButton>
+                <label for="layoutColored">Colored</label>
+            </div>
+            <div class="p-field-radiobutton">
+                <p-radioButton inputId="layoutImage" name="menuColor" value="image" [(ngModel)]="layoutColorMode" (onClick)="changeMenuColorMode('image')"></p-radioButton>
+                <label for="layoutImage">Custom</label>
+            </div>
+            <div class="layout-themes">
+                <div *ngFor="let l of layoutThemes">
+                    <a style="cursor: pointer" (click)="changeLayoutTheme($event, l.file, l.componentTheme)" [title]="l.name" [ngStyle]="{'background-image': 'linear-gradient(to right, ' + l.color1 +','+ l.color2+')'} ">
+                        <img *ngIf="layoutColorMode === 'image'" src="assets/layout/images/configurator/layout/{{l.image}}" alt="{{l.name}}"/>    
+                    </a>
+                </div>
+            </div>
+            <h5>Theme Colors</h5>
+            <div class="layout-themes">
+                <div *ngFor="let t of componentThemes">
+                    <a style="cursor: pointer" (click)="changeComponentTheme(t.file)" [title]="t.name" [ngStyle]="{'background-color': t.color}"></a>
+                </div>
+            </div>
     `
 })
 export class AppConfigComponent implements OnInit {
@@ -113,6 +81,10 @@ export class AppConfigComponent implements OnInit {
     layoutThemesImage: any;
 
     componentThemes: any;
+
+    layoutColorMode = "color"
+
+    layoutThemes: any;
 
     constructor(public appMain: AppMainComponent, public app: AppComponent) {}
 
@@ -193,6 +165,17 @@ export class AppConfigComponent implements OnInit {
             {name: 'Teal', file: 'layout-teal', color1: '#00897B', color2: '#004D40', componentTheme: 'teal'},
             {name: 'Yellow', file: 'layout-yellow', color1: '#FDD835', color2: '#F57F17', componentTheme: 'yellow'}
         ];
+
+        this.layoutThemes = this.layoutThemesColored;
+    }
+
+    changeMenuColorMode(mode) {
+        if (mode === 'color') {
+            this.layoutThemes = this.layoutThemesColored;
+        }
+        else {
+            this.layoutThemes = this.layoutThemesImage;
+        }
     }
 
     changeWrapperMode(event, mode) {
