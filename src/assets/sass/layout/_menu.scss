@@ -113,6 +113,12 @@
                     @include transition(transform $transitionDuration);
                 }
 
+                &.rotated-icon {
+                    .layout-menuitem-icon {
+                        transform: rotate(90deg);
+                    }
+                }
+
                 &:hover {
                     background-color: $overlayMenuItemHoverBgColor;
                 }

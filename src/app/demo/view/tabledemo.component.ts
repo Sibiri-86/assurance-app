@@ -45,6 +45,7 @@ export class TableDemoComponent implements OnInit {
     constructor(private customerService: CustomerService, private productService: ProductService,
                 private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
+            {label: 'UI Kit'},
             {label: 'Table'}
         ]);
     }

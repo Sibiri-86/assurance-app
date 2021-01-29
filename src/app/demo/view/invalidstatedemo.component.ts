@@ -34,6 +34,7 @@ export class InvalidStateDemoComponent implements OnInit {
 
     constructor(private countryService: CountryService, private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([
+            {label: 'UI Kit'},
             {label: 'Invalid State'}
         ]);
 
