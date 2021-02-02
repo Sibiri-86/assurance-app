@@ -1,6 +1,18 @@
 # Changelog
 
-##10.0.1
+## 11.0.0
+**Migration Guide**
+- Update your project to Angular 11.
+- Update app.main.component.ts and app.component.ts
+- Update app.menuitem.component.ts
+- Update theme files and layout files.
+
+**Implemented New Features and Enhancements:**
+
+- Upgrade to Angular and PrimeNG 11
+- Styles of new PrimeNG components
+
+## 10.0.1
 
 **Migration Guide**
 - Update theme files and layout files.
@@ -9,7 +21,7 @@
 
 - Misalignment topbar items in Prestige NG on Safari 
 
-###10.0.0
+### 10.0.0
 
 **Migration Guide**
 - Update your project to Angular 10.
