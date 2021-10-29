@@ -1,0 +1,15 @@
+<div class="font-weight-bold container-fluid"
+     *ngIf="formGroup.controls[entityField] && formGroup.controls[entityField].invalid
+  && (formGroup.controls[entityField].dirty || formGroup.controls[entityField].touched)">
+
+  <ng-template ngFor let-entityValidation [ngForOf]="entityValidations">
+    <span *ngIf="entityValidation.field === entityField">
+      <ng-container *ngFor="let validation of entityValidation.validations">
+        <span *ngIf="formGroup.controls[entityValidation.field].errors[validation.validName]">
+          <span class="p-error">{{validation.validMessage}}</span>
+          <br>
+        </span>
+      </ng-container>
+    </span>
+  </ng-template>
+</div>

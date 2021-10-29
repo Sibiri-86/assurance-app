@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, APP_INITIALIZER,  CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
@@ -145,10 +145,70 @@ import {PhotoService} from './demo/service/photoservice';
 import {ProductService} from './demo/service/productservice';
 import {BreadcrumbService} from './app.breadcrumb.service';
 import {MenuService} from './app.menu.service';
+import {initializeKeycloak} from './init/keycloak-init.factory';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import { ParametrageComponent } from './module/parametrage/parametrage.component';
+import {StoreModule} from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import {GarantieEffects} from './store/parametrage/garantie/effect';
+import {ActeEffects} from './store/parametrage/acte/effect';
+import {SousActeEffects} from './store/parametrage/sous-acte/effect';
+import {SecteurActiviteEffects} from './store/parametrage/secteur-activite/effect';
+
+import { TauxEffects } from './store/parametrage/taux/effect';
+import { DimensionPeriodeEffects } from './store/parametrage/dimension-periode/effect';
+import { TerritorialiteEffects } from './store/parametrage/territorialite/effect';
+import { TypeGarantEffects } from './store/parametrage/garant/effect';
+import { QualiteAssureEffects } from './store/parametrage/qualite-assure/effect';
+import { CategorieSocioProfessionnelEffects } from './store/parametrage/categorie-socio-professionnel/effect';
+import { ProfessionEffects } from './store/parametrage/profession/effect';
+import { StatusEffects } from './store/parametrage/status/effect';
+import { TypePrestataireEffects } from './store/parametrage/type-prestataire/effect';
+import { PrestataireEffects } from './store/parametrage/prestataire/effect';
+import { NaturePrestataireEffects } from './store/parametrage/nature-prestataire/effect';
+import { MedecinEffects } from './store/parametrage/medecin/effect';
+import { QualiteMedecinEffects } from './store/parametrage/qualite-medecin/effect';
+import { ProduitPharmaceutiqueEffects } from './store/parametrage/produit-pharmaceutique/effect';
+import { PathologieEffects } from './store/parametrage/pathologie/effect';
+import { TypeAvenantEffects } from './store/parametrage/type-avenant/effect';
+import { TypeAffaireEffects } from './store/parametrage/type-affaire/effect';
+import { TypePrimeEffects } from './store/parametrage/type-prime/effect';
+import { GenreEffects } from './store/parametrage/genre/effect';
+import { ModePaiementEffects } from './store/parametrage/mode-paiement/effect';
+
+import { RegionEffects } from './store/parametrage/region/effect';
+import { DepartementEffects } from './store/parametrage/departement/effect';
+import { VilleEffects } from './store/parametrage/ville/effect';
+import { CommuneEffects } from './store/parametrage/commune/effect';
+
+import {metaReducers, reducers} from './store/global/index';
+import {ReactiveFormsModule} from '@angular/forms';
+import {ConfirmationService,MessageService} from 'primeng/api';
+import { PaysEffects } from './store/parametrage/pays/effect';
+import { ZonePaysEffects } from './store/parametrage/zone-pays/effect';
+import { AffaireNouvelleComponent } from './module/contrat/affaire-nouvelle/affaire-nouvelle.component';
+import { GarantComponent } from './module/contrat/garant/garant.component';
+import { IntermediaireComponent } from './module/contrat/intermediaire/intermediaire.component';
+import { GarantEffects } from './store/contrat/garant/effect';
+import {IntermediaireEffects} from './store/contrat/intermediaire/effects';
+import {PoliceEffects} from './store/contrat/police/effect';
+import {GroupeEffects} from './store/contrat/groupe/effect';
+import { Plafond } from './store/contrat/plafond/model';
+import { PlafondEffects } from './store/contrat/plafond/effect';
+import { TypeIntermediaireEffects } from './store/parametrage/type-intermediaire/effect';
+import { EntityValidationComponent } from './module/common/entity-validation/entity-validation.component';
+import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
+import { PoliceComponent } from './module/contrat/police/police.component';
+import { AddRowDirective } from './module/contrat/police/add-row.directive';
+import {FormatTableValuePipe} from './module/pipes/format-table-value.pipe';
+import {MatStepperModule} from '@angular/material/stepper';
+import {AvenantComponent} from './module/contrat/avenant/avenant.component';
+import { AdherentEffects } from './store/contrat/adherent/effect';
 
 @NgModule({
     imports: [
         BrowserModule,
+        MatStepperModule,
         FormsModule,
         AppRoutingModule,
         HttpClientModule,
@@ -231,10 +291,21 @@ import {MenuService} from './app.menu.service';
         TreeModule,
         TreeTableModule,
         VirtualScrollerModule,
-        AppCodeModule
+        KeycloakAngularModule,
+        AppCodeModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot(reducers,  {metaReducers}),
+        EffectsModule.forRoot([GarantieEffects, ActeEffects,
+             SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
+             DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
+             TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
+             TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, QualiteMedecinEffects,PathologieEffects, ProduitPharmaceutiqueEffects,
+            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects])
     ],
+    schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
         AppComponent,
+        AvenantComponent,
         AppMainComponent,
         AppMenuComponent,
         AppMenuitemComponent,
@@ -279,12 +350,29 @@ import {MenuService} from './app.menu.service';
         AppNotfoundComponent,
         AppErrorComponent,
         AppTimelineDemoComponent,
-        AppAccessdeniedComponent
+        AppAccessdeniedComponent,
+        ParametrageComponent,
+        AffaireNouvelleComponent,
+        GarantComponent,
+        IntermediaireComponent,
+        EntityValidationComponent,
+        SouscripteurComponent,
+        AddRowDirective,
+        PoliceComponent,
+        FormatTableValuePipe
     ],
     providers: [
-        {provide: LocationStrategy, useClass: HashLocationStrategy},
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeKeycloak,
+            multi: true,
+            deps: [KeycloakService],
+            //provide: LocationStrategy,
+            useClass: HashLocationStrategy
+            //useClass:  HashLocationStrategy
+          },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, BreadcrumbService
+        PhotoService, ProductService, ConfirmationService, MessageService, MenuService, BreadcrumbService
     ],
     bootstrap: [AppComponent]
 })

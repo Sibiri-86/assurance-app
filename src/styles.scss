@@ -8,3 +8,19 @@
 @import "../node_modules/@fullcalendar/daygrid/main.min.css";
 @import "../node_modules/@fullcalendar/timegrid/main.min.css";
 @import "assets/demo/flags/flags.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css"; 
+@import "~@angular/material/prebuilt-themes/purple-green.css";
+
+form label {
+    font-weight: bold;
+}
+.required {
+    color:red;
+}
+
+.requiredClass::after {
+    color:red;
+    content: "*";
+}

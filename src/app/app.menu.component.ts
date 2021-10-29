@@ -12,8 +12,22 @@ export class AppMenuComponent implements OnInit {
     constructor(public app: AppMainComponent) {}
 
     ngOnInit() {
+
         this.model = [
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']},
+            {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage']},
+            {
+                label: 'Contrat', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
+                items: [
+                    {label: 'garant', icon: '', routerLink: ['/contrat/garant']},
+                    {label: 'intermediaire', icon: '', routerLink: ['/contrat/intermediaire']},
+                    {label: 'police', icon: '', routerLink: ['/contrat/police']},
+                    //{label: 'affaire nouvelle', icon: '', routerLink: ['/contrat/affaire-nouvelle/souscripteur']},
+                    {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant']},
+                    //{label: 'proposition', icon: '', routerLink: ['/proposition']}
+                ]
+            },
+            /*
             {
                 label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],
                 items: [
@@ -113,6 +127,9 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Documentation', icon: 'pi pi-fw pi-info-circle', routerLink: ['/documentation']
             }
+            */
         ];
+        
     }
+    
 }

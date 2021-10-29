@@ -1,7 +1,7 @@
 <div class="layout-topbar">
     <div href="#" class="layout-topbar-logo">
         <a href="#">
-            <img class="logo" src="assets/layout/images/logo.png" alt="prestige-layout"/>
+            <img class="logo" src="assets/layout/images/logo.jpg" alt="prestige-layout"/>
         </a>
     </div>
     <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
@@ -43,6 +43,7 @@
                 </li>
             </ul>
         </li>
+        <!--
         <li #calendar class="layout-topbar-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === calendar}">
             <a href="#" class="layout-topbar-icon first" (click)="app.onTopbarItemClick($event,calendar)">
                 <i class="topbar-icon pi pi-calendar"></i>
@@ -65,27 +66,29 @@
                 </li>
             </ul>
         </li>
+
         <li role="menuitem" class="topbar-search layout-topbar-item">
             <a href="#" class="layout-topbar-icon first">
                 <i class="topbar-icon pi pi-search"></i>
             </a>
             <input type="text" placeholder="Type to search..." />
         </li>
+        -->
         <li #profile class="user-profile" role="menuitem" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
             <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                 <div class="user-profile-info profile-link">
-                    <span class="user-profile-name">Ava Gregoraci</span>
-                    <span class="user-profile-role">Design Ops</span>
+                    <span class="user-profile-name">{{name}}</span>
+                    <span class="user-profile-role">{{role}}</span>
                 </div>
-                <img class="logo" src="assets/layout/images/avatar/avatar-ava.jpg" alt="prestige-layout" />
+                <img class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
             </a>
             <ul class="fadeInDown">
                 <li class="profile-detail">
                     <div class="user-profile-info">
-                        <img class="logo" src="assets/layout/images/avatar/avatar-ava.jpg" alt="prestige-layout" />
+                        <img class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
                         <div class="profile-info">
-                            <span class="user-profile-name">Ava Gregoraci</span>
-                            <span class="user-profile-role">Design Ops</span>
+                            <span class="user-profile-name">{{name}}</span>
+                            <span class="user-profile-role">{{role}}</span>
                         </div>
                         <a href="#" class="profile-detail-icon" (click)="app.onTopbarSubItemClick($event)">
                             <i class="pi pi-sign-out"></i>
@@ -129,6 +132,16 @@
                         <div class="menu-text">
                             <span class="menu-title">Notification</span>
                             <span class="menu-subtitle">No new notification</span>
+                        </div>
+                        <i class="right-icon pi pi-angle-right"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" (click)="lagout()">
+                        <i class="pi pi-globe"></i>
+                        <div class="menu-text">
+                            <span class="menu-title">Deconnecter</span>
+                            <span class="menu-subtitle">Cliquer pour fermer sa session</span>
                         </div>
                         <i class="right-icon pi pi-angle-right"></i>
                     </a>

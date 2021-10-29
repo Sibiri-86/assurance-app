@@ -38,7 +38,15 @@ import {AppCalendarComponent} from './pages/app.calendar.component';
 import {AppInvoiceComponent} from './pages/app.invoice.component';
 import {AppHelpComponent} from './pages/app.help.component';
 import {AppTimelineDemoComponent} from './pages/app.timelinedemo.component';
+import { ParametrageComponent } from './module/parametrage/parametrage.component';
+import {AffaireNouvelleComponent} from './module/contrat/affaire-nouvelle/affaire-nouvelle.component';
+import {GarantComponent} from './module/contrat/garant/garant.component';
+import {IntermediaireComponent} from './module/contrat/intermediaire/intermediaire.component';
+import {PoliceComponent} from './module/contrat/police/police.component';
+import {AvenantComponent} from './module/contrat/avenant/avenant.component';
 
+
+import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -46,6 +54,17 @@ import {AppTimelineDemoComponent} from './pages/app.timelinedemo.component';
                 path: '', component: AppMainComponent,
                 children: [
                     {path: '', component: DashboardDemoComponent},
+                    {path: 'parametrage', component: ParametrageComponent},
+                    {path: 'contrat/affaire-nouvelle', component: AffaireNouvelleComponent,
+                     children: [
+                        {path: 'souscripteur', component: SouscripteurComponent},
+                        {path: 'parametrage', component: ParametrageComponent}
+                    ]
+                    },
+                    {path: 'contrat/garant', component: GarantComponent},
+                    {path: 'contrat/intermediaire', component: IntermediaireComponent},
+                    {path: 'contrat/police', component: PoliceComponent},
+                    {path: 'contrat/avenant', component: AvenantComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
@@ -85,7 +104,7 @@ import {AppTimelineDemoComponent} from './pages/app.timelinedemo.component';
             {path: 'notfound', component: AppNotfoundComponent},
             {path: 'login', component: AppLoginComponent},
             {path: '**', redirectTo: '/notfound'},
-        ], {scrollPositionRestoration: 'enabled'})
+        ])
     ],
     exports: [RouterModule]
 })

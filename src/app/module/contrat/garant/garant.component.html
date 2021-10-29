@@ -1,0 +1,310 @@
+<div class="p-grid">
+	<div class="p-col-12">
+
+		<p-toast></p-toast>
+
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGarant()"></button>
+					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedGrant()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
+				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+
+			<p-table #dt [value]="garantList" [loading]="loading" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu']"
+					 [(selection)]="selectedGarants" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+						</th>
+						<th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+						<th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
+						<th pSortableColumn="contact">Contact<p-sortIcon field="contact"></p-sortIcon></th>
+						<th pSortableColumn="personneRessource" style="width: 14rem">Personne Ressource<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" style="width: 13rem">compte Bancaire 1 <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire2" style="width: 13rem">compte Bancaire 2 <p-sortIcon field="numeroCompteBancaire2"></p-sortIcon></th>
+                        <th pSortableColumn="numeroIfu">IFU <p-sortIcon field="numeroIfu"></p-sortIcon></th>
+						<th></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr>
+						<td>
+							<p-tableCheckbox [value]="garant"></p-tableCheckbox>
+						</td>
+						<td><span class="p-column-title">{{garant.nom}}</span>
+							
+						</td>
+                        <td><span class="p-column-title">{{garant.code}}</span>
+							
+						</td>
+                        <td><span class="p-column-title">{{garant.contact}}</span>
+						</td>
+						<td><span class="p-column-title">{{garant.personneRessource1}}</span>
+							
+						</td>
+						<td><span class="p-column-title">{{garant.numeroCompteBancaire1}}</span>
+							
+						</td>
+                        <td><span class="p-column-title">{{garant.numeroCompteBancaire2}}</span>
+						</td>
+
+                        <td><span class="p-column-title">{{garant.numeroIfu}}</span>
+						</td>
+						<td>
+							<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editGarant(garant)"></button>
+							<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteGarant(garant)"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{garantList ? garantList.length : 0 }} garants au total.
+					</div>
+				</ng-template>
+			</p-table>
+		</div>
+
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Ajouter un garant" [modal]="true" styleClass="p-fluid" (onHide)="garantForm.reset()">
+            <ng-template pTemplate="content">
+            <form (ngSubmit)="onCreate()"  [formGroup]="garantForm">
+                <div class="card">
+                <h5>Identification</h5>
+                <hr/>
+                <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Nom <span class="required">*</span></label>
+                            <input id="nom" type="text" required formControlName="nom"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="garantForm" [entityField]="'nom'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Type garant <span class="required">*</span></label>
+                            <p-dropdown  inputId="typeGarant" dataKey="id" [filter]="true" showClear="true" [options]="typeGarantList" formControlName="typeGarant" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'typeGarant'">
+                        </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Contact <span class="required">*</span></label>
+                            <input id="lastname2" type="number" formControlName="contact" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="garantForm" [entityField]="'contact'">
+                        </app-entity-validation>
+                        </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Adresse email <span class="required">*</span></label>
+                    <input id="firstname2" type="email" [email]="true" formControlName="adresseEmail" pInputText>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="garantForm" [entityField]="'adresseEmail'">
+                        </app-entity-validation>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Adresse postale <span class="required">*</span></label>
+                        <input id="firstname2" type="text" formControlName="adressePostale" pInputText>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'adressePostale'">
+                            </app-entity-validation>
+                        </div>
+
+                       <div class="p-field p-col">
+                        <label for="lastname2">Personne ressource 1 <span class="required">*</span></label>
+                        <input id="lastname2" type="text" formControlName="personneRessource1" pInputText>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="garantForm" [entityField]="'personneRessource1'">
+                        </app-entity-validation>
+                        </div>
+
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Contact personne ressource 1 <span class="required">*</span></label>
+                            <input id="lastname2" type="number" formControlName="contactPersonneRessource1" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'contactPersonneRessource1'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Email personne ressource 1 <span class="required">*</span></label>
+                            <input id="lastname2" type="email" formControlName="emailPersonneRessource1" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'emailPersonneRessource1'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Personne ressource 2</label>
+                            <input id="lastname2" type="text" formControlName="personneRessource2" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'personneRessource2'">
+                            </app-entity-validation>
+                        </div> 
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Contact personne ressource 2</label>
+                            <input id="lastname2" type="number"  formControlName="contactPersonneRessource2" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'contactPersonneRessource2'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Email personne ressource 2 </label>
+                            <input id="lastname2" type="email" formControlName="emailPersonneRessource2" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'emailPersonneRessource2'">
+                            </app-entity-validation>
+                        </div>
+                    </div>
+
+                    <h5>Coordonnés</h5>
+                    <hr/>
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Numero compte bancaire 1 <span class="required">*</span></label>
+                            <input id="lastname2" type="text" formControlName="numeroCompteBancaire1" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'numeroCompteBancaire1'">
+                            </app-entity-validation>
+                            </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Numero compte bancaire 2</label>
+                            <input id="lastname2" type="text" formControlName="numeroCompteBancaire2" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="garantForm" [entityField]="'numeroCompteBancaire2'">
+                            </app-entity-validation>
+                        </div>
+    
+                        <div class="p-field p-col">
+                            <label for="lastname2">Secteur activite <span class="required">*</span></label>
+                            <p-dropdown dataKey="id" inputId="secteurActivite" [filter]="true" showClear="true" [options]="secteurActiviteList" formControlName="secteurActivite" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'secteurActivite'">
+                            </app-entity-validation>
+                        </div>
+
+                        
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                       <div class="p-field p-col">
+                        <label for="lastname2">IFU <span class="required">*</span></label>
+                        <input id="lastname2" type="text" formControlName="numeroIfu" pInputText>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                        [formGroup]="garantForm" [entityField]="'numeroIfu'">
+                        </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Periodicite appel fond <span class="required">*</span> </label>
+                            <p-dropdown  inputId="periodiciteAppelFond" dataKey="id" [filter]="true" showClear="true" [options]="dimensionPeriodeList" formControlName="periodiciteAppelFond" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'periodiciteAppelFond'">
+                        </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">RCCM <span class="required">*</span></label>
+                            <input id="lastname2" type="text" formControlName="rccm" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'rccm'">
+                        </app-entity-validation>
+                        </div>
+
+                    </div>
+
+
+                    <h5>Localisation</h5>
+                    <hr/>
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Pays <span class="required">*</span></label>
+                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" formControlName="pays" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'pays'">
+                            </app-entity-validation>
+                        </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Region</label>
+                                <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" formControlName="region" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                [formGroup]="garantForm" [entityField]="'region'">
+                                </app-entity-validation>
+                                </div>
+     
+                            <div class="p-field p-col">
+                                <label for="lastname2">Province</label>
+                                <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" formControlName="province" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                [formGroup]="garantForm" [entityField]="'departement'">
+                                </app-entity-validation>
+                            </div>    
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Commune</label>
+                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'commune'">
+                            </app-entity-validation>
+                         </div>
+                    </div>
+
+                    </div>
+                    <div class="p-grid p-justify-between">
+                    <div>
+                    <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                    </div>
+                    <div>
+                    <button  [disabled]="garantForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" type="submit"></button>
+                    </div>
+                    </div>
+                    </form>
+
+
+                    
+                      
+                   </ng-template>
+            </p-dialog>
+
+            <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+	</div>
+</div>
