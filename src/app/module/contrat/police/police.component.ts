@@ -110,6 +110,19 @@ import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external
 import { element } from "protractor";
 import { AdherentFamille } from "../../../store/contrat/adherent/model";
 import { ContentObserver } from "@angular/cdk/observers";
+import { removeBlanks } from "../../util/common-util";
+
+import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
+import { Secteur } from 'src/app/store/parametrage/secteur/model';
+import { ArrondissementService } from 'src/app/store/parametrage/arrondissement/service';
+import * as secteurAction from '../../../store/parametrage/secteur/actions';
+import {loadSecteur} from '../../../store/parametrage/secteur/actions';
+import * as secteurSelector from '../../../store/parametrage/secteur/selector';
+
+import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
+import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
+import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
+
 
 @Component({
   selector: "app-police",
@@ -215,6 +228,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
   isInternationalGroupe: boolean;
   typeDuree: any = [{label:'Jour', value:'Jour'},
   {label: 'Mois', value:'Mois'}, {label:'Année', value: 'Annee'}];
+  secteurList: Array<Secteur>;
+  secteurList$: Observable<Array<Secteur>>;
+  arrondissementList$: Observable<Array<Arrondissement>>;
+  arrondissementList: Array<Arrondissement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -241,16 +258,16 @@ export class PoliceComponent implements OnInit, OnDestroy {
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
       adresseEmail: new FormControl("", [Validators.required]),
-      profession: new FormControl("", [Validators.required]),
+      profession: new FormControl(""),
       referenceBancaire: new FormControl(""),
       qualiteAssure: new FormControl("", [Validators.required]),
       genre: new FormControl("", [Validators.required]),
-      dateIncorporation: new FormControl("", [Validators.required]),
       dateEntree: new FormControl("", [Validators.required])
     });
 
     this.policeForm = this.formBuilder.group({
       id: new FormControl(""),
+      numero: new FormControl(''),
       garant: new FormControl("", [Validators.required]),
       intermediaire: new FormControl("", [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
@@ -266,16 +283,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
       nom: new FormControl("", [Validators.required]),
       //code: new FormControl('',[Validators.required]),
       contact: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl(null, [Validators.required]),
+      adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
       personneRessource: new FormControl("", [Validators.required]),
+      contactPersonneRessource: new FormControl("", [Validators.required]),
+      emailPersonneRessource: new FormControl("", [Validators.required, Validators.email]),
       secteurActivite: new FormControl("", [Validators.required]),
       numeroIfu: new FormControl(""),
-      periodiciteAppelFond: new FormControl(""),
       rccm: new FormControl(""),
-      pays: new FormControl(""),
-      region: new FormControl(""),
-      departement: new FormControl(""),
-      commune: new FormControl(""),
+      secteur: new FormControl('', [Validators.required]),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl("", [Validators.required])
@@ -430,9 +445,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
         validations: [
           { validName: "required", validMessage: "Ce champs est obligatoire" },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
-          },
+            validName: 'email',
+            validMessage: 'Veuillez renseigner une adresse email valide'
+          }
         ],
       },
       {
@@ -454,6 +469,15 @@ export class PoliceComponent implements OnInit, OnDestroy {
             validMessage: "Ce champs requiert au plus 5 caractères",
           },
         ],
+      },
+      {
+        field: 'emailPersonneRessource',
+        validations: [
+          {
+            validName: 'email',
+            validMessage: 'Veuillez renseigner une adresse email valide'
+          }
+        ]
       },
       {
         field: "numeroCompteBancaire2",
@@ -560,6 +584,25 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentFamilleList = [];
     this.adherentFamille = [];
     
+  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
+  this.store.dispatch(arrondissementAction.loadArrondissement());
+  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.loading = false;
+                this.arrondissementList = value.slice();
+              }
+  });
+
+  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
+  this.store.dispatch(secteurAction.loadSecteur());
+  this.secteurList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.loading = false;
+                this.secteurList = value.slice();
+              }
+  });
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
@@ -735,11 +778,60 @@ export class PoliceComponent implements OnInit, OnDestroy {
           this.dimensionPeriodeList = value.slice();
         }
       });
-
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
 
+
+  changeCountry(event) {
+    this.regionList$.pipe(takeUntil(this.destroy$))
+    .subscribe(value => {
+      if (value) {
+        this.regionList = value.slice();
+        this.regionList = this.regionList.filter(element=> element.idTypePays===event.value.id);
+      }
+  });
+  }
+  
+  changeRegion(event) {
+    this.departementList$.pipe(takeUntil(this.destroy$))
+    .subscribe(value => {
+      if (value) {
+        this.departementList = value.slice();
+        this.departementList = this.departementList.filter(element=> element.idRegion===event.value.id);
+      }
+  });
+  }
+  
+  changeDepartement(event) {
+    this.communeList$.pipe(takeUntil(this.destroy$))
+    .subscribe(value => {
+      if (value) {
+        this.communeList = value.slice();
+        this.communeList = this.communeList.filter(element=> element.idDepartement===event.value.id);
+      }
+  });
+  }
+  
+  changeCommune(event) {
+    this.arrondissementList$.pipe(takeUntil(this.destroy$))
+    .subscribe(value => {
+      if (value) {
+        this.arrondissementList = value.slice();
+        this.arrondissementList = this.arrondissementList.filter(element=> element.idCommune===event.value.id);
+      }
+  });
+  }
+  
+  changeArrondissement(event) {
+    this.secteurList$.pipe(takeUntil(this.destroy$))
+    .subscribe(value => {
+      if (value) {
+        this.secteurList = value.slice();
+        this.secteurList = this.secteurList.filter(element=> element.idArrondissement===event.value.id);
+      }
+  });
+  }
   // fonction pour creer adherent.
   onCreateAddherent() {
     console.log(this.adherentForm.value);
@@ -778,13 +870,31 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentForm.reset();
     this.adherentFamilleList = [];
     console.log(this.adherentFamille);
-
   }
   /** cette methode permet de creer un groupe avec des informations basiques */
   onCreateGroupe(){
     this.groupe = this.groupeForm.value;
     this.groupe.police = this.police;
     this.groupe.prime = this.primeForm.value;
+
+    if(this.groupe.prime.primeAnnuelle){
+      this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
+    }
+    if(this.groupe.prime.primeAdulte){
+      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +'');
+    }
+    if(this.groupe.prime.primeConjoint){
+      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint+'');
+    }
+    if(this.groupe.prime.primeEmploye){
+      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye+'');
+    }
+    if(this.groupe.prime.primeEnfant){
+      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant+'');
+    }
+    if( this.groupe.prime.primeFamille){
+      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille+'');
+    }
     this.groupe.adherentFamille = this.adherentFamille;
     console.log(this.groupe);
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
@@ -809,13 +919,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
   }
 
-  goToNext() {
-    this.index = (this.index === 2) ? 0 : this.index + 1;
-    console.log(this.index);
-  }
-
   getNewDate(value: number): Date {
-    this.dateEcheance = new Date(this.dateEffet);
+    this.dateEcheance = new Date(this.policeForm.get('dateEffet').value);
     this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
     if(this.typeDureeSelected === 'Jour') {
       return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
@@ -839,8 +944,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
         }
       }
 
-  changeTypeDuree(){
-    if(this.dateEcheance && this.policeForm.get('duree')){
+    changeTypeDuree(){
+    this.typeDureeSelected = this.policeForm.get('typeDuree').value;
+    if(this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
     }
@@ -909,12 +1015,17 @@ export class PoliceComponent implements OnInit, OnDestroy {
         this.adherentList = value.slice();
       }
     });
-
   }
 
   editPolice(police: Police) {
-    this.policeForm.get("id").setValue(police.id);
     this.police = { ...police };
+    if(this.police.dateEffet) {
+      this.police.dateEffet = new Date(this.police.dateEffet);
+    }
+    if(this.police.dateEcheance) {
+      this.police.dateEcheance = new Date(this.police.dateEcheance);
+    }
+    this.policeForm.patchValue(this.police);
     this.displayDialogFormPolice = true;
   }
 
@@ -936,6 +1047,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   onCreate() {
     this.police = this.policeForm.value;
+    this.police.fraisAccessoire = removeBlanks(this.police.fraisAccessoire+'');
+    this.police.fraisBadge = removeBlanks(this.police.fraisBadge+'');
     this.police.dateEcheance = this.policeForm.get('dateEcheance').value;
     console.log(this.police);
     this.confirmationService.confirm({
@@ -945,12 +1058,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
       accept: () => {
         if (this.police.id) {
           this.store.dispatch(
-            featureAction.updatePolice(this.policeForm.value)
+            featureAction.updatePolice(this.police)
           );
         } else {
           console.log(this.policeForm.value);
           this.store.dispatch(
-            featureAction.createPolice(this.policeForm.value)
+            featureAction.createPolice(this.police)
           );
         }
         this.policeForm.reset();
@@ -960,8 +1073,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   /**affichage des groupes de la police */
   voirGroupe(police: Police) {
-
-
     this.police = {...police};
     this.groupeList$ = this.store.pipe(select(groupeList));
     this.store.dispatch(loadGroupe({idPolice: this.police.id}));
@@ -1098,11 +1209,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
   /**afficher les details de la police */
-  onRowSelectPolice(event) {
-    console.log(event.data);
-    this.police = event.data;
+  onRowSelectPolice(police: Police) {
+    this.police = {...police}
     this.infosPolice = true;
-    this.policeForm.patchValue(event.data);
+    this.policeForm.patchValue(this.police);
   }
 
   /**permet de valider le plafond */
@@ -1211,9 +1321,11 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   annulerSaisie(){
+    this.policeForm.reset();
     this.primeForm.reset();
     this.groupeForm.reset();
     this.displayDialogFormAddGroupe =false;
+    this.displayDialogFormPolice = false;
     console.log('saisie');
   }
 }

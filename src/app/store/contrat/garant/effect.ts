@@ -7,6 +7,7 @@ import * as featureActions from './actions';
 import {Garant} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
+import { GarantList } from './model';
 
 @Injectable()
 export class GarantEffects {
@@ -62,8 +63,8 @@ export class GarantEffects {
                 deleteGarants$ = createEffect(() =>
                 this.actions$.pipe(
                     ofType(featureActions.deleteGarants),
-                    mergeMap(({garantList}) =>
-                        this.GarantService.deleteGarants(garantList).pipe(
+                    mergeMap((garants: GarantList) =>
+                        this.GarantService.deleteGarants(garants).pipe(
                             switchMap(value => [
                                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                                 featureActions.loadGarant()

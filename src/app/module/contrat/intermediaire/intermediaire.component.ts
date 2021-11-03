@@ -42,6 +42,23 @@ import {status} from '../../../store/global-config/selector';
 import { EntityValidations } from '../../common/models/validation';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
 
+import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
+import { Secteur } from 'src/app/store/parametrage/secteur/model';
+import { ArrondissementService } from 'src/app/store/parametrage/arrondissement/service';
+import * as secteurAction from '../../../store/parametrage/secteur/actions';
+import {loadSecteur} from '../../../store/parametrage/secteur/actions';
+import * as secteurSelector from '../../../store/parametrage/secteur/selector';
+
+import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
+import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
+import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
+
+import { Taux } from 'src/app/store/parametrage/taux/model';
+import { loadTaux } from 'src/app/store/parametrage/taux/actions';
+import * as tauxAction from '../../../store/parametrage/taux/actions';
+import * as tauxSelector from '../../../store/parametrage/taux/selector';
+
+
 @Component({
   selector: 'app-intermediaire',
   templateUrl: './intermediaire.component.html',
@@ -72,6 +89,14 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
   intermediaireForm: FormGroup;
   statusObject$: Observable<Status>;
   entityValidations: Array<EntityValidations>;
+  secteurList: Array<Secteur>;
+  secteurList$: Observable<Array<Secteur>>;
+  arrondissementList$: Observable<Array<Arrondissement>>;
+  arrondissementList: Array<Arrondissement>;
+  tauxList$: Observable<Array<Taux>>;
+  tauxList: Array<Taux>;
+  infosIntermediaire: boolean = false;
+
 
 
   constructor(private formBuilder: FormBuilder,
@@ -79,21 +104,22 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) { 
       this.intermediaireForm = this.formBuilder.group({
         id: new FormControl(''),
+        code: new FormControl(''),
         nom: new FormControl('',[Validators.required]),
         contact: new FormControl('',[Validators.required]),
-        adresseEmail: new FormControl(null,[Validators.required]),
+        adresseEmail: new FormControl(null,[Validators.required, Validators.email]),
         adressePostale: new FormControl(null,[Validators.required]),
         typeIntermediaire: new FormControl(null,[Validators.required]),
         personneRessource: new FormControl('',[Validators.required]),
         numeroCompteBancaire1: new FormControl('',[Validators.required]),
         numeroCompteBancaire2: new FormControl(''),
         numeroIfu: new FormControl('',[Validators.required]),
+        taux: new FormControl('',[Validators.required]),
         //periodiciteAppelFond: new FormControl(''),
         rccm: new FormControl(''),
-        pays: new FormControl('',[Validators.required]),
-        region: new FormControl('',),
-        province: new FormControl(''),
-        commune: new FormControl('')
+        secteur: new FormControl('', [Validators.required]),
+        contactPersonneRessource: new FormControl('', [Validators.required]),
+        emailPersonneRessource: new FormControl('', [Validators.required, Validators.email]),
       });
       this.breadcrumbService.setItems([
         {label: 'Intermediaire'}
@@ -127,11 +153,13 @@ ngOnInit(): void {
     {
       field: 'contact',
       validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
+      ]
+    },
+    {
+      field: 'contactPersonneRessource',
+      validations: [
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
@@ -139,8 +167,19 @@ ngOnInit(): void {
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'},
         {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
+          validName: 'email',
+          validMessage: 'Veuillez renseigner une adresse email valide'
+        }
+      ]
+    },
+
+    {
+      field: 'emailPersonneRessource',
+      validations: [
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+        {
+          validName: 'email',
+          validMessage: 'Veuillez renseigner une adresse email valide'
         }
       ]
     },
@@ -266,6 +305,34 @@ ngOnInit(): void {
     }
   ];
 
+  this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+  this.store.dispatch(loadTaux());
+  this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    if (value) {
+      this.tauxList = value.slice();
+    }
+  });
+
+  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
+  this.store.dispatch(arrondissementAction.loadArrondissement());
+  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                //this.loading = false;
+                this.arrondissementList = value.slice();
+              }
+  });
+
+  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
+  this.store.dispatch(secteurAction.loadSecteur());
+  this.secteurList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                //this.loading = false;
+                this.secteurList = value.slice();
+              }
+  });
+
   this.typeIntermediaireList$=this.store.pipe(select(typeIntermediaireSelector.typeIntermediaireList));
   this.store.dispatch(loadTypeIntermediaire());
   this.typeIntermediaireList$.pipe(takeUntil(this.destroy$))
@@ -344,6 +411,58 @@ ngOnInit(): void {
 
 }
 
+
+changeCountry(event) {
+  this.regionList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.regionList = value.slice();
+      this.regionList = this.regionList.filter(element=> element.idTypePays===event.value.id);
+    }
+});
+}
+
+changeRegion(event) {
+  this.departementList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.departementList = value.slice();
+      this.departementList = this.departementList.filter(element=> element.idRegion===event.value.id);
+    }
+});
+}
+
+changeDepartement(event) {
+  this.communeList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.communeList = value.slice();
+      this.communeList = this.communeList.filter(element=> element.idDepartement===event.value.id);
+    }
+});
+}
+
+changeCommune(event) {
+  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.arrondissementList = value.slice();
+      this.arrondissementList = this.arrondissementList.filter(element=> element.idCommune===event.value.id);
+    }
+});
+}
+
+changeArrondissement(event) {
+  this.secteurList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.secteurList = value.slice();
+      this.secteurList = this.secteurList.filter(element=> element.idArrondissement===event.value.id);
+    }
+});
+}
+
+
 checkStatus() {
   this.statusObject$.pipe(takeUntil(this.destroy$))
       .subscribe(statusObj => {
@@ -370,9 +489,17 @@ addIntermediaire() {
   this.displayDialogFormIntermediaire = true;
 }
 
+annulerSaisie() {
+  this.intermediaireForm.reset();
+  this.displayDialogFormIntermediaire = false;
+}
+
 editIntermediaire(intermediaire: Intermediaire) {
-this.intermediaireForm.get('id').setValue(intermediaire.id);
+//this.intermediaireForm.get('id').setValue(intermediaire.id);
+//this.intermediaireForm.get('code').setValue(intermediaire.code);
 this.intermediaire = {...intermediaire};
+console.log(this.intermediaire);
+this.intermediaireForm.patchValue(this.intermediaire);
 this.displayDialogFormIntermediaire = true;
 }
 
@@ -389,22 +516,25 @@ deleteIntermediaire(intermediaire: Intermediaire) {
 
 onCreate() {
 this.intermediaire = this.intermediaireForm.value;
-console.log(this.intermediaire);
 this.confirmationService.confirm({
-  message: 'Etes vous sur de vouloir Ajouter ce intermediaire?',
+  message: 'Etes vous sur de vouloir ajouter cet intermediaire?',
   header: 'Confirmation',
   icon: 'pi pi-exclamation-triangle',
   accept: () => {
     if(this.intermediaire.id) { 
-      this.store.dispatch(featureAction.updateIntermediaire(this.intermediaireForm.value));
+      this.store.dispatch(featureAction.updateIntermediaire(this.intermediaire));
     }else{
-    this.store.dispatch(featureAction.createIntermediaire(this.intermediaireForm.value));
+    this.store.dispatch(featureAction.createIntermediaire(this.intermediaire));
     }
     this.intermediaireForm.reset();
   }
 });
 }
 
+voirDetail(intermediaire: Intermediaire ) {
+  this.intermediaire = {...intermediaire};
+  this.infosIntermediaire = true;
+}
 
 deleteSelectedIntermediaire() {
   this.confirmationService.confirm({

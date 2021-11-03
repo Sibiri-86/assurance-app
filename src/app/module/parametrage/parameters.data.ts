@@ -92,6 +92,12 @@ import {paysList} from 'src/app/store/parametrage/pays/selector';
 import * as typeIntermediaireActions from '../../store/parametrage/type-intermediaire/actions';
 import {typeIntermediaireList} from 'src/app/store/parametrage/type-intermediaire/selector';
 
+import * as arrondissementActions from '../../store/parametrage/arrondissement/actions';
+import {arrondissementList} from 'src/app/store/parametrage/arrondissement/selector';
+
+import * as secteurActions from '../../store/parametrage/secteur/actions';
+import {secteurList} from 'src/app/store/parametrage/secteur/selector';
+
 // Definition des type de paramettres
 export const DATA_TYPE = [
   {label: 'Famille d\'acte', value: 'TypeGarantie'},
@@ -104,8 +110,10 @@ export const DATA_TYPE = [
   {label: 'Pays', value: 'Pays'},
   {label: 'Zone Pays', value: 'ZonePays'},
   {label: 'Region', value: 'Region'},
-  {label: 'Departement', value: 'Departement'},
+  {label: 'Province', value: 'Province'},
   {label: 'Commune', value: 'Commune'},
+  {label: 'Arrondissement', value: 'Arrondissement'},
+  {label: 'Secteur', value: 'Secteur'},
   //{label: 'Ville', value: 'Ville'},
   {label: 'Type de garant', value: 'TypeGarant'},
   {label: 'Qualité assuré', value: 'QualiteAssure'},
@@ -124,7 +132,7 @@ export const DATA_TYPE = [
   {label: 'Type Affaire', value: 'TypeAffaire'},
   {label: 'Type Prime', value: 'TypePrime'},
   {label: 'Mode de paiement', value: 'ModePaiement'},
-  {label: 'Type intermediaire', value: 'TypeIntermediaire'},
+  {label: 'Type intermediaire', value: 'TypeIntermediaire'}
 ];
 
 const dropdownEntriesObj: Array<SelectItem> = [
@@ -1493,7 +1501,7 @@ export const DATA_DEFINITION = [
     }
   },
   {
-    entity: 'Departement',
+    entity: 'Province',
     cols: [
       {
         field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
@@ -1514,16 +1522,6 @@ export const DATA_DEFINITION = [
           selector: regionList,
           key: 'id',
           field: 'idRegion',
-          optionLabel: 'libelle'
-        }
-      },
-      {
-        field: 'idTypeCommune', header: 'Commune', width: 1, label: 'libelleCommune', text_center: false,
-        validators: [Validators.required], type: 'dropdown', dropObj: {
-          action: communeActions.loadCommune(),
-          selector: communeList,
-          key: 'id',
-          field: 'idTypeCommune',
           optionLabel: 'libelle'
         }
       }
@@ -1558,6 +1556,123 @@ export const DATA_DEFINITION = [
       updateAction: departementActions.updateDepartement,
       deleteAction: departementActions.deleteDepartement,
       importAction: departementActions.importDepartement
+    }
+  },
+
+  {
+    entity: 'Arrondissement',
+    cols: [
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'idCommune', header: 'Commune', width: 1, label: 'libelleCommune', text_center: false,
+        validators: [Validators.required], type: 'dropdown', dropObj: {
+          action: communeActions.loadCommune(),
+          selector: communeList,
+          key: 'id',
+          field: 'idCommune',
+          optionLabel: 'libelle'
+        }
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: arrondissementList,
+      fetchAction: arrondissementActions.loadArrondissement(),
+      createAction: arrondissementActions.createArrondissement,
+      updateAction: arrondissementActions.updateArrondissement,
+      deleteAction: arrondissementActions.deleteArrondissement,
+      importAction: arrondissementActions.importArrondissement
+    }
+  },
+  {
+    entity: 'Secteur',
+    cols: [
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'idArrondissement', header: 'Arrondissement', width: 1, label: 'libelleArrondissement', text_center: false,
+        validators: [Validators.required], type: 'dropdown', dropObj: {
+          action: arrondissementActions.loadArrondissement(),
+          selector: arrondissementList,
+          key: 'id',
+          field: 'idArrondissement',
+          optionLabel: 'libelle'
+        }
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: secteurList,
+      fetchAction: secteurActions.loadSecteur(),
+      createAction: secteurActions.createSecteur,
+      updateAction: secteurActions.updateSecteur,
+      deleteAction: secteurActions.deleteSecteur,
+      importAction: secteurActions.importSecteur
     }
   },
   {
@@ -1621,6 +1736,16 @@ export const DATA_DEFINITION = [
       {
         field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
         validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'idDepartement', header: 'Province', width: 1, label: 'libelleDepartement', text_center: false,
+        validators: [Validators.required], type: 'dropdown', dropObj: {
+          action: departementActions.loadDepartement(),
+          selector: departementList,
+          key: 'id',
+          field: 'idDepartement',
+          optionLabel: 'libelle'
+        }
       }
     ],
     entityValidations: [

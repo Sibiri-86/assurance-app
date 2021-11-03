@@ -204,6 +204,8 @@ import {FormatTableValuePipe} from './module/pipes/format-table-value.pipe';
 import {MatStepperModule} from '@angular/material/stepper';
 import {AvenantComponent} from './module/contrat/avenant/avenant.component';
 import { AdherentEffects } from './store/contrat/adherent/effect';
+import { SecteurEffects } from './store/parametrage/secteur/effect';
+import { ArrondissementEffects } from './store/parametrage/arrondissement/effect';
 
 @NgModule({
     imports: [
@@ -300,7 +302,7 @@ import { AdherentEffects } from './store/contrat/adherent/effect';
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
              TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, QualiteMedecinEffects,PathologieEffects, ProduitPharmaceutiqueEffects,
-            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects])
+            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, SecteurEffects, ArrondissementEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

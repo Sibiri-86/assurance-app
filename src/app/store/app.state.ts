@@ -36,6 +36,9 @@ import {GroupeState} from './contrat/groupe/state';
 import { TypeIntermediaireState } from './parametrage/type-intermediaire/state';
 import {PlafondState} from './contrat/plafond/state';
 import { AdherentState } from './contrat/adherent/state';
+import { ArrondissementState } from './parametrage/arrondissement/state';
+import { SecteurState } from './parametrage/secteur/state';
+
 export interface AppState {
   garantieState: GarantieState
   secteurActiviteState: SecteurActiviteState
@@ -75,4 +78,6 @@ export interface AppState {
   typeIntermediaireState: TypeIntermediaireState
   plafondState: PlafondState
   adherentState: AdherentState
+  arrondissementState: ArrondissementState
+  secteurState: SecteurState
 }

@@ -9,6 +9,7 @@ import { Departement } from '../../parametrage/departement/model';
 import { Region } from '../../parametrage/region/model';
 import { Commune } from '../../parametrage/commune/model';
 import { Taux } from "../../parametrage/taux/model";
+import { Secteur } from "../../parametrage/secteur/model";
 
 export interface Police{
     id?: string,
@@ -29,13 +30,11 @@ export interface Police{
     contact?: string,
     adresseEmail?: string,
     personneRessource?: string,
+    contactPersonneRessource?: string,
+    emailPersonneRessource?: string,
     secteurActivite?: SecteurActivite,
     numeroIfu?: string,
-    periodiciteAppelFond?: DimensionPeriode,
-    pays?:Pays,
-    departement?:Departement,
-    region?:Region,
-    commune?:Commune,
+    secteur?:Secteur,
     rccm?: string,
     fraisAccessoire?: number,
     fraisBadge?: number

@@ -110,6 +110,12 @@ import {
   import * as adherentState from '../contrat/adherent/state';
   import * as adherentReducer from '../contrat/adherent/reducer';
 
+  import * as arrondissementState from '../parametrage/arrondissement/state';
+  import * as arrondissementReducer from '../parametrage/arrondissement/reducer';
+
+  import * as secteurState from '../parametrage/secteur/state';
+  import * as secteurReducer from '../parametrage/secteur/reducer';
+
   export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
     secteurActiviteState: secteurActiviteReducer.reducer,
@@ -148,7 +154,9 @@ import {
     groupeState: groupeReducer.reducer,
     typeIntermediaireState: typeIntermediaireReducer.reducer,
     plafondState: plafondReducer.reducer,
-    adherentState: adherentReducer.reducer
+    adherentState: adherentReducer.reducer,
+    arrondissementState: arrondissementReducer.reducer,
+    secteurState: secteurReducer.reducer
   };
   
   // console.log all actions

@@ -5,7 +5,8 @@ import { Departement } from '../../parametrage/departement/model';
 import { Region } from '../../parametrage/region/model';
 import *as typeGarant from '../../parametrage/garant/model';
 import { Commune } from '../../parametrage/commune/model';
-export interface Garant{
+import { Secteur } from '../../parametrage/secteur/model';
+export interface Garant {
     id?: string,
     nom?: string,
     code?: string,
@@ -24,13 +25,10 @@ export interface Garant{
     numeroIfu?: string,
     periodiciteAppelFond?: DimensionPeriode,
     typeGarant?: typeGarant.Garant,
-    pays?:Pays,
-    province?:Departement,
-    region?:Region,
-    commune?:Commune,
+    secteur?: Secteur,
     rccm?: string
 }
 
 export interface GarantList{
-    garantDtoList: Array<Garant>
+    garantDtoList?: Array<Garant>
 }

@@ -41,7 +41,6 @@
 						<th pSortableColumn="adresseEmail">Email <p-sortIcon field="adresseEmail"></p-sortIcon></th>
 						<th pSortableColumn="personneRessource" style="width: 14rem">Personne Ressource <p-sortIcon field="personneRessource"></p-sortIcon></th>
                         <th pSortableColumn="numeroCompteBancaire1" style="width: 14rem">compte Bancaire 1 <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
-                        <th pSortableColumn="numeroCompteBancaire2" style="width: 14rem">compte Bancaire 2 <p-sortIcon field="numeroCompteBancaire2"></p-sortIcon></th>
 						<th></th>
 					</tr>
 				</ng-template>
@@ -64,14 +63,12 @@
 						<td>
                         <span class="p-column-title">{{intermediaire.personneRessource}}</span>
 						</td>
-						<td><span class="p-column-title">{{intermediaire.numeroCompteBancaire1}}</span>
-							
-						</td>
-                        <td><span class="p-column-title">{{intermediaire.numeroCompteBancaire2}}</span>
+						<td><span class="p-column-title">{{intermediaire.numeroCompteBancaire1}}</span>	
 						</td>
 						<td>
-							<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editIntermediaire(intermediaire)"></button>
-							<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntermediaire(intermediaire)"></button>
+							<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editIntermediaire(intermediaire)"></button>
+							<button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteIntermediaire(intermediaire)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info" (click)="voirDetail(intermediaire)"></button>
 						</td>
 					</tr>
 				</ng-template>
@@ -83,15 +80,144 @@
 			</p-table>
 		</div>
 
-        <p-dialog [(visible)]="displayDialogFormIntermediaire" header="Ajouter un intermediaire" [modal]="true" styleClass="p-fluid" (onHide)="intermediaireForm.reset()">
+        <p-dialog [maximizable]="true" [(visible)]="infosIntermediaire" header="Intermediaire détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
             <ng-template pTemplate="content">
-            <form (ngSubmit)="onCreate()"  [formGroup]="intermediaireForm">
                 <div class="card">
                 <h5></h5>
                 <div class="p-fluid p-formgrid p-grid">
+                       <div class="p-field p-col">
+                        <label for="lastname2">Nom</label>
+                        <div>
+                            <span>{{intermediaire.nom}}</span>
+                        </div>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Code</label>
+                            <div>
+                                <span>{{intermediaire.code}}</span>
+                            </div>
+                            </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Type intermediaire</label>
+                            <div>
+                                <span>{{intermediaire.typeIntermediaire.libelle}}</span>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact</label>
+                        <div>
+                            <span>{{intermediaire.contact}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Adresse email</label>
+                    <div>
+                        <span>{{intermediaire.adresseEmail}} </span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Adresse postale</label>
+                        <div>
+                            <span>{{intermediaire.adressePostale}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Personne ressource </label>
+                        <div>
+                            <span>{{intermediaire.personneRessource}}</span>
+                        </div>
+                    </div> 
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Contact personne ressource</label>
+                        <div>
+                            <span>{{intermediaire.contactPersonneRessource}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Email personne ressource</label>
+                        <div>
+                            <span>{{intermediaire.emailPersonneRessource}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">IFU</label>
+                        <div>
+                            <span>{{intermediaire.numeroIfu}}</span>
+                        </div>  
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte banacaire 1</label>
+                        <div>
+                            <span>{{intermediaire.numeroCompteBancaire1}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte banacaire 2</label>
+                        <div>
+                            <span>{{intermediaire.numeroCompteBancaire2}}</span>
+                        </div>
+                    </div>    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">RCCM</label>
+                        <div>
+                            <span>{{intermediaire.rccm}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Taux de commission</label>
+                        <div>
+                            <span>{{intermediaire.taux.taux}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur</label>
+                        <div>
+                            <span>{{intermediaire.secteur.libelle}}</span>
+                        </div> 
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                   
+                </div>
+            </div>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormIntermediaire" header="Ajouter un intermédiaire" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()">
+            <ng-template pTemplate="content">
+            <form (ngSubmit)="onCreate()"  [formGroup]="intermediaireForm">
+                <div class="card">
+                <p-fieldset legend="Identification" toggleable="true">
+                <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                         <label for="firstname2">Nom <span class="required">*</span></label>
-                        <input id="nom" type="text" [(ngModel)]="intermediaire.nom" required formControlName="nom"  pInputText>
+                        <input id="nom" type="text" required formControlName="nom"  pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="intermediaireForm" [entityField]="'nom'">
                         </app-entity-validation>
@@ -99,43 +225,41 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact <span class="required">*</span></label>
-                            <input id="lastname2" type="text" [(ngModel)]="intermediaire.contact"  formControlName="contact" pInputText>
+                            <input id="lastname2" type="number"   formControlName="contact" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="intermediaireForm" [entityField]="'contact'">
                         </app-entity-validation>
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Type intermediaire<span class="required">*</span></label>
-                            <p-dropdown  inputId="typeIntermediaire" dataKey="id" [(ngModel)]="intermediaire.typeIntermediaire"  [filter]="true" showClear="true" [options]="typeIntermediaireList" formControlName="typeIntermediaire" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <label for="lastname2">Type intermediaire <span class="required">*</span></label>
+                            <p-dropdown  inputId="typeIntermediaire" dataKey="id"   [filter]="true" showClear="true" [options]="typeIntermediaireList" formControlName="typeIntermediaire" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="intermediaireForm" [entityField]="'typeIntermediaire'">
                         </app-entity-validation>
                         </div>
-
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
-
                     <div class="p-field p-col">
                         <label for="firstname2">Adresse email <span class="required">*</span></label>
-                        <input id="firstname2" type="text"  [(ngModel)]="intermediaire.adresseEmail" formControlName="adresseEmail" pInputText>
+                        <input id="firstname2" type="email" formControlName="adresseEmail" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="intermediaireForm" [entityField]="'adresseEmail'">
-                            </app-entity-validation>
-                    </div>
+                        </app-entity-validation>
+                       </div>
 
                     <div class="p-field p-col">
                         <label for="firstname2">Adresse postale <span class="required">*</span></label>
-                        <input id="firstname2" type="text"  [(ngModel)]="intermediaire.adressePostale" formControlName="adressePostale" pInputText>
+                        <input id="firstname2" type="text" formControlName="adressePostale" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="intermediaireForm" [entityField]="'adressePostale'">
                         </app-entity-validation>
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Personne Ressource <span class="required">*</span></label>
-                        <input id="lastname2" type="text" [(ngModel)]="intermediaire.personneRessource"  formControlName="personneRessource" pInputText>
+                        <label for="lastname2">Personne ressource <span class="required">*</span></label>
+                        <input id="lastname2" type="text" formControlName="personneRessource" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="intermediaireForm" [entityField]="'personneRessource'">
                         </app-entity-validation>
@@ -143,33 +267,51 @@
                 </div>
 
                    <div class="p-fluid p-formgrid p-grid">
-                       
-                        <div class="p-field p-col">
-                        <label for="lastname2">Numero compte bancaire 1 <span class="required">*</span></label>
-                        <input id="lastname2" type="text"  [(ngModel)]="intermediaire.numeroCompteBancaire1" formControlName="numeroCompteBancaire1" pInputText>
-                        <app-entity-validation [entityValidations]="entityValidations"
-                                          [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire1'">
-                        </app-entity-validation>
-                        </div>
 
-                        <div class="p-field p-col">
-                        <label for="lastname2">Numero compte bancaire 2</label>
-                        <input id="lastname2" type="text" [(ngModel)]="intermediaire.numeroCompteBancaire2"  formControlName="numeroCompteBancaire2" pInputText>
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Contact personne ressource <span class="required">*</span></label>
+                        <input id="lastname2" type="number" formControlName="contactPersonneRessource" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
-                                          [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire2'">
+                                          [formGroup]="intermediaireForm" [entityField]="'contactPersonneRessource'">
                         </app-entity-validation>
-                         </div>
-
-                          <div class="p-field p-col">
-                            <label for="lastname2">IFU<span class="required">*</span></label>
-                            <input id="lastname2" type="text" [(ngModel)]="intermediaire.numeroIfu" formControlName="numeroIfu" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="intermediaireForm" [entityField]="'numeroIfu'">
-                            </app-entity-validation>
-                            </div>
                     </div>
 
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Email  personne ressource <span class="required">*</span></label>
+                        <input id="lastname2" type="email" formControlName="emailPersonneRessource" pInputText>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="intermediaireForm" [entityField]="'emailPersonneRessource'">
+                        </app-entity-validation>
+                    </div>
+                    </div>
+                </p-fieldset>
+
+                    <p-fieldset legend="Coordonnés" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                            <label for="lastname2">Numero compte bancaire 1 <span class="required">*</span></label>
+                            <input id="lastname2" type="text"  formControlName="numeroCompteBancaire1" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire1'">
+                            </app-entity-validation>
+                            </div>
+
+                            <div class="p-field p-col">
+                            <label for="lastname2">Numero compte bancaire 2</label>
+                            <input id="lastname2" type="text"  formControlName="numeroCompteBancaire2" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire2'">
+                            </app-entity-validation>
+                             </div>
+    
+                              <div class="p-field p-col">
+                                <label for="lastname2">IFU <span class="required">*</span></label>
+                                <input id="lastname2" type="text"  formControlName="numeroIfu" pInputText>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                [formGroup]="intermediaireForm" [entityField]="'numeroIfu'">
+                                </app-entity-validation>
+                                </div>
                         <!--
                         <div class="p-field p-col">
                             <label for="lastname2">Periodicite Appel Fond</label>
@@ -179,56 +321,75 @@
                         </app-entity-validation>
                         </div>
                         -->
-                        <div class="p-field p-col">
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Taux de commission</label>
+                            <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="intermediaireForm" [entityField]="'taux'">
+                        </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col-4">
                             <label for="lastname2">RCCM</label>
-                            <input id="lastname2" type="text" [(ngModel)]="intermediaire.rccm"  formControlName="rccm" pInputText>
+                            <input id="lastname2" type="text"   formControlName="rccm" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="intermediaireForm" [entityField]="'rccm'">
                         </app-entity-validation>
                         </div>
-                        
-                            <div class="p-field p-col">
-                                <label for="lastname2">Pays <span class="required">*</span></label>
-                                <p-dropdown inputId="pays" [filter]="true" dataKey="id" [(ngModel)]="intermediaire.pays" showClear="true" [options]="paysList" formControlName="pays" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                [formGroup]="intermediaireForm" [entityField]="'pays'">
-                                </app-entity-validation>
-                            </div>
-
-                            <div class="p-field p-col">
-                                <label for="lastname2">Region</label>
-                                <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [(ngModel)]="intermediaire.region" [options]="regionList" formControlName="region" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                [formGroup]="intermediaireForm" [entityField]="'region'">
-                                </app-entity-validation>
-                            </div>
                     </div>
+                    </p-fieldset>
+
+                    <p-fieldset legend="Localisation" toggleable="true">
 
                     <div class="p-fluid p-formgrid p-grid">
 
-                        <div class="p-field p-col-4">
-                            <label for="lastname2">Province</label>
-                            <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [(ngModel)]="intermediaire.province" [options]="departementList" formControlName="province" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="intermediaireForm" [entityField]="'departement'">
-                            </app-entity-validation>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Pays</label>
+                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Region</label>
+                            <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList"  placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col-4">
-                           <label for="lastname2">Commune</label>
-                           <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" [(ngModel)]="intermediaire.commune" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                           <app-entity-validation [entityValidations]="entityValidations"
-                           [formGroup]="intermediaireForm" [entityField]="'commune'">
-                           </app-entity-validation>
+                            <label for="lastname2">Province</label>
+                            <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                     </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Commune</label>
+                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                         </div>
+
+                         <div class="p-field p-col-4">
+                            <label for="arrondissement">Arrondissement</label>
+                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
+                         </div>
+
+                         <div class="p-field p-col-4">
+                            <label for="secteur">Secteur <span class="required">*</span></label>
+                            <p-dropdown inputId="secteur" [filter]="true" showClear="true" [options]="secteurList" dataKey="id" formControlName="secteur" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="intermediaireForm" [entityField]="'secteur'">
+                            </app-entity-validation>
+                         </div>
                     </div>
+                    </p-fieldset>
+                    </div>
+
                     <div class="p-grid p-justify-between">
                     <div>
-                    <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                    <button pButton type="button" label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
                     </div>
                     <div>
-                    <button  [disabled]="intermediaireForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" type="submit"></button>
+                    <button  [disabled]="intermediaireForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
                     </div>
                     </div>
                     </form>

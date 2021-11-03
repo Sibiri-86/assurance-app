@@ -71,7 +71,8 @@
 						</td>
 						<td>
 							<button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editGarant(garant)"></button>
-							<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteGarant(garant)"></button>
+							<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteGarant(garant)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info" (click)="voirDetail(garant)"></button>
 						</td>
 					</tr>
 				</ng-template>
@@ -83,12 +84,172 @@
 			</p-table>
 		</div>
 
-        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Ajouter un garant" [modal]="true" styleClass="p-fluid" (onHide)="garantForm.reset()">
+
+        <p-dialog [maximizable]="true" [(visible)]="infosGarant" header="Garant détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <h5></h5>
+                <div class="p-fluid p-formgrid p-grid">
+                       <div class="p-field p-col">
+                        <label for="lastname2">Nom</label>
+                        <div>
+                            <span>{{garant.nom}}</span>
+                        </div>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Code</label>
+                            <div>
+                                <span>{{garant.code}}</span>
+                            </div>
+                            </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Type garant</label>
+                            <div>
+                                <span>{{garant.typeGarant.libelle}}</span>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact</label>
+                        <div>
+                            <span>{{garant.contact}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Adresse email</label>
+                    <div>
+                        <span>{{garant.adresseEmail}} </span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Adresse postale</label>
+                        <div>
+                            <span>{{garant.adressePostale}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Personne ressource 1</label>
+                        <div>
+                            <span>{{garant.personneRessource1}}</span>
+                        </div>
+                    </div> 
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Contact personne ressource 1</label>
+                        <div>
+                            <span>{{garant.contactPersonneRessource1}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Email personne ressource 1</label>
+                        <div>
+                            <span>{{garant.emailPersonneRessource1}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Personne ressource 2</label>
+                        <div>
+                            <span>{{garant.PersonneRessource2}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="adressePostale">Contact personne ressource 2</label>
+                        <div>
+                            <span>{{garant.contactPersonneRessource2}}</span>
+                        </div> 
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Email personne ressource 2</label>
+                        <div>
+                            <span>{{garant.emailPersonneRessource2}}</span>
+                        </div> 
+                     </div>
+
+                 </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">IFU</label>
+                        <div>
+                            <span>{{garant.numeroIfu}}</span>
+                        </div>  
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte banacaire 1</label>
+                        <div>
+                            <span>{{garant.numeroCompteBancaire1}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte banacaire 2</label>
+                        <div>
+                            <span>{{garant.numeroCompteBancaire2}}</span>
+                        </div>
+                    </div>    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">RCCM</label>
+                        <div>
+                            <span>{{garant.rccm}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Periodicité appel fond</label>
+                        <div>
+                            <span>{{garant.periodiciteAppelFond.libelle}}</span>
+                        </div> 
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur activité</label>
+                        <div>
+                            <span>{{garant.secteurActivite.libelle}}</span>
+                        </div> 
+                    </div>   
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur</label>
+                        <div>
+                            <span>{{garant.secteur.libelle}}</span>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            </ng-template>
+        </p-dialog>
+
+
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Ajouter un garant" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()">
             <ng-template pTemplate="content">
             <form (ngSubmit)="onCreate()"  [formGroup]="garantForm">
                 <div class="card">
-                <h5>Identification</h5>
-                <hr/>
+                <p-fieldset legend="Identification" toggleable="true">
                 <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
@@ -188,9 +349,10 @@
                             </app-entity-validation>
                         </div>
                     </div>
+                </p-fieldset>
 
-                    <h5>Coordonnés</h5>
-                    <hr/>
+                    
+                    <p-fieldset legend="Coordonnés" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
@@ -247,15 +409,14 @@
                         </div>
 
                     </div>
+                    </p-fieldset>
 
-
-                    <h5>Localisation</h5>
-                    <hr/>
+                    <p-fieldset legend="Localisation" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Pays <span class="required">*</span></label>
-                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" formControlName="pays" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <label for="lastname2">Pays</label>
+                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle" (onChange)="changeCountry($event)"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="garantForm" [entityField]="'pays'">
                             </app-entity-validation>
@@ -263,7 +424,7 @@
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Region</label>
-                                <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" formControlName="region" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'region'">
                                 </app-entity-validation>
@@ -271,7 +432,7 @@
      
                             <div class="p-field p-col">
                                 <label for="lastname2">Province</label>
-                                <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" formControlName="province" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" (onChange)="changeDepartement($event)" optionLabel="libelle"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'departement'">
                                 </app-entity-validation>
@@ -279,30 +440,44 @@
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
+
                         <div class="p-field p-col-4">
                             <label for="lastname2">Commune</label>
-                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="garantForm" [entityField]="'commune'">
                             </app-entity-validation>
                          </div>
+
+                         <div class="p-field p-col-4">
+                            <label for="arrondissement">Arrondissement</label>
+                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'arrondissement'">
+                            </app-entity-validation>
+                         </div>
+
+                         <div class="p-field p-col-4">
+                            <label for="secteur">Secteur <span class="required">*</span></label>
+                            <p-dropdown inputId="secteur" [filter]="true" showClear="true" [options]="secteurList" dataKey="id" formControlName="secteur" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'secteur'">
+                            </app-entity-validation>
+                         </div>
+                    </div>
+                    </p-fieldset>
                     </div>
 
-                    </div>
-                    <div class="p-grid p-justify-between">
+                <div class="p-grid p-justify-between">
                     <div>
-                    <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
                     </div>
                     <div>
-                    <button  [disabled]="garantForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" type="submit"></button>
+                    <button  [disabled]="garantForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
                     </div>
-                    </div>
-                    </form>
-
-
-                    
-                      
-                   </ng-template>
+                </div>
+                </form>                     
+             </ng-template>
             </p-dialog>
 
             <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>

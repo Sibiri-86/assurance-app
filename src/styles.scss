@@ -13,9 +13,14 @@
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css"; 
 @import "~@angular/material/prebuilt-themes/purple-green.css";
 
+p-dialog label {
+    font-weight: bold;
+}
+
 form label {
     font-weight: bold;
 }
+
 .required {
     color:red;
 }

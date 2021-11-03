@@ -140,6 +140,15 @@ export class Endpoints {
         mock: `assets/mock/parametrage/commune.mock.json`
     };
 
+    static readonly PARAMETRAGE_ARRONDISSEMENT = {
+        prod: `${SERVICE_PREFIX}/parametrage/arrondissement`,
+        mock: `assets/mock/parametrage/arrondissement.mock.json`
+    };
+    static readonly PARAMETRAGE_SECTEUR = {
+        prod: `${SERVICE_PREFIX}/parametrage/secteur`,
+        mock: `assets/mock/parametrage/secteur.mock.json`
+    };
+
     static readonly PARAMETRAGE_REGION = {
         prod: `${SERVICE_PREFIX}/parametrage/region`,
         mock: `assets/mock/parametrage/region.mock.json`
@@ -162,6 +171,7 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/intermediaire`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    
     static readonly CONTRAT_POLICE = {
         prod: `${SERVICE_PREFIX}/contrat/police`,
         mock: `assets/mock/contrat/intermediaire.mock.json`

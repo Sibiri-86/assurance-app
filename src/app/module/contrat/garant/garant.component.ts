@@ -7,10 +7,13 @@ import {garantList} from '../../../store/contrat/garant/selector';
 import {Pays} from '../../../store/parametrage/pays/model';
 import {Region} from '../../../store/parametrage/region/model';
 import * as typeGarant from '../../../store/parametrage/garant/model';
+import { GarantList } from '../../../store/contrat/garant/model';
 
 import {Departement} from '../../../store/parametrage/departement/model';
 import {DimensionPeriode} from '../../../store/parametrage/dimension-periode/model';
+import { Secteur } from 'src/app/store/parametrage/secteur/model';
 import {Commune} from '../../../store/parametrage/commune/model';
+import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
 import {SecteurActivite} from '../../../store/parametrage/secteur-activite/model';
 import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -25,8 +28,16 @@ import {loadDepartement} from '../../../store/parametrage/departement/actions';
 import * as departementSelector from '../../../store/parametrage/departement/selector';
 import {loadCommune} from '../../../store/parametrage/commune/actions';
 import * as communeSelector from '../../../store/parametrage/commune/selector';
+
 import {loadSecteurActivite} from '../../../store/parametrage/secteur-activite/actions';
 import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
+import * as secteurAction from '../../../store/parametrage/secteur/actions';
+import {loadSecteur} from '../../../store/parametrage/secteur/actions';
+import * as secteurSelector from '../../../store/parametrage/secteur/selector';
+
+import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
+import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
+import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
 
 import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
@@ -36,6 +47,7 @@ import {Status} from '../../../store/global-config/model';
 import {status} from '../../../store/global-config/selector';
 import { EntityValidations } from '../../common/models/validation';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-garant',
@@ -49,12 +61,15 @@ export class GarantComponent implements OnInit, OnDestroy {
   garantList: Array<Garant>;
   paysList$: Observable<Array<Pays>>;
   paysList: Array<Pays>;
+  arrondissementList$: Observable<Array<Arrondissement>>;
+  arrondissementList: Array<Arrondissement>;
   regionList$: Observable<Array<Region>>;
   regionList: Array<Region>;
   departementList$: Observable<Array<Departement>>;
   departementList: Array<Departement>;
   communeList$: Observable<Array<Commune>>;
   communeList: Array<Commune>;
+  listeGarant: GarantList = {};
   secteurActiviteList$: Observable<Array<SecteurActivite>>;
   secteurActiviteList: Array<SecteurActivite>;
   dimensionPeriodeList$: Observable<Array<DimensionPeriode>>;
@@ -68,10 +83,12 @@ export class GarantComponent implements OnInit, OnDestroy {
   typeGarantList$: Observable<Array<typeGarant.Garant>>;
   typeGarantList: Array<typeGarant.Garant>;
   loading:boolean;
-
+  secteurList: Array<Secteur>;
+  secteurList$: Observable<Array<Secteur>>;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   isEditable = false;
+  infosGarant = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -79,6 +96,7 @@ export class GarantComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) { 
       this.garantForm = this.formBuilder.group({
         id: new FormControl(''),
+        code: new FormControl(''),
         nom: new FormControl('',[Validators.required]),
         contact: new FormControl('',[Validators.required]),
         adresseEmail: new FormControl(null,[Validators.required, Validators.email]),
@@ -95,11 +113,9 @@ export class GarantComponent implements OnInit, OnDestroy {
         numeroIfu: new FormControl('', [Validators.required]),
         periodiciteAppelFond: new FormControl('',[Validators.required]),
         rccm: new FormControl('', [Validators.required]),
-        pays: new FormControl('', [Validators.required]),
         region: new FormControl(''),
         typeGarant: new FormControl('', [Validators.required]),
-        province: new FormControl(''),
-        commune: new FormControl('', [Validators.required])
+        secteur: new FormControl('', [Validators.required])
       });
 
       this.breadcrumbService.setItems([
@@ -316,6 +332,26 @@ ngOnInit(): void {
               }
   });
 
+  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
+  this.store.dispatch(arrondissementAction.loadArrondissement());
+  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.loading = false;
+                this.arrondissementList = value.slice();
+              }
+  });
+
+  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
+  this.store.dispatch(secteurAction.loadSecteur());
+  this.secteurList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.loading = false;
+                this.secteurList = value.slice();
+              }
+  });
+
 
   this.garantList$=this.store.pipe(select(garantList));
   this.store.dispatch(loadGarant());
@@ -387,6 +423,57 @@ ngOnInit(): void {
 
 }
 
+changeCountry(event) {
+  this.regionList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.regionList = value.slice();
+      this.regionList = this.regionList.filter(element=> element.idTypePays===event.value.id);
+    }
+});
+}
+
+changeRegion(event) {
+  this.departementList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.departementList = value.slice();
+      this.departementList = this.departementList.filter(element=> element.idRegion===event.value.id);
+    }
+});
+}
+
+changeDepartement(event) {
+  this.communeList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.communeList = value.slice();
+      this.communeList = this.communeList.filter(element=> element.idDepartement===event.value.id);
+    }
+});
+}
+
+changeCommune(event) {
+  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.arrondissementList = value.slice();
+      this.arrondissementList = this.arrondissementList.filter(element=> element.idCommune===event.value.id);
+    }
+});
+}
+
+changeArrondissement(event) {
+  this.secteurList$.pipe(takeUntil(this.destroy$))
+  .subscribe(value => {
+    if (value) {
+      this.secteurList = value.slice();
+      this.secteurList = this.secteurList.filter(element=> element.idArrondissement===event.value.id);
+    }
+});
+}
+
+
 checkStatus() {
   this.statusObject$.pipe(takeUntil(this.destroy$))
       .subscribe(statusObj => {
@@ -418,10 +505,17 @@ addGarant() {
   this.displayDialogFormGarant = true;
 }
 
+voirDetail(garant: Garant) {
+  this.infosGarant = true;
+  this.garant = garant;
+}
+
 editGarant(garant: Garant) {
-this.garantForm.get('id').setValue(garant.id);
+//this.garantForm.get('id').setValue(garant.id);
 this.garant = {...garant};
+this.garantForm.patchValue(this.garant);
 this.displayDialogFormGarant = true;
+
 }
 
 deleteGarant(garant: Garant) {
@@ -439,7 +533,7 @@ onCreate() {
 this.garant = this.garantForm.value;
 console.log(this.garant);
 this.confirmationService.confirm({
-  message: 'Etes vous sur de vouloir Ajouter ce garant?',
+  message: 'Etes vous sur de vouloir ajouter ce garant?',
   header: 'Confirmation',
   icon: 'pi pi-exclamation-triangle',
   accept: () => {
@@ -453,14 +547,19 @@ this.confirmationService.confirm({
 });
 }
 
+annulerSaisie() {
+  this.garantForm.reset();
+  this.displayDialogFormGarant = false;
+}
 
 deleteSelectedGrant() {
+  this.listeGarant.garantDtoList = this.selectedGarants;
   this.confirmationService.confirm({
     message: 'Etes vous sur de vouloir supprimer ces garants?',
     header: 'Confirmation',
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
-      this.store.dispatch(featureAction.deleteGarants({garantList: this.selectedGarants}));
+      this.store.dispatch(featureAction.deleteGarants(this.listeGarant));
     }
   });
 }

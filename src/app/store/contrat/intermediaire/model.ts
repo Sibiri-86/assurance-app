@@ -5,6 +5,8 @@ import { Departement } from '../../parametrage/departement/model';
 import { Region } from '../../parametrage/region/model';
 import { Commune } from '../../parametrage/commune/model';
 import { TypeIntermediaire } from '../../parametrage/type-intermediaire/model';
+import { Secteur } from '../../parametrage/secteur/model';
+import { Taux } from '../../parametrage/taux/model';
 
 export interface Intermediaire {
     id?: string,
@@ -20,10 +22,8 @@ export interface Intermediaire {
     numeroIfu?: string,
     periodiciteAppelFond?: DimensionPeriode,
     rccm?: string,
-    pays?:Pays,
-    province?:Departement,
-    region?:Region,
-    commune?:Commune,
+    taux?: Taux,
+    secteur?: Secteur
 }
 
 export interface IntermediaireList{

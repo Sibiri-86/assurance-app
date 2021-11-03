@@ -36,7 +36,7 @@ deleteIntermediaire(Intermediaire: Intermediaire): Observable<any> {
 
 deleteIntermediaires(intermediaire: Array<Intermediaire>): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_GARANT)}`, intermediaire);
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_INTERMEDIAIRE)}`, intermediaire);
 }
 
 pushFileToStorage(file: File): Observable<any> {
