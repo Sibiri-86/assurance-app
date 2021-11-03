@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuService } from './app.menu.service';
 import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from './app.component';
+import { NavigationStart, Router } from '@angular/router';
+import { LoaderService} from './module/util/loader-util';
+import { filter, first, takeUntil } from 'rxjs/operators';
+import Timeout = NodeJS.Timeout;
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.main.component.html'
 })
-export class AppMainComponent {
+export class AppMainComponent  implements AfterViewInit, OnDestroy, OnInit {
 
     configDialogActive = false;
 
@@ -26,8 +30,33 @@ export class AppMainComponent {
     configClick: boolean;
 
     overlayMenuMobileActive: boolean;
+    timerRef: Timeout;
+    seconds: number=0;
 
-    constructor(private menuService: MenuService, private primengConfig: PrimeNGConfig, public app: AppComponent) { }
+    constructor(private menuService: MenuService, private router: Router, public loaderService: LoaderService, private primengConfig: PrimeNGConfig, public app: AppComponent) { 
+        router.events.pipe(filter((event => event instanceof NavigationStart)))
+        .subscribe(() => {
+          this.loaderService.setRequests([]);
+        });
+      this.timerRef = setInterval(() => {
+      this.seconds++;
+      this.loaderService.isLoading.subscribe(r => {
+        if (!r) {
+          this.seconds = 0;
+        }
+      });
+    }, 1000);
+    }
+
+    ngAfterViewInit() {
+    }
+
+    ngOnDestroy(){
+
+    }
+    ngOnInit(){
+
+    }
 
     onRippleChange(event) {
         this.app.ripple = event.checked;

@@ -2,8 +2,8 @@ import { PrimeNGConfig } from 'primeng/api';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-
+import { Router } from '@angular/router';
+import {takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -17,8 +17,10 @@ export class AppComponent implements OnInit, OnDestroy {
     ripple: boolean;
     destroy$: Subject<boolean> = new Subject<boolean>();
     callRefreshStartTime: number;
+    seconds:number;
 
-    constructor(private primengConfig: PrimeNGConfig, private keycloakService: KeycloakService) { }
+    constructor(private primengConfig: PrimeNGConfig, private router: Router, private keycloakService: KeycloakService) {
+     }
 
     ngOnInit() {
         this.primengConfig.ripple = true;
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.refreshToken();
     });
     }
-    
+
     refreshToken(): void {
         const interval = (window as any).globalConfig.refreshTokenFunctionCallTimeSpan;
         if (new Date().getTime() - this.callRefreshStartTime >= interval) {

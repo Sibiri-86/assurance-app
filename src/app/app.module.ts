@@ -206,11 +206,16 @@ import {AvenantComponent} from './module/contrat/avenant/avenant.component';
 import { AdherentEffects } from './store/contrat/adherent/effect';
 import { SecteurEffects } from './store/parametrage/secteur/effect';
 import { ArrondissementEffects } from './store/parametrage/arrondissement/effect';
+import { LoaderService,LoaderInterceptor } from './module/util/loader-util';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {BlockUIModule} from 'primeng/blockui';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 @NgModule({
     imports: [
         BrowserModule,
         MatStepperModule,
+        ProgressSpinnerModule,
         FormsModule,
         AppRoutingModule,
         HttpClientModule,
@@ -224,6 +229,7 @@ import { ArrondissementEffects } from './store/parametrage/arrondissement/effect
         ButtonModule,
         CalendarModule,
         CardModule,
+        BlockUIModule,
         CarouselModule,
         ChartModule,
         CheckboxModule,
@@ -373,8 +379,13 @@ import { ArrondissementEffects } from './store/parametrage/arrondissement/effect
             useClass: HashLocationStrategy
             //useClass:  HashLocationStrategy
           },
+          {
+            provide: HTTP_INTERCEPTORS,
+            useClass: LoaderInterceptor,
+            multi: true
+          },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, ConfirmationService, MessageService, MenuService, BreadcrumbService
+        PhotoService, ProductService, LoaderService, ConfirmationService, MessageService, MenuService, BreadcrumbService
     ],
     bootstrap: [AppComponent]
 })
