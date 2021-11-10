@@ -271,7 +271,7 @@ body a {
 }
 
 .layout-wrapper {
-  padding: 25px 50px;
+  padding: 5px 7px;
 }
 .layout-wrapper .layout-content-wrapper {
   display: flex;
@@ -315,7 +315,7 @@ body a {
   }
 }
 .layout-topbar {
-  margin-bottom: 25px;
+  margin-bottom: -45px;
 }
 .layout-topbar:after {
   content: "";
@@ -324,7 +324,7 @@ body a {
 }
 .layout-topbar .layout-topbar-logo {
   display: inline-block;
-  padding: 1em 0;
+  padding: 12px 0;
   cursor: pointer;
 }
 .layout-topbar .layout-topbar-logo .logo {
@@ -1176,7 +1176,7 @@ body a {
 
 .layout-footer {
   text-align: left;
-  padding: 35px 0px;
+  padding: 5px 0px;
   color: rgba(255, 255, 255, 0.7);
 }
 .layout-footer span {
