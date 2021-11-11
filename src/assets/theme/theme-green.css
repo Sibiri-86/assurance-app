@@ -1928,7 +1928,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #495057;
   border: 1px solid #e9ecef;
   border-width: 1px 0 1px 0;
-  padding: 1rem 1rem;
+  padding: 5px 5px;
   font-weight: 600;
 }
 .p-datatable .p-datatable-footer {
@@ -1936,12 +1936,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #495057;
   border: 1px solid #e9ecef;
   border-width: 0 0 1px 0;
-  padding: 1rem 1rem;
+  padding: 2px 2px;
   font-weight: 600;
 }
 .p-datatable .p-datatable-thead > tr > th {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: 5px 5px;
   border: 1px solid #e9ecef;
   border-width: 0 0 1px 0;
   font-weight: 600;
@@ -2006,7 +2006,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   text-align: left;
   border: 1px solid #e9ecef;
   border-width: 0 0 1px 0;
-  padding: 1rem 1rem;
+  padding: 5px 5px;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -2525,7 +2525,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #6c757d;
   border: solid #e9ecef;
   border-width: 0;
-  padding: 0.5rem 1rem;
+  padding: 2px 2px;
   border-radius: 3px;
 }
 .p-paginator .p-paginator-first,
@@ -3352,7 +3352,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-toolbar {
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  padding: 1rem;
+  padding: 2px 5px;
   border-radius: 3px;
 }
 .p-toolbar .p-toolbar-separator {
@@ -3584,7 +3584,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 .p-fileupload .p-fileupload-content {
   background: #ffffff;
-  padding: 2rem 1rem;
+  /*padding: 2rem 1rem;*/
   border: 1px solid #dee2e6;
   color: #495057;
   border-bottom-right-radius: 3px;
