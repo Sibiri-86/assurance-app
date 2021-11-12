@@ -17,6 +17,7 @@ export interface PlafondFamilleActe {
   }
   
   export interface PlafondActe {
+    id?: string,
     acte?: Acte;
     montantPlafond?: number;
     dateEffet?: Date;
@@ -27,6 +28,7 @@ export interface PlafondFamilleActe {
   }
   
   export interface PlafondSousActe {
+    id?: string,
     sousActe?: SousActe;
     taux?: Taux;
     dateEffet?: Date;

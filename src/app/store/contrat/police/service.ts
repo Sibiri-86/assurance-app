@@ -29,6 +29,11 @@ updatePolice(Police: Police): Observable<any> {
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, Police);
   }
 
+  validerPolice(Police: Police): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/valider`, Police);
+  }
+
 deletePolice(Police: Police): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, null);

@@ -232,6 +232,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   secteurList$: Observable<Array<Secteur>>;
   arrondissementList$: Observable<Array<Arrondissement>>;
   arrondissementList: Array<Arrondissement>;
+  displayActe = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -1229,24 +1230,33 @@ export class PoliceComponent implements OnInit, OnDestroy {
   console.log(this.plafondActe);
   }
 
-  addFamilleActe(rowData, ri){
+  addFamilleActe(rowData, ri) {
+
+
+    this.confirmationService.confirm({
+      message: "Etes vous sur de valider?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
 
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
-
     for( var i=0; i<this.plafondFamilleActeConstruct.length; i++){
+      /** verifier si la garantie existe deja, juste le modifier */
       if(this.plafondFamilleActeConstruct[i].garantie.id===rowData.garantie.id) {
         console.log('oui');
         this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
         this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         this.plafondFamilleActeTemp.listeActe = this.plafondActe;
         console.log(i);
+        /** enregistrer */
         this.plafondFamilleActeConstruct[i]=this.plafondFamilleActeTemp;
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
         }
     }
 
+    /** si la garantie n'est pas encore ajouté, ajouter */
     this.plafondFamilleActeConstruct.forEach( async (element,index)=>{
     if(element.garantie.id===rowData.garantie.id) {
     console.log('oui');
@@ -1269,21 +1279,26 @@ export class PoliceComponent implements OnInit, OnDestroy {
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     console.log(this.countfamilleActe);
     this.countfamilleActe++;
-    
     console.log(this.plafondFamilleActeConstruct);
-    
+  },
+  });
   }
+
+
 
   /**obtenir les sous actes pour un acte donné */
   getSousActe(rowData, ri){
     this.plafondSousActe = [];
     if(!rowData.listeSousActe){
+
     this.sousActeList.forEach((element)=>{
       console.log(rowData);
        if(element.idTypeActe === rowData.acte.id){
          this.plafondSousActe.push({sousActe:element, taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: rowData.montantPlafond});
        }
     })
+
+
     } else {
       this.plafondSousActe = rowData.listeSousActe;
     }
@@ -1291,8 +1306,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.indexeActe = ri;
   }
 
+  
+
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
+  this.plafondSousActe = [];
+  this.displayActe = true;
   if(this.plafondFamilleActeConstruct.length!=0) {
       // revoir cette fonction
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
@@ -1304,20 +1323,46 @@ changeGarantie(garantie, indexLigne: number) {
       });
       console.log(this.plafondFamilleActeConstruct);
   } 
+
   if(this.plafondActe.length===0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
-   this.acteList.forEach((element)=>{
-    if(element.idTypeGarantie === garantie.value.id) {
-      this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
-    }})
+   
+    for(var j=0; j<this.acteList.length; j++){
+
+    if(this.acteList[j].idTypeGarantie === garantie.value.id) {
+      this.plafondSousActe = [];
+      // recuperer les sous actes de l'acte
+      for(var i=0; i<this.sousActeList.length; i++){
+        if(this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0})
+        }
+      }
+
+      this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
+    }
+    
   }
+
   console.log(this.plafondActe);
   }
+}
 
   ngOnDestroy() {
     this.destroy$.next(true);
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
+  }
+
+
+  validerPolice(police:Police){
+    this.confirmationService.confirm({
+      message: "Etes vous sur de vouloir valider la police?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(featureAction.validerPolice(police));
+      },
+    });
   }
 
   annulerSaisie(){
@@ -1326,6 +1371,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.groupeForm.reset();
     this.displayDialogFormAddGroupe =false;
     this.displayDialogFormPolice = false;
+    this.displayParametragePlafond = false;
     console.log('saisie');
   }
 }
