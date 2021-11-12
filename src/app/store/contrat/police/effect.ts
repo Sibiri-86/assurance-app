@@ -79,7 +79,7 @@ export class PoliceEffects {
         mergeMap(() =>
             this.PoliceService.$getPolices().pipe(
                 switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setPolice(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -87,6 +87,20 @@ export class PoliceEffects {
         )
     )
     );
+
+    /* fetchPoliceValideIsTrue$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadPolice),
+            mergeMap(() =>
+                this.PoliceService.$getPolicesByValideIsTrue().pipe(
+                    switchMap(value => [
+                        featureActions.setPolice(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    ); */
 
     
 import$ = createEffect(() =>

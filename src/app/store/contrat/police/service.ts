@@ -19,6 +19,14 @@ $getPolices(): Observable<PoliceList> {
     );
   }
 
+    $getPolicesByValideIsTrue(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_VALIDE )}`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
+
 posPolice(Police: Police): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, Police);

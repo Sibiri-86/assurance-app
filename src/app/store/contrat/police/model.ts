@@ -37,7 +37,8 @@ export interface Police{
     secteur?:Secteur,
     rccm?: string,
     fraisAccessoire?: number,
-    fraisBadge?: number
+    fraisBadge?: number,
+    valide?: boolean
 }
 
 export interface PoliceList {

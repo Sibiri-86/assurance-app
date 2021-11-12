@@ -6,7 +6,7 @@ import { Groupe } from "../../../store/contrat/groupe/model";
 import * as featureAction from "../../../store/contrat/police/actions";
 import { policeList } from "../../../store/contrat/police/selector";
 import { groupeList } from "../../../store/contrat/groupe/selector";
-import { AdherentList, Adherent } from "../../../store/contrat/adherent/model";
+import {AdherentList, Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
 import { Pays } from "../../../store/parametrage/pays/model";
 import { Taux } from "../../../store/parametrage/taux/model";
 import { Genre, GenreList } from "../../../store/parametrage/genre/model";
@@ -108,6 +108,8 @@ import {MenuItem} from 'primeng/api';
 import { Plafond } from "src/app/store/contrat/plafond/model";
 import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external/ThirdPartyDraggable";
 import { element } from "protractor";
+import * as adherentSelector from "../../../store/contrat/adherent/selector";
+import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
 
 @Component({
   selector: "app-avenant",
@@ -142,6 +144,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   loading: boolean;
   dateEffet: Date;
   dateEcheance: Date;
+  dissplayavenant = false;
+  adherentListGroupe: Array<Adherent>;
 
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -210,6 +214,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
   typeAvenantSelected: string;
   typeDuree: any = [{label:'Jour', value:'Jour'},
   {label: 'Mois', value:'Mois'}, {label:'Année', value: 'Annee'}];
+  typeActions: MenuItem[] = [];
+  selectedGroup: Groupe;
+  groupePolicy: Array<Groupe>;
+  policeItem: Police;
+  adherentList$: Observable<Array<Adherent>>;
+  adherant: AdherentFamille;
+  adherantGroupeListe: Array<AdherentFamille> = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -571,6 +582,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     ];
 
+    this.typeActions = [
+      {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+          this.addAvenant();
+          console.log($event);
+        }},
+      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
+          this.addAvenant();
+        }},
+      {label: 'Moditication', icon: 'pi pi-pencil', url: 'http://angular.io'},
+      {separator: true},
+      {label: 'Renouvellement', icon: 'pi pi-undo', routerLink: ['/setup']}
+    ];
+
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -584,6 +608,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.acteList = value.slice();
+        // console.log('**************** ' + value.length);
       }
     });
 
@@ -592,6 +617,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.avenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.avenantList = value.slice();
+        // this.cerateTypeAction();
       }
     });
 
@@ -754,6 +780,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+    this.init();
+  }
+
+  init(): void {
+    this.groupePolicy = [];
+    this.selectedGroup = null;
+    this.adherentListGroupe = [];
   }
 
 
@@ -1152,5 +1185,80 @@ changeGarantie(garantie, indexLigne: number) {
     this.destroy$.next(true);
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
+  }
+
+  invaliderPolice(police: Police): void {
+    police.valide = false;
+    this.store.dispatch(featureAction.updatePolice(police));
+    // this.policeList$ = this.store.pipe(select(policeList));
+  }
+
+  cerateTypeAction(): void {
+    this.avenantList.forEach(typeA => {
+      const item: MenuItem = {};
+      item.label = typeA.libelle;
+      item.id = typeA.id;
+      this.typeActions.push(item);
+    });
+    console.log(this.typeActions);
+  }
+
+  addAvenant(): void {
+    this.dissplayavenant = true;
+
+  }
+
+  add(): void {
+    this.adherentForm = this.formBuilder.group({
+      id: new FormControl(""),
+      nom: new FormControl("", [Validators.required]),
+      prenom: new FormControl("", [Validators.required]),
+      dateNaissance: new FormControl("", [Validators.required]),
+      matricule:new FormControl(""),
+      lieuNaissance: new FormControl("", [Validators.required]),
+      numeroTelephone: new FormControl("", [Validators.required]),
+      adresse: new FormControl("", [Validators.required]),
+      adresseEmail: new FormControl("", [Validators.required]),
+      profession: new FormControl(""),
+      referenceBancaire: new FormControl(""),
+      qualiteAssure: new FormControl("", [Validators.required]),
+      genre: new FormControl("", [Validators.required]),
+      dateEntree: new FormControl("", [Validators.required])
+    }) ;
+  }
+
+  delAvenenant(): void {
+    this.dissplayavenant = false;
+  }
+
+  loadGoupeByPolice(): void {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({idPolice: this.policeItem.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
+
+  addNewGroupe(): void {
+    this.displayDialogFormAdherent = true;
+    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.adherentListGroupe = value.slice();
+      }
+    });
+  }
+
+  addToGroup(): void {
+    this.adherant = this.adherentForm.value;
+    this.adherentListGroupe.forEach( elem => {
+      elem.ad
+    });
+    this.adherant = null;
+    this.add();
   }
 }

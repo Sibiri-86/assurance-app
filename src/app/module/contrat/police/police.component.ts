@@ -1287,13 +1287,13 @@ export class PoliceComponent implements OnInit, OnDestroy {
     } else {
       this.plafondSousActe = rowData.listeSousActe;
     }
-    this.displaySousActe =true;
+    this.displaySousActe = true;
     this.indexeActe = ri;
   }
 
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
-  if(this.plafondFamilleActeConstruct.length!=0) {
+  if (this.plafondFamilleActeConstruct.length!=0) {
       // revoir cette fonction
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
         element.listeActe.forEach(e=>{
@@ -1304,12 +1304,12 @@ changeGarantie(garantie, indexLigne: number) {
       });
       console.log(this.plafondFamilleActeConstruct);
   } 
-  if(this.plafondActe.length===0){
+  if (this.plafondActe.length===0) {
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
    this.acteList.forEach((element)=>{
-    if(element.idTypeGarantie === garantie.value.id) {
+    if (element.idTypeGarantie === garantie.value.id) {
       this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
-    }})
+    }});
   }
   console.log(this.plafondActe);
   }
@@ -1320,7 +1320,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.destroy$.unsubscribe();
   }
 
-  annulerSaisie(){
+  annulerSaisie() {
     this.policeForm.reset();
     this.primeForm.reset();
     this.groupeForm.reset();
