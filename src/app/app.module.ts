@@ -210,6 +210,7 @@ import { LoaderService,LoaderInterceptor } from './module/util/loader-util';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BlockUIModule} from 'primeng/blockui';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-incorporation/avenant-incorporation.component";
 
 @NgModule({
     imports: [
@@ -367,7 +368,8 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
         SouscripteurComponent,
         AddRowDirective,
         PoliceComponent,
-        FormatTableValuePipe
+        FormatTableValuePipe,
+        AvenantIncorporationComponent
     ],
     providers: [
         {

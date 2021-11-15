@@ -1245,7 +1245,7 @@ changeGarantie(garantie, indexLigne: number) {
   addNewGroupe(): void {
     this.displayDialogFormAdherent = true;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:groupe.id}));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentListGroupe = value.slice();
@@ -1256,9 +1256,13 @@ changeGarantie(garantie, indexLigne: number) {
   addToGroup(): void {
     this.adherant = this.adherentForm.value;
     this.adherentListGroupe.forEach( elem => {
-      elem.ad
+      // elem.ad
     });
     this.adherant = null;
     this.add();
+  }
+
+  addAdherentFamille(adherentFamille: any): void {
+    console.log(adherentFamille);
   }
 }
