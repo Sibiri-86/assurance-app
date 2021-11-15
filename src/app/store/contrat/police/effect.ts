@@ -118,4 +118,19 @@ this.actions$.pipe(
 )
 );
 
+    fetchPoliceByAffNouv$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadPoliceByAffNouv),
+            mergeMap(() =>
+                this.PoliceService.getPolicesFilterByAffNou().pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPoliceByAffNou(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
+
 }

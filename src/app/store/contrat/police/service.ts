@@ -60,5 +60,13 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    getPolicesFilterByAffNou(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/filter_by_affaire_nouvelle`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
 }
 

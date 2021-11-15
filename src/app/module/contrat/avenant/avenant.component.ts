@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { Police } from '../../../store/contrat/police/model';
+import {Police, PoliceList} from '../../../store/contrat/police/model';
 import { Groupe } from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
 import { policeList } from '../../../store/contrat/police/selector';
@@ -74,7 +74,7 @@ import * as secteurActiviteSelector from '../../../store/parametrage/secteur-act
 import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
-import { loadPolice } from 'src/app/store/contrat/police/actions';
+import {loadPolice, loadPoliceByAffNouv} from 'src/app/store/contrat/police/actions';
 import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 
 import { loadGarantie } from '../../../store/parametrage/garantie/actions';
@@ -108,6 +108,7 @@ import {MenuItem} from 'primeng/api';
 import { Plafond } from 'src/app/store/contrat/plafond/model';
 import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
 import { element } from 'protractor';
+import {PoliceService} from '../../../store/contrat/police/service';
 
 @Component({
   selector: 'app-avenant',
@@ -119,6 +120,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   cols: any[];
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
+  policeList1: Array<Police>;
+  policeListAffNouv: PoliceList;
   valCheck: string[] = [];
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
@@ -216,7 +219,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -676,11 +680,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
       });
 
     this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPolice());
+    this.store.dispatch(loadPoliceByAffNouv());
     this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.loading = false;
-        this.policeList = value.slice();
+        this.policeList1 = value.slice();
+        console.log('===============this.policeList1===========', this.policeList1);
       }
     });
 
@@ -751,6 +756,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.dimensionPeriodeList = value.slice();
         }
       });
+
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPolice());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+      }
+    });
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
