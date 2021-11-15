@@ -179,7 +179,7 @@
                     <div>
                     <span *ngFor="let qualite of qualiteAssureList">
                     <p-radioButton [id]="qualite.id" name="domaine" [value]="qualite" formControlName="domaine" class="p-mr-2"></p-radioButton>
-                    <span [for]="qualite.id" class="p-mr-2">{{qualite.libelle}}</span>
+                    <label [for]="qualite.id" class="p-mr-2">{{qualite.libelle}}</label>
                     </span>
                     </div>
                 </div>
@@ -606,7 +606,7 @@
                         
                         <div class="p-field p-col-4">
                         <label for="typePrime">Type de prime</label>
-                           <p-dropdown dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
+                           <p-dropdown dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
@@ -614,7 +614,7 @@
                             <input id="primeFamille" type="text" pInputText [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true" formControlName="primeFamille">
                         </div>
 
-                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PA'">
+                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
                             <label for="montantPrimeAdulte">Montant adulte</label>
                             <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
                         </div>
@@ -634,7 +634,7 @@
                             <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
                         </div>
 
-                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PC'">
+                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                             <label for="montantPrimeConjoint">Montant conjoint</label>
                             <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
                         </div>
@@ -643,22 +643,10 @@
                             <label for="montantPrimeEnfant">Montant enfant</label>
                             <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
                         </div>
-                       
-                      </div>
-                      
-                      <div class= "p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
-                            <label for="montantPrimeAdulte">Montant adulte</label>
-                            <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
-                        </div>
+
                         <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                             <label for="montantPrimeEmploye">Montant employé</label>
                             <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
-                        </div>
-
-                        <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
-                            <label for="montantPrimeConjoint">Montant conjoint</label>
-                            <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
                         </div>
                       </div>
                      </form>
@@ -1196,8 +1184,10 @@
 						<th></th>
 					</tr>
 				</ng-template>
+
 				<ng-template pTemplate="body" let-adherent>
-					<tr>
+
+					<tr [ngClass]="{'colorZone': adherent.nom ==='test'}" *ngIf="adherent.nom ==='test'">
 						<td>
 							<p-tableCheckbox [value]="adherent"></p-tableCheckbox>
 						</td>
@@ -1235,12 +1225,13 @@
 
 
 
-        <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'900px'}" (onHide)="adherentForm.reset()">
+        <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
             <ng-template pTemplate="content">
+        <p-fieldset legend="Adhérent" toggleable="true">
             <form (ngSubmit)="onCreateAddherent()"  [formGroup]="adherentForm">
                 <div class="card">
-                <h5></h5>
-                <div class="p-fluid p-formgrid p-grid p-col">
+            
+                <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                         <label for="firstname2">Nom</label>
                         <input id="nom" type="text" required formControlName="nom"  pInputText>
@@ -1287,18 +1278,12 @@
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Date incorporation</label>
-                        <p-calendar  [showIcon]="true" formControlName="dateIncorporation" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                        <label for="lastname2">Date entrée</label>
+                        <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                     </div>
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Date entrée</label>
-                        <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
-                    </div>
-
                     <div class="p-field p-col">
                         <label for="lastname2">Genre</label>
                         <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -1308,9 +1293,7 @@
                         <label for="lastname2">Profession</label>
                         <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
                     </div>
-                </div>
 
-                <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-4">
                         <label for="lastname2">Qualite assuré</label>
                         <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -1319,9 +1302,9 @@
 
                 </div>
                </form>        
-
-                <div class="card">
-                <h5>Famille adherent</h5>
+            </p-fieldset>
+            <p-fieldset legend="Assurés" toggleable="true">
+                <h5></h5>
                 <p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
                 <button pButton type="button" icon="pi pi-plus" class="p-button-text" [label]="'Ajouter'"
@@ -1334,7 +1317,9 @@
                             <th>Nom</th>
                             <th>Prenom</th>
                             <th>Telephone</th>
-                            <th>Date de Naissance</th>
+                            <th>Date de naissance</th>
+                            <th>Genre</th>
+                            <th>Qualite assuré</th>
                             <th style="width:8em"></th>
                         </tr>
                     </ng-template>
@@ -1365,10 +1350,10 @@
                             <td>
                                 <p-cellEditor>
                                   <ng-template pTemplate="input">
-                                      <input pInputText type="text" [(ngModel)]="rowData.telephone" required>
+                                      <input pInputText type="text" [(ngModel)]="rowData.numeroTelephone" required>
                                   </ng-template>
                                   <ng-template pTemplate="output">
-                                      {{rowData.telephone}}
+                                      {{rowData.numeroTelephone}}
                                   </ng-template>
                               </p-cellEditor>
                             </td>
@@ -1376,14 +1361,35 @@
                             <td>
                                 <p-cellEditor>
                                   <ng-template pTemplate="input">
-                                    <p-calendar  [(ngModel)]="rowData.dateIncorporation" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                   </ng-template>
                                   <ng-template pTemplate="output">
-                                      {{rowData.dateIncorporation}}
+                                      {{rowData.dateNaissance}}
                                   </ng-template>
                               </p-cellEditor>
                             </td>
-
+                            <td>
+                                <p-cellEditor>
+                                          <ng-template pTemplate="input">
+                                            <p-dropdown [options]="genreList" [(ngModel)]="rowData.genre" optionLabel="libelle" placeholder="Select Make"
+                                            [style]="{'width':'100%'}"></p-dropdown>
+                                          </ng-template>
+                                          <ng-template pTemplate="output">
+                                              {{rowData?.genre?.libelle}}
+                                          </ng-template>
+                              </p-cellEditor>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                          <ng-template pTemplate="input">
+                                            <p-dropdown [options]="qualiteAssureList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
+                                            [style]="{'width':'100%'}"></p-dropdown>
+                                          </ng-template>
+                                          <ng-template pTemplate="output">
+                                              {{rowData?.qualiteAssure?.libelle}}
+                                          </ng-template>
+                              </p-cellEditor>
+                            </td>
                               <td style="text-align:center">
                                 <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitAdherentFamille(rowData, ri)"></button>
                                 <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSaveAdherentFamille(rowData, ri)"></button>
@@ -1392,15 +1398,14 @@
                         </tr>
                     </ng-template>
                 </p-table>
-                </div>
-
-
+                </p-fieldset>
+                <br/>
                 <div class="p-grid p-justify-between">
                     <div>
-                    <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                    <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                     </div>
                     <div>
-                    <button  [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" (click)="onCreateAddherent()"></button>
+                    <button  [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
                     </div>
                 </div>
                 </ng-template>
@@ -1451,11 +1456,10 @@
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-adherent>
-					<tr>
+					<tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
 						<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
 						<td><span class="p-column-title">{{adherent.nom}}</span></td>
-                        <td><span class="p-column-title">{{adherent.prenom}}</span>
-						</td>
+                        <td><span class="p-column-title">{{adherent.prenom}}</span></td>
                         <td><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>
                         <td><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>

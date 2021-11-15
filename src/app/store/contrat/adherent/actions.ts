@@ -1,4 +1,5 @@
 import {props, createAction} from '@ngrx/store';
+import { AdherentFamille } from './model';
 import { Adherent, AdherentList } from './model';
 export const createAdherent = createAction('[App Init] Create Adherent', props<Adherent>());
 export const updateAdherent = createAction('[App Init] update Adherent', props<Adherent>());
@@ -7,3 +8,4 @@ export const deleteAdherents = createAction('[App Init] delete Adherents', props
 export const loadAdherent = createAction('[App Init] load Adherent', props<{idGroupe:string}>());
 export const setAdherent = createAction('[App Init] set Adherent',  props<AdherentList>());
 export const importAdherent = createAction('[App Init] import Adherent',  props<{file: File}>());
+export const createAdherentwithFamille = createAction('[App Init] Create Adherent with famille', props<AdherentFamille>());

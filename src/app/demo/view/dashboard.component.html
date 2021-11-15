@@ -2,47 +2,64 @@
 	<div class="p-col-12 p-md-6 p-lg-3">
 		<div class="overview-box  box-sales">
 			<div class="overview-box-icon">
-				<i class="pi pi-dollar"></i>
+				<i class="pi pi-bars"></i>
 			</div>
-			<div class="overview-box-title">Sales</div>
-			<div class="overview-box-value">$ 92,440</div>
-			<div class="overview-box-status"><b>20%</b> more than yesterday</div>
+			<div class="overview-box-title">Souscripteur</div>
+			<div class="overview-box-value">{{state?.nombreSouscripteur}}</div>
 		</div>
 	</div>
 
 	<div class="p-col-12 p-md-6 p-lg-3">
 		<div class="overview-box  box-views">
 			<div class="overview-box-icon">
-				<i class="pi pi-search"></i>
+				<i class="pi pi-envelope"></i>
 			</div>
-			<div class="overview-box-title">Views</div>
-			<div class="overview-box-value">7029</div>
-			<div class="overview-box-status"><b>7%</b> more than yesterday</div>
+			<div class="overview-box-title">Police</div>
+			<div class="overview-box-value">{{state?.nombrePolice}}</div>
 		</div>
 	</div>
 
 	<div class="p-col-12 p-md-6 p-lg-3">
 		<div class="overview-box  box-users">
 			<div class="overview-box-icon">
-				<i class="pi pi-user"></i>
+				<i class="pi pi-microsoft"></i>
 			</div>
-			<div class="overview-box-title">Users</div>
-			<div class="overview-box-value">9522</div>
-			<div class="overview-box-status"><b>12%</b> more than yesterday</div>
+			<div class="overview-box-title">Garant</div>
+			<div class="overview-box-value">{{state?.nombreGarant}}</div>
 		</div>
 	</div>
 
 	<div class="p-col-12 p-md-6 p-lg-3">
 		<div class="overview-box  box-checkins">
 			<div class="overview-box-icon">
-				<i class="pi pi-map-marker"></i>
+				<i class="pi pi-compass"></i>
 			</div>
-			<div class="overview-box-title">Check-ins</div>
-			<div class="overview-box-value">4211</div>
+			<div class="overview-box-title">Intermediaire</div>
+			<div class="overview-box-value">{{state?.nombreIntermediaire}}</div>
+			<!--   
 			<div class="overview-box-status"><b>3%</b> more than yesterday</div>
+			-->
 		</div>
 	</div>
+	<div class="p-col-12 p-md-6 p-lg-3">
+		
 
+			<div class="overview-box  box-checkins">
+				<div class="overview-box-icon">
+					<i class="pi pi-user"></i>
+				</div>
+				<div class="overview-box-title">Assuré</div>
+				<div class="overview-box-value">{{state?.nombreAssure}}</div>
+				<!--   
+				<div class="overview-box-status"><b>3%</b> more than yesterday</div>
+				-->
+			</div>
+
+		
+	</div>
+
+
+	<!--
 	<div class="p-col-12 p-lg-4">
 		<div class="card donut ">
 			<h5 style="margin-top:0">Income Statistics</h5>
@@ -651,4 +668,10 @@
 			</p-table>
 		</div>
 	</div>
+
+
+-->
+
+
+
 </div>
