@@ -110,8 +110,8 @@ import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external
 import { element } from "protractor";
 import { AdherentFamille } from "../../../store/contrat/adherent/model";
 import { ContentObserver } from "@angular/cdk/observers";
-import { removeBlanks } from "../../util/common-util";
-
+import { printPdfFile, removeBlanks } from "../../util/common-util";
+import { selectByteFile } from "../../../store/contrat/police/selector";
 import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
 import { Secteur } from 'src/app/store/parametrage/secteur/model';
 import { ArrondissementService } from 'src/app/store/parametrage/arrondissement/service';
@@ -142,6 +142,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   paysList$: Observable<Array<Pays>>;
   police: Police;
   adherentFamille: Array<AdherentFamille>;
+  adherentWithFamille: AdherentFamille;
   selectedPolices: Police[];
   displayDialogFormPolice: boolean = false;
   displayDialogFormAddAdherent: boolean = false;
@@ -584,6 +585,15 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
     this.adherentFamilleList = [];
     this.adherentFamille = [];
+    this.adherentWithFamille = {};
+
+    /** dispatch action pour imprimer le pdf */
+    this.store.pipe(select(selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
     
   this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
   this.store.dispatch(arrondissementAction.loadArrondissement());
@@ -833,15 +843,23 @@ export class PoliceComponent implements OnInit, OnDestroy {
       }
   });
   }
+
   // fonction pour creer adherent.
   onCreateAddherent() {
     console.log(this.adherentForm.value);
     console.log(this.adherentFamilleList);
+    this.adherentWithFamille.adherent =this.adherentForm.value;
+    this.adherentWithFamille.adherent.groupe = this.groupe;
+    this.adherentWithFamille.famille = this.adherentFamilleList;
+    this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    this.adherentFamilleList = [];
+    this.adherentForm.reset();
   }
+
+
 
   changePrime(event) {
         this.selectedTypePrime=event.value;
-    
     /*
     console.log(event.value);
     if (event.value.libelle === "famille") {
@@ -1009,6 +1027,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   voirAdherent(groupe: Groupe) {
     this.displayDialogFormAdherent = true;
+    this.groupe = groupe;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

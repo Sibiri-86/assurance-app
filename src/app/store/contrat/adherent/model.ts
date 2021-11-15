@@ -14,12 +14,13 @@ export interface Adherent{
     genre?: string,
     dateIncorporation?: string,
     dateEntree?: Date,
-    groupe?: Groupe
+    groupe?: Groupe,
+    adherentPrincipal?: Adherent
 }
 
 export interface AdherentFamille {
-   adherent: Adherent;
-   famille: Array<Adherent>;
+   adherent?: Adherent;
+   famille?: Array<Adherent>;
 }
 
 export interface AdherentList{

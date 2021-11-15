@@ -10,6 +10,7 @@ import { Region } from '../../parametrage/region/model';
 import { Commune } from '../../parametrage/commune/model';
 import { Taux } from "../../parametrage/taux/model";
 import { Secteur } from "../../parametrage/secteur/model";
+import { TypeReport } from "../enum/model";
 
 export interface Police{
     id?: string,
@@ -38,6 +39,23 @@ export interface Police{
     rccm?: string,
     fraisAccessoire?: number,
     fraisBadge?: number
+}
+
+export interface Statistique {
+    nombreGarant?: number,
+    nombreIntermediaire?: number,
+    nombrePolice?: number,
+    nombreSouscripteur?: number,
+    nombreAssure?: number
+}
+
+export interface ReportFile {
+    file?: ArrayBuffer
+}
+
+export interface Report {
+    typeReport?: TypeReport;
+
 }
 
 export interface PoliceList {
