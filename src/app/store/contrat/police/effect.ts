@@ -80,7 +80,7 @@ export class PoliceEffects {
                     this.PoliceService.$getReport(report).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.setReport({file:value})
+                            featureActions.setReport({reportFile:value})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

@@ -63,7 +63,9 @@
 							<button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info p-mr-2" (click)="onRowSelectPolice(police)"></button>
-                            <button pButton  pRipple icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info" (click)="validerPolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+
 						</td>
 					</tr>
 				</ng-template>
@@ -165,46 +167,129 @@
              </div>
         </p-dialog>
 
+        <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrage" header="Récapitulatif" [modal]="true" styleClass="p-fluid" [style]="{'width':'900px'}">
+            <ng-template pTemplate="content">
+                <p-table [value]="plafondFamilleActeConstruct" responsiveLayout="scroll" dataKey="garantie.id">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th>Famille acte</th>
+                            <th>Montant</th>
+                            <th>Taux</th>
+                            <th>Date effet</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-plafond let-expanded="expanded" >
+                        <tr>
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>{{plafond.garantie.libelle}}</td>
+                            <td>{{plafond.montantPlafond}}</td>
+                            <td>{{plafond.taux.taux}}</td>
+                            <td>{{plafond.dateEffet | formatTableValue : 'date'}}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-plafond>
+                        <tr>
+                            <td colspan="5">
+                                <div class="">
+                            <p-table [value]="plafond.listeActe" dataKey="id">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <ng-template pTemplate="body" let-acte let-expanded="expanded">
+                                    <tr>
+                                        <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                        <td>{{acte.acte.libelle}}</td>
+                                        <td>{{acte.montantPlafond}}</td>
+                                        <td>{{acte.taux.taux}}</td>
+                                        <td>{{acte.dateEffet | formatTableValue : 'date'}}</td>
+                                    </tr>  
+                                </ng-template>
+                                <ng-template pTemplate="rowexpansion" let-acte>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="">
+                                        <p-table [value]="acte.listeSousActe" dataKey="id">
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                            <ng-template pTemplate="body" let-sousActe let-expanded="expanded">
+                                                <tr>
+                                                    <td></td>
+                                                    <td>{{sousActe.sousActe.libelle}}</td>
+                                                    <td>{{sousActe.montantPlafond}}</td>
+                                                    <td>{{sousActe.taux.taux}}</td>
+                                                    <td>{{sousActe.dateEffet | formatTableValue : 'date'}}</td>
+                                                </tr>  
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                    </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-template>
+        </p-dialog>
 
     <p-dialog [maximizable]="true" [(visible)]="displayParametragePlafond" header="Parametrage plafond" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()" [style]="{width: '1500px'}">
         <div class="card">
-            <h5></h5>
-
-            <p-fieldset legend="Plafond" toggleable="true">
+        <p-fieldset legend="Plafond" toggleable="true">
            <form [formGroup]="plafondForm">
 
             <div class="p-fluid p-formgrid p-grid">
+                <!--
                 <div class="p-field p-col-4">
                     <label for="domaine">Domaine d'application</label>
                     <div>
                     <span *ngFor="let qualite of qualiteAssureList">
                     <p-radioButton [id]="qualite.id" name="domaine" [value]="qualite" formControlName="domaine" class="p-mr-2"></p-radioButton>
-                    <label [for]="qualite.id" class="p-mr-2">{{qualite.libelle}}</label>
+                    <span class="p-mr-2">{{qualite.libelle}}</span>
                     </span>
                     </div>
                 </div>
-                <div class="p-field p-col-4">
+                -->
+                <div class="p-field p-col">
                     <label for="primeFamille">Plafond global annuelle par personne</label>
                     <input id="primeFamille" type="number" pInputText formControlName="plafondAnnuellePersonne">
                 </div>
-                <div class="p-field p-col-4">
+                <div class="p-field p-col">
                     <label for="montantPrimeEnfant">Plafond global par famille</label>
                     <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondAnnuelleFamille">
                 </div>
-            </div>
-
-            <div class="p-fluid p-formgrid p-grid" *ngIf="isInternationalGroupe">
-                <div class="p-field p-col-4">
+                
+                <div class="p-field p-col" *ngIf="isInternationalGroupe">
                     <label for="montantPrimeEnfant">Plafond global internationnal</label>
                     <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondGlobalInternationnal">
                 </div>
             </div>
-
             </form>
         </p-fieldset>
-            <br/>
+        <br/>
 
         <p-fieldset legend="Barème" toggleable="true">
+         <p-toolbar>
+            <div class="p-toolbar-group-left">
+            </div>
+            <div class="p-toolbar-group-right">
+					<button pButton pRipple label="Récapitulatif" icon="pi pi-eye" class="p-button-success p-mr-2 p-mb-2" (click)="voirParametrage()"></button>
+            </div>
+         </p-toolbar>
+         <br/>
             <p-table #dt [value]="plafondFamilleActe" dataKey="" editMode="row">
                     <ng-template pTemplate="header">
                         <tr>
@@ -245,7 +330,8 @@
                                     {{rowData.montantPlafond}}
                                 </ng-template>
                             </p-cellEditor>
-                            </td>
+                           </td>
+
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
@@ -269,13 +355,16 @@
                             </td>
 
                             <td>
+                                
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-dropdown [options]="tauxList"  [(ngModel)]="rowData.taux" optionLabel="taux"
                                         [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{rowData.taux.taux}}
+                                    <ng-template pTemplate="output" >
+                                        <span *ngIf="rowData.garantie.libelle">
+                                            {{rowData.taux.taux}}
+                                        </span>  
                                     </ng-template>
                               </p-cellEditor>
                             </td>
@@ -293,21 +382,23 @@
                                     </ng-template>
                               </p-cellEditor>
                             </td>
-                            <td>
+                            <td >
                                 <p-cellEditor>
                                   <ng-template pTemplate="input">
                                       <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                   </ng-template>
-                                  <ng-template pTemplate="output">
-                                      {{rowData.dateEffet | formatTableValue : 'date'}}
+                                  <ng-template  pTemplate="output">
+                                    <span *ngIf="rowData.garantie.libelle">
+                                        {{rowData.dateEffet | formatTableValue : 'date'}}
+                                    </span>
                                   </ng-template>
                               </p-cellEditor>
                             </td>
                             <td style="text-align:center">
-                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInit(rowData)"></button>
-                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                                <button *ngIf="!editing" pButton pRipple  pTooltip="editer" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInit(rowData)"></button>
+                                <button *ngIf="editing" pRipple  pButton  pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
                                 <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancel(rowData, ri)"></button>
-                                <button *ngIf="!editing" pButton type="button" pCancelEditableRow icon="pi pi-arrow-circle-down" class="ui-button-danger p-mr-2" (click)="addFamilleActe(rowData, ri)"></button>
+                                <button *ngIf="!editing && rowData.garantie.libelle " pRipple pButton  pCancelEditableRow icon="pi pi-arrow-circle-down"  pTooltip="enregistrer" class="ui-button-danger p-mr-2" (click)="addFamilleActe(rowData, ri)"></button>
                             </td>
                         </tr>
                     </ng-template>
@@ -394,7 +485,6 @@
                                 <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInitPlafondActe(rowData)"></button>
                                 <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSavePlafondActe(rowData)"></button>
                                 <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancelPlafondActe(rowData, ri)"></button>
-                                <button *ngIf="!editing" pButton type="button" pCancelEditableRow icon="pi pi-chevron-right" class="ui-button-danger p-mr-2" (click)="getSousActe(rowData, ri)"></button>
                             </td>
                         </tr>
                     </ng-template>
@@ -1303,7 +1393,7 @@
                 </div>
                </form>        
             </p-fieldset>
-            <p-fieldset legend="Assurés" toggleable="true">
+            <p-fieldset legend="Membre" toggleable="true">
                 <h5></h5>
                 <p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
