@@ -211,6 +211,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BlockUIModule} from 'primeng/blockui';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-incorporation/avenant-incorporation.component";
+import {GroupeComponent} from "./module/contrat/avenant/grpoue/groupe.component";
+import {HistoriqueAvenantEffects} from "./store/contrat/historiqueAvenant/effect";
+import {AvenantRetraitComponent} from './module/contrat/avenant/avenant-retrait.component/avenant-retrait.component';
+import {AvenantRenouvellementComponent} from './module/contrat/avenant/avenant-renouvellement/avenant-renouvellement.component';
+import {AvenantModificationComponent} from './module/contrat/avenant/avenant-modification.component/avenant-modification.component';
 
 @NgModule({
     imports: [
@@ -304,7 +309,7 @@ import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-in
         AppCodeModule,
         ReactiveFormsModule,
         StoreModule.forRoot(reducers,  {metaReducers}),
-        EffectsModule.forRoot([GarantieEffects, ActeEffects,
+        EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
@@ -369,7 +374,11 @@ import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-in
         AddRowDirective,
         PoliceComponent,
         FormatTableValuePipe,
-        AvenantIncorporationComponent
+        AvenantIncorporationComponent,
+        GroupeComponent,
+        AvenantRetraitComponent,
+        AvenantRenouvellementComponent,
+        AvenantModificationComponent
     ],
     providers: [
         {

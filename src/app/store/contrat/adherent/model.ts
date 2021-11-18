@@ -13,13 +13,14 @@ export interface Adherent{
     qualiteAssure?: string,
     genre?: string,
     dateIncorporation?: string,
+    dateIncor?: Date,
     dateEntree?: Date,
     groupe?: Groupe
 }
 
 export interface AdherentFamille {
-   adherent: Adherent;
-   famille: Array<Adherent>;
+   adherent?: Adherent;
+   famille?: Array<Adherent>;
 }
 
 export interface AdherentList{

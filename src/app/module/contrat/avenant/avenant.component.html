@@ -16,6 +16,11 @@
                                     dataKey="id" [style]="{'width':'100%'}" placeholder="Selectionnez le type avenant"
                                     (onChange)="changeAvenant($event)" optionLabel="libelle"></p-dropdown>
                     </div>
+                    <div class="p-col p-mr-2 p-mb-2">
+                        <p-dropdown inputId="polices" [filter]="true" showClear="true" [options]="policeList"
+                                    dataKey="id" [style]="{'width':'100%'}" placeholder="Selectionnez la police"
+                                    (onChange)="loadHistoriqueAvenant($event)" optionLabel="numero"></p-dropdown>
+                    </div>
                 </ng-template>
 
             </p-toolbar>
@@ -1700,33 +1705,51 @@
                     </div>
                     <div class="p-grid p-justify-between">
                         <div>
-                            <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text"
+                            <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-danger p-button-text"
                                     (click)="annulerSaisie()"></button>
                         </div>
                         <div>
                             <button [disabled]="policeForm?.invalid" pButton pRipple label="Enregistrer"
-                                    icon="pi pi-check" class="p-button-text" type="submit"></button>
+                                    icon="pi pi-check" class="p-button-success p-button-text" type="submit"></button>
                         </div>
                     </div>
                 </form>
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="dissplayavenant" header="Avenenant" [modal]="true" styleClass="p-fluid"
+        <p-dialog [(visible)]="dissplayavenant" [header]="entete" [modal]="true" styleClass="p-fluid"
                   [style]="{width: '1200px'}" (onHide)="delAvenenant()">
             <div class="card">
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col-4">
-                        <p-dropdown [options]="groupePolicy" [(ngModel)]="selectedGroup" optionLabel="libelle"
-                                    [filter]="true" filterBy="name" [showClear]="true" placeholder="Choisir un groupe">
-                        </p-dropdown>
+                <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
+
+                    <div class="p-field p-col-4" *ngIf="!isNewGroupe">
+                        <form [formGroup]="customForm">
+                            <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle" name="selectedGroup"
+                                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                (onChange)="onGroupeChange()">
+                            </p-dropdown>
+                        </form>
                     </div>
-                    <div class="p-field p-col-1">
-                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-text"
-                                [(ngModel)]="selectedGroup" (click)="addNewGroupe()"></button>
+
+                    <div class="p-field p-col-12" *ngIf="isNewGroupe">
+                        <app-avenant-groupe (groupeEvent)="addGroupeNew($event)" ></app-avenant-groupe>
+                    </div>
+                    <div class="p-field p-col-2" *ngIf="!isNewGroupe">
+                        <button pButton pRipple label="Groupe" icon="pi pi-plus" class="p-button-success" (click)="addNewGroupe()"
+                            >
+                        </button>
                     </div>
                     <div class="p-field p-col-6"></div>
-                        <app-avenant-incorporation (adherentFamilleEvent)="addAdherentFamille($event)"></app-avenant-incorporation>
+                        <app-avenant-incorporation (adherentFamilleEvent)="addAdherentFamille($event)" ></app-avenant-incorporation>
+                </div>
+                <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
+                    <app-avenant-retrait [police]="policeItem"></app-avenant-retrait>
+                </div>
+                <div class="p-fluid p-grid" *ngIf="isAvenantModification">
+                    <app-avenant-modification [police]="policeItem"></app-avenant-modification>
+                </div>
+                <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement">
+                    <app-avenant-renouvellement ></app-avenant-renouvellement>
                 </div>
             </div>
 

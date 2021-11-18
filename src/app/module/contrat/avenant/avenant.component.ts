@@ -1,115 +1,111 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { takeUntil } from "rxjs/operators";
-import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
-import { Police } from "../../../store/contrat/police/model";
-import { Groupe } from "../../../store/contrat/groupe/model";
+import {Component, OnDestroy, OnInit} from "@angular/core";
+import {takeUntil} from "rxjs/operators";
+import {ConfirmationService, MenuItem, MessageService} from "primeng/api";
+
+import {Groupe} from "../../../store/contrat/groupe/model";
 import * as featureAction from "../../../store/contrat/police/actions";
-import { policeList } from "../../../store/contrat/police/selector";
-import { groupeList } from "../../../store/contrat/groupe/selector";
-import {AdherentList, Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
-import { Pays } from "../../../store/parametrage/pays/model";
-import { Taux } from "../../../store/parametrage/taux/model";
-import { Genre, GenreList } from "../../../store/parametrage/genre/model";
-import { Profession } from "../../../store/parametrage/profession/model";
-import { QualiteAssure } from "../../../store/parametrage/qualite-assure/model";
-import { Territorialite } from "../../../store/parametrage/territorialite/model";
-import { Garantie } from "../../../store/parametrage/garantie/model";
-import { SousActe } from "../../../store/parametrage/sous-acte/model";
-import { Acte } from "../../../store/parametrage/acte/model";
-import { Departement } from "../../../store/parametrage/departement/model";
-import { DimensionPeriode } from "../../../store/parametrage/dimension-periode/model";
-import { Commune } from "../../../store/parametrage/commune/model";
-import { TypePrime } from "../../../store/parametrage/type-prime/model";
-import { Region } from "../../../store/parametrage/region/model";
-import { SecteurActivite } from "../../../store/parametrage/secteur-activite/model";
-import { Observable, of, Subject } from "rxjs";
-import {
-  ControlContainer,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import { select, Store } from "@ngrx/store";
-import { AppState } from "src/app/store/app.state";
-import { loadPays } from "../../../store/parametrage/pays/actions";
+import {policeList} from "../../../store/contrat/police/selector";
+import {groupeList} from "../../../store/contrat/groupe/selector";
+import {Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
+import {Pays} from "../../../store/parametrage/pays/model";
+import {Taux} from "../../../store/parametrage/taux/model";
+import {Genre,} from "../../../store/parametrage/genre/model";
+import {Profession} from "../../../store/parametrage/profession/model";
+import {QualiteAssure} from "../../../store/parametrage/qualite-assure/model";
+import {Territorialite} from "../../../store/parametrage/territorialite/model";
+import {Garantie} from "../../../store/parametrage/garantie/model";
+import {SousActe} from "../../../store/parametrage/sous-acte/model";
+import {Acte} from "../../../store/parametrage/acte/model";
+import {Departement} from "../../../store/parametrage/departement/model";
+import {DimensionPeriode} from "../../../store/parametrage/dimension-periode/model";
+import {Commune} from "../../../store/parametrage/commune/model";
+import {TypePrime} from "../../../store/parametrage/type-prime/model";
+import {Region} from "../../../store/parametrage/region/model";
+import {SecteurActivite} from "../../../store/parametrage/secteur-activite/model";
+import {Observable, Subject} from "rxjs";
+import {FormBuilder, FormControl, FormGroup, Validators,} from "@angular/forms";
+import {select, Store} from "@ngrx/store";
+import {AppState} from "src/app/store/app.state";
+import {loadPays} from "../../../store/parametrage/pays/actions";
 import * as paysSelector from "../../../store/parametrage/pays/selector";
 
-import { loadRegion } from "../../../store/parametrage/region/actions";
+import {loadRegion} from "../../../store/parametrage/region/actions";
 import * as regionSelector from "../../../store/parametrage/region/selector";
 
-import { loadDepartement } from "../../../store/parametrage/departement/actions";
+import {loadDepartement} from "../../../store/parametrage/departement/actions";
 import * as departementSelector from "../../../store/parametrage/departement/selector";
 
-import { loadCommune } from "../../../store/parametrage/commune/actions";
+import {loadCommune} from "../../../store/parametrage/commune/actions";
 import * as communeSelector from "../../../store/parametrage/commune/selector";
 
-import { loadTaux } from "../../../store/parametrage/taux/actions";
+import {loadTaux} from "../../../store/parametrage/taux/actions";
 import * as tauxSelector from "../../../store/parametrage/taux/selector";
 
-import { loadTypeAvenant } from "../../../store/parametrage/type-avenant/actions";
+import {loadTypeAvenant} from "../../../store/parametrage/type-avenant/actions";
 import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
 
-import { loadTerritorialite } from "../../../store/parametrage/territorialite/actions";
+import {loadTerritorialite} from "../../../store/parametrage/territorialite/actions";
 import * as territorialiteSelector from "../../../store/parametrage/territorialite/selector";
 
-import { loadGarant } from "../../../store/contrat/garant/actions";
+import {loadGarant} from "../../../store/contrat/garant/actions";
 import * as garantSelector from "../../../store/contrat/garant/selector";
 
 import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
-import * as groupeSelector from "../../../store/contrat/groupe/selector";
 
-import { loadIntermediaire } from "../../../store/contrat/intermediaire/actions";
+import {loadIntermediaire} from "../../../store/contrat/intermediaire/actions";
 import * as intermediaireSelector from "../../../store/contrat/intermediaire/selector";
 
-import { Garant, GarantList } from "../../../store/contrat/garant/model";
-import {
-  Intermediaire,
-  IntermediaireList,
-} from "../../../store/contrat/intermediaire/model";
-import { TypeAvenant } from "src/app/store/parametrage/type-avenant/model";
-import { loadSecteurActivite } from "../../../store/parametrage/secteur-activite/actions";
+import {Garant} from "../../../store/contrat/garant/model";
+import {Intermediaire,} from "../../../store/contrat/intermediaire/model";
+import {TypeAvenant} from "src/app/store/parametrage/type-avenant/model";
+import {loadSecteurActivite} from "../../../store/parametrage/secteur-activite/actions";
 import * as secteurActiviteSelector from "../../../store/parametrage/secteur-activite/selector";
 
-import { loadDimensionPeriode } from "../../../store/parametrage/dimension-periode/actions";
+import {loadDimensionPeriode} from "../../../store/parametrage/dimension-periode/actions";
 import * as dimensionPeriodeSelector from "../../../store/parametrage/dimension-periode/selector";
 
-import { loadPolice } from "src/app/store/contrat/police/actions";
-import { loadGroupe } from "src/app/store/contrat/groupe/actions";
+import {loadPolice} from "src/app/store/contrat/police/actions";
+import {loadGroupe} from "src/app/store/contrat/groupe/actions";
 
-import { loadGarantie } from "../../../store/parametrage/garantie/actions";
+import {loadGarantie} from "../../../store/parametrage/garantie/actions";
 import * as garantieSelector from "../../../store/parametrage/garantie/selector";
 
-import { loadActe } from "../../../store/parametrage/acte/actions";
+import {loadActe} from "../../../store/parametrage/acte/actions";
 import * as acteSelector from "../../../store/parametrage/acte/selector";
 
-import { loadSousActe } from "../../../store/parametrage/sous-acte/actions";
+import {loadSousActe} from "../../../store/parametrage/sous-acte/actions";
 import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector";
 
-import { loadGenre } from "../../../store/parametrage/genre/actions";
+import {loadGenre} from "../../../store/parametrage/genre/actions";
 import * as genreSelector from "../../../store/parametrage/genre/selector";
 import * as featureActionsPlafond from "../../../store/contrat/plafond/action";
-import { loadProfession } from "../../../store/parametrage/profession/actions";
+import {loadProfession} from "../../../store/parametrage/profession/actions";
 import * as professionSelector from "../../../store/parametrage/profession/selector";
 
-import { loadQualiteAssure } from "../../../store/parametrage/qualite-assure/actions";
+import {loadQualiteAssure} from "../../../store/parametrage/qualite-assure/actions";
 import * as qualiteAssureSelector from "../../../store/parametrage/qualite-assure/selector";
 
-import { Status } from "../../../store/global-config/model";
-import { status } from "../../../store/global-config/selector";
-import { EntityValidations } from "../../common/models/validation";
-import { BreadcrumbService } from "../../../app.breadcrumb.service";
+import {Status} from "../../../store/global-config/model";
+import {status} from "../../../store/global-config/selector";
+import {EntityValidations} from "../../common/models/validation";
+import {BreadcrumbService} from "../../../app.breadcrumb.service";
 
-import { loadTypePrime } from "../../../store/parametrage/type-prime/actions";
+import {loadTypePrime} from "../../../store/parametrage/type-prime/actions";
 import * as typePrimeSelector from "../../../store/parametrage/type-prime/selector";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
-import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuItem} from 'primeng/api';
-import { Plafond } from "src/app/store/contrat/plafond/model";
-import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external/ThirdPartyDraggable";
-import { element } from "protractor";
+import {Plafond} from "src/app/store/contrat/plafond/model";
 import * as adherentSelector from "../../../store/contrat/adherent/selector";
 import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
+
+import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
+import * as historiqueAvenantSelector from "../../../store/contrat/historiqueAvenant/selector";
+import {Police} from "../../../store/contrat/police/model";
+import {
+  HistoriqueAvenant,
+  HistoriqueAvenantAdherant,
+  TypeHistoriqueAvenant,
+} from '../../../store/contrat/historiqueAvenant/model';
+import {loadHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/actions';
 
 @Component({
   selector: "app-avenant",
@@ -137,8 +133,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   policeForm: FormGroup;
   groupeForm: FormGroup;
   plafondForm: FormGroup;
+  customForm: FormGroup;
   primeForm: FormGroup;
   adherentForm: FormGroup;
+  adherentFamilleForm: FormGroup;
   statusObject$: Observable<Status>;
   entityValidations: Array<EntityValidations>;
   loading: boolean;
@@ -146,6 +144,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   dateEcheance: Date;
   dissplayavenant = false;
   adherentListGroupe: Array<Adherent>;
+  isNewGroupe = false;
 
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -221,6 +220,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherentList$: Observable<Array<Adherent>>;
   adherant: AdherentFamille;
   adherantGroupeListe: Array<AdherentFamille> = [];
+  historiqueAvenant: HistoriqueAvenant;
+  historiqueAvenants: Array<HistoriqueAvenant>;
+  curentGroupe: Groupe;
+  historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
+  isAvenantIncorporation = false;
+  isAvenantRetrait = false;
+  isAvenantModification = false;
+  isAvenantRenouvellement = false;
+
+  historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
+  historiqueAvenantList: Array<HistoriqueAvenant>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -305,6 +315,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
       primeAdulte: new FormControl("")
     });
 
+    this.customForm = this.formBuilder.group({
+      groupe: new FormControl('')
+    });
+
     this.breadcrumbService.setItems([{ label: "Avenant" }]);
   }
 
@@ -317,6 +331,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.policeList = [];
     this.loading = true;
+    this.historiqueAvenant = {};
 
     this.items = [
       {label: 'Home', icon: 'pi pi-fw pi-home'},
@@ -586,13 +601,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.addAvenant();
           console.log($event);
+          this.isAvenantIncorporation = true;
+          this.entete = 'Avenant d\'Incorporation';
         }},
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
-          this.addAvenant();
+          this.addAvenantRetrait();
+          this.isAvenantRetrait = true;
+          this.entete = 'Avenant de Retrait';
         }},
-      {label: 'Moditication', icon: 'pi pi-pencil', url: 'http://angular.io'},
-      {separator: true},
-      {label: 'Renouvellement', icon: 'pi pi-undo', routerLink: ['/setup']}
+      {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
+          this.isAvenantModification = true;
+          this.entete = 'Avenant de Modification';
+          this.addAvenantModification();
+        }},
+      {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
+          this.isAvenantRenouvellement = true;
+          this.entete = 'Avenant de Renouvellement';
+          this.addAvenantRenouvellement();
+        }}
     ];
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
@@ -710,6 +736,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
+    this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.historiqueAvenantList = value.slice();
+        console.log('................historiqueAvenantList............................');
+        console.log(this.historiqueAvenantList);
+      }
+    });
+
     this.paysList$ = this.store.pipe(select(paysSelector.paysList));
     this.store.dispatch(loadPays());
     this.paysList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -781,12 +818,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
     this.init();
+    // this.loadHistoriqueAvenant();
   }
 
   init(): void {
     this.groupePolicy = [];
-    this.selectedGroup = null;
+    this.selectedGroup = {};
     this.adherentListGroupe = [];
+    this.adherantGroupeListe = [];
+    this.curentGroupe = {};
+    this.customForm = this.formBuilder.group({
+      groupe: new FormControl('')
+    });
+    this.historiqueAhenantAdherants = [];
+    this.historiqueAvenant = {
+      aderants: [],
+      groupe: {},
+      police: {}
+    };
   }
 
 
@@ -802,6 +851,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
    }
 
   // fonction pour creer adherent.
+  entete = '';
   onCreateAddherent() {
     console.log(this.adherentForm.value);
     console.log(this.adherentFamilleList);
@@ -837,9 +887,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   onCreateGroupe(){
     this.groupe = this.groupeForm.value;
     this.groupe.police = this.police;
-    //this.groupe.adherent = this.adherentForm.value;
+    // this.groupe.adherent = this.adherentForm.value;
     this.groupe.prime = this.primeForm.value;
-    //this.groupe.familleAdherent = this.adherentFamilleList;
+    // this.groupe.familleAdherent = this.adherentFamilleList;
     console.log(this.groupe);
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
   }
@@ -989,7 +1039,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirGroupe(police: Police) {
     this.police = {...police};
     this.groupeList$ = this.store.pipe(select(groupeList));
-    this.store.dispatch(loadGroupe({idPolice: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: police.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
@@ -1090,7 +1140,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log(this.plafond);
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
   }
-  // 
+
   addSousActe() {
   this.plafondActe[this.indexeActe].listeSousActe =this.plafondSousActe;
   console.log(this.plafondActe);
@@ -1208,6 +1258,17 @@ changeGarantie(garantie, indexLigne: number) {
 
   }
 
+  addAvenantRetrait(): void {
+    this.dissplayavenant = true;
+  }
+  addAvenantModification(): void {
+    this.dissplayavenant = true;
+  }
+
+  addAvenantRenouvellement(): void {
+    this.dissplayavenant = true;
+  }
+
   add(): void {
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(""),
@@ -1232,8 +1293,11 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   loadGoupeByPolice(): void {
+    // this.curentGroupe = this.customForm.get('groupe').value;
+    console.log('::::::::::::::::::::::::::');
+    console.log(this.policeItem);
     this.groupeList$ = this.store.pipe(select(groupeList));
-    this.store.dispatch(loadGroupe({idPolice: this.policeItem.id}));
+    this.store.dispatch(loadGroupe({policeId: this.policeItem.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupePolicy = value.slice();
@@ -1243,9 +1307,10 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   addNewGroupe(): void {
-    this.displayDialogFormAdherent = true;
+    this.isNewGroupe = !this.isNewGroupe;
+    // this.displayDialogFormAdherent = true;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:this.groupe.id}));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentListGroupe = value.slice();
@@ -1262,7 +1327,38 @@ changeGarantie(garantie, indexLigne: number) {
     this.add();
   }
 
-  addAdherentFamille(adherentFamille: any): void {
-    console.log(adherentFamille);
+  addAdherentFamille(adherentFamille: AdherentFamille): void {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants.push(adherentFamille);
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+  }
+
+  addGroupeNew(groupe: FormGroup): Groupe {
+    console.log(groupe);
+    this.curentGroupe = groupe as Groupe;
+    return this.curentGroupe;
+  }
+
+  onGroupeChange() {
+    this.curentGroupe = this.customForm.controls.groupe.value;
+  }
+
+  loadHistoriqueAvenant(e): void {
+    console.log(e);
+    this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: e.value.id}));
+    this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiqueAvenantList = value.slice();
+        console.log('................historiqueAvenantList............................');
+        console.log(this.historiqueAvenantList);
+      }
+    });
   }
 }

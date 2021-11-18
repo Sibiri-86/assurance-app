@@ -193,4 +193,9 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+
+    static readonly HISTORIQUE_AVENANT = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
 }

@@ -24,7 +24,7 @@ export class GroupeEffects {
             this.GroupeService.posGroupe(Groupe).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadGroupe({idPolice: Groupe.police.id})
+                    featureActions.loadGroupe({policeId: Groupe.police.id})
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -38,7 +38,7 @@ export class GroupeEffects {
                 this.GroupeService.updateGroupe(Groupe).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadGroupe({idPolice: Groupe.police.id})
+                        featureActions.loadGroupe({policeId: Groupe.police.id})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -52,7 +52,7 @@ export class GroupeEffects {
                     this.GroupeService.deleteGroupe(Groupe).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.loadGroupe({idPolice: Groupe.police.id})
+                            featureActions.loadGroupe({policeId: Groupe.police.id})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -63,10 +63,10 @@ export class GroupeEffects {
     fetchGroupe$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadGroupe),
-        mergeMap(({idPolice}) =>
-            this.GroupeService.$getGroupes(idPolice).pipe(
+        mergeMap(({policeId}) =>
+            this.GroupeService.$getGroupes(policeId).pipe(
                 switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setGroupe(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
