@@ -35,6 +35,7 @@ export interface HistoriqueAvenantAdherant {
     dateRenouvellement?: Date;
     historiqueAvenant?: HistoriqueAvenant;
     adherent?: Adherent;
+    deleted: boolean;
 }
 
 export interface HistoriqueAvenantList {

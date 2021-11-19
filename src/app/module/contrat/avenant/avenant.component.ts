@@ -610,22 +610,26 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
-          this.addAvenant();
-          console.log($event);
-          this.isAvenantIncorporation = true;
-          this.entete = 'Avenant d\'Incorporation';
+        this.initDisplayAvenant();
+        this.addAvenant();
+        console.log($event);
+        this.isAvenantIncorporation = true;
+        this.entete = 'Avenant d\'Incorporation';
         }},
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
+          this.initDisplayAvenant();
           this.addAvenantRetrait();
           this.isAvenantRetrait = true;
           this.entete = 'Avenant de Retrait';
         }},
       {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
+          this.initDisplayAvenant();
           this.isAvenantModification = true;
           this.entete = 'Avenant de Modification';
           this.addAvenantModification();
         }},
       {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
+          this.initDisplayAvenant();
           this.isAvenantRenouvellement = true;
           this.entete = 'Avenant de Renouvellement';
           this.addAvenantRenouvellement();
@@ -1348,7 +1352,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.historiqueAvenant.groupe = this.curentGroupe;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
-    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    // this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
   }
 
   addGroupeNew(groupe: FormGroup): Groupe {
@@ -1385,5 +1389,12 @@ changeGarantie(garantie, indexLigne: number) {
     console.log(this.historiqueAvenant);
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     this.dissplayavenant = false;
+  }
+
+  initDisplayAvenant(): void {
+    this.isAvenantIncorporation = false;
+    this.isAvenantRetrait = false;
+    this.isAvenantModification = false;
+    this.isAvenantRenouvellement = false;
   }
 }

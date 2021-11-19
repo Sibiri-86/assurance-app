@@ -16,7 +16,7 @@ export interface Adherent{
     dateIncor?: Date,
     dateEntree?: Date,
     groupe?: Groupe,
-    adherentPrincipal?: Adherent
+    adherentPrincipal?: Adherent;
 }
 
 export interface AdherentFamille {
@@ -25,5 +25,5 @@ export interface AdherentFamille {
 }
 
 export interface AdherentList{
-    adherentDtoList: Array<Adherent>
+    adherentDtoList: Array<Adherent>;
 }

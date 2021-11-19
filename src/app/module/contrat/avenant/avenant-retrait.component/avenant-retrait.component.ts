@@ -76,7 +76,7 @@ export class AvenantRetraitComponent implements OnInit {
   loadAherantByGroupe(): void {
     console.log('*********groupe**********');
     console.log(this.groupe);
-    /* this.adherentService.$getAdherents(this.groupe.id).subscribe(
+     /* this.adherentService.$getAdherents(this.groupe.id).subscribe(
         (res) => {
           this.adherantGroupeListe = res.adherentDtoList;
           console.log('*******************');
@@ -88,17 +88,20 @@ export class AvenantRetraitComponent implements OnInit {
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherantGroupeListe = value.slice();
+        console.log('*********adherantGroupeListe**********');
+        // console.log(this.adherantGroupeListe);
         this.makeAderantFamille();
       }
     });
   }
 
-  private init() {
+  init() {
     this.familleAdherants = [];
     // this.adherantList = [];
   }
 
   retirer(adherent: Adherent): void {
+    console.log(adherent);
     const id = adherent.id;
     this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== id);
     if (adherent.adherentPrincipal !== null) {
@@ -107,15 +110,17 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   addAdherentFamilleToList(): void {
-    this.adherentFamilleEvent.emit(this.familleAdherants);
+    console.log('*********familleAdherants**********');
+    console.log(this.familleAdherants);
+    // this.adherentFamilleEvent.emit(this.familleAdherants);
     this.init();
   }
 
-  private makeAderantFamille() {
+  makeAderantFamille(): void {
     this.adherantGroupeListe.forEach(f => {
-      let familleAdherant: AdherentFamille = {};
+      const familleAdherant: AdherentFamille = {};
       if (f.adherentPrincipal !== null) {
-        familleAdherant = f as AdherentFamille;
+        familleAdherant.adherent = f;
         familleAdherant.famille = this.adherantGroupeListe.filter(e => e.id !== f.adherentPrincipal.id);
         this.familleAdherants.push(familleAdherant);
       }
