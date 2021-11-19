@@ -130,23 +130,8 @@ export class PoliceEffects {
     )
     );
 
-    /* fetchPoliceValideIsTrue$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(featureActions.loadPolice),
-            mergeMap(() =>
-                this.PoliceService.$getPolicesByValideIsTrue().pipe(
-                    switchMap(value => [
-                        featureActions.setPolice(value)
-                    ]),
-                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                )
-            )
-        )
-    ); */
-
-    
-import$ = createEffect(() =>
-this.actions$.pipe(
+    import$ = createEffect(() =>
+    this.actions$.pipe(
     ofType(featureActions.importPolice),
     mergeMap(({file}) =>
         this.PoliceService.pushFileToStorage(file).pipe(
@@ -160,4 +145,18 @@ this.actions$.pipe(
 )
 );
 
+    fetchPoliceByAffaireNouvelle$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadPoliceByAffaireNouvelle),
+            mergeMap(() =>
+                this.PoliceService.$getPoliceByAffaireNouvelles().pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPolice(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
 }

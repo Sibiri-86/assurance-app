@@ -2,8 +2,6 @@ export const SERVICE_PREFIX = `/assurance`;
 
 
 export class Endpoints {
-
-
     static readonly PARAMETRAGE_TYPE_GARANTIE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeGarantie`,
         mock: `assets/mock/parametrage/typegarantie.mock.json`
@@ -200,6 +198,11 @@ export class Endpoints {
     static readonly CONTRAT_PLAFOND = {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
+    };
+
+    static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
+        prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 
     static readonly HISTORIQUE_AVENANT = {

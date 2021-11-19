@@ -79,4 +79,12 @@ export class PoliceService {
             return throwError(error.message || 'Something went wrong');
         };
     }
+
+    $getPoliceByAffaireNouvelles(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE)}`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
 }
