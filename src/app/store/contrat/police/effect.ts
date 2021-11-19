@@ -4,7 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { PoliceService } from './service';
 import * as featureActions from './actions';
-import {Police, Report} from './model';
+import {Police} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
@@ -58,34 +58,6 @@ export class PoliceEffects {
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             ));
-
-            loadStatistiquePolice$ = createEffect(() =>
-            this.actions$.pipe(
-                ofType(featureActions.loadStatistique),
-                mergeMap(() =>
-                    this.PoliceService.$getStatistiquePolice().pipe(
-                        switchMap(value => [
-                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.setStatistique(value)
-                        ]),
-                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                    ))
-                ));
-
-            fetchReport$ = createEffect(() =>
-            this.actions$.pipe(
-                ofType(featureActions.FetchReport),
-                mergeMap((report: Report) =>
-                    this.PoliceService.$getReport(report).pipe(
-                        switchMap(value => [
-                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.setReport({file:value})
-                        ]),
-                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                    ))
-                ));
 
             deletePolice$ = createEffect(() =>
             this.actions$.pipe(
@@ -145,20 +117,5 @@ this.actions$.pipe(
     )
 )
 );
-
-    fetchPoliceByAffNouv$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(featureActions.loadPoliceByAffNouv),
-            mergeMap(() =>
-                this.PoliceService.getPolicesFilterByAffNou().pipe(
-                    switchMap(value => [
-                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.setPoliceByAffNou(value)
-                    ]),
-                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                )
-            )
-        )
-    );
 
 }

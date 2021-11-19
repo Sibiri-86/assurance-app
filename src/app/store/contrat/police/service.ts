@@ -1,5 +1,5 @@
 import { from } from "rxjs";
-import {Police, PoliceList, Report, Statistique} from "./model";
+import {Police, PoliceList} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -17,19 +17,6 @@ $getPolices(): Observable<PoliceList> {
       map((response: PoliceList) => response),
       catchError(this.handleError())
     );
-  }
-
-  $getStatistiquePolice(): Observable<Statistique> {
-    // @FIXME: get request
-    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/statistique`).pipe(
-      map((response: Statistique) => response),
-      catchError(this.handleError())
-    );
-  }
-
-  $getReport(report: Report): Observable<ArrayBuffer> {
-    // @FIXME: get request
-    return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/report`,report, {responseType: 'arraybuffer'});
   }
 
 posPolice(Police: Police): Observable<any> {

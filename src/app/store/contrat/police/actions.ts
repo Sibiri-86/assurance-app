@@ -14,6 +14,3 @@ export const setPolice = createAction('[App Init] set Police',  props<PoliceList
 export const importPolice = createAction('[App Init] import Police',  props<{file: File}>());
 export const FetchReport = createAction('[Report] Fetch Report', props<Report>());
 export const setReport = createAction('[set Report] set Report', props<{file: ArrayBuffer}>());
-export const loadPoliceByAffNouv = createAction('[App Init] load Police');
-export const setPoliceByAffNou = createAction('[App Init] set Police',  props<PoliceList>());
-
