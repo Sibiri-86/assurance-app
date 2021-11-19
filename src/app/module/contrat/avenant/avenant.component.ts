@@ -224,7 +224,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   domaineSelected: QualiteAssure;
   typeAvenantSelected: string;
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
-  {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+    {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
   typeActions: MenuItem[] = [];
   selectedGroup: Groupe;
   groupePolicy: Array<Groupe>;
@@ -245,12 +245,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantList: Array<HistoriqueAvenant>;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private store: Store<AppState>,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
-    private breadcrumbService: BreadcrumbService,
-    private policeService: PoliceService
+      private formBuilder: FormBuilder,
+      private store: Store<AppState>,
+      private messageService: MessageService,
+      private confirmationService: ConfirmationService,
+      private breadcrumbService: BreadcrumbService,
+      private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -353,7 +353,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {label: 'Edit', icon: 'pi pi-fw pi-pencil'},
       {label: 'Documentation', icon: 'pi pi-fw pi-file'},
       {label: 'Settings', icon: 'pi pi-fw pi-cog'}
-      ];
+    ];
     this.activeItem = this.items[0];
 
     this.entityValidations = [
@@ -613,11 +613,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
-        this.initDisplayAvenant();
-        this.addAvenant();
-        console.log($event);
-        this.isAvenantIncorporation = true;
-        this.entete = 'Avenant d\'Incorporation';
+          this.initDisplayAvenant();
+          this.addAvenant();
+          console.log($event);
+          this.isAvenantIncorporation = true;
+          this.entete = 'Avenant d\'Incorporation';
         }},
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
@@ -674,7 +674,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.professionList$ = this.store.pipe(
-      select(professionSelector.professionList)
+        select(professionSelector.professionList)
     );
     this.store.dispatch(loadProfession());
     this.professionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -684,16 +684,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.qualiteAssureList$ = this.store.pipe(
-      select(qualiteAssureSelector.qualiteAssureList)
+        select(qualiteAssureSelector.qualiteAssureList)
     );
     this.store.dispatch(loadQualiteAssure());
     this.qualiteAssureList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.qualiteAssureList = value.slice();
-        }
-      });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.qualiteAssureList = value.slice();
+          }
+        });
 
     this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
@@ -713,16 +713,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.intermediaireList$ = this.store.pipe(
-      select(intermediaireSelector.intermediaireList)
+        select(intermediaireSelector.intermediaireList)
     );
     this.store.dispatch(loadIntermediaire());
     this.intermediaireList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.intermediaireList = value.slice();
-        }
-      });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.intermediaireList = value.slice();
+          }
+        });
 
     this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
@@ -733,17 +733,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.territorialiteList$ = this.store.pipe(
-      select(territorialiteSelector.territorialiteList)
+        select(territorialiteSelector.territorialiteList)
     );
     this.store.dispatch(loadTerritorialite());
     this.territorialiteList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.territorialiteList = value.slice();
-          console.log(this.territorialiteList);
-        }
-      });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.territorialiteList = value.slice();
+            console.log(this.territorialiteList);
+          }
+        });
 
     this.policeList$ = this.store.pipe(select(policeList));
     this.store.dispatch(loadPoliceByAffaireNouvelle());
@@ -754,8 +754,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     });
 
+
     this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
-    this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
+    // this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
     this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.loading = false;
@@ -782,7 +783,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.departementList$ = this.store.pipe(
-      select(departementSelector.departementList)
+        select(departementSelector.departementList)
     );
     this.store.dispatch(loadDepartement());
     this.departementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -792,7 +793,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.typePrimeList$ = this.store.pipe(
-      select(typePrimeSelector.typePrimeList)
+        select(typePrimeSelector.typePrimeList)
     );
     this.store.dispatch(loadTypePrime());
     this.typePrimeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -810,28 +811,28 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.secteurActiviteList$ = this.store.pipe(
-      select(secteurActiviteSelector.secteurActiviteList)
+        select(secteurActiviteSelector.secteurActiviteList)
     );
     this.store.dispatch(loadSecteurActivite());
     this.secteurActiviteList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.secteurActiviteList = value.slice();
-        }
-      });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.secteurActiviteList = value.slice();
+          }
+        });
 
     this.dimensionPeriodeList$ = this.store.pipe(
-      select(dimensionPeriodeSelector.dimensionPeriodeList)
+        select(dimensionPeriodeSelector.dimensionPeriodeList)
     );
     this.store.dispatch(loadDimensionPeriode());
     this.dimensionPeriodeList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value) {
-          this.dimensionPeriodeList = value.slice();
-        }
-      });
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.dimensionPeriodeList = value.slice();
+          }
+        });
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
@@ -857,16 +858,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
 
-   changeAvenant(event) {
-     console.log(event.value);
-     if (event.value.libelle === 'retrait'){
-       this.typeAvenantSelected = 'retrait';
-     } else if (event.value.libelle === 'modification'){
+  changeAvenant(event) {
+    console.log(event.value);
+    if (event.value.libelle === 'retrait'){
+      this.typeAvenantSelected = 'retrait';
+    } else if (event.value.libelle === 'modification'){
       this.typeAvenantSelected = 'modification';
-     } else if (event.value.libelle === 'incorporation'){
+    } else if (event.value.libelle === 'incorporation'){
       this.typeAvenantSelected = 'incorporation';
-     }
-   }
+    }
+  }
 
   // fonction pour creer adherent.
   entete = '';
@@ -942,37 +943,37 @@ export class AvenantComponent implements OnInit, OnDestroy {
     if (this.typeDureeSelected === 'Jour') {
       return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
     } else if (this.typeDureeSelected === 'Mois') {
-        return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
-      } else if (this.typeDureeSelected === 'Annee') {
-        return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
-      }
+      return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
+    } else if (this.typeDureeSelected === 'Annee') {
+      return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
     }
+  }
 
   changeTypeDuree(){
     if (this.dateEcheance && this.policeForm.get('duree')){
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
-      }
     }
+  }
 
   onRefreshDateEcheance(value: number) {
     this.policeForm
-      .get('dateEcheance')
-      .setValue(
-        this.getNewDate(value)
-      );
+        .get('dateEcheance')
+        .setValue(
+            this.getNewDate(value)
+        );
   }
 
   onRefreshDateEcheanceForGroupe(value: number) {
     this.dateEcheance = new Date(this.dateEffet);
     this.groupeForm
-      .get('dateEcheance')
-      .setValue(
-        new Date(
-          this.dateEcheance.setMonth(
-            this.dateEcheance.getMonth() + Number(value)
-          )
-        )
-      );
+        .get('dateEcheance')
+        .setValue(
+            new Date(
+                this.dateEcheance.setMonth(
+                    this.dateEcheance.getMonth() + Number(value)
+                )
+            )
+        );
   }
 
   checkStatus() {
@@ -1041,12 +1042,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
       accept: () => {
         if (this.police.id) {
           this.store.dispatch(
-            featureAction.updatePolice(this.policeForm.value)
+              featureAction.updatePolice(this.policeForm.value)
           );
         } else {
           console.log(this.policeForm.value);
           this.store.dispatch(
-            featureAction.createPolice(this.policeForm.value)
+              featureAction.createPolice(this.policeForm.value)
           );
         }
         this.policeForm.reset();
@@ -1085,7 +1086,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   onRowEditCancel(plafondFamilleActe: PlafondFamilleActe, index: number) {
     this.plafondFamilleActe[index] =
-      this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
+        this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
     delete this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
   }
 
@@ -1126,11 +1127,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   onRowEditCancelPlafondSousActe(
-    plafondSousActe: PlafondSousActe,
-    index: number
+      plafondSousActe: PlafondSousActe,
+      index: number
   ) {
     this.plafondSousActe[index] =
-      this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
+        this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
   }
 
@@ -1161,8 +1162,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   //
   addSousActe() {
-  this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
-  console.log(this.plafondActe);
+    this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
+    console.log(this.plafondActe);
   }
 
   addFamilleActe(rowData, ri){
@@ -1180,20 +1181,20 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.plafondFamilleActeConstruct[i] = this.plafondFamilleActeTemp;
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
-        }
+      }
     }
 
     this.plafondFamilleActeConstruct.forEach( async (element, index) => {
-    if (element.garantie.id === rowData.garantie.id) {
-    console.log('oui');
-    this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
-    this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-    this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-    console.log(index);
-    this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
-    delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-    return;
-    }
+      if (element.garantie.id === rowData.garantie.id) {
+        console.log('oui');
+        this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
+        this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
+        this.plafondFamilleActeTemp.listeActe = this.plafondActe;
+        console.log(index);
+        this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
+        delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
+        return;
+      }
     });
 
 
@@ -1213,12 +1214,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
   getSousActe(rowData, ri){
     this.plafondSousActe = [];
     if (!rowData.listeSousActe){
-    this.sousActeList.forEach((element) => {
-      console.log(rowData);
-      if (element.idTypeActe === rowData.acte.id){
-         this.plafondSousActe.push({sousActe: element, montantPlafond: rowData.montantPlafond});
-       }
-    });
+      this.sousActeList.forEach((element) => {
+        console.log(rowData);
+        if (element.idTypeActe === rowData.acte.id){
+          this.plafondSousActe.push({sousActe: element, montantPlafond: rowData.montantPlafond});
+        }
+      });
     } else {
       this.plafondSousActe = rowData.listeSousActe;
     }
@@ -1226,34 +1227,179 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.indexeActe = ri;
   }
 
-changeGarantie(garantie, indexLigne: number) {
+  changeGarantie(garantie, indexLigne: number) {
 
-  this.plafondActe = [];
-  if (this.plafondFamilleActeConstruct.length != 0) {
+    this.plafondActe = [];
+    if (this.plafondFamilleActeConstruct.length != 0) {
       // revoir cette fonction
       this.plafondFamilleActeConstruct.forEach((element, index) => {
         element.listeActe.forEach(e => {
           if (e.acte.idTypeGarantie === garantie.value.id){
             this.plafondActe.push(e);
           }
-          });
+        });
       });
       console.log(this.plafondFamilleActeConstruct);
-  }
-  if (this.plafondActe.length === 0){
-   // this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
-   this.acteList.forEach((element) => {
-    if (element.idTypeGarantie === garantie.value.id) {
-      this.plafondActe.push({acte: element});
-    }});
-  }
-  console.log(this.plafondActe);
+    }
+    if (this.plafondActe.length === 0){
+      // this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
+      this.acteList.forEach((element) => {
+        if (element.idTypeGarantie === garantie.value.id) {
+          this.plafondActe.push({acte: element});
+        }});
+    }
+    console.log(this.plafondActe);
   }
 
   ngOnDestroy() {
     this.destroy$.next(true);
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
+  }
+
+  invaliderPolice(police: Police): void {
+    police.valide = false;
+    this.store.dispatch(featureAction.updatePolice(police));
+    // this.policeList$ = this.store.pipe(select(policeList));
+  }
+
+  cerateTypeAction(): void {
+    this.avenantList.forEach(typeA => {
+      const item: MenuItem = {};
+      item.label = typeA.libelle;
+      item.id = typeA.id;
+      this.typeActions.push(item);
+    });
+    console.log(this.typeActions);
+  }
+
+  addAvenant(): void {
+    this.dissplayavenant = true;
+
+  }
+
+  addAvenantRetrait(): void {
+    this.dissplayavenant = true;
+  }
+  addAvenantModification(): void {
+    this.dissplayavenant = true;
+  }
+
+  addAvenantRenouvellement(): void {
+    this.dissplayavenant = true;
+  }
+
+  add(): void {
+    this.adherentForm = this.formBuilder.group({
+      id: new FormControl(""),
+      nom: new FormControl("", [Validators.required]),
+      prenom: new FormControl("", [Validators.required]),
+      dateNaissance: new FormControl("", [Validators.required]),
+      matricule:new FormControl(""),
+      lieuNaissance: new FormControl("", [Validators.required]),
+      numeroTelephone: new FormControl("", [Validators.required]),
+      adresse: new FormControl("", [Validators.required]),
+      adresseEmail: new FormControl("", [Validators.required]),
+      profession: new FormControl(""),
+      referenceBancaire: new FormControl(""),
+      qualiteAssure: new FormControl("", [Validators.required]),
+      genre: new FormControl("", [Validators.required]),
+      dateEntree: new FormControl("", [Validators.required])
+    }) ;
+  }
+
+  delAvenenant(): void {
+    this.dissplayavenant = false;
+  }
+
+  loadGoupeByPolice(): void {
+    // this.curentGroupe = this.customForm.get('groupe').value;
+    console.log('::::::::::::::::::::::::::');
+    console.log(this.policeItem);
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.policeItem.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
+
+  addNewGroupe(): void {
+    this.isNewGroupe = !this.isNewGroupe;
+    // this.displayDialogFormAdherent = true;
+    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.adherentListGroupe = value.slice();
+      }
+    });
+  }
+
+  addToGroup(): void {
+    this.adherant = this.adherentForm.value;
+    this.adherentListGroupe.forEach( elem => {
+      // elem.ad
+    });
+    this.adherant = null;
+    this.add();
+  }
+
+  addAdherentFamille(adherentFamille: AdherentFamille): void {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants.push(adherentFamille);
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    // this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+  }
+
+  addGroupeNew(groupe: FormGroup): Groupe {
+    console.log(groupe);
+    this.curentGroupe = groupe as Groupe;
+    return this.curentGroupe;
+  }
+
+  onGroupeChange() {
+    this.curentGroupe = this.customForm.controls.groupe.value;
+  }
+
+  loadHistoriqueAvenant(e): void {
+    console.log(e);
+    this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: e.value.id}));
+    this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiqueAvenantList = value.slice();
+        console.log('................historiqueAvenantList............................');
+        console.log(this.historiqueAvenantList);
+      }
+    });
+  }
+
+  deleteAdherant(adherants: AdherentFamille[]) {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants = adherants;
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
+  }
+
+  initDisplayAvenant(): void {
+    this.isAvenantIncorporation = false;
+    this.isAvenantRetrait = false;
+    this.isAvenantModification = false;
+    this.isAvenantRenouvellement = false;
   }
 
   deValiderPolice(police: Police){
@@ -1266,5 +1412,4 @@ changeGarantie(garantie, indexLigne: number) {
       },
     });
   }
-
 }
