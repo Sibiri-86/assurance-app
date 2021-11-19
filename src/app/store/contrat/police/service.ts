@@ -8,16 +8,23 @@ import {Endpoints} from '../../../config/module.endpoints';
 
 @Injectable({providedIn: 'root'})
 export class PoliceService {
-constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-$getPolices(): Observable<PoliceList> {
-    // @FIXME: get request
-    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`).pipe(
-      map((response: PoliceList) => response),
-      catchError(this.handleError())
-    );
-  }
+    $getPolices(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
 
+    $getStatistiquePolice(): Observable<Statistique> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/statistique`).pipe(
+            map((response: Statistique) => response),
+            catchError(this.handleError())
+        );
+    }
     $getPolicesByValideIsTrue(): Observable<PoliceList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_VALIDE )}`).pipe(
@@ -25,59 +32,51 @@ $getPolices(): Observable<PoliceList> {
             catchError(this.handleError())
         );
     }
-  $getStatistiquePolice(): Observable<Statistique> {
-    // @FIXME: get request
-    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/statistique`).pipe(
-      map((response: Statistique) => response),
-      catchError(this.handleError())
-    );
-  }
 
-  $getReport(report: Report): Observable<ArrayBuffer> {
-    // @FIXME: get request
-    return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/report`,report, {responseType: 'arraybuffer'});
-  }
+    $getReport(report: Report): Observable<ArrayBuffer> {
+        // @FIXME: get request
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/report`,report, {responseType: 'arraybuffer'});
+    }
 
-posPolice(Police: Police): Observable<any> {
-    // @FIXME: post request
-    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, Police);
-  }
+    posPolice(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, Police);
+    }
 
-updatePolice(Police: Police): Observable<any> {
-    // @FIXME: post request
-    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, Police);
-  }
+    updatePolice(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, Police);
+    }
 
-  validerPolice(Police: Police): Observable<any> {
-    // @FIXME: post request
-    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/valider`, Police);
-  }
+    validerPolice(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/valider`, Police);
+    }
 
-deletePolice(Police: Police): Observable<any> {
-    // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, null);
+    deletePolice(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, null);
+    }
+
+    deletePolices(police: Array<Police>): Observable<any> {
+        // @FIXME: post request
+        return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, police);
+    }
+
+
+
+    pushFileToStorage(file: File): Observable<any> {
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/json');
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/upload`, data, { headers: headers });
+    }
+
+    private handleError<T>() {
+        return (error: HttpErrorResponse) => {
+            return throwError(error.message || 'Something went wrong');
+        };
+    }
 }
-
-deletePolices(police: Array<Police>): Observable<any> {
-    // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, police);
-}
-
-
-
-pushFileToStorage(file: File): Observable<any> {
-  const data: FormData = new FormData();
-  data.append('file', file);
-  let headers = new HttpHeaders();
-  headers.append('Content-Type', 'multipart/form-data');
-  headers.set('Accept', 'application/json');
-  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/upload`, data, { headers: headers });
-}
-
-private handleError<T>() {
-    return (error: HttpErrorResponse) => {
-      return throwError(error.message || 'Something went wrong');
-    };
-  }
-}
-

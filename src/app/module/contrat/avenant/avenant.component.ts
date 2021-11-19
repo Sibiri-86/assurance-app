@@ -1,116 +1,126 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {takeUntil} from "rxjs/operators";
-import {ConfirmationService, MenuItem, MessageService} from "primeng/api";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import {ConfirmationService, MenuItem, MessageService, SelectItem} from 'primeng/api';
+import { Police } from '../../../store/contrat/police/model';
+import { Groupe } from '../../../store/contrat/groupe/model';
+import * as featureAction from '../../../store/contrat/police/actions';
+import { policeList } from '../../../store/contrat/police/selector';
+import { groupeList } from '../../../store/contrat/groupe/selector';
+import {AdherentList, Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
+import { Pays } from '../../../store/parametrage/pays/model';
+import { Taux } from '../../../store/parametrage/taux/model';
+import { Genre, GenreList } from '../../../store/parametrage/genre/model';
+import { Profession } from '../../../store/parametrage/profession/model';
+import { QualiteAssure } from '../../../store/parametrage/qualite-assure/model';
+import { Territorialite } from '../../../store/parametrage/territorialite/model';
+import { Garantie } from '../../../store/parametrage/garantie/model';
+import { SousActe } from '../../../store/parametrage/sous-acte/model';
+import { Acte } from '../../../store/parametrage/acte/model';
+import { Departement } from '../../../store/parametrage/departement/model';
+import { DimensionPeriode } from '../../../store/parametrage/dimension-periode/model';
+import { Commune } from '../../../store/parametrage/commune/model';
+import { TypePrime } from '../../../store/parametrage/type-prime/model';
+import { Region } from '../../../store/parametrage/region/model';
+import { SecteurActivite } from '../../../store/parametrage/secteur-activite/model';
+import { Observable, of, Subject } from 'rxjs';
+import {
+  ControlContainer,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { loadPays } from '../../../store/parametrage/pays/actions';
+import * as paysSelector from '../../../store/parametrage/pays/selector';
 
-import {Groupe} from "../../../store/contrat/groupe/model";
-import * as featureAction from "../../../store/contrat/police/actions";
-import {policeList} from "../../../store/contrat/police/selector";
-import {groupeList} from "../../../store/contrat/groupe/selector";
-import {Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
-import {Pays} from "../../../store/parametrage/pays/model";
-import {Taux} from "../../../store/parametrage/taux/model";
-import {Genre,} from "../../../store/parametrage/genre/model";
-import {Profession} from "../../../store/parametrage/profession/model";
-import {QualiteAssure} from "../../../store/parametrage/qualite-assure/model";
-import {Territorialite} from "../../../store/parametrage/territorialite/model";
-import {Garantie} from "../../../store/parametrage/garantie/model";
-import {SousActe} from "../../../store/parametrage/sous-acte/model";
-import {Acte} from "../../../store/parametrage/acte/model";
-import {Departement} from "../../../store/parametrage/departement/model";
-import {DimensionPeriode} from "../../../store/parametrage/dimension-periode/model";
-import {Commune} from "../../../store/parametrage/commune/model";
-import {TypePrime} from "../../../store/parametrage/type-prime/model";
-import {Region} from "../../../store/parametrage/region/model";
-import {SecteurActivite} from "../../../store/parametrage/secteur-activite/model";
-import {Observable, Subject} from "rxjs";
-import {FormBuilder, FormControl, FormGroup, Validators,} from "@angular/forms";
-import {select, Store} from "@ngrx/store";
-import {AppState} from "src/app/store/app.state";
-import {loadPays} from "../../../store/parametrage/pays/actions";
-import * as paysSelector from "../../../store/parametrage/pays/selector";
+import { loadRegion } from '../../../store/parametrage/region/actions';
+import * as regionSelector from '../../../store/parametrage/region/selector';
 
-import {loadRegion} from "../../../store/parametrage/region/actions";
-import * as regionSelector from "../../../store/parametrage/region/selector";
-
+import * as departementSelector from '../../../store/parametrage/departement/selector';
 import {loadDepartement} from "../../../store/parametrage/departement/actions";
-import * as departementSelector from "../../../store/parametrage/departement/selector";
 
+import * as communeSelector from '../../../store/parametrage/commune/selector';
 import {loadCommune} from "../../../store/parametrage/commune/actions";
-import * as communeSelector from "../../../store/parametrage/commune/selector";
 
-import {loadTaux} from "../../../store/parametrage/taux/actions";
-import * as tauxSelector from "../../../store/parametrage/taux/selector";
+import { loadTaux } from '../../../store/parametrage/taux/actions';
+import * as tauxSelector from '../../../store/parametrage/taux/selector';
 
 import {loadTypeAvenant} from "../../../store/parametrage/type-avenant/actions";
 import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
-
-import {loadTerritorialite} from "../../../store/parametrage/territorialite/actions";
-import * as territorialiteSelector from "../../../store/parametrage/territorialite/selector";
+import { loadTerritorialite } from '../../../store/parametrage/territorialite/actions';
+import * as territorialiteSelector from '../../../store/parametrage/territorialite/selector';
 
 import {loadGarant} from "../../../store/contrat/garant/actions";
 import * as garantSelector from "../../../store/contrat/garant/selector";
 
 import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
+import * as groupeSelector from '../../../store/contrat/groupe/selector';
 
-import {loadIntermediaire} from "../../../store/contrat/intermediaire/actions";
-import * as intermediaireSelector from "../../../store/contrat/intermediaire/selector";
+import { loadIntermediaire } from '../../../store/contrat/intermediaire/actions';
+import * as intermediaireSelector from '../../../store/contrat/intermediaire/selector';
 
-import {Garant} from "../../../store/contrat/garant/model";
-import {Intermediaire,} from "../../../store/contrat/intermediaire/model";
-import {TypeAvenant} from "src/app/store/parametrage/type-avenant/model";
-import {loadSecteurActivite} from "../../../store/parametrage/secteur-activite/actions";
-import * as secteurActiviteSelector from "../../../store/parametrage/secteur-activite/selector";
+import * as professionSelector from '../../../store/parametrage/profession/selector';
 
-import {loadDimensionPeriode} from "../../../store/parametrage/dimension-periode/actions";
-import * as dimensionPeriodeSelector from "../../../store/parametrage/dimension-periode/selector";
+import { Garant, GarantList } from '../../../store/contrat/garant/model';
+import {
+  Intermediaire,
+  IntermediaireList,
+} from '../../../store/contrat/intermediaire/model';
+import { TypeAvenant } from 'src/app/store/parametrage/type-avenant/model';
+import { loadSecteurActivite } from '../../../store/parametrage/secteur-activite/actions';
+import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
+import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
+import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
-import {loadPolice} from "src/app/store/contrat/police/actions";
-import {loadGroupe} from "src/app/store/contrat/groupe/actions";
+import { loadPolice } from 'src/app/store/contrat/police/actions';
+import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 
-import {loadGarantie} from "../../../store/parametrage/garantie/actions";
-import * as garantieSelector from "../../../store/parametrage/garantie/selector";
+import { loadGarantie } from '../../../store/parametrage/garantie/actions';
+import * as garantieSelector from '../../../store/parametrage/garantie/selector';
 
-import {loadActe} from "../../../store/parametrage/acte/actions";
-import * as acteSelector from "../../../store/parametrage/acte/selector";
+import { loadActe } from '../../../store/parametrage/acte/actions';
+import * as acteSelector from '../../../store/parametrage/acte/selector';
+import { loadSousActe } from '../../../store/parametrage/sous-acte/actions';
+import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
 
-import {loadSousActe} from "../../../store/parametrage/sous-acte/actions";
-import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector";
+import { loadGenre } from '../../../store/parametrage/genre/actions';
+import * as genreSelector from '../../../store/parametrage/genre/selector';
+import * as featureActionsPlafond from '../../../store/contrat/plafond/action';
 
-import {loadGenre} from "../../../store/parametrage/genre/actions";
-import * as genreSelector from "../../../store/parametrage/genre/selector";
-import * as featureActionsPlafond from "../../../store/contrat/plafond/action";
-import {loadProfession} from "../../../store/parametrage/profession/actions";
-import * as professionSelector from "../../../store/parametrage/profession/selector";
+import { loadQualiteAssure } from '../../../store/parametrage/qualite-assure/actions';
+import * as qualiteAssureSelector from '../../../store/parametrage/qualite-assure/selector';
 
-import {loadQualiteAssure} from "../../../store/parametrage/qualite-assure/actions";
-import * as qualiteAssureSelector from "../../../store/parametrage/qualite-assure/selector";
+import { Status } from '../../../store/global-config/model';
+import { status } from '../../../store/global-config/selector';
+import { EntityValidations } from '../../common/models/validation';
+import { BreadcrumbService } from '../../../app.breadcrumb.service';
 
-import {Status} from "../../../store/global-config/model";
-import {status} from "../../../store/global-config/selector";
-import {EntityValidations} from "../../common/models/validation";
-import {BreadcrumbService} from "../../../app.breadcrumb.service";
-
-import {loadTypePrime} from "../../../store/parametrage/type-prime/actions";
-import * as typePrimeSelector from "../../../store/parametrage/type-prime/selector";
-import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
-import {Plafond} from "src/app/store/contrat/plafond/model";
+import { loadTypePrime } from '../../../store/parametrage/type-prime/actions';
+import * as typePrimeSelector from '../../../store/parametrage/type-prime/selector';
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../store/parametrage/plafond/model';
+import {TabMenuModule} from 'primeng/tabmenu';
+import { Plafond } from 'src/app/store/contrat/plafond/model';
+import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
+import { element } from 'protractor';
 import * as adherentSelector from "../../../store/contrat/adherent/selector";
 import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
 
 import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
 import * as historiqueAvenantSelector from "../../../store/contrat/historiqueAvenant/selector";
-import {Police} from "../../../store/contrat/police/model";
 import {
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
 import {loadHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/actions';
+import {loadProfession} from '../../../store/parametrage/profession/actions';
 
 @Component({
-  selector: "app-avenant",
-  templateUrl: "./avenant.component.html",
-  styleUrls: ["./avenant.component.scss"],
+  selector: 'app-avenant',
+  templateUrl: './avenant.component.html',
+  styleUrls: ['./avenant.component.scss'],
 })
 export class AvenantComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
@@ -127,9 +137,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   paysList$: Observable<Array<Pays>>;
   police: Police;
   selectedPolices: Police[];
-  displayDialogFormPolice: boolean = false;
-  displayDialogFormAddAdherent: boolean = false;
-  displayDialogFormGroupe: boolean = false;
+  displayDialogFormPolice = false;
+  displayDialogFormAddAdherent = false;
+  displayDialogFormGroupe = false;
   policeForm: FormGroup;
   groupeForm: FormGroup;
   plafondForm: FormGroup;
@@ -174,8 +184,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   secteurActiviteList: Array<SecteurActivite>;
   dimensionPeriodeList$: Observable<Array<DimensionPeriode>>;
   dimensionPeriodeList: Array<DimensionPeriode>;
-  displayDialogFormAddGroupe: boolean = false;
-  displayDialogFormAdherent: boolean = false;
+  displayDialogFormAddGroupe = false;
+  displayDialogFormAdherent = false;
   clonedPlafondFamilleActe: { [s: string]: PlafondFamilleActe } = {};
   clonedAdherentFamille: { [s: string]: Adherent } = {};
   clonedPlafondActe: { [s: string]: PlafondActe } = {};
@@ -196,23 +206,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
   professionList$: Observable<Array<Profession>>;
   qualiteAssureList: Array<QualiteAssure>;
   qualiteAssureList$: Observable<Array<QualiteAssure>>;
-  parametrageActe: boolean = false;
-  parametragePrime: boolean = false;
-  infosGroupe: boolean = true;
+  parametrageActe = false;
+  parametragePrime = false;
+  infosGroupe = true;
   selectedTypePrime: TypePrime = {};
-  groupe: Groupe ={};
+  groupe: Groupe = {};
   items: MenuItem[];
   activeItem: MenuItem;
-  index: number = 0;
-  displaySousActe: boolean =false;
+  index = 0;
+  displaySousActe = false;
   indexeActe: number;
-  countfamilleActe: number = 0;
+  countfamilleActe = 0;
   typeDureeSelected: string;
-  displayParametragePlafond: boolean = false;
+  displayParametragePlafond = false;
   domaineSelected: QualiteAssure;
   typeAvenantSelected: string;
-  typeDuree: any = [{label:'Jour', value:'Jour'},
-  {label: 'Mois', value:'Mois'}, {label:'Année', value: 'Annee'}];
+  typeDuree: any = [{label: 'Jour', value: 'Jour'},
+  {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
   typeActions: MenuItem[] = [];
   selectedGroup: Groupe;
   groupePolicy: Array<Groupe>;
@@ -241,80 +251,81 @@ export class AvenantComponent implements OnInit, OnDestroy {
   ) {
 
     this.plafondForm = this.formBuilder.group({
-      domaine: new FormControl(""),
-      plafondAnnuelleFamille: new FormControl(""),
-      plafondAnnuellePersonne: new FormControl("")
+      domaine: new FormControl(''),
+      plafondAnnuelleFamille: new FormControl(''),
+      plafondAnnuellePersonne: new FormControl('')
     });
 
     this.adherentForm = this.formBuilder.group({
-      id: new FormControl(""),
-      nom: new FormControl("", [Validators.required]),
-      prenom: new FormControl("", [Validators.required]),
-      dateNaissance: new FormControl("", [Validators.required]),
-      matricule:new FormControl(""),
-      lieuNaissance: new FormControl("", [Validators.required]),
-      numeroTelephone: new FormControl("", [Validators.required]),
-      adresse: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl("", [Validators.required]),
-      profession: new FormControl("", [Validators.required]),
-      referenceBancaire: new FormControl(""),
-      qualiteAssure: new FormControl("", [Validators.required]),
-      genre: new FormControl("", [Validators.required]),
-      dateIncorporation: new FormControl("", [Validators.required]),
-      dateEntree: new FormControl("", [Validators.required])
+      id: new FormControl(''),
+      nom: new FormControl('', [Validators.required]),
+      prenom: new FormControl('', [Validators.required]),
+      dateNaissance: new FormControl('', [Validators.required]),
+      matricule: new FormControl(''),
+      lieuNaissance: new FormControl('', [Validators.required]),
+      numeroTelephone: new FormControl('', [Validators.required]),
+      adresse: new FormControl('', [Validators.required]),
+      adresseEmail: new FormControl('', [Validators.required]),
+      profession: new FormControl('', [Validators.required]),
+      referenceBancaire: new FormControl(''),
+      qualiteAssure: new FormControl('', [Validators.required]),
+      genre: new FormControl('', [Validators.required]),
+      dateIncorporation: new FormControl('', [Validators.required]),
+      dateEntree: new FormControl('', [Validators.required])
     });
 
     this.policeForm = this.formBuilder.group({
-      id: new FormControl(""),
-      garant: new FormControl("", [Validators.required]),
-      intermediaire: new FormControl("", [Validators.required]),
-      //numero: new FormControl('',[Validators.required]),
+      id: new FormControl(''),
+      garant: new FormControl('', [Validators.required]),
+      intermediaire: new FormControl('', [Validators.required]),
+      // numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
-      territorialite: new FormControl("", [Validators.required]),
-      typeDuree: new FormControl("", [Validators.required]),
-      duree: new FormControl("", [Validators.required]),
-      dateEffet: new FormControl("", [Validators.required]),
-      dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required]),
-      adressePostale: new FormControl("", [Validators.required]),
-      //dateSaisie: new FormControl('',[Validators.required]),
-      //dateValidation: new FormControl('',[Validators.required]),
-      nom: new FormControl("", [Validators.required]),
-      //code: new FormControl('',[Validators.required]),
-      contact: new FormControl("", [Validators.required]),
+      territorialite: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+      dateEffet: new FormControl('', [Validators.required]),
+      dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
+      adressePostale: new FormControl('', [Validators.required]),
+      // dateSaisie: new FormControl('',[Validators.required]),
+      // dateValidation: new FormControl('',[Validators.required]),
+      nom: new FormControl('', [Validators.required]),
+      // code: new FormControl('',[Validators.required]),
+      contact: new FormControl('', [Validators.required]),
       adresseEmail: new FormControl(null, [Validators.required]),
-      personneRessource: new FormControl("", [Validators.required]),
-      secteurActivite: new FormControl("", [Validators.required]),
-      numeroIfu: new FormControl(""),
-      periodiciteAppelFond: new FormControl(""),
-      rccm: new FormControl(""),
-      pays: new FormControl(""),
-      region: new FormControl(""),
-      departement: new FormControl(""),
-      commune: new FormControl(""),
+      personneRessource: new FormControl('', [Validators.required]),
+      secteurActivite: new FormControl('', [Validators.required]),
+      numeroIfu: new FormControl(''),
+      periodiciteAppelFond: new FormControl(''),
+      rccm: new FormControl(''),
+      pays: new FormControl(''),
+      region: new FormControl(''),
+      departement: new FormControl(''),
+      commune: new FormControl(''),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
-      fraisBadge: new FormControl("", [Validators.required])
+      fraisBadge: new FormControl('', [Validators.required])
     });
 
     this.groupeForm = this.formBuilder.group({
-      id: new FormControl(""),
-      libelle: new FormControl("", [Validators.required]),
+      id: new FormControl(''),
+      libelle: new FormControl('', [Validators.required]),
       taux: new FormControl(null, [Validators.required]),
-      territorialite: new FormControl("", [Validators.required]),
-      duree: new FormControl("", [Validators.required]),
-      dateEffet: new FormControl("", [Validators.required]),
-      dateEcheance: new FormControl("", [Validators.required])
+      territorialite: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+      dateEffet: new FormControl('', [Validators.required]),
+      dateEcheance: new FormControl('', [Validators.required])
     });
 
     this.primeForm = this.formBuilder.group({
-      prime: new FormControl("",[Validators.required]),
-      primeEmploye: new FormControl(""),
-      primeConjoint: new FormControl(""),
-      primeEnfant: new FormControl(""),
-      primeFamille: new FormControl(""),
-      primeAdulte: new FormControl("")
+      prime: new FormControl('', [Validators.required]),
+      primeEmploye: new FormControl(''),
+      primeConjoint: new FormControl(''),
+      primeEnfant: new FormControl(''),
+      primeFamille: new FormControl(''),
+      primeAdulte: new FormControl('')
     });
 
+    this.breadcrumbService.setItems([{ label: 'Avenant' }]);
     this.customForm = this.formBuilder.group({
       groupe: new FormControl('')
     });
@@ -340,226 +351,226 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {label: 'Documentation', icon: 'pi pi-fw pi-file'},
       {label: 'Settings', icon: 'pi pi-fw pi-cog'}
       ];
-      this.activeItem = this.items[0];
+    this.activeItem = this.items[0];
 
     this.entityValidations = [
       {
-        field: "garant",
+        field: 'garant',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "intermediaire",
+        field: 'intermediaire',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "taux",
+        field: 'taux',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "territorialite",
+        field: 'territorialite',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "duree",
+        field: 'duree',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "dateEffet",
+        field: 'dateEffet',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "dateEcheance",
+        field: 'dateEcheance',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "nom",
+        field: 'nom',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "contact",
+        field: 'contact',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "adresseEmail",
+        field: 'adresseEmail',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "numeroCompteBancaire1",
+        field: 'numeroCompteBancaire1',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "personneRessource",
+        field: 'personneRessource',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "numeroCompteBancaire2",
+        field: 'numeroCompteBancaire2',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "numeroIfu",
+        field: 'numeroIfu',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "numeroPattente",
+        field: 'numeroPattente',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "secteurActivite",
+        field: 'secteurActivite',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "pays",
+        field: 'pays',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "region",
+        field: 'region',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "departement",
+        field: 'departement',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "commune",
+        field: 'commune',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "periodiciteAppelFond",
+        field: 'periodiciteAppelFond',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
       {
-        field: "rccm",
+        field: 'rccm',
         validations: [
-          { validName: "required", validMessage: "Ce champs est obligatoire" },
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
           {
-            validName: "maxlength",
-            validMessage: "Ce champs requiert au plus 5 caractères",
+            validName: 'maxlength',
+            validMessage: 'Ce champs requiert au plus 5 caractères',
           },
         ],
       },
@@ -841,12 +852,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
    changeAvenant(event) {
      console.log(event.value);
-     if(event.value.libelle==='retrait'){
-       this.typeAvenantSelected ='retrait';
-     } else if(event.value.libelle==='modification'){
-      this.typeAvenantSelected ='modification';
-     } else if(event.value.libelle==='incorporation'){
-      this.typeAvenantSelected ='incorporation';
+     if (event.value.libelle === 'retrait'){
+       this.typeAvenantSelected = 'retrait';
+     } else if (event.value.libelle === 'modification'){
+      this.typeAvenantSelected = 'modification';
+     } else if (event.value.libelle === 'incorporation'){
+      this.typeAvenantSelected = 'incorporation';
      }
    }
 
@@ -882,7 +893,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }
     */
   }
-  
+
   /** cette methode permet de creer un groupe avec des informations basiques */
   onCreateGroupe(){
     this.groupe = this.groupeForm.value;
@@ -920,25 +931,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
   getNewDate(value: number): Date {
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     this.dateEcheance = new Date(this.dateEffet);
-    this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
-    if(this.typeDureeSelected === 'Jour') {
+    this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() - 1));
+    if (this.typeDureeSelected === 'Jour') {
       return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
-    } else if(this.typeDureeSelected === 'Mois') {
+    } else if (this.typeDureeSelected === 'Mois') {
         return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
-      } else if(this.typeDureeSelected === 'Annee') {
+      } else if (this.typeDureeSelected === 'Annee') {
         return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
       }
     }
 
   changeTypeDuree(){
-    if(this.dateEcheance && this.policeForm.get('duree')){
+    if (this.dateEcheance && this.policeForm.get('duree')){
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
     }
 
   onRefreshDateEcheance(value: number) {
     this.policeForm
-      .get("dateEcheance")
+      .get('dateEcheance')
       .setValue(
         this.getNewDate(value)
       );
@@ -947,7 +958,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   onRefreshDateEcheanceForGroupe(value: number) {
     this.dateEcheance = new Date(this.dateEffet);
     this.groupeForm
-      .get("dateEcheance")
+      .get('dateEcheance')
       .setValue(
         new Date(
           this.dateEcheance.setMonth(
@@ -960,8 +971,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   checkStatus() {
     this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
       if (statusObj) {
-        //this.loading = false;
-        this.showToast(statusObj.status, "INFORMATION", statusObj.message);
+        // this.loading = false;
+        this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
         /*
           if (this.isAdding && statusObj.status === StatusEnum.success) {
             this.display = false;
@@ -991,21 +1002,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   editPolice(police: Police) {
-    
-    this.policeForm.get("id").setValue(police.id);
+
+    this.policeForm.get('id').setValue(police.id);
     this.police = { ...police };
     console.log(this.police);
     this.policeForm.patchValue(this.police);
-    this.policeForm.get("dateEffet").setValue(new Date(this.police.dateEffet));
-    this.policeForm.get("dateEcheance").setValue(new Date(this.police.dateEcheance));
+    this.policeForm.get('dateEffet').setValue(new Date(this.police.dateEffet));
+    this.policeForm.get('dateEcheance').setValue(new Date(this.police.dateEcheance));
     this.displayDialogFormPolice = true;
   }
 
   deletePolice(police: Police) {
     this.confirmationService.confirm({
-      message: "Etes vous sur de vouloir supprimer?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sur de vouloir supprimer?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureAction.deletePolice(police));
       },
@@ -1017,9 +1028,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.police.dateEcheance = this.policeForm.get('dateEcheance').value;
     console.log(this.police);
     this.confirmationService.confirm({
-      message: "Etes vous sur de vouloir ajouter ce police?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sur de vouloir ajouter ce police?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (this.police.id) {
           this.store.dispatch(
@@ -1141,8 +1152,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
   }
 
+  //
   addSousActe() {
-  this.plafondActe[this.indexeActe].listeSousActe =this.plafondSousActe;
+  this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
   console.log(this.plafondActe);
   }
 
@@ -1151,82 +1163,82 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
 
-    for( var i=0; i<this.plafondFamilleActeConstruct.length; i++){
-      if(this.plafondFamilleActeConstruct[i].garantie.id===rowData.garantie.id) {
+    for ( let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+      if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id) {
         console.log('oui');
         this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
         this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         this.plafondFamilleActeTemp.listeActe = this.plafondActe;
         console.log(i);
-        this.plafondFamilleActeConstruct[i]=this.plafondFamilleActeTemp;
+        this.plafondFamilleActeConstruct[i] = this.plafondFamilleActeTemp;
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
         }
     }
 
-    this.plafondFamilleActeConstruct.forEach( async (element,index)=>{
-    if(element.garantie.id===rowData.garantie.id) {
+    this.plafondFamilleActeConstruct.forEach( async (element, index) => {
+    if (element.garantie.id === rowData.garantie.id) {
     console.log('oui');
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
     console.log(index);
-    this.plafondFamilleActeConstruct[index]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     return;
     }
     });
 
-    
+
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-    this.plafondFamilleActeConstruct[this.countfamilleActe]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     console.log(this.countfamilleActe);
     this.countfamilleActe++;
-    
+
     console.log(this.plafondFamilleActeConstruct);
-    
+
   }
 
   getSousActe(rowData, ri){
     this.plafondSousActe = [];
-    if(!rowData.listeSousActe){
-    this.sousActeList.forEach((element)=>{
+    if (!rowData.listeSousActe){
+    this.sousActeList.forEach((element) => {
       console.log(rowData);
-       if(element.idTypeActe === rowData.acte.id){
-         this.plafondSousActe.push({sousActe:element, montantPlafond: rowData.montantPlafond});
+      if (element.idTypeActe === rowData.acte.id){
+         this.plafondSousActe.push({sousActe: element, montantPlafond: rowData.montantPlafond});
        }
-    })
+    });
     } else {
       this.plafondSousActe = rowData.listeSousActe;
     }
-    this.displaySousActe =true;
+    this.displaySousActe = true;
     this.indexeActe = ri;
   }
 
 changeGarantie(garantie, indexLigne: number) {
 
   this.plafondActe = [];
-  if(this.plafondFamilleActeConstruct.length!=0) {
+  if (this.plafondFamilleActeConstruct.length != 0) {
       // revoir cette fonction
-      this.plafondFamilleActeConstruct.forEach((element,index)=>{
-        element.listeActe.forEach(e=>{
-          if(e.acte.idTypeGarantie === garantie.value.id){
+      this.plafondFamilleActeConstruct.forEach((element, index) => {
+        element.listeActe.forEach(e => {
+          if (e.acte.idTypeGarantie === garantie.value.id){
             this.plafondActe.push(e);
           }
-          })
+          });
       });
       console.log(this.plafondFamilleActeConstruct);
-  } 
-  if(this.plafondActe.length===0){
-   //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
-   this.acteList.forEach((element)=>{
-    if(element.idTypeGarantie === garantie.value.id) {
-      this.plafondActe.push({acte:element});
-    }})
+  }
+  if (this.plafondActe.length === 0){
+   // this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
+   this.acteList.forEach((element) => {
+    if (element.idTypeGarantie === garantie.value.id) {
+      this.plafondActe.push({acte: element});
+    }});
   }
   console.log(this.plafondActe);
   }
