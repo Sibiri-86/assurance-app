@@ -122,6 +122,8 @@ import * as secteurSelector from '../../../store/parametrage/secteur/selector';
 import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
 import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
 import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
+import { Report } from "../../../store/contrat/police/model";
+import { TypeReport } from "src/app/store/contrat/enum/model";
 
 
 @Component({
@@ -159,6 +161,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   loading: boolean;
   dateEffet: Date;
   dateEcheance: Date;
+  report: Report = {};
 
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -234,6 +237,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   arrondissementList$: Observable<Array<Arrondissement>>;
   arrondissementList: Array<Arrondissement>;
   displayActe = false;
+  displayPrevisualiserParametrage : boolean = false;
+ 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -244,7 +249,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   ) {
 
     this.plafondForm = this.formBuilder.group({
-      domaine: new FormControl(""),
+      //domaine: new FormControl({}),
       plafondAnnuelleFamille: new FormControl(""),
       plafondAnnuellePersonne: new FormControl(""),
       plafondGlobalInternationnal: new FormControl("")
@@ -794,6 +799,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
 
+  imprimer(police: Police){
+    this.report.typeReporting = TypeReport.POLICE;
+    this.report.police = police;
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+
   changeCountry(event) {
     this.regionList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -1235,6 +1246,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.policeForm.patchValue(this.police);
   }
 
+  voirParametrage() {
+  this.displayPrevisualiserParametrage = true;
+  }
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;

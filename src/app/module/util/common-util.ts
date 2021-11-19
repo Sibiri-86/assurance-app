@@ -4,5 +4,5 @@ export function removeBlanks(stringValue: string): number {
 
   // Convert bytes array and print resulting pdf file in a new tab from the browser.
 export function printPdfFile(bytes) {
-  window.open(URL.createObjectURL(new Blob([bytes], {type: 'application/pdf'})), '_blank');
+  window.open(URL.createObjectURL(new Blob([bytes], {type: 'application/pdf'})));
 }

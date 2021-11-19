@@ -50,11 +50,12 @@ export interface Statistique {
 }
 
 export interface ReportFile {
-    file?: ArrayBuffer
+    reportFile?: ArrayBuffer
 }
 
 export interface Report {
-    typeReport?: TypeReport;
+    typeReporting?: TypeReport,
+    police?: Police
 
 }
 

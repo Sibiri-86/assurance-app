@@ -1,3 +1,4 @@
 export enum TypeReport {
-    FACTURE_PROFORMA = "factureProforma"
+    FACTURE_PROFORMA = "factureProforma",
+    POLICE = "POLICE"
 }

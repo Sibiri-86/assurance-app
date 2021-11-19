@@ -19,7 +19,7 @@ const featureReducer = createReducer(
     ...state, statistique: payload
   })),
   on(featureActions.setReport, (state, payload: ReportFile) => ({
-    ...state, reportFile: payload.file
+    ...state, reportFile: payload.reportFile
   }))
 );
 
