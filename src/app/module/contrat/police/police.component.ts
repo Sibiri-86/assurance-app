@@ -593,6 +593,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentWithFamille = {};
 
     /** dispatch action pour imprimer le pdf */
+    this.store.dispatch(featureAction.setReport(null));
     this.store.pipe(select(selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
@@ -756,12 +757,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.typePrimeList$ = this.store.pipe(
       select(typePrimeSelector.typePrimeList)
     );
+
     this.store.dispatch(loadTypePrime());
     this.typePrimeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.typePrimeList = value.slice();
       }
     });
+
 
     this.communeList$ = this.store.pipe(select(communeSelector.communeList));
     this.store.dispatch(loadCommune());
@@ -1252,10 +1255,23 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;
+    for(var i=0; i<this.plafondFamilleActeConstruct.length; i++){
+      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond+'');
+      for(var j=0; j<this.plafondFamilleActeConstruct[i].listeActe.length; j++){
+        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond+'');
+        for(var k =0; k<this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond+'');
+        }
+      }
+    }
     this.plafond.plafondFamilleActe = this.plafondFamilleActeConstruct;
     this.plafond.groupe = this.groupe;
     console.log(this.plafond);
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
+    this.plafondFamilleActe = [{garantie:{}}];
+    this.plafondActe = [];
+    this.plafondFamilleActeConstruct = [];
+    this.countfamilleActe = 0;
   }
   // 
   addSousActe() {
@@ -1317,8 +1333,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
   });
   }
 
-
-
   /**obtenir les sous actes pour un acte donné */
   getSousActe(rowData, ri){
     this.plafondSousActe = [];
@@ -1373,7 +1387,6 @@ changeGarantie(garantie, indexLigne: number) {
           this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0})
         }
       }
-
       this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
     }
 
