@@ -116,6 +116,9 @@ import {
   import * as secteurState from '../parametrage/secteur/state';
   import * as secteurReducer from '../parametrage/secteur/reducer';
 
+  import * as historiqueAvenantReducer from '../contrat/historiqueAvenant/reducer';
+  import * as historiqueAvenantState from '../contrat/historiqueAvenant/state';
+
   export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
     secteurActiviteState: secteurActiviteReducer.reducer,
@@ -156,7 +159,8 @@ import {
     plafondState: plafondReducer.reducer,
     adherentState: adherentReducer.reducer,
     arrondissementState: arrondissementReducer.reducer,
-    secteurState: secteurReducer.reducer
+    secteurState: secteurReducer.reducer,
+    historiqueAvenantState: historiqueAvenantReducer.reducer
   };
   
   // console.log all actions
@@ -168,4 +172,3 @@ import {
     };
   }
   export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [debug] : [];
-  

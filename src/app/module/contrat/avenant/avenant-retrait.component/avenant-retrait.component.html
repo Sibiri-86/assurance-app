@@ -1,0 +1,91 @@
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-4">
+            <label class="p-fieldset-content">Choisir le Groupe</label>
+            <p-dropdown [options]="groupeList" optionLabel="libelle" [ngModel]="groupe"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                        (onChange)="loadAherantByGroupe()">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-table #dt [value]="adherantGroupeListe"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-adherent>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="adherent"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title">{{adherent.nom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent.prenom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent.email}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent.genre.libelle}}</span></td>
+                        <td>
+                            <!--<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-cog" pTooltip="configurer le plafond" class="p-button-rounded p-button-info p-mr-2" (click)="parametrerPlafond(groupe)"></button>-->
+
+                            <button pButton  pRipple icon="pi pi-minus" pTooltip="Retirer" class="p-button-danger p-mr-2" (click)="retirer(adherent)"></button>
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{adherentList ? adherentList.length : 0 }} adherents au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <hr>
+            </div>
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

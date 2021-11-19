@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import {Police, PoliceList} from '../../../store/contrat/police/model';
+import {ConfirmationService, MenuItem, MessageService, SelectItem} from 'primeng/api';
 import { Groupe } from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
 import { policeList } from '../../../store/contrat/police/selector';
 import { groupeList } from '../../../store/contrat/groupe/selector';
-import { AdherentList, Adherent } from '../../../store/contrat/adherent/model';
+import {AdherentList, Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
 import { Pays } from '../../../store/parametrage/pays/model';
 import { Taux } from '../../../store/parametrage/taux/model';
 import { Genre, GenreList } from '../../../store/parametrage/genre/model';
@@ -38,29 +38,30 @@ import * as paysSelector from '../../../store/parametrage/pays/selector';
 import { loadRegion } from '../../../store/parametrage/region/actions';
 import * as regionSelector from '../../../store/parametrage/region/selector';
 
-import { loadDepartement } from '../../../store/parametrage/departement/actions';
 import * as departementSelector from '../../../store/parametrage/departement/selector';
+import {loadDepartement} from "../../../store/parametrage/departement/actions";
 
-import { loadCommune } from '../../../store/parametrage/commune/actions';
 import * as communeSelector from '../../../store/parametrage/commune/selector';
+import {loadCommune} from "../../../store/parametrage/commune/actions";
 
 import { loadTaux } from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
 
-import { loadTypeAvenant } from '../../../store/parametrage/type-avenant/actions';
-import * as avenantSelector from '../../../store/parametrage/type-avenant/selector';
-
+import {loadTypeAvenant} from "../../../store/parametrage/type-avenant/actions";
+import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
 import { loadTerritorialite } from '../../../store/parametrage/territorialite/actions';
 import * as territorialiteSelector from '../../../store/parametrage/territorialite/selector';
 
-import { loadGarant } from '../../../store/contrat/garant/actions';
-import * as garantSelector from '../../../store/contrat/garant/selector';
+import {loadGarant} from "../../../store/contrat/garant/actions";
+import * as garantSelector from "../../../store/contrat/garant/selector";
 
-import * as featureActionGroupe from '../../../store/contrat/groupe/actions';
+import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
 import * as groupeSelector from '../../../store/contrat/groupe/selector';
 
 import { loadIntermediaire } from '../../../store/contrat/intermediaire/actions';
 import * as intermediaireSelector from '../../../store/contrat/intermediaire/selector';
+
+import * as professionSelector from '../../../store/parametrage/profession/selector';
 
 import { Garant, GarantList } from '../../../store/contrat/garant/model';
 import {
@@ -70,7 +71,6 @@ import {
 import { TypeAvenant } from 'src/app/store/parametrage/type-avenant/model';
 import { loadSecteurActivite } from '../../../store/parametrage/secteur-activite/actions';
 import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
-
 import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
@@ -82,15 +82,12 @@ import * as garantieSelector from '../../../store/parametrage/garantie/selector'
 
 import { loadActe } from '../../../store/parametrage/acte/actions';
 import * as acteSelector from '../../../store/parametrage/acte/selector';
-
 import { loadSousActe } from '../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
 
 import { loadGenre } from '../../../store/parametrage/genre/actions';
 import * as genreSelector from '../../../store/parametrage/genre/selector';
 import * as featureActionsPlafond from '../../../store/contrat/plafond/action';
-import { loadProfession } from '../../../store/parametrage/profession/actions';
-import * as professionSelector from '../../../store/parametrage/profession/selector';
 
 import { loadQualiteAssure } from '../../../store/parametrage/qualite-assure/actions';
 import * as qualiteAssureSelector from '../../../store/parametrage/qualite-assure/selector';
@@ -104,11 +101,22 @@ import { loadTypePrime } from '../../../store/parametrage/type-prime/actions';
 import * as typePrimeSelector from '../../../store/parametrage/type-prime/selector';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../store/parametrage/plafond/model';
 import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuItem} from 'primeng/api';
 import { Plafond } from 'src/app/store/contrat/plafond/model';
 import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
 import { element } from 'protractor';
 import {PoliceService} from '../../../store/contrat/police/service';
+import * as adherentSelector from "../../../store/contrat/adherent/selector";
+import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
+
+import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
+import * as historiqueAvenantSelector from "../../../store/contrat/historiqueAvenant/selector";
+import {
+  HistoriqueAvenant,
+  HistoriqueAvenantAdherant,
+  TypeHistoriqueAvenant,
+} from '../../../store/contrat/historiqueAvenant/model';
+import {loadHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/actions';
+import {loadProfession} from '../../../store/parametrage/profession/actions';
 
 @Component({
   selector: 'app-avenant',
@@ -137,13 +145,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
   policeForm: FormGroup;
   groupeForm: FormGroup;
   plafondForm: FormGroup;
+  customForm: FormGroup;
   primeForm: FormGroup;
   adherentForm: FormGroup;
+  adherentFamilleForm: FormGroup;
   statusObject$: Observable<Status>;
   entityValidations: Array<EntityValidations>;
   loading: boolean;
   dateEffet: Date;
   dateEcheance: Date;
+  dissplayavenant = false;
+  adherentListGroupe: Array<Adherent>;
+  isNewGroupe = false;
 
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -212,6 +225,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
   typeAvenantSelected: string;
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
   {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+  typeActions: MenuItem[] = [];
+  selectedGroup: Groupe;
+  groupePolicy: Array<Groupe>;
+  policeItem: Police;
+  adherentList$: Observable<Array<Adherent>>;
+  adherant: AdherentFamille;
+  adherantGroupeListe: Array<AdherentFamille> = [];
+  historiqueAvenant: HistoriqueAvenant;
+  historiqueAvenants: Array<HistoriqueAvenant>;
+  curentGroupe: Groupe;
+  historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
+  isAvenantIncorporation = false;
+  isAvenantRetrait = false;
+  isAvenantModification = false;
+  isAvenantRenouvellement = false;
+
+  historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
+  historiqueAvenantList: Array<HistoriqueAvenant>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -298,6 +329,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.breadcrumbService.setItems([{ label: 'Avenant' }]);
+    this.customForm = this.formBuilder.group({
+      groupe: new FormControl('')
+    });
+
+    this.breadcrumbService.setItems([{ label: "Avenant" }]);
   }
 
 
@@ -309,6 +345,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.policeList = [];
     this.loading = true;
+    this.historiqueAvenant = {};
 
     this.items = [
       {label: 'Home', icon: 'pi pi-fw pi-home'},
@@ -574,6 +611,34 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     ];
 
+    this.typeActions = [
+      {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+        this.initDisplayAvenant();
+        this.addAvenant();
+        console.log($event);
+        this.isAvenantIncorporation = true;
+        this.entete = 'Avenant d\'Incorporation';
+        }},
+      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
+          this.initDisplayAvenant();
+          this.addAvenantRetrait();
+          this.isAvenantRetrait = true;
+          this.entete = 'Avenant de Retrait';
+        }},
+      {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantModification = true;
+          this.entete = 'Avenant de Modification';
+          this.addAvenantModification();
+        }},
+      {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantRenouvellement = true;
+          this.entete = 'Avenant de Renouvellement';
+          this.addAvenantRenouvellement();
+        }}
+    ];
+
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -587,6 +652,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.acteList = value.slice();
+        // console.log('**************** ' + value.length);
       }
     });
 
@@ -595,6 +661,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.avenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.avenantList = value.slice();
+        // this.cerateTypeAction();
       }
     });
 
@@ -687,6 +754,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
+    this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.historiqueAvenantList = value.slice();
+        console.log('................historiqueAvenantList............................');
+        console.log(this.historiqueAvenantList);
+      }
+    });
+
     this.paysList$ = this.store.pipe(select(paysSelector.paysList));
     this.store.dispatch(loadPays());
     this.paysList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -757,6 +835,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+    this.init();
+    // this.loadHistoriqueAvenant();
+  }
+
+  init(): void {
+    this.groupePolicy = [];
+    this.selectedGroup = {};
+    this.adherentListGroupe = [];
+    this.adherantGroupeListe = [];
+    this.curentGroupe = {};
+    this.customForm = this.formBuilder.group({
+      groupe: new FormControl('')
+    });
+    this.historiqueAhenantAdherants = [];
+    this.historiqueAvenant = {
+      aderants: [],
+      groupe: {},
+      police: {}
+    };
   }
 
 
@@ -772,6 +869,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
    }
 
   // fonction pour creer adherent.
+  entete = '';
   onCreateAddherent() {
     console.log(this.adherentForm.value);
     console.log(this.adherentFamilleList);
@@ -959,7 +1057,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirGroupe(police: Police) {
     this.police = {...police};
     this.groupeList$ = this.store.pipe(select(groupeList));
-    this.store.dispatch(loadGroupe({idPolice: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: police.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
@@ -1060,6 +1158,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log(this.plafond);
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
   }
+
   //
   addSousActe() {
   this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
@@ -1157,4 +1256,148 @@ changeGarantie(garantie, indexLigne: number) {
     this.destroy$.unsubscribe();
   }
 
+  invaliderPolice(police: Police): void {
+    police.valide = false;
+    this.store.dispatch(featureAction.updatePolice(police));
+    // this.policeList$ = this.store.pipe(select(policeList));
+  }
+
+  cerateTypeAction(): void {
+    this.avenantList.forEach(typeA => {
+      const item: MenuItem = {};
+      item.label = typeA.libelle;
+      item.id = typeA.id;
+      this.typeActions.push(item);
+    });
+    console.log(this.typeActions);
+  }
+
+  addAvenant(): void {
+    this.dissplayavenant = true;
+
+  }
+
+  addAvenantRetrait(): void {
+    this.dissplayavenant = true;
+  }
+  addAvenantModification(): void {
+    this.dissplayavenant = true;
+  }
+
+  addAvenantRenouvellement(): void {
+    this.dissplayavenant = true;
+  }
+
+  add(): void {
+    this.adherentForm = this.formBuilder.group({
+      id: new FormControl(""),
+      nom: new FormControl("", [Validators.required]),
+      prenom: new FormControl("", [Validators.required]),
+      dateNaissance: new FormControl("", [Validators.required]),
+      matricule:new FormControl(""),
+      lieuNaissance: new FormControl("", [Validators.required]),
+      numeroTelephone: new FormControl("", [Validators.required]),
+      adresse: new FormControl("", [Validators.required]),
+      adresseEmail: new FormControl("", [Validators.required]),
+      profession: new FormControl(""),
+      referenceBancaire: new FormControl(""),
+      qualiteAssure: new FormControl("", [Validators.required]),
+      genre: new FormControl("", [Validators.required]),
+      dateEntree: new FormControl("", [Validators.required])
+    }) ;
+  }
+
+  delAvenenant(): void {
+    this.dissplayavenant = false;
+  }
+
+  loadGoupeByPolice(): void {
+    // this.curentGroupe = this.customForm.get('groupe').value;
+    console.log('::::::::::::::::::::::::::');
+    console.log(this.policeItem);
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.policeItem.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
+
+  addNewGroupe(): void {
+    this.isNewGroupe = !this.isNewGroupe;
+    // this.displayDialogFormAdherent = true;
+    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.adherentListGroupe = value.slice();
+      }
+    });
+  }
+
+  addToGroup(): void {
+    this.adherant = this.adherentForm.value;
+    this.adherentListGroupe.forEach( elem => {
+      // elem.ad
+    });
+    this.adherant = null;
+    this.add();
+  }
+
+  addAdherentFamille(adherentFamille: AdherentFamille): void {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants.push(adherentFamille);
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    // this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+  }
+
+  addGroupeNew(groupe: FormGroup): Groupe {
+    console.log(groupe);
+    this.curentGroupe = groupe as Groupe;
+    return this.curentGroupe;
+  }
+
+  onGroupeChange() {
+    this.curentGroupe = this.customForm.controls.groupe.value;
+  }
+
+  loadHistoriqueAvenant(e): void {
+    console.log(e);
+    this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: e.value.id}));
+    this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiqueAvenantList = value.slice();
+        console.log('................historiqueAvenantList............................');
+        console.log(this.historiqueAvenantList);
+      }
+    });
+  }
+
+  deleteAdherant(adherants: AdherentFamille[]) {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants = adherants;
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
+  }
+
+  initDisplayAvenant(): void {
+    this.isAvenantIncorporation = false;
+    this.isAvenantRetrait = false;
+    this.isAvenantModification = false;
+    this.isAvenantRenouvellement = false;
+  }
 }

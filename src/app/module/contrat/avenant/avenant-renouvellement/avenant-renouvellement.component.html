@@ -1,0 +1,170 @@
+<div class="p-card" >
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12">
+            <p-fieldset legend="Information adhérent" toggleable="true">
+                <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="nom">Nom</label>
+                            <input id="nom" type="text" required formControlName="nom" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="prenom">Prenom</label>
+                            <input id="prenom" type="text" formControlName="prenom" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="tel">Telephone</label>
+                            <input id="tel" type="number" formControlName="numeroTelephone" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="mail">Adresse Email</label>
+                            <input id="mail" type="text" type="email" formControlName="adresseEmail"
+                                   pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="adresse">Adresse</label>
+                            <input id="adresse" type="text" formControlName="adresse" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="ref">Reference bancaire</label>
+                            <input id="ref" type="text" formControlName="referenceBancaire" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="naiss">Date de naissance</label>
+                            <p-calendar [showIcon]="true" formControlName="dateNaissance"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="lieu">Lieu de naissance</label>
+                            <input id="lieu" type="text" formControlName="lieuNaissance" pInputText>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="entre">Date entrée</label>
+                            <p-calendar [showIcon]="true" formControlName="dateEntree"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="dateIncor">Date d'incorporation</label>
+                            <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncor"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="genre">Genre</label>
+                            <p-dropdown inputId="genre" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="genreList" formControlName="genre"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="profession">Profession</label>
+                            <p-dropdown inputId="profession" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="professionList"
+                                        formControlName="profession" placeholder="Select"
+                                        optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="quali">Qualite assuré</label>
+                            <p-dropdown inputId="qualiteAssure" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="qualiteAssureList"
+                                        formControlName="qualiteAssure" placeholder="Select"
+                                        optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-3">
+                            <label for="matri">Matricule</label>
+                            <input id="matri" type="text" formControlName="matricule" pInputText>
+                        </div>
+                        <div class="p-field p-col-4"></div>
+                        <div class="p-field p-col-2">
+                            <button pButton pRipple icon="pi pi-plus" pTooltip="voir groupe" label="Famille"
+                                    class="p-button-rounded p-button-success" type="button" (click)="ajouter()"></button>
+                        </div>
+
+                        <div class="p-fluid formgrig p-col-12" formArrayName="familys">
+
+
+                                <p-fieldset class="p-fluid formgrig mb-1"  [legend]="'membre famille ' + (ri+1)" toggleable="true"
+                                            *ngFor="let familyForm of familys.controls; let ri = index" [style]="{'width': '100%'}">
+                                    <div class="p-fluid p-formgrid p-grid p-mb-2" [formGroup]="familyForm">
+                                    <div class="p-field p-grid">
+                                    <div class="p-col-3">
+                                        <label [for]="'nom' + ri">Nom</label>
+                                        <input [id]="'nom' + ri"  name="nom" type="text" formControlName="nom" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'prenom' + ri">Prenom</label>
+                                        <input [id]="'prenom' + ri" type="text" [name]="'prenom' + ri" formControlName="prenom" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'numeroTelephone' + ri">Téléphone</label>
+                                        <input [id]="'numeroTelephone' + ri" type="text" [name]="'numeroTelephone' + ri" formControlName="numeroTelephone" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'dateNaissance' + ri">Date Naisse.</label>
+                                        <input [id]="'dateNaissance' + ri" type="date" [name]="'dateNaissance' + ri" formControlName="dateNaissance" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'dateEntree' + ri">Date Entrée</label>
+                                        <input [id]="'dateEntree' + ri" type="date" [name]="'dateEntree' + ri" formControlName="dateEntree" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'dateIncor' + ri">Date Incorpotration</label>
+                                        <input [id]="'dateIncor' + ri" type="date" [name]="'dateIncor' + ri" formControlName="dateIncor" pInputText />
+                                    </div>
+                                    <div class="p-col-3">
+                                        <label [for]="'nom1' + ri">Genre</label>
+                                        <p-dropdown [options]="genreList" formControlName="genre" [name]="'genre' + ri"
+                                                    optionLabel="libelle" placeholder="Select Make" [style]="{'width':'100%'}"></p-dropdown>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <label [for]="'nom2' + ri">Qualite Assuré</label>
+                                        <p-dropdown [options]="qualiteAssureList" [name]="'qualite' + ri"
+                                                    formControlName="qualiteAssure" optionLabel="libelle" placeholder="Select Make"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </div>
+                                    <div class="p-col-1">
+                                        <button pButton type="button" (click)="delete(ri)"
+                                                icon="pi pi-trash" class="ui-button-danger">
+                                        </button>
+                                    </div>
+                                    </div>
+                                    </div>
+                                </p-fieldset>
+
+                        </div>
+                        <div class="p-fluid formgrig p-col-12 p-mt-3">
+                            <div class="p-grid">
+                                <div class="p-field p-col-5"></div>
+                                <div class="p-field p-col-2 p-ac-center">
+                                    <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                                            class="p-button p-button-warning" label="Annuler"
+                                            (click)="init()">
+                                    </button>
+                                </div>
+                                <div class="p-field p-col-2 p-ac-center">
+                                    <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                                            class="p-button p-button-success" type="submit">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </p-fieldset>
+        </div>
+    </div>
+</div>

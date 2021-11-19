@@ -38,6 +38,7 @@ import {PlafondState} from './contrat/plafond/state';
 import { AdherentState } from './contrat/adherent/state';
 import { ArrondissementState } from './parametrage/arrondissement/state';
 import { SecteurState } from './parametrage/secteur/state';
+import {HistoriqueAvenantState} from "./contrat/historiqueAvenant/state";
 
 export interface AppState {
   garantieState: GarantieState
@@ -79,5 +80,6 @@ export interface AppState {
   plafondState: PlafondState
   adherentState: AdherentState
   arrondissementState: ArrondissementState
-  secteurState: SecteurState
+  secteurState: SecteurState;
+  historiqueAvenantState: HistoriqueAvenantState;
 }

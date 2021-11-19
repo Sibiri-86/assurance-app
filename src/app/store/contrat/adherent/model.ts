@@ -13,9 +13,10 @@ export interface Adherent{
     qualiteAssure?: string,
     genre?: string,
     dateIncorporation?: string,
+    dateIncor?: Date,
     dateEntree?: Date,
     groupe?: Groupe,
-    adherentPrincipal?: Adherent
+    adherentPrincipal?: Adherent;
 }
 
 export interface AdherentFamille {
@@ -24,5 +25,5 @@ export interface AdherentFamille {
 }
 
 export interface AdherentList{
-    adherentDtoList: Array<Adherent>
+    adherentDtoList: Array<Adherent>;
 }

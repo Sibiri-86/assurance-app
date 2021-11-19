@@ -210,6 +210,12 @@ import { LoaderService,LoaderInterceptor } from './module/util/loader-util';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BlockUIModule} from 'primeng/blockui';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-incorporation/avenant-incorporation.component";
+import {GroupeComponent} from "./module/contrat/avenant/grpoue/groupe.component";
+import {HistoriqueAvenantEffects} from "./store/contrat/historiqueAvenant/effect";
+import {AvenantRetraitComponent} from './module/contrat/avenant/avenant-retrait.component/avenant-retrait.component';
+import {AvenantRenouvellementComponent} from './module/contrat/avenant/avenant-renouvellement/avenant-renouvellement.component';
+import {AvenantModificationComponent} from './module/contrat/avenant/avenant-modification.component/avenant-modification.component';
 
 @NgModule({
     imports: [
@@ -303,7 +309,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
         AppCodeModule,
         ReactiveFormsModule,
         StoreModule.forRoot(reducers,  {metaReducers}),
-        EffectsModule.forRoot([GarantieEffects, ActeEffects,
+        EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
@@ -367,7 +373,12 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
         SouscripteurComponent,
         AddRowDirective,
         PoliceComponent,
-        FormatTableValuePipe
+        FormatTableValuePipe,
+        AvenantIncorporationComponent,
+        GroupeComponent,
+        AvenantRetraitComponent,
+        AvenantRenouvellementComponent,
+        AvenantModificationComponent
     ],
     providers: [
         {

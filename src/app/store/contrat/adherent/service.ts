@@ -61,5 +61,13 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    getAdherentsByGroupe(idGroupe: string): Observable<AdherentList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_GROUPE)}/${idGroupe}`).pipe(
+            map((response: AdherentList) => response),
+            catchError(this.handleError())
+        );
+    }
 }
 
