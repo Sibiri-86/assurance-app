@@ -103,7 +103,7 @@
                                     class="p-button-rounded p-button-info" (click)="voirGroupe(police)"></button>
                             <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
                             <button pButton  pRipple icon="pi pi-reply" pTooltip="Rétrograder" class="p-button-rounded p-button-warning" (click)="deValiderPolice(police)"></button>
-                            <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions"
+                            <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2"
                                            (onDropdownClick)="policeItem = police; loadGoupeByPolice()"></p-splitButton>
 
 
