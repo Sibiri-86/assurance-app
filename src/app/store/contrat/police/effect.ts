@@ -121,7 +121,7 @@ export class PoliceEffects {
         mergeMap(() =>
             this.PoliceService.$getPolices().pipe(
                 switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setPolice(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -130,9 +130,8 @@ export class PoliceEffects {
     )
     );
 
-
-import$ = createEffect(() =>
-this.actions$.pipe(
+    import$ = createEffect(() =>
+    this.actions$.pipe(
     ofType(featureActions.importPolice),
     mergeMap(({file}) =>
         this.PoliceService.pushFileToStorage(file).pipe(

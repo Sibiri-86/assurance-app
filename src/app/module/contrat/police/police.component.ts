@@ -1109,7 +1109,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   voirGroupe(police: Police) {
     this.police = {...police};
     this.groupeList$ = this.store.pipe(select(groupeList));
-    this.store.dispatch(loadGroupe({idPolice: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: this.police.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
@@ -1349,7 +1349,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     } else {
       this.plafondSousActe = rowData.listeSousActe;
     }
-    this.displaySousActe =true;
+    this.displaySousActe = true;
     this.indexeActe = ri;
   }
 
@@ -1358,7 +1358,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
   this.plafondSousActe = [];
-  this.displayActe = true;
   if(this.plafondFamilleActeConstruct.length!=0) {
       // revoir cette fonction
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
@@ -1369,10 +1368,14 @@ changeGarantie(garantie, indexLigne: number) {
           })
       });
       console.log(this.plafondFamilleActeConstruct);
-  } 
+  }
 
   if(this.plafondActe.length===0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
+    this.acteList.forEach((element)=>{
+      if (element.idTypeGarantie === garantie.value.id) {
+        this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
+      }});
    
     for(var j=0; j<this.acteList.length; j++){
 
@@ -1386,7 +1389,7 @@ changeGarantie(garantie, indexLigne: number) {
       }
       this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
     }
-    
+
   }
 
   console.log(this.plafondActe);
@@ -1398,7 +1401,6 @@ changeGarantie(garantie, indexLigne: number) {
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
   }
-
 
   validerPolice(police:Police){
     this.confirmationService.confirm({

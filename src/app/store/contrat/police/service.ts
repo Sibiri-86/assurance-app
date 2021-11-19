@@ -1,4 +1,3 @@
-import { from } from "rxjs";
 import {Police, PoliceList, Report, Statistique} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -23,6 +22,13 @@ export class PoliceService {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/statistique`).pipe(
             map((response: Statistique) => response),
+            catchError(this.handleError())
+        );
+    }
+    $getPolicesByValideIsTrue(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_VALIDE )}`).pipe(
+            map((response: PoliceList) => response),
             catchError(this.handleError())
         );
     }

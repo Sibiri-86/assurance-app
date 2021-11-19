@@ -2,8 +2,6 @@ export const SERVICE_PREFIX = `/assurance`;
 
 
 export class Endpoints {
-
-
     static readonly PARAMETRAGE_TYPE_GARANTIE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeGarantie`,
         mock: `assets/mock/parametrage/typegarantie.mock.json`
@@ -176,12 +174,21 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/police`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+
+    static readonly CONTRAT_POLICE_VALIDE = {
+        prod: `${SERVICE_PREFIX}/contrat/police//by-valide-is-true`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
     static readonly CONTRAT_GROUPE = {
         prod: `${SERVICE_PREFIX}/contrat/groupe`,
         mock: `assets/mock/contrat/groupe.mock.json`
     };
     static readonly CONTRAT_ADHERENT = {
         prod: `${SERVICE_PREFIX}/contrat/adherent`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+    static readonly CONTRAT_ADHERENT_GROUPE = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/groupe`,
         mock: `assets/mock/contrat/adherent.mock.json`
     };
     static readonly CONTRAT_ADHERENT_WITH_FAMILLE = {
@@ -192,8 +199,14 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+
     static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
         prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 }

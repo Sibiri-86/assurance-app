@@ -89,6 +89,20 @@ export class AdherentEffects {
     )
     );
 
+    /* fetchAdherentGroupe$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadAdherentGroupe),
+        mergeMap(({idGroupe}) =>
+            this.AdherentService.getAdherentsByGroupe(idGroupe).pipe(
+                switchMap(value => [
+                    featureActions.setAdherent(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    ); */
+
 import$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importAdherent),

@@ -1,0 +1,153 @@
+<div class="card">
+    <p-fieldset legend="Caracteristique" toggleable="true">
+        <form [formGroup]="groupeForm">
+            <h5></h5>
+            <div class= "p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col">
+                    <label for="firstname2">Libelle</label>
+                    <input id="nom" type="text" formControlName="libelle"  pInputText>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'nom'">
+                    </app-entity-validation>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="lastname2">Taux de couverture</label>
+                    <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'taux'">
+                    </app-entity-validation>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="firstname2">Territorialité</label>
+                    <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'territorialite'">
+                    </app-entity-validation>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col">
+                    <label for="dateEffet">Date effet</label>
+                    <p-calendar id="dateEffet"  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'dateEffet'">
+                    </app-entity-validation>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="firstname2">Type durée</label>
+                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe($event)" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="policeForm" [entityField]="'typeDuree'">
+                    </app-entity-validation>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="lastname2">Durée</label>
+                    <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'duree'">
+                    </app-entity-validation>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4">
+                    <label for="lastname2">Date écheance</label>
+                    <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                    <app-entity-validation [entityValidations]="entityValidations"
+                                           [formGroup]="groupeForm" [entityField]="'dateEcheance'">
+                    </app-entity-validation>
+                </div>
+            </div>
+        </form>
+    </p-fieldset>
+    <br/>
+    <p-fieldset legend="Parametrage prime" toggleable="true">
+        <form [formGroup]="primeForm">
+            <h5></h5>
+            <div class= "p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-4" >
+                    <label for="primeFamille">Prime Annuelle</label>
+                    <input id="primeAnnuelle" type="text" pInputText formControlName="primeAnnuelle" [value]="primeForm.get('primeAnnuelle').value | formatTableValue: 'number':true">
+                </div>
+
+                <div class="p-field p-col-4">
+                    <label for="typePrime">Type de prime</label>
+                    <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
+                    <label for="primeFamille">Montant famille</label>
+                    <input id="primeFamille" type="text" pInputText [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true" formControlName="primeFamille">
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PA'">
+                    <label for="montantPrimeAdulte">Montant adulte</label>
+                    <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code=='PAE'">
+                    <label for="montantPrimeEnfant">Montant enfant</label>
+                    <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PP'">
+                    <label for="montantPrimePersonne">Montant personne</label>
+                    <input id="montantPrimePersonne" type="text" pInputText formControlName="primePersonne" [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PE'">
+                    <label for="montantPrimeEmploye">Montant employe</label>
+                    <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PC'">
+                    <label for="montantPrimeConjoint">Montant conjoint</label>
+                    <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                    <label for="montantPrimeEnfant1">Montant enfant</label>
+                    <input id="montantPrimeEnfant1" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                </div>
+
+            </div>
+
+            <div class= "p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
+                    <label for="montantPrimeAdulte1">Montant adulte</label>
+                    <input id="montantPrimeAdulte1" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
+                </div>
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                    <label for="montantPrimeEmploye1">Montant employé</label>
+                    <input id="montantPrimeEmploye1" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                </div>
+
+                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                    <label for="montantPrimeConjoint1">Montant conjoint</label>
+                    <input id="montantPrimeConjoint1" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
+                </div>
+            </div>
+        </form>
+        <div class="p-fluid p-formgrid p-grid p-mt-4">
+            <div class="p-col-5"></div>
+            <div class="p-col-2">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                        class="p-button p-button-success" type="button"></button>
+            </div>
+            <div class="p-col-2">
+                <button pButton pRipple icon="pi pi-save" pTooltip="Enregister groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"></button>
+            </div>
+            <div class="p-col-5"></div>
+        </div>
+    </p-fieldset>
+
+</div>
