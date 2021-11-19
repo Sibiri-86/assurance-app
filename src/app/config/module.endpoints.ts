@@ -189,6 +189,14 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/adherent`,
         mock: `assets/mock/contrat/adherent.mock.json`
     };
+    static readonly CONTRAT_ADHERENT_GROUPE = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/groupe`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+    static readonly CONTRAT_ADHERENT_WITH_FAMILLE = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/famille`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
     static readonly CONTRAT_PLAFOND = {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`

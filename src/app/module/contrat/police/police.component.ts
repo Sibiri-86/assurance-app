@@ -110,8 +110,8 @@ import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external
 import { element } from "protractor";
 import { AdherentFamille } from "../../../store/contrat/adherent/model";
 import { ContentObserver } from "@angular/cdk/observers";
-import { removeBlanks } from "../../util/common-util";
-
+import { printPdfFile, removeBlanks } from "../../util/common-util";
+import { selectByteFile } from "../../../store/contrat/police/selector";
 import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
 import { Secteur } from 'src/app/store/parametrage/secteur/model';
 import { ArrondissementService } from 'src/app/store/parametrage/arrondissement/service';
@@ -122,6 +122,8 @@ import * as secteurSelector from '../../../store/parametrage/secteur/selector';
 import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
 import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
 import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
+import { Report } from "../../../store/contrat/police/model";
+import { TypeReport } from "src/app/store/contrat/enum/model";
 
 
 @Component({
@@ -142,6 +144,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   paysList$: Observable<Array<Pays>>;
   police: Police;
   adherentFamille: Array<AdherentFamille>;
+  adherentWithFamille: AdherentFamille;
   selectedPolices: Police[];
   displayDialogFormPolice: boolean = false;
   displayDialogFormAddAdherent: boolean = false;
@@ -158,6 +161,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   loading: boolean;
   dateEffet: Date;
   dateEcheance: Date;
+  report: Report = {};
 
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -233,6 +237,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   arrondissementList$: Observable<Array<Arrondissement>>;
   arrondissementList: Array<Arrondissement>;
   displayActe = false;
+  displayPrevisualiserParametrage : boolean = false;
+ 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -243,7 +249,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   ) {
 
     this.plafondForm = this.formBuilder.group({
-      domaine: new FormControl(""),
+      //domaine: new FormControl({}),
       plafondAnnuelleFamille: new FormControl(""),
       plafondAnnuellePersonne: new FormControl(""),
       plafondGlobalInternationnal: new FormControl("")
@@ -584,6 +590,15 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
     this.adherentFamilleList = [];
     this.adherentFamille = [];
+    this.adherentWithFamille = {};
+
+    /** dispatch action pour imprimer le pdf */
+    this.store.pipe(select(selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
     
   this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
   this.store.dispatch(arrondissementAction.loadArrondissement());
@@ -784,6 +799,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
 
+  imprimer(police: Police){
+    this.report.typeReporting = TypeReport.POLICE;
+    this.report.police = police;
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+
   changeCountry(event) {
     this.regionList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -833,15 +854,23 @@ export class PoliceComponent implements OnInit, OnDestroy {
       }
   });
   }
+
   // fonction pour creer adherent.
   onCreateAddherent() {
     console.log(this.adherentForm.value);
     console.log(this.adherentFamilleList);
+    this.adherentWithFamille.adherent =this.adherentForm.value;
+    this.adherentWithFamille.adherent.groupe = this.groupe;
+    this.adherentWithFamille.famille = this.adherentFamilleList;
+    this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    this.adherentFamilleList = [];
+    this.adherentForm.reset();
   }
+
+
 
   changePrime(event) {
         this.selectedTypePrime=event.value;
-    
     /*
     console.log(event.value);
     if (event.value.libelle === "famille") {
@@ -1009,6 +1038,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   voirAdherent(groupe: Groupe) {
     this.displayDialogFormAdherent = true;
+    this.groupe = groupe;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1216,6 +1246,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.policeForm.patchValue(this.police);
   }
 
+  voirParametrage() {
+  this.displayPrevisualiserParametrage = true;
+  }
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;

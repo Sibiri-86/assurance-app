@@ -4,7 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { AdherentService } from './service';
 import * as featureActions from './actions';
-import {Adherent} from './model';
+import {Adherent, AdherentFamille} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
@@ -25,6 +25,20 @@ export class AdherentEffects {
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.loadAdherent({idGroupe: Adherent.groupe.id})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
+        createAdherentWithFamille$ = createEffect(() =>
+        this.actions$.pipe(
+        ofType(featureActions.createAdherentwithFamille),
+        mergeMap((adherent: AdherentFamille) =>
+            this.AdherentService.posAdherentWithFamille(adherent).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadAdherent({idGroupe: adherent.adherent.groupe.id})
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -74,6 +88,20 @@ export class AdherentEffects {
         )
     )
     );
+
+    /* fetchAdherentGroupe$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadAdherentGroupe),
+        mergeMap(({idGroupe}) =>
+            this.AdherentService.getAdherentsByGroupe(idGroupe).pipe(
+                switchMap(value => [
+                    featureActions.setAdherent(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    ); */
 
 import$ = createEffect(() =>
 this.actions$.pipe(

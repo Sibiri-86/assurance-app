@@ -15,7 +15,8 @@ export interface Adherent{
     dateIncorporation?: string,
     dateIncor?: Date,
     dateEntree?: Date,
-    groupe?: Groupe
+    groupe?: Groupe,
+    adherentPrincipal?: Adherent
 }
 
 export interface AdherentFamille {

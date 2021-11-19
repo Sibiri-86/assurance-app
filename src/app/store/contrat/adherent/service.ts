@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
+import { AdherentFamille } from "./model";
 import {Endpoints} from '../../../config/module.endpoints';
 
 @Injectable({providedIn: 'root'})
@@ -22,6 +23,11 @@ $getAdherents(idPolice: string): Observable<AdherentList> {
 posAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, Adherent);
+  }
+
+  posAdherentWithFamille(adherentFamille: AdherentFamille): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_WITH_FAMILLE)}`, adherentFamille);
   }
 
 updateAdherent(Adherent: Adherent): Observable<any> {
@@ -55,5 +61,13 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    getAdherentsByGroupe(idGroupe: string): Observable<AdherentList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_GROUPE)}/${idGroupe}`).pipe(
+            map((response: AdherentList) => response),
+            catchError(this.handleError())
+        );
+    }
 }
 

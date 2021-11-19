@@ -1,12 +1,10 @@
-
 import { Garant } from '../garant/model';
 import { Intermediaire } from '../intermediaire/model';
 import { Territorialite } from '../../parametrage/territorialite/model';
 import {SecteurActivite} from '../../parametrage/secteur-activite/model';
 import { Taux } from '../../parametrage/taux/model';
 import { Secteur } from '../../parametrage/secteur/model';
-import {Adherent, AdherentFamille} from "../adherent/model";
-import {Groupe} from "../groupe/model";
+import {TypeReport} from '../enum/model';
 
 export interface Police{
     id?: string;
@@ -36,6 +34,24 @@ export interface Police{
     fraisAccessoire?: number;
     fraisBadge?: number;
     valide?: boolean;
+}
+
+export interface Statistique {
+    nombreGarant?: number,
+    nombreIntermediaire?: number,
+    nombrePolice?: number,
+    nombreSouscripteur?: number,
+    nombreAssure?: number
+}
+
+export interface ReportFile {
+    reportFile?: ArrayBuffer;
+}
+
+export interface Report {
+    typeReporting?: TypeReport,
+    police?: Police;
+
 }
 
 export interface PoliceList {

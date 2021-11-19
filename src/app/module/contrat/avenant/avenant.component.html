@@ -1743,7 +1743,7 @@
                         <app-avenant-incorporation (adherentFamilleEvent)="addAdherentFamille($event)" ></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
-                    <app-avenant-retrait [police]="policeItem"></app-avenant-retrait>
+                    <app-avenant-retrait [police]="policeItem" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantModification">
                     <app-avenant-modification [police]="policeItem"></app-avenant-modification>

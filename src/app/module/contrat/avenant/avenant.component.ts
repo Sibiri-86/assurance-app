@@ -1361,4 +1361,17 @@ changeGarantie(garantie, indexLigne: number) {
       }
     });
   }
+
+  deleteAdherant(adherants: AdherentFamille[]) {
+    this.historiqueAvenant.aderants = [];
+    this.historiqueAvenant.aderants = adherants;
+    this.historiqueAvenant.police = this.policeItem;
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    console.log('**************HistoriqueAvenant****************');
+    console.log(this.historiqueAvenant);
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
+  }
 }
