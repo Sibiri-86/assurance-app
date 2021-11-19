@@ -752,7 +752,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
-    this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
+    // this.store.dispatch(loadHistoriqueAvenant({policeId: this.police.id}));
     this.historiqueAvenantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.loading = false;
