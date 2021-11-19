@@ -1157,4 +1157,15 @@ changeGarantie(garantie, indexLigne: number) {
     this.destroy$.unsubscribe();
   }
 
+  deValiderPolice(police: Police){
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir de-valider la police?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(featureAction.deValiderPolice(police));
+      },
+    });
+  }
+
 }

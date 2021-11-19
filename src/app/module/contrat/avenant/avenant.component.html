@@ -62,8 +62,9 @@
 							<button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
 							<button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
                             <button *ngIf="typeAvenantSelected==='incorporation'" pButton  pRipple icon="pi pi-angle-up" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
-                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info" (click)="voirGroupe(police)"></button>
-						</td>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
+                            <button pButton  pRipple icon="pi pi-reply" pTooltip="Rétrograder" class="p-button-rounded p-button-warning" (click)="deValiderPolice(police)"></button>
+                        </td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="summary">
