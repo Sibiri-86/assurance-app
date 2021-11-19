@@ -186,7 +186,7 @@
                             </td>
                             <td>{{plafond.garantie.libelle}}</td>
                             <td>{{plafond.montantPlafond}}</td>
-                            <td>{{plafond.taux.taux}}</td>
+                            <td>{{plafond?.taux?.taux}}</td>
                             <td>{{plafond.dateEffet | formatTableValue : 'date'}}</td>
                         </tr>
                     </ng-template>
@@ -205,10 +205,10 @@
                                 <ng-template pTemplate="body" let-acte let-expanded="expanded">
                                     <tr>
                                         <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
-                                        <td>{{acte.acte.libelle}}</td>
-                                        <td>{{acte.montantPlafond}}</td>
-                                        <td>{{acte.taux.taux}}</td>
-                                        <td>{{acte.dateEffet | formatTableValue : 'date'}}</td>
+                                        <td>{{acte?.acte?.libelle}}</td>
+                                        <td>{{acte?.montantPlafond}}</td>
+                                        <td>{{acte?.taux?.taux}}</td>
+                                        <td>{{acte?.dateEffet | formatTableValue : 'date'}}</td>
                                     </tr>  
                                 </ng-template>
                                 <ng-template pTemplate="rowexpansion" let-acte>
@@ -226,9 +226,9 @@
                                             <ng-template pTemplate="body" let-sousActe let-expanded="expanded">
                                                 <tr>
                                                     <td></td>
-                                                    <td>{{sousActe.sousActe.libelle}}</td>
-                                                    <td>{{sousActe.montantPlafond}}</td>
-                                                    <td>{{sousActe.taux.taux}}</td>
+                                                    <td>{{sousActe?.sousActe?.libelle}}</td>
+                                                    <td>{{sousActe?.montantPlafond}}</td>
+                                                    <td>{{sousActe?.taux?.taux}}</td>
                                                     <td>{{sousActe.dateEffet | formatTableValue : 'date'}}</td>
                                                 </tr>  
                                             </ng-template>
@@ -316,7 +316,7 @@
                                       [style]="{'width':'100%'}" (onChange)="changeGarantie($event, ri)"></p-dropdown>
                                   </ng-template>
                                   <ng-template pTemplate="output" *ngIf="rowData.garantie">
-                                      {{rowData.garantie.libelle}}
+                                      {{rowData?.garantie.libelle}}
                                   </ng-template>
                               </p-cellEditor>
                             </td>
@@ -324,7 +324,7 @@
                             <td>
                               <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond">
+                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.montantPlafond}}
@@ -339,7 +339,7 @@
                                         [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{rowData.dimensionPeriode.libelle}}
+                                        {{rowData?.dimensionPeriode?.libelle}}
                                     </ng-template>
                               </p-cellEditor>
                             </td>
@@ -363,7 +363,7 @@
                                     </ng-template>
                                     <ng-template pTemplate="output" >
                                         <span *ngIf="rowData.garantie.libelle">
-                                            {{rowData.taux.taux}}
+                                            {{rowData?.taux?.taux}}
                                         </span>  
                                     </ng-template>
                               </p-cellEditor>
@@ -428,7 +428,7 @@
                             <td>
                               <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" required>
+                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.montantPlafond}}
@@ -442,7 +442,7 @@
                                       [style]="{'width':'100%'}"></p-dropdown>
                                   </ng-template>
                                   <ng-template pTemplate="output">
-                                      {{rowData.dimensionPeriode?.libelle}}
+                                      {{rowData?.dimensionPeriode?.libelle}}
                                   </ng-template>
                               </p-cellEditor>
                             </td>
@@ -464,7 +464,7 @@
                                         [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{rowData.taux?.taux}}
+                                        {{rowData?.taux?.taux}}
                                     </ng-template>
                               </p-cellEditor>
                             </td>
@@ -515,13 +515,13 @@
                                               <td>
                                               </td>
                                               <td>
-                                              {{rowData2.sousActe.libelle}}
+                                              {{rowData2?.sousActe.libelle}}
                                               </td>
                       
                                                 <td>
                                                   <p-cellEditor>
                                                     <ng-template pTemplate="input">
-                                                        <input pInputText type="text" [(ngModel)]="rowData2.montantPlafond" required>
+                                                        <input pInputText type="text" [(ngModel)]="rowData2.montantPlafond" [value]="rowData2.montantPlafond | formatTableValue: 'number':true" required>
                                                     </ng-template>
                                                     <ng-template pTemplate="output">
                                                         {{rowData2.montantPlafond}}
@@ -536,7 +536,7 @@
                                                           [style]="{'width':'100%'}"></p-dropdown>
                                                       </ng-template>
                                                       <ng-template pTemplate="output">
-                                                          {{rowData2.dimensionPeriode?.libelle}}
+                                                          {{rowData2?.dimensionPeriode?.libelle}}
                                                       </ng-template>
                                                   </p-cellEditor>
                                                 </td>
@@ -559,7 +559,7 @@
                                                           [style]="{'width':'100%'}"></p-dropdown>
                                                       </ng-template>
                                                       <ng-template pTemplate="output">
-                                                          {{rowData2.taux.taux}}
+                                                          {{rowData2?.taux.taux}}
                                                       </ng-template>
                                                 </p-cellEditor>
                                               </td>
