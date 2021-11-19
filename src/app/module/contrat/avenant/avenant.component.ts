@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { Police } from '../../../store/contrat/police/model';
+import {Police, PoliceList} from '../../../store/contrat/police/model';
 import { Groupe } from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
 import { policeList } from '../../../store/contrat/police/selector';
@@ -22,7 +22,7 @@ import { Commune } from '../../../store/parametrage/commune/model';
 import { TypePrime } from '../../../store/parametrage/type-prime/model';
 import { Region } from '../../../store/parametrage/region/model';
 import { SecteurActivite } from '../../../store/parametrage/secteur-activite/model';
-import { Observable, of, Subject } from 'rxjs';
+import {Observable, of, Subject, Subscription} from 'rxjs';
 import {
   ControlContainer,
   FormBuilder,
@@ -74,7 +74,7 @@ import * as secteurActiviteSelector from '../../../store/parametrage/secteur-act
 import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
-import { loadPolice } from 'src/app/store/contrat/police/actions';
+import {loadPolice, loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
 import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 
 import { loadGarantie } from '../../../store/parametrage/garantie/actions';
@@ -108,6 +108,7 @@ import {MenuItem} from 'primeng/api';
 import { Plafond } from 'src/app/store/contrat/plafond/model';
 import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
 import { element } from 'protractor';
+import {PoliceService} from '../../../store/contrat/police/service';
 
 @Component({
   selector: 'app-avenant',
@@ -118,7 +119,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   policeList$: Observable<Array<Police>>;
-  policeList: Array<Police>;
+  policeList1$: Subscription;
+  policeList: Police[];
   valCheck: string[] = [];
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
@@ -216,7 +218,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -676,7 +679,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       });
 
     this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPolice());
+    this.store.dispatch(loadPoliceByAffaireNouvelle());
     this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.loading = false;
@@ -1153,4 +1156,5 @@ changeGarantie(garantie, indexLigne: number) {
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
   }
+
 }

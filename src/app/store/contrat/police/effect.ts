@@ -130,7 +130,7 @@ export class PoliceEffects {
     )
     );
 
-    
+
 import$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importPolice),
@@ -146,4 +146,18 @@ this.actions$.pipe(
 )
 );
 
+    fetchPoliceByAffaireNouvelle$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadPoliceByAffaireNouvelle),
+            mergeMap(() =>
+                this.PoliceService.$getPoliceByAffaireNouvelles().pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPolice(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
 }

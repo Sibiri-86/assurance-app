@@ -192,4 +192,8 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+    static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
+        prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
 }
