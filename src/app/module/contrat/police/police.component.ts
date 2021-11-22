@@ -311,6 +311,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
       duree: new FormControl("", [Validators.required]),
       dateEffet: new FormControl("", [Validators.required]),
       typeDuree: new FormControl("", [Validators.required]),
+      adresse:  new FormControl("", [Validators.required]),
+      commune: new FormControl("", [Validators.required]),
       dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required])
     });
 
@@ -1358,8 +1360,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
   this.plafondSousActe = [];
+  this.displayActe = true;
+  /*
   if(this.plafondFamilleActeConstruct.length!=0) {
-      // revoir cette fonction
+      
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
         element.listeActe.forEach(e=>{
           if(e.acte.idTypeGarantie === garantie.value.id){
@@ -1369,14 +1373,16 @@ changeGarantie(garantie, indexLigne: number) {
       });
       console.log(this.plafondFamilleActeConstruct);
   }
-
-  if(this.plafondActe.length===0){
+  */
+  
+ if(this.plafondActe.length===0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
-    this.acteList.forEach((element)=>{
-      if (element.idTypeGarantie === garantie.value.id) {
-        this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
-      }});
-   
+
+    //this.acteList.forEach((element)=>{
+      
+      //if (element.idTypeGarantie === garantie.value.id) {
+        //this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
+      //}});
     for(var j=0; j<this.acteList.length; j++){
 
     if(this.acteList[j].idTypeGarantie === garantie.value.id) {
@@ -1389,11 +1395,10 @@ changeGarantie(garantie, indexLigne: number) {
       }
       this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
     }
-
   }
-
   console.log(this.plafondActe);
   }
+
 }
 
   ngOnDestroy() {
