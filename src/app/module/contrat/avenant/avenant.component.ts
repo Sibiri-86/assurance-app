@@ -1356,7 +1356,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenant.groupe = this.curentGroupe;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
-    // this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
   }
 
   addGroupeNew(groupe: FormGroup): Groupe {
