@@ -619,7 +619,6 @@
                         <form [formGroup]="groupeForm">
                             <h5></h5>
                             <div class= "p-fluid p-formgrid p-grid">
-
                                     <div class="p-field p-col">
                                     <label for="firstname2">Libelle</label>
                                     <input id="nom" type="text" formControlName="libelle"  pInputText>
@@ -627,27 +626,52 @@
                                                       [formGroup]="groupeForm" [entityField]="'nom'">
                                     </app-entity-validation>
                                     </div>
-            
+
                                     <div class="p-field p-col">
-                                        <label for="lastname2">Taux de couverture</label>
-                                        <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                                        <label for="firstname2">Description</label>
+                                        <input id="nom" type="text" formControlName="description"  pInputText>
                                         <app-entity-validation [entityValidations]="entityValidations"
-                                                      [formGroup]="groupeForm" [entityField]="'taux'">
-                                    </app-entity-validation>
+                                                          [formGroup]="groupeForm" [entityField]="'description'">
+                                        </app-entity-validation>
                                     </div>
 
                                     <div class="p-field p-col">
-                                        <label for="firstname2">Territorialité</label>
-                                        <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
+                                        <label for="firstname2">Adresse</label>
+                                        <input id="nom" type="text" formControlName="adresse"  pInputText>
                                         <app-entity-validation [entityValidations]="entityValidations"
-                                                              [formGroup]="groupeForm" [entityField]="'territorialite'">
+                                                          [formGroup]="groupeForm" [entityField]="'adresse'">
                                         </app-entity-validation>
                                     </div>
                             </div>
+
+                            <div class= "p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-4">
+                                    <label for="lastname2">Commune</label>
+                                    <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" formControlName="commune" ></p-dropdown>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                    [formGroup]="groupeForm" [entityField]="'commune'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="lastname2">Taux de couverture</label>
+                                    <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                  [formGroup]="groupeForm" [entityField]="'taux'">
+                                </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="firstname2">Territorialité</label>
+                                    <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                          [formGroup]="groupeForm" [entityField]="'territorialite'">
+                                    </app-entity-validation>
+                                </div>
+                            </div>  
             
                             <div class="p-fluid p-formgrid p-grid">
-            
-                                    <div class="p-field p-col">
+                                <div class="p-field p-col">
                                     <label for="dateEffet">Date effet</label>
                                     <p-calendar   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
