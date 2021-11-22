@@ -1404,7 +1404,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   deValiderPolice(police: Police){
     this.confirmationService.confirm({
-      message: 'Etes vous sur de vouloir de-valider la police?',
+      message: 'Etes vous sûr(e) de vouloir dévalider la police?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
