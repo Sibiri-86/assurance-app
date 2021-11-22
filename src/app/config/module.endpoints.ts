@@ -209,4 +209,9 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+
+    static readonly HISTORIQUE_AVENANT_ADHERANT = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-aderant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
 }

@@ -14,7 +14,7 @@ import {Adherent, AdherentFamille, AdherentList} from '../../../../store/contrat
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
-import {HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
+import {HistoriqueAvenantAdherant, HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 
 @Component({
@@ -37,6 +37,8 @@ export class AvenantRetraitComponent implements OnInit {
   adherantGroupeListe: Array<Adherent> = [];
   familleAdherants: Array<AdherentFamille>;
   @Output() adherentFamilleEvent = new EventEmitter();
+  adherantDeleteds: Array<Adherent> = [];
+  historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -62,6 +64,13 @@ export class AvenantRetraitComponent implements OnInit {
       }
     });
     this.groupe = {};
+
+    this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
+        (res) => {
+          this.historiqueAveantAdherants = res;
+          console.log(this.historiqueAveantAdherants);
+        }
+    );
   }
 
 
@@ -89,8 +98,8 @@ export class AvenantRetraitComponent implements OnInit {
       if (value) {
         this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
-        // console.log(this.adherantGroupeListe);
-        this.makeAderantFamille();
+        console.log(this.adherantGroupeListe);
+        // this.makeAderantFamille();
       }
     });
   }
@@ -103,8 +112,10 @@ export class AvenantRetraitComponent implements OnInit {
   retirer(adherent: Adherent): void {
     console.log(adherent);
     const id = adherent.id;
+    this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.id === id);
     this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== id);
     if (adherent.adherentPrincipal !== null) {
+      this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.id === adherent.adherentPrincipal.id);
       this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== adherent.adherentPrincipal.id);
     }
   }
@@ -112,16 +123,34 @@ export class AvenantRetraitComponent implements OnInit {
   addAdherentFamilleToList(): void {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
-    // this.adherentFamilleEvent.emit(this.familleAdherants);
+    this.makeAderantFamille();
+    this.adherentFamilleEvent.emit(this.adherantDeleteds);
     this.init();
   }
 
   makeAderantFamille(): void {
     this.adherantGroupeListe.forEach(f => {
-      const familleAdherant: AdherentFamille = {};
-      if (f.adherentPrincipal !== null) {
+      const familleAdherant: AdherentFamille = {
+        adherent: {},
+        famille: []
+      };
+      if (f.adherentPrincipal === null) {
+        console.log('*********adhrant principal**********');
+        console.log(f);
         familleAdherant.adherent = f;
-        familleAdherant.famille = this.adherantGroupeListe.filter(e => e.id !== f.adherentPrincipal.id);
+        this.adherantGroupeListe.forEach(e => {
+          if (e.adherentPrincipal !== null && e.adherentPrincipal.id === f.id) {
+            familleAdherant.famille.push(e);
+          }
+        });
+        // familleAdherant.famille = this.adherantGroupeListe.filter(e => e.adherentPrincipal.id === f.id);
+        this.familleAdherants.push(familleAdherant);
+      }
+      else {
+        console.log('*********adhrant NON principal**********');
+        console.log(f);
+        familleAdherant.adherent = f;
+        familleAdherant.famille = [];
         this.familleAdherants.push(familleAdherant);
       }
     });

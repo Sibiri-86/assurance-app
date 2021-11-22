@@ -1,6 +1,19 @@
 <div class="p-card" >
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
+            <p-tabView>
+                <p-tabPanel header="INCORPORATION">
+                    <app-avenant-incorporation [polices]="police" (adherentFamilleEvent)="addAdherentFamilleToList()"></app-avenant-incorporation>
+                </p-tabPanel>
+                <p-tabPanel header="RETRAIT">
+                    <app-avenant-retrait [police]="police" (adherentFamilleEvent)="addAdherentFamilleToList()"></app-avenant-retrait>
+                </p-tabPanel>
+                <p-tabPanel header="MODIFICATION">
+                    <app-avenant-modification [police]="police"></app-avenant-modification>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+        <div class="p-field p-col-12">
             <p-fieldset legend="Information adhérent" toggleable="true">
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
                     <div class="p-fluid p-formgrid p-grid">

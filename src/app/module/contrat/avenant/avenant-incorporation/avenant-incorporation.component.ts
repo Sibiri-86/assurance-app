@@ -14,6 +14,7 @@ import {loadGenre} from '../../../../store/parametrage/genre/actions';
 import * as professionSelector from '../../../../store/parametrage/profession/selector';
 import {loadProfession} from '../../../../store/parametrage/profession/actions';
 import {Profession} from '../../../../store/parametrage/profession/model';
+import {Police} from '../../../../store/contrat/police/model';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -24,13 +25,14 @@ export class AvenantIncorporationComponent implements OnInit{
 
     // @Input groupe: Groupe;
     @Output() adherentFamilleEvent = new EventEmitter();
-    // @Input() initialise: boolean;
+    @Input() polices: Police[];
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     adherentListGroupe: Array<Adherent>;
     adherentFamille: AdherentFamille;
     familles: Array<Adherent>;
     newForm: FormGroup;
+    adherentFamilleForm: FormGroup;
     qualiteAssureList: Array<QualiteAssure>;
     qualiteAssureList$: Observable<Array<QualiteAssure>>;
     destroy$ = new Subject<boolean>();
@@ -41,7 +43,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     init(): void {
         this.adherentForm = this.formBuilder.group({
-            id: new FormControl(''),
+            id: new FormControl(null),
             nom: new FormControl('', [Validators.required]),
             prenom: new FormControl('', [Validators.required]),
             dateNaissance: new FormControl('', [Validators.required]),
@@ -61,7 +63,7 @@ export class AvenantIncorporationComponent implements OnInit{
         });
 
         this.newForm = this.formBuilder.group({
-            id: new FormControl(''),
+            id: new FormControl(null),
             nom: new FormControl('', [Validators.required]),
             prenom: new FormControl('', [Validators.required]),
             dateNaissance: new FormControl('', [Validators.required]),
@@ -77,6 +79,10 @@ export class AvenantIncorporationComponent implements OnInit{
             dateIncorporation: new FormControl(new Date(), [Validators.required]),
             dateEntree: new FormControl(new Date(), [Validators.required]),
             dateIncor: new FormControl(new Date(), [Validators.required]),
+        });
+        this.adherentFamilleForm = this.formBuilder.group({
+            adherent: new FormControl(''),
+            famille: new FormControl('', [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -123,12 +129,12 @@ export class AvenantIncorporationComponent implements OnInit{
 
     addAdherentFamilleToList(): void {
         const adherantFamille: AdherentFamille = {};
-        adherantFamille.adherent = this.adherentForm.value as Adherent;
+        adherantFamille.adherent = this.adherentForm.value;
         adherantFamille.famille = this.adherentForm.controls.familys.value;
         console.log('+++++++++++++++++++++++++');
         console.log(adherantFamille);
         this.adherentFamilleEvent.emit(adherantFamille);
-        this.init();
+        // this.init();
     }
     ajouter(): void {
         console.log('----------------------------------');
@@ -147,7 +153,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     createForm(): FormGroup {
         return this.formBuilder.group({
-            id: new FormControl(''),
+            id: new FormControl(null),
             nom: new FormControl('', [Validators.required]),
             prenom: new FormControl('', [Validators.required]),
             dateNaissance: new FormControl('', [Validators.required]),

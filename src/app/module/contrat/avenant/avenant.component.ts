@@ -1355,7 +1355,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.historiqueAvenant.groupe = this.curentGroupe;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
-    // this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
   }
 
   addGroupeNew(groupe: FormGroup): Groupe {
@@ -1381,17 +1381,22 @@ changeGarantie(garantie, indexLigne: number) {
     });
   }
 
-  deleteAdherant(adherants: AdherentFamille[]) {
-    this.historiqueAvenant.aderants = [];
-    this.historiqueAvenant.aderants = adherants;
-    this.historiqueAvenant.police = this.policeItem;
-    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    // this.historiqueAvenant.aderants = adherentFamille.aderants;
-    this.historiqueAvenant.groupe = this.curentGroupe;
-    console.log('**************HistoriqueAvenant****************');
-    console.log(this.historiqueAvenant);
-    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
-    this.dissplayavenant = false;
+  deleteAdherant(adherants: Adherent[]) {
+    adherants.forEach(ad => {
+      if (ad.adherentPrincipal === null) {
+        const adherentFamille: AdherentFamille = {adherent: {}, famille: []};
+        adherentFamille.adherent = ad;
+        adherentFamille.famille = adherants.filter(f => f.adherentPrincipal.id === ad.id);
+        this.historiqueAvenant.aderants.push(adherentFamille);
+        this.historiqueAvenant.police = this.policeItem;
+        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+        this.historiqueAvenant.groupe = this.curentGroupe;
+        console.log('**************HistoriqueAvenant****************');
+        console.log(this.historiqueAvenant);
+        this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+        this.dissplayavenant = false;
+      }
+    });
   }
 
   initDisplayAvenant(): void {

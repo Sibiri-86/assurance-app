@@ -1,4 +1,4 @@
-import {HistoriqueAvenant, HistoriqueAvenantList} from "./model";
+import {HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantList} from "./model";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -31,6 +31,14 @@ updateHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
 deleteHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/${historiqueAvenant.id}`, null);
+}
+
+getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAvenantAdherant[]> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERANT)}/${policeId}`).pipe(
+        map((response: HistoriqueAvenantAdherant[]) => response),
+        catchError(this.handleError())
+    );
 }
 
 private handleError<T>() {

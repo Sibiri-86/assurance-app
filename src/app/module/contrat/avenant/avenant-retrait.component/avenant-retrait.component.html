@@ -10,7 +10,7 @@
     </div>
     <div class="p-grid">
         <div class="p-col-12">
-            <p-table #dt [value]="adherantGroupeListe"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+            <p-table #dt [value]="historiqueAveantAdherants"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
@@ -41,16 +41,16 @@
                         <td>
                             <p-tableCheckbox [value]="adherent"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{adherent.nom}}</span>
+                        <td><span class="p-column-title">{{adherent?.avenant?.nom}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent.prenom}}</span>
+                        <td><span class="p-column-title">{{adherent?.avenant?.prenom}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent.email}}</span>
+                        <td><span class="p-column-title">{{adherent?.avenant?.email}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent.genre.libelle}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.avenant?.genre.libelle}}</span></td>
                         <td>
                             <!--<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
                             <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
