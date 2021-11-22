@@ -159,4 +159,18 @@ export class PoliceEffects {
             )
         )
     );
+
+    deValiderPolice$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deValiderPolice),
+            mergeMap((Police: Police) =>
+                this.PoliceService.deValiderPolice(Police).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadPoliceByAffaireNouvelle()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
 }
