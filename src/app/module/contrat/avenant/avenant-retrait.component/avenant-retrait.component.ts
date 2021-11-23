@@ -68,6 +68,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
+          console.log('.....................................');
           console.log(this.historiqueAveantAdherants);
         }
     );

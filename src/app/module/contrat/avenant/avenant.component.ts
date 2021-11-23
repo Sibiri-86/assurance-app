@@ -841,6 +841,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
+    this.isAvenantIncorporation = false;
+    this.isAvenantRetrait = false;
+    this.isAvenantModification = false;
+    this.isAvenantRenouvellement = false;
     this.groupePolicy = [];
     this.selectedGroup = {};
     this.adherentListGroupe = [];
@@ -1310,6 +1314,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   delAvenenant(): void {
     this.dissplayavenant = false;
+    this.init();
   }
 
   loadGoupeByPolice(): void {

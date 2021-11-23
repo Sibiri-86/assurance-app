@@ -134,7 +134,7 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('+++++++++++++++++++++++++');
         console.log(adherantFamille);
         this.adherentFamilleEvent.emit(adherantFamille);
-        // this.init();
+        this.init();
     }
     ajouter(): void {
         console.log('----------------------------------');
@@ -144,7 +144,7 @@ export class AvenantIncorporationComponent implements OnInit{
     }
     delete(ri: number): void {
         console.log(ri);
-        this.familles.splice(ri, 1);
+        this.familys.removeAt(ri);
     }
 
     get familys() {

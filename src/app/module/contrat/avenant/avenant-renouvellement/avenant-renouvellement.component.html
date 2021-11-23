@@ -13,7 +13,7 @@
                 </p-tabPanel>
             </p-tabView>
         </div>
-        <div class="p-field p-col-12">
+        <!--<div class="p-field p-col-12">
             <p-fieldset legend="Information adhérent" toggleable="true">
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
                     <div class="p-fluid p-formgrid p-grid">
@@ -178,6 +178,22 @@
 
                 </form>
             </p-fieldset>
+        </div>-->
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="submit">
+                </button>
+            </div>
         </div>
     </div>
 </div>
