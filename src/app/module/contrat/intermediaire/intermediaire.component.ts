@@ -57,6 +57,7 @@ import { Taux } from 'src/app/store/parametrage/taux/model';
 import { loadTaux } from 'src/app/store/parametrage/taux/actions';
 import * as tauxAction from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
+import { element } from 'protractor';
 
 
 @Component({
@@ -309,7 +310,9 @@ ngOnInit(): void {
   this.store.dispatch(loadTaux());
   this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
+
       this.tauxList = value.slice();
+      this.tauxList =this.tauxList.filter(element=>element.taux<50);
     }
   });
 

@@ -19,6 +19,7 @@ export interface Groupe {
     commune?: Commune,
     dateEcheance?: Date,
     police?: Police,
+    typePrime?: TypePrime,
     prime?: Prime,
     description?: string,
     adherentFamille?: Array<AdherentFamille>

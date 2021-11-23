@@ -312,12 +312,13 @@ export class PoliceComponent implements OnInit, OnDestroy {
       dateEffet: new FormControl("", [Validators.required]),
       typeDuree: new FormControl("", [Validators.required]),
       adresse:  new FormControl("", [Validators.required]),
+      description: new FormControl("",[Validators.required]),
       commune: new FormControl("", [Validators.required]),
       dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required])
     });
 
     this.primeForm = this.formBuilder.group({
-      prime: new FormControl("",[Validators.required]),
+      prime: new FormControl(null,[Validators.required]),
       primeEmploye: new FormControl(""),
       primeConjoint: new FormControl(""),
       primeEnfant: new FormControl(""),
@@ -911,6 +912,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe = this.groupeForm.value;
     this.groupe.police = this.police;
     this.groupe.prime = this.primeForm.value;
+    this.groupe.typePrime = this.selectedTypePrime;
 
     if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
