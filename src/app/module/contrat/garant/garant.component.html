@@ -361,7 +361,15 @@
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="garantForm" [entityField]="'numeroCompteBancaire1'">
                             </app-entity-validation>
-                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Nom Banque 1 <span class="required">*</span></label>
+                            <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque1" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="garantForm" [entityField]="'banque1'">
+                            </app-entity-validation>
+                        </div>
 
                         <div class="p-field p-col">
                             <label for="lastname2">Numero compte bancaire 2</label>
@@ -370,21 +378,30 @@
                                               [formGroup]="garantForm" [entityField]="'numeroCompteBancaire2'">
                             </app-entity-validation>
                         </div>
-    
-                        <div class="p-field p-col">
-                            <label for="lastname2">Secteur activite <span class="required">*</span></label>
-                            <p-dropdown dataKey="id" inputId="secteurActivite" [filter]="true" showClear="true" [options]="secteurActiviteList" formControlName="secteurActivite" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="garantForm" [entityField]="'secteurActivite'">
-                            </app-entity-validation>
-                        </div>
+
+                       
 
                         
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Nom Banque 2<span class="required"> *</span></label>
+                        <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque2" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                        [formGroup]="garantForm" [entityField]="'banque2'">
+                        </app-entity-validation>
+                    </div>
 
-                       <div class="p-field p-col">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur activite <span class="required">*</span></label>
+                        <p-dropdown dataKey="id" inputId="secteurActivite" [filter]="true" showClear="true" [options]="secteurActiviteList" formControlName="secteurActivite" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                        [formGroup]="garantForm" [entityField]="'secteurActivite'">
+                        </app-entity-validation>
+                    </div>
+
+                    <div class="p-field p-col">
                         <label for="lastname2">IFU <span class="required">*</span></label>
                         <input id="lastname2" type="text" formControlName="numeroIfu" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
@@ -392,6 +409,9 @@
                         </app-entity-validation>
                         </div>
 
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Periodicite appel fond <span class="required">*</span> </label>
                             <p-dropdown  inputId="periodiciteAppelFond" dataKey="id" [filter]="true" showClear="true" [options]="dimensionPeriodeList" formControlName="periodiciteAppelFond" placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -408,12 +428,6 @@
                         </app-entity-validation>
                         </div>
 
-                    </div>
-                    </p-fieldset>
-
-                    <p-fieldset legend="Localisation" toggleable="true">
-                    <div class="p-fluid p-formgrid p-grid">
-
                         <div class="p-field p-col">
                             <label for="lastname2">Pays</label>
                             <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle" (onChange)="changeCountry($event)"></p-dropdown>
@@ -421,6 +435,33 @@
                             [formGroup]="garantForm" [entityField]="'pays'">
                             </app-entity-validation>
                         </div>
+
+                    </div>
+                    </p-fieldset>
+
+                <p-fieldset legend="Commission" toggleable="true">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Taux de commission prime</label>
+                        <p-dropdown dataKey="id" inputId="tauxPrime" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionPrime" placeholder="Select" optionLabel="taux"></p-dropdown>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                      [formGroup]="garantForm" [entityField]="'taux'">
+                    </app-entity-validation>
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Taux de commission accessoire</label>
+                        <p-dropdown dataKey="id" inputId="tauxAccessoire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionAccessoire" placeholder="Select" optionLabel="taux"></p-dropdown>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                      [formGroup]="garantForm" [entityField]="'taux'">
+                    </app-entity-validation>
+                    </div>
+                    </div>
+                </p-fieldset>
+
+                    <p-fieldset legend="Localisation" toggleable="true">
+                    <div class="p-fluid p-formgrid p-grid">
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Region</label>
@@ -436,18 +477,18 @@
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'departement'">
                                 </app-entity-validation>
-                            </div>    
+                            </div> 
+                            
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">Commune</label>
+                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                [formGroup]="garantForm" [entityField]="'commune'">
+                                </app-entity-validation>
+                             </div>
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
-
-                        <div class="p-field p-col-4">
-                            <label for="lastname2">Commune</label>
-                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="garantForm" [entityField]="'commune'">
-                            </app-entity-validation>
-                         </div>
 
                          <div class="p-field p-col-4">
                             <label for="arrondissement">Arrondissement</label>

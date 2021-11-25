@@ -15,6 +15,11 @@ export class Endpoints {
         mock: `assets/mock/parametrage/typeSousActe.mock.json`
     };
 
+    static readonly PARAMETRAGE_BANQUE = {
+        prod: `${SERVICE_PREFIX}/parametrage/banque`,
+        mock: `assets/mock/parametrage/banque.mock.json`
+    };
+
     static readonly PARAMETRAGE_SECTEUR_ACTIVITE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeSecteurActivite`,
         mock: `assets/mock/parametrage/secteurActivite.mock.json`
@@ -102,6 +107,11 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/parametrage/typeAvenant`,
         mock: `assets/mock/parametrage/typeAvenant.mock.json`
     };
+
+    static readonly PARAMETRAGE_TYPE_TAUXCOMMISSIONINTERMEDIAIRE = {
+        prod: `${SERVICE_PREFIX}/parametrage/commissionIntermediaire`,
+        mock: `assets/mock/parametrage/commissionIntermediaire.mock.json`
+    }
 
     static readonly PARAMETRAGE_TYPE_AFFAIRE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeAffaire`,

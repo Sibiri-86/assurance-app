@@ -57,6 +57,13 @@ import { Taux } from 'src/app/store/parametrage/taux/model';
 import { loadTaux } from 'src/app/store/parametrage/taux/actions';
 import * as tauxAction from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
+import { element } from 'protractor';
+import * as banqueAction from '../../../store/parametrage/Banques/actions';
+import * as banqueSelector from '../../../store/parametrage/Banques/selector';
+import { Banque } from 'src/app/store/parametrage/Banques/model';
+import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
+import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
+import { TauxCommissionIntermediaire } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
 
 
 @Component({
@@ -96,8 +103,10 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
   infosIntermediaire: boolean = false;
-
-
+  banqueList: Array<Banque>;
+  banqueList$: Observable<Array<Banque>>;
+  tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
+  tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
 
   constructor(private formBuilder: FormBuilder,
     private store: Store<AppState>, private messageService: MessageService, 
@@ -111,9 +120,11 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
         adressePostale: new FormControl(null,[Validators.required]),
         typeIntermediaire: new FormControl(null,[Validators.required]),
         personneRessource: new FormControl('',[Validators.required]),
-        numeroCompteBancaire1: new FormControl('',[Validators.required]),
+        numeroCompteBancaire1: new FormControl(''),
+        banque1: new FormControl('',[Validators.required]),
+        banque2: new FormControl(null),
         numeroCompteBancaire2: new FormControl(''),
-        numeroIfu: new FormControl('',[Validators.required]),
+        numeroIfu: new FormControl(''),
         taux: new FormControl('',[Validators.required]),
         //periodiciteAppelFond: new FormControl(''),
         rccm: new FormControl(''),
@@ -305,11 +316,32 @@ ngOnInit(): void {
     }
   ];
 
+  this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
+  this.store.dispatch(banqueAction.loadBanque());
+  this.banqueList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.banqueList = value.slice();
+              }
+  });
+
+  
+  this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+  this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
+  this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.tauxCommissionIntermediaireList = value.slice();
+              }
+  });
+
   this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
   this.store.dispatch(loadTaux());
   this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
+
       this.tauxList = value.slice();
+      this.tauxList =this.tauxList.filter(element=>element.taux<50);
     }
   });
 

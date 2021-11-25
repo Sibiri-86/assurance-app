@@ -6,6 +6,7 @@ import { Police } from '../police/model';
 import { Prime } from '../prime/model';
 import { Adherent } from '../adherent/model';
 import { AdherentFamille } from '../adherent/model';
+import { Commune } from '../../parametrage/commune/model';
 
 export interface Groupe {
     id?: string,
@@ -14,9 +15,13 @@ export interface Groupe {
     territorialite?: Array<Territorialite>,
     duree?: number,
     dateEffet?: Date,
+    adresse?: string,
+    commune?: Commune,
     dateEcheance?: Date,
     police?: Police,
+    typePrime?: TypePrime,
     prime?: Prime,
+    description?: string,
     adherentFamille?: Array<AdherentFamille>
 }
 

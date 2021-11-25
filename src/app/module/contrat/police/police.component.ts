@@ -179,6 +179,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   adherentList: Array<Adherent>;
+  adherent: Adherent = {};
   adherentList$: Observable<Array<Adherent>>;
   adherentFamilleList: Array<Adherent>;
   paysList: Array<Pays>;
@@ -238,6 +239,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   arrondissementList: Array<Arrondissement>;
   displayActe = false;
   displayPrevisualiserParametrage : boolean = false;
+  displayDialogFormUpdateAdherent: boolean = false;
+  infosAdherent: boolean = false;
  
 
   constructor(
@@ -311,11 +314,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
       duree: new FormControl("", [Validators.required]),
       dateEffet: new FormControl("", [Validators.required]),
       typeDuree: new FormControl("", [Validators.required]),
+      adresse:  new FormControl("", [Validators.required]),
+      description: new FormControl("",[Validators.required]),
+      commune: new FormControl("", [Validators.required]),
       dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required])
     });
 
     this.primeForm = this.formBuilder.group({
-      prime: new FormControl("",[Validators.required]),
+      prime: new FormControl(null,[Validators.required]),
       primeEmploye: new FormControl(""),
       primeConjoint: new FormControl(""),
       primeEnfant: new FormControl(""),
@@ -342,6 +348,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe = {...groupe};
     this.displayParametragePlafond = true;
   }
+
+  voirDetailAdherent(adherent:Adherent){
+    this.adherent = {...adherent};
+  this.infosAdherent=true;
+  }
+
 
   ngOnInit(): void {
     this.policeList = [];
@@ -865,9 +877,25 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentWithFamille.adherent =this.adherentForm.value;
     this.adherentWithFamille.adherent.groupe = this.groupe;
     this.adherentWithFamille.famille = this.adherentFamilleList;
+    if(!this.adherentForm.value.id){
     this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    }else {
+      this.store.dispatch(featureActionAdherent.updateAdherent(this.adherentForm.value));
+    }
     this.adherentFamilleList = [];
     this.adherentForm.reset();
+  }
+
+
+  supprimerAdherent(adherent:Adherent){
+  this.store.dispatch(featureActionAdherent.deleteAdherent(adherent));
+  }
+
+  modifierAdherent(adherent: Adherent){
+    this.adherent= {...adherent};
+    this.adherent.dateNaissance = new Date(this.adherent.dateNaissance);
+    this.displayDialogFormUpdateAdherent = true;
+    this.adherentForm.patchValue(this.adherent);
   }
 
 
@@ -909,6 +937,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe = this.groupeForm.value;
     this.groupe.police = this.police;
     this.groupe.prime = this.primeForm.value;
+    this.groupe.typePrime = this.selectedTypePrime;
 
     if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
@@ -1358,8 +1387,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
   this.plafondSousActe = [];
+  this.displayActe = true;
+  /*
   if(this.plafondFamilleActeConstruct.length!=0) {
-      // revoir cette fonction
+      
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
         element.listeActe.forEach(e=>{
           if(e.acte.idTypeGarantie === garantie.value.id){
@@ -1369,14 +1400,16 @@ changeGarantie(garantie, indexLigne: number) {
       });
       console.log(this.plafondFamilleActeConstruct);
   }
-
-  if(this.plafondActe.length===0){
+  */
+  
+ if(this.plafondActe.length===0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
-    this.acteList.forEach((element)=>{
-      if (element.idTypeGarantie === garantie.value.id) {
-        this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
-      }});
-   
+
+    //this.acteList.forEach((element)=>{
+      
+      //if (element.idTypeGarantie === garantie.value.id) {
+        //this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
+      //}});
     for(var j=0; j<this.acteList.length; j++){
 
     if(this.acteList[j].idTypeGarantie === garantie.value.id) {
@@ -1389,11 +1422,10 @@ changeGarantie(garantie, indexLigne: number) {
       }
       this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
     }
-
   }
-
   console.log(this.plafondActe);
   }
+
 }
 
   ngOnDestroy() {

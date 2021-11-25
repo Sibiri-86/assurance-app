@@ -290,11 +290,19 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                             <div class="p-field p-col">
-                            <label for="lastname2">Numero compte bancaire 1 <span class="required">*</span></label>
+                            <label for="lastname2">Numero compte bancaire 1</label>
                             <input id="lastname2" type="text"  formControlName="numeroCompteBancaire1" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire1'">
                             </app-entity-validation>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Nom banque 1 <span class="required">*</span></label>
+                                <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque1" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                [formGroup]="intermediaireForm" [entityField]="'banque1'">
+                                </app-entity-validation>
                             </div>
 
                             <div class="p-field p-col">
@@ -304,14 +312,8 @@
                                               [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire2'">
                             </app-entity-validation>
                              </div>
-    
-                              <div class="p-field p-col">
-                                <label for="lastname2">IFU <span class="required">*</span></label>
-                                <input id="lastname2" type="text"  formControlName="numeroIfu" pInputText>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                [formGroup]="intermediaireForm" [entityField]="'numeroIfu'">
-                                </app-entity-validation>
-                                </div>
+
+                            
                         <!--
                         <div class="p-field p-col">
                             <label for="lastname2">Periodicite Appel Fond</label>
@@ -324,14 +326,33 @@
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label for="lastname2">Taux de commission</label>
-                            <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Nom banque 2 </label>
+                            <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque1" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
-                                          [formGroup]="intermediaireForm" [entityField]="'taux'">
-                        </app-entity-validation>
+                            [formGroup]="intermediaireForm" [entityField]="'banque1'">
+                            </app-entity-validation>
                         </div>
 
+                          <div class="p-field p-col">
+                            <label for="lastname2">IFU</label>
+                            <input id="lastname2" type="text"  formControlName="numeroIfu" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                            [formGroup]="intermediaireForm" [entityField]="'numeroIfu'">
+                            </app-entity-validation>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Taux de commission</label>
+                                <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="intermediaireForm" [entityField]="'taux'">
+                            </app-entity-validation>
+                            </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="lastname2">RCCM</label>
                             <input id="lastname2" type="text"   formControlName="rccm" pInputText>

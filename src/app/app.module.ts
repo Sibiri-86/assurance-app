@@ -213,6 +213,8 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-incorporation/avenant-incorporation.component";
 import {GroupeComponent} from "./module/contrat/avenant/grpoue/groupe.component";
 import {HistoriqueAvenantEffects} from "./store/contrat/historiqueAvenant/effect";
+import { BanqueEffects } from './store/parametrage/Banques/effect';
+import { TauxCommissionIntermediaireEffects } from './store/parametrage/taux-commission-intermediaire/effect';
 import {AvenantRetraitComponent} from './module/contrat/avenant/avenant-retrait.component/avenant-retrait.component';
 import {AvenantRenouvellementComponent} from './module/contrat/avenant/avenant-renouvellement/avenant-renouvellement.component';
 import {AvenantModificationComponent} from './module/contrat/avenant/avenant-modification.component/avenant-modification.component';
@@ -314,7 +316,7 @@ import {AvenantModificationComponent} from './module/contrat/avenant/avenant-mod
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
              TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, QualiteMedecinEffects,PathologieEffects, ProduitPharmaceutiqueEffects,
-            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, SecteurEffects, ArrondissementEffects])
+            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, SecteurEffects, ArrondissementEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
