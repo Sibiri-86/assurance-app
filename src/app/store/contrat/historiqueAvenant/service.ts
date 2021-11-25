@@ -25,7 +25,7 @@ postHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
 
 updateHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     // @FIXME: post request
-    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/${historiqueAvenant.id}`, historiqueAvenant);
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_UPDATE)}`, historiqueAvenant);
   }
 
 deleteHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {

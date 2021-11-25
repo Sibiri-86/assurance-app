@@ -1,41 +1,35 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import {Police, PoliceList} from '../../../store/contrat/police/model';
-import {ConfirmationService, MenuItem, MessageService, SelectItem} from 'primeng/api';
-import { Groupe } from '../../../store/contrat/groupe/model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {takeUntil} from 'rxjs/operators';
+import {Police} from '../../../store/contrat/police/model';
+import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
+import {Groupe} from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
-import { policeList } from '../../../store/contrat/police/selector';
-import { groupeList } from '../../../store/contrat/groupe/selector';
-import {AdherentList, Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
-import { Pays } from '../../../store/parametrage/pays/model';
-import { Taux } from '../../../store/parametrage/taux/model';
-import { Genre, GenreList } from '../../../store/parametrage/genre/model';
-import { Profession } from '../../../store/parametrage/profession/model';
-import { QualiteAssure } from '../../../store/parametrage/qualite-assure/model';
-import { Territorialite } from '../../../store/parametrage/territorialite/model';
-import { Garantie } from '../../../store/parametrage/garantie/model';
-import { SousActe } from '../../../store/parametrage/sous-acte/model';
-import { Acte } from '../../../store/parametrage/acte/model';
-import { Departement } from '../../../store/parametrage/departement/model';
-import { DimensionPeriode } from '../../../store/parametrage/dimension-periode/model';
-import { Commune } from '../../../store/parametrage/commune/model';
-import { TypePrime } from '../../../store/parametrage/type-prime/model';
-import { Region } from '../../../store/parametrage/region/model';
-import { SecteurActivite } from '../../../store/parametrage/secteur-activite/model';
-import {Observable, of, Subject, Subscription} from 'rxjs';
-import {
-  ControlContainer,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { select, Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { loadPays } from '../../../store/parametrage/pays/actions';
+import {policeList} from '../../../store/contrat/police/selector';
+import {groupeList} from '../../../store/contrat/groupe/selector';
+import {Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
+import {Pays} from '../../../store/parametrage/pays/model';
+import {Taux} from '../../../store/parametrage/taux/model';
+import {Genre} from '../../../store/parametrage/genre/model';
+import {Profession} from '../../../store/parametrage/profession/model';
+import {QualiteAssure} from '../../../store/parametrage/qualite-assure/model';
+import {Territorialite} from '../../../store/parametrage/territorialite/model';
+import {Garantie} from '../../../store/parametrage/garantie/model';
+import {SousActe} from '../../../store/parametrage/sous-acte/model';
+import {Acte} from '../../../store/parametrage/acte/model';
+import {Departement} from '../../../store/parametrage/departement/model';
+import {DimensionPeriode} from '../../../store/parametrage/dimension-periode/model';
+import {Commune} from '../../../store/parametrage/commune/model';
+import {TypePrime} from '../../../store/parametrage/type-prime/model';
+import {Region} from '../../../store/parametrage/region/model';
+import {SecteurActivite} from '../../../store/parametrage/secteur-activite/model';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {select, Store} from '@ngrx/store';
+import {AppState} from 'src/app/store/app.state';
+import {loadPays} from '../../../store/parametrage/pays/actions';
 import * as paysSelector from '../../../store/parametrage/pays/selector';
 
-import { loadRegion } from '../../../store/parametrage/region/actions';
+import {loadRegion} from '../../../store/parametrage/region/actions';
 import * as regionSelector from '../../../store/parametrage/region/selector';
 
 import * as departementSelector from '../../../store/parametrage/departement/selector';
@@ -44,66 +38,59 @@ import {loadDepartement} from "../../../store/parametrage/departement/actions";
 import * as communeSelector from '../../../store/parametrage/commune/selector';
 import {loadCommune} from "../../../store/parametrage/commune/actions";
 
-import { loadTaux } from '../../../store/parametrage/taux/actions';
+import {loadTaux} from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
 
 import {loadTypeAvenant} from "../../../store/parametrage/type-avenant/actions";
 import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
-import { loadTerritorialite } from '../../../store/parametrage/territorialite/actions';
+import {loadTerritorialite} from '../../../store/parametrage/territorialite/actions';
 import * as territorialiteSelector from '../../../store/parametrage/territorialite/selector';
 
 import {loadGarant} from "../../../store/contrat/garant/actions";
 import * as garantSelector from "../../../store/contrat/garant/selector";
 
 import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
-import * as groupeSelector from '../../../store/contrat/groupe/selector';
 
-import { loadIntermediaire } from '../../../store/contrat/intermediaire/actions';
+import {loadIntermediaire} from '../../../store/contrat/intermediaire/actions';
 import * as intermediaireSelector from '../../../store/contrat/intermediaire/selector';
 
 import * as professionSelector from '../../../store/parametrage/profession/selector';
 
-import { Garant, GarantList } from '../../../store/contrat/garant/model';
-import {
-  Intermediaire,
-  IntermediaireList,
-} from '../../../store/contrat/intermediaire/model';
-import { TypeAvenant } from 'src/app/store/parametrage/type-avenant/model';
-import { loadSecteurActivite } from '../../../store/parametrage/secteur-activite/actions';
+import {Garant} from '../../../store/contrat/garant/model';
+import {Intermediaire,} from '../../../store/contrat/intermediaire/model';
+import {TypeAvenant} from 'src/app/store/parametrage/type-avenant/model';
+import {loadSecteurActivite} from '../../../store/parametrage/secteur-activite/actions';
 import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
-import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
+import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
-import {loadPolice, loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
-import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
+import {loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
+import {loadGroupe} from 'src/app/store/contrat/groupe/actions';
 
-import { loadGarantie } from '../../../store/parametrage/garantie/actions';
+import {loadGarantie} from '../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../store/parametrage/garantie/selector';
 
-import { loadActe } from '../../../store/parametrage/acte/actions';
+import {loadActe} from '../../../store/parametrage/acte/actions';
 import * as acteSelector from '../../../store/parametrage/acte/selector';
-import { loadSousActe } from '../../../store/parametrage/sous-acte/actions';
+import {loadSousActe} from '../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
 
-import { loadGenre } from '../../../store/parametrage/genre/actions';
+import {loadGenre} from '../../../store/parametrage/genre/actions';
 import * as genreSelector from '../../../store/parametrage/genre/selector';
 import * as featureActionsPlafond from '../../../store/contrat/plafond/action';
 
-import { loadQualiteAssure } from '../../../store/parametrage/qualite-assure/actions';
+import {loadQualiteAssure} from '../../../store/parametrage/qualite-assure/actions';
 import * as qualiteAssureSelector from '../../../store/parametrage/qualite-assure/selector';
 
-import { Status } from '../../../store/global-config/model';
-import { status } from '../../../store/global-config/selector';
-import { EntityValidations } from '../../common/models/validation';
-import { BreadcrumbService } from '../../../app.breadcrumb.service';
+import {Status} from '../../../store/global-config/model';
+import {status} from '../../../store/global-config/selector';
+import {EntityValidations} from '../../common/models/validation';
+import {BreadcrumbService} from '../../../app.breadcrumb.service';
 
-import { loadTypePrime } from '../../../store/parametrage/type-prime/actions';
+import {loadTypePrime} from '../../../store/parametrage/type-prime/actions';
 import * as typePrimeSelector from '../../../store/parametrage/type-prime/selector';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../store/parametrage/plafond/model';
-import {TabMenuModule} from 'primeng/tabmenu';
-import { Plafond } from 'src/app/store/contrat/plafond/model';
-import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
-import { element } from 'protractor';
+import {Plafond} from 'src/app/store/contrat/plafond/model';
 import {PoliceService} from '../../../store/contrat/police/service';
 import * as adherentSelector from "../../../store/contrat/adherent/selector";
 import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
@@ -115,7 +102,6 @@ import {
   HistoriqueAvenantAdherant,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
-import {loadHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/actions';
 import {loadProfession} from '../../../store/parametrage/profession/actions';
 
 @Component({
@@ -1357,7 +1343,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenant.aderants.push(adherentFamille);
     this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.id = null;
     this.historiqueAvenant.groupe = this.curentGroupe;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
@@ -1387,22 +1373,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteAdherant(adherants: Adherent[]) {
-    adherants.forEach(ad => {
-      if (ad.adherentPrincipal === null) {
-        const adherentFamille: AdherentFamille = {adherent: {}, famille: []};
-        adherentFamille.adherent = ad;
-        adherentFamille.famille = adherants.filter(f => f.adherentPrincipal.id === ad.id);
-        this.historiqueAvenant.aderants.push(adherentFamille);
-        this.historiqueAvenant.police = this.policeItem;
-        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-        this.historiqueAvenant.groupe = this.curentGroupe;
-        console.log('**************HistoriqueAvenant****************');
-        console.log(this.historiqueAvenant);
-        this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
-        this.dissplayavenant = false;
-      }
-    });
+  deleteAdherant(historiqueAvenantAdherants: HistoriqueAvenantAdherant[]) {
+    historiqueAvenantAdherants.forEach(historiqueAvenantAdherant => {
+      historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      historiqueAvenantAdherant.adherent.groupe = this.curentGroupe;
+      });
+    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    this.historiqueAvenant.historiqueAvenantAdherants = historiqueAvenantAdherants;
+    this.historiqueAvenant.groupe = this.curentGroupe;
+    this.historiqueAvenant.police = this.policeItem;
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
   }
 
   initDisplayAvenant(): void {

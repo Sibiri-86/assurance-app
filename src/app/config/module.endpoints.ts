@@ -183,6 +183,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/groupe`,
         mock: `assets/mock/contrat/groupe.mock.json`
     };
+    static readonly CONTRAT_GROUPE_UPDATE = {
+        prod: `${SERVICE_PREFIX}/contrat/groupe/update`,
+        mock: `assets/mock/contrat/groupe.mock.json`
+    };
     static readonly CONTRAT_ADHERENT = {
         prod: `${SERVICE_PREFIX}/contrat/adherent`,
         mock: `assets/mock/contrat/adherent.mock.json`
@@ -207,6 +211,11 @@ export class Endpoints {
 
     static readonly HISTORIQUE_AVENANT = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT_UPDATE = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-update`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 

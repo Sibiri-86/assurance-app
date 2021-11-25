@@ -34,11 +34,13 @@ export class AvenantRetraitComponent implements OnInit {
   groupePolicy: any;
   historiqueAvenants: HistoriqueAvenantList;
   adherentList$: Observable<Array<Adherent>>;
-  adherantGroupeListe: Array<Adherent> = [];
+  adherantGroupeListe: Array<HistoriqueAvenantAdherant> = [];
   familleAdherants: Array<AdherentFamille>;
   @Output() adherentFamilleEvent = new EventEmitter();
-  adherantDeleteds: Array<Adherent> = [];
+  adherantDeleteds: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
+  nonRetirer = 'non retiré';
+  retirer = 'retiré';
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -68,7 +70,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
-          console.log('.....................................');
+          console.log('..................historiqueAveantAdherants...................');
           console.log(this.historiqueAveantAdherants);
         }
     );
@@ -110,15 +112,27 @@ export class AvenantRetraitComponent implements OnInit {
     // this.adherantList = [];
   }
 
-  retirer(adherent: Adherent): void {
-    console.log(adherent);
-    const id = adherent.id;
-    this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.id === id);
-    this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== id);
-    if (adherent.adherentPrincipal !== null) {
-      this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.id === adherent.adherentPrincipal.id);
-      this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== adherent.adherentPrincipal.id);
-    }
+  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+    const value: boolean = !historiqueAvenantAdherant.selected;
+    console.log(historiqueAvenantAdherant);
+    historiqueAvenantAdherant.selected = value;
+    // const id = adherent.adherent.id;
+    // this.adherantDeleteds.push(historiqueAvenantAdherant);
+    // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === historiqueAvenantAdherant.id);
+    this.historiqueAveantAdherants.forEach(haa => {
+      if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
+          haa.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
+        this.adherantDeleteds.push(haa);
+        haa.selected = value;
+        // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === haa.id);
+        // console.log('******1*******' + this.adherantDeleteds.length);
+      }
+      console.log('******1*******' + this.adherantDeleteds.length);
+    });
+    // if (adherent.adherent.adherentPrincipal !== null) {
+      // this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.adherent.id === adherent.adherent.adherentPrincipal.id);
+      // this.adherantGroupeListe = this.adherantGroupeListe.filter(e =>  e.adherent.id === adherent.adherent.adherentPrincipal.id);
+    // }
   }
 
   addAdherentFamilleToList(): void {
@@ -156,4 +170,5 @@ export class AvenantRetraitComponent implements OnInit {
       }
     });
   }
+
 }

@@ -38,8 +38,8 @@ import {Plafond} from '../../../../store/contrat/plafond/model';
 export class GroupeComponent implements OnInit{
 
     @Input() police: Police;
+    @Input() public obj: any;
     @Output() groupeEvent = new EventEmitter();
-   //  newgroupe: Groupe;
     plafondForm: FormGroup;
     adherentForm: FormGroup;
     groupeForm: FormGroup;
@@ -78,8 +78,8 @@ export class GroupeComponent implements OnInit{
     secteurActiviteList: Array<SecteurActivite>;
     dimensionPeriodeList$: Observable<Array<DimensionPeriode>>;
     dimensionPeriodeList: Array<DimensionPeriode>;
-    displayDialogFormAddGroupe: boolean = false;
-    displayDialogFormAdherent: boolean = false;
+    displayDialogFormAddGroupe = false;
+    displayDialogFormAdherent = false;
     clonedPlafondFamilleActe: { [s: string]: PlafondFamilleActe } = {};
     clonedAdherentFamille: { [s: string]: Adherent } = {};
     clonedPlafondActe: { [s: string]: PlafondActe } = {};
@@ -167,11 +167,11 @@ export class GroupeComponent implements OnInit{
         });
 
         this.plafondForm = this.formBuilder.group({
-            plafondAnnuelleFamille: new FormControl(""),
-            plafondAnnuellePersonne: new FormControl(""),
-            plafondGlobalInternationnal: new FormControl("")
+            plafondAnnuelleFamille: new FormControl(''),
+            plafondAnnuellePersonne: new FormControl(''),
+            plafondGlobalInternationnal: new FormControl('')
         });
-
+        this.setGroupeAndPrime();
     }
     constructor(
         private formBuilder: FormBuilder,
@@ -312,10 +312,12 @@ export class GroupeComponent implements OnInit{
                 this.sousActeList = value.slice();
             }
         });
+        console.log('+++++++++objet groupe+++++++++');
+        console.log(this.obj);
     }
 
     addAdherentFamilleToList(): void {
-        this.groupeEvent.emit(this.groupeForm as Groupe);
+        this.groupeEvent.emit({groupe: this.groupeForm.value, prime: this.primeForm.value});
     }
 
     getNewDate(value: number): Date {
@@ -491,7 +493,7 @@ export class GroupeComponent implements OnInit{
         if (this.groupe.prime.primeAdulte){
             this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +  '');
         }
-        if(this.groupe.prime.primeConjoint){
+        if (this.groupe.prime.primeConjoint){
             this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint + '');
         }
         if (this.groupe.prime.primeEmploye){
@@ -531,6 +533,30 @@ export class GroupeComponent implements OnInit{
         this.plafondSousActe[index] =
             this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
         delete this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
+    }
+
+    setGroupeAndPrime(): void {
+        this.groupeForm.patchValue({
+            id: this.obj.group?.id,
+            libelle: this.obj.group?.libelle,
+            taux: this.obj.group?.id,
+            territorialite: this.obj?.territorialite,
+            duree: this.obj?.duree,
+            dateEffet: this.obj?.dateEffet,
+            typeDuree: this.obj?.typeDuree,
+            dateEcheance: this.obj?.dateEcheance
+        });
+
+        this.primeForm.patchValue({
+            prime: this.obj.prime.prime,
+            primeEmploye: this.obj.prime?.primeEmploye,
+            primeConjoint: this.obj.prime?.primeConjoint,
+            primeEnfant: this.obj.prime?.primeEnfant,
+            primeFamille: this.obj.prime?.primeFamille,
+            primeAdulte: this.obj.prime?.primeAdulte,
+            primePersonne: this.obj.prime?.primePersonne,
+            primeAnnuelle: this.obj.prime?.primeAnnuelle
+        });
     }
 
 }

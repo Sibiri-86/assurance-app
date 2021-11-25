@@ -1,0 +1,31 @@
+<div class="p-card">
+    <form [formGroup]="plafondForm" (ngSubmit)="emitPlafandEvent($event)">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col">
+                <label for="primeFamille">Plafond global annuelle par personne</label>
+                <input id="primeFamille" type="number" pInputText formControlName="plafondAnnuellePersonne">
+            </div>
+            <div class="p-field p-col">
+                <label for="montantPrimeEnfant">Plafond global par famille</label>
+                <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondAnnuelleFamille">
+            </div>
+
+            <div class="p-field p-col" *ngIf="isInternationalGroupe">
+                <label for="montantPrimeEnfant1">Plafond global internationnal</label>
+                <input id="montantPrimeEnfant1" type="number" pInputText formControlName="plafondGlobalInternationnal">
+            </div>
+        </div>
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-5"></div>
+            <div class="p-col-2">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                        class="p-button p-button-success" type="button"></button>
+            </div>
+            <div class="p-col-2">
+                <button pButton pRipple icon="pi pi-save" pTooltip="Enregister groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="submit"></button>
+            </div>
+        </div>
+    </form>
+</div>

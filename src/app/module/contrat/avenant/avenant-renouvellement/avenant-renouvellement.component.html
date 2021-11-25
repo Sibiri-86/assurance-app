@@ -2,6 +2,12 @@
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
             <p-tabView>
+                <p-tabPanel header="GENERALITE">
+                    <div class="p-card">
+                        <div class="p-text-right">NUM POLICE:  {{police.referencePolice}}</div>
+                        <div class="p-text-right">NUM POLICE:  {{police.nom}}</div>
+                    </div>
+                </p-tabPanel>
                 <p-tabPanel header="INCORPORATION">
                     <app-avenant-incorporation [polices]="police" (adherentFamilleEvent)="addAdherentFamilleToList()"></app-avenant-incorporation>
                 </p-tabPanel>

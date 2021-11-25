@@ -12,7 +12,7 @@ export class AvenantRenouvellementComponent implements OnInit{
 
     // @Input groupe: Groupe;
     @Output() adherentFamilleEvent = new EventEmitter();
-    // @Input() groupe: Groupe;
+    @Input() police: Police;
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     adherentListGroupe: Array<Adherent>;
@@ -22,7 +22,7 @@ export class AvenantRenouvellementComponent implements OnInit{
     genreList: any;
     professionList: any;
     qualiteAssureList: any;
-	police: Police[] = [];
+	polices: Police[] = [];
 
     init(): void {
         // console.log(this.groupe);
