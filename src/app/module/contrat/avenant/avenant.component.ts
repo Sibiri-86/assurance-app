@@ -1,122 +1,114 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import {Police, PoliceList} from '../../../store/contrat/police/model';
-import {ConfirmationService, MenuItem, MessageService, SelectItem} from 'primeng/api';
-import { Groupe } from '../../../store/contrat/groupe/model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {takeUntil} from 'rxjs/operators';
+import {Police, Report} from '../../../store/contrat/police/model';
+import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
+import {Groupe} from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
-import { policeList } from '../../../store/contrat/police/selector';
-import { groupeList } from '../../../store/contrat/groupe/selector';
-import {AdherentList, Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
-import { Pays } from '../../../store/parametrage/pays/model';
-import { Taux } from '../../../store/parametrage/taux/model';
-import { Genre, GenreList } from '../../../store/parametrage/genre/model';
-import { Profession } from '../../../store/parametrage/profession/model';
-import { QualiteAssure } from '../../../store/parametrage/qualite-assure/model';
-import { Territorialite } from '../../../store/parametrage/territorialite/model';
-import { Garantie } from '../../../store/parametrage/garantie/model';
-import { SousActe } from '../../../store/parametrage/sous-acte/model';
-import { Acte } from '../../../store/parametrage/acte/model';
-import { Departement } from '../../../store/parametrage/departement/model';
-import { DimensionPeriode } from '../../../store/parametrage/dimension-periode/model';
-import { Commune } from '../../../store/parametrage/commune/model';
-import { TypePrime } from '../../../store/parametrage/type-prime/model';
-import { Region } from '../../../store/parametrage/region/model';
-import { SecteurActivite } from '../../../store/parametrage/secteur-activite/model';
-import {Observable, of, Subject, Subscription} from 'rxjs';
-import {
-  ControlContainer,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { select, Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { loadPays } from '../../../store/parametrage/pays/actions';
+import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
+import {groupeList} from '../../../store/contrat/groupe/selector';
+import {Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
+import {Pays} from '../../../store/parametrage/pays/model';
+import {Taux} from '../../../store/parametrage/taux/model';
+import {Genre} from '../../../store/parametrage/genre/model';
+import {Profession} from '../../../store/parametrage/profession/model';
+import {QualiteAssure} from '../../../store/parametrage/qualite-assure/model';
+import {Territorialite} from '../../../store/parametrage/territorialite/model';
+import {Garantie} from '../../../store/parametrage/garantie/model';
+import {SousActe} from '../../../store/parametrage/sous-acte/model';
+import {Acte} from '../../../store/parametrage/acte/model';
+import {Departement} from '../../../store/parametrage/departement/model';
+import {DimensionPeriode} from '../../../store/parametrage/dimension-periode/model';
+import {Commune} from '../../../store/parametrage/commune/model';
+import {TypePrime} from '../../../store/parametrage/type-prime/model';
+import {Region} from '../../../store/parametrage/region/model';
+import {SecteurActivite} from '../../../store/parametrage/secteur-activite/model';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {select, Store} from '@ngrx/store';
+import {AppState} from 'src/app/store/app.state';
+import {loadPays} from '../../../store/parametrage/pays/actions';
 import * as paysSelector from '../../../store/parametrage/pays/selector';
 
-import { loadRegion } from '../../../store/parametrage/region/actions';
+import {loadRegion} from '../../../store/parametrage/region/actions';
 import * as regionSelector from '../../../store/parametrage/region/selector';
 
 import * as departementSelector from '../../../store/parametrage/departement/selector';
-import {loadDepartement} from "../../../store/parametrage/departement/actions";
+import {loadDepartement} from '../../../store/parametrage/departement/actions';
 
 import * as communeSelector from '../../../store/parametrage/commune/selector';
-import {loadCommune} from "../../../store/parametrage/commune/actions";
+import {loadCommune} from '../../../store/parametrage/commune/actions';
 
-import { loadTaux } from '../../../store/parametrage/taux/actions';
+import {loadTaux} from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
 
-import {loadTypeAvenant} from "../../../store/parametrage/type-avenant/actions";
-import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
-import { loadTerritorialite } from '../../../store/parametrage/territorialite/actions';
+import {loadTypeAvenant} from '../../../store/parametrage/type-avenant/actions';
+import * as avenantSelector from '../../../store/parametrage/type-avenant/selector';
+import {loadTerritorialite} from '../../../store/parametrage/territorialite/actions';
 import * as territorialiteSelector from '../../../store/parametrage/territorialite/selector';
 
-import {loadGarant} from "../../../store/contrat/garant/actions";
-import * as garantSelector from "../../../store/contrat/garant/selector";
+import {loadGarant} from '../../../store/contrat/garant/actions';
+import * as garantSelector from '../../../store/contrat/garant/selector';
 
-import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
-import * as groupeSelector from '../../../store/contrat/groupe/selector';
+import * as featureActionGroupe from '../../../store/contrat/groupe/actions';
 
-import { loadIntermediaire } from '../../../store/contrat/intermediaire/actions';
+import {loadIntermediaire} from '../../../store/contrat/intermediaire/actions';
 import * as intermediaireSelector from '../../../store/contrat/intermediaire/selector';
 
 import * as professionSelector from '../../../store/parametrage/profession/selector';
 
-import { Garant, GarantList } from '../../../store/contrat/garant/model';
-import {
-  Intermediaire,
-  IntermediaireList,
-} from '../../../store/contrat/intermediaire/model';
-import { TypeAvenant } from 'src/app/store/parametrage/type-avenant/model';
-import { loadSecteurActivite } from '../../../store/parametrage/secteur-activite/actions';
+import {Garant} from '../../../store/contrat/garant/model';
+import {Intermediaire,} from '../../../store/contrat/intermediaire/model';
+import {TypeAvenant} from 'src/app/store/parametrage/type-avenant/model';
+import {loadSecteurActivite} from '../../../store/parametrage/secteur-activite/actions';
 import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
-import { loadDimensionPeriode } from '../../../store/parametrage/dimension-periode/actions';
+import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 
-import {loadPolice, loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
-import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
+import {loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
+import {loadGroupe} from 'src/app/store/contrat/groupe/actions';
 
-import { loadGarantie } from '../../../store/parametrage/garantie/actions';
+import {loadGarantie} from '../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../store/parametrage/garantie/selector';
 
-import { loadActe } from '../../../store/parametrage/acte/actions';
+import {loadActe} from '../../../store/parametrage/acte/actions';
 import * as acteSelector from '../../../store/parametrage/acte/selector';
-import { loadSousActe } from '../../../store/parametrage/sous-acte/actions';
+import {loadSousActe} from '../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
 
-import { loadGenre } from '../../../store/parametrage/genre/actions';
+import {loadGenre} from '../../../store/parametrage/genre/actions';
 import * as genreSelector from '../../../store/parametrage/genre/selector';
 import * as featureActionsPlafond from '../../../store/contrat/plafond/action';
 
-import { loadQualiteAssure } from '../../../store/parametrage/qualite-assure/actions';
+import {loadQualiteAssure} from '../../../store/parametrage/qualite-assure/actions';
 import * as qualiteAssureSelector from '../../../store/parametrage/qualite-assure/selector';
 
-import { Status } from '../../../store/global-config/model';
-import { status } from '../../../store/global-config/selector';
-import { EntityValidations } from '../../common/models/validation';
-import { BreadcrumbService } from '../../../app.breadcrumb.service';
+import {Status} from '../../../store/global-config/model';
+import {status} from '../../../store/global-config/selector';
+import {EntityValidations} from '../../common/models/validation';
+import {BreadcrumbService} from '../../../app.breadcrumb.service';
 
-import { loadTypePrime } from '../../../store/parametrage/type-prime/actions';
+import {loadTypePrime} from '../../../store/parametrage/type-prime/actions';
 import * as typePrimeSelector from '../../../store/parametrage/type-prime/selector';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../store/parametrage/plafond/model';
-import {TabMenuModule} from 'primeng/tabmenu';
-import { Plafond } from 'src/app/store/contrat/plafond/model';
-import ThirdPartyDraggable from '@fullcalendar/interaction/interactions-external/ThirdPartyDraggable';
-import { element } from 'protractor';
+import {Plafond} from 'src/app/store/contrat/plafond/model';
 import {PoliceService} from '../../../store/contrat/police/service';
-import * as adherentSelector from "../../../store/contrat/adherent/selector";
-import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
+import * as adherentSelector from '../../../store/contrat/adherent/selector';
+import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
 
 import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
-import * as historiqueAvenantSelector from "../../../store/contrat/historiqueAvenant/selector";
+import * as historiqueAvenantSelector from '../../../store/contrat/historiqueAvenant/selector';
 import {
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
+  HistoriqueAvenantList,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
-import {loadHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/actions';
 import {loadProfession} from '../../../store/parametrage/profession/actions';
+import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
+import {HistoriqueAvenantAdherentService} from '../../../store/contrat/historiqueAvenantAdherent/service';
+import {HistoriqueAvenantAdherentList} from '../../../store/contrat/historiqueAvenantAdherent/model';
+import {TypeReport} from '../../../store/contrat/enum/model';
+import {printPdfFile} from '../../util/common-util';
 
 @Component({
   selector: 'app-avenant',
@@ -226,6 +218,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
     {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
   typeActions: MenuItem[] = [];
+  typeAvenants: MenuItem[] = [];
   selectedGroup: Groupe;
   groupePolicy: Array<Groupe>;
   policeItem: Police;
@@ -243,14 +236,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantList: Array<HistoriqueAvenant>;
+  historiqueAvenants1: HistoriqueAvenantList;
+  historiqueAvenantAdherents: HistoriqueAvenantAdherentList;
+  report: Report = {};
 
+  infosPolice: boolean = false;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
       private breadcrumbService: BreadcrumbService,
-      private policeService: PoliceService
+      private policeService: PoliceService,
+      private historiqueAvenantService: HistoriqueAvenantService,
+      private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService
+
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -838,6 +838,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.checkStatus();
     this.init();
     // this.loadHistoriqueAvenant();
+
+    /** dispatch action pour imprimer le pdf */
+    this.store.dispatch(featureAction.setReport(null));
+    this.store.pipe(select(selectByteFile)).pipe(takeUntil(this.destroy$))
+        .subscribe(bytes => {
+          if (bytes) {
+            printPdfFile(bytes);
+          }
+        });
+
   }
 
   init(): void {
@@ -1053,18 +1063,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.policeForm.reset();
       },
     });
-  }
-
-  voirGroupe(police: Police) {
-    this.police = {...police};
-    this.groupeList$ = this.store.pipe(select(groupeList));
-    this.store.dispatch(loadGroupe({policeId: police.id}));
-    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.groupeList = value.slice();
-      }
-    });
-    this.displayDialogFormGroupe = true;
   }
 
   addGroupe() {
@@ -1411,5 +1409,148 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.store.dispatch(featureAction.deValiderPolice(police));
       },
     });
+  }
+
+  voirGroupe(police: Police) {
+    this.police = {...police};
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: police.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupeList = value.slice();
+      }
+    });
+    this.displayDialogFormGroupe = true;
+  }
+
+  /** afficher les details de la police */
+  onRowSelectPolice(police: Police) {
+    this.police = {...police};
+    this.infosPolice = true;
+    this.policeForm.patchValue(this.police);
+    this.historiqueAvenantService.getHistoriqueAvenants(this.police.id).subscribe(
+        (res: HistoriqueAvenantList) => {
+          this.historiqueAvenants1 = res;
+          console.log('==================================', this.historiqueAvenants1);
+        }
+    );
+  }
+
+  /** afficher les details de l'avenant' */
+  onRowSelectAvenant(avenant: HistoriqueAvenant) {
+    this.historiqueAvenant = {...avenant};
+    this.infosPolice = true;
+    this.policeForm.patchValue(this.police);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherents(this.historiqueAvenant.id).subscribe(
+        (res: HistoriqueAvenantAdherentList) => {
+          this.historiqueAvenantAdherents = res;
+          console.log('=====================historiqueAvenantAdherents=============', this.historiqueAvenantAdherents);
+          console.log('=================this.historiqueAvenant.id=================', this.historiqueAvenant.id);
+        }
+    );
+  }
+
+  printAvenantIncorporation(police: Police) {
+    this.typeAvenants = [
+      {label: 'Avenant d\'incorporation', icon: 'pi pi-print', command: ($event) => {
+          this.report.typeReporting = TypeReport.AVENANT_INCORPORATION;
+          this.report.police = police;
+          console.log('==================this.report.police=================={}', this.report.police);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }},
+      {label: 'Liste d\'ajout', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Facture d\'ajout', icon: 'pi pi-print', command: () => {
+
+        }}
+    ];
+  }
+
+  printAvenantModification() {
+    this.typeAvenants = [
+      {label: 'Avenant de modification', icon: 'pi pi-print', command: ($event) => {
+
+        }},
+      {label: 'Liste modifiée', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Facture de modification', icon: 'pi pi-print', command: () => {
+
+        }}
+    ];
+  }
+
+  printAvenantRetrait() {
+    this.typeAvenants = [
+      {label: 'Avenant de retrait', icon: 'pi pi-print', command: ($event) => {
+
+        }},
+      {label: 'Liste de retrait', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Facture de retrait', icon: 'pi pi-print', command: () => {
+
+        }}
+    ];
+  }
+
+  printAvenantRenouvellement() {
+    this.typeAvenants = [
+      {label: 'Avenant de renouvellement', icon: 'pi pi-print', command: ($event) => {
+
+        }},
+      {label: 'Liste de renouvellement', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
+
+        }},
+      {label: 'Facture de renouvellement', icon: 'pi pi-print', command: () => {
+
+        }}
+    ];
+  }
+
+  onTypeHistoriqueAvenantChoose(typeHistoriqueAvenant: TypeHistoriqueAvenant, police: Police) {
+    switch (typeHistoriqueAvenant) {
+      case TypeHistoriqueAvenant.INCORPORATION: {
+        this.printAvenantIncorporation(police);
+        break;
+      }
+      case TypeHistoriqueAvenant.MODIFICATION: {
+        this.printAvenantModification();
+        break;
+      }
+      case TypeHistoriqueAvenant.RETRAIT: {
+        this.printAvenantRetrait();
+        break;
+      }
+      case TypeHistoriqueAvenant.RENOUVELLEMENT: {
+        this.printAvenantRenouvellement();
+        break;
+      }
+      default: {
+        return null;
+      }
+    }
+   /* if (typeHistoriqueAvenant === TypeHistoriqueAvenant.INCORPORATION) {
+      this.printAvenantIncorporation(police);
+    } else if (typeHistoriqueAvenant === TypeHistoriqueAvenant.MODIFICATION) {
+      this.printAvenantModification();
+    } else if (typeHistoriqueAvenant === TypeHistoriqueAvenant.RETRAIT) {
+      this.printAvenantRetrait();
+    } else if (typeHistoriqueAvenant === TypeHistoriqueAvenant.RENOUVELLEMENT) {
+      this.printAvenantRenouvellement();
+    }*/
   }
 }
