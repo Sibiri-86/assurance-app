@@ -218,6 +218,8 @@ import { TauxCommissionIntermediaireEffects } from './store/parametrage/taux-com
 import {AvenantRetraitComponent} from './module/contrat/avenant/avenant-retrait.component/avenant-retrait.component';
 import {AvenantRenouvellementComponent} from './module/contrat/avenant/avenant-renouvellement/avenant-renouvellement.component';
 import {AvenantModificationComponent} from './module/contrat/avenant/avenant-modification.component/avenant-modification.component';
+import { PlafondComponent } from './module/contrat/avenant/plafond/plafond.component';
+import {Upercase} from './module/pipes/upercase';
 
 @NgModule({
     imports: [
@@ -380,7 +382,9 @@ import {AvenantModificationComponent} from './module/contrat/avenant/avenant-mod
         GroupeComponent,
         AvenantRetraitComponent,
         AvenantRenouvellementComponent,
-        AvenantModificationComponent
+        AvenantModificationComponent,
+        PlafondComponent,
+        Upercase
     ],
     providers: [
         {

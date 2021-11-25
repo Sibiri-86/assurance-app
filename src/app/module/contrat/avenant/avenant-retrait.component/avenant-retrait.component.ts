@@ -14,7 +14,7 @@ import {Adherent, AdherentFamille, AdherentList} from '../../../../store/contrat
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
-import {HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
+import {HistoriqueAvenantAdherant, HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 
 @Component({
@@ -34,9 +34,13 @@ export class AvenantRetraitComponent implements OnInit {
   groupePolicy: any;
   historiqueAvenants: HistoriqueAvenantList;
   adherentList$: Observable<Array<Adherent>>;
-  adherantGroupeListe: Array<Adherent> = [];
+  adherantGroupeListe: Array<HistoriqueAvenantAdherant> = [];
   familleAdherants: Array<AdherentFamille>;
   @Output() adherentFamilleEvent = new EventEmitter();
+  adherantDeleteds: Array<HistoriqueAvenantAdherant> = [];
+  historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
+  nonRetirer = 'non retiré';
+  retirer = 'retiré';
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -62,6 +66,14 @@ export class AvenantRetraitComponent implements OnInit {
       }
     });
     this.groupe = {};
+
+    this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
+        (res) => {
+          this.historiqueAveantAdherants = res;
+          console.log('..................historiqueAveantAdherants...................');
+          console.log(this.historiqueAveantAdherants);
+        }
+    );
   }
 
 
@@ -87,10 +99,10 @@ export class AvenantRetraitComponent implements OnInit {
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        this.adherantGroupeListe = value.slice();
+        //this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
-        // console.log(this.adherantGroupeListe);
-        this.makeAderantFamille();
+        console.log(this.adherantGroupeListe);
+        // this.makeAderantFamille();
       }
     });
   }
@@ -100,30 +112,34 @@ export class AvenantRetraitComponent implements OnInit {
     // this.adherantList = [];
   }
 
-  retirer(adherent: Adherent): void {
-    console.log(adherent);
-    const id = adherent.id;
-    this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== id);
-    if (adherent.adherentPrincipal !== null) {
-      this.adherantGroupeListe = this.adherantGroupeListe.filter(e => e.id !== adherent.adherentPrincipal.id);
-    }
+  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+    const value: boolean = !historiqueAvenantAdherant.selected;
+    console.log(historiqueAvenantAdherant);
+    historiqueAvenantAdherant.selected = value;
+    // const id = adherent.adherent.id;
+    // this.adherantDeleteds.push(historiqueAvenantAdherant);
+    // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === historiqueAvenantAdherant.id);
+    this.historiqueAveantAdherants.forEach(haa => {
+      if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
+          haa.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
+        this.adherantDeleteds.push(haa);
+        haa.selected = value;
+        // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === haa.id);
+        // console.log('******1*******' + this.adherantDeleteds.length);
+      }
+      console.log('******1*******' + this.adherantDeleteds.length);
+    });
+    // if (adherent.adherent.adherentPrincipal !== null) {
+      // this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.adherent.id === adherent.adherent.adherentPrincipal.id);
+      // this.adherantGroupeListe = this.adherantGroupeListe.filter(e =>  e.adherent.id === adherent.adherent.adherentPrincipal.id);
+    // }
   }
 
   addAdherentFamilleToList(): void {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
-    // this.adherentFamilleEvent.emit(this.familleAdherants);
+    this.adherentFamilleEvent.emit(this.adherantDeleteds);
     this.init();
   }
 
-  makeAderantFamille(): void {
-    this.adherantGroupeListe.forEach(f => {
-      const familleAdherant: AdherentFamille = {};
-      if (f.adherentPrincipal !== null) {
-        familleAdherant.adherent = f;
-        familleAdherant.famille = this.adherantGroupeListe.filter(e => e.id !== f.adherentPrincipal.id);
-        this.familleAdherants.push(familleAdherant);
-      }
-    });
-  }
 }

@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {Police, Report} from '../../../store/contrat/police/model';
-import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {Groupe} from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
 import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
+import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {groupeList} from '../../../store/contrat/groupe/selector';
 import {Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
 import {Pays} from '../../../store/parametrage/pays/model';
@@ -40,17 +40,14 @@ import {loadCommune} from '../../../store/parametrage/commune/actions';
 
 import {loadTaux} from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
-
 import {loadTypeAvenant} from '../../../store/parametrage/type-avenant/actions';
-import * as avenantSelector from '../../../store/parametrage/type-avenant/selector';
+import * as avenantSelector from "../../../store/parametrage/type-avenant/selector";
 import {loadTerritorialite} from '../../../store/parametrage/territorialite/actions';
 import * as territorialiteSelector from '../../../store/parametrage/territorialite/selector';
 
 import {loadGarant} from '../../../store/contrat/garant/actions';
 import * as garantSelector from '../../../store/contrat/garant/selector';
-
 import * as featureActionGroupe from '../../../store/contrat/groupe/actions';
-
 import {loadIntermediaire} from '../../../store/contrat/intermediaire/actions';
 import * as intermediaireSelector from '../../../store/contrat/intermediaire/selector';
 
@@ -851,6 +848,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
+    this.isAvenantIncorporation = false;
+    this.isAvenantRetrait = false;
+    this.isAvenantModification = false;
+    this.isAvenantRenouvellement = false;
     this.groupePolicy = [];
     this.selectedGroup = {};
     this.adherentListGroupe = [];
@@ -1308,6 +1309,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   delAvenenant(): void {
     this.dissplayavenant = false;
+    this.init();
   }
 
   loadGoupeByPolice(): void {
@@ -1350,7 +1352,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenant.aderants.push(adherentFamille);
     this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.id = null;
     this.historiqueAvenant.groupe = this.curentGroupe;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
@@ -1380,15 +1382,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteAdherant(adherants: AdherentFamille[]) {
-    this.historiqueAvenant.aderants = [];
-    this.historiqueAvenant.aderants = adherants;
-    this.historiqueAvenant.police = this.policeItem;
+  deleteAdherant(historiqueAvenantAdherants: HistoriqueAvenantAdherant[]) {
+    historiqueAvenantAdherants.forEach(historiqueAvenantAdherant => {
+      historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      historiqueAvenantAdherant.adherent.groupe = this.curentGroupe;
+      });
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    // this.historiqueAvenant.aderants = adherentFamille.aderants;
+    this.historiqueAvenant.historiqueAvenantAdherants = historiqueAvenantAdherants;
     this.historiqueAvenant.groupe = this.curentGroupe;
-    console.log('**************HistoriqueAvenant****************');
-    console.log(this.historiqueAvenant);
+    this.historiqueAvenant.police = this.policeItem;
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     this.dissplayavenant = false;
   }

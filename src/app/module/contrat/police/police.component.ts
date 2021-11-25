@@ -124,6 +124,7 @@ import {loadArrondissement} from '../../../store/parametrage/arrondissement/acti
 import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
 import { Report } from "../../../store/contrat/police/model";
 import { TypeReport } from "src/app/store/contrat/enum/model";
+import {Prime} from '../../../store/contrat/prime/model';
 
 
 @Component({
@@ -171,6 +172,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   intermediaireList$: Observable<Array<Intermediaire>>;
   intermediaireList: Array<Intermediaire>;
+  isgroupEditing = false;
+  obj: any = {group: {}, prime: {}};
 
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
@@ -241,7 +244,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
   displayPrevisualiserParametrage : boolean = false;
   displayDialogFormUpdateAdherent: boolean = false;
   infosAdherent: boolean = false;
- 
+  isPlafondEditing = false;
+  newGroupe: Groupe = {};
+  newPrime: Prime = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -1436,9 +1441,9 @@ changeGarantie(garantie, indexLigne: number) {
 
   validerPolice(police:Police){
     this.confirmationService.confirm({
-      message: "Etes vous sur de vouloir valider la police?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sur de vouloir valider la police?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureAction.validerPolice(police));
       },
@@ -1449,9 +1454,76 @@ changeGarantie(garantie, indexLigne: number) {
     this.policeForm.reset();
     this.primeForm.reset();
     this.groupeForm.reset();
-    this.displayDialogFormAddGroupe =false;
+    this.displayDialogFormAddGroupe = false;
     this.displayDialogFormPolice = false;
     this.displayParametragePlafond = false;
     console.log('saisie');
+  }
+
+  editGroupe(groupe: Groupe) {
+    this.isgroupEditing = true;
+    this.setGroupeAndPrime(groupe, groupe.prime);
+    this.newGroupe = groupe;
+    this.newPrime = this.primeForm.value;
+    this.obj = {
+      group: groupe,
+      prime: groupe.prime
+    };
+    console.log('........obj 1..........');
+    console.log(this.obj);
+    this.displayGroupForm = true;
+  }
+
+  createPlafond(): void {
+    const plafond: Plafond = {};
+    this.displayGroupForm = false;
+    console.log('..................' + plafond);
+  }
+
+  groupeAdd(group) {
+    console.log('.........group.........');
+    console.log(group);
+  }
+
+  getObjt(): any {
+    return {
+      groupe: this.newGroupe,
+      prime: this.newPrime
+    };
+  }
+
+  setGroupeAndPrime(grp: Groupe, prm: Prime): void {
+    this.groupeForm.patchValue({
+      id: grp?.id,
+      libelle: grp?.libelle,
+      taux: grp?.taux,
+      territorialite: grp.territorialite,
+      duree: grp.duree,
+      // dateEffet: Date.now(),
+      typeDuree: {},
+      // dateEcheance: grp.dateEcheance
+    });
+
+    this.primeForm.patchValue({
+      prime: grp.typePrime,
+      primeEmploye: prm?.primeEmploye,
+      primeConjoint: prm?.primeConjoint,
+      primeEnfant: prm?.primeEnfant,
+      primeFamille: prm?.primeFamille,
+      primeAdulte: prm?.primeAdulte,
+      // primePersonne: prm?.primePersonne,
+      primeAnnuelle: prm?.primeAnnuelle
+    });
+    this.selectedTypePrime = grp.typePrime;
+    this.displayDialogFormAddGroupe = true;
+    console.log(this.groupeForm);
+    console.log(this.primeForm);
+  }
+
+  saveNewGroupe(): void {
+    const groupe1: Groupe = this.groupeForm.value;
+    groupe1.groupeId = this.newGroupe.id;
+    console.log(this.newGroupe);
+    this.store.dispatch(featureActionGroupe.updateGroupe(this.newGroupe));
   }
 }
