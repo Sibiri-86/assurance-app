@@ -100,7 +100,7 @@
                                     pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2"
                                     (click)="voirGroupe(police)"></button>
                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
-                                    class="p-button-rounded p-button-info" (click)="voirGroupe(police)"></button>
+                                    class="p-button-rounded p-button-info" (click)="onRowSelectPolice(police)"></button>
                             <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
                             <button pButton  pRipple icon="pi pi-reply" pTooltip="Rétrograder" class="p-button-rounded p-button-warning p-ml-2" (click)="deValiderPolice(police)"></button>
                             <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2"
@@ -1069,7 +1069,8 @@
             </ng-template>
         </p-dialog>
 
-
+<!--voir les groupes -->
+<!--
         <p-dialog [(visible)]="displayDialogFormGroupe" header="Groupe" [modal]="true" styleClass="p-fluid"
                   [style]="{'width':'1100px'}">
             <ng-template pTemplate="content">
@@ -1083,12 +1084,12 @@
                                         class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()"
                                         [disabled]="!selectedGarants || !selectedGarants.length"></button>
                             </ng-template>
-                            <!--
+                            &lt;!&ndash;
                             <ng-template pTemplate="right">
                                 <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
                                 <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
                             </ng-template>
-                            -->
+                            &ndash;&gt;
                         </p-toolbar>
                         <p-table #dt [value]="groupeListFilter" [columns]="cols" [rows]="10" [paginator]="true"
                                  [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -1168,6 +1169,8 @@
                 </div>
             </ng-template>
         </p-dialog>
+-->
+
 
 
         <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true"
@@ -1762,6 +1765,240 @@
 
 
         </p-dialog>
+
+
+
+<!--Affichage de la liste des avenants de la police -->
+
+
+        <p-dialog [maximizable]="true" [(visible)]="infosPolice" header="Police details" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <h5></h5>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Garant</label>
+                            <div>
+                                <span>{{police.garant.nom}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Intermediaire</label>
+                            <div>
+                                <span>{{police.intermediaire.nom}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Taux de couverture</label>
+                            <div>
+                                <span>{{police.taux.taux}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Territorialité</label>
+                            <div>
+                                <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="dateEffet">Date effet</label>
+                            <div>
+                                <span>{{police.dateEffet}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Date echeance</label>
+                            <div>
+                                <span>{{police.dateEcheance}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Nom du souscripteur</label>
+                            <div>
+                                <span>{{police.nom}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Contact</label>
+                            <div>
+                                <span>{{police.contact}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Adresse email</label>
+                            <div>
+                                <span>{{police.adresseEmail}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="adressePostale">Adresse postale</label>
+                            <div>
+                                <span>{{police.adressePostale}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Secteur activite</label>
+                            <div>
+                                <span>{{police.secteurActivite.libelle}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Numero IFU</label>
+                            <div>
+                                <span>{{police.numeroIfu}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Personne ressource</label>
+                            <div>
+                                <span>{{police.personneRessource}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Contact personne ressource</label>
+                            <div>
+                                <span>{{police.contactPersonneRessource}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="refPolice">Reference police</label>
+                            <div>
+                                <span>{{police.referencePolice}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Rccm</label>
+                            <div>
+                                <span>{{police.rccm}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Numero police</label>
+                            <div>
+                                <span>{{police.numero}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Secteur</label>
+                            <div>
+                                <span>{{police.secteur.libelle}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-4">
+                            <label for="fraisAccessoire">Frais accessoire</label>
+                            <div>
+                                <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                            </div>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisBadge">Frais badge</label>
+                            <div>
+                                <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--Liste des avenants de la police-->
+                <h4> Avenant(s) de la police N°: {{police.numero}} </h4>
+                <div class="card">
+                    <p-table #dt [value]="historiqueAvenants1" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [rowHover]="true" dataKey="id"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th pSortableColumn="typeAvenant">Type d'avénant <p-sortIcon field="typeAvenant"></p-sortIcon></th>
+                                <th pSortableColumn="duree">Duree Police <p-sortIcon field="duree"></p-sortIcon></th>
+                                <th pSortableColumn="dateEffet">Date d'effet Police <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                                <th pSortableColumn="dateEcheance">Date écheance Police <p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowdata>
+                            <tr>
+                                <td>
+                                    <p-tableCheckbox [value]="historiqueAvenants1"></p-tableCheckbox>
+                                </td>
+                                <td><span class="p-column-title">{{rowdata.typeHistoriqueAvenant}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{rowdata.police.duree}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{rowdata.police.dateEffet | formatTableValue : 'date'}}</span>
+                                </td>
+                                <td>
+                                    <span class="p-column-title">{{rowdata.police.dateEcheance | formatTableValue : 'date'}}</span>
+                                </td>
+                                <td>
+                                    <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details"
+                                            class="p-button-rounded p-button-info p-mr-2" (click)="onRowSelectAvenant(rowdata)">
+                                    </button>
+                                    <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants" class="p-ml-2"
+                                                   (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, police)">
+                                    </p-splitButton>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{historiqueAvenants1 ? historiqueAvenants1.length : 0 }} Avenant(s) au total.
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </ng-template>
+        </p-dialog>
+
+        <!--Affichage des details de chaque avenant -->
+
 
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
