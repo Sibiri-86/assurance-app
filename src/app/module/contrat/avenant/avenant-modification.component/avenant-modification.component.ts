@@ -12,6 +12,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent} from '../../../../store/contrat/adherent/model';
 import {loadAdherent} from '../../../../store/contrat/adherent/actions';
+import {Genre} from '../../../../store/parametrage/genre/model';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -24,10 +25,12 @@ export class AvenantModificationComponent implements OnInit {
   groupeList$: Observable<Groupe[]>;
   groupeList: Array<Groupe>;
   adherantList$: Observable<Adherent[]>;
-  adherantList: Array<Adherent>;
+  @Input() adherantList: Array<Adherent>;
   destroy$ = new Subject<boolean>();
   groupe: Groupe;
   groupePolicy: any;
+  genreList: Array<Genre>;
+  genreList$: Observable<Array<Genre>>;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
