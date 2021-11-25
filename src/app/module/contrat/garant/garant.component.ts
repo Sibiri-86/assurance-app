@@ -39,6 +39,13 @@ import * as arrondissementAction from '../../../store/parametrage/arrondissement
 import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
 import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
 
+
+import * as banqueAction from '../../../store/parametrage/Banques/actions';
+import * as banqueSelector from '../../../store/parametrage/Banques/selector';
+
+import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
+import * as tauxCommissionAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
+
 import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
 import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 import { loadGarant } from 'src/app/store/contrat/garant/actions';
@@ -48,6 +55,9 @@ import {status} from '../../../store/global-config/selector';
 import { EntityValidations } from '../../common/models/validation';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { element } from 'protractor';
+import { Banque } from 'src/app/store/parametrage/Banques/model';
+import { TauxCommissionIntermediaire } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
+import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 
 @Component({
   selector: 'app-garant',
@@ -85,10 +95,14 @@ export class GarantComponent implements OnInit, OnDestroy {
   loading:boolean;
   secteurList: Array<Secteur>;
   secteurList$: Observable<Array<Secteur>>;
+  banqueList: Array<Banque>;
+  banqueList$: Observable<Array<Banque>>;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   isEditable = false;
   infosGarant = false;
+  tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
+  tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -115,7 +129,11 @@ export class GarantComponent implements OnInit, OnDestroy {
         rccm: new FormControl('', [Validators.required]),
         region: new FormControl(''),
         typeGarant: new FormControl('', [Validators.required]),
-        secteur: new FormControl('', [Validators.required])
+        banque1: new FormControl('', [Validators.required]),
+        banque2: new FormControl(''),
+        secteur: new FormControl('', [Validators.required]),
+        commissionPrime: new FormControl('',[Validators.required]),
+        commissionAccessoire: new FormControl('',[Validators.required])
       });
 
       this.breadcrumbService.setItems([
@@ -321,6 +339,24 @@ ngOnInit(): void {
   ];
 
 
+  this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+  this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
+  this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.tauxCommissionIntermediaireList = value.slice();
+              }
+  });
+
+  this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
+  this.store.dispatch(banqueAction.loadBanque());
+  this.banqueList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.loading = false;
+                this.banqueList = value.slice();
+              }
+  });
 
   this.typeGarantList$=this.store.pipe(select(typeGarantSelector.garantList));
   this.store.dispatch(typeGarantAction.loadGarant());

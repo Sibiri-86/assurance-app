@@ -37,7 +37,7 @@ updateAdherent(Adherent: Adherent): Observable<any> {
 
 deleteAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, null);
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);
 }
 
 deleteAdherents(adherent: Array<Adherent>): Observable<any> {

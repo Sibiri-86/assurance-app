@@ -119,11 +119,19 @@ import {
   import * as historiqueAvenantReducer from '../contrat/historiqueAvenant/reducer';
   import * as historiqueAvenantState from '../contrat/historiqueAvenant/state';
 
+  import * as banqueReducer from '../parametrage/Banques/reducer';
+  import * as banqueState from '../parametrage/Banques/state';
+  import * as tauxCommissionIntermediaireReducer from '../parametrage/taux-commission-intermediaire/reducer';
+  import * as tauxCommissionIntermediaireState from '../parametrage/taux-commission-intermediaire/state';
+import { tauxcommissionintermediaireList } from '../parametrage/taux-commission-intermediaire/selector';
+
   export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
     secteurActiviteState: secteurActiviteReducer.reducer,
     globalState: globaleStateReducer.reducer,
     acteState: acteReducer.reducer,
+    banqueState: banqueReducer.reducer,
+    tauxCommissionIntermediaireState: tauxCommissionIntermediaireReducer.reducer,
     sousActeState: sousActeReducer.reducer,
     tauxState: tauxReducer.reducer,
     dimensionPeriodeState: dimensionPeriodeReducer.reducer,

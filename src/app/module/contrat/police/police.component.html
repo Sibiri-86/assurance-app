@@ -609,12 +609,9 @@
 
         <p-dialog [maximizable]="true" (onHide)="annulerSaisie()" [(visible)]="displayDialogFormAddGroupe" header="Groupe" [modal]="true" styleClass="p-fluid" [style]="{'width':'1300px'}">
         <ng-template pTemplate="content">
-
             <div class="">
-
                 <div class="card">
                     <div *ngIf="displayGroupForm">
-                        
                         <p-fieldset legend="Caracteristique" toggleable="true">
                         <form [formGroup]="groupeForm">
                             <h5></h5>
@@ -1338,6 +1335,96 @@
 
 
 
+        <p-dialog [(visible)]="displayDialogFormUpdateAdherent" header="Modifier adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
+            <ng-template pTemplate="content">
+        <p-fieldset legend="Adhérent" toggleable="true">
+            <form   [formGroup]="adherentForm">
+                <div class="card">
+            
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                        <label for="firstname2">Nom</label>
+                        <input id="nom" type="text" required formControlName="nom"  pInputText>
+                        </div>
+
+                        <div class="p-field p-col">
+                        <label for="lastname2">Prenom</label>
+                        <input id="lastname2" type="text"  formControlName="prenom" pInputText>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Telephone</label>
+                            <input id="lastname2" type="text" formControlName="numeroTelephone" pInputText>
+                        </div>
+                       </div>
+
+                    <div class="p-fluid p-formgrid p-grid">   
+                    <div class="p-field p-col">
+                    <label for="firstname2">Adresse email</label>
+                    <input id="firstname2" type="text"  formControlName="adresseEmail" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                    <label for="lastname2">Adresse</label>
+                    <input id="lastname2" type="text" formControlName="adresse" pInputText>
+                    </div>
+    
+                    <div class="p-field p-col">
+                    <label for="lastname2">Reference bancaire</label>
+                    <input id="lastname2" type="text"  formControlName="referenceBancaire" pInputText>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Date de naissance</label>
+                        <p-calendar  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Lieu de naissance</label>
+                        <input id="lastname2" type="text" formControlName="lieuNaissance" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Date entrée</label>
+                        <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Genre</label>
+                        <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Profession</label>
+                        <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Qualite assuré</label>
+                        <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+                </div>
+
+                </div>
+               </form>        
+            </p-fieldset>
+            <br/>
+            <div class="p-grid p-justify-between">
+                <div>
+                <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
+                </div>
+                <div>
+                <button  [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
+                </div>
+            </div>
+        </ng-template>
+    </p-dialog>
+
 
         <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
             <ng-template pTemplate="content">
@@ -1525,6 +1612,95 @@
                 </ng-template>
             </p-dialog>
 
+
+            <p-dialog [maximizable]="true" [(visible)]="infosAdherent" header="Adherent détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+                <ng-template pTemplate="content">
+                    <div class="card">
+                    <h5></h5>
+                    <div class="p-fluid p-formgrid p-grid">
+                           <div class="p-field p-col">
+                            <label for="lastname2">Nom</label>
+                            <div>
+                                <span>{{adherent.nom}}</span>
+                            </div>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="lastname2">Prenom</label>
+                                <div>
+                                    <span>{{adherent.prenom}}</span>
+                                </div>
+                                </div>
+    
+                            <div class="p-field p-col">
+                                <label for="lastname2">Lieu de nasissance</label>
+                                <div>
+                                    <span>{{adherent.lieuNaissance}}</span>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Date naissance</label>
+                            <div>
+                                <span>{{adherent.dateNaissance | formatTableValue: 'date'}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Matricule</label>
+                            <div>
+                                <span>{{adherent.matricule}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Adresse</label>
+                            <div>
+                                <span>{{adherent.adresse}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Adresse-email </label>
+                            <div>
+                                <span>{{adherent.adresseEmail}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Genre</label>
+                            <div>
+                                <span>{{adherent?.genre?.libelle}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Qualite-Assuré</label>
+                            <div>
+                                <span>{{adherent?.qualiteAssure?.libelle}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Profession</label>
+                            <div>
+                                <span>{{adherent?.profession?.libelle}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </ng-template>
+            </p-dialog>
+    
+
         <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{'width':'1200px'}">
             <ng-template pTemplate="content">
                 <div class="">
@@ -1579,9 +1755,9 @@
                         <td><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
                         <td><span class="p-column-title">{{adherent.adresse}}</span></td>
 						<td>
-							<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
-							<button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
-                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-warning" (click)="voirGroupe(police)"></button>
+							<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
+							<button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning" (click)="voirDetailAdherent(adherent)"></button>
 						</td>
 					</tr>
 				</ng-template>

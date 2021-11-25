@@ -7,6 +7,8 @@ import { Commune } from '../../parametrage/commune/model';
 import { TypeIntermediaire } from '../../parametrage/type-intermediaire/model';
 import { Secteur } from '../../parametrage/secteur/model';
 import { Taux } from '../../parametrage/taux/model';
+import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
+import { Banque } from '../../parametrage/Banques/model';
 
 export interface Intermediaire {
     id?: string,
@@ -22,8 +24,10 @@ export interface Intermediaire {
     numeroIfu?: string,
     periodiciteAppelFond?: DimensionPeriode,
     rccm?: string,
-    taux?: Taux,
-    secteur?: Secteur
+    taux?: TauxCommissionIntermediaire,
+    secteur?: Secteur,
+    banque1?: Banque,
+    banque2?: Banque
 }
 
 export interface IntermediaireList{
