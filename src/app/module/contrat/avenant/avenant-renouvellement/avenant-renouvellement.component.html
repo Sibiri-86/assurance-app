@@ -1,6 +1,25 @@
 <div class="p-card" >
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
+            <p-tabView>
+                <p-tabPanel header="GENERALITE">
+                    <div class="p-card">
+                        <div class="p-text-right">NUM POLICE:  {{police.referencePolice}}</div>
+                        <div class="p-text-right">NUM POLICE:  {{police.nom}}</div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="INCORPORATION">
+                    <app-avenant-incorporation [polices]="police" (adherentFamilleEvent)="addAdherentFamilleToList()"></app-avenant-incorporation>
+                </p-tabPanel>
+                <p-tabPanel header="RETRAIT">
+                    <app-avenant-retrait [police]="police" (adherentFamilleEvent)="addAdherentFamilleToList()"></app-avenant-retrait>
+                </p-tabPanel>
+                <p-tabPanel header="MODIFICATION">
+                    <app-avenant-modification [police]="police"></app-avenant-modification>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+        <!--<div class="p-field p-col-12">
             <p-fieldset legend="Information adhérent" toggleable="true">
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
                     <div class="p-fluid p-formgrid p-grid">
@@ -165,6 +184,22 @@
 
                 </form>
             </p-fieldset>
+        </div>-->
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="submit">
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -8,6 +8,7 @@ export interface HistoriqueAvenant {
     typeHistoriqueAvenant?: TypeHistoriqueAvenant;
     aderants?: Array<AdherentFamille>;
     groupe?: Groupe;
+    historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
 }
 
 export enum TypeEtat {
@@ -36,6 +37,7 @@ export interface HistoriqueAvenantAdherant {
     historiqueAvenant?: HistoriqueAvenant;
     adherent?: Adherent;
     deleted: boolean;
+    selected: boolean;
 }
 
 export interface HistoriqueAvenantList {

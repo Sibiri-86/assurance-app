@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Police} from '../../../../store/contrat/police/model';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -11,7 +12,7 @@ export class AvenantRenouvellementComponent implements OnInit{
 
     // @Input groupe: Groupe;
     @Output() adherentFamilleEvent = new EventEmitter();
-    // @Input() groupe: Groupe;
+    @Input() police: Police;
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     adherentListGroupe: Array<Adherent>;
@@ -21,6 +22,7 @@ export class AvenantRenouvellementComponent implements OnInit{
     genreList: any;
     professionList: any;
     qualiteAssureList: any;
+	polices: Police[] = [];
 
     init(): void {
         // console.log(this.groupe);
