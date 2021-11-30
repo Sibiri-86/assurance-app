@@ -182,6 +182,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   adherentList: Array<Adherent>;
+  adherent: Adherent = {};
   adherentList$: Observable<Array<Adherent>>;
   adherentFamilleList: Array<Adherent>;
   paysList: Array<Pays>;
@@ -240,7 +241,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
   arrondissementList$: Observable<Array<Arrondissement>>;
   arrondissementList: Array<Arrondissement>;
   displayActe = false;
-  displayPrevisualiserParametrage: false;
+  displayPrevisualiserParametrage : boolean = false;
+  displayDialogFormUpdateAdherent: boolean = false;
+  infosAdherent: boolean = false;
   isPlafondEditing = false;
   newGroupe: Groupe = {};
   newPrime: Prime = {};
@@ -350,6 +353,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe = {...groupe};
     this.displayParametragePlafond = true;
   }
+
+  voirDetailAdherent(adherent:Adherent){
+    this.adherent = {...adherent};
+  this.infosAdherent=true;
+  }
+
 
   ngOnInit(): void {
     this.policeList = [];
@@ -873,9 +882,25 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentWithFamille.adherent =this.adherentForm.value;
     this.adherentWithFamille.adherent.groupe = this.groupe;
     this.adherentWithFamille.famille = this.adherentFamilleList;
+    if(!this.adherentForm.value.id){
     this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    }else {
+      this.store.dispatch(featureActionAdherent.updateAdherent(this.adherentForm.value));
+    }
     this.adherentFamilleList = [];
     this.adherentForm.reset();
+  }
+
+
+  supprimerAdherent(adherent:Adherent){
+  this.store.dispatch(featureActionAdherent.deleteAdherent(adherent));
+  }
+
+  modifierAdherent(adherent: Adherent){
+    this.adherent= {...adherent};
+    this.adherent.dateNaissance = new Date(this.adherent.dateNaissance);
+    this.displayDialogFormUpdateAdherent = true;
+    this.adherentForm.patchValue(this.adherent);
   }
 
 

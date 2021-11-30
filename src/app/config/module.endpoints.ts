@@ -15,6 +15,11 @@ export class Endpoints {
         mock: `assets/mock/parametrage/typeSousActe.mock.json`
     };
 
+    static readonly PARAMETRAGE_BANQUE = {
+        prod: `${SERVICE_PREFIX}/parametrage/banque`,
+        mock: `assets/mock/parametrage/banque.mock.json`
+    };
+
     static readonly PARAMETRAGE_SECTEUR_ACTIVITE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeSecteurActivite`,
         mock: `assets/mock/parametrage/secteurActivite.mock.json`
@@ -102,6 +107,11 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/parametrage/typeAvenant`,
         mock: `assets/mock/parametrage/typeAvenant.mock.json`
     };
+
+    static readonly PARAMETRAGE_TYPE_TAUXCOMMISSIONINTERMEDIAIRE = {
+        prod: `${SERVICE_PREFIX}/parametrage/commissionIntermediaire`,
+        mock: `assets/mock/parametrage/commissionIntermediaire.mock.json`
+    }
 
     static readonly PARAMETRAGE_TYPE_AFFAIRE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeAffaire`,
@@ -213,6 +223,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+    static readonly HISTORIQUE_AVENANT_ADHERENT = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent`,
+        mock: `assets/mock/contrat/historique-avenant-adherent.mock.json`
+    };
 
     static readonly HISTORIQUE_AVENANT_UPDATE = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant-update`,
@@ -220,7 +234,17 @@ export class Endpoints {
     };
 
     static readonly HISTORIQUE_AVENANT_ADHERANT = {
-        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-aderant`,
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+
+    static readonly CONTRAT_ADHERENT_POLICE = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/police`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT_MODIF = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/modification`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 }

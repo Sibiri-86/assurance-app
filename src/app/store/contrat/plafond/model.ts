@@ -8,7 +8,7 @@ export interface Plafond {
     plafondGlobalInternationnal?: number,
     plafondAnnuellePersonne?: number,
     plafondFamilleActe?: Array<PlafondFamilleActe>,
-    groupe: Groupe
+    groupe?: Groupe
 }
 
 export interface PlafondList {

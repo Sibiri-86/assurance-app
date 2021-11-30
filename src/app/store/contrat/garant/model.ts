@@ -6,6 +6,8 @@ import { Region } from '../../parametrage/region/model';
 import *as typeGarant from '../../parametrage/garant/model';
 import { Commune } from '../../parametrage/commune/model';
 import { Secteur } from '../../parametrage/secteur/model';
+import { Banque } from '../../parametrage/Banques/model';
+import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
 export interface Garant {
     id?: string,
     nom?: string,
@@ -26,9 +28,13 @@ export interface Garant {
     periodiciteAppelFond?: DimensionPeriode,
     typeGarant?: typeGarant.Garant,
     secteur?: Secteur,
+    banque1?: Banque,
+    banque2?: Banque,
+    commissionPrime?: TauxCommissionIntermediaire,
+    commissionAccessoire?: TauxCommissionIntermediaire,
     rccm?: string
 }
 
-export interface GarantList{
+export interface GarantList {
     garantDtoList?: Array<Garant>
 }

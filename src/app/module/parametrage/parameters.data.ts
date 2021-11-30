@@ -98,12 +98,21 @@ import {arrondissementList} from 'src/app/store/parametrage/arrondissement/selec
 import * as secteurActions from '../../store/parametrage/secteur/actions';
 import {secteurList} from 'src/app/store/parametrage/secteur/selector';
 
+import * as banqueActions from '../../store/parametrage/Banques/actions';
+import { banqueList } from 'src/app/store/parametrage/Banques/selector';
+
+import * as tauxCommissionIntermediaireAction from '../../store/parametrage/taux-commission-intermediaire/actions';
+import { TauxCommissionIntermediaireList } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
+import { tauxcommissionintermediaireList } from 'src/app/store/parametrage/taux-commission-intermediaire/selector';
+
 // Definition des type de paramettres
 export const DATA_TYPE = [
   {label: 'Famille d\'acte', value: 'TypeGarantie'},
   {label: 'Sous acte', value: 'SousActe'},
   {label: 'Acte', value: 'Acte'},
   {label: 'Genre', value: 'Genre'},
+  {label: 'Banque', value: 'Banque'},
+  {label: 'Taux de commission intermediaire', value: 'TauxDeCommissionIntermediaire'},
   {label: 'Taux', value: 'Taux'},
   {label: 'Dimension periode', value: 'DimensionPeriode'},
   {label: 'Territorialité', value: 'Territorialite'},
@@ -237,6 +246,54 @@ export const DATA_DEFINITION = [
       updateAction: typeIntermediaireActions.updateTypeIntermediaire,
       deleteAction: typeIntermediaireActions.deleteTypeIntermediaire,
       importAction: typeIntermediaireActions.importTypeIntermediaire
+    }
+  },
+  {
+    entity: 'Banque',
+    cols: [
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: banqueList,
+      fetchAction: banqueActions.loadBanque(),
+      createAction: banqueActions.createBanque,
+      updateAction: banqueActions.updateBanque,
+      deleteAction: banqueActions.deleteBanque,
+      importAction: banqueActions.importBanque
     }
   },
   
@@ -535,6 +592,80 @@ export const DATA_DEFINITION = [
       updateAction: dimensionPeriodeActions.updateDimensionPeriode,
       deleteAction: dimensionPeriodeActions.deleteDimensionPeriode,
       importAction: dimensionPeriodeActions.importDimensionPeriode
+    }
+  },
+  {
+    entity: 'Taux',
+    cols: [
+      {
+        field: 'taux', header: 'Taux', type: 'number', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'taux',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: tauxList,
+      fetchAction: tauxActions.loadTaux(),
+      createAction: tauxActions.createTaux,
+      updateAction: tauxActions.updateTaux,
+      deleteAction: tauxActions.deleteTaux,
+      importAction: tauxActions.importTaux
+    }
+  },
+  {
+    entity: 'TauxDeCommissionIntermediaire',
+    cols: [
+      {
+        field: 'taux', header: 'Taux', type: 'number', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'taux',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: tauxcommissionintermediaireList,
+      fetchAction: tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire(),
+      createAction: tauxCommissionIntermediaireAction.createTauxCommissionIntermediaire,
+      updateAction: tauxCommissionIntermediaireAction.updateTauxCommissionIntermediaire,
+      deleteAction: tauxCommissionIntermediaireAction.deleteTauxCommissionIntermediaire,
+      importAction: tauxCommissionIntermediaireAction.importTauxCommissionIntermediaire
     }
   },
   {

@@ -1,10 +1,6 @@
 import {Adherent, AdherentFamille} from '../adherent/model';
 import {Groupe} from '../groupe/model';
 import {Police} from '../police/model';
-import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
-import {Acte} from '../../parametrage/acte/model';
-import {SousActe} from '../../parametrage/sous-acte/model';
-import {Plafond} from '../plafond/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -12,7 +8,6 @@ export interface HistoriqueAvenant {
     typeHistoriqueAvenant?: TypeHistoriqueAvenant;
     aderants?: Array<AdherentFamille>;
     groupe?: Groupe;
-    historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
 }
 
 export enum TypeEtat {
@@ -40,28 +35,12 @@ export interface HistoriqueAvenantAdherant {
     dateRenouvellement?: Date;
     historiqueAvenant?: HistoriqueAvenant;
     adherent?: Adherent;
-    deleted?: boolean;
-    selected?: boolean;
+    deleted: boolean;
 }
 
 export interface HistoriqueAvenantList {
     historiqueAvenantList?: Array<HistoriqueAvenant>;
 }
-
-export class AvenantModification {
-    adherants?: Array<Adherent>;
-    groupes?: Array<Groupe>;
-}
-
-export class Avenant {
-    police?: Police;
-    adhrents?: Adherent[];
-    historiqueAvenantAdherants?: HistoriqueAvenantAdherant[];
-    historiqueAvenantAdherantDels?: HistoriqueAvenantAdherant[];
-    groupe?: Groupe;
-    historiqueAvenant?: HistoriqueAvenant;
-    plafondGroupes?: Plafond[];
-    plafondGroupeActes?: PlafondActe[];
-    plafondGroupeSousActes?: PlafondSousActe[];
-    plafondFamilleActes?: PlafondFamilleActe[];
+export interface HistoriqueAvenantAdherentList {
+    historiqueAvenantList?: Array<HistoriqueAvenantAdherant>;
 }

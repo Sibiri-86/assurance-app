@@ -54,7 +54,7 @@ export class AvenantRetraitComponent implements OnInit {
     console.log('..............police.avenant-retrait..............');
     console.log(this.police);
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
-    this.store.dispatch(loadGroupe({policeId: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: this?.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
@@ -99,7 +99,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        this.adherantGroupeListe = value.slice();
+        // this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
         console.log(this.adherantGroupeListe);
         // this.makeAderantFamille();
@@ -138,37 +138,8 @@ export class AvenantRetraitComponent implements OnInit {
   addAdherentFamilleToList(): void {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
-    this.makeAderantFamille();
     this.adherentFamilleEvent.emit(this.adherantDeleteds);
     this.init();
-  }
-
-  makeAderantFamille(): void {
-    this.adherantGroupeListe.forEach(f => {
-      const familleAdherant: AdherentFamille = {
-        adherent: {},
-        famille: []
-      };
-      if (f.adherentPrincipal === null) {
-        console.log('*********adhrant principal**********');
-        console.log(f);
-        familleAdherant.adherent = f;
-        this.adherantGroupeListe.forEach(e => {
-          if (e.adherentPrincipal !== null && e.adherentPrincipal.id === f.id) {
-            familleAdherant.famille.push(e);
-          }
-        });
-        // familleAdherant.famille = this.adherantGroupeListe.filter(e => e.adherentPrincipal.id === f.id);
-        this.familleAdherants.push(familleAdherant);
-      }
-      else {
-        console.log('*********adhrant NON principal**********');
-        console.log(f);
-        familleAdherant.adherent = f;
-        familleAdherant.famille = [];
-        this.familleAdherants.push(familleAdherant);
-      }
-    });
   }
 
 }
