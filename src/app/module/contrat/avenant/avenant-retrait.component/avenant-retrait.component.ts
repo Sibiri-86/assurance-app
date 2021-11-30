@@ -99,7 +99,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        //this.adherantGroupeListe = value.slice();
+        // this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
         console.log(this.adherantGroupeListe);
         // this.makeAderantFamille();
