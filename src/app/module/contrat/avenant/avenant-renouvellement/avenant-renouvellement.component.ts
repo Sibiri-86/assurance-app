@@ -471,7 +471,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     ngOnInit(): void {
         this.historiqueAveantAdherants = [];
         this.adherantListTmp = [];
-        console.log('.............................');
+        console.log('.............1................');
+        console.log(this.police);
         this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
         this.store.dispatch(loadGroupe({policeId: this.police.id}));
         this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -889,6 +890,6 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     addAvenantAdherant(event): void {
-        this.objet.historiqueAvenantAdherantDels = event;
+        this.objet.historiqueAvenantAdherantDels.push(event);
     }
 }

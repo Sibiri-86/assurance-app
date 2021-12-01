@@ -44,6 +44,29 @@ deleteAdherents(adherent: Array<Adherent>): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, adherent);
 }
+    getAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    findAdherantActuallList(idPolice: string): Observable<Adherent[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALL)}/${idPolice}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    loadAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
 
 
 
@@ -62,12 +85,5 @@ private handleError<T>() {
     };
   }
 
-    getAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
-        // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(
-            map((response: Adherent[]) => response),
-            catchError(this.handleError())
-        );
-    }
 }
 

@@ -1,4 +1,5 @@
 import { Groupe } from "../groupe/model";
+import {PlafondSousActe} from '../../parametrage/plafond/model';
 export interface Adherent{
     id?: string,
     nom?: string,
@@ -17,6 +18,7 @@ export interface Adherent{
     dateEntree?: Date,
     groupe?: Groupe,
     adherentPrincipal?: Adherent;
+    plafondGroupeSousActe?: PlafondSousActe;
 }
 
 export interface AdherentFamille {
