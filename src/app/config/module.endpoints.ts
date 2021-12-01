@@ -234,7 +234,17 @@ export class Endpoints {
     };
 
     static readonly HISTORIQUE_AVENANT_ADHERANT = {
-        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-aderant`,
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherant`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+
+    static readonly CONTRAT_ADHERENT_POLICE = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/police`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT_MODIF = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/modification`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 }

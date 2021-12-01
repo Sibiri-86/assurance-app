@@ -220,6 +220,7 @@ import {AvenantRenouvellementComponent} from './module/contrat/avenant/avenant-r
 import {AvenantModificationComponent} from './module/contrat/avenant/avenant-modification.component/avenant-modification.component';
 import { PlafondComponent } from './module/contrat/avenant/plafond/plafond.component';
 import {Upercase} from './module/pipes/upercase';
+import { SeparatorPipe } from './module/pipes/separator.pipe';
 
 @NgModule({
     imports: [
@@ -384,7 +385,8 @@ import {Upercase} from './module/pipes/upercase';
         AvenantRenouvellementComponent,
         AvenantModificationComponent,
         PlafondComponent,
-        Upercase
+        Upercase,
+        SeparatorPipe
     ],
     providers: [
         {

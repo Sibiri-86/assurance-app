@@ -62,10 +62,10 @@ private handleError<T>() {
     };
   }
 
-    getAdherentsByGroupe(idGroupe: string): Observable<AdherentList> {
+    getAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
         // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_GROUPE)}/${idGroupe}`).pipe(
-            map((response: AdherentList) => response),
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(
+            map((response: Adherent[]) => response),
             catchError(this.handleError())
         );
     }
