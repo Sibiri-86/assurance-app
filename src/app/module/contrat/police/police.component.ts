@@ -125,7 +125,8 @@ import * as arrondissementSelector from '../../../store/parametrage/arrondisseme
 import { Report } from "../../../store/contrat/police/model";
 import { TypeReport } from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
-
+import {AdherentService} from '../../../store/contrat/adherent/service';
+import * as adherantSelector from '../../../store/contrat/adherent/selector';
 
 @Component({
   selector: "app-police",
@@ -247,17 +248,20 @@ export class PoliceComponent implements OnInit, OnDestroy {
   isPlafondEditing = false;
   newGroupe: Groupe = {};
   newPrime: Prime = {};
+  assurerListe: Adherent[] = [];
+  adherantSelected: Adherent = {};
 
   constructor(
     private formBuilder: FormBuilder,
     private store: Store<AppState>,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private adherentService: AdherentService
   ) {
 
     this.plafondForm = this.formBuilder.group({
-      //domaine: new FormControl({}),
+      // domaine: new FormControl({}),
       plafondAnnuelleFamille: new FormControl(""),
       plafondAnnuellePersonne: new FormControl(""),
       plafondGlobalInternationnal: new FormControl("")
@@ -333,7 +337,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       primeFamille: new FormControl(""),
       primeAdulte: new FormControl(""),
       primePersonne: new FormControl(""),
-      primeAnnuelle: new FormControl("")
+      primeAnnuelle: new FormControl(null)
     });
 
     this.breadcrumbService.setItems([{ label: "Police" }]);
@@ -693,7 +697,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       }
     });
 
-    
+    // this.loadActualList();
 
     this.garantList$ = this.store.pipe(select(garantSelector.garantList));
     this.store.dispatch(loadGarant());
@@ -944,9 +948,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe.prime = this.primeForm.value;
     this.groupe.typePrime = this.selectedTypePrime;
 
-    if(this.groupe.prime.primeAnnuelle){
+    /* if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
-    }
+    } */
     if(this.groupe.prime.primeAdulte){
       this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +'');
     }
@@ -1120,13 +1124,13 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.police.dateEcheance = this.policeForm.get('dateEcheance').value;
     console.log(this.police);
     this.confirmationService.confirm({
-      message: "Etes vous sur de vouloir ajouter ce police?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sur de vouloir ajouter ce police ?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (this.police.id) {
           this.store.dispatch(
-            featureAction.updatePolice(this.police)
+            featureAction.createPolice(this.police)
           );
         } else {
           console.log(this.policeForm.value);
@@ -1307,7 +1311,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
   }
-  // 
+
   addSousActe() {
   this.plafondActe[this.indexeActe].listeSousActe =this.plafondSousActe;
   console.log(this.plafondActe);
@@ -1512,7 +1516,7 @@ changeGarantie(garantie, indexLigne: number) {
       primeFamille: prm?.primeFamille,
       primeAdulte: prm?.primeAdulte,
       // primePersonne: prm?.primePersonne,
-      primeAnnuelle: prm?.primeAnnuelle
+      primeAnnuelle: null
     });
     this.selectedTypePrime = grp.typePrime;
     this.displayDialogFormAddGroupe = true;
@@ -1525,5 +1529,15 @@ changeGarantie(garantie, indexLigne: number) {
     groupe1.groupeId = this.newGroupe.id;
     console.log(this.newGroupe);
     this.store.dispatch(featureActionGroupe.updateGroupe(this.newGroupe));
+  }
+
+  loadActualList(): void {
+    this.adherentList$ = this.store.pipe(select(adherantSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.assurerListe = value.slice();
+      }
+    });
   }
 }
