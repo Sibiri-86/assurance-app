@@ -54,7 +54,7 @@ export class AvenantRetraitComponent implements OnInit {
     console.log('..............police.avenant-retrait..............');
     console.log(this.police);
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
-    this.store.dispatch(loadGroupe({policeId: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: this?.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
@@ -99,7 +99,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        //this.adherantGroupeListe = value.slice();
+        // this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
         console.log(this.adherantGroupeListe);
         // this.makeAderantFamille();

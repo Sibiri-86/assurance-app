@@ -95,6 +95,8 @@ import * as featureActionAdherent from '../../../store/contrat/adherent/actions'
 import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
 import * as historiqueAvenantSelector from '../../../store/contrat/historiqueAvenant/selector';
 import {
+  Avenant,
+  AvenantModification,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
   HistoriqueAvenantList,
@@ -239,6 +241,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantAdherents1: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents2: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
+  avenantModification: AvenantModification = {};
 
   infosPolice: boolean = false;
   constructor(
@@ -249,8 +252,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private breadcrumbService: BreadcrumbService,
       private policeService: PoliceService,
       private historiqueAvenantService: HistoriqueAvenantService,
-      private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService
-
+      private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -1284,7 +1286,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.dissplayavenant = true;
   }
   addAvenantModification(): void {
+
     this.dissplayavenant = true;
+    this.addNewGroupe();
+    this.loadGoupeByPolice();
+    console.log('*******************-------------------------');
+    console.log(this.adherentListGroupe);
+    this.avenantModification.adherants = this.adherentListGroupe;
+    this.avenantModification.groupes = this.groupePolicy;
   }
 
   addAvenantRenouvellement(): void {
@@ -1613,6 +1622,22 @@ export class AvenantComponent implements OnInit, OnDestroy {
     } else if (typeHistoriqueAvenant === TypeHistoriqueAvenant.RENOUVELLEMENT) {
       this.printAvenantRenouvellement();
     }*/
+  }
+
+  getAvenantModification(event: any) {
+    const avenant: Avenant = event;
+    // avenant.
+    const historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
+    avenant.historiqueAvenant = historiqueAvenant;
+    this.historiqueAvenantService.postAvenant(avenant).subscribe(
+        (res) => {
+          console.log('***************RETOUR********************');
+          console.log(res);
+        }
+    );
+    console.log('********************Avenant modification************************');
+    console.log(event);
   }
 
   onAdherentPrint(historiqueAvenant) {

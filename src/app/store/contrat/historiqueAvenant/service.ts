@@ -1,4 +1,4 @@
-import {HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantList} from "./model";
+import {Avenant, HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantList} from "./model";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -40,6 +40,11 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         catchError(this.handleError())
     );
 }
+
+    postAvenant(avenant: Avenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_MODIF)}`, avenant);
+    }
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
