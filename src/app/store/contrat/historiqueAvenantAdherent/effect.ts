@@ -6,7 +6,6 @@ import {HistoriqueAvenantAdherentService} from './service';
 import * as featureActions from './actions';
 import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import {HistoriqueAvenant} from "./model";
 
 @Injectable()
 export class HistoriqueAvenantAdherantEffects {
@@ -61,6 +60,19 @@ export class HistoriqueAvenantAdherantEffects {
             ofType(featureActions.loadHistoriqueAvenantAdherent),
             mergeMap(({haId}) =>
                 this.historiqueAvenantAdherantService.getHistoriqueAvenantAdherents(haId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenantAdherent(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
+        fetchHistoriqueAvenantByHistoriqueIdAndTypeHistorique$ = createEffect(() =>
+    this.actions$.pipe(
+            ofType(featureActions.loadHistoriqueAvenantAdherentByHistoriqueIdAndTypeHistorique),
+            mergeMap(({typeHistoriqueAvenant, haId}) => this.historiqueAvenantAdherantService
+                    .getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant, haId).pipe(
                     switchMap(value => [
                         featureActions.setHistoriqueAvenantAdherent(value)
                     ]),
