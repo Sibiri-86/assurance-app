@@ -1,4 +1,4 @@
-import {HistoriqueAvenant, HistoriqueAvenantAdherentList, HistoriqueAvenantList} from './model';
+import {HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantAdherentList, HistoriqueAvenantList} from './model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -10,10 +10,10 @@ import {Endpoints} from '../../../config/module.endpoints';
 export class HistoriqueAvenantAdherentService {
 constructor(private http: HttpClient) {}
 
-getHistoriqueAvenantAdherents(haId: string): Observable<HistoriqueAvenantAdherentList> {
+getHistoriqueAvenantAdherents(haId: string): Observable<Array<HistoriqueAvenantAdherant>> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/${haId}`).pipe(
-      map((response: HistoriqueAvenantAdherentList) => response),
+      map((response: Array<HistoriqueAvenantAdherant>) => response),
       catchError(this.handleError())
     );
 }

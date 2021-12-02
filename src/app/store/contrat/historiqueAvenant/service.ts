@@ -5,6 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {

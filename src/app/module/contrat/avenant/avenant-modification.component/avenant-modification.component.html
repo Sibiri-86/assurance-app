@@ -1,5 +1,168 @@
 <div class="p-grid">
     <p-tabView>
+        <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
+            <div class="card">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Garant</label>
+                        <div>
+                            <span>{{police.garant.nom}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Intermediaire</label>
+                        <div>
+                            <span>{{police.intermediaire.nom}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Taux de couverture</label>
+                        <div>
+                            <span>{{police.taux.taux}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Territorialité</label>
+                        <div>
+                            <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="dateEffet">Date effet</label>
+                        <div>
+                            <span>{{police.dateEffet}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Date echeance</label>
+                        <div>
+                            <span>{{police.dateEcheance}}</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="firstname2">Nom du souscripteur</label>
+                        <div>
+                            <span>{{police.nom}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact</label>
+                        <div>
+                            <span>{{police.contact}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Adresse email</label>
+                        <div>
+                            <span>{{police.adresseEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="adressePostale">Adresse postale</label>
+                        <div>
+                            <span>{{police.adressePostale}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur activite</label>
+                        <div>
+                            <span>{{police.secteurActivite.libelle}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numero IFU</label>
+                        <div>
+                            <span>{{police.numeroIfu}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Personne ressource</label>
+                        <div>
+                            <span>{{police.personneRessource}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact personne ressource</label>
+                        <div>
+                            <span>{{police.contactPersonneRessource}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="refPolice">Reference police</label>
+                        <div>
+                            <span>{{police.referencePolice}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Rccm</label>
+                        <div>
+                            <span>{{police.rccm}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numero police</label>
+                        <div>
+                            <span>{{police.numero}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur</label>
+                        <div>
+                            <span>{{police.secteur.libelle}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="fraisAccessoire">Frais accessoire</label>
+                        <div>
+                            <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="fraisBadge">Frais badge</label>
+                        <div>
+                            <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
             <!--<div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col">

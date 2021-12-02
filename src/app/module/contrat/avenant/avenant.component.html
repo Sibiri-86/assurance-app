@@ -7,24 +7,29 @@
                     <p-toast></p-toast>
                     <div class="card">
 
-                    <ng-template pTemplate="left">
-                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
-                                (click)="addPolice()"></button>
-                        <button pButton pRipple label="Supprimer" icon="pi pi-trash p-mr-2" class="p-button-danger p-mb-2"
-                                (click)="deleteSelectedPolice()"
-                                [disabled]="!selectedGarants || !selectedGarants.length"></button>
+                        <ng-template pTemplate="left">
+                            <button pButton pRipple label="Ajouter" icon="pi pi-plus"
+                                    class="p-button-success p-mr-2 p-mb-2"
+                                    (click)="addPolice()"></button>
+                            <button pButton pRipple label="Supprimer" icon="pi pi-trash p-mr-2"
+                                    class="p-button-danger p-mb-2"
+                                    (click)="deleteSelectedPolice()"
+                                    [disabled]="!selectedGarants || !selectedGarants.length"></button>
 
-                        <div class="p-col p-mr-2 p-mb-2">
-                            <p-dropdown inputId="typeAvenant" [filter]="true" showClear="true" [options]="avenantList"
-                                        dataKey="id" [style]="{'width':'100%'}" placeholder="Selectionnez le type avenant"
-                                        (onChange)="changeAvenant($event)" optionLabel="libelle"></p-dropdown>
-                        </div>
-                        <div class="p-col p-mr-2 p-mb-2">
-                            <p-dropdown inputId="polices" [filter]="true" showClear="true" [options]="policeList"
-                                        dataKey="id" [style]="{'width':'100%'}" placeholder="Selectionnez la police"
-                                        (onChange)="loadHistoriqueAvenant($event)" optionLabel="numero"></p-dropdown>
-                        </div>
-                    </ng-template>
+                            <div class="p-col p-mr-2 p-mb-2">
+                                <p-dropdown inputId="typeAvenant" [filter]="true" showClear="true"
+                                            [options]="avenantList"
+                                            dataKey="id" [style]="{'width':'100%'}"
+                                            placeholder="Selectionnez le type avenant"
+                                            (onChange)="changeAvenant($event)" optionLabel="libelle"></p-dropdown>
+                            </div>
+                            <div class="p-col p-mr-2 p-mb-2">
+                                <p-dropdown inputId="polices" [filter]="true" showClear="true" [options]="policeList"
+                                            dataKey="id" [style]="{'width':'100%'}" placeholder="Selectionnez la police"
+                                            (onChange)="loadHistoriqueAvenant($event)"
+                                            optionLabel="numero"></p-dropdown>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </p-toolbar>
@@ -102,7 +107,7 @@
                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                     class="p-button-rounded p-button-info" (click)="onRowSelectPolice(police)"></button>
                             <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
-                            <button pButton  pRipple icon="pi pi-reply" pTooltip="Rétrograder" class="p-button-rounded p-button-warning p-ml-2" (click)="deValiderPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-reply" pTooltip="Rétrograder" class="p-button-rounded p-button-warning p-ml-2" (click)="deValiderPolice(police)"></button>
                             <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée"
                                     class="p-button-rounded p-button-info" (click)="loadActualList(police)"></button>
                             <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2"
@@ -114,7 +119,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{policeList ? policeList.length : 0 }} polices au total.
+                        {{policeList ? policeList.length : 0 }} police(s).
                     </div>
                 </ng-template>
             </p-table>
@@ -1071,108 +1076,107 @@
             </ng-template>
         </p-dialog>
 
-<!--voir les groupes -->
-<!--
-        <p-dialog [(visible)]="displayDialogFormGroupe" header="Groupe" [modal]="true" styleClass="p-fluid"
-                  [style]="{'width':'1100px'}">
-            <ng-template pTemplate="content">
-                <div class="">
-                    <div class="card">
-                        <p-toolbar styleClass="p-mb-4">
-                            <ng-template pTemplate="left">
-                                <button pButton pRipple label="Ajouter" icon="pi pi-plus"
-                                        class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
-                                <button pButton pRipple label="Supprimer" icon="pi pi-trash"
-                                        class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()"
-                                        [disabled]="!selectedGarants || !selectedGarants.length"></button>
-                            </ng-template>
-                            &lt;!&ndash;
-                            <ng-template pTemplate="right">
-                                <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-                                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
-                            </ng-template>
-                            &ndash;&gt;
-                        </p-toolbar>
-                        <p-table #dt [value]="groupeListFilter" [columns]="cols" [rows]="10" [paginator]="true"
-                                 [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
-                                 [rowHover]="true" dataKey="id"
-                                 styleClass="p-datatable-customers"
-                                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
-                                 [showCurrentPageReport]="true">
-                            <ng-template pTemplate="caption">
-                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                    <h5 class="p-m-0"></h5>
-                                    <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                               placeholder="Search..." [style]="{width: '20%'}"/>
-                        </span>
-                                </div>
-                            </ng-template>
+        <!--voir les groupes -->
+        <!--
+                <p-dialog [(visible)]="displayDialogFormGroupe" header="Groupe" [modal]="true" styleClass="p-fluid"
+                          [style]="{'width':'1100px'}">
+                    <ng-template pTemplate="content">
+                        <div class="">
+                            <div class="card">
+                                <p-toolbar styleClass="p-mb-4">
+                                    <ng-template pTemplate="left">
+                                        <button pButton pRipple label="Ajouter" icon="pi pi-plus"
+                                                class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
+                                        <button pButton pRipple label="Supprimer" icon="pi pi-trash"
+                                                class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()"
+                                                [disabled]="!selectedGarants || !selectedGarants.length"></button>
+                                    </ng-template>
+                                    &lt;!&ndash;
+                                    <ng-template pTemplate="right">
+                                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+                                        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+                                    </ng-template>
+                                    &ndash;&gt;
+                                </p-toolbar>
+                                <p-table #dt [value]="groupeListFilter" [columns]="cols" [rows]="10" [paginator]="true"
+                                         [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                                         [rowHover]="true" dataKey="id"
+                                         styleClass="p-datatable-customers"
+                                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                                         [showCurrentPageReport]="true">
+                                    <ng-template pTemplate="caption">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <h5 class="p-m-0"></h5>
+                                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       placeholder="Search..." [style]="{width: '20%'}"/>
+                                </span>
+                                        </div>
+                                    </ng-template>
 
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th style="width: 3rem">
-                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                    </th>
-                                    <th pSortableColumn="nom">Libelle
-                                        <p-sortIcon field="garant.nom"></p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="intermediaire" style="width: 12rem">Taux
-                                        <p-sortIcon field="intermediaire.nom"></p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="numero">Duree
-                                        <p-sortIcon field="numero"></p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="territorialite" style="width: 12rem">Territorialite
-                                        <p-sortIcon field="territorialite.libelle"></p-sortIcon>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-groupe>
-                                <tr>
-                                    <td>
-                                        <p-tableCheckbox [value]="groupe"></p-tableCheckbox>
-                                    </td>
-                                    <td><span class="p-column-title">{{groupe.libelle}}</span>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 3rem">
+                                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                            </th>
+                                            <th pSortableColumn="nom">Libelle
+                                                <p-sortIcon field="garant.nom"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="intermediaire" style="width: 12rem">Taux
+                                                <p-sortIcon field="intermediaire.nom"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="numero">Duree
+                                                <p-sortIcon field="numero"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="territorialite" style="width: 12rem">Territorialite
+                                                <p-sortIcon field="territorialite.libelle"></p-sortIcon>
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-groupe>
+                                        <tr>
+                                            <td>
+                                                <p-tableCheckbox [value]="groupe"></p-tableCheckbox>
+                                            </td>
+                                            <td><span class="p-column-title">{{groupe.libelle}}</span>
 
-                                    </td>
-                                    <td><span class="p-column-title">{{groupe.taux.taux}}</span>
+                                            </td>
+                                            <td><span class="p-column-title">{{groupe.taux.taux}}</span>
 
-                                    </td>
-                                    <td><span class="p-column-title">{{groupe.duree}}</span>
+                                            </td>
+                                            <td><span class="p-column-title">{{groupe.duree}}</span>
 
-                                    </td>
-                                    <td><span class="p-column-title">{{groupe.territorialite.libelle}}</span></td>
-                                    <td>
-                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer"
-                                                class="p-button-rounded p-button-success p-mr-2"
-                                                (click)="editPolice(police)"></button>
-                                        <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer"
-                                                class="p-button-rounded p-button-warning p-mr-2"
-                                                (click)="deletePolice(police)"></button>
-                                        <button pButton pRipple icon="pi pi-angle-up" pTooltip="configurer le plafond"
-                                                class="p-button-rounded p-button-info p-mr-2"
-                                                (click)="parametrerPlafond(groupe)"></button>
-                                        <button pButton pRipple icon="pi pi-eye" pTooltip="voir adherent"
-                                                class="p-button-rounded p-button-info p-mr-2"
-                                                (click)="voirAdherent()"></button>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="summary">
-                                <div class="p-d-flex p-ai-center p-jc-between">
-                                    {{groupeList ? groupeList.length : 0 }} groupes au total.
-                                </div>
-                            </ng-template>
-                        </p-table>
-                    </div>
-                </div>
-            </ng-template>
-        </p-dialog>
--->
-
+                                            </td>
+                                            <td><span class="p-column-title">{{groupe.territorialite.libelle}}</span></td>
+                                            <td>
+                                                <button pButton pRipple icon="pi pi-pencil" pTooltip="editer"
+                                                        class="p-button-rounded p-button-success p-mr-2"
+                                                        (click)="editPolice(police)"></button>
+                                                <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer"
+                                                        class="p-button-rounded p-button-warning p-mr-2"
+                                                        (click)="deletePolice(police)"></button>
+                                                <button pButton pRipple icon="pi pi-angle-up" pTooltip="configurer le plafond"
+                                                        class="p-button-rounded p-button-info p-mr-2"
+                                                        (click)="parametrerPlafond(groupe)"></button>
+                                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir adherent"
+                                                        class="p-button-rounded p-button-info p-mr-2"
+                                                        (click)="voirAdherent()"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <div class="p-d-flex p-ai-center p-jc-between">
+                                            {{groupeList ? groupeList.length : 0 }} groupes au total.
+                                        </div>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dialog>
+        -->
 
 
         <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true"
@@ -1717,7 +1721,8 @@
                     </div>
                     <div class="p-grid p-justify-between">
                         <div>
-                            <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-danger p-button-text"
+                            <button pButton pRipple label="Quitter" icon="pi pi-times"
+                                    class="p-button-danger p-button-text"
                                     (click)="annulerSaisie()"></button>
                         </div>
                         <div>
@@ -1736,26 +1741,31 @@
 
                     <div class="p-field p-col-4" *ngIf="!isNewGroupe">
                         <form [formGroup]="customForm">
-                            <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle" name="selectedGroup"
-                                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
-                                (onChange)="onGroupeChange()">
+                            <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
+                                        name="selectedGroup"
+                                        [filter]="true" filterBy="libelle" [showClear]="true"
+                                        placeholder="Choisir un groupe"
+                                        (onChange)="onGroupeChange()">
                             </p-dropdown>
                         </form>
                     </div>
 
                     <div class="p-field p-col-12" *ngIf="isNewGroupe">
-                        <app-avenant-groupe (groupeEvent)="addGroupeNew($event)" ></app-avenant-groupe>
+                        <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
                     </div>
                     <div class="p-field p-col-2" *ngIf="!isNewGroupe">
-                        <button pButton pRipple label="Groupe" icon="pi pi-plus" class="p-button-success" (click)="addNewGroupe()"
-                            >
+                        <button pButton pRipple label="Groupe" icon="pi pi-plus" class="p-button-success"
+                                (click)="addNewGroupe()"
+                        >
                         </button>
                     </div>
                     <div class="p-field p-col-6"></div>
-                        <app-avenant-incorporation (adherentFamilleEvent)="addAdherentFamille($event)" ></app-avenant-incorporation>
+                    <app-avenant-incorporation
+                            (adherentFamilleEvent)="addAdherentFamille($event)"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
-                    <app-avenant-retrait [police]="policeItem" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
+                    <app-avenant-retrait [police]="policeItem"
+                                         (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantModification">
                     <app-avenant-modification [police]="policeItem" (eventEmitterM)="getAvenantModification($event)"></app-avenant-modification>
@@ -1767,64 +1777,11 @@
 
 
         </p-dialog>
-        <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid"
-                  [style]="{width: '1200px'}">
-            <div class="card">
-                <p-table #dtAL [value]="adherentsListeActuelle"  [columns]="colsAL" [rows]="10" [paginator]="true"
-                         [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
-                         [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
-                         styleClass="p-datatable-customers"
-                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
-                    <ng-template pTemplate="caption">
-                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                            <h5 class="p-m-0"></h5>
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                       placeholder="Search..." [style]="{width: '20%'}" />
-                            </span>
-                        </div>
-                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                            <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dtAL.exportCSV()"></button>
-                        </div>
-                    </ng-template>
-
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-                            <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                            <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
-                            <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-adherent>
-                        <tr>
-                            <td><span class="p-column-title">{{adherent?.nom}}</span>
-
-                            </td>
-                            <td><span class="p-column-title">{{adherent?.prenom}}</span>
-
-                            </td>
-                            <td><span class="p-column-title">{{adherent?.email}}</span>
-
-                            </td>
-                            <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="summary">
-                        <div class="p-d-flex p-ai-center p-jc-between">
-                            {{adherentsListeActuelle ? adherentsListeActuelle.length : 0 }} adherents au total.
-                        </div>
-                    </ng-template>
-                </p-table>
-            </div>
-        </p-dialog>
 
 
-<!--Affichage de la liste des avenants de la police -->
-
-
-        <p-dialog [maximizable]="true" [(visible)]="infosPolice" header="Police details" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+        <!--Affichage de la liste des avenants de la police -->
+        <p-dialog [maximizable]="true" [(visible)]="infosPolice" header="Police details" [modal]="true"
+                  styleClass="p-fluid" [style]="{width: '1500px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <h5></h5>
@@ -1989,60 +1946,83 @@
 
                 </div>
                 <!--Liste des avenants de la police-->
-                <h4> Avenant(s) de la police N°: {{police.numero}} </h4>
+                <h4> Avenant(s) de la police N°:
+                    <mark>{{police.numero}}</mark>
+                    du Souscripteur:
+                    <mark>{{police.nom}}</mark>
+                </h4>
                 <div class="card">
-                    <p-table #dt [value]="historiqueAvenants1" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                    <p-table #dt [value]="historiqueAvenants1" [columns]="cols" [rows]="10" [paginator]="true"
+                             [globalFilterFields]="['typeHistoriqueAvenant']"
                              [rowHover]="true" dataKey="id"
                              styleClass="p-datatable-customers"
-                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+                             [showCurrentPageReport]="true">
                         <ng-template pTemplate="caption">
                             <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                                 <h5 class="p-m-0"></h5>
                                 <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                               placeholder="Rechercher le type d'avenant..."/>
                         </span>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
-                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                <th pSortableColumn="typeAvenant">Type d'avenant
+                                    <p-sortIcon field="typeAvenant"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="typeAvenant">Type d'avénant <p-sortIcon field="typeAvenant"></p-sortIcon></th>
-                                <th pSortableColumn="duree">Duree Police <p-sortIcon field="duree"></p-sortIcon></th>
-                                <th pSortableColumn="dateEffet">Date d'effet Police <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                                <th pSortableColumn="dateEcheance">Date écheance Police <p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                                <th pSortableColumn="duree">Durée Police
+                                    <p-sortIcon field="duree"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="dateEffet">Date d'effet Police
+                                    <p-sortIcon field="dateEffet"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="dateEcheance">Date d'écheance Police
+                                    <p-sortIcon field="dateEcheance"></p-sortIcon>
+                                </th>
                                 <th></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowdata>
                             <tr>
-                                <td>
-                                    <p-tableCheckbox [value]="historiqueAvenants1"></p-tableCheckbox>
-                                </td>
                                 <td><span class="p-column-title">{{rowdata.typeHistoriqueAvenant}}</span>
                                 </td>
                                 <td><span class="p-column-title">{{rowdata.police.duree}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{rowdata.police.dateEffet | formatTableValue : 'date'}}</span>
+                                <td><span
+                                        class="p-column-title">{{rowdata.police.dateEffet | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
                                     <span class="p-column-title">{{rowdata.police.dateEcheance | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
-                                    <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details"
-                                            class="p-button-rounded p-button-info p-mr-2" (click)="onRowSelectAvenant(rowdata)">
-                                    </button>
-                                    <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants" class="p-ml-2"
-                                                   (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, police)">
-                                    </p-splitButton>
+                                    <div class="p-grid p-mt-1">
+                                        <div class="p-col-">
+                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
+                                                    class="p-button-rounded p-button-info p-mr-2"
+                                                    (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant)">
+                                            </button>
+                                        </div>
+                                        <div class="p-col-">
+                                            <button pButton  pRipple icon="pi pi-check" pTooltip="Valider l'avenant" class="p-button-rounded p-button-info p-mr-2">
+                                            </button>
+                                        </div>
+                                        <div class="p-col-">
+                                            <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants"
+                                                           (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, rowdata)">
+                                            </p-splitButton>
+                                        </div>
+                                    </div>
+
+
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary">
                             <div class="p-d-flex p-ai-center p-jc-between">
-                                {{historiqueAvenants1 ? historiqueAvenants1.length : 0 }} Avenant(s) au total.
+                                {{historiqueAvenants1 ? historiqueAvenants1.length : 0 }} Avenant(s).
                             </div>
                         </ng-template>
                     </p-table>
@@ -2052,7 +2032,251 @@
 
         <!--Affichage des details de chaque avenant -->
 
+        <!--Affichage des details des avenants d'incorporation -->
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentIncorp"
+                  header="Adhérent(s) et membre(s) de familles ajouté(s)" [modal]="true" styleClass="p-fluid"
+                  [style]="{'width':'1200px'}">
+            <ng-template pTemplate="content">
+                <div class="">
+                    <div class="card">
+                        <p-table #dt [value]="historiqueAvenantAdherents1" [columns]="cols" [rows]="10"
+                                 [paginator]="true"
+                                 [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
+                                 [rowHover]="true" dataKey="id"
+                                 styleClass="p-datatable-customers"
+                                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                                 [showCurrentPageReport]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex p-flex-column table-header">
+                                    <div class="p-grid">
+                                        <div class="p-col-9">
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                       placeholder="Rechercher..." [style]="{width: '20%'}"/>
+                                            </span>
+                                        </div>
+                                        <div class="p-col-2">
+                                            <span class="p-input-icon-right">
+                                                <button pButton pRipple icon="pi pi-print" label="Imprimer" pTooltip="Imprimer la liste"
+                                                        class="p-button-info"></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="nom" style="width: 7rem">Nom
+                                        <p-sortIcon field="nom"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="prenom" style="width: 9rem">Prenom
+                                        <p-sortIcon field="prenom"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numero" style="width: 12rem">Date Naissance
+                                        <p-sortIcon field="dateNaissance"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="lieuNaissance" style="width: 12rem">Lieu de naissance
+                                        <p-sortIcon field="lieuNaissance"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numeroTelephone" style="width: 10rem">Telephone
+                                        <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="adresse" style="width: 10rem">Date Inc.
+                                        <p-sortIcon field="adresse"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="qla" style="width: 10rem">Qualité Assuré
+                                        <p-sortIcon field="qla"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-adherentHis>
+                                <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                                    <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                    <td><span
+                                            class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.dateIncorporation}}</span>
+                                    </td>
+                                    <td><span
+                                            class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                    </td>
+                                    <!-- <td>
+                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
+                                        <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
+                                        <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning" (click)="voirDetailAdherent(adherent)"></button>
+                                    </td> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div class="p-d-flex p-ai-center p-jc-between">
+                                    {{historiqueAvenantAdherents1 ? historiqueAvenantAdherents1.length : 0 }} assuré(s).
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+
+        <!--Affichage des details des avenants de retrait -->
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentRetrait"
+                  header="Adhérent(s) et membre(s) de familles Rétiré(s)" [modal]="true" styleClass="p-fluid"
+                  [style]="{'width':'1200px'}">
+            <ng-template pTemplate="content">
+                <div class="">
+                    <div class="card">
+                        <p-table #dt [value]="historiqueAvenantAdherents2" [columns]="cols" [rows]="10"
+                                 [paginator]="true"
+                                 [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
+                                 [rowHover]="true" dataKey="id"
+                                 styleClass="p-datatable-customers"
+                                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                                 [showCurrentPageReport]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex p-flex-column table-header">
+                                    <div class="p-grid">
+                                        <div class="p-col-9">
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                       placeholder="Rechercher..." [style]="{width: '20%'}"/>
+                                            </span>
+                                        </div>
+                                        <div class="p-col-2">
+                                            <span class="p-input-icon-right">
+                                                <button pButton pRipple icon="pi pi-print" label="Imprimer" pTooltip="Imprimer la liste"
+                                                        class="p-button-info"></button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem">
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th pSortableColumn="nom" style="width: 7rem">Nom
+                                        <p-sortIcon field="nom"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="prenom" style="width: 9rem">Prenom
+                                        <p-sortIcon field="prenom"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numero" style="width: 12rem">Date de Naissance
+                                        <p-sortIcon field="dateNaissance"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="lieuNaissance" style="width: 12rem">Lieu de naissance
+                                        <p-sortIcon field="lieuNaissance"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numeroTelephone" style="width: 10rem">Telephone
+                                        <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="adresse" style="width: 10rem">Date de Retrait
+                                        <p-sortIcon field="adresse"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="qla" style="width: 10rem">Qualité Assuré
+                                        <p-sortIcon field="qla"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-adherentHis>
+                                <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                                    <td>
+                                        <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
+                                    </td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                    <td><span
+                                            class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{adherentHis.adherent.dateIncorporation}}</span>
+                                    </td>
+                                    <td><span
+                                            class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                    </td>
+                                    <!-- <td>
+                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
+                                        <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
+                                        <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning" (click)="voirDetailAdherent(adherent)"></button>
+                                    </td> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div class="p-d-flex p-ai-center p-jc-between">
+                                    {{historiqueAvenantAdherents2 ? historiqueAvenantAdherents2.length : 0 }} assuré(s).
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+
 
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
-</div>>
+    <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid"
+              [style]="{width: '1200px'}">
+        <div class="card">
+            <p-table #dtAL [value]="adherentsListeActuelle"  [columns]="colsAL" [rows]="10" [paginator]="true"
+                     [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                     [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       placeholder="Search..." [style]="{width: '20%'}" />
+                            </span>
+                    </div>
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dtAL.exportCSV()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-adherent>
+                    <tr>
+                        <td><span class="p-column-title">{{adherent?.nom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent?.prenom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{adherentsListeActuelle ? adherentsListeActuelle.length : 0 }} adherents au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-dialog>
+</div>

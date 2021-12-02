@@ -5,6 +5,7 @@ import {SecteurActivite} from '../../parametrage/secteur-activite/model';
 import { Taux } from '../../parametrage/taux/model';
 import { Secteur } from '../../parametrage/secteur/model';
 import {TypeReport} from '../enum/model';
+import {HistoriqueAvenant} from '../historiqueAvenant/model';
 
 export interface Police{
     id?: string;
@@ -51,6 +52,7 @@ export interface ReportFile {
 export interface Report {
     typeReporting?: TypeReport,
     police?: Police;
+    historiqueAvenant?: HistoriqueAvenant;
 
 }
 

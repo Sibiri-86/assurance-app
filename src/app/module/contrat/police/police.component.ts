@@ -337,7 +337,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       primeFamille: new FormControl(""),
       primeAdulte: new FormControl(""),
       primePersonne: new FormControl(""),
-      primeAnnuelle: new FormControl("")
+      primeAnnuelle: new FormControl(null)
     });
 
     this.breadcrumbService.setItems([{ label: "Police" }]);
@@ -948,9 +948,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe.prime = this.primeForm.value;
     this.groupe.typePrime = this.selectedTypePrime;
 
-    if(this.groupe.prime.primeAnnuelle){
+    /* if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
-    }
+    } */
     if(this.groupe.prime.primeAdulte){
       this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +'');
     }
@@ -1516,7 +1516,7 @@ changeGarantie(garantie, indexLigne: number) {
       primeFamille: prm?.primeFamille,
       primeAdulte: prm?.primeAdulte,
       // primePersonne: prm?.primePersonne,
-      primeAnnuelle: prm?.primeAnnuelle
+      primeAnnuelle: null
     });
     this.selectedTypePrime = grp.typePrime;
     this.displayDialogFormAddGroupe = true;
