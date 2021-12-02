@@ -1514,7 +1514,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
         }},
       {label: 'Facture d\'ajout', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
@@ -1554,7 +1557,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
         }},
       {label: 'Facture de retrait', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
