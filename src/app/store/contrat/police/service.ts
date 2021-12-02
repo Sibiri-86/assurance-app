@@ -45,7 +45,7 @@ export class PoliceService {
 
     updatePolice(Police: Police): Observable<any> {
         // @FIXME: post request
-        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, Police);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_UPDATE)}}`, Police);
     }
 
     validerPolice(Police: Police): Observable<any> {

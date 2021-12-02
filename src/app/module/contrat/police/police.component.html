@@ -752,7 +752,7 @@
                         </div>
                         <div *ngIf="isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
-                            <button pButton pRipple label="Enregistrer" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>
+                            <button pButton pRipple label="Modifier" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>
                         </div>
                     </div>
                 </div>
@@ -1328,82 +1328,91 @@
 
         <p-dialog [(visible)]="displayDialogFormUpdateAdherent" header="Modifier adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
             <ng-template pTemplate="content">
-        <p-fieldset legend="Adhérent" toggleable="true">
-            <form   [formGroup]="adherentForm">
-                <div class="card">
-            
-                <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col">
-                        <label for="firstname2">Nom</label>
-                        <input id="nom" type="text" required formControlName="nom"  pInputText>
+                <p-fieldset legend="Adhérent" toggleable="true">
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <label for="a">Qualite assuré</label>
+                            <p-dropdown  inputId="a" dataKey="id" [filter]="true" showClear="true"
+                                         [options]="assurerListe" filterBy="nom, prenom, numero, groupe.nom"
+                                         [(ngModel)]="adherantSelected" placeholder="Ex:" optionLabel="nom"></p-dropdown>
+                        </div>
+                        <div class="p-col-6"></div>
+                    </div>
+                    <form   [formGroup]="adherentForm">
+                        <div class="card">
+
+                        <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                <label for="firstname2">Nom</label>
+                                <input id="nom" type="text" required formControlName="nom"  pInputText>
+                                </div>
+
+                                <div class="p-field p-col">
+                                <label for="lastname2">Prenom</label>
+                                <input id="lastname2" type="text"  formControlName="prenom" pInputText>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="lastname2">Telephone</label>
+                                    <input id="lastname2" type="text" formControlName="numeroTelephone" pInputText>
+                                </div>
+                               </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                            <label for="firstname2">Adresse email</label>
+                            <input id="firstname2" type="text"  formControlName="adresseEmail" pInputText>
+                            </div>
+
+                            <div class="p-field p-col">
+                            <label for="lastname2">Adresse</label>
+                            <input id="lastname2" type="text" formControlName="adresse" pInputText>
+                            </div>
+
+                            <div class="p-field p-col">
+                            <label for="lastname2">Reference bancaire</label>
+                            <input id="lastname2" type="text"  formControlName="referenceBancaire" pInputText>
+                            </div>
                         </div>
 
-                        <div class="p-field p-col">
-                        <label for="lastname2">Prenom</label>
-                        <input id="lastname2" type="text"  formControlName="prenom" pInputText>
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Date de naissance</label>
+                                <p-calendar  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Lieu de naissance</label>
+                                <input id="lastname2" type="text" formControlName="lieuNaissance" pInputText>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Date entrée</label>
+                                <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            </div>
                         </div>
 
-                        <div class="p-field p-col">
-                            <label for="lastname2">Telephone</label>
-                            <input id="lastname2" type="text" formControlName="numeroTelephone" pInputText>
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="lastname2">Genre</label>
+                                <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Profession</label>
+                                <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">Qualite assuré</label>
+                                <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            </div>
                         </div>
-                       </div>
 
-                    <div class="p-fluid p-formgrid p-grid">   
-                    <div class="p-field p-col">
-                    <label for="firstname2">Adresse email</label>
-                    <input id="firstname2" type="text"  formControlName="adresseEmail" pInputText>
-                    </div>
-
-                    <div class="p-field p-col">
-                    <label for="lastname2">Adresse</label>
-                    <input id="lastname2" type="text" formControlName="adresse" pInputText>
-                    </div>
-    
-                    <div class="p-field p-col">
-                    <label for="lastname2">Reference bancaire</label>
-                    <input id="lastname2" type="text"  formControlName="referenceBancaire" pInputText>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Date de naissance</label>
-                        <p-calendar  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Lieu de naissance</label>
-                        <input id="lastname2" type="text" formControlName="lieuNaissance" pInputText>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Date entrée</label>
-                        <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
-                        <label for="lastname2">Genre</label>
-                        <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Profession</label>
-                        <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                    </div>
-
-                    <div class="p-field p-col-4">
-                        <label for="lastname2">Qualite assuré</label>
-                        <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                    </div>
-                </div>
-
-                </div>
-               </form>        
-            </p-fieldset>
+                        </div>
+                       </form>
+                    </p-fieldset>
             <br/>
             <div class="p-grid p-justify-between">
                 <div>
@@ -1936,7 +1945,7 @@
 
 <p-dialog [maximizable]="true" [(visible)]="displayDialogFormPolice" header="Police" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}" (onHide)="policeForm.reset()">
     <ng-template pTemplate="content">
-        <form (ngSubmit)="onCreate()"  [formGroup]="policeForm" (onHide)="annulerSaisie()">
+        <form (ngSubmit)="onCreate()"  [formGroup]="policeForm" >
             <div class="card">
                 <p-fieldset legend="Identification" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
@@ -2194,7 +2203,8 @@
                     <button pButton pRipple type="button" label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                 </div>
                 <div>
-                    <button  [disabled]="policeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button *ngIf="!policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button *ngIf="policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Modifier" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
         </form>

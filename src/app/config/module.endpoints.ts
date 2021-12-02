@@ -185,6 +185,11 @@ export class Endpoints {
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 
+    static readonly CONTRAT_POLICE_UPDATE = {
+            prod: `${SERVICE_PREFIX}/contrat/police/update`,
+            mock: `assets/mock/contrat/intermediaire.mock.json`
+        };
+
     static readonly CONTRAT_POLICE_VALIDE = {
         prod: `${SERVICE_PREFIX}/contrat/police//by-valide-is-true`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
