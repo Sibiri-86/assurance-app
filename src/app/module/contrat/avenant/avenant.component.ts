@@ -1614,4 +1614,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
       this.printAvenantRenouvellement();
     }*/
   }
+
+  onAdherentPrint(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_RETRAIT;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+  onAdherentPrint1(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_INCORPORATION;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
 }
