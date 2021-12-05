@@ -1,7 +1,7 @@
 <div class="p-grid">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
-            <div class="card">
+            <div class="p-grid">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="lastname2">Garant</label>
@@ -328,6 +328,25 @@
             </div>
         </p-tabPanel>
         <p-tabPanel header="PLAFOND" leftIcon="pi pi-user-edit" tooltip="PLAFOND">
+            <p-fieldset legend="Plafond" toggleable="true">
+                <form [formGroup]="plafondForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="primeFamillePG">Plafond global annuelle par personne</label>
+                            <input id="primeFamillePG" type="number" pInputText formControlName="plafondAnnuellePersonne">
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="montantPrimeEnfantPG">Plafond global par famille</label>
+                            <input id="montantPrimeEnfantPG" type="number" pInputText formControlName="plafondAnnuelleFamille">
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="montantPrimeInter">Plafond global internationnal</label>
+                            <input id="montantPrimeInter" type="number" pInputText formControlName="plafondGlobalInternationnal">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
             <p-table #dt [value]="plafondFamilleActe" dataKey="" editMode="row">
                 <ng-template pTemplate="header">
                     <tr>
@@ -678,7 +697,7 @@
                                         <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{historiqueAveantAdherant.adherent.dateNaissance}}
+                                        {{historiqueAveantAdherant?.adherent?.dateNaissance}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -708,7 +727,7 @@
                                         <p-dropdown [options]="genreList" optionLabel="libelle" [(ngModel)]="historiqueAveantAdherant.adherent.genre" [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{historiqueAveantAdherant.adherent.genre.libelle}}
+                                        {{historiqueAveantAdherant.adherent?.genre?.libelle}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -785,7 +804,7 @@
         <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
     </div>
     <div class="p-col-1">
-        <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+        <button type="button" [disabled]="historiqueAveantAdherants?.length < 1" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
     </div>
 
 </div>

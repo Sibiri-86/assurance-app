@@ -100,6 +100,10 @@ import {
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
   HistoriqueAvenantList,
+  HistoriquePlafond,
+  HistoriquePlafondActe,
+  HistoriquePlafondFamilleActe,
+  HistoriquePlafondSousActe,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
 import {loadProfession} from '../../../store/parametrage/profession/actions';
@@ -247,6 +251,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantAdherents2: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
   avenantModification: AvenantModification = {};
+  historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondFamilleActeList: Array<HistoriquePlafondFamilleActe> = [];
+  historiquePlafondActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondActeList: Array<HistoriquePlafondActe> = [];
+  historiquePlafondSousActeList$: Observable<Array<HistoriquePlafondSousActe>>;
+  historiquePlafondSousActeList: Array<Territorialite> = [];
+  historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
+  historiquePlafondList: Array<HistoriquePlafondActe> = [];
 
   infosPolice = false;
   constructor(
@@ -1689,5 +1701,49 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log(res);
         }
     );
+  }
+
+  loadHistoriquePlafondGroupe(): void {
+    const avanantId = '';
+    this.historiquePlafondList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeFamilleActe(): void {
+    const avanantId = '';
+    this.historiquePlafondFamilleActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeFamilleActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondFamilleActe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondFamilleActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondFamilleActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeActe(): void {
+    const avanantId = '';
+    this.historiquePlafondActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeSousActe(): void {
+    const avanantId = '';
+    this.historiquePlafondSousActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeSousActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondSousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondSousActeList = value.slice();
+      }
+    });
   }
 }

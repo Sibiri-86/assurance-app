@@ -15,7 +15,11 @@ import {
   Avenant,
   AvenantModification,
   HistoriqueAvenant,
-  HistoriqueAvenantAdherant
+  HistoriqueAvenantAdherant,
+  HistoriquePlafond,
+  HistoriquePlafondActe,
+  HistoriquePlafondFamilleActe,
+  HistoriquePlafondSousActe
 } from '../../../../store/contrat/historiqueAvenant/model';
 import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -68,6 +72,8 @@ import {Taux} from '../../../../store/parametrage/taux/model';
 import * as territorialiteSelector from '../../../../store/parametrage/territorialite/selector';
 import {loadTerritorialite} from '../../../../store/parametrage/territorialite/actions';
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
+import * as historiqueAvenantSelector from '../../../../store/contrat/historiqueAvenant/selector';
+import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -467,6 +473,15 @@ export class AvenantModificationComponent implements OnInit {
       plafondAnnuellePersonne: new FormControl('')
     });
   }
+  historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondFamilleActeList: Array<HistoriquePlafondFamilleActe> = [];
+  historiquePlafondActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondActeList: Array<HistoriquePlafondActe> = [];
+  historiquePlafondSousActeList$: Observable<Array<HistoriquePlafondSousActe>>;
+  historiquePlafondSousActeList: Array<Territorialite> = [];
+  historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
+  historiquePlafondList: Array<HistoriquePlafondActe> = [];
+  historiqueAvenant: HistoriqueAvenant = {};
 
   ngOnInit(): void {
     this.historiqueAveantAdherants = [];
@@ -619,6 +634,10 @@ export class AvenantModificationComponent implements OnInit {
     this.obj.group = this.groupeSelected;
     this.historiqueAveantAdherants = this.adherantListTmp.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
     this.setGroupeAndPrime(this.groupeSelected);
+    this.loadHistoriquePlafondGroupe();
+    this.loadHistoriquePlafondGroupeFamilleActe();
+    this.loadHistoriquePlafondGroupeActe();
+    this.loadHistoriquePlafondGroupeSousActe();
   }
 
   addAvenantModification(): void{
@@ -870,21 +889,77 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   createAvenantModif(): void {
-    this.plafondActe.forEach(pa => {
-      pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
-    });
-    this.plafondFamilleActe.forEach(pa => {
-      pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
-    });
-    this.plafondSousActe.forEach(pa => {
-      pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
-    });
+    if (this.plafondActe) {
+      this.plafondActe.forEach(pa => {
+        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+      });
+    }
+    if (this.plafondActe) {
+      this.plafondFamilleActe.forEach(pa => {
+        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+      });
+    }
+    if (this.plafondActe) {
+      this.plafondSousActe.forEach(pa => {
+        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+      });
+    }
+    this.objet.groupe = this.groupeForm.value || this.groupeSelected;
     this.objet.plafondGroupeActes = this.plafondActe;
     this.objet.plafondFamilleActes = this.plafondFamilleActe;
     this.objet.plafondGroupeSousActes = this.plafondSousActe;
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.adherantListTmp;
+    this.objet.plafondGroupe = this.plafondForm.value;
     console.log(this.objet);
     this.eventEmitterM.emit(this.objet);
+  }
+
+  loadHistoriquePlafondGroupe(): void {
+    const avanantId = '';
+    this.historiquePlafondList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe(
+        {avanantId: this.historiqueAvenant.id, grpId: this.groupeSelected.id}));
+    this.historiquePlafondList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeFamilleActe(): void {
+    const avanantId = '';
+    this.historiquePlafondFamilleActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeFamilleActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondFamilleActe(
+        {avanantId: this.historiqueAvenant.id, grpId: this.groupeSelected.id}));
+    this.historiquePlafondFamilleActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondFamilleActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeActe(): void {
+    const avanantId = '';
+    this.historiquePlafondActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe(
+        {avanantId: this.historiqueAvenant.id, grpId: this.groupeSelected.id}));
+    this.historiquePlafondActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeSousActe(): void {
+    const avanantId = '';
+    this.historiquePlafondSousActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeSousActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe(
+        {avanantId: this.historiqueAvenant.id, grpId: this.groupeSelected.id}));
+    this.historiquePlafondSousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondSousActeList = value.slice();
+      }
+    });
   }
 }

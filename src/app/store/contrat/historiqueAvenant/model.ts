@@ -5,6 +5,10 @@ import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrag
 import {Acte} from '../../parametrage/acte/model';
 import {SousActe} from '../../parametrage/sous-acte/model';
 import {Plafond} from '../plafond/model';
+import {Garantie} from '../../parametrage/garantie/model';
+import {DimensionPeriode} from '../../parametrage/dimension-periode/model';
+import {Taux} from '../../parametrage/taux/model';
+import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -13,6 +17,8 @@ export interface HistoriqueAvenant {
     aderants?: Array<AdherentFamille>;
     groupe?: Groupe;
     historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
+    numero?: number;
+    numeroGarant?: number;
 }
 
 export enum TypeEtat {
@@ -60,8 +66,54 @@ export class Avenant {
     historiqueAvenantAdherantDels?: HistoriqueAvenantAdherant[];
     groupe?: Groupe;
     historiqueAvenant?: HistoriqueAvenant;
-    plafondGroupes?: Plafond[];
-    plafondGroupeActes?: PlafondActe[];
-    plafondGroupeSousActes?: PlafondSousActe[];
-    plafondFamilleActes?: PlafondFamilleActe[];
+    plafondGroupe?: HistoriquePlafond;
+    plafondGroupeActes?: HistoriquePlafondActe[];
+    plafondGroupeSousActes?: HistoriquePlafondSousActe[];
+    plafondFamilleActes?: HistoriquePlafondFamilleActe[];
+}
+
+export class HistoriquePlafondFamilleActe {
+    garantie?: Garantie;
+    montantPlafond?: number;
+    dimensionPeriode?: DimensionPeriode;
+    dateEffet?: Date;
+    taux?: Taux;
+    nombre?: number;
+    listeActe?: Array<PlafondActe>;
+    domaine?: Array<QualiteAssure>;
+    historiqueAvenant?: HistoriqueAvenant;
+}
+
+export interface HistoriquePlafondActe {
+    id?: string;
+    acte?: Acte;
+    montantPlafond?: number;
+    dateEffet?: Date;
+    taux?: Taux;
+    dimensionPeriode?: DimensionPeriode;
+    nombre?: number;
+    listeSousActe?: Array<PlafondSousActe>;
+    historiqueAvenant?: HistoriqueAvenant;
+}
+
+export interface HistoriquePlafondSousActe {
+    id?: string;
+    sousActe?: SousActe;
+    taux?: Taux;
+    dateEffet?: Date;
+    montantPlafond?: number;
+    dimensionPeriode?: DimensionPeriode;
+    nombre?: number;
+    historiqueAvenant?: HistoriqueAvenant;
+}
+
+export interface HistoriquePlafond {
+    id?: string;
+    domaine?: QualiteAssure;
+    plafondAnnuelleFamille?: number;
+    plafondGlobalInternationnal?: number;
+    plafondAnnuellePersonne?: number;
+    plafondFamilleActe?: Array<PlafondFamilleActe>;
+    groupe?: Groupe;
+    historiqueAvenant?: HistoriqueAvenant;
 }

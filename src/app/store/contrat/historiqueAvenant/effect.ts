@@ -68,4 +68,56 @@ export class HistoriqueAvenantEffects {
                 )
             )
         ));
+
+    fetchHistoriquePlafond$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriquePlafondGroupe),
+            mergeMap(({avanantId, grpId}) =>
+                this.historiqueAvenantService.getHistoriquePlafonds(avanantId, grpId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
+    fetchHistoriquePlafondSousActe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriquePlafondSousActe),
+            mergeMap(({avanantId, grpId}) =>
+                this.historiqueAvenantService.getHistoriquePlafondSousActes(avanantId, grpId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
+    fetchHistoriquePlafondFamilleActe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriquePlafondFamilleActe),
+            mergeMap(({avanantId, grpId}) =>
+                this.historiqueAvenantService.getHistoriquePlafondFamilleActes(avanantId, grpId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
+    fetchHistoriquePlafondActe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriquePlafondActe),
+            mergeMap(({avanantId, grpId}) =>
+                this.historiqueAvenantService.getHistoriquePlafondActes(avanantId, grpId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
 }

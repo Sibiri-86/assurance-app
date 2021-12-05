@@ -47,6 +47,46 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_MODIF)}`, avenant);
     }
 
+    getHistoriquePlafondFamilleActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpgfa`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafondActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpga`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafondSousActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpgsa`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafonds(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpg`,
+            {params: createRequestOption({avanantId, grpId})}
+        ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');
