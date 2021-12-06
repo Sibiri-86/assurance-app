@@ -9,13 +9,13 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
-import {Adherent} from '../../../../store/contrat/adherent/model';
+import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
 import {loadAdherent} from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
     AvenantModification,
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant
+    HistoriqueAvenantAdherant, TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -68,6 +68,7 @@ import {Taux} from '../../../../store/parametrage/taux/model';
 import * as territorialiteSelector from '../../../../store/parametrage/territorialite/selector';
 import {loadTerritorialite} from '../../../../store/parametrage/territorialite/actions';
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
+import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -145,8 +146,9 @@ export class AvenantRenouvellementComponent implements OnInit {
     territorialiteList$: Observable<Array<Territorialite>>;
     territorialiteList: Array<Territorialite>;
     objet: Avenant = {};
-    typeDuree: any = [{label: 'Jour', value: 'Jour'},
-        {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+    historiqueAvenant: HistoriqueAvenant = {};
+    typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+    adherentFamilleListe: AdherentFamille[] = [];
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -884,12 +886,36 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.objet.plafondFamilleActes = this.plafondFamilleActe;
         this.objet.plafondGroupeSousActes = this.plafondSousActe;
         this.objet.police = this.police;
+        this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
+        this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
+            if (this.adherantListTmp.find(e => e.adherent.id === haa.adherent.id) !== null) {
+                this.objet.historiqueAvenantAdherants.push(this.adherantListTmp.find(e => e.adherent.id === haa.adherent.id));
+            }
+        });
         this.objet.historiqueAvenantAdherants = this.adherantListTmp;
+        this.objet.familles = this.adherentFamilleListe;
+        this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log(this.objet);
         this.eventEmitterM.emit(this.objet);
     }
 
-    addAvenantAdherant(event): void {
+    addAvenantAdherant(event: AdherentFamille): void {
+        this.adherentFamilleListe.push(event);
         this.objet.historiqueAvenantAdherantDels.push(event);
+    }
+
+    deleteAdherant(retour: any) {
+        console.log(retour);
+        retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
+            avenant: {}
+        }) => {
+            // historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+            historiqueAvenantAdherant.adherent.groupe = retour.grp;
+            historiqueAvenantAdherant.deleted = true;
+        });
+        this.historiqueAvenant.dateAvenant = retour.date;
+        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+        this.historiqueAvenant.historiqueAvenantAdherants = retour.retrais;
+        this.historiqueAvenant.groupe = retour.grp;
     }
 }

@@ -7,6 +7,22 @@
                         (onChange)="loadAherantByGroupe()">
             </p-dropdown>
         </div>
+        <div class="p-col-8">
+                <form [formGroup]="myForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="numero">Numéro de l'avenant chez la garant</label>
+                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Date de retrait</label>
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                    </div>
+                </form>
+        </div>
     </div>
     <div class="p-grid">
         <div class="p-col-12">

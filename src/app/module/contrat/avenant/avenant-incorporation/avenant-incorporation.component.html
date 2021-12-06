@@ -1,6 +1,20 @@
 <div class="p-card">
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
+            <form [formGroup]="myForm">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-3">
+                        <label for="nom">Numéro de l'avenant chez la garant</label>
+                        <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="nom">Date d'Incorporation</label>
+                        <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
+                                dateFormat="dd/mm/yy" inputId="calendar"
+                                appendTo="body"></p-calendar>
+                    </div>
+                </div>
+            </form>
             <p-fieldset legend="Information adhérent" toggleable="true">
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
                     <div class="p-fluid p-formgrid p-grid">
@@ -162,15 +176,19 @@
                                 <div class="p-col-12">
                                     <hr>
                                 </div>
-                                <div class="p-field p-col-5"></div>
+                                <div class="p-field p-col-3"></div>
                                 <div class="p-field p-col-2 p-ac-center">
-                                    <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
-                                            class="p-button p-button-warning" label="Annuler"
-                                            (click)="init()">
+                                    <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" type="button"
+                                            class="p-button p-button-warning" label="Annuler" (click)="init()">
                                     </button>
                                 </div>
                                 <div class="p-field p-col-2 p-ac-center">
-                                    <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                                    <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
+                                            class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()">
+                                    </button>
+                                </div>
+                                <div class="p-field p-col-2 p-ac-center">
+                                    <button pButton pRipple icon="pi pi-save" pTooltip="Valider la viste des incorporés" label="Enregistrer"
                                             class="p-button p-button-success" type="submit">
                                     </button>
                                 </div>

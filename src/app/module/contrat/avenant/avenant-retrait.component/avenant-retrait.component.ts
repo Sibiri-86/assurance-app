@@ -16,6 +16,7 @@ import * as featureActionAdherent from '../../../../store/contrat/adherent/actio
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {HistoriqueAvenantAdherant, HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -41,12 +42,14 @@ export class AvenantRetraitComponent implements OnInit {
   historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
   nonRetirer = 'non retiré';
   retirer = 'retiré';
+  myForm: FormGroup;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
       private historiqueAvenantService: HistoriqueAvenantService,
-      private adherentService: AdherentService
+      private adherentService: AdherentService,
+      private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -108,6 +111,10 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   init() {
+    this.myForm = this.formBuilder.group({
+      numero: new FormControl(null, [Validators.required]),
+      dateAvenant: new FormControl(null, [Validators.required]),
+    });
     this.familleAdherants = [];
     // this.adherantList = [];
   }
@@ -138,7 +145,13 @@ export class AvenantRetraitComponent implements OnInit {
   addAdherentFamilleToList(): void {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
-    this.adherentFamilleEvent.emit(this.adherantDeleteds);
+    const retour = {
+      retrais: this.adherantDeleteds,
+      date: this.myForm.get('dateAvenant').value,
+      numero: this.myForm.get('numero').value,
+      grp: this.groupe
+    };
+    this.adherentFamilleEvent.emit(retour);
     this.init();
   }
 

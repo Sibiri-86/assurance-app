@@ -19,6 +19,7 @@ export interface HistoriqueAvenant {
     historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
     numero?: number;
     numeroGarant?: number;
+    dateAvenant?: Date;
 }
 
 export enum TypeEtat {
@@ -70,6 +71,7 @@ export class Avenant {
     plafondGroupeActes?: HistoriquePlafondActe[];
     plafondGroupeSousActes?: HistoriquePlafondSousActe[];
     plafondFamilleActes?: HistoriquePlafondFamilleActe[];
+    familles?: AdherentFamille[];
 }
 
 export class HistoriquePlafondFamilleActe {

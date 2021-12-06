@@ -1407,9 +1407,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.add();
   }
 
-  addAdherentFamille(adherentFamille: AdherentFamille): void {
-    this.historiqueAvenant.aderants = [];
-    this.historiqueAvenant.aderants.push(adherentFamille);
+  addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
+    this.historiqueAvenant = historiqueAvenant;
     this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
@@ -1442,14 +1441,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteAdherant(historiqueAvenantAdherants: HistoriqueAvenantAdherant[]) {
-    historiqueAvenantAdherants.forEach(historiqueAvenantAdherant => {
-      historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-      historiqueAvenantAdherant.adherent.groupe = this.curentGroupe;
+  deleteAdherant(retour: any) {
+    console.log(retour);
+    retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
+      avenant: {}
+    }) => {
+      // historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      historiqueAvenantAdherant.adherent.groupe = retour.grp;
+      historiqueAvenantAdherant.deleted = true;
       });
+    this.historiqueAvenant.dateAvenant = retour.date;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    this.historiqueAvenant.historiqueAvenantAdherants = historiqueAvenantAdherants;
-    this.historiqueAvenant.groupe = this.curentGroupe;
+    this.historiqueAvenant.historiqueAvenantAdherants = retour.retrais;
+    this.historiqueAvenant.groupe = retour.grp;
     this.historiqueAvenant.police = this.policeItem;
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     this.dissplayavenant = false;
