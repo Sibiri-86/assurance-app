@@ -100,13 +100,19 @@ import {
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
   HistoriqueAvenantList,
+  HistoriquePlafond,
+  HistoriquePlafondActe,
+  HistoriquePlafondFamilleActe,
+  HistoriquePlafondSousActe,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
 import {loadProfession} from '../../../store/parametrage/profession/actions';
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 import {HistoriqueAvenantAdherentService} from '../../../store/contrat/historiqueAvenantAdherent/service';
+import {HistoriqueAvenantAdherentList} from '../../../store/contrat/historiqueAvenantAdherent/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
 import {printPdfFile} from '../../util/common-util';
+import {AdherentService} from '../../../store/contrat/adherent/service';
 
 @Component({
   selector: 'app-avenant',
@@ -116,6 +122,7 @@ import {printPdfFile} from '../../util/common-util';
 export class AvenantComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
+  colsAL: any[];
   policeList$: Observable<Array<Police>>;
   policeList1$: Subscription;
   policeList: Police[];
@@ -227,6 +234,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherant: AdherentFamille;
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
+  adherentsListeActuelle: Array<Adherent> = [];
+  displayALA = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
   isAvenantIncorporation = false;
@@ -242,8 +251,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantAdherents2: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
   avenantModification: AvenantModification = {};
+  historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondFamilleActeList: Array<HistoriquePlafondFamilleActe> = [];
+  historiquePlafondActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondActeList: Array<HistoriquePlafondActe> = [];
+  historiquePlafondSousActeList$: Observable<Array<HistoriquePlafondSousActe>>;
+  historiquePlafondSousActeList: Array<Territorialite> = [];
+  historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
+  historiquePlafondList: Array<HistoriquePlafondActe> = [];
 
-  infosPolice: boolean = false;
+  infosPolice = false;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -253,6 +270,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private policeService: PoliceService,
       private historiqueAvenantService: HistoriqueAvenantService,
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
+      private adherentService: AdherentService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -336,6 +354,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.breadcrumbService.setItems([{ label: "Avenant" }]);
+
+    this.colsAL = [
+      {field: 'groupe.police.nom', header: 'SOUSCRIPTEUR', type: 'string'},
+      {field: 'groupe.police.numero', header: 'NUM_POLICE', type: 'string'},
+      {field: 'numero', header: 'NUM_ASSURE', type: 'string'},
+      {field: 'groupe.police.nom', header: 'BENEFICIAIRE', type: 'string'},
+      {field: 'groupe.taux.taux', header: 'TAUX', type: 'string'},
+      {field: 'fullName', header: 'ASSURE', type: 'string'},
+      {field: 'groupe.dateEffet', header: 'EFFET', type: 'date'},
+      {field: 'groupe.dateEcheance', header: 'ECHEANCE', type: 'date'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'CONS GENERALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'CONS SPECIALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'RADIO STANDARD', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'RADIO SPECIALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'ANALYSE STANDARD', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'ANALYSE SPECIALES', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'FRAIS SCANNER', type: 'number'},
+      {field: 'fullName', header: 'Photo', type: 'string'},
+    ];
   }
 
 
@@ -1338,6 +1375,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadActualList(police: Police): void {
+    this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          console.log('---------- Actual Liste ----------');
+          console.log(res);
+          this.adherentsListeActuelle = res;
+          this.displayALA = true;
+        }
+    );
+  }
+
   addNewGroupe(): void {
     this.isNewGroupe = !this.isNewGroupe;
     // this.displayDialogFormAdherent = true;
@@ -1359,9 +1407,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.add();
   }
 
-  addAdherentFamille(adherentFamille: AdherentFamille): void {
-    this.historiqueAvenant.aderants = [];
-    this.historiqueAvenant.aderants.push(adherentFamille);
+  addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
+    this.historiqueAvenant = historiqueAvenant;
     this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
@@ -1394,14 +1441,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteAdherant(historiqueAvenantAdherants: HistoriqueAvenantAdherant[]) {
-    historiqueAvenantAdherants.forEach(historiqueAvenantAdherant => {
-      historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-      historiqueAvenantAdherant.adherent.groupe = this.curentGroupe;
+  deleteAdherant(retour: any) {
+    console.log(retour);
+    retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
+      avenant: {}
+    }) => {
+      // historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      historiqueAvenantAdherant.adherent.groupe = retour.grp;
+      historiqueAvenantAdherant.deleted = true;
       });
+    this.historiqueAvenant.dateAvenant = retour.date;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    this.historiqueAvenant.historiqueAvenantAdherants = historiqueAvenantAdherants;
-    this.historiqueAvenant.groupe = this.curentGroupe;
+    this.historiqueAvenant.historiqueAvenantAdherants = retour.retrais;
+    this.historiqueAvenant.groupe = retour.grp;
     this.historiqueAvenant.police = this.policeItem;
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     this.dissplayavenant = false;
@@ -1523,7 +1575,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
         }},
       {label: 'Facture d\'ajout', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
@@ -1563,7 +1618,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
         }},
       {label: 'Facture de retrait', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
@@ -1632,5 +1690,64 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
     console.log('********************Avenant modification************************');
     console.log(event);
+  }
+
+  getAvenantRenouvellement(event: any): void {
+    const avenant: Avenant = event;
+    const historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+    avenant.historiqueAvenant = historiqueAvenant;
+    console.log('********************Avenant renouvellement************************');
+    console.log(event);
+    this.historiqueAvenantService.postAvenant(avenant).subscribe(
+        (res) => {
+          console.log('***************RETOUR RENOUV********************');
+          console.log(res);
+        }
+    );
+  }
+
+  loadHistoriquePlafondGroupe(): void {
+    const avanantId = '';
+    this.historiquePlafondList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeFamilleActe(): void {
+    const avanantId = '';
+    this.historiquePlafondFamilleActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeFamilleActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondFamilleActe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondFamilleActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondFamilleActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeActe(): void {
+    const avanantId = '';
+    this.historiquePlafondActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondActeList = value.slice();
+      }
+    });
+  }
+
+  loadHistoriquePlafondGroupeSousActe(): void {
+    const avanantId = '';
+    this.historiquePlafondSousActeList$ = this.store.pipe(select(historiqueAvenantSelector.historiquePlafondGroupeSousActe));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriquePlafondGroupe({avanantId: avanantId, grpId: avanantId}));
+    this.historiquePlafondSousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiquePlafondSousActeList = value.slice();
+      }
+    });
   }
 }

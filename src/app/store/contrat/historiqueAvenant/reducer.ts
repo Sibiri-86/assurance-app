@@ -1,9 +1,19 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './actions';
 import {HistoriqueAvenantState} from './state';
+import {
+    HistoriquePlafond,
+    HistoriquePlafondActe,
+    HistoriquePlafondFamilleActe,
+    HistoriquePlafondSousActe
+} from './model';
 
 const initialState: HistoriqueAvenantState = {
     historiqueAvenantList: [],
+    historiquePlafondGroupe: [],
+    historiquePlafondGroupeFamilleActe: [],
+    historiquePlafondGroupeActe: [],
+    historiquePlafondGroupeSousActe: []
 };
 
 const featureReducer = createReducer(

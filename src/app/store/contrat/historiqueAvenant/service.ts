@@ -5,6 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -44,6 +45,46 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     postAvenant(avenant: Avenant): Observable<any> {
         // @FIXME: post request
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_MODIF)}`, avenant);
+    }
+
+    getHistoriquePlafondFamilleActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpgfa`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafondActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpga`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafondSousActes(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpgsa`,
+            {params: createRequestOption({avanantId, grpId})}
+            ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getHistoriquePlafonds(avanantId: string, grpId: string): Observable<HistoriqueAvenantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/hpg`,
+            {params: createRequestOption({avanantId, grpId})}
+        ).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
     }
 
 private handleError<T>() {

@@ -15,6 +15,11 @@ import * as professionSelector from '../../../../store/parametrage/profession/se
 import {loadProfession} from '../../../../store/parametrage/profession/actions';
 import {Profession} from '../../../../store/parametrage/profession/model';
 import {Police} from '../../../../store/contrat/police/model';
+import {
+    HistoriqueAvenant,
+    HistoriqueAvenantAdherant,
+    TypeHistoriqueAvenant
+} from '../../../../store/contrat/historiqueAvenant/model';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -28,6 +33,7 @@ export class AvenantIncorporationComponent implements OnInit{
     @Input() polices: Police[];
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
+    myForm: FormGroup;
     adherentListGroupe: Array<Adherent>;
     adherentFamille: AdherentFamille;
     familles: Array<Adherent>;
@@ -40,6 +46,8 @@ export class AvenantIncorporationComponent implements OnInit{
     genreList$: Observable<Array<Genre>>;
     professionList: Array<Profession>;
     professionList$: Observable<Array<Profession>>;
+    historiqueAvenantAdherants: HistoriqueAvenantAdherant[] = [];
+    adherentFamilleListe: AdherentFamille[] = [];
 
     init(): void {
         this.adherentForm = this.formBuilder.group({
@@ -54,7 +62,7 @@ export class AvenantIncorporationComponent implements OnInit{
             adresseEmail: new FormControl('', [Validators.required]),
             profession: new FormControl('', [Validators.required]),
             referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl('', [Validators.required]),
+            qualiteAssure: new FormControl(),
             genre: new FormControl('', [Validators.required]),
             dateIncorporation: new FormControl('', [Validators.required]),
             dateEntree: new FormControl('', [Validators.required]),
@@ -83,6 +91,10 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleForm = this.formBuilder.group({
             adherent: new FormControl(''),
             famille: new FormControl('', [Validators.required]),
+        });
+        this.myForm = this.formBuilder.group({
+            numero: new FormControl(null, [Validators.required]),
+            dateIncorparation: new FormControl(null, [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -128,13 +140,16 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     addAdherentFamilleToList(): void {
-        const adherantFamille: AdherentFamille = {};
-        adherantFamille.adherent = this.adherentForm.value;
-        adherantFamille.famille = this.adherentForm.controls.familys.value;
-        console.log('+++++++++++++++++++++++++');
-        console.log(adherantFamille);
-        this.adherentFamilleEvent.emit(adherantFamille);
-        this.init();
+        // this.createHistoriqueAvenant();
+        const historiqueAvenant: HistoriqueAvenant = {};
+        historiqueAvenant.aderants = this.adherentFamilleListe;
+        historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+        historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
+        historiqueAvenant.dateAvenant = this.myForm.get('dateIncorparation').value;
+        console.log('..........historiqueAvenant.............');
+        console.log(historiqueAvenant);
+        this.adherentFamilleEvent.emit(historiqueAvenant);
+        // this.init();
     }
     ajouter(): void {
         console.log('----------------------------------');
@@ -170,6 +185,16 @@ export class AvenantIncorporationComponent implements OnInit{
             dateEntree: new FormControl('', [Validators.required]),
             dateIncor: new FormControl(new Date(), [Validators.required]),
         });
+    }
+
+    createHistoriqueAvenant(): void {
+        const adherantFamille: AdherentFamille = {};
+        adherantFamille.adherent = this.adherentForm.value;
+        adherantFamille.famille = this.familys.value;
+        console.log('---------this.historiqueAvenantAdherants--------');
+        console.log(this.historiqueAvenantAdherants);
+        this.adherentForm.reset();
+        this.familys.reset();
     }
 
 }
