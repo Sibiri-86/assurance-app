@@ -1,11 +1,12 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './actions';
-import { PoliceList, ReportFile, Statistique } from './model';
+import { PoliceList, Rapport, ReportFile, Statistique } from './model';
 import {PoliceState} from './state';
 
 const initialState : PoliceState = {
   policeList: null,
   statistique: null,
+  rapport: null,
   reportFile: null
 };
 
@@ -17,6 +18,9 @@ const featureReducer = createReducer(
   })),
   on(featureActions.setStatistique, (state, payload: Statistique) => ({
     ...state, statistique: payload
+  })),
+  on(featureActions.setRapport, (state, payload: Rapport) => ({
+    ...state, rapport: payload
   })),
   on(featureActions.setReport, (state, payload: ReportFile) => ({
     ...state, reportFile: payload.reportFile

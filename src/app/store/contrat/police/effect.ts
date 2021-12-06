@@ -73,6 +73,21 @@ export class PoliceEffects {
                     ))
                 ));
 
+
+        loadRapportPolice$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.loadRapport),
+                    mergeMap((police: Police) =>
+                        this.PoliceService.rapportPolice(police).pipe(
+                            switchMap(value => [
+                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setRapport(value)
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                    ));
+
             fetchReport$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.FetchReport),

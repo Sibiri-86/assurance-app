@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
 import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
-import { Police } from "../../../store/contrat/police/model";
+import { Police, Rapport } from "../../../store/contrat/police/model";
 import { Groupe } from "../../../store/contrat/groupe/model";
 import * as featureAction from "../../../store/contrat/police/actions";
 import { policeList } from "../../../store/contrat/police/selector";
@@ -76,6 +76,8 @@ import * as dimensionPeriodeSelector from "../../../store/parametrage/dimension-
 
 import { loadPolice } from "src/app/store/contrat/police/actions";
 import { loadGroupe } from "src/app/store/contrat/groupe/actions";
+
+import * as policeSelector from "src/app/store/contrat/police/selector";
 
 import { loadGarantie } from "../../../store/parametrage/garantie/actions";
 import * as garantieSelector from "../../../store/parametrage/garantie/selector";
@@ -217,13 +219,17 @@ export class PoliceComponent implements OnInit, OnDestroy {
   professionList: Array<Profession>;
   professionList$: Observable<Array<Profession>>;
   qualiteAssureList: Array<QualiteAssure>;
+  qualitePrincipalList: Array<QualiteAssure>;
+  membreList: Array<QualiteAssure>;
   qualiteAssureList$: Observable<Array<QualiteAssure>>;
   parametrageActe: boolean = false;
   parametragePrime: boolean = false;
   infosPolice: boolean = false;
   infosGroupe: boolean = true;
   selectedTypePrime: TypePrime = {};
-  groupe: Groupe ={};
+  groupe: Groupe = {};
+  rapport: Rapport = {};
+  rapport$: Observable<Rapport>;
   items: MenuItem[];
   activeItem: MenuItem;
   index: number = 0;
@@ -247,6 +253,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   isPlafondEditing = false;
   newGroupe: Groupe = {};
   newPrime: Prime = {};
+  valideMontantPlafond = true;
+  valideDateEffet = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -676,11 +684,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
       select(qualiteAssureSelector.qualiteAssureList)
     );
     this.store.dispatch(loadQualiteAssure());
+
     this.qualiteAssureList$
       .pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
         if (value) {
           this.qualiteAssureList = value.slice();
+          this.qualitePrincipalList = this.qualiteAssureList.filter(element => element.code === 'ADHERENT');
+          this.membreList =  this.qualiteAssureList.filter(element => element.code != 'ADHERENT');
         }
       });
 
@@ -1142,6 +1153,16 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**affichage des groupes de la police */
   voirGroupe(police: Police) {
     this.police = {...police};
+
+    this.rapport$ = this.store.pipe(select(policeSelector.rapport));
+    this.store.dispatch(featureAction.loadRapport(this.police));
+    this.rapport$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.rapport = value;
+        console.log(this.rapport);
+      }
+    });
+
     this.groupeList$ = this.store.pipe(select(groupeList));
     this.store.dispatch(loadGroupe({policeId: this.police.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1286,6 +1307,49 @@ export class PoliceComponent implements OnInit, OnDestroy {
   voirParametrage() {
   this.displayPrevisualiserParametrage = true;
   }
+
+  saisiePrimePersonne() {
+    console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
+    if(this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value+'');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value+'');
+      
+      if(plafondPersonne > plafondFamille){
+        this.valideMontantPlafond = false;
+        this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
+    } else {
+        this.valideMontantPlafond = true;
+    }
+  }
+}
+
+  saisiePrimeFamille() {
+    console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
+    if(this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value+'');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value+'');
+      
+      if(plafondPersonne > plafondFamille) {
+        this.valideMontantPlafond = false;
+        this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
+    } else {
+        this.valideMontantPlafond = true;
+    }
+  }
+  }
+
+  /** verifier la date Effet du groupe avec celle de la police */
+  checkDateEffet(){
+    if(this.groupeForm.get('dateEffet').value){
+      if(new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
+        this.valideDateEffet = false;
+        this.showToast("error", "INFORMATION", "la date effet du groupe doit etre superieure à celle de la police");
+      } else {
+        this.valideDateEffet = true;
+      }
+    }
+  }
+
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;
@@ -1295,6 +1359,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
         this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond+'');
         for(var k =0; k<this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
           this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond+'');
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe+'');
         }
       }
     }
@@ -1422,7 +1487,7 @@ changeGarantie(garantie, indexLigne: number) {
       // recuperer les sous actes de l'acte
       for(var i=0; i<this.sousActeList.length; i++){
         if(this.sousActeList[i].idTypeActe === this.acteList[j].id) {
-          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0})
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0, montantPlafondParActe: 0})
         }
       }
       this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});

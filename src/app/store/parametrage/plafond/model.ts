@@ -33,6 +33,7 @@ export interface PlafondFamilleActe {
     taux?: Taux;
     dateEffet?: Date;
     montantPlafond?: number;
+    montantPlafondParActe?: number;
     dimensionPeriode?: DimensionPeriode;
     nombre?: number;
   }

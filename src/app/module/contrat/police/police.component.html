@@ -265,11 +265,12 @@
                     -->
                     <div class="p-field p-col">
                         <label for="primeFamille">Plafond global annuelle par personne</label>
-                        <input id="primeFamille" type="number" pInputText formControlName="plafondAnnuellePersonne">
+                        <input id="primeFamille" type="number" pInputText formControlName="plafondAnnuellePersonne" (blur) ='saisiePrimePersonne()'>
                     </div>
+
                     <div class="p-field p-col">
                         <label for="montantPrimeEnfant">Plafond global par famille</label>
-                        <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondAnnuelleFamille">
+                        <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondAnnuelleFamille" (blur) ='saisiePrimeFamille()'>
                     </div>
 
                     <div class="p-field p-col" *ngIf="isInternationalGroupe">
@@ -296,6 +297,7 @@
                         <th style="width:3em"></th>
                         <th>Famille acte</th>
                         <th>Montant plafonné</th>
+                        <th>Montant plafonné/acte</th>
                         <th>Periode</th>
                         <th>Nombre acte</th>
                         <th>Taux de couverture</th>
@@ -331,7 +333,9 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        <td>
 
+                        </td>
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -414,6 +418,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th style="width:8em"></th>
                     </tr>
                 </ng-template>
@@ -434,6 +439,8 @@
                                     {{rowData.montantPlafond}}
                                 </ng-template>
                             </p-cellEditor>
+                        </td>
+                        <td>
                         </td>
                         <td>
                             <p-cellEditor>
@@ -491,13 +498,14 @@
 
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr [pEditableRow]="rowData2">
-                        <td colspan="9">
+                        <td colspan="10">
                             <div class="">
                                 <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row">
 
                                     <ng-template pTemplate="header">
                     <tr>
                         <th style="width:3em"></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -524,6 +532,17 @@
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2.montantPlafond}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData2.montantPlafondParActe" [value]="rowData2.montantPlafondParActe | formatTableValue: 'number':true" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData2.montantPlafondParActe}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -599,7 +618,7 @@
             <button pButton pRipple label="Quitter" icon="pi pi-check" (click)="annulerSaisie()" class="p-button-success p-mr-2 p-mb-2" ></button>
         </div>
         <div>
-            <button pButton pRipple label="Valider" icon="pi pi-check" (click)="validerPlafond()" class="p-button-success p-mr-2 p-mb-2" ></button>
+            <button pButton pRipple [disabled]="!valideMontantPlafond" label="Valider" icon="pi pi-check" (click)="validerPlafond()" class="p-button-success p-mr-2 p-mb-2" ></button>
         </div>
     </div>
 
@@ -648,7 +667,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateEffet">Date effet</label>
-                                    <p-calendar   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
+                                    <p-calendar   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
                                     </app-entity-validation>
@@ -745,10 +764,9 @@
                         <div>
                             <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                         </div>
-
                         <div *ngIf="!isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
-                            <button pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
+                            <button [disabled]="!valideDateEffet" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
                         </div>
                         <div *ngIf="isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
@@ -829,7 +847,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="lastname2">Qualite assuré</label>
-                                    <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                    <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                 </div>
                             </div>
 
@@ -935,7 +953,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-dropdown [options]="qualiteAssureList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
+                                                <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
                                                             [style]="{'width':'100%'}"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
@@ -1164,12 +1182,15 @@
                         <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
                     </ng-template>
-                    <!--
+                    
                     <ng-template pTemplate="right">
-                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-                        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+                        <span>{{rapport?.nombreEnfant}} Enfants-</span>
+                        <span> {{rapport?.nombreConjoint}} Conjoint(e)-</span>
+                        <span> {{rapport?.nombreAdherent}} Adhérents-</span>
+                        <span> {{rapport?.nombreFeminin}} Genre feminin-</span>
+                        <span> {{rapport?.nombreMasculin}} Genre masculin</span>
                     </ng-template>
-                    -->
+                    
                 </p-toolbar>
                 <p-table #dt [value]="groupeList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                          [rowHover]="true" dataKey="id"
@@ -1179,9 +1200,10 @@
                         <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                             <h5 class="p-m-0"></h5>
                             <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
-                        </span>
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
+                            </span>
+                           
                         </div>
                     </ng-template>
 
@@ -2024,7 +2046,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact souscripteur</label>
-                            <input id="lastname2" type="number" formControlName="contact" pInputText>
+                            <input id="lastname2" type="text" formControlName="contact" [value]="policeForm.get('contact').value | formatTableValue: 'phoneContact':true" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contact'">
                             </app-entity-validation>

@@ -43,6 +43,11 @@ export class PoliceService {
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}`, Police);
     }
 
+    rapportPolice(police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/rapport`, police);
+    }
+
     updatePolice(Police: Police): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/${Police.id}`, Police);

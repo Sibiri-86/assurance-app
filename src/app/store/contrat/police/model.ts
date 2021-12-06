@@ -45,6 +45,14 @@ export interface Statistique {
     nombreAssure?: number
 }
 
+export interface Rapport {
+    nombreConjoint?: number,
+    nombreEnfant?: number,
+    nombreAdherent?: number,
+    nombreFeminin?: number,
+    nombreMasculin?: number
+}
+
 export interface ReportFile {
     reportFile?: ArrayBuffer;
 }

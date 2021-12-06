@@ -20,7 +20,10 @@ export class FormatTableValuePipe implements PipeTransform {
           retValue = '';
         }
         return retValue;
-      } else {
+      } else if (type ==='phoneContact') {
+        return value.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+      }
+       else {
         return value;
       }
     } else {
