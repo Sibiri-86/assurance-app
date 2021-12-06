@@ -125,7 +125,8 @@ import * as arrondissementSelector from '../../../store/parametrage/arrondisseme
 import { Report } from "../../../store/contrat/police/model";
 import { TypeReport } from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
-
+import {AdherentService} from '../../../store/contrat/adherent/service';
+import * as adherantSelector from '../../../store/contrat/adherent/selector';
 
 @Component({
   selector: "app-police",
@@ -182,6 +183,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   adherentList: Array<Adherent>;
+  adherentList1: Array<Adherent>;
+  adherentList2: Array<Adherent>;
   adherent: Adherent = {};
   adherentList$: Observable<Array<Adherent>>;
   adherentFamilleList: Array<Adherent>;
@@ -247,17 +250,25 @@ export class PoliceComponent implements OnInit, OnDestroy {
   isPlafondEditing = false;
   newGroupe: Groupe = {};
   newPrime: Prime = {};
+  assurerListe: Adherent[] = [];
+  adherantSelected: Adherent = {};
+  adherentPrincipaux: Adherent[];
+  adherentPrincipaux1: Adherent[];
+  adherentPrincipauxTMP: Array<Adherent>;
+  adherentSelected: Adherent = {};
+  genre: Genre[];
 
   constructor(
     private formBuilder: FormBuilder,
     private store: Store<AppState>,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private adherentService: AdherentService
   ) {
 
     this.plafondForm = this.formBuilder.group({
-      //domaine: new FormControl({}),
+      // domaine: new FormControl({}),
       plafondAnnuelleFamille: new FormControl(""),
       plafondAnnuellePersonne: new FormControl(""),
       plafondGlobalInternationnal: new FormControl("")
@@ -268,7 +279,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       nom: new FormControl("", [Validators.required]),
       prenom: new FormControl("", [Validators.required]),
       dateNaissance: new FormControl("", [Validators.required]),
-      matricule:new FormControl(""),
+      matriculeGarant:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl("", [Validators.required]),
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
@@ -333,7 +344,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       primeFamille: new FormControl(""),
       primeAdulte: new FormControl(""),
       primePersonne: new FormControl(""),
-      primeAnnuelle: new FormControl("")
+      primeAnnuelle: new FormControl(null)
     });
 
     this.breadcrumbService.setItems([{ label: "Police" }]);
@@ -361,6 +372,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;
 
@@ -693,7 +705,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       }
     });
 
-    
+    // this.loadActualList();
 
     this.garantList$ = this.store.pipe(select(garantSelector.garantList));
     this.store.dispatch(loadGarant());
@@ -814,6 +826,35 @@ export class PoliceComponent implements OnInit, OnDestroy {
           this.dimensionPeriodeList = value.slice();
         }
       });
+    this.genreList$ = this.store.pipe(select(genreSelector.genreList));
+    this.store.dispatch(loadGenre());
+    this.genreList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.genreList = value.slice();
+      }
+    });
+
+    this.professionList$ = this.store.pipe(
+        select(professionSelector.professionList)
+    );
+    this.store.dispatch(loadProfession());
+    this.professionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.professionList = value.slice();
+      }
+    });
+
+    this.qualiteAssureList$ = this.store.pipe(
+        select(qualiteAssureSelector.qualiteAssureList)
+    );
+    this.store.dispatch(loadQualiteAssure());
+    this.qualiteAssureList$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.qualiteAssureList = value.slice();
+          }
+        });
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
@@ -944,9 +985,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.groupe.prime = this.primeForm.value;
     this.groupe.typePrime = this.selectedTypePrime;
 
-    if(this.groupe.prime.primeAnnuelle){
+    /* if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
-    }
+    } */
     if(this.groupe.prime.primeAdulte){
       this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +'');
     }
@@ -1120,13 +1161,13 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.police.dateEcheance = this.policeForm.get('dateEcheance').value;
     console.log(this.police);
     this.confirmationService.confirm({
-      message: "Etes vous sur de vouloir ajouter ce police?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sur de vouloir ajouter ce police ?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (this.police.id) {
           this.store.dispatch(
-            featureAction.updatePolice(this.police)
+            featureAction.createPolice(this.police)
           );
         } else {
           console.log(this.policeForm.value);
@@ -1307,7 +1348,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
   }
-  // 
+
   addSousActe() {
   this.plafondActe[this.indexeActe].listeSousActe =this.plafondSousActe;
   console.log(this.plafondActe);
@@ -1512,7 +1553,7 @@ changeGarantie(garantie, indexLigne: number) {
       primeFamille: prm?.primeFamille,
       primeAdulte: prm?.primeAdulte,
       // primePersonne: prm?.primePersonne,
-      primeAnnuelle: prm?.primeAnnuelle
+      primeAnnuelle: null
     });
     this.selectedTypePrime = grp.typePrime;
     this.displayDialogFormAddGroupe = true;
@@ -1526,4 +1567,55 @@ changeGarantie(garantie, indexLigne: number) {
     console.log(this.newGroupe);
     this.store.dispatch(featureActionGroupe.updateGroupe(this.newGroupe));
   }
+
+  loadActualList(): void {
+    this.adherentList$ = this.store.pipe(select(adherantSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.assurerListe = value.slice();
+      }
+    });
+  }
+
+  setAdherentPrincipal(adherent: Adherent): void {
+    console.log('***************adherent*******************', adherent);
+    this.adherentForm.patchValue({
+      id: adherent?.id || null,
+      nom: adherent?.nom,
+      prenom: adherent?.prenom,
+      dateNaissance: adherent?.dateNaissance,
+      matriculeGarant: adherent?.matriculeGarant,
+      lieuNaissance: adherent?.lieuNaissance,
+      numeroTelephone: adherent?.numeroTelephone,
+      adresse: adherent?.adresse,
+      adresseEmail: adherent?.adresseEmail,
+      profession: adherent?.profession?.libelle,
+      referenceBancaire: adherent?.referenceBancaire,
+      qualiteAssure: adherent?.qualiteAssure?.libelle,
+      genre: adherent?.genre,
+      dateEntree: adherent?.dateEntree
+    });
+    console.log('***************this.adherentForm*******************', this.adherentForm);
+  }
+
+  loadAdherentPrincipalByGroupe(groupe: Groupe) {
+    this.adherentService.getAdherentPrincipauxByGroupe(this.groupe.id).subscribe(
+        (res) => {
+          this.adherentPrincipaux = res;
+          console.log('*****************************************', this.adherentPrincipaux);
+        }
+    );
+  }
+
+  loadAdherentPrincipalInfo() {
+    console.log(this.adherentSelected);
+    this.obj.group = this.adherentSelected;
+    this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
+    console.log('*************this.adherentSelected*************', this.adherentSelected);
+    /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
+    console.log('*************this.genre*************', this.genre);*/
+    this.setAdherentPrincipal(this.adherentSelected);
+  }
+
 }

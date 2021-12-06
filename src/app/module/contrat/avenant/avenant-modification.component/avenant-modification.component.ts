@@ -831,7 +831,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   loadAdherantByPolice(): void {
-      this.adherentService.getAdherentsByPolice(this.police.id).subscribe(
+      this.adherentService.loadAdherentsByPolice(this.police.id).subscribe(
           (res) => {
             // this.adherantListTMP = res;
             this.adherantList = res;

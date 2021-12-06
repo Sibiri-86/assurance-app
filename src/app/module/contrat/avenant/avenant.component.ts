@@ -105,8 +105,10 @@ import {
 import {loadProfession} from '../../../store/parametrage/profession/actions';
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 import {HistoriqueAvenantAdherentService} from '../../../store/contrat/historiqueAvenantAdherent/service';
+import {HistoriqueAvenantAdherentList} from '../../../store/contrat/historiqueAvenantAdherent/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
 import {printPdfFile} from '../../util/common-util';
+import {AdherentService} from '../../../store/contrat/adherent/service';
 
 @Component({
   selector: 'app-avenant',
@@ -116,6 +118,7 @@ import {printPdfFile} from '../../util/common-util';
 export class AvenantComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
+  colsAL: any[];
   policeList$: Observable<Array<Police>>;
   policeList1$: Subscription;
   policeList: Police[];
@@ -227,6 +230,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherant: AdherentFamille;
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
+  adherentsListeActuelle: Array<Adherent> = [];
+  displayALA = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
   isAvenantIncorporation = false;
@@ -244,7 +249,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   report: Report = {};
   avenantModification: AvenantModification = {};
 
-  infosPolice: boolean = false;
+  infosPolice = false;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -254,6 +259,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private policeService: PoliceService,
       private historiqueAvenantService: HistoriqueAvenantService,
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
+      private adherentService: AdherentService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -337,6 +343,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
     this.breadcrumbService.setItems([{ label: "Avenant" }]);
+
+    this.colsAL = [
+      {field: 'groupe.police.nom', header: 'SOUSCRIPTEUR', type: 'string'},
+      {field: 'groupe.police.numero', header: 'NUM_POLICE', type: 'string'},
+      {field: 'numero', header: 'NUM_ASSURE', type: 'string'},
+      {field: 'groupe.police.nom', header: 'BENEFICIAIRE', type: 'string'},
+      {field: 'groupe.taux.taux', header: 'TAUX', type: 'string'},
+      {field: 'fullName', header: 'ASSURE', type: 'string'},
+      {field: 'groupe.dateEffet', header: 'EFFET', type: 'date'},
+      {field: 'groupe.dateEcheance', header: 'ECHEANCE', type: 'date'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'CONS GENERALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'CONS SPECIALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'RADIO STANDARD', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'RADIO SPECIALISTE', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'ANALYSE STANDARD', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'ANALYSE SPECIALES', type: 'number'},
+      {field: 'plafondGroupeSousActe.taux.taux', header: 'FRAIS SCANNER', type: 'number'},
+      {field: 'fullName', header: 'Photo', type: 'string'},
+    ];
   }
 
 
@@ -1339,6 +1364,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadActualList(police: Police): void {
+    this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          console.log('---------- Actual Liste ----------');
+          console.log(res);
+          this.adherentsListeActuelle = res;
+          this.displayALA = true;
+        }
+    );
+  }
+
   addNewGroupe(): void {
     this.isNewGroupe = !this.isNewGroupe;
     // this.displayDialogFormAdherent = true;
@@ -1639,6 +1675,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
     console.log('********************Avenant modification************************');
     console.log(event);
+  }
+
+  getAvenantRenouvellement(event: any): void {
+    const avenant: Avenant = event;
+    const historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+    avenant.historiqueAvenant = historiqueAvenant;
+    console.log('********************Avenant renouvellement************************');
+    console.log(event);
+    this.historiqueAvenantService.postAvenant(avenant).subscribe(
+        (res) => {
+          console.log('***************RETOUR RENOUV********************');
+          console.log(res);
+        }
+    );
   }
 
   onAdherentPrint(historiqueAvenant) {
