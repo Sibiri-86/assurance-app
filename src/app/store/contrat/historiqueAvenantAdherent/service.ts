@@ -5,6 +5,8 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {TypeHistoriqueAvenant} from '../historiqueAvenant/model';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantAdherentService {
@@ -17,6 +19,16 @@ getHistoriqueAvenantAdherents(haId: string): Observable<Array<HistoriqueAvenantA
       catchError(this.handleError())
     );
 }
+
+getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string):
+    Observable<Array<HistoriqueAvenantAdherant>> {
+        // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}`,
+        {params: createRequestOption({typeHistoriqueAvenant, haId})}).pipe(
+            map((response: Array<HistoriqueAvenantAdherant>) => response),
+            catchError(this.handleError())
+        );
+    }
 
 /* postHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     // @FIXME: post request

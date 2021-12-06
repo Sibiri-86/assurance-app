@@ -801,7 +801,7 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col">
                                     <label for="firstname2">Adresse Email</label>
-                                    <input id="firstname2" type="text" type="email"  formControlName="adresseEmail" pInputText>
+                                    <input id="firstname2" type="email"  formControlName="adresseEmail" pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
@@ -922,7 +922,7 @@
                                                 <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{rowData?.dateNaissance}}
+                                                {{rowData?.dateNaissance | formatTableValue : 'date'}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -1451,75 +1451,124 @@
 <p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
     <ng-template pTemplate="content">
         <p-fieldset legend="Adhérent" toggleable="true">
+            <!--filtre des adhérents principaux-->
+            <div class="p-field p-col">
+                <label for="adherentSelected">Adhérent</label>
+                <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
+                            (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal" optionLabel="fullName"></p-dropdown>
+            </div>
             <form (ngSubmit)="onCreateAddherent()"  [formGroup]="adherentForm">
                 <div class="card">
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="firstname2">Nom</label>
+                            <label for="matriculeGarant">Matricule Garant <span style="color: red !important;">(*)</span></label>
+                            <input id="matriculeGarant" type="text"  formControlName="matriculeGarant" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'matriculeGarant'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="nom">Nom <span style="color: red !important;">(*)</span></label>
                             <input id="nom" type="text" required formControlName="nom"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'nom'">
+                            </app-entity-validation>
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Prenom</label>
-                            <input id="lastname2" type="text"  formControlName="prenom" pInputText>
+                            <label for="prenom">Prenom <span style="color: red !important;">(*)</span></label>
+                            <input id="prenom" type="text"  formControlName="prenom" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'prenom'">
+                            </app-entity-validation>
+                        </div>
+
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="numeroTelephone">Telephone <span style="color: red !important;">(*)</span></label>
+                            <input id="numeroTelephone" type="text" formControlName="numeroTelephone" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'numeroTelephone'">
+                            </app-entity-validation>
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Telephone</label>
-                            <input id="lastname2" type="text" formControlName="numeroTelephone" pInputText>
+                            <label for="adresseEmail">Adresse email <span style="color: red !important;">(*)</span></label>
+                            <input id="adresseEmail" type="text"  formControlName="adresseEmail" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'adresseEmail'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
+                            <input id="adresse" type="text" formControlName="adresse" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'adresse'">
+                            </app-entity-validation>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="dateNaissance">Date de naissance <span style="color: red !important;">(*)</span></label>
+                            <p-calendar id="dateNaissance"  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'dateNaissance'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lieuNaissance">Lieu de naissance <span style="color: red !important;">(*)</span></label>
+                            <input id="lieuNaissance" type="text" formControlName="lieuNaissance" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'lieuNaissance'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="dateEntree">Date entrée <span style="color: red !important;">(*)</span></label>
+                            <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'dateEntree'">
+                            </app-entity-validation>
                         </div>
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="firstname2">Adresse email</label>
-                            <input id="firstname2" type="text"  formControlName="adresseEmail" pInputText>
+                            <label for="genre">Genre <span style="color: red !important;">(*)</span></label>
+                            <p-dropdown id="genre"  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'genre'">
+                            </app-entity-validation>
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Adresse</label>
-                            <input id="lastname2" type="text" formControlName="adresse" pInputText>
-                        </div>
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Reference bancaire</label>
-                            <input id="lastname2" type="text"  formControlName="referenceBancaire" pInputText>
-                        </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Date de naissance</label>
-                            <p-calendar  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
-                        </div>
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Lieu de naissance</label>
-                            <input id="lastname2" type="text" formControlName="lieuNaissance" pInputText>
-                        </div>
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Date entrée</label>
-                            <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
-                        </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col">
-                            <label for="lastname2">Genre</label>
-                            <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                        </div>
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Profession</label>
-                            <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <label for="profession">Profession</label>
+                            <p-dropdown id="profession"  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'profession'">
+                            </app-entity-validation>
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Qualite assuré</label>
-                            <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <label for="qualiteAssure">Qualite assuré <span style="color: red !important;">(*)</span></label>
+                            <p-dropdown id="qualiteAssure"  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'qualiteAssure'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="referenceBancaire">Reference bancaire</label>
+                            <input id="referenceBancaire" type="text"  formControlName="referenceBancaire" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="adherentForm" [entityField]="'referenceBancaire'">
+                            </app-entity-validation>
                         </div>
                     </div>
 
@@ -1587,7 +1636,7 @@
                                     <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData.dateNaissance}}
+                                    {{rowData.dateNaissance | formatTableValue : 'date'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1640,28 +1689,40 @@
                     <div class="card">
                     <h5></h5>
                     <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Matricule</label>
+                            <div>
+                                <span>{{adherent.matricule}}</span>
+                            </div>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Matricule Garant</label>
+                            <div>
+                                <span>{{adherent.matriculeGarant}}</span>
+                            </div>
+                        </div>
                            <div class="p-field p-col">
                             <label for="lastname2">Nom</label>
                             <div>
                                 <span>{{adherent.nom}}</span>
                             </div>
                             </div>
-                            <div class="p-field p-col">
-                                <label for="lastname2">Prenom</label>
-                                <div>
-                                    <span>{{adherent.prenom}}</span>
-                                </div>
-                                </div>
-    
-                            <div class="p-field p-col">
-                                <label for="lastname2">Lieu de nasissance</label>
-                                <div>
-                                    <span>{{adherent.lieuNaissance}}</span>
-                                </div>
-                            </div>
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Prenom</label>
+                            <div>
+                                <span>{{adherent.prenom}}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Lieu de nasissance</label>
+                            <div>
+                                <span>{{adherent.lieuNaissance}}</span>
+                            </div>
+                        </div>
 
                         <div class="p-field p-col">
                             <label for="lastname2">Date naissance</label>
@@ -1670,22 +1731,15 @@
                             </div>
                         </div>
 
-                        <div class="p-field p-col">
-                            <label for="lastname2">Matricule</label>
-                            <div>
-                                <span>{{adherent.matricule}}</span>
-                            </div>
-                        </div>
+                    </div>
 
+                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Adresse</label>
                             <div>
                                 <span>{{adherent.adresse}}</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
                             <label for="lastname2">Adresse-email </label>
@@ -1700,16 +1754,16 @@
                                 <span>{{adherent?.genre?.libelle}}</span>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Qualite-Assuré</label>
                             <div>
                                 <span>{{adherent?.qualiteAssure?.libelle}}</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Profession</label>
                             <div>
@@ -1723,13 +1777,13 @@
             </p-dialog>
     
 
-        <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{'width':'1200px'}">
+        <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
             <ng-template pTemplate="content">
                 <div class="">
                 <div class="card">
                 <p-toolbar styleClass="p-mb-4">
                     <ng-template pTemplate="left">
-                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addAdherent()"></button>
+                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addAdherent(); loadAdherentPrincipalByGroupe(groupe)"></button>
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
                     </ng-template>
                     <!--
@@ -1758,8 +1812,10 @@
 						<th style="width: 3rem">
 							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
 						</th>
-						<th pSortableColumn="nom" style="width: 7rem">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
-						<th pSortableColumn="nom" style="width: 7rem">Groupe<p-sortIcon field="nom"></p-sortIcon></th>
+						<th pSortableColumn="matricule" style="width: 12rem">Matricule<p-sortIcon field="matricule"></p-sortIcon></th>
+						<th pSortableColumn="matriculeGarant" style="width: 12rem">Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+						<th pSortableColumn="souscripteur" style="width: 12rem">Souscripteur<p-sortIcon field="souscripteur"></p-sortIcon></th>
+						<!--<th pSortableColumn="nom" style="width: 7rem">Groupe<p-sortIcon field="nom"></p-sortIcon></th>-->
 						<th pSortableColumn="nom" style="width: 7rem">Garant<p-sortIcon field="nom"></p-sortIcon></th>
 						<th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
 						<th pSortableColumn="prenom" style="width: 9rem" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
@@ -1773,8 +1829,10 @@
 				<ng-template pTemplate="body" let-adherent>
 					<tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
 						<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
+						<td><span class="p-column-title">{{adherent.matricule}}</span></td>
+						<td><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
 						<td><span class="p-column-title">{{adherent.groupe?.police?.numero}}</span></td>
-						<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>
+						<!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->
 						<td><span class="p-column-title">{{adherent.groupe?.police?.garant?.code}}</span></td>
 						<td><span class="p-column-title">{{adherent.nom}}</span></td>
                         <td><span class="p-column-title">{{adherent.prenom}}</span></td>

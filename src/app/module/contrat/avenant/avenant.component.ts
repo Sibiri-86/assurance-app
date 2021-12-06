@@ -247,6 +247,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantList: Array<HistoriqueAvenant>;
   historiqueAvenants1: HistoriqueAvenantList;
   historiqueAvenantAdherents: Array<HistoriqueAvenantAdherant>;
+  historiqueAvenantAdherent1s: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents1: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents2: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
@@ -1530,14 +1531,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   viewAvenantIncorp(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
-    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherents(this.historiqueAvenant.id).subscribe(
+    console.log(typeof typeHistoriqueAvenant);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+        this.historiqueAvenant.id).subscribe(
         (res: Array<HistoriqueAvenantAdherant>) => {
           this.historiqueAvenantAdherents = res;
-          this.historiqueAvenantAdherents1 = this.historiqueAvenantAdherents
-              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
-          console.log('=====================historiqueAvenantAdherents=============', this.historiqueAvenantAdherents);
-          console.log('=================this.historiqueAvenant.id=================', this.historiqueAvenant.id);
-          console.log('=================this.historiqueAvenantAdherents1=================', this.historiqueAvenantAdherents1);
+          console.log('=====================res=============', res);
         }
     );
     this.displayDialogFormAdherentIncorp = true;
@@ -1545,13 +1544,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   viewAvenantRetrait(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
-    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherents(this.historiqueAvenant.id).subscribe(
+    console.log(typeof typeHistoriqueAvenant);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+        avenant.id).subscribe(
         (res: Array<HistoriqueAvenantAdherant>) => {
-          this.historiqueAvenantAdherents = res;
-          this.historiqueAvenantAdherents2 = this.historiqueAvenantAdherents
+          this.historiqueAvenantAdherent1s = res;
+          console.log('=====================res=============', res);
+          this.historiqueAvenantAdherents2 = this.historiqueAvenantAdherent1s
               .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
-          console.log('=====================historiqueAvenantAdherents=============', this.historiqueAvenantAdherents);
-          console.log('=================this.historiqueAvenant.id=================', this.historiqueAvenant.id);
+          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
         }
     );
     this.displayDialogFormAdherentRetrait = true;
@@ -1749,5 +1750,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.historiquePlafondSousActeList = value.slice();
       }
     });
+  }
+
+  onAdherentPrint(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_RETRAIT;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+  onAdherentPrint1(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_INCORPORATION;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
   }
 }

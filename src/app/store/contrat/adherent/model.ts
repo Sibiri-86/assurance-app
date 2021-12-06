@@ -1,7 +1,13 @@
 import { Groupe } from "../groupe/model";
 import {PlafondSousActe} from '../../parametrage/plafond/model';
+import {Genre} from '../../parametrage/genre/model';
+import {QualiteAssure} from '../../parametrage/qualite-assure/model';
+import {Profession} from '../../parametrage/profession/model';
 export interface Adherent{
     id?: string,
+    matriculeGarant?: string;
+    matricule?: string;
+    nomAdherent?: string;
     nom?: string,
     prenom?: string,
     dateNaissance?: Date,
@@ -9,10 +15,10 @@ export interface Adherent{
     numeroTelephone?: string,
     adresse?: string,
     adresseEmail?: string,
-    profession?: string,
+    profession?: Profession,
     referenceBancaire?: string,
-    qualiteAssure?: string,
-    genre?: string,
+    qualiteAssure?: QualiteAssure,
+    genre?: Genre,
     dateIncorporation?: string,
     dateIncor?: Date,
     dateEntree?: Date,

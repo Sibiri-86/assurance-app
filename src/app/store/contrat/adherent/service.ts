@@ -85,5 +85,13 @@ private handleError<T>() {
     };
   }
 
+    getAdherentPrincipauxByGroupe(idGpe: string): Observable<Adherent[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_PRINCIPAL_GROUPE)}/${idGpe}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
 }
 

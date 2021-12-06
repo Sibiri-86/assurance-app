@@ -185,6 +185,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   adherentList: Array<Adherent>;
+  adherentList1: Array<Adherent>;
+  adherentList2: Array<Adherent>;
   adherent: Adherent = {};
   adherentList$: Observable<Array<Adherent>>;
   adherentFamilleList: Array<Adherent>;
@@ -258,6 +260,11 @@ export class PoliceComponent implements OnInit, OnDestroy {
   valideDateEffet = true;
   assurerListe: Adherent[] = [];
   adherantSelected: Adherent = {};
+  adherentPrincipaux: Adherent[];
+  adherentPrincipaux1: Adherent[];
+  adherentPrincipauxTMP: Array<Adherent>;
+  adherentSelected: Adherent = {};
+  genre: Genre[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -280,7 +287,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       nom: new FormControl("", [Validators.required]),
       prenom: new FormControl("", [Validators.required]),
       dateNaissance: new FormControl("", [Validators.required]),
-      matricule:new FormControl(""),
+      matriculeGarant:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl("", [Validators.required]),
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
@@ -373,6 +380,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;
 
@@ -829,6 +837,35 @@ export class PoliceComponent implements OnInit, OnDestroy {
           this.dimensionPeriodeList = value.slice();
         }
       });
+    this.genreList$ = this.store.pipe(select(genreSelector.genreList));
+    this.store.dispatch(loadGenre());
+    this.genreList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.genreList = value.slice();
+      }
+    });
+
+    this.professionList$ = this.store.pipe(
+        select(professionSelector.professionList)
+    );
+    this.store.dispatch(loadProfession());
+    this.professionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.professionList = value.slice();
+      }
+    });
+
+    this.qualiteAssureList$ = this.store.pipe(
+        select(qualiteAssureSelector.qualiteAssureList)
+    );
+    this.store.dispatch(loadQualiteAssure());
+    this.qualiteAssureList$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.qualiteAssureList = value.slice();
+          }
+        });
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
@@ -1605,4 +1642,45 @@ changeGarantie(garantie, indexLigne: number) {
       }
     });
   }
+
+  setAdherentPrincipal(adherent: Adherent): void {
+    console.log('***************adherent*******************', adherent);
+    this.adherentForm.patchValue({
+      id: adherent?.id || null,
+      nom: adherent?.nom,
+      prenom: adherent?.prenom,
+      dateNaissance: adherent?.dateNaissance,
+      matriculeGarant: adherent?.matriculeGarant,
+      lieuNaissance: adherent?.lieuNaissance,
+      numeroTelephone: adherent?.numeroTelephone,
+      adresse: adherent?.adresse,
+      adresseEmail: adherent?.adresseEmail,
+      profession: adherent?.profession?.libelle,
+      referenceBancaire: adherent?.referenceBancaire,
+      qualiteAssure: adherent?.qualiteAssure?.libelle,
+      genre: adherent?.genre,
+      dateEntree: adherent?.dateEntree
+    });
+    console.log('***************this.adherentForm*******************', this.adherentForm);
+  }
+
+  loadAdherentPrincipalByGroupe(groupe: Groupe) {
+    this.adherentService.getAdherentPrincipauxByGroupe(this.groupe.id).subscribe(
+        (res) => {
+          this.adherentPrincipaux = res;
+          console.log('*****************************************', this.adherentPrincipaux);
+        }
+    );
+  }
+
+  loadAdherentPrincipalInfo() {
+    console.log(this.adherentSelected);
+    this.obj.group = this.adherentSelected;
+    this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
+    console.log('*************this.adherentSelected*************', this.adherentSelected);
+    /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
+    console.log('*************this.genre*************', this.genre);*/
+    this.setAdherentPrincipal(this.adherentSelected);
+  }
+
 }
