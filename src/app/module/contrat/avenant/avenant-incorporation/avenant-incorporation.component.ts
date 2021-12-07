@@ -191,8 +191,7 @@ export class AvenantIncorporationComponent implements OnInit{
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
         adherantFamille.famille = this.familys.value;
-        console.log('---------this.historiqueAvenantAdherants--------');
-        console.log(this.historiqueAvenantAdherants);
+        this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
     }

@@ -145,8 +145,14 @@ export class AvenantRenouvellementComponent implements OnInit {
     garantieList$: Observable<Array<Garantie>>;
     territorialiteList$: Observable<Array<Territorialite>>;
     territorialiteList: Array<Territorialite>;
-    objet: Avenant = {};
-    historiqueAvenant: HistoriqueAvenant = {};
+    objet: Avenant = {
+        historiqueAvenantAdherantDels: [],
+        historiqueAvenantAdherants: [],
+        plafondGroupeActes: [],
+        plafondFamilleActes: [],
+        plafondGroupeSousActes: []
+    };
+    historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
     typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
     adherentFamilleListe: AdherentFamille[] = [];
     constructor(
@@ -900,11 +906,14 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     addAvenantAdherant(event: AdherentFamille): void {
-        this.adherentFamilleListe.push(event);
-        this.objet.historiqueAvenantAdherantDels.push(event);
+        if (event) {
+            this.adherentFamilleListe.push(event);
+            this.objet.historiqueAvenantAdherantDels.push(event);
+        }
     }
 
     deleteAdherant(retour: any) {
+        console.log('********retour***********');
         console.log(retour);
         retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
             avenant: {}

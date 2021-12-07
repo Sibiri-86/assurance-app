@@ -1414,6 +1414,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
     this.historiqueAvenant.groupe = this.curentGroupe;
+    this.historiqueAvenant.aderants = historiqueAvenant.aderants;
     console.log('**************HistoriqueAvenant****************');
     console.log(this.historiqueAvenant);
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
@@ -1442,19 +1443,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteAdherant(retour: any) {
-    console.log(retour);
-    retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
-      avenant: {}
-    }) => {
-      // historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-      historiqueAvenantAdherant.adherent.groupe = retour.grp;
-      historiqueAvenantAdherant.deleted = true;
-      });
-    this.historiqueAvenant.dateAvenant = retour.date;
-    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    this.historiqueAvenant.historiqueAvenantAdherants = retour.retrais;
-    this.historiqueAvenant.groupe = retour.grp;
+  deleteAdherant(historiqueAvenantRetrais: HistoriqueAvenant) {
+    console.log('++++++++++++   historiqueAvenantRetrais      ++++++++++++');
+    console.log(historiqueAvenantRetrais);
+    this.historiqueAvenant = historiqueAvenantRetrais;
     this.historiqueAvenant.police = this.policeItem;
     this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     this.dissplayavenant = false;

@@ -2,6 +2,22 @@
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
             <div class="p-grid">
+                <form [formGroup]="myForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="numero">Numéro de l'avenant chez la garant</label>
+                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Date de retrait</label>
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <p-fieldset legend="Caracteristique" toggleable="true">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="lastname2">Garant</label>
@@ -160,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-
+                </p-fieldset>
             </div>
         </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
