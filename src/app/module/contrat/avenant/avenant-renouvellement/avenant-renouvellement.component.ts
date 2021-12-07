@@ -155,6 +155,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
     typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
     adherentFamilleListe: AdherentFamille[] = [];
+    private myForm: FormGroup;
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -214,6 +215,11 @@ export class AvenantRenouvellementComponent implements OnInit {
             referencePolice: new FormControl('', [Validators.required]),
             fraisAccessoire: new FormControl('', [Validators.required]),
             fraisBadge: new FormControl('', [Validators.required])
+        });
+
+        this.myForm = this.formBuilder.group({
+            numero: new FormControl(null, [Validators.required]),
+            dateAvenant: new FormControl(null, [Validators.required]),
         });
 
         this.entityValidations = [
