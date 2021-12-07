@@ -2314,4 +2314,106 @@
             </p-table>
         </div>
     </p-dialog>
+
+    <!--Affichage des details des avenants affaire nouvelle -->
+    <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentAffaireNouvelle"
+              header="Adhérent(s) et membre(s) de la police Affaire Nouvelle" [modal]="true" styleClass="p-fluid"
+              [style]="{'width':'1200px'}">
+        <ng-template pTemplate="content">
+            <div class="">
+                <div class="card">
+                    <p-table #dt [value]="historiqueAvenantAdherents3" [columns]="cols" [rows]="10"
+                             [paginator]="true"
+                             [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
+                             [rowHover]="true" dataKey="id"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                             [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column table-header">
+                                <div class="p-grid">
+                                    <div class="p-col-9">
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text"
+                                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                       placeholder="Rechercher..." [style]="{width: '20%'}"/>
+                                            </span>
+                                    </div>
+                                    <div class="p-col-2">
+                                            <span class="p-input-icon-right">
+                                                <button pButton pRipple icon="pi pi-print" label="Imprimer"
+                                                        pTooltip="Imprimer la liste"
+                                                        class="p-button-info"
+                                                        (click)="onAdherentPrint3(historiqueAvenant)"></button>
+                                            </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th pSortableColumn="nom" style="width: 7rem">Nom
+                                    <p-sortIcon field="nom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="prenom" style="width: 9rem">Prenom
+                                    <p-sortIcon field="prenom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numero" style="width: 12rem">Date de Naissance
+                                    <p-sortIcon field="dateNaissance"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="lieuNaissance" style="width: 12rem">Lieu de naissance
+                                    <p-sortIcon field="lieuNaissance"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroTelephone" style="width: 10rem">Telephone
+                                    <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="adresse" style="width: 10rem">Date de Retrait
+                                    <p-sortIcon field="adresse"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="qla" style="width: 10rem">Qualité Assuré
+                                    <p-sortIcon field="qla"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-adherentHis>
+                            <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                                <td>
+                                    <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
+                                </td>
+                                <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                <td><span
+                                        class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{adherentHis.adherent.dateIncorporation}}</span>
+                                </td>
+                                <td><span
+                                        class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                </td>
+                                <!-- <td>
+                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
+                                    <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
+                                    <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning" (click)="voirDetailAdherent(adherent)"></button>
+                                </td> -->
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{historiqueAvenantAdherents3 ? historiqueAvenantAdherents3.length : 0 }} assuré(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </ng-template>
+    </p-dialog>
 </div>

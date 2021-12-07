@@ -331,17 +331,17 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.groupeForm = this.formBuilder.group({
-      id: new FormControl(""),
-      libelle: new FormControl("", [Validators.required]),
+      id: new FormControl(''),
+      libelle: new FormControl('', [Validators.required]),
       taux: new FormControl(null, [Validators.required]),
-      territorialite: new FormControl("", [Validators.required]),
-      duree: new FormControl("", [Validators.required]),
-      dateEffet: new FormControl("", [Validators.required]),
-      typeDuree: new FormControl("", [Validators.required]),
-      adresse:  new FormControl("", [Validators.required]),
-      description: new FormControl("",[Validators.required]),
-      commune: new FormControl("", [Validators.required]),
-      dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required])
+      territorialite: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+      dateEffet: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl('', [Validators.required]),
+      adresse:  new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      commune: new FormControl('', [Validators.required]),
+      dateEcheance: new FormControl({value: '', disabled: true})
     });
 
     this.primeForm = this.formBuilder.group({
@@ -929,16 +929,18 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   // fonction pour creer adherent.
   onCreateAddherent() {
-    console.log(this.adherentForm.value);
-    console.log(this.adherentFamilleList);
-    this.adherentWithFamille.adherent =this.adherentForm.value;
+    console.log('àààààààààààààààààààààthis.adherentForm.valueàààààààààààààààààààààààà', this.adherentForm.value);
+    console.log('ooooooooooooooooo  this.adherentFamilleList oooooooooooooooooooo', this.adherentFamilleList);
+    this.adherentWithFamille.adherent = this.adherentForm.value || this.adherentSelected;
     this.adherentWithFamille.adherent.groupe = this.groupe;
     this.adherentWithFamille.famille = this.adherentFamilleList;
-    if(!this.adherentForm.value.id){
     this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    /*if(!this.adherentForm.value.id){
+    this.store.dispatch(featureActionAdherent.createAdherentwithFamille(this.adherentWithFamille));
+    console.log('ooooooooooooooooo this.adherentWithFamille oooooooooooooooooooo', this.adherentWithFamille);
     }else {
-      this.store.dispatch(featureActionAdherent.updateAdherent(this.adherentForm.value));
-    }
+      this.store.dispatch(featureActionAdherent.updateAdherent(this.adherentForm.value || this.adherentSelected));
+    }*/
     this.adherentFamilleList = [];
     this.adherentForm.reset();
   }
@@ -1649,17 +1651,17 @@ changeGarantie(garantie, indexLigne: number) {
       id: adherent?.id || null,
       nom: adherent?.nom,
       prenom: adherent?.prenom,
-      dateNaissance: adherent?.dateNaissance,
+      dateNaissance: new Date(adherent?.dateNaissance),
       matriculeGarant: adherent?.matriculeGarant,
       lieuNaissance: adherent?.lieuNaissance,
       numeroTelephone: adherent?.numeroTelephone,
       adresse: adherent?.adresse,
       adresseEmail: adherent?.adresseEmail,
-      profession: adherent?.profession?.libelle,
+      profession: adherent?.profession,
       referenceBancaire: adherent?.referenceBancaire,
-      qualiteAssure: adherent?.qualiteAssure?.libelle,
+      qualiteAssure: adherent?.qualiteAssure,
       genre: adherent?.genre,
-      dateEntree: adherent?.dateEntree
+      dateEntree: new Date(adherent?.dateEntree)
     });
     console.log('***************this.adherentForm*******************', this.adherentForm);
   }
