@@ -765,6 +765,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
       if (value) {
         this.loading = false;
         this.policeList = value.slice();
+        console.log('+++++++++++this.policeList+++++++++++++');
+        console.log(this.policeList);
       }
     });
 

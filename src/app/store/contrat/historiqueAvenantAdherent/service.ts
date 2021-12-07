@@ -7,6 +7,7 @@ import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {TypeHistoriqueAvenant} from '../historiqueAvenant/model';
 import {createRequestOption} from '../../../module/util/loader-util';
+import {Adherent} from '../adherent/model';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantAdherentService {
@@ -26,6 +27,15 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}`,
         {params: createRequestOption({typeHistoriqueAvenant, haId})}).pipe(
             map((response: Array<HistoriqueAvenantAdherant>) => response),
+            catchError(this.handleError())
+        );
+    }
+
+
+    findHistoriqueAvenantAdherantActuallList(idPolice: string): Observable<HistoriqueAvenantAdherant[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALISE)}/${idPolice}`).pipe(
+            map((response: HistoriqueAvenantAdherant[]) => response),
             catchError(this.handleError())
         );
     }

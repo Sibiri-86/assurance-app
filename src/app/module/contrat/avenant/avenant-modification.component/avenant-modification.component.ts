@@ -74,6 +74,7 @@ import {loadTerritorialite} from '../../../../store/parametrage/territorialite/a
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
 import * as historiqueAvenantSelector from '../../../../store/contrat/historiqueAvenant/selector';
 import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
+import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -81,7 +82,7 @@ import * as featureActionHistoriqueAdherant from '../../../../store/contrat/hist
   styleUrls: ['./avenant-modification.component.scss']
 })
 export class AvenantModificationComponent implements OnInit {
-  @Input() adherantList: Array<Adherent>;
+  @Input() historiqueAvenantAdherantList: Array<HistoriqueAvenantAdherant>;
   @Input() police: Police;
   groupe: Groupe;
   groupePolicy: any;
@@ -93,7 +94,9 @@ export class AvenantModificationComponent implements OnInit {
   @Output() eventEmitterM = new EventEmitter();
   destroy$ = new Subject<boolean>();
   obj: any = {group: {}, prime: {}};
-  historiqueAveantAdherants: HistoriqueAvenantAdherant[];
+  historiqueAveantAdherants: HistoriqueAvenantAdherant[] = [];
+  historiqueAveantAdherantsTMP: HistoriqueAvenantAdherant[] = [];
+  historiqueAveantAdherantEdited: HistoriqueAvenantAdherant[] = [];
   private clonedProducts: any = [];
   private products2: any = [];
   genreList: Array<Genre>;
@@ -153,6 +156,7 @@ export class AvenantModificationComponent implements OnInit {
   objet: Avenant = {};
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
     {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+  private myForm: FormGroup;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -160,6 +164,7 @@ export class AvenantModificationComponent implements OnInit {
       private historiqueAvenantService: HistoriqueAvenantService,
       private formBuilder: FormBuilder,
       private adherentService: AdherentService,
+      private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
   ) {
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
@@ -212,6 +217,11 @@ export class AvenantModificationComponent implements OnInit {
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl('', [Validators.required])
+    });
+
+    this.myForm = this.formBuilder.group({
+      numero: new FormControl(null, [Validators.required]),
+      dateAvenant: new FormControl(null, [Validators.required]),
     });
 
     this.entityValidations = [
@@ -620,7 +630,7 @@ export class AvenantModificationComponent implements OnInit {
           }
         });
 
-    this.loadAdherantByPolice();
+    this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
   }
 
@@ -632,7 +642,7 @@ export class AvenantModificationComponent implements OnInit {
   loadAherantByGroupe(): void {
     console.log(this.groupeSelected);
     this.obj.group = this.groupeSelected;
-    this.historiqueAveantAdherants = this.adherantListTmp.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
+    this.historiqueAveantAdherants = this.historiqueAveantAdherantsTMP.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
     this.setGroupeAndPrime(this.groupeSelected);
     this.loadHistoriquePlafondGroupe();
     this.loadHistoriquePlafondGroupeFamilleActe();
@@ -664,6 +674,8 @@ export class AvenantModificationComponent implements OnInit {
 
   onRowEditSave(product: HistoriqueAvenantAdherant) {
       delete this.clonedProducts[product.id];
+      this.historiqueAveantAdherantEdited.push(product);
+      console.log(this.historiqueAveantAdherantEdited);
       // this.messageService.add({severity: 'success', summary: 'Success', detail: 'Adherant is updated'});
   }
 
@@ -849,12 +861,11 @@ export class AvenantModificationComponent implements OnInit {
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
   }
 
-  loadAdherantByPolice(): void {
-      this.adherentService.loadAdherentsByPolice(this.police.id).subscribe(
+  loadHistoriqueAvenantAdherantByPolice(): void {
+      this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallList(this.police.id).subscribe(
           (res) => {
-            // this.adherantListTMP = res;
-            this.adherantList = res;
-            this.addHistoriqueAvenantAdherant(this.adherantList);
+            this.historiqueAveantAdherants = res;
+            this.historiqueAveantAdherantsTMP = res;
           }
       );
   }
@@ -909,8 +920,10 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.plafondFamilleActes = this.plafondFamilleActe;
     this.objet.plafondGroupeSousActes = this.plafondSousActe;
     this.objet.police = this.police;
-    this.objet.historiqueAvenantAdherants = this.adherantListTmp;
+    this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
     this.objet.plafondGroupe = this.plafondForm.value;
+    this.objet.historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
+    this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     console.log(this.objet);
     this.eventEmitterM.emit(this.objet);
   }

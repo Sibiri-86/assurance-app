@@ -248,6 +248,11 @@ export class Endpoints {
         mock: `assets/mock/contrat/adherent.mock.json`
     };
 
+    static readonly CONTRAT_ADHERENT_POLICE_ACTUALISE = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent/liste-actualise`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
     static readonly CONTRAT_ADHERENT_POLICE_ACTUALL = {
         prod: `${SERVICE_PREFIX}/contrat/adherent/police-actuall`,
         mock: `assets/mock/contrat/adherent.mock.json`

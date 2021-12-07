@@ -35,7 +35,7 @@ export class PoliceService {
 
     $getReport(report: Report): Observable<ArrayBuffer> {
         // @FIXME: get request
-        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/report`,report, {responseType: 'arraybuffer'});
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/report`, report, {responseType: 'arraybuffer'});
     }
 
     posPolice(Police: Police): Observable<any> {
