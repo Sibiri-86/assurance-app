@@ -91,6 +91,7 @@ import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector
 import { loadGenre } from "../../../store/parametrage/genre/actions";
 import * as genreSelector from "../../../store/parametrage/genre/selector";
 import * as featureActionsPlafond from "../../../store/contrat/plafond/action";
+import * as plafondSelector from "../../../store/contrat/plafond/selector";
 import { loadProfession } from "../../../store/parametrage/profession/actions";
 import * as professionSelector from "../../../store/parametrage/profession/selector";
 
@@ -208,9 +209,11 @@ export class PoliceComponent implements OnInit, OnDestroy {
   clonedPlafondActe: { [s: string]: PlafondActe } = {};
   clonedPlafondFamilleActeTemp: { [s: string]: PlafondFamilleActe } = {};
   clonedPlafondSousActe: { [s: string]: PlafondSousActe } = {};
+  clonedPlafondConfiguration: { [s: string]: PlafondFamilleActe } = {};
   plafondFamilleActe: Array<PlafondFamilleActe>;
   plafondFamilleActeTemp: PlafondFamilleActe;
   plafondFamilleActeConstruct: Array<PlafondFamilleActe> = [];
+  plafondActuelleConfiguration: Array<PlafondFamilleActe> = [];
   plafondActe: Array<PlafondActe>;
   plafondSousActe: Array<PlafondSousActe>;
   typePrimeList: Array<TypePrime>;
@@ -233,6 +236,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   groupe: Groupe = {};
   rapport: Rapport = {};
   rapport$: Observable<Rapport>;
+  plafondGroupe: Plafond = {};
+  plafondGroupe$: Observable<Plafond>;
   items: MenuItem[];
   activeItem: MenuItem;
   index: number = 0;
@@ -251,6 +256,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   arrondissementList: Array<Arrondissement>;
   displayActe = false;
   displayPrevisualiserParametrage : boolean = false;
+  displayConfigurationPlafond: boolean = false;
   displayDialogFormUpdateAdherent: boolean = false;
   infosAdherent: boolean = false;
   isPlafondEditing = false;
@@ -362,8 +368,25 @@ export class PoliceComponent implements OnInit, OnDestroy {
   ifExistTerritorialiteInternational(groupe:Groupe): boolean {
     return groupe.territorialite.some(element => element.code==='INT');
   }
+
+
+  voirConfiguration() {
+  /**recuperer le plafond du groupe */
+  this.displayConfigurationPlafond = true;
+  }
+
   /**permet de parametrer le plafond pour un groupe */
   parametrerPlafond(groupe: Groupe) {
+    this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
+    this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
+    this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    if (value) {
+      this.plafondGroupe = value;
+      this.plafondActuelleConfiguration = this.plafondGroupe.plafondFamilleActe.slice();
+      console.log(this.plafondActuelleConfiguration);
+      console.log(this.plafondGroupe);
+    }
+    });
     console.log(groupe);
     console.log(this.ifExistTerritorialiteInternational(groupe));
     if(this.ifExistTerritorialiteInternational(groupe)){
@@ -375,7 +398,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   voirDetailAdherent(adherent:Adherent){
     this.adherent = {...adherent};
-  this.infosAdherent=true;
+    this.infosAdherent = true;
   }
 
 
@@ -383,7 +406,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;
-
     this.items = [
       {label: 'Home', icon: 'pi pi-fw pi-home'},
       {label: 'Calendar', icon: 'pi pi-fw pi-calendar'},
@@ -1194,7 +1216,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**affichage des groupes de la police */
   voirGroupe(police: Police) {
     this.police = {...police};
-
     this.rapport$ = this.store.pipe(select(policeSelector.rapport));
     this.store.dispatch(featureAction.loadRapport(this.police));
     this.rapport$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1303,6 +1324,21 @@ export class PoliceComponent implements OnInit, OnDestroy {
     delete this.clonedPlafondActe[plafondActe.acte.id];
   }
 
+
+  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
+    this.clonedPlafondConfiguration[plafond.garantie.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
+    delete this.clonedPlafondConfiguration[plafond.garantie.id];
+  }
+
+  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
+    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie.id];
+    delete this.clonedPlafondConfiguration[plafond.garantie.id];
+  }
+
   onRowEditInitPlafondSousActe(plafondSousActe: PlafondSousActe) {
     this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {
       ...plafondSousActe,
@@ -1348,6 +1384,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
   voirParametrage() {
   this.displayPrevisualiserParametrage = true;
   }
+
+ 
+
+
 
   saisiePrimePersonne() {
     console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
