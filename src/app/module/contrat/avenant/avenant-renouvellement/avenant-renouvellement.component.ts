@@ -69,6 +69,7 @@ import * as territorialiteSelector from '../../../../store/parametrage/territori
 import {loadTerritorialite} from '../../../../store/parametrage/territorialite/actions';
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
 import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
+import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -89,6 +90,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     destroy$ = new Subject<boolean>();
     obj: any = {group: {}, prime: {}};
     historiqueAveantAdherants: HistoriqueAvenantAdherant[];
+    historiqueAveantAdherantsTMP: HistoriqueAvenantAdherant[];
     private clonedProducts: any = [];
     private products2: any = [];
     genreList: Array<Genre>;
@@ -163,6 +165,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         private historiqueAvenantService: HistoriqueAvenantService,
         private formBuilder: FormBuilder,
         private adherentService: AdherentService,
+        private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
     ) {
         this.groupeForm = this.formBuilder.group({
             id: new FormControl(null),
@@ -620,6 +623,12 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             });
 
+        this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
+            (res) => {
+                this.historiqueAveantAdherantsTMP = res;
+            }
+        );
+
         this.loadAdherantByPolice();
         this.addFamilleActe(this.police);
     }
@@ -846,31 +855,14 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     loadAdherantByPolice(): void {
-        this.adherentService.getAdherentsByPolice(this.police.id).subscribe(
+        this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherents(this.police.id).subscribe(
             (res) => {
                 // this.adherantListTMP = res;
-                this.adherantList = res;
-                this.addHistoriqueAvenantAdherant(this.adherantList);
+                this.adherantListTmp = res;
+                this.historiqueAveantAdherants = res;
+                // this.addHistoriqueAvenantAdherant(this.adherantList);
             }
         );
-    }
-
-    addHistoriqueAvenantAdherant(adherantsListe: Adherent[]): void {
-        adherantsListe.forEach(adherant => {
-            const historiqueAvenantAdherant: HistoriqueAvenantAdherant = {};
-            historiqueAvenantAdherant.id = null;
-            historiqueAvenantAdherant.avenant = null;
-            historiqueAvenantAdherant.dateEntree = new Date();
-            historiqueAvenantAdherant.dateIncorporation = null;
-            historiqueAvenantAdherant.dateRetrait = null;
-            historiqueAvenantAdherant.dateModification = new Date();
-            historiqueAvenantAdherant.dateRenouvellement = null;
-            historiqueAvenantAdherant.historiqueAvenant = null;
-            historiqueAvenantAdherant.adherent = adherant;
-            historiqueAvenantAdherant.deleted = false;
-            this.historiqueAveantAdherants.push(historiqueAvenantAdherant);
-            this.adherantListTmp.push(historiqueAvenantAdherant);
-        });
     }
 
     setPlafondFamilleActe(): void {
@@ -898,39 +890,40 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.objet.plafondFamilleActes = this.plafondFamilleActe;
         this.objet.plafondGroupeSousActes = this.plafondSousActe;
         this.objet.police = this.police;
-        this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
-        this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
+        // this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
+        /* this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
             if (this.adherantListTmp.find(e => e.adherent.id === haa.adherent.id) !== null) {
                 this.objet.historiqueAvenantAdherants.push(this.adherantListTmp.find(e => e.adherent.id === haa.adherent.id));
             }
+        }); */
+        // this.objet.historiqueAvenantAdherants = this.adherantListTmp;
+        this.adherentFamilleListe.forEach(famille => {
+            famille.adherent.groupe = this.groupeSelected;
+            famille.famille.forEach(f => {
+                f.groupe = this.groupeSelected;
+            });
         });
-        this.objet.historiqueAvenantAdherants = this.adherantListTmp;
         this.objet.familles = this.adherentFamilleListe;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log(this.objet);
         this.eventEmitterM.emit(this.objet);
     }
 
-    addAvenantAdherant(event: AdherentFamille): void {
+    addAvenantAdherant(event: HistoriqueAvenant): void {
         if (event) {
-            this.adherentFamilleListe.push(event);
-            this.objet.historiqueAvenantAdherantDels.push(event);
+            event.aderants.forEach(f => {
+                this.adherentFamilleListe.push(f);
+            });
+            console.log('+++++++++++++');
+            console.log(event);
+            // this.objet.historiqueAvenantAdherantDels.push(event);
         }
     }
 
-    deleteAdherant(retour: any) {
+    deleteAdherant(historiqueAvenant: HistoriqueAvenant) {
         console.log('********retour***********');
-        console.log(retour);
-        retour.retrais.forEach((historiqueAvenantAdherant: HistoriqueAvenantAdherant = {
-            avenant: {}
-        }) => {
-            // historiqueAvenantAdherant.avenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-            historiqueAvenantAdherant.adherent.groupe = retour.grp;
-            historiqueAvenantAdherant.deleted = true;
-        });
-        this.historiqueAvenant.dateAvenant = retour.date;
-        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
-        this.historiqueAvenant.historiqueAvenantAdherants = retour.retrais;
-        this.historiqueAvenant.groupe = retour.grp;
+        console.log(historiqueAvenant);
+        this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherants;
+        this.objet.historiqueAvenantAdherants = historiqueAvenant.historiqueAvenantAdherant1s;
     }
 }
