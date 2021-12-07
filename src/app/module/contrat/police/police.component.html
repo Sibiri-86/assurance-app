@@ -71,7 +71,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{policeList ? policeList.length : 0 }} polices au total.
+                        {{policeList ? policeList.length : 0 }} police(s).
                     </div>
                 </ng-template>
             </p-table>
@@ -758,7 +758,7 @@
                             <div class= "p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="firstname2">Libelle</label>
+                                    <label for="nom">Libelle <span style="color: red !important;">(*)</span></label>
                                     <input id="nom" type="text" formControlName="libelle"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'nom'">
@@ -766,16 +766,16 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="lastname2">Taux de couverture</label>
-                                    <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                                    <label for="taux">Taux de couverture <span style="color: red !important;">(*)</span></label>
+                                    <p-dropdown id="taux" dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'taux'">
                                     </app-entity-validation>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="firstname2">Territorialité</label>
-                                    <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
+                                    <label for="territorialite">Territorialité <span style="color: red !important;">(*)</span></label>
+                                    <p-multiSelect id="territorialite" dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'territorialite'">
                                     </app-entity-validation>
@@ -785,24 +785,24 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="dateEffet">Date effet</label>
-                                    <p-calendar   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
+                                    <label for="dateEffet">Date effet <span style="color: red !important;">(*)</span></label>
+                                    <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
                                     </app-entity-validation>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="firstname2">Type durée</label>
-                                    <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe($event)" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                                    <label for="typeDuree">Type durée <span style="color: red !important;">(*)</span></label>
+                                    <p-dropdown id="typeDuree" dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe($event)" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="policeForm" [entityField]="'typeDuree'">
                                     </app-entity-validation>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="lastname2">Durée</label>
-                                    <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
+                                    <label for="duree">Durée <span style="color: red !important;">(*)</span></label>
+                                    <input id="duree" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'duree'">
                                     </app-entity-validation>
@@ -810,11 +810,32 @@
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col-4">
-                                    <label for="lastname2">Date écheance</label>
-                                    <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                <div class="p-field p-col-2">
+                                    <label for="dateEcheance">Date écheance</label>
+                                    <p-calendar id="dateEcheance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEcheance'">
+                                    </app-entity-validation>
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
+                                    <input id="adresse" type="text" formControlName="adresse"  pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'adresse'">
+                                    </app-entity-validation>
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label for="description">Description <span style="color: red !important;">(*)</span></label>
+                                    <input id="description" type="text" formControlName="description"  pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'description'">
+                                    </app-entity-validation>
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="commune">Commune<span style="color: red !important;">(*)</span></label>
+                                    <p-dropdown id="commune" dataKey="id" inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'commune'">
                                     </app-entity-validation>
                                 </div>
                             </div>
@@ -832,8 +853,8 @@
                                 </div>-->
 
                                 <div class="p-field p-col-4">
-                                    <label for="typePrime">Type de prime</label>
-                                    <p-dropdown dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
+                                    <label for="typePrime">Type de prime<span style="color: red !important;">(*)</span></label>
+                                    <p-dropdown id="typePrime" dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
@@ -885,7 +906,7 @@
                         </div>
                         <div *ngIf="!isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
-                            <button [disabled]="!valideDateEffet" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
+                            <button [disabled]="groupeForm?.invalid && primeForm?.invalid" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
                         </div>
                         <div *ngIf="isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
@@ -1722,7 +1743,7 @@
                                     <input pInputText type="text" [(ngModel)]="rowData.nom" required>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData.nom}}
+                                    {{rowData?.nom}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1811,7 +1832,7 @@
                         <div class="p-field p-col">
                             <label for="lastname2">Matricule</label>
                             <div>
-                                <span>{{adherent.matricule}}</span>
+                                <span>{{adherent.numero}}</span>
                             </div>
                         </div>
                         <div class="p-field p-col">
@@ -1948,7 +1969,7 @@
 				<ng-template pTemplate="body" let-adherent>
 					<tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
 						<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
-						<td><span class="p-column-title">{{adherent.matricule}}</span></td>
+						<td><span class="p-column-title">{{adherent.numero}}</span></td>
 						<td><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
 						<td><span class="p-column-title">{{adherent.groupe?.police?.numero}}</span></td>
 						<!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->

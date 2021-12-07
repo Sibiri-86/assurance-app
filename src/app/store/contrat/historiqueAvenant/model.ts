@@ -33,7 +33,8 @@ export enum TypeHistoriqueAvenant {
     RENOUVELLEMENT = 'RENOUVELLEMENT',
     MODIFICATION = 'MODIFICATION',
     RETRAIT = 'RETRAIT',
-    INCORPORATION = 'INCORPORATION'
+    INCORPORATION = 'INCORPORATION',
+    AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE'
 }
 
 export interface HistoriqueAvenantAdherant {

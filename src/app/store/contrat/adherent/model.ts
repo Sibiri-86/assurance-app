@@ -13,6 +13,7 @@ export interface Adherent{
     dateNaissance?: Date,
     lieuNaissance?: string,
     numeroTelephone?: string,
+    numero?: number,
     adresse?: string,
     adresseEmail?: string,
     profession?: Profession,

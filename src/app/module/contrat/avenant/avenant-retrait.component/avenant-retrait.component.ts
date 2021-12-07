@@ -14,7 +14,11 @@ import {Adherent, AdherentFamille, AdherentList} from '../../../../store/contrat
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
-import {HistoriqueAvenantAdherant, HistoriqueAvenantList} from '../../../../store/contrat/historiqueAvenant/model';
+import {
+  HistoriqueAvenant,
+  HistoriqueAvenantAdherant,
+  HistoriqueAvenantList, TypeHistoriqueAvenant
+} from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -145,13 +149,18 @@ export class AvenantRetraitComponent implements OnInit {
   addAdherentFamilleToList(): void {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
-    const retour = {
-      retrais: this.adherantDeleteds,
-      date: this.myForm.get('dateAvenant').value,
-      numero: this.myForm.get('numero').value,
-      grp: this.groupe
-    };
-    this.adherentFamilleEvent.emit(retour);
+    const historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+    historiqueAvenant.numero = this.myForm.get('numero').value;
+    historiqueAvenant.groupe = this.groupe;
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    this.adherantDeleteds.forEach(haa => {
+      haa.deleted = true;
+      haa.adherent.groupe = this.groupe;
+      // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    });
+    historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
+    this.adherentFamilleEvent.emit(historiqueAvenant);
     this.init();
   }
 
