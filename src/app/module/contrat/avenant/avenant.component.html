@@ -1951,7 +1951,7 @@
                 </div>
                 <!--Liste des avenants de la police-->
                 <h4> Avenant(s) de la police N°:
-                    <mark>{{police.numero}}</mark>
+                    <mark>{{police?.numero}}</mark>
                     du Souscripteur:
                     <mark>{{police.nom}}</mark>
                 </h4>
@@ -2009,11 +2009,11 @@
                                                     (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant)">
                                             </button>
                                         </div>
-                                        <div class="p-col-">
+                                        <!--<div class="p-col-">
                                             <button pButton pRipple icon="pi pi-check" pTooltip="Valider l'avenant"
                                                     class="p-button-rounded p-button-info p-mr-2">
                                             </button>
-                                        </div>
+                                        </div>-->
                                         <div class="p-col-">
                                             <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants"
                                                            (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, rowdata)">
