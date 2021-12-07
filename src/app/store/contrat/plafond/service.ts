@@ -6,6 +6,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import { Groupe } from "../groupe/model";
 
 @Injectable({providedIn: 'root'})
 export class PlafondService {
@@ -17,6 +18,12 @@ $getPlafonds(): Observable<PlafondList> {
       map((response: PlafondList) => response),
       catchError(this.handleError())
     );
+  }
+
+$getPlafondsByGroupe(groupe: Groupe): Observable<any> {
+    // @FIXME: get plafond by groupe
+    console.log(groupe);
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/consulter`, groupe);
   }
 
 posPlafond(Plafond: Plafond): Observable<any> {

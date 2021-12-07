@@ -14,3 +14,7 @@ export interface Plafond {
 export interface PlafondList {
     plafondDtoList: Array<Plafond>
 }
+
+export interface PlafondGroupe {
+    plafond: Plafond
+}

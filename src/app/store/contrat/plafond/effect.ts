@@ -7,6 +7,7 @@ import * as featureActions from './action';
 import {Plafond} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
+import { Groupe } from '../groupe/model';
 
 @Injectable()
 export class PlafondEffects {
@@ -88,7 +89,21 @@ export class PlafondEffects {
     )
     );
 
-    
+    fetchPlafondGroupe$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadPlafondGroupe),
+        mergeMap((groupe: Groupe) =>
+            this.PlafondService.$getPlafondsByGroupe(groupe).pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setPlafondGroupe(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
 import$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importPlafond),
