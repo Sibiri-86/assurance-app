@@ -313,7 +313,12 @@ import { SeparatorPipe } from './module/pipes/separator.pipe';
         KeycloakAngularModule,
         AppCodeModule,
         ReactiveFormsModule,
-        StoreModule.forRoot(reducers,  {metaReducers}),
+        StoreModule.forRoot(reducers,  
+          {metaReducers, 
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false,
+            }}),
         EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 

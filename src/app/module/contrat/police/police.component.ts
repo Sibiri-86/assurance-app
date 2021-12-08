@@ -375,25 +375,35 @@ export class PoliceComponent implements OnInit, OnDestroy {
   this.displayConfigurationPlafond = true;
   }
 
+  fermerConfigurationPlafond() {
+    this.displayConfigurationPlafond = false;
+  }
+
   /**permet de parametrer le plafond pour un groupe */
   parametrerPlafond(groupe: Groupe) {
-    this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
+    this.groupe = {...groupe};
+    console.log('id du groupe est'+groupe.id);
+    //this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
-    this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    if (value) {
-      this.plafondGroupe = value;
-      this.plafondActuelleConfiguration = this.plafondGroupe.plafondFamilleActe.slice();
-      console.log(this.plafondActuelleConfiguration);
-      console.log(this.plafondGroupe);
-    }
-    });
+
+   // this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //if (value) {
+      //this.plafondGroupe = value;
+     // console.log(value);
+     // this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
+      //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
+    //}
+    //});
+
+    console.log(this.plafondActuelleConfiguration);
     console.log(groupe);
     console.log(this.ifExistTerritorialiteInternational(groupe));
     if(this.ifExistTerritorialiteInternational(groupe)){
-      this.isInternationalGroupe = true;
+    this.isInternationalGroupe = true;
     }
-    this.groupe = {...groupe};
     this.displayParametragePlafond = true;
+    //console.log(this.plafondGroupe);
+    
   }
 
   voirDetailAdherent(adherent:Adherent){
@@ -403,6 +413,19 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+
+    this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
+    this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
+    this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    if (value) {
+      //this.plafondGroupe = value;
+      console.log(value);
+      this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
+      
+      //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
+    }
+    });
+
     this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;
@@ -1343,6 +1366,39 @@ export class PoliceComponent implements OnInit, OnDestroy {
     delete this.clonedPlafondConfiguration[plafond.garantie.id];
   }
 
+  onRowEditInitPlafondConfigurationActe(plafond: PlafondActe) {
+    this.clonedPlafondConfiguration[plafond.acte.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfigurationActe(plafond: PlafondActe) {
+    delete this.clonedPlafondConfiguration[plafond.acte.id];
+  }
+
+  onRowEditCancelPlafondConfigurationActe(plafond: PlafondActe, index: number, indexGarantie: any) {
+    console.log(indexGarantie);
+    //this.plafondActuelleConfiguration[indexGarantie].listeActe[index] = this.clonedPlafondConfiguration[plafond.acte.id];
+    //delete this.clonedPlafondConfiguration[plafond.acte.id];
+  }
+
+  onRowEditInitPlafondConfigurationSousActe(plafond: PlafondSousActe) {
+    this.clonedPlafondSousActe[plafond.sousActe.id] = {...plafond};
+    console.log(this.clonedPlafondSousActe);
+  }
+
+  onRowEditSavePlafondConfigurationSousActe(plafond: PlafondSousActe) {
+    delete this.clonedPlafondSousActe[plafond.sousActe.id];
+  }
+
+  onRowEditCancelPlafondConfigurationSousActe(plafond: PlafondSousActe, index: number, indexGarantie: number) {
+    //console.log(indexGarantie);
+    //this.plafondActuelleConfiguration[indexGarantie].listeActe[index] = this.clonedPlafondConfiguration[plafond.acte.id];
+    //delete this.clonedPlafondConfiguration[plafond.acte.id];
+  }
+
+
+  
+
   onRowEditInitPlafondSousActe(plafondSousActe: PlafondSousActe) {
     this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {
       ...plafondSousActe,
@@ -1389,10 +1445,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
   this.displayPrevisualiserParametrage = true;
   }
 
- 
-
-
-
   saisiePrimePersonne() {
     console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
     if(this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
@@ -1438,6 +1490,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;
+    this.plafond.plafondAnnuelleFamille = removeBlanks(this.plafond.plafondAnnuelleFamille+'');
+    this.plafond.plafondAnnuellePersonne = removeBlanks(this.plafond.plafondAnnuellePersonne+'');
+    this.plafond.plafondGlobalInternationnal = removeBlanks(this.plafond.plafondGlobalInternationnal+'');
+
     for(var i=0; i<this.plafondFamilleActeConstruct.length; i++){
       this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond+'');
       for(var j=0; j<this.plafondFamilleActeConstruct[i].listeActe.length; j++){
@@ -1456,6 +1512,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
+    this.plafondForm.reset();
   }
 
   addSousActe() {
