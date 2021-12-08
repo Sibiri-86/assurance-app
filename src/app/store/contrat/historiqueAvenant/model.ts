@@ -9,6 +9,7 @@ import {Garantie} from '../../parametrage/garantie/model';
 import {DimensionPeriode} from '../../parametrage/dimension-periode/model';
 import {Taux} from '../../parametrage/taux/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
+import {TypePrime} from '../../parametrage/type-prime/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -119,5 +120,21 @@ export interface HistoriquePlafond {
     plafondAnnuellePersonne?: number;
     plafondFamilleActe?: Array<PlafondFamilleActe>;
     groupe?: Groupe;
+    historiqueAvenant?: HistoriqueAvenant;
+}
+
+export interface HistoriqueAvenantPrime {
+    id?: string;
+    typePrime?: TypePrime;
+    primeFamille?: number;
+    primeAdulte?: number;
+    primeEnfant?: number;
+    primeEmploye?: number;
+    primeConjoint?: number;
+    primeAnnuelle?: number;
+    primePersonne?: number;
+    primeNet?: number;
+    primeTotal?: number;
+    deleted?: boolean;
     historiqueAvenant?: HistoriqueAvenant;
 }
