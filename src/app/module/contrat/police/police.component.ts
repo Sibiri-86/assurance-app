@@ -1657,6 +1657,17 @@ changeGarantie(garantie, indexLigne: number) {
     });
   }
 
+  cloturePolice(police:Police){
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir clôturer la police?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(featureAction.cloturePolice(police));
+      },
+    });
+  }
+
   annulerSaisie(){
     this.policeForm.reset();
     this.primeForm.reset();

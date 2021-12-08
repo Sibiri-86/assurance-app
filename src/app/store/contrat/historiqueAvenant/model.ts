@@ -17,6 +17,7 @@ export interface HistoriqueAvenant {
     aderants?: Array<AdherentFamille>;
     groupe?: Groupe;
     historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
+    historiqueAvenantAdherant1s?: Array<HistoriqueAvenantAdherant>;
     numero?: number;
     numeroGarant?: number;
     dateAvenant?: Date;
