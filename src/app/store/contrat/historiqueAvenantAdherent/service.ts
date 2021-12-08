@@ -5,7 +5,8 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {HistoriqueAvenantPrime, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
+import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
+import {HistoriqueAvenantPrime} from '../historiqueAvenant/model';
 import {createRequestOption} from '../../../module/util/loader-util';
 import {Adherent} from '../adherent/model';
 
@@ -27,6 +28,16 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}`,
         {params: createRequestOption({typeHistoriqueAvenant, haId})}).pipe(
             map((response: Array<HistoriqueAvenantAdherant>) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getAvenantModificationInfo(typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string, policeId: string):
+    Observable<Avenant> {
+        // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_MODIFICATION)}`,
+        {params: createRequestOption({typeHistoriqueAvenant, haId, policeId})}).pipe(
+            map((response: Avenant) => response),
             catchError(this.handleError())
         );
     }

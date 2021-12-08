@@ -225,7 +225,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact <span class="required">*</span></label>
-                            <input id="lastname2" type="number"   formControlName="contact" pInputText>
+                            <input id="lastname2" type="text"   formControlName="contact" [value]="intermediaireForm.get('contact').value | formatTableValue: 'phoneContact':true" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="intermediaireForm" [entityField]="'contact'">
                         </app-entity-validation>
@@ -270,7 +270,7 @@
 
                     <div class="p-field p-col-4">
                         <label for="lastname2">Contact personne ressource <span class="required">*</span></label>
-                        <input id="lastname2" type="number" formControlName="contactPersonneRessource" pInputText>
+                        <input id="lastname2" type="text" formControlName="contactPersonneRessource" [value]="intermediaireForm.get('contactPersonneRessource').value | formatTableValue: 'phoneContact':true" pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="intermediaireForm" [entityField]="'contactPersonneRessource'">
                         </app-entity-validation>

@@ -270,10 +270,15 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact <span class="required">*</span></label>
-                            <input id="lastname2" type="number" formControlName="contact" pInputText>
+                            <!--
+                            <input id="lastname2" type="text" formControlName="contact" [value]="garantForm.get('contact').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            
+                            <p-inputMask formControlName="contact" mask="99 99 99 99"></p-inputMask>
+
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="garantForm" [entityField]="'contact'">
-                        </app-entity-validation>
+                            </app-entity-validation>
                         </div>
                 </div>
 
@@ -309,7 +314,11 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact personne ressource 1 <span class="required">*</span></label>
-                            <input id="lastname2" type="number" formControlName="contactPersonneRessource1" pInputText>
+                            <!--
+                            <input id="lastname2" type="text" formControlName="contactPersonneRessource1" [value]="garantForm.get('contactPersonneRessource1').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            <p-inputMask formControlName="contactPersonneRessource1" mask="99 99 99 99"></p-inputMask>
+
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="garantForm" [entityField]="'contactPersonneRessource1'">
                             </app-entity-validation>
@@ -335,7 +344,10 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="lastname2">Contact personne ressource 2</label>
-                            <input id="lastname2" type="number"  formControlName="contactPersonneRessource2" pInputText>
+                            <!--
+                            <input id="lastname2" type="text"  formControlName="contactPersonneRessource2" [value]="garantForm.get('contactPersonneRessource2').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            <p-inputMask formControlName="contactPersonneRessource2" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="garantForm" [entityField]="'contactPersonneRessource2'">
                             </app-entity-validation>

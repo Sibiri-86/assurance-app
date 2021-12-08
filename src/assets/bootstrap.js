@@ -10,4 +10,3 @@
       refreshTokenFunctionCallTimeSpan: 18000 // in ms => 5 min
     }
   }(this));
-  

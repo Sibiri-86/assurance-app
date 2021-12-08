@@ -31,8 +31,8 @@
                         <th pSortableColumn="taux" style="width: 12rem">Taux <p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 14rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="width: 12rem">Duree <p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="width: 14rem">Date effet <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="width: 14rem">Date écheance <p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="width: 12rem">Date effet <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="width: 12rem">Date écheance <p-sortIcon field="dateEcheance"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -65,6 +65,7 @@
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info p-mr-2" (click)="onRowSelectPolice(police)"></button>
                             <button pButton  pRipple icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
                             <button pButton  pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+                            <button pButton  pRipple icon="pi pi-lock" pTooltip="clôturer l'exercice" class="p-button-rounded p-button-danger p-ml-2" (click)="cloturePolice(police)"></button>
 
                         </td>
                     </tr>
@@ -256,19 +257,17 @@
                 <tr>
                     <th></th>
                     <th>Famille acte</th>
-                    <th>Prime</th>
+                    <th>Montant plafond</th>
                     <th>Taux</th>
                     <th>Date effet</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
+            <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
                 <tr [pEditableRow]="plafond">
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
-
                     <td>{{plafond.garantie.libelle}}</td>
-
                     <!--
                     <td>{{plafond.montantPlafond}}</td>
                     -->
@@ -294,56 +293,145 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td>{{plafond.dateEffet | formatTableValue : 'date'}}</td>
+
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{plafond.dateEffet | formatTableValue : 'date'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
                     <td style="text-align:center">
                         <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
-                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri)"></button>
+                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
                     </td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-plafond>
+            <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
                 <tr >
-                    <td colspan="5">
-                        <div class="">
-                            <p-table [value]="plafond.listeActe" dataKey="id">
+                <td colspan="6">
+                    <div class="">
+                        <p-table [value]="plafond.listeActe" dataKey="id" editMode="row">
                 <tr>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
-                <ng-template pTemplate="body" let-acte let-expanded="expanded">
-                    <tr>
+                <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                    <tr  [pEditableRow]="acte">
                         <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
                         <td>{{acte?.acte?.libelle}}</td>
-                        <td>{{acte?.montantPlafond}}</td>
-                        <td>{{acte?.taux?.taux}}</td>
-                        <td>{{acte?.dateEffet | formatTableValue : 'date'}}</td>
+
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{acte.montantPlafond}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+    
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="tauxList" [(ngModel)]="acte.taux" optionLabel="taux" placeholder="Select Make"
+                                                [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{acte?.taux.taux}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{acte.dateEffet | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td style="text-align:center">
+                            <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationActe(acte)"></button>
+                            <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationActe(acte)"></button>
+                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationActe(acte, ri, ri1)"></button>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-acte>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="">
-                                <p-table [value]="acte.listeSousActe" dataKey="id">
+                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
                     <tr>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
-                    <ng-template pTemplate="body" let-sousActe let-expanded="expanded">
-                        <tr>
+                    <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                        <tr [pEditableRow]="sousActe">
                             <td></td>
                             <td>{{sousActe?.sousActe?.libelle}}</td>
-                            <td>{{sousActe?.montantPlafond}}</td>
-                            <td>{{sousActe?.taux?.taux}}</td>
-                            <td>{{sousActe.dateEffet | formatTableValue : 'date'}}</td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" required>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{sousActe?.montantPlafond}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+        
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select Make"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{sousActe?.taux.taux}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{sousActe.dateEffet | formatTableValue : 'date'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td style="text-align:center">
+                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(sousActe)"></button>
+                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(sousActe)"></button>
+                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1)"></button>
+                            </td>
                         </tr>
                     </ng-template>
+
+                   
         </p-table>
 </div>
 </td>
@@ -355,6 +443,18 @@
 </tr>
 </ng-template>
 </p-table>
+<br/>
+<br/>
+<div class="p-grid p-justify-between">
+    <div>
+        <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="fermerConfigurationPlafond()"></button>
+    </div>
+    
+    <div>
+        <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
+        <button pButton pRipple label="Modifier" icon="pi pi-pencil" (click)="saveNewGroupe()"></button>
+    </div>
+</div>
 </ng-template>
 </p-dialog>
 
@@ -382,17 +482,17 @@
                     -->
                     <div class="p-field p-col">
                         <label for="primeFamille">Plafond global annuelle par personne</label>
-                        <input id="primeFamille" type="number" pInputText formControlName="plafondAnnuellePersonne" (blur) ='saisiePrimePersonne()'>
+                        <input id="primeFamille" type="text" pInputText formControlName="plafondAnnuellePersonne" [value]="plafondForm.get('plafondAnnuellePersonne').value | formatTableValue: 'number':true"  (blur) ='saisiePrimePersonne()'>
                     </div>
 
                     <div class="p-field p-col">
                         <label for="montantPrimeEnfant">Plafond global par famille</label>
-                        <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondAnnuelleFamille" (blur) ='saisiePrimeFamille()'>
+                        <input id="montantPrimeEnfant" type="text" pInputText formControlName="plafondAnnuelleFamille" [value]="plafondForm.get('plafondAnnuelleFamille').value | formatTableValue: 'number':true" (blur) ='saisiePrimeFamille()'>
                     </div>
 
                     <div class="p-field p-col" *ngIf="isInternationalGroupe">
                         <label for="montantPrimeEnfant">Plafond global internationnal</label>
-                        <input id="montantPrimeEnfant" type="number" pInputText formControlName="plafondGlobalInternationnal">
+                        <input id="montantPrimeEnfant" type="text" pInputText formControlName="plafondGlobalInternationnal" [value]="plafondForm.get('plafondGlobalInternationnal').value | formatTableValue: 'number':true" >
                     </div>
                 </div>
             </form>
@@ -737,7 +837,7 @@
             <button pButton pRipple label="Quitter" icon="pi pi-check" (click)="annulerSaisie()" class="p-button-success p-mr-2 p-mb-2" ></button>
         </div>
         <div>
-            <button pButton pRipple [disabled]="!valideMontantPlafond" label="Valider" icon="pi pi-check" (click)="validerPlafond()" class="p-button-success p-mr-2 p-mb-2" ></button>
+            <button pButton pRipple [disabled]="!valideMontantPlafond || !plafondFamilleActeConstruct.length" label="Valider" icon="pi pi-check" (click)="validerPlafond()" class="p-button-success p-mr-2 p-mb-2" ></button>
         </div>
     </div>
 
@@ -2313,7 +2413,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Contact Personne ressource</label>
-                            <input id="lastname2" type="number" formControlName="contactPersonneRessource" pInputText>
+                            <input id="lastname2" type="text" formControlName="contactPersonneRessource" [value]="policeForm.get('contactPersonneRessource').value | formatTableValue: 'phoneContact':true" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contactPersonneRessource'">
                             </app-entity-validation>
@@ -2442,3 +2542,4 @@
 </div>
 
 </div>
+

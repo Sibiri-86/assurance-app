@@ -189,6 +189,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayDialogFormAdherentIncorp = false;
   displayDialogFormAdherentRetrait = false;
   displayDialogFormAdherentAffaireNouvelle = false;
+  displayDialogFormAdherentModification = false;
+  displayDialogFormAdherentrenouvellement = false;
   clonedPlafondFamilleActe: { [s: string]: PlafondFamilleActe } = {};
   clonedAdherentFamille: { [s: string]: Adherent } = {};
   clonedPlafondActe: { [s: string]: PlafondActe } = {};
@@ -236,6 +238,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
   adherentsListeActuelle: Array<Adherent> = [];
+  adherentsListeActuelle1: Array<Adherent> = [];
   displayALA = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
@@ -252,6 +255,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantAdherents1: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents2: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents3: Array<HistoriqueAvenantAdherant>;
+  historiqueAvenantAdherents4: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
   avenantModification: AvenantModification = {};
   historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
@@ -262,6 +266,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiquePlafondSousActeList: Array<Territorialite> = [];
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
+  avenantModif: Avenant = {};
   historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
   displayDialogPrime = false;
 
@@ -391,6 +396,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantAdherents1 = [];
     this.historiqueAvenantAdherents2 = [];
     this.historiqueAvenantAdherents3 = [];
+    this.historiqueAvenantAdherents4 = [];
     this.policeList = [];
     this.loading = true;
     this.historiqueAvenant = {};
@@ -1392,6 +1398,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadActualList1(police: Police): void {
+    this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          console.log('---------- Actual Liste ----------');
+          console.log(res);
+          this.adherentsListeActuelle1 = res;
+        }
+    );
+  }
+
   addNewGroupe(): void {
     this.isNewGroupe = !this.isNewGroupe;
     // this.displayDialogFormAdherent = true;
@@ -1517,7 +1533,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-
+        this.viewAvenantAffaireRenouvellement(avenant, typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -1572,7 +1588,43 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
         }
     );
-    this.displayDialogFormAdherentAffaireNouvelle = true;
+    // this.displayDialogFormAdherentAffaireNouvelle = true;
+    this.displayDialogFormAdherentModification = true;
+  }
+
+  viewAvenantAffaireRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+    this.historiqueAvenant = {...avenant};
+    console.log(typeof typeHistoriqueAvenant);
+    console.log('++++++++++++++++++++avenant.id+++++++++++++++++++++++', avenant.id);
+    console.log('++++++++++++++++++++avenant.police.id+++++++++++++++++++++++', avenant.police.id);
+    this.historiqueAvenantAdherentService.getAvenantModificationInfo(typeHistoriqueAvenant,
+        avenant.id, avenant.police.id).subscribe(
+        (res: Avenant) => {
+          this.avenantModif = res;
+          console.log('=====================res=============', res);
+          /* console.log('=====================res=============', res);
+          this.historiqueAvenantAdherents4 = this.historiqueAvenantAdherent1s
+              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
+          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant); */
+        }
+    );
+    this.displayDialogFormAdherentrenouvellement = true;
+  }
+
+  viewAvenantModification(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+    this.historiqueAvenant = {...avenant};
+    console.log(typeof typeHistoriqueAvenant);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+        avenant.id).subscribe(
+        (res: Array<HistoriqueAvenantAdherant>) => {
+          this.historiqueAvenantAdherent1s = res;
+          console.log('=====================res=============', res);
+          this.historiqueAvenantAdherents3 = this.historiqueAvenantAdherent1s
+              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
+          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
+        }
+    );
+    this.displayDialogFormAdherentModification = true;
   }
 
   printAvenantIncorporation(historiqueAvenant: HistoriqueAvenant) {
