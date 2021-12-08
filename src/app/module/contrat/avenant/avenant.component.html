@@ -3231,6 +3231,88 @@
         </p-tabPanel>
 
         <p-tabPanel header="INCORPORATION" leftIcon="pi pi-cog" tooltip="liste des personnes incorporées">
+            <div class="card">
+                <p-table #dtAL [value]="avenantModif.historiqueAvenantAdherants" [columns]="colsAL" [rows]="10" [paginator]="true"
+                         [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                         [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
+                         styleClass="p-datatable-customers"
+                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                         [showCurrentPageReport]="true">
+                    <ng-template pTemplate="caption">
+                        <div class="table-header">
+                            <h5 class="p-m-0"></h5>
+<!--
+                            <div class="p-grid">
+                                <div class="p-col-8">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder="Search..." [style]="{width: '20%'}"/>
+                                </span>
+
+                                </div>
+                                <div class="p-col-2">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help"
+                                                (click)="dtAL.exportCSV()"></button>
+                                    </div>
+                                </div>
+                                <div class="p-col-2">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <button pButton pRipple label="Imprimer" icon="pi pi-print" class="p-button-info">
+
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+-->
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="nom">Nom
+                                <p-sortIcon field="nom"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="prenom" style="width: 12rem">Prenom
+                                <p-sortIcon field="prenom"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="adresseEmail">Date de Naissance
+                                <p-sortIcon field="dateNaissance"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="adresseEmail">Email
+                                <p-sortIcon field="adresseEmail"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="genre" style="width: 12rem">Genre
+                                <p-sortIcon field="genre.libelle"></p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowdata>
+                        <tr>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.nom}}</span>
+
+                            </td>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.prenom}}</span>
+
+                            </td>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.dateNaissance}}</span>
+
+                            </td>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.email}}</span>
+
+                            </td>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.genre?.libelle}}</span></td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            {{avenantModif.historiqueAvenantAdherants ? avenantModif.historiqueAvenantAdherants.length : 0 }} adherent(s).
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+
 
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-cog" tooltip="liste des personnes retirées">

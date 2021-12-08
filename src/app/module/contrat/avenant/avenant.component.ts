@@ -1600,10 +1600,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res: Avenant) => {
           this.avenantModif = res;
           console.log('=====================res=============', res);
-          /* console.log('=====================res=============', res);
-          this.historiqueAvenantAdherents4 = this.historiqueAvenantAdherent1s
-              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
-          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant); */
         }
     );
     this.displayDialogFormAdherentrenouvellement = true;
