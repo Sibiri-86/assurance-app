@@ -57,6 +57,10 @@ export class PoliceService {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/valider`, Police);
     }
+    cloturePolice(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_CLOTURE)}/cloturePolice`, Police);
+    }
 
     deletePolice(Police: Police): Observable<any> {
         // @FIXME: post request

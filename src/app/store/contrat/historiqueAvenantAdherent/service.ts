@@ -5,7 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {HistoriqueAvenantPrime, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
+import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
 import {createRequestOption} from '../../../module/util/loader-util';
 import {Adherent} from '../adherent/model';
 
@@ -31,19 +31,21 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    getAvenantModificationInfo(typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string, policeId: string):
+    Observable<Avenant> {
+        // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_MODIFICATION)}`,
+        {params: createRequestOption({typeHistoriqueAvenant, haId, policeId})}).pipe(
+            map((response: Avenant) => response),
+            catchError(this.handleError())
+        );
+    }
+
 
     findHistoriqueAvenantAdherantActuallList(idPolice: string): Observable<HistoriqueAvenantAdherant[]> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALISE)}/${idPolice}`).pipe(
             map((response: HistoriqueAvenantAdherant[]) => response),
-            catchError(this.handleError())
-        );
-    }
-
-    findHistoriqueAvenantPrime(idHa: string): Observable<HistoriqueAvenantPrime[]> {
-        // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_HISTORIQUE_AVENANT_PRIME)}/${idHa}`).pipe(
-            map((response: HistoriqueAvenantPrime[]) => response),
             catchError(this.handleError())
         );
     }

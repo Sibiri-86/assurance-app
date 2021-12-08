@@ -262,8 +262,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiquePlafondSousActeList: Array<Territorialite> = [];
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
-  historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
-  displayDialogPrime = false;
 
   infosPolice = false;
   constructor(
@@ -1819,14 +1817,5 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
-  }
-
-  voirPrime(rowdata: HistoriqueAvenant): void {
-    this.historiqueAvenantAdherentService.findHistoriqueAvenantPrime(rowdata.id).subscribe(
-        (res) => {
-          this.historiqueAvenantPrimes = res || [];
-          this.displayDialogPrime = true;
-        }
-    );
   }
 }
