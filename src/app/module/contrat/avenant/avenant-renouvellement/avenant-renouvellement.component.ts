@@ -916,7 +916,6 @@ export class AvenantRenouvellementComponent implements OnInit {
             });
             console.log('+++++++++++++');
             console.log(event);
-            // this.objet.historiqueAvenantAdherantDels.push(event);
         }
     }
 
