@@ -99,7 +99,7 @@ import {
   AvenantModification,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
-  HistoriqueAvenantList,
+  HistoriqueAvenantList, HistoriqueAvenantPrime,
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
@@ -267,6 +267,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
   avenantModif: Avenant = {};
+  historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
+  displayDialogPrime = false;
 
   infosPolice = false;
   constructor(
@@ -1869,5 +1871,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+
+  voirPrime(rowdata: HistoriqueAvenant): void {
+    this.historiqueAvenantAdherentService.findHistoriqueAvenantPrime(rowdata.id).subscribe(
+        (res) => {
+          this.historiqueAvenantPrimes = res || [];
+          this.displayDialogPrime = true;
+        }
+    );
   }
 }
