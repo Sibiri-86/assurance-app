@@ -266,4 +266,8 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/adherents`,
         mock: `assets/mock/contrat/adherent.mock.json`
     };
+    static readonly CONTRAT_POLICE_CLOTURE = {
+        prod: `${SERVICE_PREFIX}/contrat/police`,
+        mock: `assets/mock/contrat/police.mock.json`
+    };
 }

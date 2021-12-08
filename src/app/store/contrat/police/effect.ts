@@ -59,6 +59,20 @@ export class PoliceEffects {
                 ))
             ));
 
+        cloturePolice = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.cloturePolice),
+            mergeMap((Police: Police) =>
+                this.PoliceService.cloturePolice(Police).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadPolice()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
             loadStatistiquePolice$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.loadStatistique),

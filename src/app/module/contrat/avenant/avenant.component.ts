@@ -189,6 +189,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayDialogFormAdherentIncorp = false;
   displayDialogFormAdherentRetrait = false;
   displayDialogFormAdherentAffaireNouvelle = false;
+  displayDialogFormAdherentModification = false;
   clonedPlafondFamilleActe: { [s: string]: PlafondFamilleActe } = {};
   clonedAdherentFamille: { [s: string]: Adherent } = {};
   clonedPlafondActe: { [s: string]: PlafondActe } = {};
@@ -236,6 +237,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
   adherentsListeActuelle: Array<Adherent> = [];
+  adherentsListeActuelle1: Array<Adherent> = [];
   displayALA = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
@@ -1390,6 +1392,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadActualList1(police: Police): void {
+    this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          console.log('---------- Actual Liste ----------');
+          console.log(res);
+          this.adherentsListeActuelle1 = res;
+        }
+    );
+  }
+
   addNewGroupe(): void {
     this.isNewGroupe = !this.isNewGroupe;
     // this.displayDialogFormAdherent = true;
@@ -1570,7 +1582,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
         }
     );
-    this.displayDialogFormAdherentAffaireNouvelle = true;
+    // this.displayDialogFormAdherentAffaireNouvelle = true;
+    this.displayDialogFormAdherentModification = true;
+  }
+
+  viewAvenantModification(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+    this.historiqueAvenant = {...avenant};
+    console.log(typeof typeHistoriqueAvenant);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+        avenant.id).subscribe(
+        (res: Array<HistoriqueAvenantAdherant>) => {
+          this.historiqueAvenantAdherent1s = res;
+          console.log('=====================res=============', res);
+          this.historiqueAvenantAdherents3 = this.historiqueAvenantAdherent1s
+              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
+          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
+        }
+    );
+    this.displayDialogFormAdherentModification = true;
   }
 
   printAvenantIncorporation(historiqueAvenant: HistoriqueAvenant) {
