@@ -2006,7 +2006,7 @@
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant);loadActualList1(rowdata?.police)">
+                                                    (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant)">
                                             </button>
                                         </div>
                                         <!--<div class="p-col-">
@@ -2417,29 +2417,13 @@
         </ng-template>
     </p-dialog>
 
-    <!--Affichage des details des avenants de modification -->
-    <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentModification"
-              header="Détails de l'avenant de modification" [modal]="true" styleClass="p-fluid"
+    <!--Affichage des details des avenants de renouvellement -->
+    <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentrenouvellement"
+              header="Détails de l'avenant de renouvellement" [modal]="true" styleClass="p-fluid"
               [style]="{'width':'1200px'}">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
             <div>
-<!--
-                <form [formGroup]="myForm">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
-                            <label for="numero">Numéro de l'avenant chez la garant</label>
-                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
-                        </div>
-                        <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Date de retrait</label>
-                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar>
-                        </div>
-                    </div>
-                </form>
--->
                 <br>
                 <p-fieldset legend="Police" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
@@ -3082,7 +3066,7 @@
             </p-fieldset>
 -->
         </p-tabPanel>
-        <p-tabPanel header="ADHERANT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
+        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
                 <div class="card">
                     <p-table #dtAL [value]="adherentsListeActuelle1" [columns]="colsAL" [rows]="10" [paginator]="true"
                              [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -3246,7 +3230,830 @@
             </div>
         </p-tabPanel>
 
+        <p-tabPanel header="INCORPORATION" leftIcon="pi pi-cog" tooltip="liste des personnes incorporées">
+
+        </p-tabPanel>
+        <p-tabPanel header="RETRAIT" leftIcon="pi pi-cog" tooltip="liste des personnes retirées">
+
+        </p-tabPanel>
+
     </p-tabView>
         </p-dialog>
+
+    <!--Affichage des details des avenants de modification -->
+    <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentModification"
+              header="Détails de l'avenant de modification" [modal]="true" styleClass="p-fluid"
+              [style]="{'width':'1200px'}">
+        <p-tabView>
+            <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
+                <div>
+                    <br>
+                    <p-fieldset legend="Police" toggleable="true">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="lastname2">Garant</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.garant?.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Intermediaire</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.intermediaire?.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Taux de couverture</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.taux?.taux}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Territorialité</label>
+                                <div>
+                                    <span *ngFor="let t of historiqueAvenant?.police?.territorialite">{{t.libelle}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="dateEffet">Date effet</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.dateEffet}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">Date echeance</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.dateEcheance}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="firstname2">Nom du souscripteur</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.contact}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Adresse email</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.adresseEmail}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="adressePostale">Adresse postale</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.adressePostale}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur activite</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.secteurActivite?.libelle}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero IFU</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.numeroIfu}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Personne ressource</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.personneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact personne ressource</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.contactPersonneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="refPolice">Reference police</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.referencePolice}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Rccm</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.rccm}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero police</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.numero}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.secteur?.libelle}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col-4">
+                                <label for="fraisAccessoire">Frais accessoire</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label for="fraisBadge">Frais badge</label>
+                                <div>
+                                    <span>{{historiqueAvenant?.police?.fraisBadge | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
+                <!--
+                            <div class="p-grid">
+                                <div class="p-col-12">
+                                    <label class="p-fieldset-content">Choisir le Groupe</label>
+                                    <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelected"
+                                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                                (onChange)="loadAherantByGroupe()" [style]="{'width': '40%'}">
+                                    </p-dropdown>
+                                </div>
+                                <div class="p-col-12">
+                                    &lt;!&ndash;<app-avenant-groupe [obj]="obj" (groupeEvent)="obj = $event"></app-avenant-groupe>&ndash;&gt;
+                                    <p-fieldset legend="Caracteristique" toggleable="true">
+                                        <form [formGroup]="groupeForm">
+                                            <h5></h5>
+                                            <div class= "p-fluid p-formgrid p-grid">
+
+                                                <div class="p-field p-col">
+                                                    <label for="firstname2">Libelle</label>
+                                                    <input id="nom" type="text" formControlName="libelle"  pInputText>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'nom'">
+                                                    </app-entity-validation>
+                                                </div>
+
+                                                <div class="p-field p-col">
+                                                    <label for="lastname2">Taux de couverture</label>
+                                                    <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'taux'">
+                                                    </app-entity-validation>
+                                                </div>
+
+                                                <div class="p-field p-col">
+                                                    <label for="firstname2">Territorialité</label>
+                                                    <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'territorialite'">
+                                                    </app-entity-validation>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-fluid p-formgrid p-grid">
+
+                                                <div class="p-field p-col">
+                                                    <label for="dateEffet">Date effet</label>
+                                                    &lt;!&ndash;<input type="date" class="form-control" formControlName="dateEffet" id="dateEffet" required style="width: 100%">&ndash;&gt;
+                                                    <p-calendar id="dateEffet"  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'dateEffet'">
+                                                    </app-entity-validation>
+                                                </div>
+
+                                                <div class="p-field p-col">
+                                                    <label for="firstname2">Type durée</label>
+                                                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (onChange)="getGroupeSelected()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="policeForm" [entityField]="'typeDuree'">
+                                                    </app-entity-validation>
+                                                </div>
+
+                                                <div class="p-field p-col">
+                                                    <label for="lastname2">Durée</label>
+                                                    <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'duree'">
+                                                    </app-entity-validation>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-fluid p-formgrid p-grid">
+                                                <div class="p-field p-col-4">
+                                                    <label for="lastname2">Date écheance</label>
+                                                    <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                                           [formGroup]="groupeForm" [entityField]="'dateEcheance'">
+                                                    </app-entity-validation>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+                                </div>
+                                <div class="p-col-12">
+                                    <p-fieldset legend="Parametrage prime" toggleable="true">
+                                        <form [formGroup]="primeForm">
+                                            <h5></h5>
+                                            <div class= "p-fluid p-formgrid p-grid">
+
+                                                <div class="p-field p-col-4" >
+                                                    <label for="primeFamille">Prime Annuelle</label>
+                                                    <input id="primeAnnuelle" type="text" pInputText formControlName="primeAnnuelle" [value]="primeForm.get('primeAnnuelle').value | formatTableValue: 'number':true">
+                                                </div>
+
+                                                <div class="p-field p-col-4">
+                                                    <label for="typePrime">Type de prime</label>
+                                                    <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle"></p-dropdown>
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
+                                                    <label for="primeFamille">Montant famille</label>
+                                                    <input id="primeFamille" type="text" pInputText [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true" formControlName="primeFamille">
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PA'">
+                                                    <label for="montantPrimeAdulte">Montant adulte</label>
+                                                    <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code=='PAE'">
+                                                    <label for="montantPrimeEnfant">Montant enfant</label>
+                                                    <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PP'">
+                                                    <label for="montantPrimePersonne">Montant personne</label>
+                                                    <input id="montantPrimePersonne" type="text" pInputText formControlName="primePersonne" [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PE'">
+                                                    <label for="montantPrimeEmploye">Montant employe</label>
+                                                    <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PC'">
+                                                    <label for="montantPrimeConjoint">Montant conjoint</label>
+                                                    <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                                                    <label for="montantPrimeEnfant1">Montant enfant</label>
+                                                    <input id="montantPrimeEnfant1" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                            </div>
+
+                                            <div class= "p-fluid p-formgrid p-grid">
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
+                                                    <label for="montantPrimeAdulte1">Montant adulte</label>
+                                                    <input id="montantPrimeAdulte1" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
+                                                </div>
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                                                    <label for="montantPrimeEmploye1">Montant employé</label>
+                                                    <input id="montantPrimeEmploye1" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                                                </div>
+
+                                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
+                                                    <label for="montantPrimeConjoint1">Montant conjoint</label>
+                                                    <input id="montantPrimeConjoint1" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </p-fieldset>
+                                </div>
+                            </div>
+                -->
+            </p-tabPanel>
+            <p-tabPanel header="PLAFOND" leftIcon="pi pi-user-edit" tooltip="PLAFOND">
+                <p-fieldset legend="Plafond" toggleable="true">
+                    <form [formGroup]="plafondForm">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="primeFamillePG">Plafond global annuelle par personne</label>
+                                <input id="primeFamillePG" type="number" pInputText formControlName="plafondAnnuellePersonne">
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="montantPrimeEnfantPG">Plafond global par famille</label>
+                                <input id="montantPrimeEnfantPG" type="number" pInputText formControlName="plafondAnnuelleFamille">
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="montantPrimeInter">Plafond global internationnal</label>
+                                <input id="montantPrimeInter" type="number" pInputText formControlName="plafondGlobalInternationnal">
+                            </div>
+                        </div>
+                    </form>
+                </p-fieldset>
+                <!--
+                            <p-table #dt [value]="plafondFamilleActe" dataKey="" editMode="row">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width:3em"></th>
+                                        <th>Famille acte</th>
+                                        <th>Montant plafonné</th>
+                                        <th>Periode</th>
+                                        <th>Nombre acte</th>
+                                        <th>Taux de couverture</th>
+                                        <th>Domaine</th>
+                                        <th>Date effet</th>
+                                        <th style="width:8em"></th>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                    <tr [pEditableRow]="rowData">
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-dropdown [options]="garanties" [(ngModel)]="rowData.garantie" optionLabel="libelle" placeholder="Select Make"
+                                                                [style]="{'width':'100%'}" (onChange)="changeGarantie($event, ri)"></p-dropdown>
+                                                </ng-template>
+                                                <ng-template pTemplate="output" *ngIf="rowData.garantie">
+                                                    {{rowData?.garantie.libelle}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true">
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{rowData.montantPlafond}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="rowData.dimensionPeriode" optionLabel="libelle" placeholder="Select Make"
+                                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{rowData?.dimensionPeriode?.libelle}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input pInputText type="text" [(ngModel)]="rowData.nombre">
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{rowData.nombre}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td>
+
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-dropdown [options]="tauxList"  [(ngModel)]="rowData.taux" optionLabel="taux"
+                                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                </ng-template>
+                                                <ng-template pTemplate="output" >
+                                                        <span *ngIf="rowData.garantie.libelle">
+                                                            {{rowData?.taux?.taux}}
+                                                        </span>
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="rowData.domaine" optionLabel="libelle"
+                                                                   [style]="{'width':'100%'}"></p-multiSelect>
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                        <span *ngFor="let d of rowData.domaine">
+                                                            {{d.libelle}}
+                                                        </span>
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td >
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                </ng-template>
+                                                <ng-template  pTemplate="output">
+                                                    <span *ngIf="rowData.garantie.libelle">
+                                                        {{rowData.dateEffet | formatTableValue : 'date'}}
+                                                    </span>
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <button *ngIf="!editing" pButton pRipple  pTooltip="editer" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInit(rowData)"></button>
+                                            <button *ngIf="editing" pRipple  pButton  pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
+                                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancel(rowData, ri)"></button>
+                                            <button *ngIf="!editing && rowData.garantie.libelle " pRipple pButton  pCancelEditableRow icon="pi pi-arrow-circle-down"  pTooltip="enregistrer" class="ui-button-danger p-mr-2" (click)="addFamilleActe(rowData, ri)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                -->
+                <!--
+                            <p-fieldset legend="Paramétrage des plafonds" toggleable="true">
+                                <p-table #dtActe [value]="plafondActe" dataKey="" editMode="row">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Acte</th>
+                                            <th>Plafond</th>
+                                            <th>Période</th>
+                                            <th>Nombre</th>
+                                            <th>Taux</th>
+                                            <th>Effet</th>
+                                            <th style="width:8em"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                        <tr [pEditableRow]="rowData">
+                                            <td>
+                                                {{rowData.acte.libelle}}
+                                            </td>
+                                            <td>
+                                                <p-cellEditor>
+                                                    <ng-template pTemplate="input">
+                                                        <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" required>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="output">
+                                                        {{rowData.montantPlafond}}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                            <td>
+                                                <p-cellEditor>
+                                                    <ng-template pTemplate="input">
+                                                        <p-dropdown [options]="dimensionPeriodeList"
+                                                                    [(ngModel)]="rowData.dimensionPeriode" optionLabel="libelle"
+                                                                    placeholder="Select Make"
+                                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="output">
+                                                        {{rowData.dimensionPeriode?.libelle}}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                            <td>
+                                                <p-cellEditor>
+                                                    <ng-template pTemplate="input">
+                                                        <input pInputText type="text" [(ngModel)]="rowData.nombre" required>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="output">
+                                                        {{rowData.nombre}}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+
+                                            <td>
+                                                <p-cellEditor>
+                                                    <ng-template pTemplate="input">
+                                                        <p-dropdown [options]="tauxList" [(ngModel)]="rowData.taux" optionLabel="taux"
+                                                                    placeholder="Select Make"
+                                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="output">
+                                                        {{rowData.taux?.taux}}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+
+                                            <td>
+                                                <p-cellEditor>
+                                                    <ng-template pTemplate="input">
+                                                        <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet"
+                                                                    dateFormat="dd/mm/yy" inputId="calendar"
+                                                                    appendTo="body"></p-calendar>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="output">
+                                                        {{rowData.dateEffet}}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+
+                                            <td style="text-align:center">
+                                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                                                        class="ui-button-info p-mr-2"
+                                                        (click)="onRowEditInitPlafondActe(rowData)"></button>
+                                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                                                        class="ui-button-success p-mr-2" style="margin-right: .5em"
+                                                        (click)="onRowEditSavePlafondActe(rowData)"></button>
+                                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                                                        class="ui-button-danger p-mr-2"
+                                                        (click)="onRowEditCancelPlafondActe(rowData, ri)"></button>
+                                                <button *ngIf="!editing" pButton type="button" pCancelEditableRow
+                                                        icon="pi pi-chevron-right" class="ui-button-danger p-mr-2"
+                                                        (click)="getSousActe(rowData, ri)"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <div class="card">
+                                    <p-toolbar styleClass="p-mb-4">
+                                        <ng-template pTemplate="left">
+                                            <button pButton pRipple label="Valider" icon="pi pi-check" (click)="addSousActe()" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                        </ng-template>
+                                    </p-toolbar>
+
+                                    <h5></h5>
+                                    <p-table #dtSousActe [value]="plafondSousActe" dataKey="" editMode="row">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Sous acte</th>
+                                                <th>Montant</th>
+                                                <th>Periode</th>
+                                                <th>Nombre acte</th>
+                                                <th>Taux</th>
+                                                <th>Date effet</th>
+                                                <th style="width:8em"></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                            <tr [pEditableRow]="rowData">
+                                                <td>
+                                                    {{rowData.sousActe.libelle}}
+                                                </td>
+
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-inputNumber inputId="integeronly" [(ngModel)]="rowData.montantPlafond" required></p-inputNumber>
+                                                            &lt;!&ndash;<input pInputText type="text" [(ngModel)]="rowData.montantPlafond" required>&ndash;&gt;
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{rowData.montantPlafond}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="rowData.dimensionPeriode" optionLabel="libelle" placeholder="Select Make"
+                                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{rowData.dimensionPeriode?.libelle}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-inputNumber inputId="integeronly" [(ngModel)]="rowData.nombre" required></p-inputNumber>
+                                                            &lt;!&ndash;<input pInputText type="text" [(ngModel)]="rowData.nombre" required>&ndash;&gt;
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{rowData.nombre}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-dropdown [options]="tauxList" [(ngModel)]="rowData.taux" optionLabel="taux" placeholder="Select Make"
+                                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{rowData.taux?.taux}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{rowData.dateEffet | formatTableValue : 'date'}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondSousActe(rowData)"></button>
+                                                    <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondSousActe(rowData)"></button>
+                                                    <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondSousActe(rowData, ri)"></button>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </p-fieldset>
+                -->
+            </p-tabPanel>
+            <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
+                <div class="card">
+                    <p-table #dtAL [value]="adherentsListeActuelle1" [columns]="colsAL" [rows]="10" [paginator]="true"
+                             [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                             [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header">
+                                <h5 class="p-m-0"></h5>
+                                <div class="p-grid">
+                                    <div class="p-col-8">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder="Search..." [style]="{width: '20%'}"/>
+                                </span>
+
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help"
+                                                    (click)="dtAL.exportCSV()"></button>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <button pButton pRipple label="Imprimer" icon="pi pi-print" class="p-button-info">
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="nom">Nom
+                                    <p-sortIcon field="nom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="prenom" style="width: 12rem">Prenom
+                                    <p-sortIcon field="prenom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="adresseEmail">Email
+                                    <p-sortIcon field="adresseEmail"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre" style="width: 12rem">Genre
+                                    <p-sortIcon field="genre.libelle"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-adherent>
+                            <tr>
+                                <td><span class="p-column-title">{{adherent?.nom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.prenom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{adherentsListeActuelle1 ? adherentsListeActuelle1.length : 0 }} adherent(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+
+                <div class="p-col-12">
+                    <!--
+                                    <p-table [value]="historiqueAveantAdherants" dataKey="id" editMode="row">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>NOM</th>
+                                                <th>PRENOM</th>
+                                                <th>DATE NAISS.</th>
+                                                <th>MAIL</th>
+                                                <th>DATE INCORP.</th>
+                                                <th>GENRE</th>
+                                                <th style="width:8rem"></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-historiqueAveantAdherant let-editing="editing" let-ri="rowIndex">
+                                            <tr [pEditableRow]="historiqueAveantAdherant">
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.nom">
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant.adherent.nom}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.prenom" required>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant.adherent.prenom}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant?.adherent?.dateNaissance}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.mail">
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant.adherent.mail}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.dateEntree">
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant.dateEntree | date}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td>
+                                                    <p-cellEditor>
+                                                        <ng-template pTemplate="input">
+                                                            <p-dropdown [options]="genreList" optionLabel="libelle" [(ngModel)]="historiqueAveantAdherant.adherent.genre" [style]="{'width':'100%'}"></p-dropdown>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="output">
+                                                            {{historiqueAveantAdherant.adherent?.genre?.libelle}}
+                                                        </ng-template>
+                                                    </p-cellEditor>
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(historiqueAveantAdherant)" class="p-button-rounded p-button-text"></button>
+                                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(historiqueAveantAdherant)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(historiqueAveantAdherant, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                    -->
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+    </p-dialog>
 
 </div>
