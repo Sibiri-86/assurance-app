@@ -160,6 +160,7 @@ export class AvenantRetraitComponent implements OnInit {
       // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
     });
     historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
+    historiqueAvenant.historiqueAvenantAdherant1s = this.historiqueAveantAdherants.filter(e => !e.selected);
     this.adherentFamilleEvent.emit(historiqueAvenant);
     this.init();
   }
