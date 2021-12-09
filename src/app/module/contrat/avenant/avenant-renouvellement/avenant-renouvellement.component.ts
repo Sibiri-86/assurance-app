@@ -158,6 +158,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
     adherentFamilleListe: AdherentFamille[] = [];
     private myForm: FormGroup;
+    typeDureeSelected = '';
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -653,6 +654,13 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.setGroupeAndPrime(this.groupeSelected);
     }
 
+    changeTypeDureeGroupe(event){
+        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log(this.typeDureeSelected);
+        if(this.dateEcheance && this.groupeForm.get('duree')){
+            this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
+        }
+    }
     loadGroupe(police: Police): void {
         this.groupeList$ = this.store.pipe(select(groupeList));
         this.store.dispatch(loadGroupe({policeId: this.police.id}));
@@ -678,6 +686,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     setGroupeAndPrime(group: Groupe): void {
+        console.log('++++  group.prime ++++');
+        console.log(group.prime);
         this.groupeForm.patchValue({
             id: group?.id || null,
             libelle: group?.libelle,
@@ -697,21 +707,32 @@ export class AvenantRenouvellementComponent implements OnInit {
             primeFamille: group.prime?.primeFamille,
             primeAdulte: group.prime?.primeAdulte,
             primePersonne: group.prime.primeAdulte,
-            primeAnnuelle: group.prime?.primeAnnuelle
+            primeAnnuelle: group.prime?.primeAnnuelle,
         });
+        // this.selectedTypePrime = group.prime.typePrime;
     }
 
     onRefreshDateEcheanceForGroupe(value: number) {
-        this.dateEcheance = new Date(this.dateEffet);
+        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log(this.typeDureeSelected);
         this.groupeForm
             .get('dateEcheance')
             .setValue(
-                new Date(
-                    this.dateEcheance.setMonth(
-                        this.dateEcheance.getMonth() + Number(value)
-                    )
-                )
+                this.getNewDateForGroupe(value)
             );
+    }
+
+    getNewDateForGroupe(value: number): Date {
+        this.dateEcheance = new Date(this.groupeForm.get('dateEffet').value);
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        console.log(this.dateEcheance);
+        if(this.typeDureeSelected === 'Jour') {
+            return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
+        } else if(this.typeDureeSelected === 'Mois') {
+            return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
+        } else if(this.typeDureeSelected === 'Annee') {
+            return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
+        }
     }
 
     onRowEditInitPlafondActe(plafondActe: PlafondActe) {
@@ -924,5 +945,28 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log(historiqueAvenant);
         this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherants;
         this.objet.historiqueAvenantAdherants = historiqueAvenant.historiqueAvenantAdherant1s;
+    }
+
+    getNewDate(value: number): Date {
+        this.dateEcheance = new Date(this.policeForm.get('dateEffet').value);
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        if (this.typeDureeSelected === 'Jour') {
+            return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
+        } else if (this.typeDureeSelected === 'Mois') {
+            return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
+        } else if (this.typeDureeSelected === 'Annee') {
+            return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
+        }
+    }
+    onRefreshDateEcheance(value: number) {
+        this.policeForm
+            .get('dateEcheance')
+            .setValue(
+                this.getNewDate(value)
+            );
+    }
+
+    changePrime(event) {
+        this.selectedTypePrime = event.value;
     }
 }

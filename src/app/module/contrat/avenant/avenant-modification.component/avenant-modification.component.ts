@@ -157,6 +157,7 @@ export class AvenantModificationComponent implements OnInit {
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
     {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
   private myForm: FormGroup;
+  @Output() returnEvent = new EventEmitter();
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -480,7 +481,8 @@ export class AvenantModificationComponent implements OnInit {
     this.plafondForm = this.formBuilder.group({
       domaine: new FormControl(''),
       plafondAnnuelleFamille: new FormControl(''),
-      plafondAnnuellePersonne: new FormControl('')
+      plafondAnnuellePersonne: new FormControl(''),
+      plafondGlobalInternationnal: new FormControl('')
     });
   }
   historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
@@ -897,6 +899,7 @@ export class AvenantModificationComponent implements OnInit {
     this.plafondFamilleActe = [];
     this.acteList = [];
     this.sousActeList = [];
+    this.returnEvent.emit('Sortie');
   }
 
   createAvenantModif(): void {

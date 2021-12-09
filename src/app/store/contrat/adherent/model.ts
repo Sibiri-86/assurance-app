@@ -26,6 +26,8 @@ export interface Adherent{
     groupe?: Groupe,
     adherentPrincipal?: Adherent;
     plafondGroupeSousActe?: PlafondSousActe;
+    matriculeSouscripteur?: string;
+    fullName?: string;
 }
 
 export interface AdherentFamille {

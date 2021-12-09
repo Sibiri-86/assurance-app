@@ -1385,6 +1385,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
         console.log(this.groupePolicy);
       }
     });
+
+    this.adherentService.loadAdherentsByPolice(this.policeItem.id).subscribe(
+        (res) => {
+          res.forEach(a => {
+            a.fullName = a.nom + ' ' + a.prenom;
+          });
+          this.adherentListGroupe = res.filter(e => e.adherentPrincipal === null);
+        }
+    );
   }
 
   loadActualList(police: Police): void {
@@ -1880,5 +1889,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.displayDialogPrime = true;
         }
     );
+  }
+
+  getSortie(event: any): void {
+    console.log(event);
+    this.initDisplayAvenant();
   }
 }

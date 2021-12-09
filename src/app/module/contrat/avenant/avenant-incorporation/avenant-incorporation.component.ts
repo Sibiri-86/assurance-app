@@ -20,6 +20,10 @@ import {
     HistoriqueAvenantAdherant,
     TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
+import {Groupe} from '../../../../store/contrat/groupe/model';
+import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import {loadGroupe} from '../../../../store/contrat/groupe/actions';
+import {AdherentService} from '../../../../store/contrat/adherent/service';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -30,7 +34,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     // @Input groupe: Groupe;
     @Output() adherentFamilleEvent = new EventEmitter();
-    @Input() polices: Police[];
+    @Input() police: Police;
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     myForm: FormGroup;
@@ -39,7 +43,8 @@ export class AvenantIncorporationComponent implements OnInit{
     familles: Array<Adherent>;
     newForm: FormGroup;
     adherentFamilleForm: FormGroup;
-    qualiteAssureList: Array<QualiteAssure>;
+    qualiteAssureList1: Array<QualiteAssure>;
+    qualiteAssureList2: Array<QualiteAssure>;
     qualiteAssureList$: Observable<Array<QualiteAssure>>;
     destroy$ = new Subject<boolean>();
     genreList: Array<Genre>;
@@ -48,6 +53,13 @@ export class AvenantIncorporationComponent implements OnInit{
     professionList$: Observable<Array<Profession>>;
     historiqueAvenantAdherants: HistoriqueAvenantAdherant[] = [];
     adherentFamilleListe: AdherentFamille[] = [];
+    @Input() isRenouv: boolean;
+    obj: any = {group: {}, prime: {}};
+    adherentSelected: Adherent = {};
+    adherentPrincipaux1: Adherent[];
+    @Input() adherentPrincipauxTMP: Array<Adherent>;
+    groupes: Array<Groupe>;
+    adherentPrincipaux: Array<Adherent>;
 
     init(): void {
         this.adherentForm = this.formBuilder.group({
@@ -55,18 +67,19 @@ export class AvenantIncorporationComponent implements OnInit{
             nom: new FormControl('', [Validators.required]),
             prenom: new FormControl('', [Validators.required]),
             dateNaissance: new FormControl('', [Validators.required]),
-            matricule: new FormControl(''),
             lieuNaissance: new FormControl('', [Validators.required]),
             numeroTelephone: new FormControl('', [Validators.required]),
             adresse: new FormControl('', [Validators.required]),
             adresseEmail: new FormControl('', [Validators.required]),
             profession: new FormControl('', [Validators.required]),
             referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl(),
+            qualiteAssure: new FormControl('', [Validators.required]),
             genre: new FormControl('', [Validators.required]),
             dateIncorporation: new FormControl('', [Validators.required]),
             dateEntree: new FormControl('', [Validators.required]),
             dateIncor: new FormControl(new Date(), [Validators.required]),
+            matriculeGarant: new FormControl('', ),
+            matriculeSouscripteur: new FormControl('', ),
             familys: this.formBuilder.array([])
         });
 
@@ -112,7 +125,8 @@ export class AvenantIncorporationComponent implements OnInit{
             .pipe(takeUntil(this.destroy$))
             .subscribe((value) => {
                 if (value) {
-                    this.qualiteAssureList = value.slice();
+                    this.qualiteAssureList1 = value.slice().filter(e => e.code === 'ADHERENT');
+                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
                 }
             });
         this.genreList$ = this.store.pipe(select(genreSelector.genreList));
@@ -133,10 +147,13 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
     }
-    constructor(private formBuilder: FormBuilder, private store: Store<AppState>) {}
+    constructor(private formBuilder: FormBuilder, private store: Store<AppState>, private adherentService: AdherentService) {}
 
     ngOnInit(): void {
         this.init();
+        console.log('---------------------------------');
+        console.log(this.adherentPrincipauxTMP);
+        this.adherentPrincipaux = this.adherentPrincipauxTMP;
     }
 
     addAdherentFamilleToList(): void {
@@ -194,6 +211,37 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
+    }
+
+    loadAdherentPrincipalInfo() {
+        console.log(this.adherentSelected);
+        this.obj.group = this.adherentSelected;
+        this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
+        console.log('*************this.adherentSelected*************', this.adherentSelected);
+        /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
+		console.log('*************this.genre*************', this.genre);*/
+        this.setAdherentPrincipal(this.adherentSelected);
+    }
+
+    setAdherentPrincipal(adherent: Adherent): void {
+        console.log('***************adherent*******************', adherent);
+        this.adherentForm.patchValue({
+            id: adherent?.id || null,
+            nom: adherent?.nom,
+            prenom: adherent?.prenom,
+            dateNaissance: new Date(adherent?.dateNaissance),
+            matriculeGarant: adherent?.matriculeGarant,
+            lieuNaissance: adherent?.lieuNaissance,
+            numeroTelephone: adherent?.numeroTelephone,
+            adresse: adherent?.adresse,
+            adresseEmail: adherent?.adresseEmail,
+            profession: adherent?.profession,
+            referenceBancaire: adherent?.referenceBancaire,
+            qualiteAssure: adherent?.qualiteAssure,
+            genre: adherent?.genre,
+            dateEntree: new Date(adherent?.dateEntree)
+        });
+        console.log('***************this.adherentForm*******************', this.adherentForm);
     }
 
 }
