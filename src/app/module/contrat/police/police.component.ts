@@ -167,18 +167,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
   dateEffet: Date;
   dateEcheance: Date;
   report: Report = {};
-
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
-
   garantList$: Observable<Array<Garant>>;
   garantList: Array<Garant>;
-
   intermediaireList$: Observable<Array<Intermediaire>>;
   intermediaireList: Array<Intermediaire>;
   isgroupEditing = false;
   obj: any = {group: {}, prime: {}};
-
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -385,7 +381,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
     console.log('id du groupe est'+groupe.id);
     //this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
-
    // this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     //if (value) {
       //this.plafondGroupe = value;
@@ -394,7 +389,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     //}
     //});
-
     console.log(this.plafondActuelleConfiguration);
     console.log(groupe);
     console.log(this.ifExistTerritorialiteInternational(groupe));
@@ -403,7 +397,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
     }
     this.displayParametragePlafond = true;
     //console.log(this.plafondGroupe);
-    
   }
 
   voirDetailAdherent(adherent:Adherent){
@@ -413,7 +406,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-
     this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -421,11 +413,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
       //this.plafondGroupe = value;
       console.log(value);
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
-      
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
     });
-
     this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;

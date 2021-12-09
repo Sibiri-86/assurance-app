@@ -910,28 +910,31 @@
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col-2">
+                                <div class="p-field p-col">
                                     <label for="dateEcheance">Date écheance</label>
                                     <p-calendar id="dateEcheance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEcheance'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col-3">
+                                <div class="p-field p-col">
                                     <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
                                     <input id="adresse" type="text" formControlName="adresse"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'adresse'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col-3">
+                                <div class="p-field p-col">
                                     <label for="description">Description <span style="color: red !important;">(*)</span></label>
                                     <input id="description" type="text" formControlName="description"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'description'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col">
+                               
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-4">
                                     <label for="commune">Commune<span style="color: red !important;">(*)</span></label>
                                     <p-dropdown id="commune" dataKey="id" inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
@@ -1034,7 +1037,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="lastname2">Telephone</label>
-                                    <input id="lastname2" type="number" formControlName="numeroTelephone" pInputText>
+                                    <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
                                 </div>
                             </div>
 
@@ -1424,11 +1427,11 @@
                     </ng-template>
                     
                     <ng-template pTemplate="right">
-                        <span>{{rapport?.nombreEnfant}} Enfants-</span>
-                        <span> {{rapport?.nombreConjoint}} Conjoint(e)-</span>
-                        <span> {{rapport?.nombreAdherent}} Adhérents-</span>
-                        <span> {{rapport?.nombreFeminin}} Genre feminin-</span>
-                        <span> {{rapport?.nombreMasculin}} Genre masculin</span>
+                        <span><span class="indicateur">{{rapport?.nombreEnfant}}</span> Enfants-</span>
+                        <span><span class="indicateur">{{rapport?.nombreConjoint}}</span> Conjoint(e)-</span>
+                        <span><span class="indicateur">{{rapport?.nombreAdherent}}</span> Adhérents-</span>
+                        <span><span class="indicateur">{{rapport?.nombreFeminin}}</span> Genre feminin-</span>
+                        <span><span class="indicateur">{{rapport?.nombreMasculin}}</span> Genre masculin</span>
                     </ng-template>
                     
                 </p-toolbar>
@@ -1616,7 +1619,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="lastname2">Telephone</label>
-                                    <input id="lastname2" type="text" formControlName="numeroTelephone" pInputText>
+                                    <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
                                 </div>
                                </div>
 
@@ -1668,7 +1671,7 @@
 
                             <div class="p-field p-col-4">
                                 <label for="lastname2">Qualite assuré</label>
-                                <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                                <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             </div>
                         </div>
 
@@ -1729,7 +1732,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="numeroTelephone">Telephone <span style="color: red !important;">(*)</span></label>
-                            <input id="numeroTelephone" type="text" formControlName="numeroTelephone" pInputText>
+                            <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'numeroTelephone'">
                             </app-entity-validation>
@@ -1798,12 +1801,15 @@
 
                         <div class="p-field p-col-4">
                             <label for="qualiteAssure">Qualite assuré <span style="color: red !important;">(*)</span></label>
-                            <p-dropdown id="qualiteAssure"  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown id="qualiteAssure"  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'qualiteAssure'">
                             </app-entity-validation>
                         </div>
-                        <div class="p-field p-col">
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
                             <label for="referenceBancaire">Reference bancaire</label>
                             <input id="referenceBancaire" type="text"  formControlName="referenceBancaire" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
@@ -1862,7 +1868,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData.numeroTelephone" required>
+                                    <p-inputMask  [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99"></p-inputMask>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.numeroTelephone}}
@@ -1894,7 +1900,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown [options]="qualiteAssureList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
+                                    <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
                                                 [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
