@@ -1762,18 +1762,18 @@
                         </button>
                     </div>
                     <div class="p-field p-col-6"></div>
-                    <app-avenant-incorporation
+                    <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe"
                             (adherentFamilleEvent)="addAdherentFamille($event)"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
-                    <app-avenant-retrait [police]="policeItem"
+                    <app-avenant-retrait [police]="policeItem" [isRenouv]="false"
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
-                <div class="p-fluid p-grid" *ngIf="isAvenantModification">
-                    <app-avenant-modification [police]="policeItem"
+                <div class="p-fluid p-col-12" *ngIf="isAvenantModification">
+                    <app-avenant-modification [police]="policeItem" (returnEvent)="getSortie($event)"
                                               (eventEmitterM)="getAvenantModification($event)"></app-avenant-modification>
                 </div>
-                <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement">
+                <div class="p-fluid p-col-12" *ngIf="isAvenantRenouvellement">
                     <app-avenant-renouvellement [police]="policeItem"
                                                 (eventEmitterM)="getAvenantRenouvellement($event)"></app-avenant-renouvellement>
                 </div>

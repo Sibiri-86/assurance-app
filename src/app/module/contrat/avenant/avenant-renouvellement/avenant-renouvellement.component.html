@@ -1,7 +1,7 @@
-<div class="p-grid">
+<div class="p-fluid">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
-            <div class="p-grid">
+
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
@@ -176,7 +176,7 @@
                     </div>
                 </div>
                 </p-fieldset>
-            </div>
+
         </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
             <!--<div class="p-fluid p-formgrid p-grid">
@@ -242,7 +242,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="firstname2">Type durée</label>
-                                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (onChange)="getGroupeSelected()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe($event)" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="policeForm" [entityField]="'typeDuree'">
                                     </app-entity-validation>
@@ -282,7 +282,7 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="typePrime">Type de prime</label>
-                                    <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle"></p-dropdown>
+                                    <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
@@ -793,20 +793,20 @@
 
 
         <p-tabPanel header="INCORPORATION" leftIcon="pi pi-cog" tooltip="BAREME">
-            <app-avenant-incorporation (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
+            <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-cog" tooltip="BAREME">
-            <app-avenant-retrait [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
+            <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
         </p-tabPanel>
     </p-tabView>
     <hr>
-
-    <div class="p-col-5"></div>
-    <div class="p-col-1">
-        <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+    <div class="p-grid">
+        <div class="p-col-4"></div>
+        <div class="p-col-2">
+            <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+        </div>
+        <div class="p-col-2">
+            <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+        </div>
     </div>
-    <div class="p-col-1">
-        <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
-    </div>
-
 </div>

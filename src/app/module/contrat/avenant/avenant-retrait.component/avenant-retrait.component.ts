@@ -47,6 +47,7 @@ export class AvenantRetraitComponent implements OnInit {
   nonRetirer = 'non retiré';
   retirer = 'retiré';
   myForm: FormGroup;
+  @Input() isRenouv: boolean;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
