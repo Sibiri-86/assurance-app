@@ -10,6 +10,9 @@ import {DimensionPeriode} from '../../parametrage/dimension-periode/model';
 import {Taux} from '../../parametrage/taux/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 import {TypePrime} from '../../parametrage/type-prime/model';
+import {Territorialite} from '../../parametrage/territorialite/model';
+import {Commune} from '../../parametrage/commune/model';
+import {Prime} from '../prime/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -75,6 +78,29 @@ export class Avenant {
     plafondGroupeSousActes?: HistoriquePlafondSousActe[];
     plafondFamilleActes?: HistoriquePlafondFamilleActe[];
     familles?: AdherentFamille[];
+    historiqueGroupeDto?: HistoriqueGroupe;
+}
+
+export class HistoriqueGroupe {
+    id?: string;
+    libelle?: string;
+    description?: string;
+    taux?: Taux;
+    typePrime?: TypePrime;
+    territorialite?: Territorialite;
+    duree?: number;
+    dateEffet?: Date;
+    dateEcheance?: Date;
+    dateSaisie?: Date;
+    dateValidation?: Date;
+    numeroExercice?: number;
+    adresse?: string;
+    commune?: Commune;
+    police?: Police;
+    prime?: Prime;
+    adherentFamille?: AdherentFamille;
+    groupeId?: string;
+    historiqueAvenant?: HistoriqueAvenant;
 }
 
 export class HistoriquePlafondFamilleActe {
