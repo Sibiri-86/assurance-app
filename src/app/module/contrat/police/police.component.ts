@@ -290,6 +290,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       prenom: new FormControl("", [Validators.required]),
       dateNaissance: new FormControl("", [Validators.required]),
       matriculeGarant:new FormControl("", [Validators.required]),
+      matriculeSouscripteur:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl("", [Validators.required]),
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
