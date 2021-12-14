@@ -1239,11 +1239,11 @@
                         </div>
 
                         <div>
-                            <button pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="enregistrerAdherent()"></button>
+                            <button [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="enregistrerAdherent()"></button>
                         </div>
 
                         <div>
-                            <button pButton pRipple label="Valider" icon="pi pi-check" (click)="onCreateGroupe()"></button>
+                            <button pButton pRipple label="Valider" [disabled]="adherentForm?.invalid && groupeForm?.invalid" icon="pi pi-check" (click)="onCreateGroupe()"></button>
                         </div>
                     </div>
                 </div>
@@ -1716,7 +1716,8 @@
             <div class="p-field p-col">
                 <label for="adherentSelected">Adhérent</label>
                 <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
-                            (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal" optionLabel="fullName"></p-dropdown>
+                            (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal par son numéro, son nom et son prénom"
+                            optionLabel="fullName"></p-dropdown>
             </div>
             <form (ngSubmit)="onCreateAddherent()"  [formGroup]="adherentForm">
                 <div class="card">
@@ -1955,7 +1956,7 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
             </div>
             <div>
-                <button  [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
+                <button pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
             </div>
         </div>
     </ng-template>
