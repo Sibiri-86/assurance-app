@@ -17,3 +17,8 @@ export interface NextPageObj {
   filterLabelKey: string; // define the label to see in the dropdown
   filterKey: string; // define the key of the object of the dropdown
 }
+
+export interface Etat {
+  libelle?: string,
+  identifiant?: number
+}

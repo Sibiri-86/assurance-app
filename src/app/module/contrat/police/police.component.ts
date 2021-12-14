@@ -1627,8 +1627,9 @@ changeGarantie(garantie, indexLigne: number) {
   }
   console.log(this.plafondActe);
   }
-
 }
+
+
 
   ngOnDestroy() {
     this.destroy$.next(true);

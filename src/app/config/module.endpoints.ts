@@ -218,6 +218,11 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+    
+    static readonly BAREME = {
+        prod: `${SERVICE_PREFIX}/contrat/bareme`,
+        mock: `assets/mock/contrat/bareme.mock.json`
+    };
 
     static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
         prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
