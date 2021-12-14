@@ -2387,22 +2387,22 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-adherentHis>
-                            <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                            <tr [ngClass]="{'colorZone': !adherentHis?.adherent?.adherentPrincipal}">
                                 <td>
                                     <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
                                 </td>
-                                <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
-                                <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.prenom}}</span></td>
                                 <td><span
-                                        class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                        class="p-column-title">{{adherentHis?.adherent?.dateNaissance | formatTableValue : 'date'}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
-                                <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.lieuNaissance}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.numeroTelephone}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{adherentHis.adherent.dateIncorporation}}</span>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.dateIncorporation}}</span>
                                 </td>
                                 <td><span
-                                        class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                        class="p-column-title">{{adherentHis?.adherent?.qualiteAssure?.libelle}}</span>
                                 </td>
                             </tr>
                         </ng-template>
