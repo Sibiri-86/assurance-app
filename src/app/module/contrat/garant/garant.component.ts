@@ -129,6 +129,7 @@ export class GarantComponent implements OnInit, OnDestroy {
         rccm: new FormControl('', [Validators.required]),
         region: new FormControl(''),
         typeGarant: new FormControl('', [Validators.required]),
+        commune: new FormControl('', [Validators.required]),
         banque1: new FormControl('', [Validators.required]),
         banque2: new FormControl(''),
         secteur: new FormControl('', [Validators.required]),

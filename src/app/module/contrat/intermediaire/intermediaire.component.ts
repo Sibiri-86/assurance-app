@@ -129,6 +129,7 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
         //periodiciteAppelFond: new FormControl(''),
         rccm: new FormControl(''),
         secteur: new FormControl('', [Validators.required]),
+        commune: new FormControl('', [Validators.required]),
         contactPersonneRessource: new FormControl('', [Validators.required]),
         emailPersonneRessource: new FormControl('', [Validators.required, Validators.email]),
       });

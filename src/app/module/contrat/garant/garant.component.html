@@ -492,8 +492,8 @@
                             </div> 
                             
                             <div class="p-field p-col-4">
-                                <label for="lastname2">Commune</label>
-                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
+                                <label for="lastname2">Commune <span class="required">*</span></label>
+                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'commune'">
                                 </app-entity-validation>

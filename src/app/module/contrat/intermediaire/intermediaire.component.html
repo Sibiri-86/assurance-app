@@ -383,10 +383,10 @@
                         </div>
                     </div>
 
-                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Commune</label>
-                            <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <label for="lastname2">Commune <span class="required">*</span></label>
+                            <p-dropdown inputId="commune" [filter]="true" showClear="true" formControlName="commune"  [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle"></p-dropdown>
                          </div>
 
                          <div class="p-field p-col-4">

@@ -81,6 +81,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
   typeBareme =   Object.keys(TypeBareme).map(key => ({ label: TypeBareme[key], value: key }));
   typeEtat = Object.keys(Status).map(key => ({ label: Status[key], value: key }));
   cols: any[];
+  displayVoirBareme = false;
 
   constructor(private breadcrumbService: BreadcrumbService, private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
     private store: Store<AppState>) {
@@ -263,6 +264,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
       }
     }
     this.bareme.baremeFamilleActe = this.plafondFamilleActeConstruct;
+    console.log(this.bareme);
     this.store.dispatch(featureActionsPlafond.createBareme(this.bareme));
     //this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
     this.plafondFamilleActe = [{garantie:{}}];
@@ -272,6 +274,12 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.baremeForm.reset();
   }
 
+
+  voirBareme(bareme: Bareme){
+  this.displayVoirBareme = true;
+  this.plafondFamilleActeConstruct = bareme.baremeFamilleActe;
+  console.log(this.plafondFamilleActeConstruct);
+  }
 
   addFamilleActe(rowData, ri) {
     this.confirmationService.confirm({

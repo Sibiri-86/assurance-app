@@ -328,6 +328,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       numeroIfu: new FormControl(""),
       rccm: new FormControl(""),
       secteur: new FormControl('', [Validators.required]),
+      commune: new FormControl('', [Validators.required]),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl("", [Validators.required])
