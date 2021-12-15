@@ -285,7 +285,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.adherentForm = this.formBuilder.group({
-      id: new FormControl(""),
+      id: new FormControl(null),
       nom: new FormControl("", [Validators.required]),
       prenom: new FormControl("", [Validators.required]),
       dateNaissance: new FormControl("", [Validators.required]),

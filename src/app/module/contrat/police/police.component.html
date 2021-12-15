@@ -1168,10 +1168,11 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <input pInputText type="number" [(ngModel)]="rowData.telephone" required>
+                                                <!--<input pInputText type="number" [(ngModel)]="rowData.telephone" required>-->
+                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99"></p-inputMask>
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{rowData?.telephone}}
+                                                {{rowData?.numeroTelephone}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -1964,15 +1965,22 @@
                                 <span>{{adherent.matriculeGarant}}</span>
                             </div>
                         </div>
-                           <div class="p-field p-col">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Matricule Souscripteur</label>
+                            <div>
+                                <span>{{adherent.matriculeSouscripteur}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
                             <label for="lastname2">Nom</label>
                             <div>
                                 <span>{{adherent.nom}}</span>
                             </div>
-                            </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
+                        </div>
                         <div class="p-field p-col">
                             <label for="lastname2">Prenom</label>
                             <div>
@@ -1981,22 +1989,21 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Lieu de nasissance</label>
+                            <label for="lastname2">Lieu de naissance</label>
                             <div>
                                 <span>{{adherent.lieuNaissance}}</span>
-                            </div>
-                        </div>
-
-                        <div class="p-field p-col">
-                            <label for="lastname2">Date naissance</label>
-                            <div>
-                                <span>{{adherent.dateNaissance | formatTableValue: 'date'}}</span>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Date naissance</label>
+                            <div>
+                                <span>{{adherent.dateNaissance | formatTableValue: 'date'}}</span>
+                            </div>
+                        </div>
                         <div class="p-field p-col">
                             <label for="lastname2">Adresse</label>
                             <div>
@@ -2010,16 +2017,15 @@
                                 <span>{{adherent.adresseEmail}}</span>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Genre</label>
                             <div>
                                 <span>{{adherent?.genre?.libelle}}</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Qualite-Assuré</label>
                             <div>
