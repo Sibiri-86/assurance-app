@@ -285,4 +285,12 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/police`,
         mock: `assets/mock/contrat/police.mock.json`
     };
+    static readonly HISTORIQUE_AVENANT_FILE = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_EXPORT_EXCEL_MODEL = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/export-excel-model`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
 }

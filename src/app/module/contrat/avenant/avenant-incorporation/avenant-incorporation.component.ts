@@ -24,6 +24,7 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
+import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -60,8 +61,14 @@ export class AvenantIncorporationComponent implements OnInit{
     @Input() adherentPrincipauxTMP: Array<Adherent>;
     groupes: Array<Groupe>;
     adherentPrincipaux: Array<Adherent>;
+    viewListe = false;
+    selectedFile: File;
+    historiqueAvenant1: HistoriqueAvenant = {};
+    isImport = 'NON';
 
     init(): void {
+        this.historiqueAvenant1.file = new FormData();
+        // this.historiqueAvenant1.fileToLoad = {};
         this.adherentForm = this.formBuilder.group({
             id: new FormControl(null),
             nom: new FormControl('', [Validators.required]),
@@ -147,7 +154,7 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
     }
-    constructor(private formBuilder: FormBuilder, private store: Store<AppState>, private adherentService: AdherentService) {}
+    constructor(private formBuilder: FormBuilder, private store: Store<AppState>, private historiqueAvenantService: HistoriqueAvenantService) {}
 
     ngOnInit(): void {
         this.init();
@@ -158,14 +165,16 @@ export class AvenantIncorporationComponent implements OnInit{
 
     addAdherentFamilleToList(): void {
         // this.createHistoriqueAvenant();
-        const historiqueAvenant: HistoriqueAvenant = {};
-        historiqueAvenant.aderants = this.adherentFamilleListe;
-        historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-        historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
-        historiqueAvenant.dateAvenant = this.myForm.get('dateIncorparation').value;
-        console.log('..........historiqueAvenant.............');
-        console.log(historiqueAvenant);
-        this.adherentFamilleEvent.emit(historiqueAvenant);
+        // const historiqueAvenant1: HistoriqueAvenant = {};
+        this.historiqueAvenant1.aderants = this.adherentFamilleListe;
+        this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+        this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value;
+        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        // this.historiqueAvenant1.fileToLoad = this.selectedFile;
+        // this.historiqueAvenant1.file.append('file', this.historiqueAvenant1.fileToLoad);
+        console.log('..........historiqueAvenant  f.............');
+        console.log(this.historiqueAvenant1);
+        this.adherentFamilleEvent.emit(this.historiqueAvenant1);
         // this.init();
     }
     ajouter(): void {
@@ -244,4 +253,28 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('***************this.adherentForm*******************', this.adherentForm);
     }
 
+    getFiles(event: File) {
+        this.historiqueAvenant1.fileToLoad = event;
+        this.selectedFile = event;
+        console.log('------------get files success---------------');
+        console.log(this.historiqueAvenant1.fileToLoad);
+    }
+
+    voirLaliste(): void {
+        this.viewListe = !this.viewListe;
+    }
+
+    hideListe(): void {
+        this.viewListe = false;
+    }
+
+    exportModel(): void {
+        this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.INCORPORATION).subscribe(
+            (res) => {
+                const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+                const  fileUrl = URL.createObjectURL(file);
+                window.open(fileUrl);
+            }
+        );
+    }
 }

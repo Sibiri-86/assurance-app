@@ -1440,15 +1440,27 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
+    console.log('**************HistoriqueAvenan-----t***------*************');
+    console.log(historiqueAvenant);
     this.historiqueAvenant = historiqueAvenant;
     this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
     this.historiqueAvenant.groupe = this.curentGroupe;
     this.historiqueAvenant.aderants = historiqueAvenant.aderants;
-    console.log('**************HistoriqueAvenant****************');
-    console.log(this.historiqueAvenant);
-    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.historiqueAvenant.fileToLoad = historiqueAvenant.fileToLoad;
+    this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
+    console.log('**************HistoriqueAvenan-----t****************');
+    console.log(this.historiqueAvenant.file.get('file'));
+    if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
+        && this.historiqueAvenant.fileToLoad.size > 0) {
+      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
+        historiqueAvenant: this.historiqueAvenant,
+        file: this.historiqueAvenant.fileToLoad
+      }));
+    } else {
+      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    }
   }
 
   addGroupeNew(groupe: FormGroup): Groupe {
@@ -1478,8 +1490,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('++++++++++++   historiqueAvenantRetrais      ++++++++++++');
     console.log(historiqueAvenantRetrais);
     this.historiqueAvenant = historiqueAvenantRetrais;
+    this.historiqueAvenant.numeroGarant = historiqueAvenantRetrais.numero;
     this.historiqueAvenant.police = this.policeItem;
-    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
+        && this.historiqueAvenant.fileToLoad.size > 0) {
+      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
+        historiqueAvenant: this.historiqueAvenant,
+        file: this.historiqueAvenant.fileToLoad
+      }));
+    } else {
+      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    }
     this.dissplayavenant = false;
   }
 

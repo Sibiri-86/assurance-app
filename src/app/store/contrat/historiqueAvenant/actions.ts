@@ -13,3 +13,4 @@ export const loadHistoriquePlafondActe = createAction('[App Init] load Historiqu
 	props<{avanantId: string, grpId: string}>());
 export const loadHistoriquePlafondSousActe = createAction('[App Init] load HistoriquePlafondSousActe',
 	props<{avanantId: string, grpId: string}>());
+export const createHistoriqueAvenantFile = createAction('[App Init] Create HistoriqueAvenant With File', props<{historiqueAvenant: HistoriqueAvenant, file: File}>());

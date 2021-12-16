@@ -1736,7 +1736,7 @@
         </p-dialog>
 
         <p-dialog [(visible)]="dissplayavenant" [header]="entete" [modal]="true" styleClass="p-fluid"
-                  [style]="{width: '1200px'}" (onHide)="delAvenenant()">
+                  [style]="{width: '1400px'}" (onHide)="delAvenenant()" [maximizable]="true">
             <div class="card">
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
 

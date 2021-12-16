@@ -120,4 +120,17 @@ export class HistoriqueAvenantEffects {
                 )
             )
         ));
+
+    createHistoriqueAvenantFile$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.createHistoriqueAvenantFile),
+            mergeMap(({historiqueAvenant, file}) =>
+                this.historiqueAvenantService.postHistoriqueAvenantFile(historiqueAvenant, file).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
 }

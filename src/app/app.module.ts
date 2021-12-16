@@ -222,6 +222,7 @@ import { PlafondComponent } from './module/contrat/avenant/plafond/plafond.compo
 import {Upercase} from './module/pipes/upercase';
 import { SeparatorPipe } from './module/pipes/separator.pipe';
 import { BaremeComponent } from './module/contrat/bareme/bareme.component';
+import { UploadFileComponent } from './module/contrat/avenant/upload-file/upload-file.component';
 
 @NgModule({
     imports: [
@@ -393,7 +394,8 @@ import { BaremeComponent } from './module/contrat/bareme/bareme.component';
         PlafondComponent,
         Upercase,
         SeparatorPipe,
-        BaremeComponent
+        BaremeComponent,
+        UploadFileComponent
     ],
     providers: [
         {
