@@ -339,7 +339,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl('', [Validators.required])
-      
     });
 
     this.groupeForm = this.formBuilder.group({
