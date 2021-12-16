@@ -2558,7 +2558,7 @@
                     <button pButton pRipple type="button" label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                 </div>
                 <div>
-                    <button *ngIf="!policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button *ngIf="!policeForm.get('id').value"  pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
                     <button *ngIf="policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Modifier" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
