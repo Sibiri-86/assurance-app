@@ -1,32 +1,66 @@
 <div class="card">
     <div class="p-grid">
-        <div class="p-col-4">
-            <label class="p-fieldset-content">Choisir le Groupe</label>
-            <p-dropdown [options]="groupeList" optionLabel="libelle" [ngModel]="groupe"
-                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
-                        (onChange)="loadAherantByGroupe()">
-            </p-dropdown>
-        </div>
-        <div class="p-col-8">
-                <form [formGroup]="myForm" *ngIf="!isRenouv">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
-                            <label for="numero">Numéro de l'avenant chez la garant</label>
-                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
-                        </div>
-                        <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Date de retrait</label>
-                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar>
-                        </div>
+        <div class="p-field p-col-12">
+            <div class="p-field p-col-7">
+                <div class="p-field-checkbox">
+                    <label class="p-badge-success">Souhaitez vous importer les adhérents à tavers un fichier excel ?</label>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1" id="city1"></p-radioButton>
+                        <label for="city1">OUI</label>
                     </div>
-                </form>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="NON" [(ngModel)]="isImport" inputId="city2" id="city2"></p-radioButton>
+                        <label for="city2">NON </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-3">
+            <form [formGroup]="newForm" *ngIf="!isRenouv">
+                <div class="p-fluid p-formgrid p-grid">
+                    <label class="p-fieldset-content">Choisir le Groupe</label><br>
+                    <p-dropdown [options]="groupeList" optionLabel="libelle" formControlName="groupe"
+                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
+                    </p-dropdown>
+                </div>
+            </form>
+        </div>
+        <div class="p-col-9">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4"><br>
+                    <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
+                            class="p-button p-button-icon" label="export model" (click)="exportModel()">
+                    </button>
+                </div>
+                <div class="p-field p-col-4" *ngIf="isImport === 'OUI'"><br><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+            </div>
         </div>
     </div>
     <div class="p-grid">
         <div class="p-col-12">
-            <p-table #dt [value]="historiqueAveantAdherants"  [columns]="cols" [rows]="10" [paginator]="true"
+        <p-fieldset legend="Avenant" toggleable="true">
+            <form [formGroup]="myForm" *ngIf="!isRenouv">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-6">
+                        <label for="numero">Numéro de l'avenant chez la garant</label>
+                        <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="dateIncorparation">Date de retrait</label>
+                        <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                    dateFormat="dd/mm/yy" inputId="calendar"
+                                    appendTo="body"></p-calendar>
+                    </div>
+
+                </div>
+            </form>
+        </p-fieldset>
+        </div>
+    </div>
+    <div class="p-grid" *ngIf="isImport === 'NON'">
+        <div class="p-col-12">
+            <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                      [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers"

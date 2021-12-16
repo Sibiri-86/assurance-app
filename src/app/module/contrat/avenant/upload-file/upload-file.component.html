@@ -1,0 +1,10 @@
+<p-fileUpload mode="basic" name="file[]" url="" customUpload="true" maxFileSize="1000000"
+              accept=".xlsx" chooseLabel="Importer" [maxFileSize]="1000000" [showUploadButton]="true"
+              [showCancelButton]="true" uploadLabel="valider" cancelLabel="annuler" chooseIcon="pi pi-download"
+              (uploadHandler)="onBasicUpload($event)" (onUpload)="onUpload($event)">
+    <ng-template pTemplate="content">
+        <ul *ngIf="selectedFile?.length">
+            <li *ngFor="let file of selectedFile">{{file?.name}} - {{file?.size}} bytes</li>
+        </ul>
+    </ng-template>
+</p-fileUpload>

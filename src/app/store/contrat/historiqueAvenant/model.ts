@@ -22,6 +22,8 @@ export interface HistoriqueAvenant {
     numero?: number;
     numeroGarant?: number;
     dateAvenant?: Date;
+    file?: FormData;
+    fileToLoad?: File;
 }
 
 export enum TypeEtat {
@@ -137,4 +139,9 @@ export interface HistoriqueAvenantPrime {
     primeTotal?: number;
     deleted?: boolean;
     historiqueAvenant?: HistoriqueAvenant;
+}
+
+export interface HistoriqueAvenantFile {
+    avenant?: HistoriqueAvenant;
+    file?: FormData;
 }
