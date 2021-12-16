@@ -130,6 +130,9 @@ import { TypeReport } from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import * as adherantSelector from '../../../store/contrat/adherent/selector';
+import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-commission-intermediaire/model";
+import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
+import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 
 @Component({
   selector: "app-police",
@@ -167,18 +170,14 @@ export class PoliceComponent implements OnInit, OnDestroy {
   dateEffet: Date;
   dateEcheance: Date;
   report: Report = {};
-
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
-
   garantList$: Observable<Array<Garant>>;
   garantList: Array<Garant>;
-
   intermediaireList$: Observable<Array<Intermediaire>>;
   intermediaireList: Array<Intermediaire>;
   isgroupEditing = false;
   obj: any = {group: {}, prime: {}};
-
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -271,6 +270,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   adherentPrincipauxTMP: Array<Adherent>;
   adherentSelected: Adherent = {};
   genre: Genre[];
+  tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
+  tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -289,11 +290,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.adherentForm = this.formBuilder.group({
-      id: new FormControl(""),
+      id: new FormControl(null),
       nom: new FormControl("", [Validators.required]),
       prenom: new FormControl("", [Validators.required]),
       dateNaissance: new FormControl("", [Validators.required]),
       matriculeGarant:new FormControl("", [Validators.required]),
+      matriculeSouscripteur:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl("", [Validators.required]),
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
@@ -306,34 +308,37 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.policeForm = this.formBuilder.group({
-      id: new FormControl(""),
+      id: new FormControl(''),
       numero: new FormControl(''),
-      garant: new FormControl("", [Validators.required]),
-      intermediaire: new FormControl("", [Validators.required]),
+      garant: new FormControl('', [Validators.required]),
+      intermediaire: new FormControl('', [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
-      territorialite: new FormControl("", [Validators.required]),
-      typeDuree: new FormControl("", [Validators.required]),
-      duree: new FormControl("", [Validators.required]),
-      dateEffet: new FormControl("", [Validators.required]),
+      territorialite: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+      dateEffet: new FormControl('', [Validators.required]),
       dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required]),
-      adressePostale: new FormControl("", [Validators.required]),
-      //dateSaisie: new FormControl('',[Validators.required]),
-      //dateValidation: new FormControl('',[Validators.required]),
-      nom: new FormControl("", [Validators.required]),
-      //code: new FormControl('',[Validators.required]),
-      contact: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
-      personneRessource: new FormControl("", [Validators.required]),
-      contactPersonneRessource: new FormControl("", [Validators.required]),
-      emailPersonneRessource: new FormControl("", [Validators.required, Validators.email]),
-      secteurActivite: new FormControl("", [Validators.required]),
-      numeroIfu: new FormControl(""),
-      rccm: new FormControl(""),
+      adressePostale: new FormControl('', [Validators.required]),
+      tauxCommissionIntermediaire: new FormControl('', [Validators.required]),
+      // dateSaisie: new FormControl('',[Validators.required]),
+      // dateValidation: new FormControl('',[Validators.required]),
+      nom: new FormControl('', [Validators.required]),
+      // code: new FormControl('',[Validators.required]),
+      
+      contact: new FormControl('', [Validators.required]),
+      adresseEmail: new FormControl(null, [Validators.required]),
+      personneRessource: new FormControl('', [Validators.required]),
+      contactPersonneRessource: new FormControl('', [Validators.required]),
+      emailPersonneRessource: new FormControl('', [Validators.required]),
+      secteurActivite: new FormControl('', [Validators.required]),
+      numeroIfu: new FormControl(''),
+      rccm: new FormControl(''),
       secteur: new FormControl('', [Validators.required]),
+      commune: new FormControl('', [Validators.required]),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
-      fraisBadge: new FormControl("", [Validators.required])
+      fraisBadge: new FormControl('', [Validators.required])
     });
 
     this.groupeForm = this.formBuilder.group({
@@ -385,7 +390,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
     console.log('id du groupe est'+groupe.id);
     //this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
-
    // this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     //if (value) {
       //this.plafondGroupe = value;
@@ -394,7 +398,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     //}
     //});
-
     console.log(this.plafondActuelleConfiguration);
     console.log(groupe);
     console.log(this.ifExistTerritorialiteInternational(groupe));
@@ -403,7 +406,6 @@ export class PoliceComponent implements OnInit, OnDestroy {
     }
     this.displayParametragePlafond = true;
     //console.log(this.plafondGroupe);
-    
   }
 
   voirDetailAdherent(adherent:Adherent){
@@ -414,6 +416,16 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+
+    this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+    this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
+    this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+              .subscribe(value => {
+                if (value) {
+                  this.tauxCommissionIntermediaireList = value.slice();
+                }
+    });
+
     this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -421,11 +433,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
       //this.plafondGroupe = value;
       console.log(value);
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
-      
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
     });
-
     this.adherentPrincipauxTMP = [];
     this.policeList = [];
     this.loading = true;
@@ -1637,8 +1647,9 @@ changeGarantie(garantie, indexLigne: number) {
   }
   console.log(this.plafondActe);
   }
-
 }
+
+
 
   ngOnDestroy() {
     this.destroy$.next(true);
@@ -1763,6 +1774,7 @@ changeGarantie(garantie, indexLigne: number) {
       prenom: adherent?.prenom,
       dateNaissance: new Date(adherent?.dateNaissance),
       matriculeGarant: adherent?.matriculeGarant,
+      matriculeSouscripteur: adherent?.matriculeSouscripteur,
       lieuNaissance: adherent?.lieuNaissance,
       numeroTelephone: adherent?.numeroTelephone,
       adresse: adherent?.adresse,

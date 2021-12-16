@@ -165,7 +165,7 @@
                     <div class="p-field p-col">
                         <label for="firstname2">Personne ressource 2</label>
                         <div>
-                            <span>{{garant.PersonneRessource2}}</span>
+                            <span>{{garant.personneRessource2}}</span>
                         </div>
                     </div>
 
@@ -194,21 +194,37 @@
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numéro compte banacaire 1</label>
+                        <label for="lastname2">Numéro compte bancaire 1</label>
                         <div>
                             <span>{{garant.numeroCompteBancaire1}}</span>
                         </div>
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numéro compte banacaire 2</label>
+                        <label for="lastname2">Banque 1</label>
                         <div>
-                            <span>{{garant.numeroCompteBancaire2}}</span>
+                            <span>{{garant.banque1?.libelle}}</span>
                         </div>
-                    </div>    
+                    </div>
+
+                      
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte bancaire 2</label>
+                        <div>
+                            <span>{{garant.numeroCompteBancaire2}}</span>
+                        </div>
+                    </div> 
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Banque 2</label>
+                        <div>
+                            <span>{{garant.banque2?.libelle}}</span>
+                        </div>
+                    </div>
 
                     <div class="p-field p-col">
                         <label for="lastname2">RCCM</label>
@@ -216,6 +232,10 @@
                             <span>{{garant.rccm}}</span>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col">
                         <label for="lastname2">Periodicité appel fond</label>
@@ -229,16 +249,19 @@
                         <div>
                             <span>{{garant.secteurActivite.libelle}}</span>
                         </div> 
-                    </div>   
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
+                    </div>
+                    
                     <div class="p-field p-col">
                         <label for="lastname2">Secteur</label>
                         <div>
                             <span>{{garant.secteur.libelle}}</span>
                         </div> 
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
                 </div>
             </div>
             </ng-template>
@@ -455,7 +478,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Taux de commission prime</label>
+                        <label for="lastname2">Taux de commission de gestion</label>
                         <p-dropdown dataKey="id" inputId="tauxPrime" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionPrime" placeholder="Select" optionLabel="taux"></p-dropdown>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="garantForm" [entityField]="'taux'">
@@ -492,8 +515,8 @@
                             </div> 
                             
                             <div class="p-field p-col-4">
-                                <label for="lastname2">Commune</label>
-                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
+                                <label for="lastname2">Commune <span class="required">*</span></label>
+                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'commune'">
                                 </app-entity-validation>

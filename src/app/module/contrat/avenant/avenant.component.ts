@@ -269,6 +269,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   avenantModif: Avenant = {};
   historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
   displayDialogPrime = false;
+  avenantModif1: Avenant = {};
 
   infosPolice = false;
   constructor(
@@ -1618,8 +1619,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
         }
     );
-    // this.displayDialogFormAdherentAffaireNouvelle = true;
-    this.displayDialogFormAdherentModification = true;
+    this.displayDialogFormAdherentAffaireNouvelle = true;
   }
 
   viewAvenantAffaireRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
@@ -1632,10 +1632,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res: Avenant) => {
           this.avenantModif = res;
           console.log('=====================res=============', res);
-          /* console.log('=====================res=============', res);
-          this.historiqueAvenantAdherents4 = this.historiqueAvenantAdherent1s
-              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
-          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant); */
         }
     );
     this.displayDialogFormAdherentrenouvellement = true;
@@ -1644,10 +1640,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   viewAvenantModification(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
     console.log(typeof typeHistoriqueAvenant);
-    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
-        avenant.id).subscribe(
-        (res: Array<HistoriqueAvenantAdherant>) => {
-          this.historiqueAvenantAdherent1s = res;
+    this.historiqueAvenantAdherentService.getAvenantModificationInfo(typeHistoriqueAvenant,
+        avenant.id, avenant.police.id).subscribe(
+        (res: Avenant) => {
+          this.avenantModif1 = res;
           console.log('=====================res=============', res);
           this.historiqueAvenantAdherents3 = this.historiqueAvenantAdherent1s
               .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
@@ -1755,19 +1751,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
     ];
   }
 
-  printAvenantRenouvellement() {
+  printAvenantRenouvellement(historiqueAvenant: HistoriqueAvenant) {
     this.typeAvenants = [
       {label: 'Avenant de renouvellement', icon: 'pi pi-print', command: ($event) => {
-
-        }},
-      {label: 'Liste de renouvellement', icon: 'pi pi-print', command: () => {
-
-        }},
-      {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.AVENANT_RENOUVELLEMENT;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de renouvellement', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
@@ -1787,7 +1783,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-        this.printAvenantRenouvellement();
+        this.printAvenantRenouvellement(historiqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -1915,5 +1911,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
   getSortie(event: any): void {
     console.log(event);
     this.initDisplayAvenant();
+  }
+
+  onAdherentPrint4(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_AVENANT_RENOUVELLEMENT;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
   }
 }

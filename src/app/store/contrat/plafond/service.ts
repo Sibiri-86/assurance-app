@@ -1,5 +1,5 @@
 import { from } from "rxjs";
-import {Plafond, PlafondList} from "./model";
+import {Bareme, BaremeList, Plafond, PlafondList} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -46,6 +46,29 @@ deletePlafonds(plafond: Array<Plafond>): Observable<any> {
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}`, plafond);
 }
 
+/**service pour le parametrage des baremes */
+postBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}`, bareme);
+}
+
+updateBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
+}
+
+deleteBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
+}
+
+$getBaremes(): Observable<BaremeList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}`).pipe(
+    map((response: BaremeList) => response),
+    catchError(this.handleError())
+  );
+}
 
 
 pushFileToStorage(file: File): Observable<any> {
