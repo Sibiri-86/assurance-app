@@ -125,7 +125,6 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
         banque2: new FormControl(null),
         numeroCompteBancaire2: new FormControl(''),
         numeroIfu: new FormControl(''),
-        taux: new FormControl('',[Validators.required]),
         //periodiciteAppelFond: new FormControl(''),
         rccm: new FormControl(''),
         secteur: new FormControl('', [Validators.required]),

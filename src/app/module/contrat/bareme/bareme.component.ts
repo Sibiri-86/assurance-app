@@ -93,6 +93,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
   this.baremeForm = this.formBuilder.group({
     // domaine: new FormControl({}),
+    id:new FormControl(null),
     libelle: new FormControl(null, [Validators.required]),
     description: new FormControl(null, [Validators.required]),
     taux: new FormControl(null, [Validators.required]),
@@ -251,6 +252,8 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.displayPrevisualiserParametrage = true;
     }
 
+
+
   validerPlafond() {
     this.bareme = this.baremeForm.value;
     for(var i=0; i<this.plafondFamilleActeConstruct.length; i++){
@@ -265,7 +268,11 @@ export class BaremeComponent implements OnInit, OnDestroy {
     }
     this.bareme.baremeFamilleActe = this.plafondFamilleActeConstruct;
     console.log(this.bareme);
+    if(!this.baremeForm.value.id){
     this.store.dispatch(featureActionsPlafond.createBareme(this.bareme));
+    } else {
+    this.store.dispatch(featureActionsPlafond.updateBareme(this.bareme));
+    }
     //this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
     this.plafondFamilleActe = [{garantie:{}}];
     this.plafondActe = [];
@@ -274,6 +281,25 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.baremeForm.reset();
   }
 
+
+
+  modifierBareme(bareme:Bareme) {
+    this.baremeForm.patchValue(bareme);
+    this.plafondFamilleActeConstruct = bareme.baremeFamilleActe;
+    this.dispplayDialogueBareme= true;
+  }
+
+  supprimerBareme(bareme: Bareme) {
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir supprimer?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(featureActionsPlafond.deleteBareme(bareme));
+      }
+  });
+    
+  }
 
   voirBareme(bareme: Bareme){
   this.displayVoirBareme = true;

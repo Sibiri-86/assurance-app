@@ -59,7 +59,7 @@ updateBareme(bareme: Bareme): Observable<any> {
 
 deleteBareme(bareme: Bareme): Observable<any> {
   // @FIXME: post request
-  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, null);
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
 }
 
 $getBaremes(): Observable<BaremeList> {

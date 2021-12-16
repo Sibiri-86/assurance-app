@@ -130,6 +130,9 @@ import { TypeReport } from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import * as adherantSelector from '../../../store/contrat/adherent/selector';
+import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-commission-intermediaire/model";
+import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
+import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 
 @Component({
   selector: "app-police",
@@ -267,6 +270,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   adherentPrincipauxTMP: Array<Adherent>;
   adherentSelected: Adherent = {};
   genre: Genre[];
+  tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
+  tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -303,35 +308,38 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.policeForm = this.formBuilder.group({
-      id: new FormControl(""),
+      id: new FormControl(''),
       numero: new FormControl(''),
-      garant: new FormControl("", [Validators.required]),
-      intermediaire: new FormControl("", [Validators.required]),
+      garant: new FormControl('', [Validators.required]),
+      intermediaire: new FormControl('', [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
-      territorialite: new FormControl("", [Validators.required]),
-      typeDuree: new FormControl("", [Validators.required]),
-      duree: new FormControl("", [Validators.required]),
-      dateEffet: new FormControl("", [Validators.required]),
+      territorialite: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+      dateEffet: new FormControl('', [Validators.required]),
       dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required]),
-      adressePostale: new FormControl("", [Validators.required]),
+      adressePostale: new FormControl('', [Validators.required]),
+      tauxCommissionIntermediaire: new FormControl('', [Validators.required]),
       // dateSaisie: new FormControl('',[Validators.required]),
       // dateValidation: new FormControl('',[Validators.required]),
-      nom: new FormControl("", [Validators.required]),
+      nom: new FormControl('', [Validators.required]),
       // code: new FormControl('',[Validators.required]),
-      contact: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
-      personneRessource: new FormControl("", [Validators.required]),
-      contactPersonneRessource: new FormControl("", [Validators.required]),
-      emailPersonneRessource: new FormControl("", [Validators.required, Validators.email]),
-      secteurActivite: new FormControl("", [Validators.required]),
-      numeroIfu: new FormControl(""),
-      rccm: new FormControl(""),
+      
+      contact: new FormControl('', [Validators.required]),
+      adresseEmail: new FormControl(null, [Validators.required]),
+      personneRessource: new FormControl('', [Validators.required]),
+      contactPersonneRessource: new FormControl('', [Validators.required]),
+      emailPersonneRessource: new FormControl('', [Validators.required]),
+      secteurActivite: new FormControl('', [Validators.required]),
+      numeroIfu: new FormControl(''),
+      rccm: new FormControl(''),
       secteur: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
-      fraisBadge: new FormControl("", [Validators.required])
+      fraisBadge: new FormControl('', [Validators.required])
+      
     });
 
     this.groupeForm = this.formBuilder.group({
@@ -408,6 +416,17 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+
+
+    this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+    this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
+    this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+              .subscribe(value => {
+                if (value) {
+                  this.tauxCommissionIntermediaireList = value.slice();
+                }
+    });
+
     this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

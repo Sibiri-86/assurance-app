@@ -201,14 +201,30 @@
                     </div>
 
                     <div class="p-field p-col">
+                        <label for="lastname2">Banque 1</label>
+                        <div>
+                            <span>{{garant.banque1?.libelle}}</span>
+                        </div>
+                    </div>
+
+                      
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
                         <label for="lastname2">Numéro compte bancaire 2</label>
                         <div>
                             <span>{{garant.numeroCompteBancaire2}}</span>
                         </div>
-                    </div>    
-                </div>
+                    </div> 
 
-                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Banque 2</label>
+                        <div>
+                            <span>{{garant.banque2?.libelle}}</span>
+                        </div>
+                    </div>
 
                     <div class="p-field p-col">
                         <label for="lastname2">RCCM</label>
@@ -216,6 +232,10 @@
                             <span>{{garant.rccm}}</span>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col">
                         <label for="lastname2">Periodicité appel fond</label>
@@ -229,16 +249,19 @@
                         <div>
                             <span>{{garant.secteurActivite.libelle}}</span>
                         </div> 
-                    </div>   
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
+                    </div>
+                    
                     <div class="p-field p-col">
                         <label for="lastname2">Secteur</label>
                         <div>
                             <span>{{garant.secteur.libelle}}</span>
                         </div> 
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
                 </div>
             </div>
             </ng-template>

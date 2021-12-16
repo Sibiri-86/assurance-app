@@ -17,7 +17,7 @@
                 -->
 			</p-toolbar>
 
-            <p-table #dt [value]="baremeList" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="[]"
+            <p-table #dt [value]="baremeList" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','taux.taux','typeBareme']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -57,9 +57,11 @@
                         <td><span class="p-column-title">{{bareme.typeBareme}}</span>
                         </td>
                         <td>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
-                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierBareme(bareme)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerBareme(bareme)"></button>
+                            <!--
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir bareme" class="p-button-rounded p-button-info p-mr-2" (click)="voirBareme(bareme)"></button>
+                            -->
                         </td>
                     </tr>
                 </ng-template>
@@ -1334,14 +1336,16 @@
 <br/>
 <br/>
 <div class="p-grid p-justify-between">
+    <!--
     <div>
         <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="fermerConfigurationPlafond()"></button>
     </div>
     
     <div>
-        <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
+        
         <button pButton pRipple label="Modifier" icon="pi pi-pencil" (click)="saveNewGroupe()"></button>
     </div>
+    -->
 </div>
 </ng-template>
 </p-dialog>

@@ -180,30 +180,19 @@
 
                 <div class="p-fluid p-formgrid p-grid">
 
-                    <div class="p-field p-col">
+                    <div class="p-field p-col-4">
                         <label for="lastname2">RCCM</label>
                         <div>
                             <span>{{intermediaire.rccm}}</span>
                         </div>
                     </div>
 
-                    <div class="p-field p-col">
-                        <label for="lastname2">Taux de commission</label>
-                        <div>
-                            <span>{{intermediaire.taux.taux}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
+                    <div class="p-field p-col-4">
                         <label for="lastname2">Secteur</label>
                         <div>
                             <span>{{intermediaire.secteur.libelle}}</span>
                         </div> 
                     </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-                   
                 </div>
             </div>
             </ng-template>
@@ -343,23 +332,13 @@
                             </app-entity-validation>
                             </div>
 
-                            <div class="p-field p-col">
-                                <label for="lastname2">Taux de commission</label>
-                                <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">RCCM</label>
+                                <input id="lastname2" type="text"   formControlName="rccm" pInputText>
                                 <app-entity-validation [entityValidations]="entityValidations"
-                                              [formGroup]="intermediaireForm" [entityField]="'taux'">
+                                [formGroup]="intermediaireForm" [entityField]="'rccm'">
                             </app-entity-validation>
-                            </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label for="lastname2">RCCM</label>
-                            <input id="lastname2" type="text"   formControlName="rccm" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="intermediaireForm" [entityField]="'rccm'">
-                        </app-entity-validation>
-                        </div>
+                            </div>   
                     </div>
                     </p-fieldset>
 
