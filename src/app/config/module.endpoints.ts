@@ -288,4 +288,20 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/export-excel-model`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+    static readonly CONTRAT_POLICE_LOAD_ADHERENT = {
+        prod: `${SERVICE_PREFIX}/contrat/police/load-adherent-excel`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_COMPARE_DATE = {
+        prod: `${SERVICE_PREFIX}/contrat/police/compare-date`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_ADHERANT_UNSUSPEND = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent/unsuspend`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_CHANGE_STATUS = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/change-status`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
 }

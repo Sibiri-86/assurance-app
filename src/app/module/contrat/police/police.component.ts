@@ -130,6 +130,7 @@ import { TypeReport } from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import * as adherantSelector from '../../../store/contrat/adherent/selector';
+import {PoliceService} from '../../../store/contrat/police/service';
 
 @Component({
   selector: "app-police",
@@ -271,6 +272,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
   adherentPrincipauxTMP: Array<Adherent>;
   adherentSelected: Adherent = {};
   genre: Genre[];
+  isImport = 'NON';
+  FamilyListToImport: Array<AdherentFamille>;
+  private afficheDetail = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -278,7 +282,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private breadcrumbService: BreadcrumbService,
-    private adherentService: AdherentService
+    private adherentService: AdherentService,
+    private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -915,6 +920,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
         });
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+    this.FamilyListToImport = [];
   }
 
 
@@ -1793,6 +1799,17 @@ changeGarantie(garantie, indexLigne: number) {
     /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
     console.log('*************this.genre*************', this.genre);*/
     this.setAdherentPrincipal(this.adherentSelected);
+  }
+
+  getAdherentFiles(event: any): void {
+    console.log(event);
+    this.policeService.loadAdherentsByExcelFile(event).subscribe(
+        (res) => {
+          this.FamilyListToImport = res;
+          this.adherentFamille = res;
+          this.afficheDetail = true;
+        }
+    );
   }
 
 }
