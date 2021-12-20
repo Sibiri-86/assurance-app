@@ -555,10 +555,12 @@ this.confirmationService.confirm({
   accept: () => {
     if(this.intermediaire.id) { 
       this.store.dispatch(featureAction.updateIntermediaire(this.intermediaire));
+      this.displayDialogFormIntermediaire = false;
     }else{
     this.store.dispatch(featureAction.createIntermediaire(this.intermediaire));
     }
     this.intermediaireForm.reset();
+    
   }
 });
 }

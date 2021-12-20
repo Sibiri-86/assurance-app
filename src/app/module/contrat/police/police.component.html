@@ -62,11 +62,9 @@
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
                             <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
-                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info p-mr-2" (click)="onRowSelectPolice(police)"></button>
-                            <button pButton  pRipple icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
-                            <button pButton  pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
-                            <button pButton  pRipple icon="pi pi-lock" pTooltip="clôturer l'exercice" class="p-button-rounded p-button-danger p-ml-2" (click)="cloturePolice(police)"></button>
-
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -2444,7 +2442,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact souscripteur</label>
-                            <input id="contactsouscripteur" type="text" formControlName="contact" [value]="policeForm.get('contact').value | formatTableValue: 'phoneContact':true" pInputText>
+                            <p-inputMask formControlName="contact" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contact'">
                             </app-entity-validation>
@@ -2499,7 +2497,7 @@
                         </div>
                         <div class="p-field p-col">
                             <label for="lastname2">Contact Personne ressource</label>
-                            <input id="contactPers" type="text" formControlName="contactPersonneRessource" [value]="policeForm.get('contactPersonneRessource').value | formatTableValue: 'phoneContact':true" pInputText>
+                            <p-inputMask formControlName="contactPersonneRessource" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contactPersonneRessource'">
                             </app-entity-validation>
@@ -2595,7 +2593,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="fraisAccessoire">Frais accessoire</label>
-                            <input id="fraisAccessoire" formControlName="fraisAccessoire" [value]="policeForm.get('fraisAccessoire').value | formatTableValue: 'number':true" pInputText>
+                            <input formControlName="fraisAccessoire" [value]="policeForm.get('fraisAccessoire').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisAccessoire'">
                             </app-entity-validation>
@@ -2603,7 +2601,7 @@
 
                         <div class="p-field p-col-4">
                             <label for="fraisBadge">Frais badge</label>
-                            <input id="fraisBadge" formControlName="fraisBadge" [value]="policeForm.get('fraisBadge').value | formatTableValue: 'number':true" pInputText>
+                            <input formControlName="fraisBadge" [value]="policeForm.get('fraisBadge').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisBadge'">
                             </app-entity-validation>
@@ -2618,13 +2616,13 @@
                     <button pButton pRipple type="button" label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                 </div>
                 <div>
-                    <button pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button *ngIf="!policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button *ngIf="policeForm.get('id').value" [disabled]="policeForm?.invalid" pButton pRipple label="Modifier" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
         </form>
     </ng-template>
 </p-dialog>
-
 
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
