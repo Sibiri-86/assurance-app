@@ -133,6 +133,7 @@ import * as adherantSelector from '../../../store/contrat/adherent/selector';
 import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-commission-intermediaire/model";
 import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
+import {PoliceService} from '../../../store/contrat/police/service';
 
 @Component({
   selector: "app-police",
@@ -272,6 +273,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   genre: Genre[];
   tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
+  isImport = 'NON';
+  FamilyListToImport: Array<AdherentFamille>;
+  private afficheDetail = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -279,7 +283,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private breadcrumbService: BreadcrumbService,
-    private adherentService: AdherentService
+    private adherentService: AdherentService,
+    private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -930,6 +935,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+    this.FamilyListToImport = [];
   }
 
 
@@ -1818,6 +1824,17 @@ changeGarantie(garantie, indexLigne: number) {
     /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
     console.log('*************this.genre*************', this.genre);*/
     this.setAdherentPrincipal(this.adherentSelected);
+  }
+
+  getAdherentFiles(event: any): void {
+    console.log(event);
+    this.policeService.loadAdherentsByExcelFile(event).subscribe(
+        (res) => {
+          this.FamilyListToImport = res;
+          this.adherentFamille = res;
+          this.afficheDetail = true;
+        }
+    );
   }
 
 }

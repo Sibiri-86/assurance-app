@@ -1,0 +1,173 @@
+<div class="card">
+    <div class="p-grid">
+        <div class="p-field p-col-12">
+            <div class="p-field p-col-7">
+                <div class="p-field-checkbox">
+                    <label class="p-badge-success">Souhaitez vous importer les adhérents à tavers un fichier excel ?</label>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1" id="city1"></p-radioButton>
+                        <label for="city1">OUI</label>
+                    </div>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="NON" [(ngModel)]="isImport" inputId="city2" id="city2"></p-radioButton>
+                        <label for="city2">NON </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-4">
+            <form [formGroup]="newForm" *ngIf="!isRenouv">
+
+                    <label for="groupe">Choisir le Groupe</label><br>
+                    <p-dropdown [options]="groupeList" optionLabel="libelle" formControlName="groupe"
+                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}" id="groupe">
+                    </p-dropdown>
+
+            </form>
+        </div>
+        <div class="p-col-9">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4"><br>
+                    <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
+                            class="p-button p-button-icon" label="export model" (click)="exportModel()">
+                    </button>
+                </div>
+                <div class="p-field p-col-4" *ngIf="isImport === 'OUI'"><br><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-fieldset legend="Avenant" toggleable="true">
+                <form [formGroup]="myForm" *ngIf="!isRenouv">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="numero">Numéro de l'avenant chez la garant <sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Date de suspension <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="observation">Observation</label>
+                            <input id="observation" type="text" required formControlName="observation" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Le demandeur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                    </div>
+                </form>
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="p-grid" *ngIf="isImport === 'NON'">
+        <div class="p-col-12">
+            <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true"
+                     [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                     [rowHover]="true" dataKey="id" [(selection)]="adherantSuspendds"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-grid">
+                        <div class="p-col-3">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       placeholder="Search..." [style]="{width: '80%'}" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-col-3"></div>
+                        <div class="p-col-6">
+                            <span style="color: red; font-weight: bold">ADHERENTS A SUSPENDRE : {{adherantSuspendds.length}}</span>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th>Date de suspension</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-historiqueAveantAdherant>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom | upercase}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
+                        <td>
+                            <span class="p-column-title">
+                                <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                       [(ngModel)]="historiqueAveantAdherant.dateIncorporation" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
+                                <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
+                                            dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
+                                            appendTo="body"></p-calendar>-->
+                            </span>
+                        </td>
+                        <td>
+                            <!--<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-cog" pTooltip="configurer le plafond" class="p-button-rounded p-button-info p-mr-2" (click)="parametrerPlafond(groupe)"></button>-->
+                            <span class="texte-danger" *ngIf="historiqueAveantAdherant.selected">{{retirer}} </span>
+                            <span class="texte-succes" *ngIf="!historiqueAveantAdherant.selected">{{nonRetirer}}</span>
+                            <!--<button pButton  pRipple icon="pi pi-minus" pTooltip="Retirer" class="p-button-danger p-mr-2" (click)="retirer(historiqueAveantAdherant)"></button>-->
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{historiqueAveantAdherants ? historiqueAveantAdherants.length : 0 }} adherents au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <hr>
+            </div>
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                        class="p-button p-button-success" type="button" (click)="createAvenantSuspension()">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -168,7 +168,7 @@
             </div>
         </p-dialog>
 
-        
+
 
         <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrage" header="Récapitulatif" [modal]="true" styleClass="p-fluid" [style]="{'width':'900px'}">
             <ng-template pTemplate="content">
@@ -342,7 +342,7 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-    
+
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -401,7 +401,7 @@
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
-        
+
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
@@ -433,7 +433,7 @@
                         </tr>
                     </ng-template>
 
-                   
+
         </p-table>
 </div>
 </td>
@@ -451,7 +451,7 @@
     <div>
         <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="fermerConfigurationPlafond()"></button>
     </div>
-    
+
     <div>
         <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
         <button pButton pRipple label="Modifier" icon="pi pi-pencil" (click)="saveNewGroupe()"></button>
@@ -1037,7 +1037,26 @@
                 <div *ngIf="displayAdherentForm">
 
                     <p-fieldset legend="Information adhérent" toggleable="true">
-                        <form [formGroup]="adherentForm">
+                        <div class="p-field p-col-12">
+                            <div class="p-field p-col-7">
+                                <div class="p-field-checkbox">
+                                    <label class="p-badge-success">Souhaitez vous importer les adhérents à tavers un fichier excel ?</label>
+                                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                                        <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1" id="city1"></p-radioButton>
+                                        <label for="city1">OUI</label>
+                                    </div>
+                                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                                        <p-radioButton name="city" value="NON" [(ngModel)]="isImport" inputId="city2" id="city2"></p-radioButton>
+                                        <label for="city2">NON </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-5" *ngIf="isImport === 'OUI'">
+                                <app-upload-file (fileEvent)="getAdherentFiles($event)"></app-upload-file>
+                            </div>
+                        </div>
+
+                        <form [formGroup]="adherentForm" *ngIf="isImport === 'NON'">
                             <h5></h5>
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col">
@@ -1122,14 +1141,14 @@
                         </form>
                     </p-fieldset>
                     <br/>
-                    <p-fieldset legend="Famille adhérent" toggleable="true">
+                    <p-fieldset legend="Famille adhérent" toggleable="true" *ngIf="isImport === 'NON'">
                         <p-toolbar styleClass="p-mb-4">
                             <ng-template pTemplate="left">
                                 <button pButton pRipple label="Ajouter" icon="pi pi-plus" pAddRow [table]="dtFamilleAdherent" [newRow]="newRowFamilleAdherent()" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </ng-template>
                         </p-toolbar>
 
-                        <p-table #dtFamilleAdherent [value]="adherentFamilleList" dataKey="" editMode="row">
+                        <p-table #dtFamilleAdherent [value]="adherentFamilleList" dataKey="" editMode="row" *ngIf="isImport === 'NON'">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Mle. Garant</th>
@@ -1245,6 +1264,9 @@
                             </ng-template>
                         </p-table>
                     </p-fieldset>
+                    <div *ngIf="afficheDetail">
+                        <app-adherent-list [adherentFamilleList]="FamilyListToImport"></app-adherent-list>
+                    </div>
                     <br/>
                     <br/>
                     <div class="p-grid p-justify-between">
@@ -1455,7 +1477,7 @@
                         <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
                     </ng-template>
-                    
+
                     <ng-template pTemplate="right">
                         <span><span class="indicateur">{{rapport?.nombreEnfant}}</span> Enfants-</span>
                         <span><span class="indicateur">{{rapport?.nombreConjoint}}</span> Conjoint(e)-</span>
@@ -1463,7 +1485,7 @@
                         <span><span class="indicateur">{{rapport?.nombreFeminin}}</span> Genre feminin-</span>
                         <span><span class="indicateur">{{rapport?.nombreMasculin}}</span> Genre masculin</span>
                     </ng-template>
-                    
+
                 </p-toolbar>
                 <p-table #dt [value]="groupeList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                          [rowHover]="true" dataKey="id"
@@ -1476,7 +1498,7 @@
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
                             </span>
-                           
+
                         </div>
                     </ng-template>
 
@@ -1637,7 +1659,6 @@
                     </div>
                     <form   [formGroup]="adherentForm">
                         <div class="card">
-
                         <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col">
                                 <label for="firstname2">Nom</label>
@@ -2083,7 +2104,7 @@
                 </div>
                 </ng-template>
             </p-dialog>
-    
+
 
         <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
             <ng-template pTemplate="content">

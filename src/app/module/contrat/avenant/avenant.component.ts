@@ -246,6 +246,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   isAvenantRetrait = false;
   isAvenantModification = false;
   isAvenantRenouvellement = false;
+  isAvenantResiliation = false;
+  isAvenantSuspension = false;
 
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantList: Array<HistoriqueAvenant>;
@@ -690,6 +692,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.initDisplayAvenant();
           this.isAvenantRenouvellement = true;
           this.entete = 'Avenant de Renouvellement';
+          this.addAvenantRenouvellement();
+        }},
+      {label: 'Résiliation', icon: 'pi pi-sign-out', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantResiliation = true;
+          this.entete = 'Avenant de Résiliation';
+          this.addAvenantModification();
+        }},
+      {label: 'Suspension', icon: 'pi pi-pause', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantSuspension = true;
+          this.entete = 'Avenant de Suspension';
           this.addAvenantRenouvellement();
         }}
     ];
@@ -1329,7 +1343,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   addAvenant(): void {
     this.dissplayavenant = true;
-
   }
 
   addAvenantRetrait(): void {
@@ -1509,6 +1522,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.isAvenantRetrait = false;
     this.isAvenantModification = false;
     this.isAvenantRenouvellement = false;
+    this.isAvenantSuspension = false;
+    this.isAvenantResiliation = false;
   }
 
   deValiderPolice(police: Police){
@@ -1913,10 +1928,32 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.initDisplayAvenant();
   }
 
+
   onAdherentPrint4(historiqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_AVENANT_RENOUVELLEMENT;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+
+  getAvenantResiliation(event: HistoriqueAvenant): void {
+    this.historiqueAvenant = event;
+    this.historiqueAvenant.police = this.policeItem;
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
+  }
+
+  getAvenantSuspension(event: HistoriqueAvenant): void {
+    this.historiqueAvenant = event;
+    this.historiqueAvenant.police = this.policeItem;
+    this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+    this.dissplayavenant = false;
+  }
+  changeStatus(historiqueAvenant: HistoriqueAvenant, state: boolean): void {
+    this.historiqueAvenantService.changeStatus(historiqueAvenant.id, state).subscribe(
+        (res) => {
+          this.historiqueAvenant = res;
+        }
+    );
   }
 }

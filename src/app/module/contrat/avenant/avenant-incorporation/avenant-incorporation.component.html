@@ -26,7 +26,7 @@
                         <div class="p-field p-col-4">
                             <label for="nom">Date d'Incorporation</label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
-                                    dateFormat="dd/mm/yy" inputId="calendar"
+                                    dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                     appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-2">
@@ -44,7 +44,7 @@
                     <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
                                 (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal" optionLabel="fullName"></p-dropdown>
                 </div>
-                <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
+                <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()" >
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
                             <label for="nom">Nom <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
@@ -214,90 +214,37 @@
                             </p-fieldset>
 
                         </div>
-                        <div class="p-fluid formgrig p-col-12 p-mt-3">
-                            <div class="p-grid">
-                                <div class="p-col-12">
-                                    <hr>
-                                </div>
-                                <div class="p-field p-col-3"></div>
-                                <div class="p-field p-col-2 p-ac-center">
-                                    <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" type="button"
-                                            class="p-button p-button-warning" label="Annuler" (click)="init()">
-                                    </button>
-                                </div>
-                                <div class="p-field p-col-2 p-ac-center">
-                                    <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button" [disabled]="adherentForm.value.valid === null"
-                                            class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()">
-                                    </button>
-                                </div>
-                                <div class="p-field p-col-2 p-ac-center">
-                                    <button pButton pRipple icon="pi pi-save" pTooltip="Valider la viste des incorporés" label="Enregistrer"
-                                            class="p-button p-button-success" type="submit">
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 </form>
             </p-fieldset>
+            <div class="p-fluid formgrig p-col-12 p-mt-3">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <hr>
+                    </div>
+                    <div class="p-field p-col-3"></div>
+                    <div class="p-field p-col-2 p-ac-center">
+                        <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" type="button"
+                                class="p-button p-button-warning" label="Annuler" (click)="init()">
+                        </button>
+                    </div>
+                    <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
+                        <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button" [disabled]="adherentForm.value.valid === null"
+                                class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()">
+                        </button>
+                    </div>
+                    <div class="p-field p-col-2 p-ac-center">
+                        <button pButton pRipple icon="pi pi-save" pTooltip="Valider la viste des incorporés" label="Enregistrer"
+                                class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()">
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérent à incorporer"
               [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}" (onHide)="hideListe()">
-        <p-table #dt [value]="adherentFamilleListe"  [rows]="10" [paginator]="true"
-                 [rowHover]="true" dataKey="id"
-                 styleClass="p-datatable-customers"
-                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
-            <ng-template pTemplate="caption">
-            </ng-template>
-
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width: 3rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th>
-                    <th pSortableColumn="matriculeGarant" style="width: 12rem">Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
-                    <th pSortableColumn="souscripteur" style="width: 12rem">Souscripteur<p-sortIcon field="souscripteur"></p-sortIcon></th>
-                    <th pSortableColumn="nom" style="width: 7rem">Garant<p-sortIcon field="nom"></p-sortIcon></th>
-                    <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
-                    <th pSortableColumn="prenom" style="width: 9rem" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
-                    <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
-                    <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
-                    <th></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-adherent>
-                <tr [ngClass]="{'colorZone': !adherent.adherent.adherentPrincipal}">
-                    <td><p-tableCheckbox [value]="adherent.adherent"></p-tableCheckbox></td>
-                    <td><span class="p-column-title">{{adherent.adherent.matriculeGarant}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.groupe?.police?.numero}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.groupe?.police?.garant?.code}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.nom}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.prenom}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
-                    <td><span class="p-column-title">{{adherent.adherent.numeroTelephone}}</span></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr *ngFor="let ad of adherent.famille">
-                    <td><p-tableCheckbox [value]="ad"></p-tableCheckbox></td>
-                    <td><span class="p-column-title">{{ad.matriculeGarant}}</span></td>
-                    <td><span class="p-column-title">{{ad.groupe?.police?.numero}}</span></td>
-                    <td><span class="p-column-title">{{ad.groupe?.police?.garant?.code}}</span></td>
-                    <td><span class="p-column-title">{{ad.nom}}</span></td>
-                    <td><span class="p-column-title">{{ad.prenom}}</span></td>
-                    <td><span class="p-column-title">{{ad.dateNaissance | formatTableValue : 'date'}}</span></td>
-                    <td><span class="p-column-title">{{ad.numeroTelephone}}</span></td>
-                    <td>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="summary">
-                <div class="p-d-flex p-ai-center p-jc-between">
-                    {{adherentFamilleListe ? adherentFamilleListe.length : 0 }} assurés au total
-                </div>
-            </ng-template>
-        </p-table>
+            <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
     </p-dialog>
 </div>
