@@ -5,7 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
-
 // PrimeNG Components for demos
 import {AccordionModule} from 'primeng/accordion';
 import {AutoCompleteModule} from 'primeng/autocomplete';
@@ -223,6 +222,10 @@ import {Upercase} from './module/pipes/upercase';
 import { SeparatorPipe } from './module/pipes/separator.pipe';
 import { BaremeComponent } from './module/contrat/bareme/bareme.component';
 import { UploadFileComponent } from './module/contrat/avenant/upload-file/upload-file.component';
+import { AdherentListComponent } from './module/contrat/police/adherent-list/adherent-list.component';
+import { AvenantSuspensionComponent } from './module/contrat/avenant/avenant-suspension/avenant-suspension.component';
+import { AvenantResiliationComponent } from './module/contrat/avenant/avenant-resiliation/avenant-resiliation.component';
+import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
 
 @NgModule({
     imports: [
@@ -395,7 +398,11 @@ import { UploadFileComponent } from './module/contrat/avenant/upload-file/upload
         Upercase,
         SeparatorPipe,
         BaremeComponent,
-        UploadFileComponent
+        UploadFileComponent,
+        AdherentListComponent,
+        AvenantSuspensionComponent,
+        AvenantResiliationComponent,
+        BeginLowerCasePipe
     ],
     providers: [
         {

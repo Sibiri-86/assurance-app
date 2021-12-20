@@ -1762,7 +1762,7 @@
                     </div>
                     <div class="p-field p-col-6"></div>
                     <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe"
-                            (adherentFamilleEvent)="addAdherentFamille($event)"></app-avenant-incorporation>
+                            (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
                     <app-avenant-retrait [police]="policeItem" [isRenouv]="false"
@@ -1775,6 +1775,14 @@
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement">
                     <app-avenant-renouvellement [police]="policeItem"
                                                 (eventEmitterM)="getAvenantRenouvellement($event)"></app-avenant-renouvellement>
+                </div>
+                <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">
+                    <app-avenant-resiliation [police]="policeItem"
+                                                (eventEmitterResiliation)="getAvenantResiliation($event)"></app-avenant-resiliation>
+                </div>
+                <div class="p-fluid p-col-12" *ngIf="isAvenantSuspension">
+                    <app-avenant-suspension [police]="policeItem"
+                                                (eventEmitterSuspension)="getAvenantSuspension($event)"></app-avenant-suspension>
                 </div>
             </div>
 
@@ -1982,10 +1990,11 @@
                                 <th pSortableColumn="dateEffet">Date d'effet Police
                                     <p-sortIcon field="dateEffet"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="dateEcheance">Date d'écheance Police
+                                <th pSortableColumn="dateEcheance">Date d'échéance Police
                                     <p-sortIcon field="dateEcheance"></p-sortIcon>
                                 </th>
-                                <th></th>
+                                <th>Status</th>
+                                <th colspan="2"></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowdata>
@@ -2001,7 +2010,15 @@
                                     <span class="p-column-title">{{rowdata.police.dateEcheance | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
+                                    <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDE</span>
+                                    <span *ngIf="!rowdata?.valide" style="color: red; font-weight: bold">EN ATTENTE ...</span>
+
+                                </td>
+                                <td colspan="2">
                                     <div class="p-grid p-mt-1">
+                                        <div class="p-col-">
+                                            <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide)" [(ngModel)]="rowdata.valide"></p-inputSwitch>
+                                        </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
@@ -2106,7 +2123,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-adherentHis>
-                                <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                                <tr [ngClass]="{'colorZone': !adherentHis?.adherent?.adherentPrincipal}">
                                     <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
                                     <td><span
@@ -2209,24 +2226,19 @@
                                     <td>
                                         <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
                                     </td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.prenom}}</span></td>
                                     <td><span
-                                            class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                            class="p-column-title">{{adherentHis?.adherent?.dateNaissance | formatTableValue : 'date'}}</span>
                                     </td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.lieuNaissance}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.numeroTelephone}}</span>
                                     </td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.dateIncorporation}}</span>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.dateIncorporation}}</span>
                                     </td>
                                     <td><span
-                                            class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                            class="p-column-title">{{adherentHis?.adherent?.qualiteAssure?.libelle}}</span>
                                     </td>
-                                    <!-- <td>
-                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
-                                        <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
-                                        <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning" (click)="voirDetailAdherent(adherent)"></button>
-                                    </td> -->
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary">

@@ -5,6 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {HistoriqueAvenant} from '../historiqueAvenant/model';
 
 @Injectable({providedIn: 'root'})
 export class PoliceService {
@@ -99,5 +100,17 @@ export class PoliceService {
     deValiderPolice(Police: Police): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/deValider`, Police);
+    }
+
+    loadAdherentsByExcelFile(file: File): Observable<any> {
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/json');
+        console.log('++++++++++++++++++data++++++++++++++++++++++');
+        console.log(data);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data, {headers: headers});
     }
 }

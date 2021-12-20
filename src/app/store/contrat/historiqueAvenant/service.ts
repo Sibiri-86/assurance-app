@@ -124,6 +124,27 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
              {params: createRequestOption({typeHistoriqueAvenant}), responseType: 'arraybuffer' as 'json'});
     }
 
+    compareDate(debut?: Date, fin?: Date): Observable<any> {
+        // @FIXME: post request
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_COMPARE_DATE)}`,
+             {params: createRequestOption({debut, fin})});
+    }
+
+    getHistoriqueAvenantAdherantsByPoliceAndUnsuspend(policeId: string): Observable<HistoriqueAvenantAdherant[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERANT_UNSUSPEND)}/${policeId}`).pipe(
+            map((response: HistoriqueAvenantAdherant[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    changeStatus(historiqueAvenantId: string, status: boolean): Observable<HistoriqueAvenant> {
+        // @FIXME: get request
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_CHANGE_STATUS)}`,
+            {params: createRequestOption({historiqueAvenantId, status})}
+        );
+    }
+
     /* pushFileToStorage(file: File): Observable<any> {
         const data: FormData = new FormData();
         data.append('file', file);

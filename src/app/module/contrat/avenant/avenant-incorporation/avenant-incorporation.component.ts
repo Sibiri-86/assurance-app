@@ -277,4 +277,16 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         );
     }
+
+    compareDate(): boolean {
+        const response = false;
+        const debut: Date = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenantService.compareDate(new Date(debut.getFullYear(), debut.getHours(), debut.getDay()), this.police.dateEffet).subscribe(
+            (res) => {
+                return res;
+                console.log(res);
+            }
+        );
+        return response;
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
 import { takeUntil } from "rxjs/operators";
 import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
 import { Police, Rapport } from "../../../store/contrat/police/model";
@@ -133,13 +133,14 @@ import * as adherantSelector from '../../../store/contrat/adherent/selector';
 import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-commission-intermediaire/model";
 import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
+import {PoliceService} from '../../../store/contrat/police/service';
 
 @Component({
   selector: "app-police",
   templateUrl: "./police.component.html",
   styleUrls: ["./police.component.scss"],
 })
-export class PoliceComponent implements OnInit, OnDestroy {
+export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   destroy$ = new Subject<boolean>();
   cols: any[];
   policeList$: Observable<Array<Police>>;
@@ -240,15 +241,15 @@ export class PoliceComponent implements OnInit, OnDestroy {
   items: MenuItem[];
   activeItem: MenuItem;
   index: number = 0;
-  displaySousActe: boolean =false;
+  displaySousActe: boolean = false;
   indexeActe: number;
   countfamilleActe: number = 0;
   typeDureeSelected: string;
   displayParametragePlafond: boolean = false;
   domaineSelected: QualiteAssure;
   isInternationalGroupe: boolean;
-  typeDuree: any = [{label:'Jour', value:'Jour'},
-  {label: 'Mois', value:'Mois'}, {label:'Année', value: 'Annee'}];
+  typeDuree: any = [{label: 'Jour', value: 'Jour'},
+  {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
   secteurList: Array<Secteur>;
   secteurList$: Observable<Array<Secteur>>;
   arrondissementList$: Observable<Array<Arrondissement>>;
@@ -272,6 +273,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
   genre: Genre[];
   tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
+  isImport = 'NON';
+  FamilyListToImport: Array<AdherentFamille>;
+  private afficheDetail = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -279,7 +283,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private breadcrumbService: BreadcrumbService,
-    private adherentService: AdherentService
+    private adherentService: AdherentService,
+    private policeService: PoliceService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -293,9 +298,10 @@ export class PoliceComponent implements OnInit, OnDestroy {
       id: new FormControl(null),
       nom: new FormControl("", [Validators.required]),
       prenom: new FormControl("", [Validators.required]),
-      dateNaissance: new FormControl("", [Validators.required]),
-      matriculeGarant:new FormControl("", [Validators.required]),
       matriculeSouscripteur:new FormControl("", [Validators.required]),
+      dateNaissance: new FormControl("", [Validators.required]),
+      matriculeGarant: new FormControl("", [Validators.required]),
+      // matriculeSouscripteur:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl("", [Validators.required]),
       numeroTelephone: new FormControl("", [Validators.required]),
       adresse: new FormControl("", [Validators.required]),
@@ -318,14 +324,13 @@ export class PoliceComponent implements OnInit, OnDestroy {
       typeDuree: new FormControl('', [Validators.required]),
       duree: new FormControl('', [Validators.required]),
       dateEffet: new FormControl('', [Validators.required]),
-      dateEcheance: new FormControl({value:'', disabled: true}, [Validators.required]),
+      dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
       adressePostale: new FormControl('', [Validators.required]),
       tauxCommissionIntermediaire: new FormControl('', [Validators.required]),
       // dateSaisie: new FormControl('',[Validators.required]),
       // dateValidation: new FormControl('',[Validators.required]),
       nom: new FormControl('', [Validators.required]),
       // code: new FormControl('',[Validators.required]),
-      
       contact: new FormControl('', [Validators.required]),
       adresseEmail: new FormControl(null, [Validators.required]),
       personneRessource: new FormControl('', [Validators.required]),
@@ -356,7 +361,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     });
 
     this.primeForm = this.formBuilder.group({
-      prime: new FormControl(null,[Validators.required]),
+      prime: new FormControl(null, [Validators.required]),
       primeEmploye: new FormControl(""),
       primeConjoint: new FormControl(""),
       primeEnfant: new FormControl(""),
@@ -370,8 +375,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
 
-  ifExistTerritorialiteInternational(groupe:Groupe): boolean {
-    return groupe.territorialite.some(element => element.code==='INT');
+  ifExistTerritorialiteInternational(groupe: Groupe): boolean {
+    return groupe.territorialite.some(element => element.code === 'INT');
   }
 
 
@@ -387,7 +392,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**permet de parametrer le plafond pour un groupe */
   parametrerPlafond(groupe: Groupe) {
     this.groupe = {...groupe};
-    console.log('id du groupe est'+groupe.id);
+    console.log('id du groupe est' + groupe.id);
     //this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
    // this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -401,23 +406,28 @@ export class PoliceComponent implements OnInit, OnDestroy {
     console.log(this.plafondActuelleConfiguration);
     console.log(groupe);
     console.log(this.ifExistTerritorialiteInternational(groupe));
-    if(this.ifExistTerritorialiteInternational(groupe)){
+    if (this.ifExistTerritorialiteInternational(groupe)){
     this.isInternationalGroupe = true;
     }
     this.displayParametragePlafond = true;
     //console.log(this.plafondGroupe);
   }
 
-  voirDetailAdherent(adherent:Adherent){
+  voirDetailAdherent(adherent: Adherent){
     this.adherent = {...adherent};
     this.infosAdherent = true;
   }
 
+  ngAfterViewInit() {
+    //this.fraisAccessoireInput = this.inputFraisAccessoireView.nativeElement as HTMLElement;
+    //this.fraisBadgeInput = this.inputFraisBadgeView.nativeElement as HTMLElement;
+
+  }
 
   ngOnInit(): void {
 
 
-    this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+    this.tauxCommissionIntermediaireList$ = this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
     this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
     this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
               .subscribe(value => {
@@ -446,7 +456,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
       {label: 'Documentation', icon: 'pi pi-fw pi-file'},
       {label: 'Settings', icon: 'pi pi-fw pi-cog'}
       ];
-      this.activeItem = this.items[0];
+    this.activeItem = this.items[0];
 
     this.entityValidations = [
       {
@@ -693,9 +703,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
         }
     });
     
-  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
-  this.store.dispatch(arrondissementAction.loadArrondissement());
-  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+    this.arrondissementList$ = this.store.pipe(select(arrondissementSelector.arrondissementList));
+    this.store.dispatch(arrondissementAction.loadArrondissement());
+    this.arrondissementList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.loading = false;
@@ -703,9 +713,9 @@ export class PoliceComponent implements OnInit, OnDestroy {
               }
   });
 
-  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
-  this.store.dispatch(secteurAction.loadSecteur());
-  this.secteurList$.pipe(takeUntil(this.destroy$))
+    this.secteurList$ = this.store.pipe(select(secteurSelector.secteurList));
+    this.store.dispatch(secteurAction.loadSecteur());
+    this.secteurList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.loading = false;
@@ -925,6 +935,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
         });
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+    this.FamilyListToImport = [];
   }
 
 
@@ -939,7 +950,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     .subscribe(value => {
       if (value) {
         this.regionList = value.slice();
-        this.regionList = this.regionList.filter(element=> element.idTypePays===event.value.id);
+        this.regionList = this.regionList.filter(element => element.idTypePays === event.value.id);
       }
   });
   }
@@ -949,7 +960,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     .subscribe(value => {
       if (value) {
         this.departementList = value.slice();
-        this.departementList = this.departementList.filter(element=> element.idRegion===event.value.id);
+        this.departementList = this.departementList.filter(element => element.idRegion === event.value.id);
       }
   });
   }
@@ -959,7 +970,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     .subscribe(value => {
       if (value) {
         this.communeList = value.slice();
-        this.communeList = this.communeList.filter(element=> element.idDepartement===event.value.id);
+        this.communeList = this.communeList.filter(element => element.idDepartement === event.value.id);
       }
   });
   }
@@ -969,7 +980,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     .subscribe(value => {
       if (value) {
         this.arrondissementList = value.slice();
-        this.arrondissementList = this.arrondissementList.filter(element=> element.idCommune===event.value.id);
+        this.arrondissementList = this.arrondissementList.filter(element => element.idCommune === event.value.id);
       }
   });
   }
@@ -979,7 +990,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     .subscribe(value => {
       if (value) {
         this.secteurList = value.slice();
-        this.secteurList = this.secteurList.filter(element=> element.idArrondissement===event.value.id);
+        this.secteurList = this.secteurList.filter(element => element.idArrondissement === event.value.id);
       }
   });
   }
@@ -1003,12 +1014,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
 
-  supprimerAdherent(adherent:Adherent){
+  supprimerAdherent(adherent: Adherent){
   this.store.dispatch(featureActionAdherent.deleteAdherent(adherent));
   }
 
   modifierAdherent(adherent: Adherent){
-    this.adherent= {...adherent};
+    this.adherent = {...adherent};
     this.adherent.dateNaissance = new Date(this.adherent.dateNaissance);
     this.displayDialogFormUpdateAdherent = true;
     this.adherentForm.patchValue(this.adherent);
@@ -1017,7 +1028,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
 
   changePrime(event) {
-        this.selectedTypePrime=event.value;
+        this.selectedTypePrime = event.value;
     /*
     console.log(event.value);
     if (event.value.libelle === "famille") {
@@ -1043,7 +1054,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     */
   }
   enregistrerAdherent() {
-    this.adherentFamille.push({adherent:this.adherentForm.value, famille: this.adherentFamilleList});
+    this.adherentFamille.push({adherent: this.adherentForm.value, famille: this.adherentFamilleList});
     this.adherentForm.reset();
     this.adherentFamilleList = [];
     console.log(this.adherentFamille);
@@ -1058,20 +1069,20 @@ export class PoliceComponent implements OnInit, OnDestroy {
     /* if(this.groupe.prime.primeAnnuelle){
       this.groupe.prime.primeAnnuelle = removeBlanks(this.groupe.prime.primeAnnuelle +'');
     } */
-    if(this.groupe.prime.primeAdulte){
-      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte +'');
+    if (this.groupe.prime.primeAdulte){
+      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte + '');
     }
-    if(this.groupe.prime.primeConjoint){
-      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint+'');
+    if (this.groupe.prime.primeConjoint){
+      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint + '');
     }
-    if(this.groupe.prime.primeEmploye){
-      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye+'');
+    if (this.groupe.prime.primeEmploye){
+      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye + '');
     }
-    if(this.groupe.prime.primeEnfant){
-      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant+'');
+    if (this.groupe.prime.primeEnfant){
+      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant + '');
     }
-    if( this.groupe.prime.primeFamille){
-      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille+'');
+    if ( this.groupe.prime.primeFamille){
+      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille + '');
     }
     this.groupe.adherentFamille = this.adherentFamille;
     console.log(this.groupe);
@@ -1099,32 +1110,32 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   getNewDate(value: number): Date {
     this.dateEcheance = new Date(this.policeForm.get('dateEffet').value);
-    this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
-    if(this.typeDureeSelected === 'Jour') {
+    this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() - 1));
+    if (this.typeDureeSelected === 'Jour') {
       return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
-    } else if(this.typeDureeSelected === 'Mois') {
+    } else if (this.typeDureeSelected === 'Mois') {
         return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
-      } else if(this.typeDureeSelected === 'Annee') {
+      } else if (this.typeDureeSelected === 'Annee') {
         return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
       }
     }
 
     getNewDateForGroupe(value: number): Date {
       this.dateEcheance = new Date(this.groupeForm.get('dateEffet').value);
-      this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+      this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() - 1));
       console.log(this.dateEcheance);
-      if(this.typeDureeSelected === 'Jour') {
+      if (this.typeDureeSelected === 'Jour') {
         return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
-      } else if(this.typeDureeSelected === 'Mois') {
+      } else if (this.typeDureeSelected === 'Mois') {
           return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
-        } else if(this.typeDureeSelected === 'Annee') {
+        } else if (this.typeDureeSelected === 'Annee') {
           return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
         }
       }
 
     changeTypeDuree(){
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
-    if(this.policeForm.get('duree')) {
+    if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
     }
@@ -1132,7 +1143,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     changeTypeDureeGroupe(event){
       this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
       console.log(this.typeDureeSelected);
-      if(this.dateEcheance && this.groupeForm.get('duree')){
+      if (this.dateEcheance && this.groupeForm.get('duree')){
         this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
         }
       }
@@ -1188,7 +1199,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.displayDialogFormAdherent = true;
     this.groupe = groupe;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe:groupe.id}));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: groupe.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentList = value.slice();
@@ -1198,13 +1209,19 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   editPolice(police: Police) {
     this.police = { ...police };
-    if(this.police.dateEffet) {
+    if (this.police.dateEffet) {
       this.police.dateEffet = new Date(this.police.dateEffet);
     }
-    if(this.police.dateEcheance) {
+    if (this.police.dateEcheance) {
       this.police.dateEcheance = new Date(this.police.dateEcheance);
     }
     this.policeForm.patchValue(this.police);
+    if (this.police.fraisBadge) {
+      this.policeForm.get('fraisBadge').setValue(Number(this.police.fraisBadge).toLocaleString('fr-FR'));
+    }
+    if (this.police.fraisAccessoire) {
+      this.policeForm.get('fraisAccessoire').setValue(Number(this.police.fraisAccessoire).toLocaleString('fr-FR'));
+    }
     this.displayDialogFormPolice = true;
   }
 
@@ -1226,8 +1243,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   onCreate() {
     this.police = this.policeForm.value;
-    this.police.fraisAccessoire = removeBlanks(this.police.fraisAccessoire+'');
-    this.police.fraisBadge = removeBlanks(this.police.fraisBadge+'');
+    this.police.fraisAccessoire = removeBlanks(this.police.fraisAccessoire + '');
+    this.police.fraisBadge = removeBlanks(this.police.fraisBadge + '');
     this.police.dateEcheance = this.policeForm.get('dateEcheance').value;
     console.log(this.police);
     this.confirmationService.confirm({
@@ -1239,6 +1256,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
           this.store.dispatch(
             featureAction.createPolice(this.police)
           );
+          this.displayDialogFormPolice = false;
         } else {
           console.log(this.policeForm.value);
           this.store.dispatch(
@@ -1446,7 +1464,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   /**afficher les details de la police */
   onRowSelectPolice(police: Police) {
-    this.police = {...police}
+    this.police = {...police};
     this.infosPolice = true;
     this.policeForm.patchValue(this.police);
   }
@@ -1456,12 +1474,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
   saisiePrimePersonne() {
-    console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
-    if(this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
-      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value+'');
-      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value+'');
+    console.log('le montant saisie de la prime par personne est' + this.plafondForm.get('plafondAnnuellePersonne').value);
+    if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
       
-      if(plafondPersonne > plafondFamille){
+      if (plafondPersonne > plafondFamille){
         this.valideMontantPlafond = false;
         this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
     } else {
@@ -1471,12 +1489,12 @@ export class PoliceComponent implements OnInit, OnDestroy {
 }
 
   saisiePrimeFamille() {
-    console.log('le montant saisie de la prime par personne est'+this.plafondForm.get('plafondAnnuellePersonne').value);
-    if(this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
-      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value+'');
-      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value+'');
+    console.log('le montant saisie de la prime par personne est' + this.plafondForm.get('plafondAnnuellePersonne').value);
+    if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
       
-      if(plafondPersonne > plafondFamille) {
+      if (plafondPersonne > plafondFamille) {
         this.valideMontantPlafond = false;
         this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
     } else {
@@ -1487,8 +1505,8 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
   /** verifier la date Effet du groupe avec celle de la police */
   checkDateEffet(){
-    if(this.groupeForm.get('dateEffet').value){
-      if(new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
+    if (this.groupeForm.get('dateEffet').value){
+      if (new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
         this.valideDateEffet = false;
         this.showToast("error", "INFORMATION", "la date effet du groupe doit etre superieure à celle de la police");
       } else {
@@ -1500,17 +1518,17 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;
-    this.plafond.plafondAnnuelleFamille = removeBlanks(this.plafond.plafondAnnuelleFamille+'');
-    this.plafond.plafondAnnuellePersonne = removeBlanks(this.plafond.plafondAnnuellePersonne+'');
-    this.plafond.plafondGlobalInternationnal = removeBlanks(this.plafond.plafondGlobalInternationnal+'');
+    this.plafond.plafondAnnuelleFamille = removeBlanks(this.plafond.plafondAnnuelleFamille + '');
+    this.plafond.plafondAnnuellePersonne = removeBlanks(this.plafond.plafondAnnuellePersonne + '');
+    this.plafond.plafondGlobalInternationnal = removeBlanks(this.plafond.plafondGlobalInternationnal + '');
 
-    for(var i=0; i<this.plafondFamilleActeConstruct.length; i++){
-      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond+'');
-      for(var j=0; j<this.plafondFamilleActeConstruct[i].listeActe.length; j++){
-        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond+'');
-        for(var k =0; k<this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond+'');
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe+'');
+    for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
+      for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
+        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
+        for (var k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
         }
       }
     }
@@ -1518,7 +1536,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     this.plafond.groupe = this.groupe;
     console.log(this.plafond);
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
-    this.plafondFamilleActe = [{garantie:{}}];
+    this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
@@ -1526,7 +1544,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
   }
 
   addSousActe() {
-  this.plafondActe[this.indexeActe].listeSousActe =this.plafondSousActe;
+  this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
   console.log(this.plafondActe);
   }
 
@@ -1541,30 +1559,30 @@ export class PoliceComponent implements OnInit, OnDestroy {
 
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
-    for( var i=0; i<this.plafondFamilleActeConstruct.length; i++){
+    for ( var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
       /** verifier si la garantie existe deja, juste le modifier */
-      if(this.plafondFamilleActeConstruct[i].garantie.id===rowData.garantie.id) {
+      if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id) {
         console.log('oui');
         this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
         this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         this.plafondFamilleActeTemp.listeActe = this.plafondActe;
         console.log(i);
         /** enregistrer */
-        this.plafondFamilleActeConstruct[i]=this.plafondFamilleActeTemp;
+        this.plafondFamilleActeConstruct[i] = this.plafondFamilleActeTemp;
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
         }
     }
 
     /** si la garantie n'est pas encore ajouté, ajouter */
-    this.plafondFamilleActeConstruct.forEach( async (element,index)=>{
-    if(element.garantie.id===rowData.garantie.id) {
+    this.plafondFamilleActeConstruct.forEach( async (element, index) => {
+    if (element.garantie.id === rowData.garantie.id) {
     console.log('oui');
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
     console.log(index);
-    this.plafondFamilleActeConstruct[index]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     return;
     }
@@ -1575,7 +1593,7 @@ export class PoliceComponent implements OnInit, OnDestroy {
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-    this.plafondFamilleActeConstruct[this.countfamilleActe]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     console.log(this.countfamilleActe);
     this.countfamilleActe++;
@@ -1587,14 +1605,15 @@ export class PoliceComponent implements OnInit, OnDestroy {
   /**obtenir les sous actes pour un acte donné */
   getSousActe(rowData, ri){
     this.plafondSousActe = [];
-    if(!rowData.listeSousActe){
+    if (!rowData.listeSousActe){
 
-    this.sousActeList.forEach((element)=>{
+    this.sousActeList.forEach((elements) => {
       console.log(rowData);
-       if(element.idTypeActe === rowData.acte.id){
-         this.plafondSousActe.push({sousActe:element, taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: rowData.montantPlafond});
+      if (elements.idTypeActe === rowData.acte.id){
+         this.plafondSousActe.push({sousActe: elements,
+          taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: rowData.montantPlafond});
        }
-    })
+    });
 
 
     } else {
@@ -1624,7 +1643,7 @@ changeGarantie(garantie, indexLigne: number) {
   }
   */
   
- if(this.plafondActe.length===0){
+  if (this.plafondActe.length === 0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
 
     //this.acteList.forEach((element)=>{
@@ -1632,20 +1651,20 @@ changeGarantie(garantie, indexLigne: number) {
       //if (element.idTypeGarantie === garantie.value.id) {
         //this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
       //}});
-    for(var j=0; j<this.acteList.length; j++){
+    for (var j = 0; j < this.acteList.length; j++){
 
-    if(this.acteList[j].idTypeGarantie === garantie.value.id) {
+    if (this.acteList[j].idTypeGarantie === garantie.value.id) {
       this.plafondSousActe = [];
       // recuperer les sous actes de l'acte
-      for(var i=0; i<this.sousActeList.length; i++){
-        if(this.sousActeList[i].idTypeActe === this.acteList[j].id) {
-          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux:this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0, montantPlafondParActe: 0})
+      for (var i = 0; i < this.sousActeList.length; i++){
+        if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0, montantPlafondParActe: 0});
         }
       }
-      this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
+      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
     }
   }
-  console.log(this.plafondActe);
+    console.log(this.plafondActe);
   }
 }
 
@@ -1657,7 +1676,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.destroy$.unsubscribe();
   }
 
-  validerPolice(police:Police){
+  validerPolice(police: Police){
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir valider la police?',
       header: 'Confirmation',
@@ -1668,7 +1687,7 @@ changeGarantie(garantie, indexLigne: number) {
     });
   }
 
-  cloturePolice(police:Police){
+  cloturePolice(police: Police){
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir clôturer la police?',
       header: 'Confirmation',
@@ -1805,6 +1824,17 @@ changeGarantie(garantie, indexLigne: number) {
     /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
     console.log('*************this.genre*************', this.genre);*/
     this.setAdherentPrincipal(this.adherentSelected);
+  }
+
+  getAdherentFiles(event: any): void {
+    console.log(event);
+    this.policeService.loadAdherentsByExcelFile(event).subscribe(
+        (res) => {
+          this.FamilyListToImport = res;
+          this.adherentFamille = res;
+          this.afficheDetail = true;
+        }
+    );
   }
 
 }

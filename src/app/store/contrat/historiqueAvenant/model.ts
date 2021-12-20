@@ -27,6 +27,9 @@ export interface HistoriqueAvenant {
     dateAvenant?: Date;
     file?: FormData;
     fileToLoad?: File;
+    valide?: boolean;
+    observation?: string;
+    typeDemandeur?: TypeDemandeur;
 }
 
 export enum TypeEtat {
@@ -41,7 +44,9 @@ export enum TypeHistoriqueAvenant {
     MODIFICATION = 'MODIFICATION',
     RETRAIT = 'RETRAIT',
     INCORPORATION = 'INCORPORATION',
-    AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE'
+    AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE',
+    RESILIATION = 'RESILIATION',
+    SUSPENSION = 'SUSPENSION',
 }
 
 export interface HistoriqueAvenantAdherant {
@@ -167,7 +172,7 @@ export interface HistoriqueAvenantPrime {
     historiqueAvenant?: HistoriqueAvenant;
 }
 
-export interface HistoriqueAvenantFile {
-    avenant?: HistoriqueAvenant;
-    file?: FormData;
+export enum TypeDemandeur {
+    VIMSO = 'VIMSO',
+    SOUSCRIPTEUR = 'SOUSCRIPTEUR',
 }

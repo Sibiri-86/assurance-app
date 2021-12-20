@@ -86,13 +86,13 @@ export class GarantComponent implements OnInit, OnDestroy {
   dimensionPeriodeList: Array<DimensionPeriode>;
   garant: Garant;
   selectedGarants: Garant[];
-  displayDialogFormGarant: boolean = false;
+  displayDialogFormGarant = false;
   garantForm: FormGroup;
   statusObject$: Observable<Status>;
   entityValidations: Array<EntityValidations>;
   typeGarantList$: Observable<Array<typeGarant.Garant>>;
   typeGarantList: Array<typeGarant.Garant>;
-  loading:boolean;
+  loading: boolean;
   secteurList: Array<Secteur>;
   secteurList$: Observable<Array<Secteur>>;
   banqueList: Array<Banque>;
@@ -106,26 +106,26 @@ export class GarantComponent implements OnInit, OnDestroy {
 
 
   constructor(private formBuilder: FormBuilder,
-    private store: Store<AppState>, private messageService: MessageService, 
-    private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) { 
+              private store: Store<AppState>, private messageService: MessageService,
+              private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
       this.garantForm = this.formBuilder.group({
         id: new FormControl(''),
         code: new FormControl(''),
-        nom: new FormControl('',[Validators.required]),
-        contact: new FormControl('',[Validators.required]),
-        adresseEmail: new FormControl(null,[Validators.required, Validators.email]),
-        personneRessource1: new FormControl('',[Validators.required]),
-        contactPersonneRessource1: new FormControl('',[Validators.required]),
-        emailPersonneRessource1: new FormControl('',[Validators.required, Validators.email]),
-        emailPersonneRessource2: new FormControl('',[Validators.email]),
+        nom: new FormControl('', [Validators.required]),
+        contact: new FormControl('', [Validators.required]),
+        adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
+        personneRessource1: new FormControl('', [Validators.required]),
+        contactPersonneRessource1: new FormControl('', [Validators.required]),
+        emailPersonneRessource1: new FormControl('', [Validators.required, Validators.email]),
+        emailPersonneRessource2: new FormControl('', [Validators.email]),
         personneRessource2: new FormControl(''),
         contactPersonneRessource2: new FormControl(''),
-        numeroCompteBancaire1: new FormControl('',[Validators.required]),
+        numeroCompteBancaire1: new FormControl('', [Validators.required]),
         numeroCompteBancaire2: new FormControl(''),
         adressePostale: new FormControl('', [Validators.required]),
         secteurActivite: new FormControl('', [Validators.required]),
         numeroIfu: new FormControl('', [Validators.required]),
-        periodiciteAppelFond: new FormControl('',[Validators.required]),
+        periodiciteAppelFond: new FormControl('', [Validators.required]),
         rccm: new FormControl('', [Validators.required]),
         region: new FormControl(''),
         typeGarant: new FormControl('', [Validators.required]),
@@ -133,18 +133,18 @@ export class GarantComponent implements OnInit, OnDestroy {
         banque1: new FormControl('', [Validators.required]),
         banque2: new FormControl(''),
         secteur: new FormControl('', [Validators.required]),
-        commissionPrime: new FormControl('',[Validators.required]),
-        commissionAccessoire: new FormControl('',[Validators.required])
+        commissionPrime: new FormControl('', [Validators.required]),
+        commissionAccessoire: new FormControl('', [Validators.required])
       });
 
       this.breadcrumbService.setItems([
         {label: 'Garant'}
     ]);
 
-    this.firstFormGroup = this.formBuilder.group({
+      this.firstFormGroup = this.formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
-    this.secondFormGroup = this.formBuilder.group({
+      this.secondFormGroup = this.formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
 
@@ -340,7 +340,7 @@ ngOnInit(): void {
   ];
 
 
-  this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+  this.tauxCommissionIntermediaireList$ = this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
   this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
   this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -349,7 +349,7 @@ ngOnInit(): void {
               }
   });
 
-  this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
+  this.banqueList$ = this.store.pipe(select(banqueSelector.banqueList));
   this.store.dispatch(banqueAction.loadBanque());
   this.banqueList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -359,7 +359,7 @@ ngOnInit(): void {
               }
   });
 
-  this.typeGarantList$=this.store.pipe(select(typeGarantSelector.garantList));
+  this.typeGarantList$ = this.store.pipe(select(typeGarantSelector.garantList));
   this.store.dispatch(typeGarantAction.loadGarant());
   this.typeGarantList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -369,7 +369,7 @@ ngOnInit(): void {
               }
   });
 
-  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
+  this.arrondissementList$ = this.store.pipe(select(arrondissementSelector.arrondissementList));
   this.store.dispatch(arrondissementAction.loadArrondissement());
   this.arrondissementList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -379,7 +379,7 @@ ngOnInit(): void {
               }
   });
 
-  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
+  this.secteurList$ = this.store.pipe(select(secteurSelector.secteurList));
   this.store.dispatch(secteurAction.loadSecteur());
   this.secteurList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -390,7 +390,7 @@ ngOnInit(): void {
   });
 
 
-  this.garantList$=this.store.pipe(select(garantList));
+  this.garantList$ = this.store.pipe(select(garantList));
   this.store.dispatch(loadGarant());
   this.garantList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -400,7 +400,7 @@ ngOnInit(): void {
               }
   });
 
-  this.paysList$=this.store.pipe(select(paysSelector.paysList));
+  this.paysList$ = this.store.pipe(select(paysSelector.paysList));
   this.store.dispatch(loadPays());
   this.paysList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -410,7 +410,7 @@ ngOnInit(): void {
   });
 
 
-  this.regionList$=this.store.pipe(select(regionSelector.regionList));
+  this.regionList$ = this.store.pipe(select(regionSelector.regionList));
   this.store.dispatch(loadRegion());
   this.regionList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -419,7 +419,7 @@ ngOnInit(): void {
               }
   });
 
-  this.departementList$=this.store.pipe(select(departementSelector.departementList));
+  this.departementList$ = this.store.pipe(select(departementSelector.departementList));
   this.store.dispatch(loadDepartement());
   this.departementList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -428,7 +428,7 @@ ngOnInit(): void {
               }
   });
 
-  this.communeList$=this.store.pipe(select(communeSelector.communeList));
+  this.communeList$ = this.store.pipe(select(communeSelector.communeList));
   this.store.dispatch(loadCommune());
   this.communeList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -437,7 +437,7 @@ ngOnInit(): void {
               }
   });
 
-  this.secteurActiviteList$=this.store.pipe(select(secteurActiviteSelector.secteurActiviteList));
+  this.secteurActiviteList$ = this.store.pipe(select(secteurActiviteSelector.secteurActiviteList));
   this.store.dispatch(loadSecteurActivite());
   this.secteurActiviteList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -446,7 +446,7 @@ ngOnInit(): void {
               }
   });
 
-  this.dimensionPeriodeList$=this.store.pipe(select(dimensionPeriodeSelector.dimensionPeriodeList));
+  this.dimensionPeriodeList$ = this.store.pipe(select(dimensionPeriodeSelector.dimensionPeriodeList));
   this.store.dispatch(loadDimensionPeriode());
   this.dimensionPeriodeList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
@@ -456,7 +456,7 @@ ngOnInit(): void {
   });
 
   this.statusObject$ = this.store.pipe(select(status));
-    this.checkStatus();
+  this.checkStatus();
 
 }
 
@@ -465,7 +465,7 @@ changeCountry(event) {
   .subscribe(value => {
     if (value) {
       this.regionList = value.slice();
-      this.regionList = this.regionList.filter(element=> element.idTypePays===event.value.id);
+      this.regionList = this.regionList.filter(elements => elements.idTypePays === event.value.id);
     }
 });
 }
@@ -475,7 +475,7 @@ changeRegion(event) {
   .subscribe(value => {
     if (value) {
       this.departementList = value.slice();
-      this.departementList = this.departementList.filter(element=> element.idRegion===event.value.id);
+      this.departementList = this.departementList.filter(element => element.idRegion === event.value.id);
     }
 });
 }
@@ -485,7 +485,7 @@ changeDepartement(event) {
   .subscribe(value => {
     if (value) {
       this.communeList = value.slice();
-      this.communeList = this.communeList.filter(element=> element.idDepartement===event.value.id);
+      this.communeList = this.communeList.filter(element => element.idDepartement === event.value.id);
     }
 });
 }
@@ -495,7 +495,8 @@ changeCommune(event) {
   .subscribe(value => {
     if (value) {
       this.arrondissementList = value.slice();
-      this.arrondissementList = this.arrondissementList.filter(element=> element.idCommune===event.value.id);
+      // tslint:disable-next-line: no-shadowed-variable
+      this.arrondissementList = this.arrondissementList.filter(element => element.idCommune === event.value.id);
     }
 });
 }
@@ -505,7 +506,7 @@ changeArrondissement(event) {
   .subscribe(value => {
     if (value) {
       this.secteurList = value.slice();
-      this.secteurList = this.secteurList.filter(element=> element.idArrondissement===event.value.id);
+      this.secteurList = this.secteurList.filter(element => element.idArrondissement === event.value.id);
     }
 });
 }
@@ -515,7 +516,7 @@ checkStatus() {
   this.statusObject$.pipe(takeUntil(this.destroy$))
       .subscribe(statusObj => {
         if (statusObj) {
-          //this.loading = false;
+          // this.loading = false;
           this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
           /*
           if (this.isAdding && statusObj.status === StatusEnum.success) {
@@ -548,7 +549,7 @@ voirDetail(garant: Garant) {
 }
 
 editGarant(garant: Garant) {
-//this.garantForm.get('id').setValue(garant.id);
+// this.garantForm.get('id').setValue(garant.id);
 this.garant = {...garant};
 this.garantForm.patchValue(this.garant);
 this.displayDialogFormGarant = true;
@@ -574,8 +575,9 @@ this.confirmationService.confirm({
   header: 'Confirmation',
   icon: 'pi pi-exclamation-triangle',
   accept: () => {
-    if(this.garant.id) { 
+    if (this.garant.id) {
       this.store.dispatch(featureAction.updateGarant(this.garantForm.value));
+      this.displayDialogFormGarant = false;
     }else{
     this.store.dispatch(featureAction.createGarant(this.garantForm.value));
     }
