@@ -858,7 +858,7 @@
                             <div class= "p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="nom">Libelle <span style="color: red !important;">(*)</span></label>
+                                    <label for="nom">Libelle <span style="color: red !important;">*</span></label>
                                     <input id="nom" type="text" formControlName="libelle"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'nom'">
@@ -866,7 +866,7 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="taux">Taux de couverture <span style="color: red !important;">(*)</span></label>
+                                    <label for="taux">Taux de couverture <span style="color: red !important;">*</span></label>
                                     <p-dropdown id="taux" dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'taux'">
@@ -874,7 +874,7 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="territorialite">Territorialité <span style="color: red !important;">(*)</span></label>
+                                    <label for="territorialite">Territorialité <span style="color: red !important;">*</span></label>
                                     <p-multiSelect id="territorialite" dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'territorialite'">
@@ -885,7 +885,7 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="dateEffet">Date effet <span style="color: red !important;">(*)</span></label>
+                                    <label for="dateEffet">Date effet <span style="color: red !important;">*</span></label>
                                     <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
@@ -893,7 +893,7 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="typeDuree">Type durée <span style="color: red !important;">(*)</span></label>
+                                    <label for="typeDuree">Type durée <span style="color: red !important;">*</span></label>
                                     <p-dropdown id="typeDuree" dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe($event)" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="policeForm" [entityField]="'typeDuree'">
@@ -901,7 +901,7 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="duree">Durée <span style="color: red !important;">(*)</span></label>
+                                    <label for="duree">Durée <span style="color: red !important;">*</span></label>
                                     <input id="duree" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'duree'">
@@ -918,21 +918,21 @@
                                     </app-entity-validation>
                                 </div>
                                 <div class="p-field p-col-3">
-                                    <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
+                                    <label for="adresse">Adresse <span style="color: red !important;">*</span></label>
                                     <input id="adresse" type="text" formControlName="adresse"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'adresse'">
                                     </app-entity-validation>
                                 </div>
                                 <div class="p-field p-col-3">
-                                    <label for="description">Description <span style="color: red !important;">(*)</span></label>
+                                    <label for="description">Description <span style="color: red !important;">*</span></label>
                                     <input id="description" type="text" formControlName="description"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'description'">
                                     </app-entity-validation>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label for="commune">Commune<span style="color: red !important;">(*)</span></label>
+                                    <label for="commune">Commune<span style="color: red !important;">*</span></label>
                                     <p-dropdown id="commune" dataKey="id" inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'commune'">
@@ -953,7 +953,7 @@
                                 </div>-->
 
                                 <div class="p-field p-col-4">
-                                    <label for="typePrime">Type de prime<span style="color: red !important;">(*)</span></label>
+                                    <label for="typePrime">Type de prime<span style="color: red !important;">*</span></label>
                                     <p-dropdown id="typePrime" dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
@@ -1723,14 +1723,14 @@
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="matriculeGarant">Matricule Garant <span style="color: red !important;">(*)</span></label>
+                            <label for="matriculeGarant">Matricule Garant <span style="color: red !important;">*</span></label>
                             <input id="matriculeGarant" type="text"  formControlName="matriculeGarant" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'matriculeGarant'">
                             </app-entity-validation>
                         </div>
                         <div class="p-field p-col">
-                            <label for="nom">Nom <span style="color: red !important;">(*)</span></label>
+                            <label for="nom">Nom <span style="color: red !important;">*</span></label>
                             <input id="nom" type="text" required formControlName="nom"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'nom'">
@@ -1738,7 +1738,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="prenom">Prenom <span style="color: red !important;">(*)</span></label>
+                            <label for="prenom">Prenom <span style="color: red !important;">*</span></label>
                             <input id="prenom" type="text"  formControlName="prenom" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'prenom'">
@@ -1749,7 +1749,7 @@
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="numeroTelephone">Telephone <span style="color: red !important;">(*)</span></label>
+                            <label for="numeroTelephone">Telephone <span style="color: red !important;">*</span></label>
                             <input id="numeroTelephone" type="text" formControlName="numeroTelephone" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'numeroTelephone'">
@@ -1757,7 +1757,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="adresseEmail">Adresse email <span style="color: red !important;">(*)</span></label>
+                            <label for="adresseEmail">Adresse email <span style="color: red !important;">*</span></label>
                             <input id="adresseEmail" type="text"  formControlName="adresseEmail" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'adresseEmail'">
@@ -1765,7 +1765,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
+                            <label for="adresse">Adresse <span style="color: red !important;">*</span></label>
                             <input id="adresse" type="text" formControlName="adresse" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'adresse'">
@@ -1776,7 +1776,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
-                            <label for="dateNaissance">Date de naissance <span style="color: red !important;">(*)</span></label>
+                            <label for="dateNaissance">Date de naissance <span style="color: red !important;">*</span></label>
                             <p-calendar id="dateNaissance"  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'dateNaissance'">
@@ -1784,7 +1784,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lieuNaissance">Lieu de naissance <span style="color: red !important;">(*)</span></label>
+                            <label for="lieuNaissance">Lieu de naissance <span style="color: red !important;">*</span></label>
                             <input id="lieuNaissance" type="text" formControlName="lieuNaissance" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'lieuNaissance'">
@@ -1792,7 +1792,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="dateEntree">Date entrée <span style="color: red !important;">(*)</span></label>
+                            <label for="dateEntree">Date entrée <span style="color: red !important;">*</span></label>
                             <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'dateEntree'">
@@ -1802,7 +1802,7 @@
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="genre">Genre <span style="color: red !important;">(*)</span></label>
+                            <label for="genre">Genre <span style="color: red !important;">*</span></label>
                             <p-dropdown id="genre"  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'genre'">
@@ -1818,7 +1818,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="qualiteAssure">Qualite assuré <span style="color: red !important;">(*)</span></label>
+                            <label for="qualiteAssure">Qualite assuré <span style="color: red !important;">*</span></label>
                             <p-dropdown id="qualiteAssure"  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualiteAssureList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'qualiteAssure'">
