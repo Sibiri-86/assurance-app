@@ -23,6 +23,7 @@ export interface Groupe {
     description?: string;
     adherentFamille?: Array<AdherentFamille>;
     groupeId?: string;
+    listGroupe?: Array<Groupe>;
 }
 
 export interface GroupeList{
