@@ -296,21 +296,21 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(null),
-      nom: new FormControl("", [Validators.required]),
-      prenom: new FormControl("", [Validators.required]),
-      matriculeSouscripteur:new FormControl("", [Validators.required]),
-      dateNaissance: new FormControl("", [Validators.required]),
-      matriculeGarant: new FormControl("", [Validators.required]),
+      nom: new FormControl(null, [Validators.required]),
+      prenom: new FormControl(null, [Validators.required]),
+      matriculeSouscripteur:new FormControl(null, [Validators.required]),
+      dateNaissance: new FormControl(null, [Validators.required]),
+      matriculeGarant: new FormControl(null, [Validators.required]),
       // matriculeSouscripteur:new FormControl("", [Validators.required]),
-      lieuNaissance: new FormControl("", [Validators.required]),
-      numeroTelephone: new FormControl("", [Validators.required]),
-      adresse: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl("", [Validators.required]),
-      profession: new FormControl(""),
-      referenceBancaire: new FormControl(""),
-      qualiteAssure: new FormControl("", [Validators.required]),
-      genre: new FormControl("", [Validators.required]),
-      dateEntree: new FormControl("", [Validators.required])
+      lieuNaissance: new FormControl(null, [Validators.required]),
+      numeroTelephone: new FormControl(null, [Validators.required]),
+      adresse: new FormControl(null, [Validators.required]),
+      adresseEmail: new FormControl(null, [Validators.required]),
+      profession: new FormControl(null),
+      referenceBancaire: new FormControl(null),
+      qualiteAssure: new FormControl(null, [Validators.required]),
+      genre: new FormControl(null, [Validators.required]),
+      dateEntree: new FormControl(null, [Validators.required])
     });
 
     this.policeForm = this.formBuilder.group({

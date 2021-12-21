@@ -1069,8 +1069,10 @@
                                     <input id="prenom" type="text"  formControlName="prenom" pInputText>
                                 </div>
 
-                                <label for="numeroTelephone">Telephone <span style="color: red">(*)</span> </label>
-                                <p-inputMask id="numeroTelephone" formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                                <div class="p-field p-col">
+                                    <label for="numeroTelephone">Telephone <span style="color: red">(*)</span> </label>
+                                    <p-inputMask id="numeroTelephone" formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                                </div>
                             </div>
 
 
@@ -1744,7 +1746,7 @@
     </p-dialog>
 
 
-<p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
+<p-dialog [(visible)]="displayDialogFormAddAdherent" header="Ajouter un adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}" (onHide)="adherentForm.reset()">
     <ng-template pTemplate="content">
         <p-fieldset legend="Adhérent" toggleable="true">
             <!--filtre des adhérents principaux-->
@@ -1784,7 +1786,7 @@
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
+                        <div class="p-field p-col">
                             <label for="matriculeSouscripteur">Matricule Souscripteur <span style="color: red">(*)</span> </label>
                             <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
@@ -1810,16 +1812,13 @@
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
+                        <div class="p-field p-col">
                             <label for="adresse">Adresse <span style="color: red !important;">(*)</span></label>
                             <input id="adresse" type="text" formControlName="adresse" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'adresse'">
                             </app-entity-validation>
                         </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
                             <label for="dateNaissance">Date de naissance <span style="color: red !important;">(*)</span></label>
@@ -1840,16 +1839,13 @@
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
+                        <div class="p-field p-col">
                             <label for="dateEntree">Date entrée <span style="color: red !important;">(*)</span></label>
                             <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'dateEntree'">
                             </app-entity-validation>
                         </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="genre">Genre <span style="color: red !important;">(*)</span></label>
                             <p-dropdown id="genre"  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -1866,6 +1862,9 @@
                             </app-entity-validation>
                         </div>
 
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="qualiteAssure">Qualite assuré <span style="color: red !important;">(*)</span></label>
                             <p-dropdown id="qualiteAssure"  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -1873,9 +1872,6 @@
                                                    [formGroup]="adherentForm" [entityField]="'qualiteAssure'">
                             </app-entity-validation>
                         </div>
-                    </div>
-
-                    <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="referenceBancaire">Reference bancaire</label>
                             <input id="referenceBancaire" type="text"  formControlName="referenceBancaire" pInputText>
@@ -1904,6 +1900,7 @@
                         <th>Prenom</th>
                         <th>Telephone</th>
                         <th>Date de naissance</th>
+                        <th>Date d'entrée</th>
                         <th>Genre</th>
                         <th>Qualite assuré</th>
                         <th style="width:8em"></th>
@@ -1961,6 +1958,16 @@
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.dateNaissance | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData?.dateEntree | formatTableValue : 'date'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
