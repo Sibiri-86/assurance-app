@@ -2052,7 +2052,7 @@
                         </ng-template>
                         <ng-template pTemplate="summary">
                             <div class="p-d-flex p-ai-center p-jc-between">
-                                {{historiqueAvenants1 ? historiqueAvenants1.length : 0 }} Avenant(s).
+                                {{historiqueAvenants1 ? historiqueAvenants1?.length : 0 }} Avenant(s).
                             </div>
                         </ng-template>
                     </p-table>
@@ -2065,7 +2065,7 @@
         <!--Affichage des details des avenants d'incorporation -->
         <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentIncorp"
                   header="Adhérent(s) et membre(s) de familles ajouté(s)" [modal]="true" styleClass="p-fluid"
-                  [style]="{'width':'1200px'}">
+                  [style]="{'width':'1300px'}">
             <ng-template pTemplate="content">
                 <div class="">
                     <div class="card">
@@ -2102,6 +2102,12 @@
 
                             <ng-template pTemplate="header">
                                 <tr>
+                                    <th pSortableColumn="numero" style="width: 3rem">N°
+                                        <p-sortIcon field="numero"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                        <p-sortIcon field="numeroGarant"></p-sortIcon>
+                                    </th>
                                     <th pSortableColumn="nom" style="width: 7rem">Nom
                                         <p-sortIcon field="nom"></p-sortIcon>
                                     </th>
@@ -2126,7 +2132,9 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-adherentHis>
-                                <tr [ngClass]="{'colorZone': !adherentHis?.adherent?.adherentPrincipal}">
+                                <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.numero}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.matriculeGarant}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
                                     <td><span
@@ -2161,7 +2169,7 @@
         <!--Affichage des details des avenants de retrait -->
         <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentRetrait"
                   header="Adhérent(s) et membre(s) de familles Rétiré(s)" [modal]="true" styleClass="p-fluid"
-                  [style]="{'width':'1200px'}">
+                  [style]="{'width':'1300px'}">
             <ng-template pTemplate="content">
                 <div class="">
                     <div class="card">
@@ -2201,6 +2209,12 @@
                                     <th style="width: 3rem">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
+                                    <th pSortableColumn="numero" style="width: 3rem">N°
+                                        <p-sortIcon field="numero"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                        <p-sortIcon field="numeroGarant"></p-sortIcon>
+                                    </th>
                                     <th pSortableColumn="nom" style="width: 7rem">Nom
                                         <p-sortIcon field="nom"></p-sortIcon>
                                     </th>
@@ -2229,6 +2243,8 @@
                                     <td>
                                         <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
                                     </td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.numero}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.matriculeGarant}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.prenom}}</span></td>
                                     <td><span
@@ -2259,7 +2275,7 @@
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
     <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid"
-              [style]="{width: '1200px'}">
+              [style]="{width: '1300px'}">
         <div class="card">
             <p-table #dtAL [value]="adherentsListeActuelle" [columns]="colsAL" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -2298,6 +2314,12 @@
 
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pSortableColumn="numero" style="width: 3rem">N°
+                            <p-sortIcon field="numero"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                            <p-sortIcon field="numeroGarant"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="nom">Nom
                             <p-sortIcon field="nom"></p-sortIcon>
                         </th>
@@ -2313,7 +2335,9 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-adherent>
-                    <tr>
+                    <tr [ngClass]="{'colorZone': !adherent?.adherentPrincipal}">
+                        <td><span class="p-column-title">{{adherent?.numero}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.matriculeGarant}}</span></td>
                         <td><span class="p-column-title">{{adherent?.nom}}</span>
 
                         </td>
@@ -2338,7 +2362,7 @@
     <!--Affichage des details des avenants affaire nouvelle -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentAffaireNouvelle"
               header="Adhérent(s) et membre(s) de la police Affaire Nouvelle" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1200px'}">
+              [style]="{'width':'1300px'}">
         <ng-template pTemplate="content">
             <div class="">
                 <div class="card">
@@ -2378,6 +2402,12 @@
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
+                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                    <p-sortIcon field="numero"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                    <p-sortIcon field="numeroGarant"></p-sortIcon>
+                                </th>
                                 <th pSortableColumn="nom" style="width: 7rem">Nom
                                     <p-sortIcon field="nom"></p-sortIcon>
                                 </th>
@@ -2406,6 +2436,9 @@
                                 <td>
                                     <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
                                 </td>
+
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.numero}}</span></td>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.matriculeGarant}}</span></td>
                                 <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
                                 <td><span class="p-column-title">{{adherentHis?.adherent?.prenom}}</span></td>
                                 <td><span
