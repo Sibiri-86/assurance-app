@@ -2019,7 +2019,7 @@
                                 </td>
                                 <td colspan="2">
                                     <div class="p-grid p-mt-1">
-                                        <div class="p-col-">
+                                        <div class="p-col- p-mr-2">
                                             <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide)" [(ngModel)]="rowdata.valide"></p-inputSwitch>
                                         </div>
                                         <div class="p-col-">
@@ -2029,14 +2029,14 @@
                                             </button>
                                         </div>
                                         <div class="p-col-">
-                                            <button pButton pRipple icon="pi pi-dollar" pTooltip="voir Prime"
-                                                    class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="voirPrime(rowdata)">
+                                            <button pButton pRipple icon="pi pi-search" pTooltip="voir Prime"
+                                                    class="p-button-rounded p-button-warning p-mr-2"
+                                                    (click)="voirPrime(rowdata)" [disabled]="!rowdata.valide">
                                             </button>
                                         </div>
                                         <div class="p-col-">
-                                            <button pButton pRipple icon="pi pi-check" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
-                                                    class="p-button-rounded p-button-info p-mr-2">
+                                            <button pButton pRipple icon="pi pi-dollar" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
+                                                    class="p-button-rounded p-button-help p-mr-2">
                                             </button>
                                         </div>
                                         <div class="p-col-">
@@ -3339,7 +3339,7 @@
         </p-tabView>
     </p-dialog>
 
-    <p-dialog [maximizable]="true" [(visible)]="displayDialogPrime"
+    <p-dialog [maximizable]="true" [(visible)]="displayDialogPrime" (onHide)="annulerPrime()"
     header="VISUALISATION DES PRIMES" [modal]="true" styleClass="p-fluid"
     [style]="{'width':'1200px'}">
 <ng-template pTemplate="content">
