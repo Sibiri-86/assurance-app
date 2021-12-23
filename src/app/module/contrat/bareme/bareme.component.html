@@ -142,7 +142,7 @@
 
 		</div>
 
-        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="dispplayDialogueBareme" header="Paramétrage des types de barème" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="dispplayDialogueBareme" header="Paramétrage des types de barème" (onHide)="quitter()" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
             
                 <div class="card">
 
@@ -250,7 +250,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="rowData.nombre">
+                                            <input pInputText type="text" [(ngModel)]="rowData.nombre" placeholder="nombre acte">
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{rowData.nombre}}
@@ -375,7 +375,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="rowData.nombre" required>
+                                <input pInputText type="text" [(ngModel)]="rowData.nombre" placeholder="nombre acte" required>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.nombre}}
@@ -494,7 +494,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="rowData2.nombre" required>
+                                <input pInputText type="text" [(ngModel)]="rowData2.nombre" placeholder="nombre acte" required>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData2.nombre}}
@@ -560,7 +560,7 @@
    <br/>
     <div class="p-grid p-justify-between">
         <div>
-            <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+            <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" (click)="quitter()" ></button>
         </div>
         <div>
             <button pButton pRipple label="Valider" [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" (click)="validerPlafond()" ></button>
@@ -568,6 +568,11 @@
     </div>
    </div>    
 </p-dialog>
+
+
+
+
+
 
 
 
@@ -964,6 +969,8 @@
 
 <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrage" header="Recapitulatif" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}">
     <ng-template pTemplate="content">
+        
+        
         <p-table #dtConfigurationPlafond [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
@@ -1017,7 +1024,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="plafond.nombre">
+                                <input pInputText type="text" [(ngModel)]="plafond.nombre" placeholder="nombre acte">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{plafond.nombre}}
@@ -1134,7 +1141,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="acte.nombre">
+                                    <input pInputText type="text" [(ngModel)]="acte.nombre" placeholder="nombre acte">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{acte.nombre}}
@@ -1223,7 +1230,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/acte" required>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe.montantPlafond}}
@@ -1233,7 +1240,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/acte" required>
+                                        <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe?.montantPlafond}}
@@ -1256,7 +1263,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="sousActe.nombre">
+                                        <input pInputText type="text" [(ngModel)]="sousActe.nombre" placeholder="nombre acte">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe.nombre}}
@@ -1333,6 +1340,13 @@
 </tr>
 </ng-template>
 </p-table>
+
+
+
+
+
+
+
 <br/>
 <br/>
 <div class="p-grid p-justify-between">
