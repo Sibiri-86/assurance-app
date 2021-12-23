@@ -192,6 +192,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayDialogFormAdherentAffaireNouvelle = false;
   displayDialogFormAdherentModification = false;
   displayDialogFormAdherentrenouvellement = false;
+  displayDialogFormAdherentSuspension = false;
   clonedPlafondFamilleActe: { [s: string]: PlafondFamilleActe } = {};
   clonedAdherentFamille: { [s: string]: Adherent } = {};
   clonedPlafondActe: { [s: string]: PlafondActe } = {};
@@ -260,6 +261,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantAdherents3: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents4: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents5: Array<HistoriqueAvenantAdherant>;
+  historiqueAvenantAdherents6: Array<HistoriqueAvenantAdherant>;
   report: Report = {};
   avenantModification: AvenantModification = {};
   historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
@@ -403,6 +405,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantAdherents3 = [];
     this.historiqueAvenantAdherents4 = [];
     this.historiqueAvenantAdherents5 = [];
+    this.historiqueAvenantAdherents6 = [];
     this.policeList = [];
     this.loading = true;
     this.historiqueAvenant = {};
@@ -1573,16 +1576,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.viewAvenantIncorp(avenant, typeHistoriqueAvenant);
         break;
       }
-      case TypeHistoriqueAvenant.MODIFICATION: {
-
-        break;
-      }
       case TypeHistoriqueAvenant.RETRAIT: {
         this.viewAvenantRetrait(avenant, typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-        this.viewAvenantAffaireRenouvellement(avenant, typeHistoriqueAvenant);
+        this.viewAvenantRenouvellement(avenant, typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -1591,6 +1590,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
       case TypeHistoriqueAvenant.RESILIATION: {
         this.viewAvenantResiliation(avenant, typeHistoriqueAvenant);
+        break;
+      }
+      case TypeHistoriqueAvenant.SUSPENSION: {
+        this.viewAvenantSuspension(avenant, typeHistoriqueAvenant);
+        break;
+      }
+      case TypeHistoriqueAvenant.MODIFICATION: {
+        this.viewAvenantModification(avenant, typeHistoriqueAvenant);
         break;
       }
       default: {
@@ -1644,7 +1651,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.displayDialogFormAdherentAffaireNouvelle = true;
   }
 
-  viewAvenantAffaireRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  viewAvenantRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
     console.log(typeof typeHistoriqueAvenant);
     console.log('++++++++++++++++++++avenant.id+++++++++++++++++++++++', avenant.id);
@@ -1688,6 +1695,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.displayDialogFormAdherentResiliation = true;
   }
 
+  viewAvenantSuspension(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+    this.historiqueAvenant = {...avenant};
+    console.log(typeof typeHistoriqueAvenant);
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+        this.historiqueAvenant.id).subscribe(
+        (res: Array<HistoriqueAvenantAdherant>) => {
+          this.historiqueAvenantAdherents6 = res;
+          console.log('=====================res=============', res);
+        }
+    );
+    this.displayDialogFormAdherentSuspension = true;
+  }
+
   printAvenantIncorporation(historiqueAvenant: HistoriqueAvenant) {
     this.typeAvenants = [
       {label: 'Avenant d\'incorporation', icon: 'pi pi-print', command: ($event) => {
@@ -1696,16 +1716,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
-      {label: 'Liste d\'ajout', icon: 'pi pi-print', command: () => {
+      {label: 'Liste d\'incorporation', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.LISTE_INCORPORATION;
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }},
-      {label: 'Facture d\'ajout', icon: 'pi pi-print', command: () => {
+      {label: 'Facture d\'incorporation', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.FACTURE_INCORP;
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
@@ -1714,7 +1737,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     ];
   }
 
-  printAvenantModification() {
+  printAvenantModification(historiqueAvenant: HistoriqueAvenant) {
     this.typeAvenants = [
       {label: 'Avenant de modification', icon: 'pi pi-print', command: ($event) => {
 
@@ -1723,7 +1746,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
         }},
       {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de modification', icon: 'pi pi-print', command: () => {
 
@@ -1746,7 +1772,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de retrait', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.FACTURE_INCORP;
@@ -1818,7 +1847,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste actualisée', icon: 'pi pi-print', command: () => {
-
+          this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de résiliation', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.FACTURE_INCORP;
@@ -1829,6 +1861,36 @@ export class AvenantComponent implements OnInit, OnDestroy {
     ];
   }
 
+  printAvenantSuspension(historiqueAvenant: HistoriqueAvenant) {
+    this.typeAvenants = [
+      {label: 'Avenant de suspension', icon: 'pi pi-print', command: ($event) => {
+          this.report.typeReporting = TypeReport.AVENANT_SUSPENSION;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }},
+      {label: 'Liste de suspension', icon: 'pi pi-print', command: () => {
+          this.report.typeReporting = TypeReport.LISTE_AVENANT_SUSPENSION;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }},
+      {label: 'Liste actualisée', icon: 'pi pi-print', command: () => {
+          this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }},
+      {label: 'Facture de suspension', icon: 'pi pi-print', command: () => {
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }}
+    ];
+  }
+
+
   onTypeHistoriqueAvenantChoose(typeHistoriqueAvenant: TypeHistoriqueAvenant, historiqueAvenant: HistoriqueAvenant) {
     switch (typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION: {
@@ -1836,7 +1898,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.MODIFICATION: {
-        this.printAvenantModification();
+        this.printAvenantModification(historiqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
@@ -1850,8 +1912,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
         this.printAvenantAffaireNouvelle(historiqueAvenant);
         break;
-      }case TypeHistoriqueAvenant.RESILIATION: {
+      }
+      case TypeHistoriqueAvenant.RESILIATION: {
         this.printAvenantResiliation(historiqueAvenant);
+        break;
+      }
+      case TypeHistoriqueAvenant.SUSPENSION: {
+        this.printAvenantSuspension(historiqueAvenant);
         break;
       }
       default: {
@@ -2010,5 +2077,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.historiqueAvenant = res;
         }
     );
+  }
+
+  printListeActualisee(historiqueAvenant: HistoriqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
   }
 }
