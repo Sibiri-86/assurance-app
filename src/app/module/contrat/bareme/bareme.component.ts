@@ -281,13 +281,26 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.baremeForm.reset();
   }
 
-
+ quitter() {
+  this.dispplayDialogueBareme= false;
+  this.baremeForm.reset();
+}
 
   modifierBareme(bareme:Bareme) {
     this.baremeForm.patchValue(bareme);
     this.plafondFamilleActeConstruct = bareme.baremeFamilleActe;
+    // changer les dates effet à la date du jour
+    for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++) {
+      this.plafondFamilleActeConstruct[i].dateEffet= new Date();
+      for (let j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
+        this.plafondFamilleActeConstruct[i].listeActe[j].dateEffet = new Date();
+        for (let k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++) {
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].dateEffet =  new Date();
+        }
+      }
+    }
     this.dispplayDialogueBareme= true;
-  }
+}
 
   supprimerBareme(bareme: Bareme) {
     this.confirmationService.confirm({
