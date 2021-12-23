@@ -1,11 +1,12 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './action';
-import { Plafond, PlafondGroupe, PlafondList } from './model';
+import { BaremeList, Plafond, PlafondGroupe, PlafondList } from './model';
 import {PlafondState} from './state';
 
 const initialState : PlafondState = {
   plafondList: null,
-  plafondGroupe: null
+  plafondGroupe: null,
+  baremeList:null
 };
 
 const featureReducer = createReducer(
@@ -15,6 +16,9 @@ const featureReducer = createReducer(
   })),
   on(featureActions.setPlafondGroupe, (state, payload: Plafond) => ({
     ...state, plafondGroupe: payload
+  })),
+  on(featureActions.setBareme, (state, payload: BaremeList) => ({
+    ...state, baremeList: payload.baremeDtoList
   }))
 
 );

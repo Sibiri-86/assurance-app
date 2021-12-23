@@ -218,6 +218,11 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+    
+    static readonly BAREME = {
+        prod: `${SERVICE_PREFIX}/contrat/bareme`,
+        mock: `assets/mock/contrat/bareme.mock.json`
+    };
 
     static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
         prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
@@ -302,6 +307,14 @@ export class Endpoints {
     };
     static readonly HISTORIQUE_AVENANT_CHANGE_STATUS = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/change-status`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_CALCUL_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/calcule-prime`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_VALIDER_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/valider-prime`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 }

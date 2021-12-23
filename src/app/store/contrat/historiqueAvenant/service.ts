@@ -2,7 +2,7 @@ import {
     Avenant,
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
-    HistoriqueAvenantList,
+    HistoriqueAvenantList, HistoriqueAvenantPrime,
     TypeHistoriqueAvenant
 } from "./model";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
@@ -159,4 +159,16 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    calculerPrime(avenantId: string): Observable<Array<HistoriqueAvenantPrime>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_CALCUL_PRIME)}`,
+            {params: createRequestOption({avenantId})}
+        );
+    }
+
+    validerPrime(historiqueAvenantPrimes: HistoriqueAvenantPrime[]): Observable<any> {
+        return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_VALIDER_PRIME)}`, historiqueAvenantPrimes,
+            {observe: 'response'}
+        );
+    }
 }

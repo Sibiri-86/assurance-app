@@ -4,7 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { PlafondService } from './service';
 import * as featureActions from './action';
-import {Plafond} from './model';
+import {Bareme, Plafond} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 import { Groupe } from '../groupe/model';
@@ -24,8 +24,8 @@ export class PlafondEffects {
         mergeMap((Plafond: Plafond) =>
             this.PlafondService.posPlafond(Plafond).pipe(
                 switchMap(value => [
-                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg)
-                   // featureActions.loadPlafond()
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                   featureActions.loadPlafondGroupe(Plafond.groupe)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -119,4 +119,61 @@ this.actions$.pipe(
 )
 );
 
+    /**effects pour les baremes */
+    createBareme$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createBareme),
+        mergeMap((bareme: Bareme) =>
+            this.PlafondService.postBareme(bareme).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                   featureActions.loadBareme()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
+        updateBareme$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.updateBareme),
+            mergeMap((bareme: Bareme) =>
+                this.PlafondService.updateBareme(bareme).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadBareme()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
+            fetchBareme$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadBareme),
+                mergeMap(() =>
+                    this.PlafondService.$getBaremes().pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setBareme(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+            );
+
+            deleteBareme$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.deleteBareme),
+                mergeMap((bareme: Bareme) =>
+                    this.PlafondService.deleteBareme(bareme).pipe(
+                        switchMap(value => [
+                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.loadBareme()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    ))
+                ));
 }
