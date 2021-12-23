@@ -8,6 +8,7 @@ import { Etat } from "src/app/module/common/models/model";
 import { Status } from "src/app/module/common/models/etat.enum";
 
 export interface PlafondFamilleActe {
+    id?: string;
     garantie?: Garantie;
     montantPlafond?: number;
     dimensionPeriode?: DimensionPeriode;
@@ -18,9 +19,9 @@ export interface PlafondFamilleActe {
     domaine?: Array<QualiteAssure>;
     etat?: Status;
   }
-  
-  export interface PlafondActe {
-    id?: string,
+
+export interface PlafondActe {
+    id?: string;
     acte?: Acte;
     montantPlafond?: number;
     dateEffet?: Date;
@@ -30,8 +31,8 @@ export interface PlafondFamilleActe {
     listeSousActe?: Array<PlafondSousActe>;
     etat?: Status;
   }
-  
-  export interface PlafondSousActe {
+
+export interface PlafondSousActe {
     id?: string,
     sousActe?: SousActe;
     taux?: Taux;
@@ -41,4 +42,4 @@ export interface PlafondFamilleActe {
     dimensionPeriode?: DimensionPeriode;
     nombre?: number;
     etat?: Status;
-  }
+}

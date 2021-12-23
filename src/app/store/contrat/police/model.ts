@@ -52,7 +52,8 @@ export interface Rapport {
     nombreEnfant?: number,
     nombreAdherent?: number,
     nombreFeminin?: number,
-    nombreMasculin?: number
+    nombreMasculin?: number,
+    total?: number
 }
 
 export interface ReportFile {

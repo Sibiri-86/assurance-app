@@ -3,7 +3,8 @@
         <div class="route-bar-breadcrumb">
             <ng-template ngFor let-item let-last="last" [ngForOf]="items">
                 <span>
-                    <ng-container *ngIf="!item.routerLink">{{item.label}}</ng-container>
+                    <ng-container *ngIf="!item.routerLink" > <span [ngClass]="{'styl':true,'colorPolice': item.label ==='Police', 
+                        'colorGarant':item.label ==='Garant', 'colorIntermediaire':item.label ==='Intermediaire', 'colorBareme':item.label ==='Barème', 'colorAvenant':item.label ==='Avenant'}">{{item.label}}</span></ng-container>
                     <span *ngIf="!last"> | </span>
                 </span>
             </ng-template>

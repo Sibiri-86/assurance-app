@@ -14,6 +14,10 @@ export interface Plafond {
     groupe?: Groupe
 }
 
+export interface PlafondConfig {
+    dtoList?: Array<PlafondFamilleActe>
+}
+
 export interface Bareme{
     id?:string,
     libelle?: string,

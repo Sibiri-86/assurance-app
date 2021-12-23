@@ -34,11 +34,28 @@ form label {
     content: "*";
 }
 
-.colorZone{
+.colorPolice {
+    color: #f4a52f;
+}
+
+.colorGarant {
+    color:#fe5288;
+}
+
+.colorIntermediaire {
+    color:#9346dd;
+}
+
+.styl {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.colorZone {
     background-color: rgba(0,0,0,.15) !important;
 }
 
-.colorZoneActe{
+.colorZoneActe {
 background-color: rgba(113, 145, 51, 0.8) !important;
 }
 

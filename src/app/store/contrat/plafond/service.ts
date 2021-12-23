@@ -1,5 +1,5 @@
 import { from } from "rxjs";
-import {Bareme, BaremeList, Plafond, PlafondList} from "./model";
+import {Bareme, BaremeList, Plafond, PlafondConfig, PlafondList} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -70,6 +70,15 @@ $getBaremes(): Observable<BaremeList> {
   );
 }
 
+$getBaremesConfig(typeBareme: string, taux: number): Observable<PlafondConfig> {
+  // @FIXME: get request
+  if(typeBareme && taux){
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/config/${typeBareme}/${taux}`).pipe(
+    map((response: PlafondConfig) => response),
+    catchError(this.handleError())
+  );
+  }
+}
 
 pushFileToStorage(file: File): Observable<any> {
   const data: FormData = new FormData();

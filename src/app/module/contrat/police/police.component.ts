@@ -108,7 +108,7 @@ import * as typePrimeSelector from "../../../store/parametrage/type-prime/select
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
 import {TabMenuModule} from 'primeng/tabmenu';
 import {MenuItem} from 'primeng/api';
-import { Plafond } from "src/app/store/contrat/plafond/model";
+import { Bareme, Plafond } from "src/app/store/contrat/plafond/model";
 import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external/ThirdPartyDraggable";
 import { element } from "protractor";
 import { AdherentFamille } from "../../../store/contrat/adherent/model";
@@ -134,6 +134,7 @@ import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-comm
 import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import {PoliceService} from '../../../store/contrat/police/service';
+import { TypeBareme } from "../../common/models/bareme.enum";
 
 @Component({
   selector: "app-police",
@@ -275,7 +276,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
   isImport = 'NON';
   FamilyListToImport: Array<AdherentFamille>;
+  typeBareme =   Object.keys(TypeBareme).map(key => ({ label: TypeBareme[key], value: key }));
   private afficheDetail = false;
+  bareme: TypeBareme;
+  taux: Taux;
+  baremeList$: Observable<Array<PlafondFamilleActe>>;
+  baremeList: Array<PlafondFamilleActe>;
+  reponse = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -289,28 +296,29 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.plafondForm = this.formBuilder.group({
       // domaine: new FormControl({}),
-      plafondAnnuelleFamille: new FormControl(""),
-      plafondAnnuellePersonne: new FormControl(""),
-      plafondGlobalInternationnal: new FormControl("")
+      id: new FormControl(''),
+      plafondAnnuelleFamille: new FormControl(''),
+      plafondAnnuellePersonne: new FormControl(''),
+      plafondGlobalInternationnal: new FormControl('')
     });
 
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(null),
-      nom: new FormControl("", [Validators.required]),
-      prenom: new FormControl("", [Validators.required]),
-      matriculeSouscripteur:new FormControl("", [Validators.required]),
-      dateNaissance: new FormControl("", [Validators.required]),
-      matriculeGarant: new FormControl("", [Validators.required]),
+      nom: new FormControl('', [Validators.required]),
+      prenom: new FormControl('', [Validators.required]),
+      matriculeSouscripteur: new FormControl('', [Validators.required]),
+      dateNaissance: new FormControl('', [Validators.required]),
+      matriculeGarant: new FormControl('', [Validators.required]),
       // matriculeSouscripteur:new FormControl("", [Validators.required]),
-      lieuNaissance: new FormControl("", [Validators.required]),
-      numeroTelephone: new FormControl("", [Validators.required]),
-      adresse: new FormControl("", [Validators.required]),
-      adresseEmail: new FormControl("", [Validators.required]),
-      profession: new FormControl(""),
-      referenceBancaire: new FormControl(""),
-      qualiteAssure: new FormControl("", [Validators.required]),
-      genre: new FormControl("", [Validators.required]),
-      dateEntree: new FormControl("", [Validators.required])
+      lieuNaissance: new FormControl('', [Validators.required]),
+      numeroTelephone: new FormControl('', [Validators.required]),
+      adresse: new FormControl('', [Validators.required]),
+      adresseEmail: new FormControl('', [Validators.required]),
+      profession: new FormControl(''),
+      referenceBancaire: new FormControl(''),
+      qualiteAssure: new FormControl('', [Validators.required]),
+      genre: new FormControl('', [Validators.required]),
+      dateEntree: new FormControl('', [Validators.required])
     });
 
     this.policeForm = this.formBuilder.group({
@@ -442,6 +450,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (value) {
       //this.plafondGroupe = value;
       console.log(value);
+      this.plafondForm.patchValue(value);
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
@@ -693,6 +702,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentFamilleList = [];
     this.adherentFamille = [];
     this.adherentWithFamille = {};
+    
+    this.baremeList$ = this.store.pipe(select(plafondSelector.plafondConfig));
+    this.store.dispatch(featureActionsPlafond.loadPlafondConfig(null));
+    this.baremeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.plafondActuelleConfiguration = value.slice();
+        console.log(this.plafondActuelleConfiguration);
+      }
+    });
 
     /** dispatch action pour imprimer le pdf */
     this.store.dispatch(featureAction.setReport(null));
@@ -702,7 +720,6 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
                 printPdfFile(bytes);
         }
     });
-    
     this.arrondissementList$ = this.store.pipe(select(arrondissementSelector.arrondissementList));
     this.store.dispatch(arrondissementAction.loadArrondissement());
     this.arrondissementList$.pipe(takeUntil(this.destroy$))
@@ -995,6 +1012,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   });
   }
 
+  onClickReponse(event){
+    console.log(this.reponse);
+  }
+
   // fonction pour creer adherent.
   onCreateAddherent() {
     console.log('àààààààààààààààààààààthis.adherentForm.valueàààààààààààààààààààààààà', this.adherentForm.value);
@@ -1138,6 +1159,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
+    }
+
+    importerBareme(){
+      this.store.dispatch(featureActionsPlafond.loadPlafondConfig({typeBareme: this.bareme, taux: this.taux.taux}));
     }
 
     changeTypeDureeGroupe(event){
@@ -1504,7 +1529,16 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /** verifier la date Effet du groupe avec celle de la police */
-  checkDateEffet(){
+  checkDateEffet(){    for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+    this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
+    for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
+      this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
+      for (var k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
+        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
+        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
+      }
+    }
+  }
     if (this.groupeForm.get('dateEffet').value){
       if (new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
         this.valideDateEffet = false;
@@ -1513,6 +1547,18 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         this.valideDateEffet = true;
       }
     }
+  }
+
+  appliquerConfiguration() {
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir appliquer le barème?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.plafondFamilleActeConstruct = this.plafondActuelleConfiguration;
+        this.displayConfigurationPlafond = false;
+      }
+    });
   }
 
   /**permet de valider le plafond */
@@ -1535,12 +1581,17 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.plafond.plafondFamilleActe = this.plafondFamilleActeConstruct;
     this.plafond.groupe = this.groupe;
     console.log(this.plafond);
+    
+    
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
     this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
     this.plafondForm.reset();
+    if(this.plafond.id){
+      this.displayParametragePlafond = false;
+    }
   }
 
   addSousActe() {

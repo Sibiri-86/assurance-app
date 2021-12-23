@@ -162,6 +162,22 @@ this.actions$.pipe(
                 )
             )
             );
+            /**recuperer la configuration du bareme par type bareme et taux */
+            fetchBaremeConfig$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadPlafondConfig),
+                mergeMap(({typeBareme, taux}) =>
+                    this.PlafondService.$getBaremesConfig(typeBareme, taux).pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setPlafondConfig(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+            );
+
 
             deleteBareme$ = createEffect(() =>
             this.actions$.pipe(
