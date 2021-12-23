@@ -53,7 +53,8 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
 
     findHistoriqueAvenantPrime(idHa: string): Observable<HistoriqueAvenantPrime[]> {
         // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_HISTORIQUE_AVENANT_PRIME)}/${idHa}`).pipe(
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_HISTORIQUE_AVENANT_PRIME)}`,
+            {params: createRequestOption({idHa})}).pipe(
             map((response: HistoriqueAvenantPrime[]) => response),
             catchError(this.handleError())
         );

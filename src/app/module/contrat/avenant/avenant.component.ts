@@ -2043,6 +2043,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res) => {
           this.historiqueAvenantPrimes = res || [];
           this.displayDialogPrime = true;
+          res.forEach(prime => {
+            this.primetotal += prime.primeTotal;
+          });
+          // console.log(res);
         }
     );
   }
