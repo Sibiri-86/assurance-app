@@ -2034,11 +2034,11 @@
                                                     (click)="voirPrime(rowdata)">
                                             </button>
                                         </div>
-                                        <!--<div class="p-col-">
-                                            <button pButton pRipple icon="pi pi-check" pTooltip="Valider l'avenant"
+                                        <div class="p-col-">
+                                            <button pButton pRipple icon="pi pi-check" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
                                                     class="p-button-rounded p-button-info p-mr-2">
                                             </button>
-                                        </div>-->
+                                        </div>
                                         <div class="p-col-">
                                             <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants"
                                                            (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, rowdata)">
@@ -3380,7 +3380,13 @@
                       <th pSortableColumn="nom" style="width: 7rem">Type Prime
                           <p-sortIcon field="nom"></p-sortIcon>
                       </th>
-                      <th pSortableColumn="prenom" style="width: 9rem">Prime
+                      <th pSortableColumn="nom" style="width: 7rem">Frais accessoir
+                          <p-sortIcon field="nom"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="nom" style="width: 7rem">Frais badge
+                          <p-sortIcon field="nom"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="prenom" style="width: 20rem">Montant(s) prime
                           <p-sortIcon field="prenom"></p-sortIcon>
                       </th>
                       <th pSortableColumn="numero" style="width: 12rem">Prime Net
@@ -3391,21 +3397,46 @@
                       </th>
                   </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-historiqueAvenant>
+              <ng-template pTemplate="body" let-historiqueAvenantPrime>
                   <tr>
-                      <td><span class="p-column-title">{{historiqueAvenant?.historiqueAvenant?.groupe?.libelle}}</span></td>
-                      <td><span class="p-column-title">{{historiqueAvenant.typePrime?.libelle}}</span></td>
-                      <td><span class="p-column-title">{{historiqueAvenant.primeNet}}</span></td>
-                      <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>
-                      <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>
+                      <td><span>{{historiqueAvenantPrime.groupe?.libelle}}</span></td>
+                      <td><span>{{historiqueAvenantPrime.typePrime?.libelle}}</span></td>
+                      <td><span>{{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</span></td>
+                      <td><span>{{historiqueAvenantPrime.fraisBadge | formatTableValue: 'number':true}}</span></td>
+                      <td>
+                          <span *ngIf="historiqueAvenantPrime.groupe.typePrime.code === 'PAE'">
+                              Prime Adulte : <span style="font-weight: bold">{{historiqueAvenantPrime.primeAdulte | formatTableValue: 'number':true}} </span> <br>
+                              Prime Enfant :<span style="font-weight: bold">{{historiqueAvenantPrime.primeEnfant | formatTableValue: 'number':true}} </span>
+                          </span>
+                          <span *ngIf="historiqueAvenantPrime.groupe.typePrime.code === 'PECE'">
+                              Prime Employé : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEmploye | formatTableValue: 'number':true}} </span> <br>
+                              Prime Enfant : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEnfant | formatTableValue: 'number':true}}</span> <br>
+                              Prime Conjoint : <span style="font-weight: bold">{{historiqueAvenantPrime.primeConjoint | formatTableValue: 'number':true}}</span>
+                          </span>
+                      </td>
+                      <td><span style="font-weight: bold">{{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</span></td>
+                      <td><span style="font-weight: bold">{{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</span></td>
                   </tr>
               </ng-template>
               <ng-template pTemplate="summary">
-                  <div class="p-d-flex p-ai-center p-jc-between">
-                      {{historiqueAvenantAdherents3 ? historiqueAvenantAdherents3.length : 0 }} assuré(s).
+                  <div style="text-align: center; font-weight: bold; color: #0cca16; font-size: 1.5em">
+                      Prime Total de l'avenant : {{primetotal | formatTableValue: 'number':true}}
                   </div>
               </ng-template>
           </p-table>
+          <div class="p-grid mt-3">
+              <div class="p-col-3"></div>
+              <div class="p-col-2">
+                  <button pButton pRipple label="Annuler Prime" icon="pi pi-times" class="p-button p-button-danger" type="button"
+                              (click)="annulerPrime()">
+                  </button>
+              </div>
+              <div class="p-col-2">
+                  <button type="button" pButton pRipple label="Valider Prime" icon="pi pi-save" class="p-button p-button-success"
+                      (click)="validerPrime()">
+                  </button>
+              </div>
+          </div>
       </div>
   </div>
 </ng-template>

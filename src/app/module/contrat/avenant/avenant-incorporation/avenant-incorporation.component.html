@@ -30,11 +30,16 @@
                                     appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-2">
+                            <br>
                             <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
                                     class="p-button p-button-icon" label="export model" (click)="exportModel()">
                             </button>
                         </div>
                         <div class="p-field p-col-2" *ngIf="isImport === 'OUI'"><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+                        <div class="p-field p-col-12">
+                            <label for="nom">Observation</label>
+                            <input id="Observation" type="text" required formControlName="observation" pInputText>
+                        </div>
                     </div>
                 </form>
             </p-fieldset>

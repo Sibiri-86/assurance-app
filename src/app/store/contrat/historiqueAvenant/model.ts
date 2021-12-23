@@ -170,6 +170,9 @@ export interface HistoriqueAvenantPrime {
     primeTotal?: number;
     deleted?: boolean;
     historiqueAvenant?: HistoriqueAvenant;
+    groupe?: Groupe;
+    fraisBadge?: number;
+    fraisAccessoir?: number;
 }
 
 export enum TypeDemandeur {
