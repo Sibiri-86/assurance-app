@@ -10,6 +10,7 @@ export class PlafondComponent implements OnInit {
 
   @Output() plafandEvent = new EventEmitter();
   plafondForm: FormGroup;
+  isInternationalGroupe = false;
 
   constructor(private formBuilder: FormBuilder) {
     this.init();

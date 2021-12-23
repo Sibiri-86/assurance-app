@@ -309,4 +309,12 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/change-status`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    static readonly HISTORIQUE_AVENANT_CALCUL_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/calcule-prime`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_VALIDER_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/valider-prime`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
 }

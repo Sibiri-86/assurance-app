@@ -135,6 +135,8 @@ import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import {PoliceService} from '../../../store/contrat/police/service';
 import { TypeBareme } from "../../common/models/bareme.enum";
+import {TypeHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/model';
+import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 
 @Component({
   selector: "app-police",
@@ -291,7 +293,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     private confirmationService: ConfirmationService,
     private breadcrumbService: BreadcrumbService,
     private adherentService: AdherentService,
-    private policeService: PoliceService
+    private policeService: PoliceService,
+    private historiqueAvenantService: HistoriqueAvenantService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -1884,6 +1887,16 @@ changeGarantie(garantie, indexLigne: number) {
           this.FamilyListToImport = res;
           this.adherentFamille = res;
           this.afficheDetail = true;
+        }
+    );
+  }
+
+  exportModel(): void {
+    this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+        (res) => {
+          const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+          const  fileUrl = URL.createObjectURL(file);
+          window.open(fileUrl);
         }
     );
   }

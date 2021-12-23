@@ -278,6 +278,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   avenantModif1: Avenant = {};
 
   infosPolice = false;
+  private primetotal = 0;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -1466,6 +1467,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
     this.historiqueAvenant.groupe = this.curentGroupe;
+    this.historiqueAvenant.observation = historiqueAvenant.observation;
     this.historiqueAvenant.aderants = historiqueAvenant.aderants;
     this.historiqueAvenant.fileToLoad = historiqueAvenant.fileToLoad;
     this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
@@ -2079,10 +2081,37 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
+
   printListeActualisee(historiqueAvenant: HistoriqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+
+  calculerPrime(rowdata: HistoriqueAvenant): void {
+    this.historiqueAvenantService.calculerPrime(rowdata.id).subscribe(
+        (res) => {
+          this.historiqueAvenantPrimes = res;
+          res.forEach(prime => {
+            this.primetotal += prime.primeTotal;
+          });
+          this.displayDialogPrime = true;
+        }
+    );
+  }
+
+  validerPrime(): void {
+    this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
+        (res) => {
+          this.historiqueAvenantPrimes = res;
+          this.displayDialogPrime = false;
+        }
+    );
+  }
+  annulerPrime(): void {
+      this.historiqueAvenantPrimes = [];
+      this.displayDialogPrime = false;
+      this.primetotal = 0;
   }
 }

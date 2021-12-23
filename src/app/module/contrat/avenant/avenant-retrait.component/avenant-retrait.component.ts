@@ -126,6 +126,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.myForm = this.formBuilder.group({
       numero: new FormControl(null, [Validators.required]),
       dateAvenant: new FormControl(null, [Validators.required]),
+      observation: new FormControl(null, [Validators.required]),
     });
     this.newForm = this.formBuilder.group({
       groupe: new FormControl(null, [Validators.required]),
@@ -138,23 +139,28 @@ export class AvenantRetraitComponent implements OnInit {
     const value: boolean = !historiqueAvenantAdherant.selected;
     console.log(historiqueAvenantAdherant);
     historiqueAvenantAdherant.selected = value;
-    // const id = adherent.adherent.id;
-    // this.adherantDeleteds.push(historiqueAvenantAdherant);
-    // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === historiqueAvenantAdherant.id);
-    this.historiqueAveantAdherants.forEach(haa => {
-      if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
-          haa.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
-        this.adherantDeleteds.push(haa);
-        haa.selected = value;
-        // this.historiqueAveantAdherants = this.historiqueAveantAdherants.filter(e => e.id === haa.id);
-        // console.log('******1*******' + this.adherantDeleteds.length);
+    if (historiqueAvenantAdherant.selected) {
+      this.historiqueAveantAdherants.forEach(haa => {
+        if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
+            haa.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
+          this.adherantDeleteds.push(haa);
+          haa.selected = value;
+        }
+        console.log('******1*******' + this.adherantDeleteds.length);
+      });
+    } else {
+      const idx = this.adherantDeleteds.indexOf(historiqueAvenantAdherant);
+      this.adherantDeleteds.splice(idx, 1);
+      if (historiqueAvenantAdherant.adherent.adherentPrincipal === null) {
+        this.historiqueAveantAdherants.forEach(elem => {
+          if (elem.adherent.adherentPrincipal != null && elem.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
+            const idx1 = this.adherantDeleteds.indexOf(elem);
+            this.adherantDeleteds.splice(idx1, 1);
+            elem.selected = value;
+          }
+        });
       }
-      console.log('******1*******' + this.adherantDeleteds.length);
-    });
-    // if (adherent.adherent.adherentPrincipal !== null) {
-      // this.adherantDeleteds = this.adherantGroupeListe.filter(e => e.adherent.id === adherent.adherent.adherentPrincipal.id);
-      // this.adherantGroupeListe = this.adherantGroupeListe.filter(e =>  e.adherent.id === adherent.adherent.adherentPrincipal.id);
-    // }
+    }
   }
 
   addAdherentFamilleToList(): void {

@@ -49,10 +49,12 @@
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait</label>
                         <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                    dateFormat="dd/mm/yy" inputId="calendar"
-                                    appendTo="body"></p-calendar>
+                                    dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                     </div>
-
+                    <div class="p-field p-col-12">
+                        <label for="observation">Observation</label>
+                        <input id="observation" type="text" required formControlName="observation" pInputText>
+                    </div>
                 </div>
             </form>
         </p-fieldset>
