@@ -126,8 +126,10 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
 
     compareDate(debut?: Date, fin?: Date): Observable<any> {
         // @FIXME: post request
-        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_COMPARE_DATE)}`,
-             {params: createRequestOption({debut, fin})});
+        const avenant: HistoriqueAvenant = {};
+        avenant.dateEffet = debut;
+        avenant.dateAvenant = fin;
+        return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_COMPARE_DATE)}`, avenant);
     }
 
     getHistoriqueAvenantAdherantsByPoliceAndUnsuspend(policeId: string): Observable<HistoriqueAvenantAdherant[]> {
@@ -170,5 +172,13 @@ private handleError<T>() {
         return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_VALIDER_PRIME)}`, historiqueAvenantPrimes,
             {observe: 'response'}
         );
+    }
+
+    // get-date-fin
+    getDateFin(debut: Date, typeDuree: string, duree: number): Observable<any> {
+    const historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant.dateEffet = debut;
+    return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_GET_END)}`, historiqueAvenant,
+            {params: createRequestOption({typeDuree, duree}), observe: 'response'});
     }
 }
