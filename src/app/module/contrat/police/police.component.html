@@ -315,7 +315,7 @@
             <br/>
             
         
-            <p-table #dtConfigurationPlafond [value]="plafondActuelleConfiguration" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
+            <p-table #dtConfigurationPlafond [value]="plafondActuelleConfiguration" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
                         <th></th>
@@ -1282,7 +1282,7 @@
                         <div class="p-field p-col-12">
                             <div class="p-field p-col-7">
                                 <div class="p-field-checkbox">
-                                    <label class="p-badge-success">Souhaitez vous importer les adhérents à tavers un fichier excel ?</label>
+                                    <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel ?</label>
                                     <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
                                         <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1" id="city1"></p-radioButton>
                                         <label for="city1">OUI</label>
@@ -1392,11 +1392,11 @@
                     <p-fieldset legend="Famille adhérent" toggleable="true" *ngIf="isImport === 'NON'">
                         <p-toolbar styleClass="p-mb-4">
                             <ng-template pTemplate="left">
-                                <button pButton pRipple label="Ajouter" icon="pi pi-plus" pAddRow [table]="dtFamilleAdherent" [newRow]="newRowFamilleAdherent()" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple label="Ajouter" icon="pi pi-plus" pAddRow [table]="dtFamilleAdherentGroupe" [newRow]="newRowFamilleAdherent()" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </ng-template>
                         </p-toolbar>
 
-                        <p-table #dtFamilleAdherent [value]="adherentFamilleList" dataKey="" editMode="row" *ngIf="isImport === 'NON'">
+                        <p-table #dtFamilleAdherentGroupe [value]="adherentFamilleList" dataKey="" editMode="row" *ngIf="isImport === 'NON'">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Mle. Garant</th>

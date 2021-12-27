@@ -1,11 +1,11 @@
-import { Garantie } from "../garantie/model";
-import { DimensionPeriode } from "../dimension-periode/model";
-import { Acte } from "../acte/model";
-import { SousActe } from "../sous-acte/model";
-import { Taux } from "../taux/model";
-import { QualiteAssure } from "../qualite-assure/model";
-import { Etat } from "src/app/module/common/models/model";
-import { Status } from "src/app/module/common/models/etat.enum";
+import { Garantie } from '../garantie/model';
+import { DimensionPeriode } from '../dimension-periode/model';
+import { Acte } from '../acte/model';
+import { SousActe } from '../sous-acte/model';
+import { Taux } from '../taux/model';
+import { QualiteAssure } from '../qualite-assure/model';
+import { Etat } from 'src/app/module/common/models/model';
+import { Status } from 'src/app/module/common/models/etat.enum';
 
 export interface PlafondFamilleActe {
     id?: string;
