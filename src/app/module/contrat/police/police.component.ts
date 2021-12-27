@@ -1884,6 +1884,20 @@ changeGarantie(garantie, indexLigne: number) {
     console.log(event);
     this.policeService.loadAdherentsByExcelFile(event).subscribe(
         (res) => {
+          /* res.forEach(adherentFamille => {
+            console.log(adherentFamille.adherent.profession);
+            console.log(adherentFamille.famille);
+            if (!adherentFamille.adherent && adherentFamille.adherent.profession === '') {
+              adherentFamille.adherent.profession = {};
+            }
+            if (adherentFamille.famille) {
+              adherentFamille.famille.forEach(adFam => {
+                if (adFam.profession === '') {
+                  adFam.profession = {};
+                }
+              });
+            }
+          }); */
           this.FamilyListToImport = res;
           this.adherentFamille = res;
           this.afficheDetail = true;
