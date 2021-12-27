@@ -28,9 +28,10 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="numero" style="width: 12rem">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 12rem">Taux <p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 12rem">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 5rem">Taux <p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 14rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="width: 12rem">Duree <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 6rem">Duree <p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="width: 12rem">Date effet <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="width: 12rem">Date écheance <p-sortIcon field="dateEcheance"></p-sortIcon></th>
                         <th></th>
@@ -43,6 +44,8 @@
                         </td>
 
                         <td><span class="p-column-title">{{police.numero}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{police.nom}}</span>
                         </td>
                         <td><span class="p-column-title">{{police.taux.taux}}</span>
                         </td>
