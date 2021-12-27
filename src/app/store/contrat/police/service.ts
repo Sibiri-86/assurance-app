@@ -110,8 +110,6 @@ export class PoliceService {
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/json');
-        // console.log('++++++++++++++++++data++++++++++++++++++++++');
-        // console.log(data);
         return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data, {headers: headers});
     }
 }

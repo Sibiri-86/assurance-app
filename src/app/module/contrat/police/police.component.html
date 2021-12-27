@@ -1347,34 +1347,34 @@
                             <h5></h5>
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col">
-                                    <label for="nom">Nom <span style="color: red">(*)</span> </label>
+                                    <label for="nom">Nom <span style="color: red">*</span> </label>
                                     <input id="nom" type="text" required formControlName="nom"  pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="prenom">Prenom <span style="color: red">(*)</span> </label>
+                                    <label for="prenom">Prenom <span style="color: red">*</span> </label>
                                     <input id="prenom" type="text"  formControlName="prenom" pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="numeroTelephone">Telephone <span style="color: red">(*)</span> </label>
+                                    <label for="numeroTelephone">Telephone <span style="color: red">*</span> </label>
                                     <p-inputMask id="numeroTelephone" formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
                                 </div>
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col">
-                                    <label for="adresseEmail">Adresse Email <span style="color: red">(*)</span> </label>
+                                    <label for="adresseEmail">Adresse Email <span style="color: red">*</span> </label>
                                     <input id="adresseEmail" type="email"  formControlName="adresseEmail" pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="adresse">Adresse <span style="color: red">(*)</span> </label>
+                                    <label for="adresse">Adresse <span style="color: red">*</span> </label>
                                     <input id="adresse" type="text" formControlName="adresse" pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="referenceBancaire">Reference bancaire <span style="color: red">(*)</span> </label>
+                                    <label for="referenceBancaire">Reference bancaire <span style="color: red">*</span> </label>
                                     <input id="referenceBancaire" type="text"  formControlName="referenceBancaire" pInputText>
                                 </div>
                             </div>
@@ -1382,17 +1382,17 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="dateNaissance">Date de naissance <span style="color: red">(*)</span> </label>
+                                    <label for="dateNaissance">Date de naissance <span style="color: red">*</span> </label>
                                     <p-calendar id="dateNaissance" [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="lieuNaissance">Lieu de naissance <span style="color: red">(*)</span> </label>
+                                    <label for="lieuNaissance">Lieu de naissance <span style="color: red">*</span> </label>
                                     <input id="lieuNaissance" type="text" formControlName="lieuNaissance" pInputText>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="dateEntree">Date entrée <span style="color: red">(*)</span> </label>
+                                    <label for="dateEntree">Date entrée <span style="color: red">*</span> </label>
                                     <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                 </div>
                             </div>
@@ -1400,17 +1400,17 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col">
-                                    <label for="genre">Genre <span style="color: red">(*)</span> </label>
+                                    <label for="genre">Genre <span style="color: red">*</span> </label>
                                     <p-dropdown id="genre" inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="profession">Profession <span style="color: red">(*)</span> </label>
+                                    <label for="profession">Profession <span style="color: red">*</span> </label>
                                     <p-dropdown id="profession" inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="qualiteAssure">Qualite assuré <span style="color: red">(*)</span> </label>
+                                    <label for="qualiteAssure">Qualite assuré <span style="color: red">*</span> </label>
                                     <p-dropdown id="qualiteAssure" inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                 </div>
                             </div>
@@ -1418,26 +1418,27 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col-4">
-                                    <label for="matriculeGarant">Matricule Garant <span style="color: red">(*)</span> </label>
+                                    <label for="matriculeGarant">Matricule Garant <span style="color: red">*</span> </label>
                                     <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label for="matriculeSouscripteur">Matricule Souscripteur <span style="color: red">(*)</span> </label>
+                                    <label for="matriculeSouscripteur">Matricule Souscripteur <span style="color: red">*</span> </label>
                                     <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
                                 </div>
                             </div>
                         </form>
                     </p-fieldset>
                     <br/>
-                    <p-fieldset legend="Famille adhérent" toggleable="true" *ngIf="isImport === 'NON'">
+                    <div *ngIf="isImport === 'NON'">
+                    <p-fieldset legend="Famille adhérent" toggleable="true">
                         <p-toolbar styleClass="p-mb-4">
                             <ng-template pTemplate="left">
                                 <button pButton pRipple label="Ajouter" icon="pi pi-plus" pAddRow [table]="dtFamilleAdherentGroupe" [newRow]="newRowFamilleAdherent()" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </ng-template>
                         </p-toolbar>
 
-                        <div *ngIf="isImport === 'NON'">
-                        <p-table #dtFamilleAdherent [value]="adherentFamilleList" dataKey="" editMode="row">
+
+                        <p-table #dtFamilleAdherentGroupe [value]="adherentFamilleList" dataKey="" editMode="row">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Mle. Garant</th>
@@ -1552,8 +1553,9 @@
                                 </tr>
                             </ng-template>
                         </p-table>
-                        </div>
+
                     </p-fieldset>
+                    </div>
                     <div *ngIf="afficheDetail">
                         <app-adherent-list [adherentFamilleList]="FamilyListToImport"></app-adherent-list>
                     </div>
@@ -1564,7 +1566,7 @@
                             <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                         </div>
 
-                        <div>
+                        <div *ngIf="isImport === 'NON'">
                             <button [disabled]="adherentForm?.invalid && groupeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="enregistrerAdherent()"></button>
                         </div>
 

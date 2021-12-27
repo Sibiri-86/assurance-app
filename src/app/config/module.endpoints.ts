@@ -317,4 +317,8 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/valider-prime`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    static readonly HISTORIQUE_AVENANT_GET_END = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/get-date-fin`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
 }

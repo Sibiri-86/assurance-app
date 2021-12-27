@@ -30,6 +30,7 @@ export interface HistoriqueAvenant {
     valide?: boolean;
     observation?: string;
     typeDemandeur?: TypeDemandeur;
+    dateEffet?: Date;
 }
 
 export enum TypeEtat {

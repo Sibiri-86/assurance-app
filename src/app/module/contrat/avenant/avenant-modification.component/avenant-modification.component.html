@@ -1,194 +1,194 @@
 <div class="p-fluid">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
-
-            <form [formGroup]="myForm">
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col-6">
-                        <label for="numero">Numéro de l'avenant chez la garant</label>
-                        <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
-                    </div>
-                    <div class="p-field p-col-6">
-                        <label for="dateIncorparation">Date de modification</label>
-                        <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                    dateFormat="dd/mm/yy" inputId="calendar"
-                                    appendTo="body"></p-calendar>
-                    </div>
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <form [formGroup]="myForm">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6">
+                                <label for="numero">Numéro de l'avenant chez la garant</label>
+                                <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                            </div>
+                            <div class="p-field p-col-6">
+                                <label for="dateIncorparation">Date de modification</label>
+                                <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                            dateFormat="dd/mm/yy" inputId="calendar"
+                                            appendTo="body"></p-calendar>
+                            </div>
+                            <div class="p-field p-col-12">
+                                <label for="nom">Observation</label>
+                                <input id="Observation" type="text" required formControlName="observation" pInputText>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-            <p-fieldset legend="RECAPITULATIF" toggleable="true">
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
-                        <label for="lastname2">Garant</label>
-                        <div>
-                            <span>{{police.garant.nom}}</span>
-                        </div>
-                    </div>
+                <div class="p-col-12">
+                    <p-fieldset legend="RECAPITULATIF" toggleable="true">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="lastname2">Garant</label>
+                                <div>
+                                    <span>{{police.garant.nom}}</span>
+                                </div>
+                            </div>
 
-                    <div class="p-field p-col">
-                        <label for="lastname2">Intermediaire</label>
-                        <div>
-                            <span>{{police.intermediaire.nom}}</span>
-                        </div>
-                    </div>
+                            <div class="p-field p-col">
+                                <label for="lastname2">Intermediaire</label>
+                                <div>
+                                    <span>{{police.intermediaire.nom}}</span>
+                                </div>
+                            </div>
 
-                    <div class="p-field p-col">
-                        <label for="lastname2">Taux de couverture</label>
-                        <div>
-                            <span>{{police.taux.taux}}</span>
+                            <div class="p-field p-col">
+                                <label for="lastname2">Taux de couverture</label>
+                                <div>
+                                    <span>{{police.taux.taux}}</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Territorialité</label>
+                                <div>
+                                    <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="dateEffet">Date effet</label>
+                                <div>
+                                    <span>{{police.dateEffet}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">Date d'écheance</label>
+                                <div>
+                                    <span>{{police.dateEcheance}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="firstname2">Nom du souscripteur</label>
+                                <div>
+                                    <span>{{police.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact</label>
+                                <div>
+                                    <span>{{police.contact}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Adresse email</label>
+                                <div>
+                                    <span>{{police.adresseEmail}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="adressePostale">Adresse postale</label>
+                                <div>
+                                    <span>{{police.adressePostale}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur d'activité</label>
+                                <div>
+                                    <span>{{police.secteurActivite.libelle}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero IFU</label>
+                                <div>
+                                    <span>{{police.numeroIfu}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Personne ressource</label>
+                                <div>
+                                    <span>{{police.personneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact personne ressource</label>
+                                <div>
+                                    <span>{{police.contactPersonneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="refPolice">Reference police</label>
+                                <div>
+                                    <span>{{police.referencePolice}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">RCCM</label>
+                                <div>
+                                    <span>{{police.rccm}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero police</label>
+                                <div>
+                                    <span>{{police.numero}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur</label>
+                                <div>
+                                    <span>{{police.secteur.libelle}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col-4">
+                                <label for="fraisAccessoire">Frais des accessoires</label>
+                                <div>
+                                    <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label for="fraisBadge">Frais de badge</label>
+                                <div>
+                                    <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </p-fieldset>
                 </div>
+            </div>
 
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="firstname2">Territorialité</label>
-                        <div>
-                            <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="dateEffet">Date effet</label>
-                        <div>
-                            <span>{{police.dateEffet}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col-4">
-                        <label for="lastname2">Date d'écheance</label>
-                        <div>
-                            <span>{{police.dateEcheance}}</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
-                        <label for="firstname2">Nom du souscripteur</label>
-                        <div>
-                            <span>{{police.nom}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Contact</label>
-                        <div>
-                            <span>{{police.contact}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="firstname2">Adresse email</label>
-                        <div>
-                            <span>{{police.adresseEmail}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="adressePostale">Adresse postale</label>
-                        <div>
-                            <span>{{police.adressePostale}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Secteur d'activité</label>
-                        <div>
-                            <span>{{police.secteurActivite.libelle}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Numero IFU</label>
-                        <div>
-                            <span>{{police.numeroIfu}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Personne ressource</label>
-                        <div>
-                            <span>{{police.personneRessource}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Contact personne ressource</label>
-                        <div>
-                            <span>{{police.contactPersonneRessource}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="refPolice">Reference police</label>
-                        <div>
-                            <span>{{police.referencePolice}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">RCCM</label>
-                        <div>
-                            <span>{{police.rccm}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Numero police</label>
-                        <div>
-                            <span>{{police.numero}}</span>
-                        </div>
-                    </div>
-
-                    <div class="p-field p-col">
-                        <label for="lastname2">Secteur</label>
-                        <div>
-                            <span>{{police.secteur.libelle}}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
-
-                    <div class="p-field p-col-4">
-                        <label for="fraisAccessoire">Frais des accessoires</label>
-                        <div>
-                            <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
-                        </div>
-                    </div>
-                    <div class="p-field p-col-4">
-                        <label for="fraisBadge">Frais de badge</label>
-                        <div>
-                            <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
-                        </div>
-                    </div>
-                </div>
-            </p-fieldset>
 
         </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
-            <!--<div class="p-fluid p-formgrid p-grid">
-                <div class="p-field p-col">
-                    <label for="firstname1">Firstname</label>
-                    <input id="firstname1" type="text" pInputText>
-                </div>
-                <div class="p-field p-col">
-                    <label for="lastname1">Lastname</label>
-                    <input id="lastname1" type="text" pInputText>
-                </div>
-            </div>-->
             <div class="p-grid">
                 <div class="p-col-12">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -242,7 +242,7 @@
 
                                     <div class="p-field p-col">
                                         <label for="firstname2">Type durée</label>
-                                        <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (onChange)="getGroupeSelected()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                                        <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true" showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                         <app-entity-validation [entityValidations]="entityValidations"
                                                                [formGroup]="policeForm" [entityField]="'typeDuree'">
                                         </app-entity-validation>
@@ -250,7 +250,7 @@
 
                                     <div class="p-field p-col">
                                         <label for="lastname2">Durée</label>
-                                        <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe($event.target.value)"  formControlName="duree" pInputText>
+                                        <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe()"  formControlName="duree" pInputText>
                                         <app-entity-validation [entityValidations]="entityValidations"
                                                                [formGroup]="groupeForm" [entityField]="'duree'">
                                         </app-entity-validation>
@@ -260,10 +260,11 @@
                                 <div class="p-fluid p-formgrid p-grid">
                                     <div class="p-field p-col-4">
                                         <label for="lastname2">Date d'écheance</label>
-                                        <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                        <input type="date" formControlName="dateEcheance" style="width: 100%; height: 2.5em">
+                                        <!--<p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                                         <app-entity-validation [entityValidations]="entityValidations"
                                                                [formGroup]="groupeForm" [entityField]="'dateEcheance'">
-                                        </app-entity-validation>
+                                        </app-entity-validation>-->
                                     </div>
                                 </div>
                             </form>
@@ -275,65 +276,62 @@
                                 <h5></h5>
                                 <div class= "p-fluid p-formgrid p-grid">
 
-                                    <div class="p-field p-col-4" >
+                                    <!--<div class="p-field p-col-4" >
                                         <label for="primeFamille">Prime Annuelle</label>
                                         <input id="primeAnnuelle" type="text" pInputText formControlName="primeAnnuelle" [value]="primeForm.get('primeAnnuelle').value | formatTableValue: 'number':true">
-                                    </div>
+                                    </div>-->
 
                                     <div class="p-field p-col-4">
-                                        <label for="typePrime">Type de prime</label>
-                                        <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle"></p-dropdown>
+                                        <label for="typePrime">Type de prime /AN</label>
+                                        <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
-                                        <label for="primeFamille">Prime par famille</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PF'">
+                                        <label for="primeFamille">Prime par famille /AN</label>
                                         <input id="primeFamille" type="text" pInputText [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true" formControlName="primeFamille">
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PA'">
-                                        <label for="montantPrimeAdulte">Prime par adulte</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PA'">
+                                        <label for="montantPrimeAdulte">Prime par adulte /AN</label>
                                         <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code=='PAE'">
-                                        <label for="montantPrimeEnfant">Prime par enfant</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PAE'">
+                                        <label for="montantPrimeEnfant">Prime par enfant /AN</label>
                                         <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PP'">
-                                        <label for="montantPrimePersonne">Prime par personne</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PP'">
+                                        <label for="montantPrimePersonne">Prime par personne /AN</label>
                                         <input id="montantPrimePersonne" type="text" pInputText formControlName="primePersonne" [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PE'">
-                                        <label for="montantPrimeEmploye">Prime par employe</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PE'">
+                                        <label for="montantPrimeEmploye">Prime par employé /AN</label>
                                         <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PC'">
-                                        <label for="montantPrimeConjoint">Prime par conjoint</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PC'">
+                                        <label for="montantPrimeConjoint">Prime par conjoint /AN</label>
                                         <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
-                                        <label for="montantPrimeEnfant1">Prime par enfant</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
+                                        <label for="montantPrimeEnfant1">Prime par enfant /AN</label>
                                         <input id="montantPrimeEnfant1" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                </div>
-
-                                <div class= "p-fluid p-formgrid p-grid">
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
-                                        <label for="montantPrimeAdulte1">Prime par adulte</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PAE'">
+                                        <label for="montantPrimeAdulte1">Prime par adulte /AN</label>
                                         <input id="montantPrimeAdulte1" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
                                     </div>
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
-                                        <label for="montantPrimeEmploye1">Prime par employé</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
+                                        <label for="montantPrimeEmploye1">Prime par employé /AN</label>
                                         <input id="montantPrimeEmploye1" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
                                     </div>
 
-                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
-                                        <label for="montantPrimeConjoint1">Prime par conjoint</label>
+                                    <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
+                                        <label for="montantPrimeConjoint1">Prime par conjoint /AN</label>
                                         <input id="montantPrimeConjoint1" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
                                     </div>
                                 </div>
@@ -342,7 +340,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="PLAFOND" leftIcon="pi pi-user-edit" tooltip="PLAFOND">
+        <p-tabPanel header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="PLAFOND">
             <p-fieldset legend="Plafond" toggleable="true">
                 <form [formGroup]="plafondForm">
                     <div class="p-fluid p-formgrid p-grid">
@@ -681,7 +679,7 @@
                             <th>MAIL</th>
                             <th>DATE INCORP.</th>
                             <th>GENRE</th>
-                            <th style="width:8rem"></th>
+                            <th style="width:8rem">Modifier</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-historiqueAveantAdherant let-editing="editing" let-ri="rowIndex">
@@ -692,7 +690,7 @@
                                         <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.nom">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{historiqueAveantAdherant.adherent.nom}}
+                                        {{historiqueAveantAdherant.adherent.nom | upercase}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -702,7 +700,7 @@
                                         <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.prenom" required>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{historiqueAveantAdherant.adherent.prenom}}
+                                        {{historiqueAveantAdherant.adherent.prenom | beginLowerCase}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -712,7 +710,7 @@
                                         <input pInputText type="text" [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{historiqueAveantAdherant?.adherent?.dateNaissance}}
+                                        {{historiqueAveantAdherant?.adherent?.dateNaissance | date}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
