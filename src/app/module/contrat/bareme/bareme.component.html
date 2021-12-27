@@ -171,7 +171,7 @@
 
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
-                                <label for="taux">Taux de couverture <span style="color: red !important;">(*)</span></label>
+                                <label for="taux">Taux de couverture en % <span class="required">*</span></label>
                                 <p-dropdown id="taux" dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                             </div>
                         </div>
@@ -230,7 +230,7 @@
                                             <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{rowData.montantPlafond}}
+                                            {{rowData.montantPlafond | formatTableValue: 'number':true}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -355,7 +355,7 @@
                                 <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true" placeholder="montant plafonné/periode">
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{rowData.montantPlafond}}
+                                {{rowData.montantPlafond | formatTableValue: 'number':true}}
                             </ng-template>
                         </p-cellEditor>
                     </td>
@@ -463,7 +463,7 @@
                                 <input pInputText type="text" [(ngModel)]="rowData2.montantPlafondParActe" [value]="rowData2.montantPlafondParActe | formatTableValue: 'number':true" required placeholder="plafond/acte">
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{rowData2.montantPlafondParActe}}
+                                {{rowData2.montantPlafondParActe | formatTableValue: 'number':true}}
                             </ng-template>
                         </p-cellEditor>
                     </td>
@@ -474,7 +474,7 @@
                                 <input pInputText type="text" [(ngModel)]="rowData2.montantPlafond" [value]="rowData2.montantPlafond | formatTableValue: 'number':true" required placeholder="plafond/periode">
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{rowData2.montantPlafond}}
+                                {{rowData2.montantPlafond | formatTableValue: 'number':true}}
                             </ng-template>
                         </p-cellEditor>
                     </td>      
@@ -1004,7 +1004,7 @@
                                 <input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{plafond.montantPlafond}}
+                                {{plafond.montantPlafond | formatTableValue: 'number':true}}
                             </ng-template>
                         </p-cellEditor>
                     </td>
@@ -1119,7 +1119,7 @@
                                     <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{acte.montantPlafond}}
+                                    {{acte.montantPlafond | formatTableValue: 'number':true}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1233,7 +1233,7 @@
                                         <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/acte" required>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{sousActe.montantPlafond}}
+                                        {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1243,7 +1243,7 @@
                                         <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{sousActe?.montantPlafond}}
+                                        {{sousActe?.montantPlafond | formatTableValue: 'number':true}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>        

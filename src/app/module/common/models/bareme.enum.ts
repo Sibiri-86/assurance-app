@@ -1,4 +1,3 @@
 export enum TypeBareme {
-    STANDART='STANDART',
-    ORDINAIRE='ORDINAIRE'
+    STANDARD='STANDARD',
 }

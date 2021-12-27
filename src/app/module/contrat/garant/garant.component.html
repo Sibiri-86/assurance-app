@@ -478,7 +478,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Taux de commission de gestion</label>
+                        <label for="lastname2">Taux de commission de gestion en %</label>
                         <p-dropdown dataKey="id" inputId="tauxPrime" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionPrime" placeholder="Select" optionLabel="taux"></p-dropdown>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="garantForm" [entityField]="'taux'">
@@ -486,7 +486,7 @@
                     </div>
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Taux de commission accessoire</label>
+                        <label for="lastname2">Taux de commission accessoire en %</label>
                         <p-dropdown dataKey="id" inputId="tauxAccessoire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionAccessoire" placeholder="Select" optionLabel="taux"></p-dropdown>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="garantForm" [entityField]="'taux'">

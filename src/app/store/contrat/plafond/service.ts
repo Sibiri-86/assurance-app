@@ -23,7 +23,9 @@ $getPlafonds(): Observable<PlafondList> {
 $getPlafondsByGroupe(groupe: Groupe): Observable<any> {
     // @FIXME: get plafond by groupe
     console.log(groupe);
+    if(groupe){
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/consulter`, groupe);
+    }
   }
 
 posPlafond(Plafond: Plafond): Observable<any> {

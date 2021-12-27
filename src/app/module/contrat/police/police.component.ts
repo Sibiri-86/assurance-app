@@ -23,6 +23,7 @@ import { TypePrime } from "../../../store/parametrage/type-prime/model";
 import { Region } from "../../../store/parametrage/region/model";
 import { SecteurActivite } from "../../../store/parametrage/secteur-activite/model";
 import { Observable, of, Subject } from "rxjs";
+import { Status as Etat } from '../../common/models/etat.enum';
 import {
   ControlContainer,
   FormBuilder,
@@ -97,12 +98,10 @@ import * as professionSelector from "../../../store/parametrage/profession/selec
 
 import { loadQualiteAssure } from "../../../store/parametrage/qualite-assure/actions";
 import * as qualiteAssureSelector from "../../../store/parametrage/qualite-assure/selector";
-
-import { Status } from "../../../store/global-config/model";
+import {Status} from "../../../store/global-config/model";
 import { status } from "../../../store/global-config/selector";
 import { EntityValidations } from "../../common/models/validation";
 import { BreadcrumbService } from "../../../app.breadcrumb.service";
-
 import { loadTypePrime } from "../../../store/parametrage/type-prime/actions";
 import * as typePrimeSelector from "../../../store/parametrage/type-prime/selector";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
@@ -279,12 +278,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   isImport = 'NON';
   FamilyListToImport: Array<AdherentFamille>;
   typeBareme =   Object.keys(TypeBareme).map(key => ({ label: TypeBareme[key], value: key }));
+  typeEtat = Object.keys(Etat).map(key => ({ label: Etat[key], value: key }));
   private afficheDetail = false;
   bareme: TypeBareme;
   taux: Taux;
   baremeList$: Observable<Array<PlafondFamilleActe>>;
   baremeList: Array<PlafondFamilleActe>;
   reponse = 0;
+  importer : Boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -451,10 +452,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
+      if(value.id) { 
       //this.plafondGroupe = value;
       console.log(value);
       this.plafondForm.patchValue(value);
+      /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
+      }
+      
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
     });
@@ -707,10 +712,21 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentWithFamille = {};
     
     this.baremeList$ = this.store.pipe(select(plafondSelector.plafondConfig));
-    this.store.dispatch(featureActionsPlafond.loadPlafondConfig(null));
     this.baremeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.plafondActuelleConfiguration = value.slice();
+        if(this.importer) {
+        for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
+          this.plafondActuelleConfiguration[i].dateEffet = new Date(this.police.dateEffet);
+          for (var j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
+            this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.police.dateEffet);
+            for (var k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++){
+              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.police.dateEffet);
+            }
+          }
+        }
+        this.importer = false;
+        }
         console.log(this.plafondActuelleConfiguration);
       }
     });
@@ -1157,14 +1173,48 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
 
-    changeTypeDuree(){
+    changeTypeDuree() {
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
     }
+    
+    
+    validerRecap() {
+      
+      this.confirmationService.confirm({
+        message: "Etes vous sur de vouloir valider?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          for( let prop of this.plafondFamilleActeConstruct){
+            this.plafondActuelleConfiguration.push(prop);
+            this.displayPrevisualiserParametrage = false;
+          }
+        },
+      });
+    }
+    
+    viderRecap() {
+      this.confirmationService.confirm({
+        message: "Etes vous sur de vouloir vider?",
+        header: "Confirmation",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.plafondFamilleActeConstruct = [];
+          this.displayPrevisualiserParametrage = false;
+        },
+      });
+    }
+    
+    
+    
+    
 
-    importerBareme(){
+    importerBareme() {
+      this.importer = true;
+      console.log(this.importer);
       this.store.dispatch(featureActionsPlafond.loadPlafondConfig({typeBareme: this.bareme, taux: this.taux.taux}));
     }
 
@@ -1532,7 +1582,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /** verifier la date Effet du groupe avec celle de la police */
-  checkDateEffet(){    for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+  checkDateEffet(){   
+     for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
     this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
     for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
       this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
@@ -1603,8 +1654,6 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addFamilleActe(rowData, ri) {
-
-
     this.confirmationService.confirm({
       message: "Etes vous sur de valider?",
       header: "Confirmation",

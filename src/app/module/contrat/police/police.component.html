@@ -173,13 +173,16 @@
 
 
 
-        <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrage" header="Récapitulatif" [modal]="true" styleClass="p-fluid" [style]="{'width':'900px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrage" header="Récapitulatif" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}">
             <ng-template pTemplate="content">
-                
-                
-                
-                
-                
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                    <button [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length" pButton pRipple type="button" (click)="validerRecap()" label="Valider"></button>
+                    </div>
+                    <div class="p-field">
+                    <button pButton pRipple type="button" (click)="viderRecap()" label="Reinitialiser"></button>
+                    </div>
+                </div>
                 <p-table [value]="plafondFamilleActeConstruct" responsiveLayout="scroll" dataKey="garantie.id">
                     <ng-template pTemplate="header">
                         <tr>
@@ -196,7 +199,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-plafond let-expanded="expanded" >
-                        <tr>
+                        <tr class="colorZone">
                             <td>
                                 <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
@@ -229,12 +232,12 @@
                             <th></th>
                         </tr>
                         <ng-template pTemplate="body" let-acte let-expanded="expanded">
-                            <tr>
+                            <tr class="colorZoneActe">
                                 <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
                                 <td>{{acte?.acte?.libelle}}</td>
                                 <td></td>
                             <td>{{acte?.montantPlafond}}</td>
-                            <td>{{acte?.dimensionPeriode}}</td>
+                            <td>{{acte?.dimensionPeriode?.libelle}}</td>
                             <td>{{acte?.nombre}}</td>
                             <td>{{acte?.taux?.taux}}</td>
                             <td ></td>
@@ -260,12 +263,12 @@
                                 <th></th>
                             </tr>
                             <ng-template pTemplate="body" let-sousActe let-expanded="expanded">
-                                <tr>
+                                <tr class="colorZoneSousActe">
                                     <td></td>
                                     <td>{{sousActe?.sousActe?.libelle}}</td>
                                     <td>{{sousActe?.montantPlafondParActe}}</td>
                                     <td>{{sousActe?.montantPlafond}}</td>
-                                    <td>{{sousActe?.dimensionPeriode}}</td>
+                                    <td>{{sousActe?.dimensionPeriode?.libelle}}</td>
                                     <td>{{sousActe?.nombre}}</td>
                                     <td>{{sousActe?.taux?.taux}}</td>
                                     <td ></td>
@@ -273,12 +276,7 @@
                                     <td >{{sousActe?.etat}}</td>
                                 </tr>
                             </ng-template>
-                </p-table>
-                
-                
-                
-                
-                
+                </p-table>        
     </div>
     </td>
     </tr>
@@ -310,7 +308,7 @@
                     </div>
                     
                     <div class="p-field">
-                    <button pButton [disabled]="!taux || !bareme" pRipple type="button" label="Importer barème" (click)="importerBareme()"></button>
+                    <button pButton [disabled]="!taux || !bareme" pRipple type="button" label="Importer barème standard" (click)="importerBareme()"></button>
                     </div>
                 </div>
         
@@ -577,7 +575,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.montantPlafond}}
@@ -750,7 +748,7 @@
                 </div>
                 <div class="p-toolbar-group-right">
                     <button pButton pRipple label="Configuration" icon="pi pi-eye"  class="p-button-success p-mr-2 p-mb-2" (click)="voirConfiguration()"></button>
-                    <button pButton pRipple [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length"   label="Récapitulatif" icon="pi pi-eye" class="p-button-success p-mr-2 p-mb-2" (click)="voirParametrage()"></button>
+                    <button *ngIf="reponse==1" pButton pRipple [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length"   label="Récapitulatif" icon="pi pi-eye" class="p-button-success p-mr-2 p-mb-2" (click)="voirParametrage()"></button>
                 </div>
             </p-toolbar>
             <br/>
@@ -774,19 +772,20 @@
                     <tr>
                         <th style="width:3em"></th>
                         <th>Famille acte</th>
-                        <th>Montant plafonné</th>
                         <th>Montant plafonné/acte</th>
+                        <th>Montant plafonné/periode</th>
                         <th>Periode</th>
                         <th>Nombre acte</th>
                         <th>Taux de couverture</th>
                         <th>Domaine</th>
                         <th>Date effet</th>
+                        <th>Status</th>
                         <th style="width:8em"></th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="rowData">
+                    <tr [pEditableRow]="rowData" class="colorZone">
                         <td>
                         </td>
                         <td>
@@ -800,6 +799,9 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        
+                        <td>
+                        </td>
 
                         <td>
                             <p-cellEditor>
@@ -811,9 +813,7 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>
-
-                        </td>
+                        
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -876,6 +876,17 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="rowData.etat" placeholder="Select status"
+                                                [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData?.etat}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                         <td style="text-align:center">
                             <button *ngIf="!editing" pButton pRipple  pTooltip="editer" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInit(rowData)"></button>
                             <button *ngIf="editing" pRipple  pButton  pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSave(rowData)"></button>
@@ -900,16 +911,19 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th style="width:8em"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="rowData">
+                    <tr [pEditableRow]="rowData" class="colorZoneActe">
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td >
                             {{rowData.acte.libelle}}
+                        </td>
+                        <td>
                         </td>
                         <td>
                             <p-cellEditor>
@@ -921,8 +935,7 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>
-                        </td>
+                        
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -968,7 +981,17 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="rowData.etat" placeholder="Select status"
+                                                [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData?.etat}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                         <td style="text-align:center">
                             <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInitPlafondActe(rowData)"></button>
                             <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSavePlafondActe(rowData)"></button>
@@ -979,7 +1002,7 @@
 
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr [pEditableRow]="rowData2">
-                        <td colspan="10">
+                        <td colspan="11">
                             <div class="">
                                 <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row">
 
@@ -994,16 +1017,28 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th style="width:8em"></th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-rowData2 let-editing="editing" let-ri="rowIndex">
-                    <tr [pEditableRow]="rowData2">
+                    <tr [pEditableRow]="rowData2" class="colorZoneSousActe">
                         <td>
                         </td>
                         <td>
                             {{rowData2?.sousActe.libelle}}
+                        </td>
+                        
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="rowData2.montantPlafondParActe" [value]="rowData2.montantPlafondParActe | formatTableValue: 'number':true" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData2.montantPlafondParActe}}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
 
                         <td>
@@ -1017,16 +1052,7 @@
                             </p-cellEditor>
                         </td>
 
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData2.montantPlafondParActe" [value]="rowData2.montantPlafondParActe | formatTableValue: 'number':true" required>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{rowData2.montantPlafondParActe}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
+                       
 
                         <td>
                             <p-cellEditor>
@@ -1071,6 +1097,17 @@
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2.dateEffet | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="rowData2.etat" placeholder="Select status"
+                                                [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData2?.etat}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
