@@ -1210,28 +1210,28 @@
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col">
+                                <div class="p-field p-col-4">
                                     <label for="dateEcheance">Date écheance</label>
                                     <p-calendar id="dateEcheance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEcheance'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col-3">
+                                <div class="p-field p-col-4">
                                     <label for="adresse">Adresse <span style="color: red !important;">*</span></label>
                                     <input id="adresse" type="text" formControlName="adresse"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'adresse'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col-3">
+                                <div class="p-field p-col-4">
                                     <label for="description">Description <span style="color: red !important;">*</span></label>
                                     <input id="description" type="text" formControlName="description"  pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'description'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col">
+                                <div class="p-field p-col-4">
                                     <label for="commune">Commune<span style="color: red !important;">*</span></label>
                                     <p-dropdown id="commune" dataKey="id" inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
