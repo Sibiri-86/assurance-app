@@ -224,6 +224,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.myForm = this.formBuilder.group({
             numero: new FormControl(null, [Validators.required]),
             dateAvenant: new FormControl(null, [Validators.required]),
+            dateEffet: new FormControl(null, [Validators.required]),
+            dateEcheance: new FormControl(null, [Validators.required]),
         });
 
         this.entityValidations = [
@@ -838,17 +840,6 @@ export class AvenantRenouvellementComponent implements OnInit {
             }
         });
 
-
-        /*
-		this.clonedPlafondFamilleActeTemp[rowData?.garantie?.id] = { ...rowData };
-		console.log(this.clonedPlafondFamilleActeTemp);
-		this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-		this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-		this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
-		delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-		console.log(this.countfamilleActe);
-		this.countfamilleActe++;
-		*/
         console.log(this.plafondFamilleActeConstruct);
     }
     getSousActe(rowData, ri){
@@ -925,6 +916,10 @@ export class AvenantRenouvellementComponent implements OnInit {
             });
         });
         this.objet.familles = this.adherentFamilleListe;
+        this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
+        this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+        this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
+        // this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log(this.objet);
         this.eventEmitterM.emit(this.objet);
