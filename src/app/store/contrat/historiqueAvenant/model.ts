@@ -31,6 +31,7 @@ export interface HistoriqueAvenant {
     observation?: string;
     typeDemandeur?: TypeDemandeur;
     dateEffet?: Date;
+    dateEcheance?: Date;
 }
 
 export enum TypeEtat {
@@ -63,6 +64,7 @@ export interface HistoriqueAvenantAdherant {
     adherent?: Adherent;
     deleted?: boolean;
     selected?: boolean;
+    dateEcheance?: Date;
 }
 
 export interface HistoriqueAvenantList {
