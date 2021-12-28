@@ -191,7 +191,7 @@
                                 <button pButton pRipple label="Récapitulatif" [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length" icon="pi pi-eye" class="p-button-success p-mr-2 p-mb-2" (click)="voirParametrage()" ></button> 
                             </div>
                     </p-toolbar>
-                    <p-table #dt [value]="plafondFamilleActe" dataKey="" editMode="row">
+                    <p-table #dt [value]="plafondFamilleActe"  dataKey="" editMode="row">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Famille acte</th>
