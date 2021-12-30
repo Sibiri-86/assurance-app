@@ -1568,16 +1568,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.viewAvenantIncorp(avenant, typeHistoriqueAvenant);
         break;
       }
-      case TypeHistoriqueAvenant.MODIFICATION: {
-
-        break;
-      }
       case TypeHistoriqueAvenant.RETRAIT: {
         this.viewAvenantRetrait(avenant, typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-        this.viewAvenantRenouvellement(avenant, typeHistoriqueAvenant);
+        // this.viewAvenantRenouvellement(avenant, typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -1593,7 +1589,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.MODIFICATION: {
-        this.viewAvenantModification(avenant, typeHistoriqueAvenant);
+        // this.viewAvenantModification(avenant, typeHistoriqueAvenant);
         break;
       }
       default: {
