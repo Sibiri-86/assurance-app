@@ -15,9 +15,9 @@
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-3">
-                            <label for="dateEffetA">Date d'effet</label>
+                            <label for="dateEffetA">Date d'effet du renouvellement</label>
                             <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-3">

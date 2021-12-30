@@ -75,6 +75,10 @@ import {Territorialite} from '../../../../store/parametrage/territorialite/model
 import * as historiqueAvenantSelector from '../../../../store/contrat/historiqueAvenant/selector';
 import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
+import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-assure/selector';
+import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
+import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model';
+import {PlafondService} from '../../../../store/contrat/plafond/service';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -159,7 +163,17 @@ export class AvenantModificationComponent implements OnInit {
   private myForm: FormGroup;
   typeDureeSelected: string;
   historiqueAvenant: HistoriqueAvenant = {};
+  qualiteAssureList1: Array<QualiteAssure>;
+  qualiteAssureList2: Array<QualiteAssure>;
+  qualiteAssureList$: Observable<Array<QualiteAssure>>;
   @Output() returnEvent = new EventEmitter();
+  groupePlafongConfig: Groupe = {};
+  plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
+  plafondFamilleActeTempPlafongConfig: PlafondFamilleActe = {};
+  plafondFamilleActeConstructPlafongConfig: Array<PlafondFamilleActe> = [];
+  plafondActePlafongConfig: Array<PlafondActe> = [];
+  plafondSousActePlafongConfig: Array<PlafondSousActe> = [];
+  private clonedPlafondConfiguration: any = {};
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -168,6 +182,7 @@ export class AvenantModificationComponent implements OnInit {
       private formBuilder: FormBuilder,
       private adherentService: AdherentService,
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
+      private plafondService: PlafondService
   ) {
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
@@ -225,6 +240,7 @@ export class AvenantModificationComponent implements OnInit {
     this.myForm = this.formBuilder.group({
       numero: new FormControl(null, [Validators.required]),
       dateAvenant: new FormControl(null, [Validators.required]),
+      dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
     });
 
@@ -449,6 +465,18 @@ export class AvenantModificationComponent implements OnInit {
           },
         ],
       },
+      {
+        field: 'dateEffetA',
+        validations: [
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
+        ],
+      },
+      {
+        field: 'dateAvenant',
+        validations: [
+          { validName: 'required', validMessage: 'Ce champs est obligatoire' },
+        ],
+      },
     ];
 
     this.plafondFamilleActe = [
@@ -496,6 +524,7 @@ export class AvenantModificationComponent implements OnInit {
   historiquePlafondSousActeList: Array<Territorialite> = [];
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
+  plafondActuelleConfiguration: any = {};
 
   ngOnInit(): void {
     this.objet = {
@@ -644,6 +673,19 @@ export class AvenantModificationComponent implements OnInit {
           if (value) {
             this.territorialiteList = value.slice();
             console.log(this.territorialiteList);
+          }
+        });
+
+    this.qualiteAssureList$ = this.store.pipe(
+        select(qualiteAssureSelector.qualiteAssureList)
+    );
+    this.store.dispatch(loadQualiteAssure());
+    this.qualiteAssureList$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (value) {
+            this.qualiteAssureList1 = value.slice();
+            this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
           }
         });
 
@@ -933,6 +975,7 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.plafondGroupe = this.plafondForm.value;
     this.objet.historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+    this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     // console.log(this.objet);
     this.eventEmitterM.emit(this.objet);
@@ -1019,5 +1062,75 @@ export class AvenantModificationComponent implements OnInit {
       this.onRefreshDateEcheance(this.groupeForm.get('duree').value);
     }
     this.onRefreshDateEcheanceForGroupe();
+  }
+
+  fermerConfigurationPlafond(): void {}
+
+  appliquerConfiguration(): void {}
+
+
+  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
+    this.clonedPlafondConfiguration[plafond.garantie.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
+    delete this.clonedPlafondConfiguration[plafond.garantie.id];
+  }
+
+  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
+    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie.id];
+    delete this.clonedPlafondConfiguration[plafond.garantie.id];
+  }
+
+  onRowEditInitPlafondConfigurationActe(plafond: PlafondActe) {
+    this.clonedPlafondConfiguration[plafond.acte.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfigurationActe(plafond: PlafondActe) {
+    delete this.clonedPlafondConfiguration[plafond.acte.id];
+  }
+
+  loadPlafondConfigBygroupe() {
+    // plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
+    // plafondFamilleActeTempPlafongConfig: PlafondFamilleActe = {};
+    // plafondFamilleActeConstructPlafongConfig: Array<PlafondFamilleActe> = [];
+    // plafondActePlafongConfig: Array<PlafondActe> = [];
+    // plafondSousActePlafongConfig
+    // this.plafondSousActePlafongConfig = this.plafondSousActe.filter(f => f.sousActe.i)
+    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
+            (res) => {
+              this.plafondFamilleActePlafongConfig = res.body;
+              console.log(res);
+            }
+    );
+    this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
+        (res) => {
+          this.plafondActePlafongConfig = res.body;
+        }
+    );
+    this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
+        (res) => {
+          this.plafondSousActePlafongConfig = res.body;
+        }
+    );
+  }
+  onTabChange(event): void {}
+
+  compareDate(): void {
+    this.historiqueAvenantService.compareDate(this.myForm.get('dateEffet').value, this.police.dateEffet).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+            this.myForm.patchValue({dateEffet: null});
+          }
+        }
+    );
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 }

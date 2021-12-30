@@ -15,12 +15,12 @@ export class UploadFileComponent implements OnInit {
   }
 
   onBasicUpload(event): void {
-  	console.log(' *****FILE******* ' + typeof event.files[0]);
+  	console.log(' *****FILE******* ');
   	this.fileEvent.emit(event.files[0]);
   }
 
   onUpload(event: any) {
     this.selectedFile = event.files[0];
-    console.log(' *****FILE 1******* ' + this.selectedFile);
+    console.log(' *****FILE 1******* ');
   }
 }

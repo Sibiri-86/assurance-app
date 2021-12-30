@@ -176,9 +176,12 @@ export interface HistoriqueAvenantPrime {
     groupe?: Groupe;
     fraisBadge?: number;
     fraisAccessoir?: number;
+    primeTTC?: number;
+    taxeTTC?: number;
 }
 
 export enum TypeDemandeur {
     VIMSO = 'VIMSO',
     SOUSCRIPTEUR = 'SOUSCRIPTEUR',
+    GARANT = 'GARANT',
 }

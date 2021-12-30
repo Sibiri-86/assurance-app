@@ -2094,11 +2094,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   calculerPrime(rowdata: HistoriqueAvenant): void {
+    this.primetotal = 0;
     this.historiqueAvenantService.calculerPrime(rowdata.id).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
           res.forEach(prime => {
-            this.primetotal += prime.primeTotal;
+            this.primetotal += prime.primeTTC;
           });
           this.displayDialogPrime = true;
         }

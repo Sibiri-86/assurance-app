@@ -110,7 +110,7 @@ export class AvenantSuspensionComponent implements OnInit {
 	   }
    ); */
     this.adherentList$ = this.store.pipe(select(adherantSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe.id}));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: this.groupe?.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         // this.adherantGroupeListe = value.slice();
@@ -177,5 +177,21 @@ export class AvenantSuspensionComponent implements OnInit {
       typeDemandeur: this.myForm.get('demandeur').value.value
     });
     console.log(this.myForm.get('typeDemandeur').value);
+  }
+
+  compareDate(): void {
+    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.police.dateEffet).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+            this.myForm.patchValue({dateAvenant: null});
+          }
+        }
+    );
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 }

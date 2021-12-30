@@ -1305,12 +1305,12 @@
                             <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                         </div>
                         <div *ngIf="!isgroupEditing">
-                            <button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
-                            <!--<button [disabled]="groupeForm?.invalid && primeForm?.invalid" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
+                            <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
+                            <button [disabled]="primeForm?.invalid && primeForm?.invalid" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
                         </div>
                         <div *ngIf="isgroupEditing">
-                            <button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>
-                            <!--<button pButton pRipple label="Modifier" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>-->
+                            <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>-->
+                            <button pButton pRipple label="Modifier" icon="pi pi-angle-right" (click)="saveNewGroupe()" [disabled]="primeForm?.invalid || groupeForm?.invalid"></button>
                         </div>
                     </div>
                 </div>
