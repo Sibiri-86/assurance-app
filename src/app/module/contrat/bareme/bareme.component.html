@@ -971,7 +971,7 @@
     <ng-template pTemplate="content">
         
         
-        <p-table #dtConfigurationPlafond [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
+        <p-table #dtConfigurationPlafond [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true" scrollHeight="500px">
             <ng-template pTemplate="header">
                 <tr>
                     <th></th>
@@ -1092,7 +1092,7 @@
                 <tr >
                 <td colspan="11">
                     <div class="">
-                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row">
+                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="500px">
                 <tr>
                     <th></th>
                     <th></th>
@@ -1209,7 +1209,7 @@
                     <tr>
                         <td colspan="11">
                             <div class="">
-                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
+                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="500px">
                     <tr>
                         <th></th>
                         <th></th>

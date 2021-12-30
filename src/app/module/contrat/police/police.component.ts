@@ -286,6 +286,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   baremeList: Array<PlafondFamilleActe>;
   reponse = 0;
   importer : Boolean = false;
+  adherentChecked : Adherent;
+  displayPhotos: Boolean = false;
+  pictureUrl='';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -1417,7 +1420,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  onRowEditSave(plafondFamilleActe: PlafondFamilleActe) {
+  onRowEditSave(plafondFamilleActe: PlafondFamilleActe, ri) {
+    if(plafondFamilleActe.dateEffet) {
+      if (new Date(plafondFamilleActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+        this.plafondFamilleActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+        return;
+      }
+    }
     delete this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
   }
 
@@ -1448,7 +1458,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clonedPlafondActe[plafondActe.acte.id] = { ...plafondActe };
   }
 
-  onRowEditSavePlafondActe(plafondActe: PlafondActe) {
+  /** save plafondActe */
+  onRowEditSavePlafondActe(plafondActe: PlafondActe, ri) {
+    if(plafondActe.dateEffet) {
+      if (new Date(plafondActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+        this.plafondActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+        return;
+      }
+    }
     delete this.clonedPlafondActe[plafondActe.acte.id];
   }
 
@@ -1511,7 +1529,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  onRowEditSavePlafondSousActe(plafondSousActe: PlafondSousActe) {
+  onRowEditSavePlafondSousActe(plafondSousActe: PlafondSousActe, ri) {
+    console.log('yes');
+    console.log(ri);
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
   }
 
@@ -1790,7 +1810,7 @@ changeGarantie(garantie, indexLigne: number) {
     });
   }
 
-  cloturePolice(police: Police){
+  cloturePolice(police: Police) {
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir clôturer la police?',
       header: 'Confirmation',
@@ -1800,15 +1820,94 @@ changeGarantie(garantie, indexLigne: number) {
       },
     });
   }
+  
+  voirPhotos(ad:Adherent) {
+    //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
+    this.pictureUrl =ad.urlPhoto;
+    this.displayPhotos = true;
+  }
+  
+  onBasicUpload(event) {
+    if(!this.adherentChecked){
+      this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
+   } else {
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la photos de l\'adherent',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files[0]);
+        this.store.dispatch(featureActionAdherent.importPhotosAdherent({file:event.files[0], idAdherent:this.adherentChecked.id, idGroupe: this.groupe.id}));
+      },
+    });
+   }
+  }
 
+  onRowSelect(event) {
+    this.adherentChecked = event.data;
+  }
+  
+  onSelectDateEffetPlafond(event){
+    console.log('yes');
+    console.log(event);
+    /*
+    if (new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
+      this.valideDateEffet = false;
+      this.showToast("error", "INFORMATION", "la date effet du groupe doit etre superieure à celle de la police");
+    } else {
+      this.valideDateEffet = true;
+    }
+    */
+    
+  }
+  
+  quitterParametragePlafond(){
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir quitter?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.groupeForm.reset();
+        this.displayParametragePlafond = false;
+        console.log('saisie');
+      },
+    });
+  }
+  
+  quiterGroupe(){
+    
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir quitter?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.groupeForm.reset();
+        this.displayDialogFormAddGroupe = false;
+       
+      },
+    });
+    
+  }
+  
   annulerSaisie(){
-    this.policeForm.reset();
-    this.primeForm.reset();
-    this.groupeForm.reset();
-    this.displayDialogFormAddGroupe = false;
-    this.displayDialogFormPolice = false;
-    this.displayParametragePlafond = false;
-    console.log('saisie');
+    this.confirmationService.confirm({
+      message: 'Etes vous sur de vouloir quitter?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.displayDialogFormAddAdherent = false;
+        this.adherentForm.reset();
+        this.policeForm.reset();
+        this.primeForm.reset();
+        this.groupeForm.reset();
+        this.displayDialogFormAddGroupe = false;
+        this.displayDialogFormPolice = false;
+        this.displayParametragePlafond = false;
+        console.log('saisie');
+      },
+    });
+    
+    
   }
 
   editGroupe(groupe: Groupe) {
@@ -1850,9 +1949,9 @@ changeGarantie(garantie, indexLigne: number) {
       taux: grp?.taux,
       territorialite: grp.territorialite,
       duree: grp.duree,
-      // dateEffet: Date.now(),
+      dateEffet: new Date(grp.dateEffet),
       typeDuree: {},
-      // dateEcheance: grp.dateEcheance
+      dateEcheance: new Date(grp.dateEcheance)
     });
 
     this.primeForm.patchValue({

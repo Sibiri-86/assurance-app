@@ -28,6 +28,7 @@ export interface Adherent{
     plafondGroupeSousActe?: PlafondSousActe;
     matriculeSouscripteur?: string;
     fullName?: string;
+    urlPhoto?: string;
 }
 
 export interface AdherentFamille {

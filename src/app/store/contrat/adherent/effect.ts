@@ -118,4 +118,19 @@ this.actions$.pipe(
 )
 );
 
+importPhotosAdherent$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.importPhotosAdherent),
+    mergeMap(({file,idAdherent,idGroupe}) =>
+        this.AdherentService.pushPhotosAdherent(file,idAdherent).pipe(
+            switchMap(value => [
+                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                featureActions.loadAdherent({idGroupe: idGroupe})
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
 }
