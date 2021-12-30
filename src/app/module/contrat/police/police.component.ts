@@ -1956,8 +1956,9 @@ changeGarantie(garantie, indexLigne: number) {
 
   exportModel(): void {
     this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+    // /* this.historiqueAvenantService.getModel().subscribe(
         (res) => {
-          const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+          const file = new Blob([res], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'});
           const  fileUrl = URL.createObjectURL(file);
           window.open(fileUrl);
         }
