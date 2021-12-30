@@ -2097,6 +2097,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantService.calculerPrime(rowdata.id).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
+          console.log('****************************res************************************', res);
           res.forEach(prime => {
             this.primetotal += prime.primeTotal;
           });
