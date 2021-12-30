@@ -158,6 +158,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
     adherentFamilleListe: AdherentFamille[] = [];
     private myForm: FormGroup;
+    typeDureeSelected = '';
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -223,6 +224,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.myForm = this.formBuilder.group({
             numero: new FormControl(null, [Validators.required]),
             dateAvenant: new FormControl(null, [Validators.required]),
+            dateEffet: new FormControl(null, [Validators.required]),
+            dateEcheance: new FormControl(null, [Validators.required]),
         });
 
         this.entityValidations = [
@@ -653,6 +656,13 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.setGroupeAndPrime(this.groupeSelected);
     }
 
+    changeTypeDureeGroupe(event){
+        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log(this.typeDureeSelected);
+        if(this.dateEcheance && this.groupeForm.get('duree')){
+            this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
+        }
+    }
     loadGroupe(police: Police): void {
         this.groupeList$ = this.store.pipe(select(groupeList));
         this.store.dispatch(loadGroupe({policeId: this.police.id}));
@@ -678,6 +688,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     setGroupeAndPrime(group: Groupe): void {
+        console.log('++++  group.prime ++++');
+        console.log(group.prime);
         this.groupeForm.patchValue({
             id: group?.id || null,
             libelle: group?.libelle,
@@ -697,21 +709,32 @@ export class AvenantRenouvellementComponent implements OnInit {
             primeFamille: group.prime?.primeFamille,
             primeAdulte: group.prime?.primeAdulte,
             primePersonne: group.prime.primeAdulte,
-            primeAnnuelle: group.prime?.primeAnnuelle
+            primeAnnuelle: group.prime?.primeAnnuelle,
         });
+        // this.selectedTypePrime = group.prime.typePrime;
     }
 
     onRefreshDateEcheanceForGroupe(value: number) {
-        this.dateEcheance = new Date(this.dateEffet);
+        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log(this.typeDureeSelected);
         this.groupeForm
             .get('dateEcheance')
             .setValue(
-                new Date(
-                    this.dateEcheance.setMonth(
-                        this.dateEcheance.getMonth() + Number(value)
-                    )
-                )
+                this.getNewDateForGroupe(value)
             );
+    }
+
+    getNewDateForGroupe(value: number): Date {
+        this.dateEcheance = new Date(this.groupeForm.get('dateEffet').value);
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        console.log(this.dateEcheance);
+        if(this.typeDureeSelected === 'Jour') {
+            return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
+        } else if(this.typeDureeSelected === 'Mois') {
+            return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
+        } else if(this.typeDureeSelected === 'Annee') {
+            return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
+        }
     }
 
     onRowEditInitPlafondActe(plafondActe: PlafondActe) {
@@ -817,17 +840,6 @@ export class AvenantRenouvellementComponent implements OnInit {
             }
         });
 
-
-        /*
-		this.clonedPlafondFamilleActeTemp[rowData?.garantie?.id] = { ...rowData };
-		console.log(this.clonedPlafondFamilleActeTemp);
-		this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-		this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-		this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
-		delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
-		console.log(this.countfamilleActe);
-		this.countfamilleActe++;
-		*/
         console.log(this.plafondFamilleActeConstruct);
     }
     getSousActe(rowData, ri){
@@ -904,6 +916,10 @@ export class AvenantRenouvellementComponent implements OnInit {
             });
         });
         this.objet.familles = this.adherentFamilleListe;
+        this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
+        this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+        this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
+        // this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log(this.objet);
         this.eventEmitterM.emit(this.objet);
@@ -924,5 +940,44 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log(historiqueAvenant);
         this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherants;
         this.objet.historiqueAvenantAdherants = historiqueAvenant.historiqueAvenantAdherant1s;
+    }
+
+    getNewDate(value: number): Date {
+        this.dateEcheance = new Date(this.policeForm.get('dateEffet').value);
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        if (this.typeDureeSelected === 'Jour') {
+            return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
+        } else if (this.typeDureeSelected === 'Mois') {
+            return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
+        } else if (this.typeDureeSelected === 'Annee') {
+            return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
+        }
+    }
+    onRefreshDateEcheance(value: number) {
+        this.policeForm
+            .get('dateEcheance')
+            .setValue(
+                this.getNewDate(value)
+            );
+    }
+
+    changePrime(event) {
+        this.selectedTypePrime = event.value;
+    }
+
+    compareDate(): void {
+        this.historiqueAvenantService.compareDate(this.myForm.get('dateEffet').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.myForm.patchValue({dateEffet: null});
+                }
+            }
+        );
+    }
+
+    addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
     }
 }

@@ -17,9 +17,15 @@ import {Profession} from '../../../../store/parametrage/profession/model';
 import {Police} from '../../../../store/contrat/police/model';
 import {
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant,
+    HistoriqueAvenantAdherant, TypeDemandeur,
     TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
+import {Groupe} from '../../../../store/contrat/groupe/model';
+import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import {loadGroupe} from '../../../../store/contrat/groupe/actions';
+import {AdherentService} from '../../../../store/contrat/adherent/service';
+import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
+import {MessageService} from 'primeng/api';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -30,7 +36,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     // @Input groupe: Groupe;
     @Output() adherentFamilleEvent = new EventEmitter();
-    @Input() polices: Police[];
+    @Input() police: Police;
    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     myForm: FormGroup;
@@ -39,7 +45,8 @@ export class AvenantIncorporationComponent implements OnInit{
     familles: Array<Adherent>;
     newForm: FormGroup;
     adherentFamilleForm: FormGroup;
-    qualiteAssureList: Array<QualiteAssure>;
+    qualiteAssureList1: Array<QualiteAssure>;
+    qualiteAssureList2: Array<QualiteAssure>;
     qualiteAssureList$: Observable<Array<QualiteAssure>>;
     destroy$ = new Subject<boolean>();
     genreList: Array<Genre>;
@@ -48,25 +55,44 @@ export class AvenantIncorporationComponent implements OnInit{
     professionList$: Observable<Array<Profession>>;
     historiqueAvenantAdherants: HistoriqueAvenantAdherant[] = [];
     adherentFamilleListe: AdherentFamille[] = [];
+    @Input() isRenouv: boolean;
+    obj: any = {group: {}, prime: {}};
+    adherentSelected: Adherent = {};
+    adherentPrincipaux1: Adherent[];
+    @Input() adherentPrincipauxTMP: Array<Adherent>;
+    groupes: Array<Groupe>;
+    adherentPrincipaux: Array<Adherent>;
+    viewListe = false;
+    selectedFile: File;
+    historiqueAvenant1: HistoriqueAvenant = {};
+    isImport = 'NON';
+    demandeursList: any = [
+        {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+        {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+        {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+        ];
 
     init(): void {
+        this.historiqueAvenant1.file = new FormData();
+        // this.historiqueAvenant1.fileToLoad = {};
         this.adherentForm = this.formBuilder.group({
             id: new FormControl(null),
             nom: new FormControl('', [Validators.required]),
             prenom: new FormControl('', [Validators.required]),
             dateNaissance: new FormControl('', [Validators.required]),
-            matricule: new FormControl(''),
             lieuNaissance: new FormControl('', [Validators.required]),
             numeroTelephone: new FormControl('', [Validators.required]),
             adresse: new FormControl('', [Validators.required]),
             adresseEmail: new FormControl('', [Validators.required]),
             profession: new FormControl('', [Validators.required]),
             referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl(),
+            qualiteAssure: new FormControl('', [Validators.required]),
             genre: new FormControl('', [Validators.required]),
             dateIncorporation: new FormControl('', [Validators.required]),
             dateEntree: new FormControl('', [Validators.required]),
             dateIncor: new FormControl(new Date(), [Validators.required]),
+            matriculeGarant: new FormControl('', ),
+            matriculeSouscripteur: new FormControl('', ),
             familys: this.formBuilder.array([])
         });
 
@@ -95,6 +121,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.myForm = this.formBuilder.group({
             numero: new FormControl(null, [Validators.required]),
             dateIncorparation: new FormControl(null, [Validators.required]),
+            observation: new FormControl(null, [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -112,7 +139,8 @@ export class AvenantIncorporationComponent implements OnInit{
             .pipe(takeUntil(this.destroy$))
             .subscribe((value) => {
                 if (value) {
-                    this.qualiteAssureList = value.slice();
+                    this.qualiteAssureList1 = value.slice().filter(e => e.code === 'ADHERENT');
+                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
                 }
             });
         this.genreList$ = this.store.pipe(select(genreSelector.genreList));
@@ -133,28 +161,41 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
     }
-    constructor(private formBuilder: FormBuilder, private store: Store<AppState>) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
+        private historiqueAvenantService: HistoriqueAvenantService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit(): void {
         this.init();
+        console.log('---------------------------------');
+        console.log(this.adherentPrincipauxTMP);
+        this.adherentPrincipaux = this.adherentPrincipauxTMP;
     }
 
     addAdherentFamilleToList(): void {
         // this.createHistoriqueAvenant();
-        const historiqueAvenant: HistoriqueAvenant = {};
-        historiqueAvenant.aderants = this.adherentFamilleListe;
-        historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-        historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
-        historiqueAvenant.dateAvenant = this.myForm.get('dateIncorparation').value;
-        console.log('..........historiqueAvenant.............');
-        console.log(historiqueAvenant);
-        this.adherentFamilleEvent.emit(historiqueAvenant);
+        // const historiqueAvenant1: HistoriqueAvenant = {};
+        this.historiqueAvenant1.aderants = this.adherentFamilleListe;
+        this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+        this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value;
+        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.observation = this.myForm.get('observation').value;
+        // this.historiqueAvenant1.fileToLoad = this.selectedFile;
+        // this.historiqueAvenant1.file.append('file', this.historiqueAvenant1.fileToLoad);
+        console.log('..........historiqueAvenant  f.............');
+        console.log(this.historiqueAvenant1);
+        this.adherentFamilleEvent.emit(this.historiqueAvenant1);
         // this.init();
     }
     ajouter(): void {
         console.log('----------------------------------');
         console.log(this.familys);
-        this.familys.push(this.createForm());
+        const formAdherent: FormGroup = this.createForm();
+        formAdherent.patchValue({dateIncor: this.adherentForm.get('dateIncorporation').value});
+        this.familys.push(formAdherent);
         // this.familles.push(this.getAdheranrt());
     }
     delete(ri: number): void {
@@ -194,6 +235,101 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
+        this.adherentSelected = {};
     }
 
+    loadAdherentPrincipalInfo() {
+        console.log(this.adherentSelected);
+        this.obj.group = this.adherentSelected;
+        this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
+        console.log('*************this.adherentSelected*************', this.adherentSelected);
+        /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
+		console.log('*************this.genre*************', this.genre);*/
+        this.setAdherentPrincipal(this.adherentSelected);
+    }
+
+    setAdherentPrincipal(adherent: Adherent): void {
+        console.log('***************adherent*******************', adherent);
+        this.adherentForm.patchValue({
+            id: adherent?.id || null,
+            nom: adherent?.nom,
+            prenom: adherent?.prenom,
+            dateNaissance: new Date(adherent?.dateNaissance),
+            matriculeGarant: adherent?.matriculeGarant,
+            lieuNaissance: adherent?.lieuNaissance,
+            numeroTelephone: adherent?.numeroTelephone,
+            adresse: adherent?.adresse,
+            adresseEmail: adherent?.adresseEmail,
+            profession: adherent?.profession,
+            referenceBancaire: adherent?.referenceBancaire,
+            qualiteAssure: adherent?.qualiteAssure,
+            genre: adherent?.genre,
+            dateEntree: new Date(adherent?.dateEntree)
+        });
+        console.log('***************this.adherentForm*******************', this.adherentForm);
+    }
+
+    getFiles(event: File) {
+        this.historiqueAvenant1.fileToLoad = event;
+        this.selectedFile = event;
+        console.log('------------get files success---------------');
+        console.log(this.historiqueAvenant1.fileToLoad);
+    }
+
+    voirLaliste(): void {
+        this.viewListe = !this.viewListe;
+    }
+
+    hideListe(): void {
+        this.viewListe = false;
+    }
+
+    exportModel(): void {
+        this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.INCORPORATION).subscribe(
+            (res) => {
+                const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+                const  fileUrl = URL.createObjectURL(file);
+                window.open(fileUrl);
+            }
+        );
+    }
+
+    compareDate(): void {
+        this.historiqueAvenantService.compareDate(this.myForm.get('dateIncorparation').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.myForm.patchValue({dateIncorparation: null});
+                }
+            }
+        );
+    }
+
+    addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+    }
+
+    compareDateIncorp(): void {
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.adherentForm.patchValue({dateIncor: null});
+                }
+            }
+        );
+    }
+    compareDateMembre(): void {
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.adherentForm.patchValue({dateIncor: null});
+                }
+            }
+        );
+    }
 }

@@ -29,6 +29,9 @@ import * as sousActeSelector from '../../../../store/parametrage/sous-acte/selec
 import {loadSousActe} from '../../../../store/parametrage/sous-acte/actions';
 import {ConfirmationService} from 'primeng/api';
 import {Plafond} from '../../../../store/contrat/plafond/model';
+import {AdherentService} from '../../../../store/contrat/adherent/service';
+import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 
 @Component({
     selector: 'app-avenant-groupe',
@@ -90,6 +93,10 @@ export class GroupeComponent implements OnInit{
     sousActeList$: Observable<Array<SousActe>>;
     sousActeList: Array<SousActe>;
     plafond: Plafond;
+    private adherentPrincipaux: Adherent[] = [];
+    groupeListes: Array<Groupe>;
+    groupeList$: Observable<Array<Groupe>>;
+    @Output() listeEvent = new EventEmitter();
 
     init(): void {
         // this.adherentFamille = null;
@@ -177,6 +184,7 @@ export class GroupeComponent implements OnInit{
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private confirmationService: ConfirmationService,
+        private adherentService: AdherentService
     ) {
         this.entityValidations = [
             {
@@ -289,6 +297,16 @@ export class GroupeComponent implements OnInit{
         this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             if (value) {
                 this.tauxList = value.slice();
+            }
+        });
+
+        this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
+        this.store.dispatch(loadGroupe({policeId: this.police.id}));
+        this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.groupeListes = value.slice();
+                console.log(this.groupeListes);
+                this.listeEvent.emit(this.groupeListes);
             }
         });
 
@@ -557,6 +575,15 @@ export class GroupeComponent implements OnInit{
             primePersonne: this.obj.prime?.primePersonne,
             primeAnnuelle: this.obj.prime?.primeAnnuelle
         });
+    }
+
+    loadAdherentPrincipalByGroupe(groupe: Groupe) {
+        this.adherentService.getAdherentPrincipauxByGroupe(this.groupe.id).subscribe(
+            (res) => {
+                this.adherentPrincipaux = res;
+                console.log('*****************************************', this.adherentPrincipaux);
+            }
+        );
     }
 
 }

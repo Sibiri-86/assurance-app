@@ -9,6 +9,7 @@ import { Commune } from '../../parametrage/commune/model';
 export interface Groupe {
     id?: string;
     libelle?: string;
+    numeroGroupe?: number;
     taux?: Taux;
     territorialite?: Array<Territorialite>;
     duree?: number;
@@ -22,6 +23,7 @@ export interface Groupe {
     description?: string;
     adherentFamille?: Array<AdherentFamille>;
     groupeId?: string;
+    listGroupe?: Array<Groupe>;
 }
 
 export interface GroupeList{

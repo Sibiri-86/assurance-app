@@ -44,7 +44,7 @@ import {GarantComponent} from './module/contrat/garant/garant.component';
 import {IntermediaireComponent} from './module/contrat/intermediaire/intermediaire.component';
 import {PoliceComponent} from './module/contrat/police/police.component';
 import {AvenantComponent} from './module/contrat/avenant/avenant.component';
-
+import { BaremeComponent } from './module/contrat/bareme/bareme.component';
 
 import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
 @NgModule({
@@ -64,6 +64,7 @@ import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteu
                     {path: 'contrat/garant', component: GarantComponent},
                     {path: 'contrat/intermediaire', component: IntermediaireComponent},
                     {path: 'contrat/police', component: PoliceComponent},
+                    {path: 'contrat/bareme', component: BaremeComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},

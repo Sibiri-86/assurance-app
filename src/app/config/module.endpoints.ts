@@ -218,6 +218,11 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/plafond`,
         mock: `assets/mock/contrat/plafond.mock.json`
     };
+    
+    static readonly BAREME = {
+        prod: `${SERVICE_PREFIX}/contrat/bareme`,
+        mock: `assets/mock/contrat/bareme.mock.json`
+    };
 
     static readonly CONTRAT_POLICE_BY_AFFAIRE_NOUVELLE = {
         prod: `${SERVICE_PREFIX}/contrat/police/filter_by_affaire_nouvelle`,
@@ -279,5 +284,61 @@ export class Endpoints {
     static readonly CONTRAT_POLICE_CLOTURE = {
         prod: `${SERVICE_PREFIX}/contrat/police`,
         mock: `assets/mock/contrat/police.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_FILE = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_EXPORT_EXCEL_MODEL = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/export-excel-model`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+    static readonly CONTRAT_POLICE_LOAD_ADHERENT = {
+        prod: `${SERVICE_PREFIX}/contrat/police/load-adherent-excel`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_COMPARE_DATE = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/compare-date`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_ADHERANT_UNSUSPEND = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent/unsuspend`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_CHANGE_STATUS = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/change-status`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_CALCUL_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/calcule-prime`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_VALIDER_PRIME = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/valider-prime`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_GET_END = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/get-date-fin`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGFA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HG = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGSA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPG = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 }

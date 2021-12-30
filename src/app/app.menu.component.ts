@@ -17,10 +17,11 @@ export class AppMenuComponent implements OnInit {
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']},
             {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage']},
             {
-                label: 'Contrat', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
+                label: 'Production', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
                 items: [
                     {label: 'garant', icon: '', routerLink: ['/contrat/garant']},
                     {label: 'intermediaire', icon: '', routerLink: ['/contrat/intermediaire']},
+                    {label: 'Barème', icon: '', routerLink: ['/contrat/bareme']},
                     {label: 'police', icon: '', routerLink: ['/contrat/police']},
                     //{label: 'affaire nouvelle', icon: '', routerLink: ['/contrat/affaire-nouvelle/souscripteur']},
                     {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant']},

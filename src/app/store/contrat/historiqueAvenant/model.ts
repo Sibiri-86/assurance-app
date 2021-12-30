@@ -10,6 +10,9 @@ import {DimensionPeriode} from '../../parametrage/dimension-periode/model';
 import {Taux} from '../../parametrage/taux/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 import {TypePrime} from '../../parametrage/type-prime/model';
+import {Territorialite} from '../../parametrage/territorialite/model';
+import {Commune} from '../../parametrage/commune/model';
+import {Prime} from '../prime/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -22,6 +25,13 @@ export interface HistoriqueAvenant {
     numero?: number;
     numeroGarant?: number;
     dateAvenant?: Date;
+    file?: FormData;
+    fileToLoad?: File;
+    valide?: boolean;
+    observation?: string;
+    typeDemandeur?: TypeDemandeur;
+    dateEffet?: Date;
+    dateEcheance?: Date;
 }
 
 export enum TypeEtat {
@@ -36,7 +46,9 @@ export enum TypeHistoriqueAvenant {
     MODIFICATION = 'MODIFICATION',
     RETRAIT = 'RETRAIT',
     INCORPORATION = 'INCORPORATION',
-    AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE'
+    AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE',
+    RESILIATION = 'RESILIATION',
+    SUSPENSION = 'SUSPENSION',
 }
 
 export interface HistoriqueAvenantAdherant {
@@ -52,6 +64,7 @@ export interface HistoriqueAvenantAdherant {
     adherent?: Adherent;
     deleted?: boolean;
     selected?: boolean;
+    dateEcheance?: Date;
 }
 
 export interface HistoriqueAvenantList {
@@ -75,6 +88,29 @@ export class Avenant {
     plafondGroupeSousActes?: HistoriquePlafondSousActe[];
     plafondFamilleActes?: HistoriquePlafondFamilleActe[];
     familles?: AdherentFamille[];
+    historiqueGroupeDto?: HistoriqueGroupe;
+}
+
+export class HistoriqueGroupe {
+    id?: string;
+    libelle?: string;
+    description?: string;
+    taux?: Taux;
+    typePrime?: TypePrime;
+    territorialite?: Territorialite;
+    duree?: number;
+    dateEffet?: Date;
+    dateEcheance?: Date;
+    dateSaisie?: Date;
+    dateValidation?: Date;
+    numeroExercice?: number;
+    adresse?: string;
+    commune?: Commune;
+    police?: Police;
+    prime?: Prime;
+    adherentFamille?: AdherentFamille;
+    groupeId?: string;
+    historiqueAvenant?: HistoriqueAvenant;
 }
 
 export class HistoriquePlafondFamilleActe {
@@ -137,4 +173,15 @@ export interface HistoriqueAvenantPrime {
     primeTotal?: number;
     deleted?: boolean;
     historiqueAvenant?: HistoriqueAvenant;
+    groupe?: Groupe;
+    fraisBadge?: number;
+    fraisAccessoir?: number;
+    primeTTC?: number;
+    taxeTTC?: number;
+}
+
+export enum TypeDemandeur {
+    VIMSO = 'VIMSO',
+    SOUSCRIPTEUR = 'SOUSCRIPTEUR',
+    GARANT = 'GARANT',
 }

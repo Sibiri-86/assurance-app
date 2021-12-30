@@ -1,12 +1,14 @@
 import { from } from "rxjs";
-import {Plafond, PlafondList} from "./model";
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {Bareme, BaremeList, Plafond, PlafondConfig, PlafondList} from "./model";
+import {HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import { Groupe } from "../groupe/model";
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class PlafondService {
@@ -23,7 +25,9 @@ $getPlafonds(): Observable<PlafondList> {
 $getPlafondsByGroupe(groupe: Groupe): Observable<any> {
     // @FIXME: get plafond by groupe
     console.log(groupe);
+    if(groupe){
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/consulter`, groupe);
+    }
   }
 
 posPlafond(Plafond: Plafond): Observable<any> {
@@ -46,7 +50,39 @@ deletePlafonds(plafond: Array<Plafond>): Observable<any> {
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}`, plafond);
 }
 
+/**service pour le parametrage des baremes */
+postBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}`, bareme);
+}
 
+updateBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
+}
+
+deleteBareme(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
+}
+
+$getBaremes(): Observable<BaremeList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}`).pipe(
+    map((response: BaremeList) => response),
+    catchError(this.handleError())
+  );
+}
+
+$getBaremesConfig(typeBareme: string, taux: number): Observable<PlafondConfig> {
+  // @FIXME: get request
+  if(typeBareme && taux){
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/config/${typeBareme}/${taux}`).pipe(
+    map((response: PlafondConfig) => response),
+    catchError(this.handleError())
+  );
+  }
+}
 
 pushFileToStorage(file: File): Observable<any> {
   const data: FormData = new FormData();
@@ -62,5 +98,22 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    getPlafondGroupeFamilleActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
+        return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/famille-acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'});
+    }
+
+    getPlafondGroupeActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondActe[]>> {
+        return this.http.get<PlafondActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'
+        });
+    }
+
+    getPlafondGroupeSousActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondSousActe[]>> {
+        return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/sous-acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'}
+        );
+    }
 }
 

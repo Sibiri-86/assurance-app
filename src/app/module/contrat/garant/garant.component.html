@@ -165,7 +165,7 @@
                     <div class="p-field p-col">
                         <label for="firstname2">Personne ressource 2</label>
                         <div>
-                            <span>{{garant.PersonneRessource2}}</span>
+                            <span>{{garant.personneRessource2}}</span>
                         </div>
                     </div>
 
@@ -194,21 +194,37 @@
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numéro compte banacaire 1</label>
+                        <label for="lastname2">Numéro compte bancaire 1</label>
                         <div>
                             <span>{{garant.numeroCompteBancaire1}}</span>
                         </div>
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numéro compte banacaire 2</label>
+                        <label for="lastname2">Banque 1</label>
                         <div>
-                            <span>{{garant.numeroCompteBancaire2}}</span>
+                            <span>{{garant.banque1?.libelle}}</span>
                         </div>
-                    </div>    
+                    </div>
+
+                      
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro compte bancaire 2</label>
+                        <div>
+                            <span>{{garant.numeroCompteBancaire2}}</span>
+                        </div>
+                    </div> 
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Banque 2</label>
+                        <div>
+                            <span>{{garant.banque2?.libelle}}</span>
+                        </div>
+                    </div>
 
                     <div class="p-field p-col">
                         <label for="lastname2">RCCM</label>
@@ -216,6 +232,10 @@
                             <span>{{garant.rccm}}</span>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col">
                         <label for="lastname2">Periodicité appel fond</label>
@@ -229,16 +249,19 @@
                         <div>
                             <span>{{garant.secteurActivite.libelle}}</span>
                         </div> 
-                    </div>   
-                </div>
-
-                <div class="p-fluid p-formgrid p-grid">
+                    </div>
+                    
                     <div class="p-field p-col">
                         <label for="lastname2">Secteur</label>
                         <div>
                             <span>{{garant.secteur.libelle}}</span>
                         </div> 
                     </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
                 </div>
             </div>
             </ng-template>
@@ -270,10 +293,15 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact <span class="required">*</span></label>
-                            <input id="lastname2" type="number" formControlName="contact" pInputText>
+                            <!--
+                            <input id="lastname2" type="text" formControlName="contact" [value]="garantForm.get('contact').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            
+                            <p-inputMask formControlName="contact" mask="99 99 99 99"></p-inputMask>
+
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="garantForm" [entityField]="'contact'">
-                        </app-entity-validation>
+                            </app-entity-validation>
                         </div>
                 </div>
 
@@ -309,7 +337,11 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Contact personne ressource 1 <span class="required">*</span></label>
-                            <input id="lastname2" type="number" formControlName="contactPersonneRessource1" pInputText>
+                            <!--
+                            <input id="lastname2" type="text" formControlName="contactPersonneRessource1" [value]="garantForm.get('contactPersonneRessource1').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            <p-inputMask formControlName="contactPersonneRessource1" mask="99 99 99 99"></p-inputMask>
+
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="garantForm" [entityField]="'contactPersonneRessource1'">
                             </app-entity-validation>
@@ -335,7 +367,10 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="lastname2">Contact personne ressource 2</label>
-                            <input id="lastname2" type="number"  formControlName="contactPersonneRessource2" pInputText>
+                            <!--
+                            <input id="lastname2" type="text"  formControlName="contactPersonneRessource2" [value]="garantForm.get('contactPersonneRessource2').value | formatTableValue: 'phoneContact':true" pInputText>
+                            -->
+                            <p-inputMask formControlName="contactPersonneRessource2" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="garantForm" [entityField]="'contactPersonneRessource2'">
                             </app-entity-validation>
@@ -443,7 +478,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Taux de commission prime</label>
+                        <label for="lastname2">Taux de commission de gestion en %</label>
                         <p-dropdown dataKey="id" inputId="tauxPrime" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionPrime" placeholder="Select" optionLabel="taux"></p-dropdown>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="garantForm" [entityField]="'taux'">
@@ -451,7 +486,7 @@
                     </div>
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Taux de commission accessoire</label>
+                        <label for="lastname2">Taux de commission accessoire en %</label>
                         <p-dropdown dataKey="id" inputId="tauxAccessoire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="commissionAccessoire" placeholder="Select" optionLabel="taux"></p-dropdown>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="garantForm" [entityField]="'taux'">
@@ -480,8 +515,8 @@
                             </div> 
                             
                             <div class="p-field p-col-4">
-                                <label for="lastname2">Commune</label>
-                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
+                                <label for="lastname2">Commune <span class="required">*</span></label>
+                                <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeCommune($event)"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'commune'">
                                 </app-entity-validation>
@@ -497,7 +532,7 @@
                             [formGroup]="garantForm" [entityField]="'arrondissement'">
                             </app-entity-validation>
                          </div>
-
+                         
                          <div class="p-field p-col-4">
                             <label for="secteur">Secteur <span class="required">*</span></label>
                             <p-dropdown inputId="secteur" [filter]="true" showClear="true" [options]="secteurList" dataKey="id" formControlName="secteur" placeholder="Select" optionLabel="libelle"></p-dropdown>

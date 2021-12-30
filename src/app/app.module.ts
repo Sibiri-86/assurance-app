@@ -5,7 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
-
 // PrimeNG Components for demos
 import {AccordionModule} from 'primeng/accordion';
 import {AutoCompleteModule} from 'primeng/autocomplete';
@@ -221,6 +220,12 @@ import {AvenantModificationComponent} from './module/contrat/avenant/avenant-mod
 import { PlafondComponent } from './module/contrat/avenant/plafond/plafond.component';
 import {Upercase} from './module/pipes/upercase';
 import { SeparatorPipe } from './module/pipes/separator.pipe';
+import { BaremeComponent } from './module/contrat/bareme/bareme.component';
+import { UploadFileComponent } from './module/contrat/avenant/upload-file/upload-file.component';
+import { AdherentListComponent } from './module/contrat/police/adherent-list/adherent-list.component';
+import { AvenantSuspensionComponent } from './module/contrat/avenant/avenant-suspension/avenant-suspension.component';
+import { AvenantResiliationComponent } from './module/contrat/avenant/avenant-resiliation/avenant-resiliation.component';
+import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
 
 @NgModule({
     imports: [
@@ -313,7 +318,12 @@ import { SeparatorPipe } from './module/pipes/separator.pipe';
         KeycloakAngularModule,
         AppCodeModule,
         ReactiveFormsModule,
-        StoreModule.forRoot(reducers,  {metaReducers}),
+        StoreModule.forRoot(reducers,  
+          {metaReducers, 
+            runtimeChecks: {
+              strictStateImmutability: false,
+              strictActionImmutability: false,
+            }}),
         EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
@@ -386,7 +396,13 @@ import { SeparatorPipe } from './module/pipes/separator.pipe';
         AvenantModificationComponent,
         PlafondComponent,
         Upercase,
-        SeparatorPipe
+        SeparatorPipe,
+        BaremeComponent,
+        UploadFileComponent,
+        AdherentListComponent,
+        AvenantSuspensionComponent,
+        AvenantResiliationComponent,
+        BeginLowerCasePipe
     ],
     providers: [
         {

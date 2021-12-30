@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-fieldset legend="Avenant" toggleable="true">
+                <form [formGroup]="myForm" *ngIf="!isRenouv" (ngSubmit)="createAvenantSuspension()">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="numero">Numéro de l'avenant chez la garant <sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Date de la résiliation <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="observation">Observation</label>
+                            <input id="observation" type="text" required formControlName="observation" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Motif <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-5"></div>
+                        <div class="p-field p-col-2 p-ac-center">
+                            <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                                    class="p-button p-button-warning" label="Annuler"
+                                    (click)="init()">
+                            </button>
+                        </div>
+                        <div class="p-field p-col-2 p-ac-center">
+                            <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                                    class="p-button p-button-success" type="submit">
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+        </div>
+    </div>
+</div>

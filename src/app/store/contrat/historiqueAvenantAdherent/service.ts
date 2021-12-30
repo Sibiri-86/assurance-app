@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
+import {HistoriqueAvenantPrime} from '../historiqueAvenant/model';
 import {createRequestOption} from '../../../module/util/loader-util';
 import {Adherent} from '../adherent/model';
 
@@ -50,20 +51,34 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
-/* postHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
-    // @FIXME: post request
-    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}`, historiqueAvenant);
-  }
+    findHistoriqueAvenantPrime(idHa: string): Observable<HistoriqueAvenantPrime[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_HISTORIQUE_AVENANT_PRIME)}`,
+            {params: createRequestOption({idHa})}).pipe(
+            map((response: HistoriqueAvenantPrime[]) => response),
+            catchError(this.handleError())
+        );
+    }
 
-updateHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
-    // @FIXME: post request
-    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/${historiqueAvenant.id}`, historiqueAvenant);
-  }
+    findAllHistoriquePlafondGroupeByHistoriqueAvenantAndGroupe(avenantId: string, groupeId: string): Observable<any> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/hpgf`,
+            {params: createRequestOption({avenantId, groupeId})});
+    }
 
-deleteHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
-    // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/${historiqueAvenant.id}`, null);
-} */
+    findAllHistoriquePlafondGroupeFamilleActeByHistoriqueAvenantAndGroupe(avenantId: string, groupeId: string): Observable<any> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/hpgfa`,
+            {params: createRequestOption({avenantId, groupeId})});
+    }
+
+    findAllHistoriquePlafondGroupeActeByHistoriqueAvenantAndGroupe(avenantId: string, groupeId: string): Observable<any> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/hpga`,
+            {params: createRequestOption({avenantId, groupeId})});
+    }
+
+    findAllHistoriquePlafondGroupeSousActeByHistoriqueAvenantAndGroupe(avenantId: string, groupeId: string): Observable<any> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/hpgsa`,
+            {params: createRequestOption({avenantId, groupeId})});
+    }
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {

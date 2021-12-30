@@ -6,6 +6,7 @@ import { Taux } from '../../parametrage/taux/model';
 import { Secteur } from '../../parametrage/secteur/model';
 import {TypeReport} from '../enum/model';
 import {HistoriqueAvenant} from '../historiqueAvenant/model';
+import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
 
 export interface Police{
     id?: string;
@@ -22,6 +23,7 @@ export interface Police{
     referencePolice?: string;
     typeDuree?: string;
     nom?: string;
+    tauxCommissionIntermediaire?: TauxCommissionIntermediaire;
     code?: string;
     contact?: string;
     adresseEmail?: string;
@@ -50,7 +52,8 @@ export interface Rapport {
     nombreEnfant?: number,
     nombreAdherent?: number,
     nombreFeminin?: number,
-    nombreMasculin?: number
+    nombreMasculin?: number,
+    total?: number
 }
 
 export interface ReportFile {

@@ -5,6 +5,9 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {HistoriqueAvenant} from '../historiqueAvenant/model';
+import {AdherentFamille} from '../adherent/model';
+import * as XLSX from 'xlsx';
 
 @Injectable({providedIn: 'root'})
 export class PoliceService {
@@ -99,5 +102,20 @@ export class PoliceService {
     deValiderPolice(Police: Police): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/deValider`, Police);
+    }
+
+    loadAdherentsByExcelFile(file: File): Observable<AdherentFamille[]> {
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/json');
+        return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data, {headers: headers});
+    }
+
+    getModel(): Observable<any> {
+        // var url = 'assets/excell/Model_import_affaire_nouvelle.xlsx';
+        return this.http.get('assets/excell/Model_import_affaire_nouvelle.xlsx');
     }
 }
