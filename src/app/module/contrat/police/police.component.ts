@@ -1373,7 +1373,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         dimensionPeriode: {},
         taux: this.police.taux,
-        dateEffet: new Date(this.police.dateEffet),
+        dateEffet: new Date(this.groupe.dateEffet),
         garantie: {}
       }
     ];
@@ -1450,7 +1450,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     delete this.clonedAdherentFamille[index];
   }
 
-  deleteRow(adherentFamille: Adherent, index: number){
+  deleteRow(adherentFamille: Adherent, index: number) {
     this.adherentFamilleList.splice(index);
   }
 
@@ -1781,10 +1781,10 @@ changeGarantie(garantie, indexLigne: number) {
       // recuperer les sous actes de l'acte
       for (var i = 0; i < this.sousActeList.length; i++){
         if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
-          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), montantPlafond: 0, montantPlafondParActe: 0});
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: this.police.taux, dateEffet: new Date(this.groupe.dateEffet), montantPlafond: 0, montantPlafondParActe: 0});
         }
       }
-      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.police.dateEffet), listeSousActe: this.plafondSousActe});
+      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: this.police.taux, dateEffet: new Date(this.groupe.dateEffet), listeSousActe: this.plafondSousActe});
     }
   }
     console.log(this.plafondActe);
@@ -1827,7 +1827,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.displayPhotos = true;
   }
   
-  onBasicUpload(event) {
+  onBasicUpload(event, form) {
     if(!this.adherentChecked){
       this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
    } else {
@@ -1838,6 +1838,7 @@ changeGarantie(garantie, indexLigne: number) {
       accept: () => {
         console.log(event.files[0]);
         this.store.dispatch(featureActionAdherent.importPhotosAdherent({file:event.files[0], idAdherent:this.adherentChecked.id, idGroupe: this.groupe.id}));
+        form.clear();
       },
     });
    }
