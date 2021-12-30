@@ -14,6 +14,13 @@
                     </div>
                 </div>
             </div>
+            <div class="p-field p-col-4">
+                <br>
+                <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
+                        class="p-button p-button-icon" label="export model" (click)="exportModel()">
+                </button>
+            </div>
+            <div class="p-field p-col-8" *ngIf="isImport === 'OUI'"><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
         </div>
         <div class="p-field p-col-12">
             <p-fieldset legend="Information de l'Avenant" toggleable="true">
@@ -29,13 +36,12 @@
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                     appendTo="body"></p-calendar>
                         </div>
-                        <div class="p-field p-col-2">
-                            <br>
-                            <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
-                                    class="p-button p-button-icon" label="export model" (click)="exportModel()">
-                            </button>
+                        <div class="p-field p-col-4">
+                            <label for="dateIncorparation">Le demandeur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
-                        <div class="p-field p-col-2" *ngIf="isImport === 'OUI'"><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
                         <div class="p-field p-col-12">
                             <label for="nom">Observation</label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText>
@@ -52,22 +58,22 @@
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()" >
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
-                            <label for="nom">Nom <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="nom">Nom <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="nom" type="text" required formControlName="nom" pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="prenom">Prenom <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="prenom">Prenom <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="prenom" type="text" formControlName="prenom" pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="tel">Telephone <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="tel">Telephone <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="tel" type="number" formControlName="numeroTelephone" pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="matriculeGarant">Matricule chez le garant <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="matriculeGarant">Matricule chez le garant <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
                         </div>
 
@@ -77,13 +83,13 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="mail">Adresse Email <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
-                            <input id="mail" type="text" type="email" formControlName="adresseEmail"
+                            <label for="mail">Adresse Email <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <input id="mail" type="email" formControlName="adresseEmail"
                                    pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="adresse">Adresse <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="adresse">Adresse <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="adresse" type="text" formControlName="adresse" pInputText>
                         </div>
 
@@ -93,39 +99,39 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="naiss">Date de naissance <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
-                            <p-calendar [showIcon]="true" formControlName="dateNaissance"
+                            <label for="naiss">Date de naissance <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <p-calendar [showIcon]="true" formControlName="dateNaissance" id="naiss"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="lieu">Lieu de naissance <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="lieu">Lieu de naissance <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="lieu" type="text" formControlName="lieuNaissance" pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="entre">Date entrée <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="entre">Date entrée <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-calendar [showIcon]="true" formControlName="dateEntree"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-3">
-                            <label for="dateIncor">Date d'incorporation <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="dateIncor">Date d'incorporation <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncor"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDateIncorp()"
                                         appendTo="body"></p-calendar>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="genre">Genre <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="genre">Genre <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-dropdown inputId="genre" dataKey="id" [filter]="true" showClear="true"
                                         [options]="genreList" formControlName="genre"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="profession">Profession<sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="profession">Profession<sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-dropdown inputId="profession" dataKey="id" [filter]="true"
                                         showClear="true" [options]="professionList"
                                         formControlName="profession" placeholder="Select"
@@ -133,7 +139,7 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="quali">Qualite assuré <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                            <label for="quali">Qualite assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-dropdown inputId="qualiteAssure" dataKey="id" [filter]="true"
                                         showClear="true" [options]="qualiteAssureList1"
                                         formControlName="qualiteAssure" placeholder="Select"
@@ -165,12 +171,12 @@
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" [formGroup]="familyForm">
                                     <div class="p-field p-grid">
                                         <div class="p-col-3">
-                                            <label [for]="'nom' + ri">Nom<sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'nom' + ri">Nom<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'nom' + ri" name="nom" type="text" formControlName="nom"
                                                    pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'prenom' + ri">Prenom <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'prenom' + ri">Prenom <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'prenom' + ri" type="text" [name]="'prenom' + ri"
                                                    formControlName="prenom" pInputText/>
                                         </div>
@@ -181,29 +187,29 @@
                                                    pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'dateNaissance' + ri">Date Naisse. <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'dateNaissance' + ri">Date Naisse. <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'dateNaissance' + ri" type="date" [name]="'dateNaissance' + ri"
                                                    formControlName="dateNaissance" pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'dateEntree' + ri" type="date" [name]="'dateEntree' + ri"
                                                    formControlName="dateEntree" pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'dateIncor' + ri">Date Incorpotration <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'dateIncor' + ri">Date Incorpotration <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'dateIncor' + ri" type="date" [name]="'dateIncor' + ri"
                                                    formControlName="dateIncor" pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'nom1' + ri">Genre <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'nom1' + ri">Genre <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown [options]="genreList" formControlName="genre"
                                                         [name]="'genre' + ri"
                                                         optionLabel="libelle" placeholder="Select Make"
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </div>
                                         <div class="p-col-2">
-                                            <label [for]="'nom2' + ri">Qualite Assuré <sup style="color: red !important; size: 1.4em;">(*)</sup></label>
+                                            <label [for]="'nom2' + ri">Qualite Assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown [options]="qualiteAssureList2" [name]="'qualite' + ri"
                                                         formControlName="qualiteAssure" optionLabel="libelle"
                                                         placeholder="Select Make"

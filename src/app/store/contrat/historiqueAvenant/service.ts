@@ -2,10 +2,14 @@ import {
     Avenant,
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
-    HistoriqueAvenantList, HistoriqueAvenantPrime,
+    HistoriqueAvenantList,
+    HistoriqueAvenantPrime,
+    HistoriqueGroupe,
+    HistoriquePlafondFamilleActe,
+    HistoriquePlafondSousActe,
     TypeHistoriqueAvenant
 } from "./model";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -180,5 +184,31 @@ private handleError<T>() {
     historiqueAvenant.dateEffet = debut;
     return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_GET_END)}`, historiqueAvenant,
             {params: createRequestOption({typeDuree, duree}), observe: 'response'});
+    }
+
+    findHistoriquePlafondGroupeFamilleActeByGroupeIdAndDeletedIsFalse(groupeId: string):
+        Observable<HttpResponse<HistoriquePlafondFamilleActe[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HPGFA)}`,
+            {params: createRequestOption({groupeId}), observe: 'response'});
+    }
+
+    findHistoriqueGroupeByGroupeIdAndDeletedIsFalse(groupeId: string): Observable<HttpResponse<HistoriqueGroupe[]>> {
+        return this.http.get<HistoriqueGroupe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HG)}`,
+            {params: createRequestOption({groupeId}), observe: 'response'});
+    }
+
+    findHistoriquePlafondGroupeSousActeByGroupeIdAndDeletedIsFalse(groupeId: string): Observable<HttpResponse<HistoriquePlafondSousActe[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HPGSA)}`,
+            {params: createRequestOption({groupeId}), observe: 'response'});
+    }
+
+    findHistoriquePlafondGroupeByGroupeIdAndDeletedIsFalse(groupeId: string): Observable<HttpResponse<HistoriqueGroupe[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HPG)}`,
+            {params: createRequestOption({groupeId}), observe: 'response'});
+    }
+
+    findHistoriquePlafondGroupeActeByGroupeIdAndDeletedIsFalse(groupeId: string): Observable<HttpResponse<HistoriqueGroupe[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HPGA)}`,
+            {params: createRequestOption({groupeId}), observe: 'response'});
     }
 }

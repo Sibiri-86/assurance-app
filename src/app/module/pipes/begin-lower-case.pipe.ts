@@ -5,13 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class BeginLowerCasePipe implements PipeTransform {
     transform(value: string): string {
-        if (value !== null) {
+        if (value) {
             if (this.decoupe(value).length === 1) {
                 return this.beginLower(value);
             } else {
                 return this.beginLowerList(this.decoupe(value));
             }
         }
+        return '';
     }
 
     decoupe(entree: string): string[] {

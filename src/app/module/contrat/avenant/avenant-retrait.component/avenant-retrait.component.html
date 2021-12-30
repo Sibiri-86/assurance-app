@@ -35,7 +35,7 @@
                             class="p-button p-button-icon" label="export model" (click)="exportModel()">
                     </button>
                 </div>
-                <div class="p-field p-col-4" *ngIf="isImport === 'OUI'"><br><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+                <div class="p-field p-col-6" *ngIf="isImport === 'OUI'"><br><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait</label>
                         <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                    dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
                     </div>
                     <div class="p-field p-col-12">
                         <label for="observation">Observation</label>

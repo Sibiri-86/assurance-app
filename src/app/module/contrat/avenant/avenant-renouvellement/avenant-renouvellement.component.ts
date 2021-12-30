@@ -964,4 +964,20 @@ export class AvenantRenouvellementComponent implements OnInit {
     changePrime(event) {
         this.selectedTypePrime = event.value;
     }
+
+    compareDate(): void {
+        this.historiqueAvenantService.compareDate(this.myForm.get('dateEffet').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.myForm.patchValue({dateEffet: null});
+                }
+            }
+        );
+    }
+
+    addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+    }
 }

@@ -298,7 +298,7 @@ export class Endpoints {
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
     static readonly HISTORIQUE_AVENANT_COMPARE_DATE = {
-        prod: `${SERVICE_PREFIX}/contrat/police/compare-date`,
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/compare-date`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
     static readonly HISTORIQUE_AVENANT_ADHERANT_UNSUSPEND = {
@@ -319,6 +319,26 @@ export class Endpoints {
     };
     static readonly HISTORIQUE_AVENANT_GET_END = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/get-date-fin`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGFA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HG = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGSA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPG = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly HISTORIQUE_AVENANT_HPGA = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 }

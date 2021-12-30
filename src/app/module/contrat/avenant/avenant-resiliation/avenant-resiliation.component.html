@@ -9,9 +9,9 @@
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Date de suspension <sup style="color: red; size: 1.7em">*</sup></label>
+                            <label for="dateIncorparation">Date de la résiliation <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-6">
@@ -19,7 +19,7 @@
                             <input id="observation" type="text" required formControlName="observation" pInputText>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Le demandeur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <label for="dateIncorparation">Motif <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>

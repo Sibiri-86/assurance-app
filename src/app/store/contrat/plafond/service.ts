@@ -1,12 +1,14 @@
 import { from } from "rxjs";
 import {Bareme, BaremeList, Plafond, PlafondConfig, PlafondList} from "./model";
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import { Groupe } from "../groupe/model";
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class PlafondService {
@@ -96,5 +98,22 @@ private handleError<T>() {
       return throwError(error.message || 'Something went wrong');
     };
   }
+
+    getPlafondGroupeFamilleActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
+        return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/famille-acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'});
+    }
+
+    getPlafondGroupeActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondActe[]>> {
+        return this.http.get<PlafondActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'
+        });
+    }
+
+    getPlafondGroupeSousActeByGroupe(idGroupe: string): Observable<HttpResponse<PlafondSousActe[]>> {
+        return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/sous-acte-groupe`,
+            {params: createRequestOption({idGroupe}), observe: 'response'}
+        );
+    }
 }
 

@@ -3435,7 +3435,10 @@
                       <th pSortableColumn="numero" style="width: 12rem">Prime Net
                           <p-sortIcon field="dateNaissance"></p-sortIcon>
                       </th>
-                      <th pSortableColumn="lieuNaissance" style="width: 12rem">Prime Total
+                      <th pSortableColumn="numero" style="width: 12rem">Taxe
+                          <p-sortIcon field="dateNaissance"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="lieuNaissance" style="width: 12rem">Prime Hors Taxe
                           <p-sortIcon field="lieuNaissance"></p-sortIcon>
                       </th>
                   </tr>
@@ -3458,6 +3461,7 @@
                           </span>
                       </td>
                       <td><span style="font-weight: bold">{{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</span></td>
+                      <td><span style="font-weight: bold">{{historiqueAvenantPrime.taxeTTC | formatTableValue: 'number':true}}</span></td>
                       <td><span style="font-weight: bold">{{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</span></td>
                   </tr>
               </ng-template>

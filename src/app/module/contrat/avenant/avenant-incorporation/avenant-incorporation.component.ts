@@ -17,7 +17,7 @@ import {Profession} from '../../../../store/parametrage/profession/model';
 import {Police} from '../../../../store/contrat/police/model';
 import {
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant,
+    HistoriqueAvenantAdherant, TypeDemandeur,
     TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {Groupe} from '../../../../store/contrat/groupe/model';
@@ -25,6 +25,7 @@ import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
+import {MessageService} from 'primeng/api';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -65,6 +66,11 @@ export class AvenantIncorporationComponent implements OnInit{
     selectedFile: File;
     historiqueAvenant1: HistoriqueAvenant = {};
     isImport = 'NON';
+    demandeursList: any = [
+        {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+        {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+        {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+        ];
 
     init(): void {
         this.historiqueAvenant1.file = new FormData();
@@ -155,7 +161,12 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
     }
-    constructor(private formBuilder: FormBuilder, private store: Store<AppState>, private historiqueAvenantService: HistoriqueAvenantService) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
+        private historiqueAvenantService: HistoriqueAvenantService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit(): void {
         this.init();
@@ -182,7 +193,9 @@ export class AvenantIncorporationComponent implements OnInit{
     ajouter(): void {
         console.log('----------------------------------');
         console.log(this.familys);
-        this.familys.push(this.createForm());
+        const formAdherent: FormGroup = this.createForm();
+        formAdherent.patchValue({dateIncor: this.adherentForm.get('dateIncorporation').value});
+        this.familys.push(formAdherent);
         // this.familles.push(this.getAdheranrt());
     }
     delete(ri: number): void {
@@ -222,6 +235,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
+        this.adherentSelected = {};
     }
 
     loadAdherentPrincipalInfo() {
@@ -280,15 +294,42 @@ export class AvenantIncorporationComponent implements OnInit{
         );
     }
 
-    compareDate(): boolean {
-        const response = false;
-        const debut: Date = this.myForm.get('dateIncorparation').value;
-        this.historiqueAvenantService.compareDate(new Date(debut.getFullYear(), debut.getHours(), debut.getDay()), this.police.dateEffet).subscribe(
+    compareDate(): void {
+        this.historiqueAvenantService.compareDate(this.myForm.get('dateIncorparation').value, this.police.dateEffet).subscribe(
             (res) => {
-                return res;
-                console.log(res);
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.myForm.patchValue({dateIncorparation: null});
+                }
             }
         );
-        return response;
+    }
+
+    addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+    }
+
+    compareDateIncorp(): void {
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.adherentForm.patchValue({dateIncor: null});
+                }
+            }
+        );
+    }
+    compareDateMembre(): void {
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+            (res) => {
+                if (res) {
+                    this.addMessage('error', 'Date d\'effet invalide',
+                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.adherentForm.patchValue({dateIncor: null});
+                }
+            }
+        );
     }
 }
