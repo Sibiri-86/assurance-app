@@ -3529,6 +3529,11 @@
 
                         <ng-template pTemplate="header">
                             <tr>
+                                <td><span class="p-column-title">{{historiqueAvenant.historiqueAvenant?.groupe?.libelle}}</span></td>
+                                <td><span class="p-column-title">{{historiqueAvenant.typePrime?.libelle}}</span></td>
+                                <td><span class="p-column-title">{{historiqueAvenant.primeNet}}</span></td>
+                                <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>
+                                <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>
                                 <th pSortableColumn="numero" style="width: 3rem">N°
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
@@ -3584,6 +3589,7 @@
                         </ng-template>
                         <ng-template pTemplate="summary">
                             <div class="p-d-flex p-ai-center p-jc-between">
+                                {{historiqueAvenantAdherents3 ? historiqueAvenantAdherents3.length : 0 }} assuré(s).
                                 {{historiqueAvenantAdherents5 ? historiqueAvenantAdherents5.length : 0 }} assuré(s).
                             </div>
                         </ng-template>
@@ -3696,6 +3702,7 @@
             </div>
         </ng-template>
     </p-dialog>
-    
+
+
 
 </div>

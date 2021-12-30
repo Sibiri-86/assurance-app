@@ -240,7 +240,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
   adherentsListeActuelle: Array<Adherent> = [];
-  adherentsListeActuelle1: Array<Adherent> = [];
   displayALA = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
@@ -276,9 +275,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
   displayDialogPrime = false;
   avenantModif1: Avenant = {};
+  private primetotal = 0;
 
   infosPolice = false;
-  private primetotal = 0;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -1350,6 +1349,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   addAvenant(): void {
     this.dissplayavenant = true;
+
   }
 
   addAvenantRetrait(): void {
@@ -1424,16 +1424,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log(res);
           this.adherentsListeActuelle = res;
           this.displayALA = true;
-        }
-    );
-  }
-
-  loadActualList1(police: Police): void {
-    this.adherentService.findAdherantActuallList(police.id).subscribe(
-        (res) => {
-          console.log('---------- Actual Liste ----------');
-          console.log(res);
-          this.adherentsListeActuelle1 = res;
         }
     );
   }
@@ -1578,6 +1568,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.viewAvenantIncorp(avenant, typeHistoriqueAvenant);
         break;
       }
+      case TypeHistoriqueAvenant.MODIFICATION: {
+
+        break;
+      }
       case TypeHistoriqueAvenant.RETRAIT: {
         this.viewAvenantRetrait(avenant, typeHistoriqueAvenant);
         break;
@@ -1651,37 +1645,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
     );
     this.displayDialogFormAdherentAffaireNouvelle = true;
-  }
-
-  viewAvenantRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
-    this.historiqueAvenant = {...avenant};
-    console.log(typeof typeHistoriqueAvenant);
-    console.log('++++++++++++++++++++avenant.id+++++++++++++++++++++++', avenant.id);
-    console.log('++++++++++++++++++++avenant.police.id+++++++++++++++++++++++', avenant.police.id);
-    this.historiqueAvenantAdherentService.getAvenantModificationInfo(typeHistoriqueAvenant,
-        avenant.id, avenant.police.id).subscribe(
-        (res: Avenant) => {
-          this.avenantModif = res;
-          console.log('=====================res=============', res);
-        }
-    );
-    this.displayDialogFormAdherentrenouvellement = true;
-  }
-
-  viewAvenantModification(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
-    this.historiqueAvenant = {...avenant};
-    console.log(typeof typeHistoriqueAvenant);
-    this.historiqueAvenantAdherentService.getAvenantModificationInfo(typeHistoriqueAvenant,
-        avenant.id, avenant.police.id).subscribe(
-        (res: Avenant) => {
-          this.avenantModif1 = res;
-          console.log('=====================res=============', res);
-          this.historiqueAvenantAdherents3 = this.historiqueAvenantAdherent1s
-              .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);
-          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
-        }
-    );
-    this.displayDialogFormAdherentModification = true;
   }
 
   viewAvenantResiliation(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {

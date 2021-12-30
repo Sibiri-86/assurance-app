@@ -11,11 +11,15 @@ import {
 } from "./model";
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError, Observable} from 'rxjs';
+import {throwError, Observable, of} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -116,7 +120,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         data.append('groupeId', historiqueAvenant.groupe.id);
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
-        headers.set('Accept', 'application/json');
+        headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
         console.log('++++++++++++++++++data++++++++++++++++++++++');
         console.log(data);
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_FILE)}`, data, {headers: headers});
@@ -210,5 +214,19 @@ private handleError<T>() {
     findHistoriquePlafondGroupeActeByGroupeIdAndDeletedIsFalse(groupeId: string): Observable<HttpResponse<HistoriqueGroupe[]>> {
         return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_HPGA)}`,
             {params: createRequestOption({groupeId}), observe: 'response'});
+    }
+
+    getModel(): Observable<any> {
+        return null;
+    }
+
+    private saveAsExcelFile(buffer: any, fileName: string): void {
+        const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
+        FileSaver.saveAs(data, fileName + '_export_' + new  Date().getTime() + EXCEL_EXTENSION);
+    }
+
+    exportAsXLSX(): void {}
+    public getJSON(): Observable<any> {
+        return this.http.get('assets/excell/Model_import_affaire_nouvelle.xlsx');
     }
 }
