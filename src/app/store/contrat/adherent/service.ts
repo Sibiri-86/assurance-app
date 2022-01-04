@@ -41,6 +41,18 @@ posAdherent(Adherent: Adherent): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers: headers });
   }
   
+  
+  pushPhotosAdherentLot(filesList: File[]): Observable<any> {
+    const data: FormData = new FormData();
+    for (let i = 0; i < filesList.length; i++) {
+      data.append('fileArray', filesList[i], filesList[i].name);
+    }
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.set('Accept', 'application/json');
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/lot`, data, { headers: headers });
+  }
+  
 updateAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);

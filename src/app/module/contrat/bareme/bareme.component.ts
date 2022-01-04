@@ -201,7 +201,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
   }
 
 
-  
+  expandActe(i){
+    console.log(i);
+  }
 
   onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
     this.clonedPlafondConfiguration[plafond.garantie.id] = {...plafond};

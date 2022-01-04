@@ -215,6 +215,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   plafondFamilleActe: Array<PlafondFamilleActe>;
   plafondFamilleActeTemp: PlafondFamilleActe;
   plafondFamilleActeConstruct: Array<PlafondFamilleActe> = [];
+  plafondFamilleActeConstrutRecap: Array<PlafondFamilleActe> = [];
   plafondActuelleConfiguration: Array<PlafondFamilleActe> = [];
   plafondActe: Array<PlafondActe>;
   plafondSousActe: Array<PlafondSousActe>;
@@ -289,6 +290,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   adherentChecked : Adherent;
   displayPhotos: Boolean = false;
   pictureUrl='';
+  indexActeExpand:number;
+  displayRecap = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -1064,6 +1067,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   modifierAdherent(adherent: Adherent){
     this.adherent = {...adherent};
     this.adherent.dateNaissance = new Date(this.adherent.dateNaissance);
+    this.adherent.dateEntree = new Date(this.adherent.dateEntree);
     this.displayDialogFormUpdateAdherent = true;
     this.adherentForm.patchValue(this.adherent);
   }
@@ -1317,6 +1321,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  voirRecap(){
+    this.displayRecap = true;
+  }
   nextToAdherent() {
     this.displayAdherentForm = true;
     this.displayGroupForm = false;
@@ -1373,7 +1380,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         dimensionPeriode: {},
         taux: this.police.taux,
-        dateEffet: new Date(this.groupe.dateEffet),
+        dateEffet: new Date(this.police.dateEffet),
         garantie: {}
       }
     ];
@@ -1415,11 +1422,29 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**mode edition de plafondFamilleActe */
   onRowEditInit(plafondFamilleActe: PlafondFamilleActe) {
-    this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id] = {
-      ...plafondFamilleActe,
+    console.log(plafondFamilleActe);
+    this.clonedPlafondFamilleActe["0"] = {
+      ...plafondFamilleActe
     };
+  
+  }
+  
+  expandActe(ri){
+    console.log(ri);
+    this.indexActeExpand = ri;
   }
 
+  onCheckDateEffetSousActe(event, form){
+    if(event) {
+      if (new Date(event).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+        form.value = new Date(this.groupe.dateEffet);
+        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+        return;
+      }
+    }
+    console.log(event);
+  }
+  
   onRowEditSave(plafondFamilleActe: PlafondFamilleActe, ri) {
     if(plafondFamilleActe.dateEffet) {
       if (new Date(plafondFamilleActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
@@ -1428,13 +1453,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
     }
-    delete this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
+    delete this.clonedPlafondFamilleActe["0"];
   }
 
   onRowEditCancel(plafondFamilleActe: PlafondFamilleActe, index: number) {
-    this.plafondFamilleActe[index] =
-      this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
-    delete this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id];
+    this.plafondFamilleActe[index] =this.clonedPlafondFamilleActe["0"];
+    delete this.clonedPlafondFamilleActe["0"];
+    
   }
 
   onRowEditInitAdherentFamille(adherentFamille: Adherent, index: number) {
@@ -1520,9 +1545,6 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     //delete this.clonedPlafondConfiguration[plafond.acte.id];
   }
 
-
-  
-
   onRowEditInitPlafondSousActe(plafondSousActe: PlafondSousActe) {
     this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {
       ...plafondSousActe,
@@ -1531,7 +1553,16 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRowEditSavePlafondSousActe(plafondSousActe: PlafondSousActe, ri) {
     console.log('yes');
+    console.log(this.indexActeExpand);
     console.log(ri);
+    
+    if(plafondSousActe.dateEffet) {
+      if (new Date(plafondSousActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+        this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+        return;
+      }
+    }
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
   }
 
@@ -1539,7 +1570,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     plafondSousActe: PlafondSousActe,
     index: number
   ) {
-    this.plafondSousActe[index] =
+    this.plafondActe[this.indexActeExpand].listeSousActe[index]=
       this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe.id];
   }
@@ -1724,6 +1755,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   },
   });
   }
+  
 
   /**obtenir les sous actes pour un acte donné */
   getSousActe(rowData, ri){
@@ -1842,6 +1874,22 @@ changeGarantie(garantie, indexLigne: number) {
       },
     });
    }
+  }
+  
+  
+  onBasicUploadLot(event, form) {
+    console.log(event.files);
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la photos des adherents par lot',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files);
+        this.store.dispatch(featureActionAdherent.importPhotosAdherentLot({file:event.files, idGroupe: this.groupe.id}));
+        form.clear();
+      },
+    });
+   
   }
 
   onRowSelect(event) {

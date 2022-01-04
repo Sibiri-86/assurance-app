@@ -1,8 +1,6 @@
 <div class="p-grid">
 	<div class="p-col-12">
-
 		<p-toast></p-toast>
-
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
@@ -429,11 +427,10 @@
 
             <ng-template pTemplate="rowexpansion" let-rowData>
                 <tr [pEditableRow]="rowData2">
-                    <td colspan="11">
-                        <div class="">
-                            <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="400px">
-
-                                <ng-template pTemplate="header">
+                <td colspan="11">
+                <div class="">
+                <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="400px">
+                <ng-template pTemplate="header">
                 <tr>
                     <th style="width:3em"></th>
                     <th></th>
@@ -482,7 +479,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="rowData2.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="rowData2.dimensionPeriode" optionLabel="libelle" appendTo="body" placeholder="Select periode"
                                             [style]="{'width':'100%'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -505,7 +502,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="tauxList" [(ngModel)]="rowData2.taux" optionLabel="taux" placeholder="Select Taux"
+                                <p-dropdown [options]="tauxList" [(ngModel)]="rowData2.taux" appendTo="body" optionLabel="taux" placeholder="Select Taux"
                                             [style]="{'width':'100%'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -518,7 +515,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData2.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData2.dateEffet | formatTableValue : 'date'}}
@@ -529,7 +526,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typeEtat" [(ngModel)]="rowData2.etat" placeholder="Select status"
+                                <p-dropdown [options]="typeEtat" [(ngModel)]="rowData2.etat" appendTo="body" placeholder="Select status"
                                             [style]="{'width':'100%'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -861,7 +858,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" appendTo="body" optionLabel="libelle" placeholder="Select periode"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -884,7 +881,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" appendTo="body" optionLabel="taux" placeholder="Select taux"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -896,7 +893,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" appendTo="body" optionLabel="libelle"
                                                        [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -921,7 +918,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status"
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status" appendTo="body"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output" *ngIf="sousActe.etat">
@@ -987,7 +984,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
-                <tr [pEditableRow]="plafond" class="colorZone">
+                <tr [pEditableRow]="plafond" class="colorZone" *ngIf="plafond.etat==='ACTIF'">
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
@@ -1092,7 +1089,7 @@
                 <tr >
                 <td colspan="11">
                     <div class="">
-                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="500px">
+                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="500px" expansionMode="single">
                 <tr>
                     <th></th>
                     <th></th>
@@ -1107,11 +1104,10 @@
                     <th></th>
                 </tr>
                 <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
-                    <tr  [pEditableRow]="acte" class="colorZoneActe">
-
-                        <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                    <tr  [pEditableRow]="acte" class="colorZoneActe" (onRowSelect)="expandActe(ri)" *ngIf="acte.etat==='ACTIF'">
+                        <td> <button type="button" pButton  pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
                         <td>{{acte?.acte?.libelle}}</td>
-                        <td>   
+                        <td> 
                         </td>
                         <td>
                             <p-cellEditor>
@@ -1224,7 +1220,7 @@
                         <th></th>
                     </tr>
                     <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
-                        <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
+                        <tr [pEditableRow]="sousActe" class="colorZoneSousActe" *ngIf="sousActe.etat==='ACTIF'">
                             <td></td>
                             <td>{{sousActe?.sousActe?.libelle}}</td>
                             <td>
@@ -1251,7 +1247,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" appendTo="body" optionLabel="libelle" placeholder="Select periode"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -1274,7 +1270,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" appendTo="body" optionLabel="taux" placeholder="Select taux"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -1287,7 +1283,7 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
-                                                       [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                                       [style]="{'width':'100%'}" appendTo="body" placeholder="Select domaine"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                             <span *ngFor="let d of sousActe.domaine">
@@ -1311,7 +1307,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status"
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status" appendTo="body"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output" *ngIf="sousActe.etat">
@@ -1341,12 +1337,6 @@
 </ng-template>
 </p-table>
 
-
-
-
-
-
-
 <br/>
 <br/>
 <div class="p-grid p-justify-between">
@@ -1363,10 +1353,6 @@
 </div>
 </ng-template>
 </p-dialog>
-
-
-
-        <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
-	
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
 </div>

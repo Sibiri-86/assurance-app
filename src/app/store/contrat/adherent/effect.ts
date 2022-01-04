@@ -133,4 +133,20 @@ this.actions$.pipe(
 )
 );
 
+/**import photo par lot */
+importPhotosAdherentLot$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.importPhotosAdherentLot),
+    mergeMap(({file,idGroupe}) =>
+        this.AdherentService.pushPhotosAdherentLot(file).pipe(
+            switchMap(value => [
+                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                featureActions.loadAdherent({idGroupe: idGroupe})
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
 }

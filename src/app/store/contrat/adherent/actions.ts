@@ -11,3 +11,4 @@ export const setAdherent = createAction('[App Init] set Adherent',  props<Adhere
 export const importAdherent = createAction('[App Init] import Adherent',  props<{file: File}>());
 export const createAdherentwithFamille = createAction('[App Init] Create Adherent with famille', props<AdherentFamille>());
 export const importPhotosAdherent = createAction('[App Init] import photos adherent',  props<{file: File, idAdherent:string, idGroupe:string}>());
+export const importPhotosAdherentLot = createAction('[App Init] import photos adherent lot',  props<{file: File[], idGroupe:string}>());
