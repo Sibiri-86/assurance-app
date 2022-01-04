@@ -19,11 +19,9 @@
                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                 </th>
                 <th>Matricule</th>
-                <th pSortableColumn="matriculeGarant" style="width: 12rem">Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
-                <th pSortableColumn="souscripteur" style="width: 12rem">Souscripteur<p-sortIcon field="souscripteur"></p-sortIcon></th>
-                <th pSortableColumn="nom" style="width: 7rem">Garant<p-sortIcon field="nom"></p-sortIcon></th>
+                <th pSortableColumn="matriculeGarant" style="width: 12rem">Matricule<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
                 <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
-                <th pSortableColumn="prenom" style="width: 9rem" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
+                <th pSortableColumn="prenom" style="width: 9rem" >Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
                 <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                 <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                 <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
@@ -33,9 +31,6 @@
             <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
                 <td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
                 <td><span class="p-column-title">{{adherent.numero}}</span></td>
-                <td><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
-                <td><span class="p-column-title">{{adherent.groupe?.police?.numero}}</span></td>
-                <!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->
                 <td><span class="p-column-title">{{adherent.groupe?.police?.garant?.code}}</span></td>
                 <td><span class="p-column-title">{{adherent.nom}}</span></td>
                 <td><span class="p-column-title">{{adherent.prenom}}</span></td>

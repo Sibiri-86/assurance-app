@@ -27,11 +27,11 @@
                 <form [formGroup]="myForm" *ngIf="!isRenouv">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="nom">Numéro de l'avenant chez la garant</label>
+                            <label for="nom">Numéro de l'avenant chez la garant <sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Date d'Incorporation</label>
+                            <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                     appendTo="body"></p-calendar>
@@ -43,7 +43,7 @@
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                         <div class="p-field p-col-12">
-                            <label for="nom">Observation</label>
+                            <label for="nom">Motif</label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText>
                         </div>
                     </div>

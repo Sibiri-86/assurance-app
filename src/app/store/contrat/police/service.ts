@@ -7,7 +7,6 @@ import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {AdherentFamille} from '../adherent/model';
 
-
 @Injectable({providedIn: 'root'})
 export class PoliceService {
     constructor(private http: HttpClient) {}
@@ -112,5 +111,4 @@ export class PoliceService {
         headers.set('Accept', 'application/json');
         return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data, {headers: headers});
     }
-
 }

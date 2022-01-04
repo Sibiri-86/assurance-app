@@ -478,11 +478,11 @@
                             </td>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="rowexpansion" let-product>
+                    <ng-template pTemplate="rowexpansion" let-listeActe>
                         <tr>
                             <td>
                                 <div>
-                                    <p-table [value]="product.orders" dataKey="id">
+                                    <p-table [value]="listeActe.orders" dataKey="id">
                                         <ng-template pTemplate="header">
                                         <tr>
                                             <th pSortableColumn="id">Id

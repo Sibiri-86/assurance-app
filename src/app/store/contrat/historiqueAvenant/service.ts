@@ -17,7 +17,6 @@ import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
 
-
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
 constructor(private http: HttpClient) {}
@@ -214,6 +213,8 @@ private handleError<T>() {
     }
 
     getModel(): Observable<any> {
-        return null;
+        let header = new HttpHeaders();
+        // header = header.append('Accept', 'application/vnd.ms-excel');
+        return this.http.get('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
     }
 }
