@@ -16,10 +16,6 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
-import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
-const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-const EXCEL_EXTENSION = '.xlsx';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -217,16 +213,8 @@ private handleError<T>() {
     }
 
     getModel(): Observable<any> {
-        return null;
-    }
-
-    private saveAsExcelFile(buffer: any, fileName: string): void {
-        const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
-        FileSaver.saveAs(data, fileName + '_export_' + new  Date().getTime() + EXCEL_EXTENSION);
-    }
-
-    exportAsXLSX(): void {}
-    public getJSON(): Observable<any> {
-        return this.http.get('assets/excell/Model_import_affaire_nouvelle.xlsx');
+        let header = new HttpHeaders();
+        // header = header.append('Accept', 'application/vnd.ms-excel');
+        return this.http.get('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
     }
 }

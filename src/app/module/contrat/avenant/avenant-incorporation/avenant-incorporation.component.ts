@@ -26,6 +26,7 @@ import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {MessageService} from 'primeng/api';
+import {PoliceService} from '../../../../store/contrat/police/service';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -122,6 +123,7 @@ export class AvenantIncorporationComponent implements OnInit{
             numero: new FormControl(null, [Validators.required]),
             dateIncorparation: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
+            demandeur: new FormControl(null, [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -165,7 +167,8 @@ export class AvenantIncorporationComponent implements OnInit{
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private historiqueAvenantService: HistoriqueAvenantService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private policeService: PoliceService
     ) {}
 
     ngOnInit(): void {
@@ -183,6 +186,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
+        this.historiqueAvenant1.typeDemandeur = this.myForm.get('demandeur').value;
         // this.historiqueAvenant1.fileToLoad = this.selectedFile;
         // this.historiqueAvenant1.file.append('file', this.historiqueAvenant1.fileToLoad);
         console.log('..........historiqueAvenant  f.............');
@@ -274,6 +278,12 @@ export class AvenantIncorporationComponent implements OnInit{
         this.selectedFile = event;
         console.log('------------get files success---------------');
         console.log(this.historiqueAvenant1.fileToLoad);
+        this.policeService.loadAdherentsByExcelFile(event).subscribe(
+            (res) => {
+                this.adherentFamilleListe = res.slice();
+                this.viewListe = !this.viewListe;
+            }
+        );
     }
 
     voirLaliste(): void {
@@ -332,4 +342,6 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         );
     }
+
+    onDemandeurChange(): void { }
 }

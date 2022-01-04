@@ -19,7 +19,7 @@ export class AdherentListComponent implements OnInit {
     this.createAdherents();
   }
   createAdherents(): void {
-    if (this.adherentFamilleList) {
+    if (this.adherentFamilleList.length) {
       this.adherentFamilleList.forEach(adherentFamille => {
         this.adherentList.push(adherentFamille.adherent);
         if (adherentFamille.famille) {
