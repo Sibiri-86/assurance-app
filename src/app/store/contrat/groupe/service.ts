@@ -36,12 +36,12 @@ updateGroupe(Groupe: Groupe): Observable<any> {
 
 deleteGroupe(Groupe: Groupe): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/${Groupe.id}`, null);
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/delete`, Groupe);
 }
 
 deleteGroupes(groupe: Array<Groupe>): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}`, groupe);
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/deletes`, groupe);
 }
 
 

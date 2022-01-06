@@ -1999,4 +1999,7 @@ changeGarantie(garantie, indexLigne: number) {
     );
   }
 
+  deleteGroupe(groupe): void {
+    this.store.dispatch(featureActionGroupe.deleteGroupe(groupe));
+  }
 }
