@@ -7,8 +7,8 @@ import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/mode
   styleUrls: ['./adherent-list.component.scss']
 })
 export class AdherentListComponent implements OnInit {
-	@Input() adherentFamilleList: Array<AdherentFamille>;
-	adherentList: Array<Adherent>;
+  @Input() adherentFamilleList: Array<AdherentFamille>;
+  adherentList: Array<Adherent>;
 
   constructor() { }
 

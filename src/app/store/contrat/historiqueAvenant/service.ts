@@ -212,9 +212,16 @@ private handleError<T>() {
             {params: createRequestOption({groupeId}), observe: 'response'});
     }
 
-    getModel(): Observable<any> {
-        let header = new HttpHeaders();
-        // header = header.append('Accept', 'application/vnd.ms-excel');
-        return this.http.get('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
+    getModel(typeHistoriqueAvenant: TypeHistoriqueAvenant): Observable<any> {
+        switch (typeHistoriqueAvenant) {
+            case TypeHistoriqueAvenant.AFAIRE_NOUVELLE:
+                return this.http.get<any>('assets/excell/Model_import_affaire_nouvelle.xlsx', {responseType: 'blob'});
+            case TypeHistoriqueAvenant.INCORPORATION:
+                return this.http.get<any>('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
+            case TypeHistoriqueAvenant.RETRAIT:
+                return this.http.get<any>('assets/excell/Model_excel_import_retrait.xlsx', {responseType: 'blob'});
+            default: break;
+        }
+        return null;
     }
 }

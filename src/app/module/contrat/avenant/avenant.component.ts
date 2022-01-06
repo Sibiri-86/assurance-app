@@ -1236,6 +1236,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   //
+  typeHistoriqueAvenantAN = TypeHistoriqueAvenant.AFAIRE_NOUVELLE;
   addSousActe() {
     this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
     console.log(this.plafondActe);

@@ -26,7 +26,7 @@ posGroupe(Groupe: Groupe): Observable<any> {
 
 updateGroupe(Groupe: Groupe): Observable<any> {
     // @FIXME: post request
-    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/${Groupe.id}`, Groupe);
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}`, Groupe);
   }
 
   updateCurentGroupe(groupe: Groupe, newGroupe: Groupe): Observable<any> {

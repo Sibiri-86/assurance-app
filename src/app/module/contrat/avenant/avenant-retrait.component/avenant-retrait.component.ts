@@ -183,7 +183,7 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   exportModel(): void {
-    this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.RETRAIT).subscribe(
+    this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.RETRAIT).subscribe(
         (res) => {
           const file = new Blob([res], {type: 'application/vnd.ms-excel'});
           const  fileUrl = URL.createObjectURL(file);

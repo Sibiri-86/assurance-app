@@ -270,17 +270,15 @@ export class AvenantIncorporationComponent implements OnInit{
             genre: adherent?.genre,
             dateEntree: new Date(adherent?.dateEntree)
         });
-        console.log('***************this.adherentForm*******************', this.adherentForm);
     }
 
     getFiles(event: File) {
         this.historiqueAvenant1.fileToLoad = event;
         this.selectedFile = event;
-        console.log('------------get files success---------------');
-        console.log(this.historiqueAvenant1.fileToLoad);
         this.policeService.loadAdherentsByExcelFile(event).subscribe(
             (res) => {
                 this.adherentFamilleListe = res.slice();
+                console.log('***************A******************* ', this.adherentFamilleListe.length);
                 this.viewListe = !this.viewListe;
             }
         );
@@ -292,10 +290,11 @@ export class AvenantIncorporationComponent implements OnInit{
 
     hideListe(): void {
         this.viewListe = false;
+        this.adherentFamilleListe = [];
     }
 
     exportModel(): void {
-        this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.INCORPORATION).subscribe(
+        this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.INCORPORATION).subscribe(
             (res) => {
                 const file = new Blob([res], {type: 'application/vnd.ms-excel'});
                 const  fileUrl = URL.createObjectURL(file);

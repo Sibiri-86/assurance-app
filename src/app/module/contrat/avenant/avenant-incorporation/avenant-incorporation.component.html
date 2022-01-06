@@ -37,7 +37,7 @@
                                     appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="dateIncorparation">Le demandeur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
@@ -254,8 +254,8 @@
             </div>
         </div>
     </div>
-    <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérent à incorporer"
+    <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérents à incorporer"
               [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}" (onHide)="hideListe()">
-            <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
+            <app-adherent-list [adherentFamilleList]="adherentFamilleListe" *ngIf="adherentFamilleListe?.length > 0"></app-adherent-list>
     </p-dialog>
 </div>

@@ -1812,6 +1812,7 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   editGroupe(groupe: Groupe) {
+    console.log(groupe);
     this.isgroupEditing = true;
     this.setGroupeAndPrime(groupe, groupe.prime);
     this.newGroupe = groupe;
@@ -1850,9 +1851,12 @@ changeGarantie(garantie, indexLigne: number) {
       taux: grp?.taux,
       territorialite: grp.territorialite,
       duree: grp.duree,
-      // dateEffet: Date.now(),
+      dateEffet: new Date(grp.dateEffet),
       typeDuree: {},
-      // dateEcheance: grp.dateEcheance
+      dateEcheance: new Date(grp.dateEcheance),
+      adresse: grp.adresse,
+      commune: grp.commune,
+      description: grp.description
     });
 
     this.primeForm.patchValue({
@@ -1872,10 +1876,36 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   saveNewGroupe(): void {
+    console.log('prime === ');
+    console.log(this.groupeForm.value);
     const groupe1: Groupe = this.groupeForm.value;
+    groupe1.prime = this.primeForm.value;
     groupe1.groupeId = this.newGroupe.id;
+    groupe1.typePrime = this.primeForm.get('prime').value;
+    groupe1.police = this.newGroupe.police;
+    if (groupe1.prime.primeAdulte) {
+      groupe1.prime.primeAdulte = removeBlanks(groupe1.prime.primeAdulte + '');
+    }
+    if (groupe1.prime.primeAnnuelle) {
+      groupe1.prime.primeAnnuelle = removeBlanks(groupe1.prime.primeAnnuelle + '');
+    }
+    if (groupe1.prime.primeConjoint) {
+      groupe1.prime.primeConjoint = removeBlanks(groupe1.prime.primeConjoint + '');
+    }
+    if (groupe1.prime.primeEmploye) {
+      groupe1.prime.primeEmploye = removeBlanks(groupe1.prime.primeEmploye + '');
+    }
+    if (groupe1.prime.primeEnfant) {
+      groupe1.prime.primeEnfant = removeBlanks(groupe1.prime.primeEnfant + '');
+    }
+    if (groupe1.prime.primeFamille) {
+      groupe1.prime.primeFamille = removeBlanks(groupe1.prime.primeFamille + '');
+    }
     console.log(this.newGroupe);
-    this.store.dispatch(featureActionGroupe.updateGroupe(this.newGroupe));
+    this.store.dispatch(featureActionGroupe.updateGroupe(groupe1));
+    this.displayDialogFormAddGroupe = false;
+    this.primeForm.reset();
+    this.groupeForm.reset();
   }
 
   loadActualList(): void {
@@ -1956,11 +1986,15 @@ changeGarantie(garantie, indexLigne: number) {
 
   exportModel(): void {
     // this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
-    this.historiqueAvenantService.getModel().subscribe(
+    this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
         (res) => {
           const file = new Blob([res], {type: 'application/vnd.ms-excel'});
           const  fileUrl = URL.createObjectURL(file);
           window.open(fileUrl);
+
+          // const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+          // const url = window.URL.createObjectURL(blob);
+          // window.open(url);
         }
     );
   }

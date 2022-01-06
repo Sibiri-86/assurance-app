@@ -226,6 +226,9 @@ import { AdherentListComponent } from './module/contrat/police/adherent-list/adh
 import { AvenantSuspensionComponent } from './module/contrat/avenant/avenant-suspension/avenant-suspension.component';
 import { AvenantResiliationComponent } from './module/contrat/avenant/avenant-resiliation/avenant-resiliation.component';
 import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
+import { PlafondFamilleActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-famille-acte.component';
+import { PlafondActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-acte.component';
+import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-sous-acte/plafond-sous-acte.component';
 
 @NgModule({
     imports: [
@@ -402,7 +405,10 @@ import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
         AdherentListComponent,
         AvenantSuspensionComponent,
         AvenantResiliationComponent,
-        BeginLowerCasePipe
+        BeginLowerCasePipe,
+        PlafondFamilleActeComponent,
+        PlafondActeComponent,
+        PlafondSousActeComponent
     ],
     providers: [
         {

@@ -19,7 +19,7 @@ import {
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
-  HistoriquePlafondSousActe
+  HistoriquePlafondSousActe, TypeDemandeur
 } from '../../../../store/contrat/historiqueAvenant/model';
 import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -242,6 +242,7 @@ export class AvenantModificationComponent implements OnInit {
       dateAvenant: new FormControl(null, [Validators.required]),
       dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
+      demandeur: new FormControl(null, [Validators.required]),
     });
 
     this.entityValidations = [
@@ -525,6 +526,12 @@ export class AvenantModificationComponent implements OnInit {
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
   plafondActuelleConfiguration: any = {};
+  qualiteAssureList: any;
+  demandeursList: any = [
+    {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+    {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+    {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+  ];
 
   ngOnInit(): void {
     this.objet = {
@@ -1138,5 +1145,16 @@ export class AvenantModificationComponent implements OnInit {
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  onRowEditInitPlafondConfigurationSousActe(sousActe) {
+  }
+
+  onRowEditSavePlafondConfigurationSousActe(sousActe) {
+    
+  }
+
+  onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1) {
+    
   }
 }
