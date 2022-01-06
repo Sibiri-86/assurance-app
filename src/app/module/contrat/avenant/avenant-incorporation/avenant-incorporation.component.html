@@ -26,21 +26,25 @@
             <p-fieldset legend="Information de l'Avenant" toggleable="true">
                 <form [formGroup]="myForm" *ngIf="!isRenouv">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
+                        <div class="p-field p-col-6">
                             <label for="nom">Numéro de l'avenant chez la garant <sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
-                        <div class="p-field p-col-4">
+                        <div class="p-field p-col-6">
                             <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                     appendTo="body"></p-calendar>
                         </div>
-                        <div class="p-field p-col-4">
+                        <div class="p-field p-col-6">
                             <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-16">
+                            <label for="nom">Frais Badgets et Accessoires</label>
+                            <p-inputNumber id="fraisBadgetAccessoirs" inputId="integeronly" formControlName="fraisBadgetAccessoires" style="width: 100%;"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-12">
                             <label for="nom">Motif</label>
@@ -63,13 +67,14 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="prenom">Prenom <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <label for="prenom">Prénom (s) <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <input id="prenom" type="text" formControlName="prenom" pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="tel">Telephone <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                            <input id="tel" type="number" formControlName="numeroTelephone" pInputText>
+                            <label for="tel">Téléphone <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                            <!--<input id="tel" type="number" formControlName="numeroTelephone" pInputText>-->
                         </div>
 
                         <div class="p-field p-col-3">
@@ -139,7 +144,7 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="quali">Qualite assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <label for="quali">Qualité assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
                             <p-dropdown inputId="qualiteAssure" dataKey="id" [filter]="true"
                                         showClear="true" [options]="qualiteAssureList1"
                                         formControlName="qualiteAssure" placeholder="Select"
@@ -176,15 +181,17 @@
                                                    pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'prenom' + ri">Prenom <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label [for]="'prenom' + ri">Prénom(s) <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <input [id]="'prenom' + ri" type="text" [name]="'prenom' + ri"
                                                    formControlName="prenom" pInputText/>
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'numeroTelephone' + ri">Téléphone</label>
-                                            <input [id]="'numeroTelephone' + ri" type="text"
-                                                   [name]="'numeroTelephone' + ri" formControlName="numeroTelephone"
-                                                   pInputText/>
+                                            <p-inputMask [id]="'numeroTelephone' + ri" formControlName="numeroTelephone" mask="99 99 99 99" [name]="'numeroTelephone' + ri">
+                                            </p-inputMask>
+                                            <!--<input  type="text"
+                                                    formControlName="numeroTelephone"
+                                                   pInputText/>-->
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateNaissance' + ri">Date Naisse. <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -209,7 +216,7 @@
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </div>
                                         <div class="p-col-2">
-                                            <label [for]="'nom2' + ri">Qualite Assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label [for]="'nom2' + ri">Qualité Assuré <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown [options]="qualiteAssureList2" [name]="'qualite' + ri"
                                                         formControlName="qualiteAssure" optionLabel="libelle"
                                                         placeholder="Select Make"

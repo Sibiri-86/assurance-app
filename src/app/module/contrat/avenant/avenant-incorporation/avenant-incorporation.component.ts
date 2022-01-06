@@ -17,13 +17,11 @@ import {Profession} from '../../../../store/parametrage/profession/model';
 import {Police} from '../../../../store/contrat/police/model';
 import {
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant, TypeDemandeur,
+    HistoriqueAvenantAdherant,
+    TypeDemandeur,
     TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {Groupe} from '../../../../store/contrat/groupe/model';
-import * as groupeSlector from '../../../../store/contrat/groupe/selector';
-import {loadGroupe} from '../../../../store/contrat/groupe/actions';
-import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {MessageService} from 'primeng/api';
 import {PoliceService} from '../../../../store/contrat/police/service';
@@ -124,6 +122,7 @@ export class AvenantIncorporationComponent implements OnInit{
             dateIncorparation: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required]),
+            fraisBadgetAccessoires: new FormControl(null, [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -181,26 +180,46 @@ export class AvenantIncorporationComponent implements OnInit{
     addAdherentFamilleToList(): void {
         // this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
+        this.adherentFamilleListe.forEach(af => {
+            af.famille.forEach(f => {
+                f.adherentPrincipal = null;
+            });
+        });
         this.historiqueAvenant1.aderants = this.adherentFamilleListe;
         this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
-        this.historiqueAvenant1.typeDemandeur = this.myForm.get('demandeur').value;
+        switch (this.myForm.get('demandeur').value.value) {
+            case TypeDemandeur.GARANT:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                break;
+            case TypeDemandeur.SOUSCRIPTEUR:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                break;
+            case TypeDemandeur.VIMSO:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                break;
+            default: break;
+        }
+        this.historiqueAvenant1.fraisBadgetAccessoires = this.myForm.get('fraisBadgetAccessoires').value;
         // this.historiqueAvenant1.fileToLoad = this.selectedFile;
         // this.historiqueAvenant1.file.append('file', this.historiqueAvenant1.fileToLoad);
-        console.log('..........historiqueAvenant  f.............');
+        console.log('..........   historiqueAvenant  f  .............');
         console.log(this.historiqueAvenant1);
         this.adherentFamilleEvent.emit(this.historiqueAvenant1);
-        // this.init();
+        this.init();
     }
     ajouter(): void {
         console.log('----------------------------------');
         console.log(this.familys);
         const formAdherent: FormGroup = this.createForm();
         formAdherent.patchValue({dateIncor: this.adherentForm.get('dateIncorporation').value});
+        // formAdherent.controls.f
         this.familys.push(formAdherent);
-        // this.familles.push(this.getAdheranrt());
+        this.familles.forEach(family => {
+            family.adherentPrincipal = null;
+        });
     }
     delete(ri: number): void {
         console.log(ri);
@@ -236,6 +255,9 @@ export class AvenantIncorporationComponent implements OnInit{
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
         adherantFamille.famille = this.familys.value;
+        adherantFamille.famille.forEach(f => {
+            f.adherentPrincipal = null;
+        });
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();

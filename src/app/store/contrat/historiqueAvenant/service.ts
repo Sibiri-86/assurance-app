@@ -215,11 +215,11 @@ private handleError<T>() {
     getModel(typeHistoriqueAvenant: TypeHistoriqueAvenant): Observable<any> {
         switch (typeHistoriqueAvenant) {
             case TypeHistoriqueAvenant.AFAIRE_NOUVELLE:
-                return this.http.get<any>('assets/excell/Model_import_affaire_nouvelle.xlsx', {responseType: 'blob'});
+                return this.http.get('assets/excell/Model_import_affaire_nouvelle.xlsx', {responseType: 'blob'});
             case TypeHistoriqueAvenant.INCORPORATION:
-                return this.http.get<any>('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
+                return this.http.get('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
             case TypeHistoriqueAvenant.RETRAIT:
-                return this.http.get<any>('assets/excell/Model_excel_import_retrait.xlsx', {responseType: 'blob'});
+                return this.http.get('assets/excell/Model_excel_import_retrait.xlsx', {responseType: 'blob'});
             default: break;
         }
         return null;
