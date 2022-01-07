@@ -1110,17 +1110,17 @@
                     -->
                     <div class="p-field p-col">
                         <label for="primeFamille">Plafond global annuel par personne</label>
-                        <input id="primeFamille" type="text" pInputText formControlName="plafondAnnuellePersonne" [value]="plafondForm.get('plafondAnnuellePersonne').value | formatTableValue: 'number':true"  (blur) ='saisiePrimePersonne()'>
+                        <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondAnnuellePersonne" (blur) ='saisiePrimePersonne()'></p-inputNumber>
                     </div>
 
                     <div class="p-field p-col">
                         <label for="montantPrimeEnfant">Plafond global par famille</label>
-                        <input id="montantPrimeEnfant" type="text" pInputText formControlName="plafondAnnuelleFamille" [value]="plafondForm.get('plafondAnnuelleFamille').value | formatTableValue: 'number':true" (blur) ='saisiePrimeFamille()'>
+                        <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondAnnuelleFamille" (blur) ='saisiePrimeFamille()'></p-inputNumber>
                     </div>
 
                     <div class="p-field p-col" *ngIf="isInternationalGroupe">
                         <label for="montantPrimeEnfant">Plafond global international</label>
-                        <input id="montantPrimeEnfant" type="text" pInputText formControlName="plafondGlobalInternationnal" [value]="plafondForm.get('plafondGlobalInternationnal').value | formatTableValue: 'number':true" >
+                        <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondGlobalInternationnal"></p-inputNumber>
                     </div>
                 </div>
             </form>
