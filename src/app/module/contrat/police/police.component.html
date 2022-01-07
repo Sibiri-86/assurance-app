@@ -348,7 +348,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                    <p-inputNumber [(ngModel)]="plafond.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{plafond.montantPlafond}}
@@ -463,7 +463,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        <p-inputNumber [(ngModel)]="acte.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{acte.montantPlafond}}
@@ -577,7 +577,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                            <p-inputNumber [(ngModel)]="sousActe.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="plafond/acte"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.montantPlafond}}
@@ -587,7 +587,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/acte" required>
+                                            <p-inputNumber [(ngModel)]="sousActe.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe?.montantPlafond}}
@@ -736,7 +736,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                    <p-inputNumber [(ngModel)]="plafond.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{plafond.montantPlafond}}
@@ -851,7 +851,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        <p-inputNumber [(ngModel)]="acte.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{acte.montantPlafond}}
@@ -965,7 +965,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                            <p-inputNumber [(ngModel)]="sousActe.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="montant plafond/acte"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.montantPlafond}}
@@ -975,7 +975,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/acte" required>
+                                            <p-inputNumber [(ngModel)]="sousActe.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe?.montantPlafond}}
@@ -1109,7 +1109,7 @@
                     </div>
                     -->
                     <div class="p-field p-col">
-                        <label for="primeFamille">Plafond global annuelle par personne</label>
+                        <label for="primeFamille">Plafond global annuel par personne</label>
                         <input id="primeFamille" type="text" pInputText formControlName="plafondAnnuellePersonne" [value]="plafondForm.get('plafondAnnuellePersonne').value | formatTableValue: 'number':true"  (blur) ='saisiePrimePersonne()'>
                     </div>
 
@@ -1119,7 +1119,7 @@
                     </div>
 
                     <div class="p-field p-col" *ngIf="isInternationalGroupe">
-                        <label for="montantPrimeEnfant">Plafond global internationnal</label>
+                        <label for="montantPrimeEnfant">Plafond global international</label>
                         <input id="montantPrimeEnfant" type="text" pInputText formControlName="plafondGlobalInternationnal" [value]="plafondForm.get('plafondGlobalInternationnal').value | formatTableValue: 'number':true" >
                     </div>
                 </div>
@@ -1191,7 +1191,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode">
+                                    <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData?.montantPlafond}}
@@ -1311,8 +1311,8 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData.montantPlafond" [value]="rowData.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode">
-                                </ng-template>
+                                    <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
+                               </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.montantPlafond}}
                                 </ng-template>
@@ -1416,7 +1416,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData2.montantPlafondParActe" [value]="rowData2.montantPlafondParActe | formatTableValue: 'number':true" required placeholder="plafond/acte">
+                                    <p-inputNumber [(ngModel)]="rowData2.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="montant plafond/acte"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2.montantPlafondParActe}}
@@ -1427,7 +1427,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="rowData2.montantPlafond" [value]="rowData2.montantPlafond | formatTableValue: 'number':true" required placeholder="plafond/periode">
+                                    <p-inputNumber [(ngModel)]="rowData2.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2.montantPlafond}}
@@ -1507,7 +1507,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="9">Aucune sous-acte disponible</td>
+                        <td colspan="9">Aucun sous-acte disponible</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -1649,42 +1649,42 @@
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
                                     <label for="primeFamille1">Prime famille /an</label>
-                                    <input id="primeFamille1" type="text" pInputText [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true" formControlName="primeFamille">
+                                    <p-inputNumber formControlName="primeFamille" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
                                     <label for="montantPrimeAdulte">Prime adulte /an</label>
-                                    <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte" [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeAdulte" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code=='PAE'">
                                     <label for="montantPrimeEnfant">Prime enfant /an</label>
-                                    <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PP'">
                                     <label for="montantPrimePersonne">Prime personne /an</label>
-                                    <input id="montantPrimePersonne" type="text" pInputText formControlName="primePersonne" [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primePersonne" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PE'">
                                     <label for="montantPrimeEmploye">Prime employe /an</label>
-                                    <input id="montantPrimeEmploye" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeConjoint">Prime conjoint /an</label>
-                                    <input id="montantPrimeConjoint" type="text" pInputText formControlName="primeConjoint" [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeConjoint" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeEnfant1">Prime enfant /an</label>
-                                    <input id="montantPrimeEnfant1" type="text" pInputText formControlName="primeEnfant" [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeEmploye1">Prime employé /an</label>
-                                    <input id="montantPrimeEmploye1" type="text" pInputText formControlName="primeEmploye" [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true" >
+                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                 </div>
                             </div>
                         </form>
@@ -2163,7 +2163,7 @@
                     <ng-template pTemplate="right">
                         <span><span class="indicateur">{{rapport?.nombreAdherent}}</span> Adhérents-</span>
                         <span><span class="indicateur">{{rapport?.nombreConjoint}}</span> Conjoint(e)-</span>
-                        <span><span class="indicateur">{{rapport?.nombreEnfant}}</span> Enfants-</span>
+                        <span><span class="indicateur">{{rapport?.nombreEnfant}}</span> Enfant(s)-</span>
                         <span><span class="indicateur">{{rapport?.total}}</span> Effectif total</span>
                     </ng-template>
 
@@ -2698,19 +2698,37 @@
 </p-dialog>
 
 
-            <p-dialog [maximizable]="true" [(visible)]="infosAdherent" header="Adherent détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+<div class="p-grid">
+	<div class="p-col">
+		<div class="box">1</div>
+	</div>
+	<div class="p-col">
+		<div class="box">2</div>
+	</div>
+	<div class="p-col">
+		<div class="box">3</div>
+	</div>
+</div>
+
+
+<p-dialog [maximizable]="true" [(visible)]="infosAdherent" header="Adherent détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
                 <ng-template pTemplate="content">
                     <div class="card">
+                        
                     <h5></h5>
                     
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <div *ngIf="adherent.urlPhoto" class="">
-                                <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="200" height="200" class="p-shadow-4" /> 
+                    <div class="p-grid">
+                        
+                    <div class="p-col-4">
+                            <div class="p-field p-col-4">
+                                <div *ngIf="adherent.urlPhoto" class="">
+                                    <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="200" height="200" class="p-shadow-4" /> 
+                                </div>
                             </div>
-                        </div>
                     </div>
-                    
+                        
+                        
+                    <div class="p-col-8">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="lastname2">Matricule</label>
@@ -2806,7 +2824,8 @@
                     </div>
                    </div>
                     -->
-                    
+                </div>
+                </div> 
                 </div>
                 </ng-template>
             </p-dialog>

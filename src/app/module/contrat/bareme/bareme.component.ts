@@ -374,7 +374,14 @@ export class BaremeComponent implements OnInit, OnDestroy {
   });
   }
 
-  onRowEditInit(plafondFamilleActe: PlafondFamilleActe) {
+ test(){
+   console.log('yessaye');
+ }
+  
+  onRowEditInit(plafondFamilleActe: PlafondFamilleActe, montantPlafondFamilleActe) {
+    if(this.plafondFamilleActe[0].montantPlafond){
+    montantPlafondFamilleActe = this.plafondFamilleActe[0].montantPlafond.toLocaleString('fr');
+    }
     this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id] = {
       ...plafondFamilleActe,
     };
