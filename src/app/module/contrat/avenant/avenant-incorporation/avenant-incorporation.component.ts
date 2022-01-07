@@ -195,10 +195,10 @@ export class AvenantIncorporationComponent implements OnInit{
                 this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
                 break;
             case TypeDemandeur.SOUSCRIPTEUR:
-                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
                 break;
             case TypeDemandeur.VIMSO:
-                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.VIMSO;
                 break;
             default: break;
         }

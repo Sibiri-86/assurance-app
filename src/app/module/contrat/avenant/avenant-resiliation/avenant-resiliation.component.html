@@ -15,11 +15,11 @@
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="observation">Observation</label>
+                            <label for="observation">Motif</label>
                             <input id="observation" type="text" required formControlName="observation" pInputText>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Motif <sup style="color: red; size: 1.7em">*</sup></label>
+                            <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>

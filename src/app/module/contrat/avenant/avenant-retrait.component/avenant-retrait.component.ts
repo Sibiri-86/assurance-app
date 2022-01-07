@@ -184,10 +184,10 @@ export class AvenantRetraitComponent implements OnInit {
         this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
         break;
       case TypeDemandeur.SOUSCRIPTEUR:
-        this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+        this.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
         break;
       case TypeDemandeur.VIMSO:
-        this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+        this.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
         break;
       default: break;
     }

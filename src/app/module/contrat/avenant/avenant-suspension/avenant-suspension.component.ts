@@ -47,10 +47,11 @@ export class AvenantSuspensionComponent implements OnInit {
   @Input() isRenouv: boolean;
   private selectedFile: File;
   isImport = 'NON';
-  demandeursList: any = [{libelle: 'VIMSO', value: TypeDemandeur.VIMSO}, {
-    libelle: 'SOUSCRIPTEUR',
-    value: TypeDemandeur.SOUSCRIPTEUR
-  }];
+  demandeursList: any = [
+    {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+    {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+    {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+  ];
 
   constructor(
       private store: Store<AppState>,
