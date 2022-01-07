@@ -32,6 +32,8 @@ export interface HistoriqueAvenant {
     typeDemandeur?: TypeDemandeur;
     dateEffet?: Date;
     dateEcheance?: Date;
+    historiqueAvenantPrimes?: HistoriqueAvenantPrime[];
+    fraisBadgetAccessoires?: number;
 }
 
 export enum TypeEtat {

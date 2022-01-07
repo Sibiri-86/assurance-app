@@ -19,7 +19,7 @@ import {
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
-  HistoriquePlafondSousActe
+  HistoriquePlafondSousActe, TypeDemandeur
 } from '../../../../store/contrat/historiqueAvenant/model';
 import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -79,6 +79,8 @@ import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-as
 import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
 import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model';
 import {PlafondService} from '../../../../store/contrat/plafond/service';
+import {TypeBareme} from '../../../common/models/bareme.enum';
+import {Status as Etat} from '../../../common/models/etat.enum';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -174,6 +176,8 @@ export class AvenantModificationComponent implements OnInit {
   plafondActePlafongConfig: Array<PlafondActe> = [];
   plafondSousActePlafongConfig: Array<PlafondSousActe> = [];
   private clonedPlafondConfiguration: any = {};
+  typeBareme =   Object.keys(TypeBareme).map(key => ({ label: TypeBareme[key], value: key }));
+  typeEtat = Object.keys(Etat).map(key => ({ label: Etat[key], value: key }));
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -242,6 +246,7 @@ export class AvenantModificationComponent implements OnInit {
       dateAvenant: new FormControl(null, [Validators.required]),
       dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
+      demandeur: new FormControl(null, [Validators.required]),
     });
 
     this.entityValidations = [
@@ -525,6 +530,12 @@ export class AvenantModificationComponent implements OnInit {
   historiquePlafondList$: Observable<Array<HistoriquePlafond>>;
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
   plafondActuelleConfiguration: any = {};
+  qualiteAssureList: any;
+  demandeursList: any = [
+    {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+    {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+    {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+  ];
 
   ngOnInit(): void {
     this.objet = {
@@ -752,9 +763,10 @@ export class AvenantModificationComponent implements OnInit {
       taux: group?.taux,
       territorialite: group.territorialite || [],
       duree: group.duree,
-      dateEffet: new Date(),
+      dateEffet: new Date(group.dateEffet),
       // typeDuree: {},
-      dateEcheance: group.dateEcheance
+      dateEcheance: new Date(group.dateEcheance),
+      commune: group.commune
     });
 
     this.primeForm.patchValue({
@@ -951,33 +963,73 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   createAvenantModif(): void {
-    if (this.plafondActe) {
+    /* if (this.plafondActe) {
       this.plafondActe.forEach(pa => {
         pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
       });
-    }
+    } */
     if (this.plafondActe) {
-      this.plafondFamilleActe.forEach(pa => {
-        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+      this.plafondFamilleActe = this.plafondFamilleActePlafongConfig;
+      this.plafondFamilleActe.forEach(pfa => {
+        if (pfa.montantPlafond) {
+          pfa.montantPlafond = parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+        }
+        if (pfa.nombre) {
+          pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
+        }
+        if (pfa.listeActe) {
+          pfa.listeActe.forEach(pa => {
+            if (pa.nombre) {
+              pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
+            }
+            if (pa.montantPlafond) {
+              pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+            }
+            if (pa.listeSousActe) {
+              pa.listeSousActe.forEach(psa => {
+                if (psa.nombre) {
+                  psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
+                }
+                if (psa.montantPlafond) {
+                  psa.montantPlafond = parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                }
+              });
+            }
+          });
+        }
       });
     }
-    if (this.plafondActe) {
+    /* if (this.plafondActe) {
       this.plafondSousActe.forEach(pa => {
         pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
       });
-    }
+    } */
     this.objet.groupe = this.groupeForm.value || this.groupeSelected;
     this.objet.plafondGroupeActes = this.plafondActe;
     this.objet.plafondFamilleActes = this.plafondFamilleActe;
     this.objet.plafondGroupeSousActes = this.plafondSousActe;
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
+    if (this.plafondForm.value) {
     this.objet.plafondGroupe = this.plafondForm.value;
+    }
     this.objet.historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
-    // console.log(this.objet);
+    switch (this.myForm.get('demandeur').value.value) {
+      case TypeDemandeur.GARANT:
+        this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+        break;
+      case TypeDemandeur.SOUSCRIPTEUR:
+        this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+        break;
+      case TypeDemandeur.VIMSO:
+        this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
+        break;
+      default: break;
+    }
+    console.log(this.objet);
     this.eventEmitterM.emit(this.objet);
   }
 
@@ -1093,12 +1145,6 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   loadPlafondConfigBygroupe() {
-    // plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
-    // plafondFamilleActeTempPlafongConfig: PlafondFamilleActe = {};
-    // plafondFamilleActeConstructPlafongConfig: Array<PlafondFamilleActe> = [];
-    // plafondActePlafongConfig: Array<PlafondActe> = [];
-    // plafondSousActePlafongConfig
-    // this.plafondSousActePlafongConfig = this.plafondSousActe.filter(f => f.sousActe.i)
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
             (res) => {
               this.plafondFamilleActePlafongConfig = res.body;
@@ -1117,7 +1163,10 @@ export class AvenantModificationComponent implements OnInit {
         (res) => {
           this.plafondSousActePlafongConfig = res.body;
           this.plafondFamilleActePlafongConfig.forEach(pfapc => {
-            pfapc.listeActe = this.plafondActePlafongConfig;
+            this.plafondActePlafongConfig.forEach(papc => {
+              papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
+            });
+            pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.acte.idTypeGarantie === pfapc.garantie.id);
           });
         }
     );
@@ -1138,5 +1187,20 @@ export class AvenantModificationComponent implements OnInit {
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  onRowEditInitPlafondConfigurationSousActe(sousActe) {
+  }
+
+  onRowEditSavePlafondConfigurationSousActe(sousActe) {
+    
+  }
+
+  onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1) {
+    
+  }
+
+  viderRecap() {
+
   }
 }

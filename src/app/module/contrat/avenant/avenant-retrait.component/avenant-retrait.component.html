@@ -53,8 +53,14 @@
                         <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
                                     dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
                     </div>
-                    <div class="p-field p-col-12">
-                        <label for="observation">Observation</label>
+                    <div class="p-field p-col-6">
+                        <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                        <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                    [options]="demandeursList" formControlName="demandeur"
+                                    placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="observation">Motif</label>
                         <input id="observation" type="text" required formControlName="observation" pInputText>
                     </div>
                 </div>
@@ -64,8 +70,8 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true"
-                     [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+            <p-table #dt [value]="historiqueAveantAdherants" [rows]="15" [paginator]="true"
+                     [globalFilterFields]="['adherent?.numero', 'adherent?.prenom', 'adherent?.nom']"
                      [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
@@ -74,7 +80,7 @@
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Numéro, nom, prénom(s)" [style]="{width: '80%'}" />
                         </span>
                     </div>
                 </ng-template>
@@ -84,8 +90,9 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
+                        <th pSortableColumn="nom">Numéro <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
                         <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
                         <th>Date de retrait</th>
@@ -93,10 +100,11 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-historiqueAveantAdherant>
-                    <tr>
+                    <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td>
                             <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>
                         </td>
+                        <td>{{historiqueAveantAdherant.adherent?.numero}}</td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom}}</span>
 
                         </td>
@@ -110,7 +118,7 @@
                         <td>
                             <span class="p-column-title">
                                 <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
-                                       [(ngModel)]="historiqueAveantAdherant.dateIncorporation" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
+                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
                             <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
                                         dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
                                         appendTo="body"></p-calendar>-->

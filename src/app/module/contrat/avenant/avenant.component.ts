@@ -1235,6 +1235,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   //
+  typeHistoriqueAvenantAN = TypeHistoriqueAvenant.AFAIRE_NOUVELLE;
   addSousActe() {
     this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
     console.log(this.plafondActe);
@@ -1472,6 +1473,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     }
+    this.initDisplayAvenant();
+    this.dissplayavenant = false;
   }
 
   addGroupeNew(groupe: FormGroup): Groupe {
@@ -1512,6 +1515,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
     }
+    this.dissplayavenant = false;
     this.dissplayavenant = false;
   }
 
@@ -1938,7 +1942,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantService.postAvenant(avenant).subscribe(
         (res) => {
           console.log('***************RETOUR********************');
-          console.log(res);
+          if (res) {
+            this.addMessage('success', 'Opération reussie', 'Avenant créé avec succès');
+            this.initDisplayAvenant();
+            this.dissplayavenant = false;
+          } else {
+            this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
+          }
         }
     );
     console.log('********************Avenant modification************************');
@@ -1955,7 +1965,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantService.postAvenant(avenant).subscribe(
         (res) => {
           console.log('***************RETOUR RENOUV********************');
-          console.log(res);
+          if (res) {
+            this.addMessage('success', 'Opération reussie', 'Avenant créé avec succès');
+            this.initDisplayAvenant();
+            this.dissplayavenant = false;
+          } else {
+            this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
+          }
         }
     );
   }
@@ -2110,5 +2126,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
       this.historiqueAvenantPrimes = [];
       this.displayDialogPrime = false;
       this.primetotal = 0;
+  }
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 }

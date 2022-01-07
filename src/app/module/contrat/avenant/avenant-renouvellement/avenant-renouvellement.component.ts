@@ -15,7 +15,7 @@ import {
     Avenant,
     AvenantModification,
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant, TypeHistoriqueAvenant
+    HistoriqueAvenantAdherant, TypeDemandeur, TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -70,6 +70,11 @@ import {loadTerritorialite} from '../../../../store/parametrage/territorialite/a
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
 import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
+import {PlafondService} from '../../../../store/contrat/plafond/service';
+import {TypeBareme} from '../../../common/models/bareme.enum';
+import {Status as Etat} from '../../../common/models/etat.enum';
+import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model';
+import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -159,6 +164,20 @@ export class AvenantRenouvellementComponent implements OnInit {
     adherentFamilleListe: AdherentFamille[] = [];
     private myForm: FormGroup;
     typeDureeSelected = '';
+    plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
+    plafondActePlafongConfig: Array<PlafondActe> = [];
+    plafondSousActePlafongConfig: Array<PlafondSousActe> = [];
+    groupePlafongConfig: Groupe = {};
+    typeBareme =   Object.keys(TypeBareme).map(key => ({ label: TypeBareme[key], value: key }));
+    typeEtat = Object.keys(Etat).map(key => ({ label: Etat[key], value: key }));
+    qualiteAssureList1: Array<QualiteAssure>;
+    qualiteAssureList2: Array<QualiteAssure>;
+    private qualiteAssureList$: any;
+    demandeursList: any = [
+        {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+        {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+        {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+    ];
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -167,6 +186,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         private formBuilder: FormBuilder,
         private adherentService: AdherentService,
         private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
+        private plafondService: PlafondService
     ) {
         this.groupeForm = this.formBuilder.group({
             id: new FormControl(null),
@@ -226,6 +246,8 @@ export class AvenantRenouvellementComponent implements OnInit {
             dateAvenant: new FormControl(null, [Validators.required]),
             dateEffet: new FormControl(null, [Validators.required]),
             dateEcheance: new FormControl(null, [Validators.required]),
+            observation: new FormControl(null, [Validators.required]),
+            demandeur: new FormControl(null, [Validators.required])
         });
 
         this.entityValidations = [
@@ -616,6 +638,17 @@ export class AvenantRenouvellementComponent implements OnInit {
             }
         });
 
+        this.store.dispatch(loadQualiteAssure());
+        this.qualiteAssureList$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((value) => {
+                if (value) {
+                    this.qualiteAssureList1 = value.slice();
+                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
+                }
+            });
+
+
         this.territorialiteList$ = this.store.pipe(select(territorialiteSelector.territorialiteList));
         this.store.dispatch(loadTerritorialite());
         this.territorialiteList$.pipe(takeUntil(this.destroy$))
@@ -659,8 +692,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     changeTypeDureeGroupe(event){
         this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
         console.log(this.typeDureeSelected);
-        if(this.dateEcheance && this.groupeForm.get('duree')){
-            this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
+        if (this.dateEcheance && this.groupeForm.get('duree')){
+            // this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
         }
     }
     loadGroupe(police: Police): void {
@@ -714,25 +747,27 @@ export class AvenantRenouvellementComponent implements OnInit {
         // this.selectedTypePrime = group.prime.typePrime;
     }
 
-    onRefreshDateEcheanceForGroupe(value: number) {
-        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
-        console.log(this.typeDureeSelected);
-        this.groupeForm
-            .get('dateEcheance')
-            .setValue(
-                this.getNewDateForGroupe(value)
-            );
+    onRefreshDateEcheanceForGroupe() {
+        if (this.groupeForm.get('duree').value !== null && this.groupeForm.get('typeDuree').value !== null
+            && this.groupeForm.get('duree').value !== null) {
+            this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value,
+                this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value)
+                .subscribe((res) => {
+                    this.groupeForm.patchValue({dateEcheance: res.body});
+                    console.log('date fin = ' + this.groupeForm.get('dateEcheance').value);
+                });
+        }
     }
 
     getNewDateForGroupe(value: number): Date {
         this.dateEcheance = new Date(this.groupeForm.get('dateEffet').value);
-        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() - 1));
         console.log(this.dateEcheance);
-        if(this.typeDureeSelected === 'Jour') {
+        if (this.typeDureeSelected === 'Jour') {
             return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
-        } else if(this.typeDureeSelected === 'Mois') {
+        } else if (this.typeDureeSelected === 'Mois') {
             return new Date(this.dateEcheance.setMonth(this.dateEcheance.getMonth() + Number(value)));
-        } else if(this.typeDureeSelected === 'Annee') {
+        } else if (this.typeDureeSelected === 'Annee') {
             return new Date(this.dateEcheance.setFullYear(this.dateEcheance.getFullYear() + Number(value)));
         }
     }
@@ -944,7 +979,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     getNewDate(value: number): Date {
         this.dateEcheance = new Date(this.policeForm.get('dateEffet').value);
-        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate()-1));
+        this.dateEcheance = new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() - 1));
         if (this.typeDureeSelected === 'Jour') {
             return new Date(this.dateEcheance.setDate(this.dateEcheance.getDate() + Number(value)));
         } else if (this.typeDureeSelected === 'Mois') {
@@ -979,5 +1014,40 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     addMessage(severite: string, resume: string, detaile: string): void {
         this.messageService.add({severity: severite, summary: resume, detail: detaile});
+    }
+    loadPlafondConfigBygroupe() {
+        this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
+            (res) => {
+                this.plafondFamilleActePlafongConfig = res.body;
+                console.log(res);
+            }
+        );
+        this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
+            (res) => {
+                this.plafondActePlafongConfig = res.body;
+                this.plafondFamilleActePlafongConfig.forEach(pfapc => {
+                    // pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.)
+                });
+            }
+        );
+        this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
+            (res) => {
+                this.plafondSousActePlafongConfig = res.body;
+                this.plafondFamilleActePlafongConfig.forEach(pfapc => {
+                    this.plafondActePlafongConfig.forEach(papc => {
+                        papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
+                    });
+                    pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.acte.idTypeGarantie === pfapc.garantie.id);
+                });
+            }
+        );
+    }
+    changeTypeDuree(){
+        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log('value === ' + this.typeDureeSelected);
+        if (this.groupeForm.get('duree')) {
+            this.onRefreshDateEcheance(this.groupeForm.get('duree').value);
+        }
+        this.onRefreshDateEcheanceForGroupe();
     }
 }

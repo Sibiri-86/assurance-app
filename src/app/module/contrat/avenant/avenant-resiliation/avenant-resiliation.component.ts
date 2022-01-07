@@ -27,10 +27,11 @@ export class AvenantResiliationComponent implements OnInit {
   myForm: FormGroup;
   historiqueAvenant: HistoriqueAvenant = {};
   @Input() isRenouv: boolean;
-  demandeursList: any = [{libelle: 'VIMSO', value: TypeDemandeur.VIMSO}, {
-    libelle: 'SOUSCRIPTEUR',
-    value: TypeDemandeur.SOUSCRIPTEUR
-  }];
+  demandeursList: any = [
+    {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+    {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+    {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+  ];
 
   constructor(
       private store: Store<AppState>,

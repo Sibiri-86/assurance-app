@@ -17,7 +17,7 @@ import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAven
 import {
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
-  HistoriqueAvenantList, TypeHistoriqueAvenant
+  HistoriqueAvenantList, TypeDemandeur, TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -52,6 +52,11 @@ export class AvenantRetraitComponent implements OnInit {
   @Input() isRenouv: boolean;
   private selectedFile: File;
   isImport = 'NON';
+  demandeursList: any = [
+    {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+    {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+    {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+  ];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -127,6 +132,7 @@ export class AvenantRetraitComponent implements OnInit {
       numero: new FormControl(null, [Validators.required]),
       dateAvenant: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
+      demandeur: new FormControl(null, [Validators.required]),
     });
     this.newForm = this.formBuilder.group({
       groupe: new FormControl(null, [Validators.required]),
@@ -139,6 +145,7 @@ export class AvenantRetraitComponent implements OnInit {
     const value: boolean = !historiqueAvenantAdherant.selected;
     console.log(historiqueAvenantAdherant);
     historiqueAvenantAdherant.selected = value;
+    /*
     if (historiqueAvenantAdherant.selected) {
       this.historiqueAveantAdherants.forEach(haa => {
         if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
@@ -161,6 +168,7 @@ export class AvenantRetraitComponent implements OnInit {
         });
       }
     }
+    */
   }
 
   addAdherentFamilleToList(): void {
@@ -171,6 +179,18 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenant.numero = this.myForm.get('numero').value;
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    switch (this.myForm.get('demandeur').value.value) {
+      case TypeDemandeur.GARANT:
+        this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+        break;
+      case TypeDemandeur.SOUSCRIPTEUR:
+        this.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+        break;
+      case TypeDemandeur.VIMSO:
+        this.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
+        break;
+      default: break;
+    }
     this.adherantDeleteds.forEach(haa => {
       haa.deleted = true;
       haa.adherent.groupe = this.groupe;
@@ -183,7 +203,7 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   exportModel(): void {
-    this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.RETRAIT).subscribe(
+    this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.RETRAIT).subscribe(
         (res) => {
           const file = new Blob([res], {type: 'application/vnd.ms-excel'});
           const  fileUrl = URL.createObjectURL(file);
