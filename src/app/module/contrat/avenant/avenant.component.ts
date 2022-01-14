@@ -2020,26 +2020,32 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAdherentPrint(historiqueAvenant) {
+  onAdherentPrintRetrait(historiqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_RETRAIT;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
   }
-  onAdherentPrint1(historiqueAvenant) {
+  onAdherentPrintIncorporation(historiqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_INCORPORATION;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
   }
-  onAdherentPrint3(historiqueAvenant) {
+  onAdherentPrintAffaireNouvelle(historiqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_AFAIRE_NOUVELLE1;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));
   }
-  onAdherentPrint5(historiqueAvenant) {
+  onAdherentPrintResiliation(historiqueAvenant) {
     this.report.typeReporting = TypeReport.LISTE_AVENANT_RESILIATION;
+    this.report.historiqueAvenant = historiqueAvenant;
+    console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+    this.store.dispatch(featureAction.FetchReport(this.report));
+  }
+  onAdherentPrintSuspension(historiqueAvenant) {
+    this.report.typeReporting = TypeReport.LISTE_AVENANT_SUSPENSION;
     this.report.historiqueAvenant = historiqueAvenant;
     console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
     this.store.dispatch(featureAction.FetchReport(this.report));

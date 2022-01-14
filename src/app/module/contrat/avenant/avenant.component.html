@@ -2076,7 +2076,7 @@
         <!--Affichage des details des avenants d'incorporation -->
         <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentIncorp"
                   header="Adhérent(s) et membre(s) de familles ajouté(s)" [modal]="true" styleClass="p-fluid"
-                  [style]="{'width':'1300px'}">
+                  [style]="{'width':'1400px'}">
             <ng-template pTemplate="content">
                 <div class="">
                     <div class="card">
@@ -2103,7 +2103,7 @@
                                                 <button pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrint1(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintIncorporation(historiqueAvenant)"></button>
                                             </span>
                                         </div>
                                     </div>
@@ -2113,10 +2113,10 @@
 
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th pSortableColumn="numero" style="width: 3rem">N°
+                                    <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                         <p-sortIcon field="numero"></p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                    <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                         <p-sortIcon field="numeroGarant"></p-sortIcon>
                                     </th>
                                     <th pSortableColumn="nom" style="width: 7rem">Nom
@@ -2180,7 +2180,7 @@
         <!--Affichage des details des avenants de retrait -->
         <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentRetrait"
                   header="Adhérent(s) et membre(s) de familles Rétiré(s)" [modal]="true" styleClass="p-fluid"
-                  [style]="{'width':'1300px'}">
+                  [style]="{'width':'1400px'}">
             <ng-template pTemplate="content">
                 <div class="">
                     <div class="card">
@@ -2207,7 +2207,7 @@
                                                 <button pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrint(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintRetrait(historiqueAvenant)"></button>
                                             </span>
                                         </div>
                                     </div>
@@ -2217,13 +2217,11 @@
 
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th style="width: 3rem">
-                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                    </th>
-                                    <th pSortableColumn="numero" style="width: 3rem">N°
+
+                                    <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                         <p-sortIcon field="numero"></p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                    <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                         <p-sortIcon field="numeroGarant"></p-sortIcon>
                                     </th>
                                     <th pSortableColumn="nom" style="width: 7rem">Nom
@@ -2251,9 +2249,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-adherentHis>
                                 <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
-                                    <td>
-                                        <p-tableCheckbox [value]="adherentHis"></p-tableCheckbox>
-                                    </td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.numero}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.matriculeGarant}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
@@ -2286,7 +2281,7 @@
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
     <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid"
-              [style]="{width: '1300px'}">
+              [style]="{width: '1400px'}">
         <div class="card">
             <p-table #dtAL [value]="adherentsListeActuelle" [columns]="colsAL" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -2325,10 +2320,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="numero" style="width: 3rem">N°
+                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                             <p-sortIcon field="numero"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                        <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                             <p-sortIcon field="numeroGarant"></p-sortIcon>
                         </th>
                         <th pSortableColumn="nom">Nom
@@ -2339,6 +2334,9 @@
                         </th>
                         <th pSortableColumn="adresseEmail">Email
                             <p-sortIcon field="adresseEmail"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numeroTelephone">Telephone
+                            <p-sortIcon field="numeroTelephone"></p-sortIcon>
                         </th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre
                             <p-sortIcon field="genre.libelle"></p-sortIcon>
@@ -2358,6 +2356,9 @@
                         <td><span class="p-column-title">{{adherent?.email}}</span>
 
                         </td>
+                        <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
+
+                        </td>
                         <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
                     </tr>
                 </ng-template>
@@ -2373,7 +2374,7 @@
     <!--Affichage des details des avenants affaire nouvelle -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentAffaireNouvelle"
               header="Adhérent(s) et membre(s) de la police Affaire Nouvelle" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1300px'}">
+              [style]="{'width':'1400px'}">
         <ng-template pTemplate="content">
             <div class="">
                 <div class="card">
@@ -2400,7 +2401,7 @@
                                                 <button pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrint3(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintAffaireNouvelle(historiqueAvenant)"></button>
                                             </span>
                                     </div>
                                 </div>
@@ -2413,10 +2414,10 @@
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
-                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom" style="width: 7rem">Nom
@@ -2479,7 +2480,7 @@
     <!--Affichage des details des avenants de renouvellement -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentrenouvellement"
               header="Détails de l'avenant de renouvellement" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1300px'}">
+              [style]="{'width':'1400px'}">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
             <div>
@@ -2798,10 +2799,10 @@
 
                         <ng-template pTemplate="header">
                             <tr>
-                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom">Nom
@@ -2816,7 +2817,10 @@
                                 <th pSortableColumn="adresseEmail">Email
                                     <p-sortIcon field="adresseEmail"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="genre" style="width: 12rem">Genre
+                                <th pSortableColumn="numeroTelephone">Téléphone
+                                    <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre">Genre
                                     <p-sortIcon field="genre.libelle"></p-sortIcon>
                                 </th>
                             </tr>
@@ -2836,6 +2840,9 @@
 
                                 </td>
                                 <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
 
                                 </td>
                                 <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
@@ -2885,10 +2892,10 @@
 
                     <ng-template pTemplate="header">
                         <tr>
-                            <th pSortableColumn="numero" style="width: 3rem">N°
+                            <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                 <p-sortIcon field="numero"></p-sortIcon>
                             </th>
-                            <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                            <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                 <p-sortIcon field="numeroGarant"></p-sortIcon>
                             </th>
                             <th pSortableColumn="nom">Nom
@@ -2902,6 +2909,9 @@
                             </th>
                             <th pSortableColumn="adresseEmail">Email
                                 <p-sortIcon field="adresseEmail"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="numeroTelephone">Téléphone
+                                <p-sortIcon field="numeroTelephone"></p-sortIcon>
                             </th>
                             <th pSortableColumn="genre" style="width: 12rem">Genre
                                 <p-sortIcon field="genre.libelle"></p-sortIcon>
@@ -2922,6 +2932,9 @@
 
                             </td>
                             <td><span class="p-column-title">{{rowdata?.adherent?.email}}</span>
+
+                            </td>
+                            <td><span class="p-column-title">{{rowdata?.adherent?.numeroTelephone}}</span>
 
                             </td>
                             <td><span class="p-column-title">{{rowdata?.adherent?.genre?.libelle}}</span></td>
@@ -2949,10 +2962,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="numero" style="width: 3rem">N°
+                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                             <p-sortIcon field="numero"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                        <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                             <p-sortIcon field="numeroGarant"></p-sortIcon>
                         </th>
                         <th pSortableColumn="nom">Nom
@@ -2966,6 +2979,9 @@
                         </th>
                         <th pSortableColumn="adresseEmail">Email
                             <p-sortIcon field="adresseEmail"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numeroTelephone">Téléphone
+                            <p-sortIcon field="numeroTelephone"></p-sortIcon>
                         </th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre
                             <p-sortIcon field="genre.libelle"></p-sortIcon>
@@ -2988,6 +3004,9 @@
                         <td><span class="p-column-title">{{adherent?.email}}</span>
 
                         </td>
+                        <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
+
+                        </td>
                         <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
                     </tr>
                 </ng-template>
@@ -3006,7 +3025,7 @@
     <!--Affichage des details des avenants de modification -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentModification"
               header="Détails de l'avenant de modification" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1300px'}">
+              [style]="{'width':'1400px'}">
         <p-tabView>
             <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
                 <div>
@@ -3325,10 +3344,10 @@
 
                         <ng-template pTemplate="header">
                             <tr>
-                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom">Nom
@@ -3342,6 +3361,9 @@
                                 </th>
                                 <th pSortableColumn="adresseEmail">Email
                                     <p-sortIcon field="adresseEmail"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroTelephone">Téléphone
+                                    <p-sortIcon field="numeroTelephone"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="genre" style="width: 12rem">Genre
                                     <p-sortIcon field="genre.libelle"></p-sortIcon>
@@ -3362,6 +3384,9 @@
 
                                 </td>
                                 <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
 
                                 </td>
                                 <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
@@ -3493,7 +3518,7 @@
     <!--Affichage des details des avenants de résiliation -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentResiliation"
               header="Adhérent(s) et membre(s) de familles résilié(s)" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1300px'}">
+              [style]="{'width':'1400px'}">
         <ng-template pTemplate="content">
             <div class="">
                 <div class="card">
@@ -3520,7 +3545,7 @@
                                                 <button pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrint5(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintResiliation(historiqueAvenant)"></button>
                                             </span>
                                     </div>
                                 </div>
@@ -3536,10 +3561,10 @@
                                 <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>
                                 <td><span class="p-column-title">{{historiqueAvenant.primeTotal}}</span></td>-->
 
-                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom" style="width: 7rem">Nom
@@ -3603,7 +3628,7 @@
     <!--Affichage des details des avenants de suspension -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentSuspension"
               header="Adhérent(s) et membre(s) de familles suspendu(s)" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1300px'}">
+              [style]="{'width':'1400px'}">
         <ng-template pTemplate="content">
             <div class="">
                 <div class="card">
@@ -3630,7 +3655,7 @@
                                                 <button pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrint5(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintSuspension(historiqueAvenant)"></button>
                                             </span>
                                     </div>
                                 </div>
@@ -3640,10 +3665,10 @@
 
                         <ng-template pTemplate="header">
                             <tr>
-                                <th pSortableColumn="numero" style="width: 3rem">N°
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style="width: 7rem">N° Garant
+                                <th pSortableColumn="numeroGarant" style="font-size: 12px !important; font-weight: bold;">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom" style="width: 7rem">Nom

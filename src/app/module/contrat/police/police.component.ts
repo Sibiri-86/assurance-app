@@ -292,6 +292,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   pictureUrl='';
   indexActeExpand:number;
   displayRecap = false;
+  isEnreg: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -316,9 +317,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       id: new FormControl(null),
       nom: new FormControl('', [Validators.required]),
       prenom: new FormControl('', [Validators.required]),
-      matriculeSouscripteur: new FormControl('', [Validators.required]),
+      matriculeSouscripteur: new FormControl('', ),
       dateNaissance: new FormControl('', [Validators.required]),
-      matriculeGarant: new FormControl('', [Validators.required]),
+      matriculeGarant: new FormControl('', ),
       // matriculeSouscripteur:new FormControl("", [Validators.required]),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
@@ -375,7 +376,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       adresse:  new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
-      dateEcheance: new FormControl({value: '', disabled: true})
+      dateEcheance: new FormControl('')
     });
 
     this.primeForm = this.formBuilder.group({
@@ -458,14 +459,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
-      if(value.id) { 
+      if(value.id) {
       //this.plafondGroupe = value;
       console.log(value);
       this.plafondForm.patchValue(value);
       /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
       }
-      
+
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
     });
@@ -716,7 +717,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentFamilleList = [];
     this.adherentFamille = [];
     this.adherentWithFamille = {};
-    
+
     this.baremeList$ = this.store.pipe(select(plafondSelector.plafondConfig));
     this.baremeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -978,6 +979,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
     this.FamilyListToImport = [];
+    this.isEnreg = false;
   }
 
 
@@ -996,7 +998,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
   });
   }
-  
+
   changeRegion(event) {
     this.departementList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -1006,7 +1008,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
   });
   }
-  
+
   changeDepartement(event) {
     this.communeList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -1016,7 +1018,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
   });
   }
-  
+
   changeCommune(event) {
     this.arrondissementList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -1026,7 +1028,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
   });
   }
-  
+
   changeArrondissement(event) {
     this.secteurList$.pipe(takeUntil(this.destroy$))
     .subscribe(value => {
@@ -1104,11 +1106,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentFamille.push({adherent: this.adherentForm.value, famille: this.adherentFamilleList});
     this.adherentForm.reset();
     this.adherentFamilleList = [];
+    this.isEnreg = true;
     console.log(this.adherentFamille);
   }
   /** cette methode permet de creer un groupe avec des informations basiques */
   onCreateGroupe(){
     this.groupe = this.groupeForm.value;
+    console.log('******************************this.groupe********************************', this.groupe);
     this.groupe.police = this.police;
     this.groupe.prime = this.primeForm.value;
     this.groupe.typePrime = this.selectedTypePrime;
@@ -1186,10 +1190,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
     }
-    
-    
+
+
     validerRecap() {
-      
+
       this.confirmationService.confirm({
         message: "Etes vous sur de vouloir valider?",
         header: "Confirmation",
@@ -1202,7 +1206,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       });
     }
-    
+
     viderRecap() {
       this.confirmationService.confirm({
         message: "Etes vous sur de vouloir vider?",
@@ -1214,10 +1218,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       });
     }
-    
-    
-    
-    
+
+
+
+
 
     importerBareme() {
       this.importer = true;
@@ -1277,6 +1281,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addAdherent() {
+    this.adherentSelected = null;
     this.displayDialogFormAddAdherent = true;
   }
 
@@ -1410,7 +1415,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
- 
+
 
   addGroupe() {
     this.displayDialogFormAddGroupe = true;
@@ -1426,9 +1431,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clonedPlafondFamilleActe["0"] = {
       ...plafondFamilleActe
     };
-  
+
   }
-  
+
   expandActe(ri){
     console.log(ri);
     this.indexActeExpand = ri;
@@ -1444,7 +1449,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     console.log(event);
   }
-  
+
   onRowEditSave(plafondFamilleActe: PlafondFamilleActe, ri) {
     if(plafondFamilleActe.dateEffet) {
       if (new Date(plafondFamilleActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
@@ -1459,7 +1464,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   onRowEditCancel(plafondFamilleActe: PlafondFamilleActe, index: number) {
     this.plafondFamilleActe[index] =this.clonedPlafondFamilleActe["0"];
     delete this.clonedPlafondFamilleActe["0"];
-    
+
   }
 
   onRowEditInitAdherentFamille(adherentFamille: Adherent, index: number) {
@@ -1555,7 +1560,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('yes');
     console.log(this.indexActeExpand);
     console.log(ri);
-    
+
     if(plafondSousActe.dateEffet) {
       if (new Date(plafondSousActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
         this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
@@ -1607,7 +1612,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
       const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
       const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
-      
+
       if (plafondPersonne > plafondFamille){
         this.valideMontantPlafond = false;
         this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
@@ -1622,7 +1627,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
       const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
       const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
-      
+
       if (plafondPersonne > plafondFamille) {
         this.valideMontantPlafond = false;
         this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
@@ -1633,7 +1638,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /** verifier la date Effet du groupe avec celle de la police */
-  checkDateEffet(){   
+  checkDateEffet(){
      for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
     this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
     for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
@@ -1686,8 +1691,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.plafond.plafondFamilleActe = this.plafondFamilleActeConstruct;
     this.plafond.groupe = this.groupe;
     console.log(this.plafond);
-    
-    
+
+
     this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
     this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
@@ -1742,7 +1747,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     });
 
-    
+
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
@@ -1755,7 +1760,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   },
   });
   }
-  
+
 
   /**obtenir les sous actes pour un acte donné */
   getSousActe(rowData, ri){
@@ -1778,7 +1783,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.indexeActe = ri;
   }
 
-  
+
 
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
@@ -1786,7 +1791,7 @@ changeGarantie(garantie, indexLigne: number) {
   this.displayActe = true;
   /*
   if(this.plafondFamilleActeConstruct.length!=0) {
-      
+
       this.plafondFamilleActeConstruct.forEach((element,index)=>{
         element.listeActe.forEach(e=>{
           if(e.acte.idTypeGarantie === garantie.value.id){
@@ -1797,12 +1802,12 @@ changeGarantie(garantie, indexLigne: number) {
       console.log(this.plafondFamilleActeConstruct);
   }
   */
-  
+
   if (this.plafondActe.length === 0){
    //this.plafondActe = this.acteList.filter(element=>element.idTypeGarantie === garantie.value.id);
 
     //this.acteList.forEach((element)=>{
-      
+
       //if (element.idTypeGarantie === garantie.value.id) {
         //this.plafondActe.push({acte:element, taux: this.police.taux, dateEffet: new Date(this.police.dateEffet)});
       //}});
@@ -1852,13 +1857,13 @@ changeGarantie(garantie, indexLigne: number) {
       },
     });
   }
-  
+
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
     this.pictureUrl =ad.urlPhoto;
     this.displayPhotos = true;
   }
-  
+
   onBasicUpload(event, form) {
     if(!this.adherentChecked){
       this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
@@ -1875,8 +1880,8 @@ changeGarantie(garantie, indexLigne: number) {
     });
    }
   }
-  
-  
+
+
   onBasicUploadLot(event, form) {
     console.log(event.files);
     this.confirmationService.confirm({
@@ -1889,13 +1894,13 @@ changeGarantie(garantie, indexLigne: number) {
         form.clear();
       },
     });
-   
+
   }
 
   onRowSelect(event) {
     this.adherentChecked = event.data;
   }
-  
+
   onSelectDateEffetPlafond(event){
     console.log('yes');
     console.log(event);
@@ -1907,9 +1912,9 @@ changeGarantie(garantie, indexLigne: number) {
       this.valideDateEffet = true;
     }
     */
-    
+
   }
-  
+
   quitterParametragePlafond(){
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir quitter?',
@@ -1922,9 +1927,9 @@ changeGarantie(garantie, indexLigne: number) {
       },
     });
   }
-  
+
   quiterGroupe(){
-    
+
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir quitter?',
       header: 'Confirmation',
@@ -1932,12 +1937,12 @@ changeGarantie(garantie, indexLigne: number) {
       accept: () => {
         this.groupeForm.reset();
         this.displayDialogFormAddGroupe = false;
-       
+
       },
     });
-    
+
   }
-  
+
   annulerSaisie(){
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir quitter?',
@@ -1952,11 +1957,12 @@ changeGarantie(garantie, indexLigne: number) {
         this.displayDialogFormAddGroupe = false;
         this.displayDialogFormPolice = false;
         this.displayParametragePlafond = false;
+        this.isEnreg = false;
         console.log('saisie');
       },
     });
-    
-    
+
+
   }
 
   editGroupe(groupe: Groupe) {
