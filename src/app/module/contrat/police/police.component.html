@@ -1880,7 +1880,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <!--<input pInputText type="number" [(ngModel)]="rowData.telephone" required>-->
-                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99" required></p-inputMask>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.numeroTelephone}}
@@ -1891,7 +1891,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateNaissance | formatTableValue : 'date'}}
@@ -1902,7 +1902,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateEntree | formatTableValue : 'date'}}
@@ -1914,7 +1914,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="genreList" [(ngModel)]="rowData.genre" optionLabel="libelle" placeholder="Select Make"
-                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                                            [style]="{'width':'100%'}" required></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.genre?.libelle}}
@@ -1926,7 +1926,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
-                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                                            [style]="{'width':'100%'}" required></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.qualiteAssure?.libelle}}
