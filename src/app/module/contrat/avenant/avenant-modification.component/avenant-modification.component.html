@@ -4,6 +4,20 @@
                     [style]="{'width': '100%'}">
             <div class="p-grid">
                 <div class="p-col-12">
+                    <p-fieldset legend="Exercice" toggleable="true">
+                        <form [formGroup]="exerciceForm" *ngIf="!isRenouv">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-6">
+                                    <label for="debit">Date d'effet</label>
+                                    <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                                </div>
+                                <div class="p-field p-col-6">
+                                    <label for="fin">Date d'échéance</label>
+                                    <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                                </div>
+                            </div>
+                        </form>
+                    </p-fieldset>
                     <form [formGroup]="myForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-6">
@@ -291,9 +305,9 @@
                                     </app-entity-validation>-->
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label for="lastname2">Commune</label>
-                                    <p-dropdown dataKey="id" id="commune" inputId="cummune" [filter]="true"
-                                                showClear="true" [options]="communeList" formControlName="cummune"
+                                    <label for="commune">Commune</label>
+                                    <p-dropdown dataKey="id" id="commune" inputId="commune" [filter]="true"
+                                                showClear="true" [options]="communeList" formControlName="commune"
                                                 optionLabel="libelle"></p-dropdown>
                                 </div>
                             </div>
@@ -388,7 +402,8 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="PLAFOND">
+        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
+
             <ng-template pTemplate="content">
                 <div class="p-grid">
                     <div class="p-col-4">
@@ -421,6 +436,10 @@
                             <th>Domaine</th>
                             <th>Date effet</th>
                             <th>Status</th>
+                            <th>
+                                <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                                        icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                            </th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
@@ -428,7 +447,17 @@
                             <td>
                                 <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
-                            <td>{{plafond.garantie.libelle}}</td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.garantie?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
                             <!--
                             <td>{{plafond.montantPlafond}}</td>
                             -->
@@ -549,7 +578,17 @@
                             <tr  [pEditableRow]="acte" class="colorZoneActe">
 
                                 <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
-                                <td>{{acte?.acte?.libelle}}</td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="acte.listeActe" [(ngModel)]="acte.acte" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.acte?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
                                 <td>
                                 </td>
                                 <td>
@@ -595,7 +634,7 @@
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{acte?.taux.taux}}
+                                            {{acte?.taux?.taux}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -720,7 +759,7 @@
                                                             [style]="{'width':'100%'}"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe?.taux.taux}}
+                                                {{sousActe?.taux?.taux}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -728,7 +767,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-multiSelect [options]="qualiteAssureList1"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                                <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
                                                                [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                             </ng-template>
                                             <ng-template pTemplate="output">

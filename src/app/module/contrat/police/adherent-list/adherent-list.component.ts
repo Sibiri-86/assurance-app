@@ -8,18 +8,19 @@ import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/mode
 })
 export class AdherentListComponent implements OnInit {
   @Input() adherentFamilleList: Array<AdherentFamille>;
+  @Input() listeAdherent: Array<Adherent>;
   adherentList: Array<Adherent>;
 
   constructor() { }
 
   ngOnInit(): void {
     this.adherentList = [];
-    console.log('--------this.adherentFamilleList.length------');
-    console.log(this.adherentFamilleList);
     this.createAdherents();
   }
   createAdherents(): void {
-    if (this.adherentFamilleList.length) {
+    if (this.adherentFamilleList) {
+      console.log('--------this.adherentFamilleList.length------');
+      console.log(this.adherentFamilleList);
       this.adherentFamilleList.forEach(adherentFamille => {
         this.adherentList.push(adherentFamille.adherent);
         if (adherentFamille.famille) {
@@ -29,6 +30,11 @@ export class AdherentListComponent implements OnInit {
           });
         }
       });
+    }
+    if (this.listeAdherent) {
+      console.log('--------listeAdherent------');
+      console.log(this.listeAdherent.length);
+      this.adherentList = this.listeAdherent;
     }
   }
 

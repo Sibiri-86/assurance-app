@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {AdherentFamille} from '../adherent/model';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class PoliceService {
@@ -109,6 +110,12 @@ export class PoliceService {
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/json');
-        return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data, {headers: headers});
+        return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data,
+            {headers: headers});
+    }
+
+    getActiveExerciceByPolice(policeId: string): Observable<any> {
+      return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_ACTIVE_EXERCICE)}`,
+          {params: createRequestOption({policeId})});
     }
 }

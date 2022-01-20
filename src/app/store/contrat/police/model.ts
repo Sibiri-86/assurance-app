@@ -39,6 +39,7 @@ export interface Police{
     fraisBadge?: number;
     valide?: boolean;
     numero?: string;
+    historiqueAvenantListWithoutActiveList?: HistoriqueAvenant[];
 }
 
 export interface Statistique {
@@ -71,4 +72,13 @@ export interface Report {
 
 export interface PoliceList {
     policeDtoList: Array<Police>;
+}
+
+export interface Exercice {
+    id?: string;
+    debut?: Date;
+    fin?: Date;
+    police?: Police;
+    deleted?: boolean;
+    actived?: boolean;
 }

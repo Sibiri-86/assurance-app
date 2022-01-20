@@ -111,8 +111,9 @@ import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant
 import {HistoriqueAvenantAdherentService} from '../../../store/contrat/historiqueAvenantAdherent/service';
 import {HistoriqueAvenantAdherentList} from '../../../store/contrat/historiqueAvenantAdherent/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
-import {printPdfFile} from '../../util/common-util';
+import {printPdfFile, removeBlanks} from '../../util/common-util';
 import {AdherentService} from '../../../store/contrat/adherent/service';
+import {historiqueAvenantListWithoutActive} from '../../../store/contrat/historiqueAvenant/selector';
 
 @Component({
   selector: 'app-avenant',
@@ -249,10 +250,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
   isAvenantRenouvellement = false;
   isAvenantResiliation = false;
   isAvenantSuspension = false;
-
+  isAvenantFacturation = false;
+  historiqueAvenantListWithoutActiveList$: Observable<Array<HistoriqueAvenant>>;
+  historiqueAvenantListWithoutActiveList: Array<HistoriqueAvenant>;
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantList: Array<HistoriqueAvenant>;
   historiqueAvenants1: HistoriqueAvenantList;
+  historiqueAvenants1$: Observable<any>;
   historiqueAvenantAdherents: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherent1s: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherents1: Array<HistoriqueAvenantAdherant>;
@@ -276,8 +280,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayDialogPrime = false;
   avenantModif1: Avenant = {};
   private primetotal = 0;
-
   infosPolice = false;
+  private clonedPPrime: { [s: string]: HistoriqueAvenantPrime; } = {};
+  private historiqueAvenantPrimesTMP: HistoriqueAvenantPrime[] = [];
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -681,37 +686,43 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log($event);
           this.isAvenantIncorporation = true;
           this.entete = 'Avenant d\'Incorporation';
-        }},
+      }},
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
           this.addAvenantRetrait();
           this.isAvenantRetrait = true;
           this.entete = 'Avenant de Retrait';
-        }},
+      }},
       {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
           this.initDisplayAvenant();
           this.isAvenantModification = true;
           this.entete = 'Avenant de Modification';
           this.addAvenantModification();
-        }},
+      }},
       {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
           this.initDisplayAvenant();
           this.isAvenantRenouvellement = true;
           this.entete = 'Avenant de Renouvellement';
           this.addAvenantRenouvellement();
-        }},
-      {label: 'Résiliation', icon: 'pi pi-sign-out', command: () => {
+      }},
+      {label: 'Facturation', icon: 'pi pi-euro', command: () => {
           this.initDisplayAvenant();
-          this.isAvenantResiliation = true;
-          this.entete = 'Avenant de Résiliation';
-          this.addAvenantModification();
-        }},
+          this.isAvenantFacturation = true;
+          this.entete = 'Avenant de Suspension';
+          this.addAvenantFacturation();
+      }},
       {label: 'Suspension', icon: 'pi pi-pause', command: () => {
           this.initDisplayAvenant();
           this.isAvenantSuspension = true;
           this.entete = 'Avenant de Suspension';
           this.addAvenantRenouvellement();
-        }}
+      }},
+      {label: 'Résiliation', icon: 'pi pi-sign-out', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantResiliation = true;
+          this.entete = 'Avenant de Résiliation';
+          this.addAvenantModification();
+      }},
     ];
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
@@ -923,6 +934,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           }
         });
 
+
   }
 
   init(): void {
@@ -930,6 +942,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.isAvenantRetrait = false;
     this.isAvenantModification = false;
     this.isAvenantRenouvellement = false;
+    this.isAvenantFacturation = false;
+    this.isAvenantSuspension = false;
+    this.isAvenantResiliation = false;
     this.groupePolicy = [];
     this.selectedGroup = {};
     this.adherentListGroupe = [];
@@ -1370,6 +1385,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   addAvenantRenouvellement(): void {
     this.dissplayavenant = true;
   }
+  addAvenantFacturation(): void {
+    this.dissplayavenant = true;
+  }
 
   add(): void {
     this.adherentForm = this.formBuilder.group({
@@ -1454,16 +1472,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('**************HistoriqueAvenan-----t***------*************');
     console.log(historiqueAvenant);
     this.historiqueAvenant = historiqueAvenant;
-    this.historiqueAvenant.police = this.policeItem;
+    // this.historiqueAvenant.police = this.policeItem;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
-    this.historiqueAvenant.groupe = this.curentGroupe;
+    // this.historiqueAvenant.groupe = this.curentGroupe;
     this.historiqueAvenant.observation = historiqueAvenant.observation;
     this.historiqueAvenant.aderants = historiqueAvenant.aderants;
     this.historiqueAvenant.fileToLoad = historiqueAvenant.fileToLoad;
     this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
     console.log('**************HistoriqueAvenan-----t****************');
-    console.log(this.historiqueAvenant.file.get('file'));
+    console.log(this.historiqueAvenant);
     if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
         && this.historiqueAvenant.fileToLoad.size > 0) {
       this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
@@ -1556,12 +1574,22 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.police = {...police};
     this.infosPolice = true;
     this.policeForm.patchValue(this.police);
-    this.historiqueAvenantService.getHistoriqueAvenants(this.police.id).subscribe(
+    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: police.id}));
+    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        // this.loading = false;
+        this.historiqueAvenants1 = value.slice();
+        console.log('................historiqueAvenantListWithoutActiveList............................');
+        console.log(this.historiqueAvenantList.length);
+      }
+    });
+    /* this.historiqueAvenantService.getHistoriqueAvenants(this.police.id).subscribe(
         (res: HistoriqueAvenantList) => {
           this.historiqueAvenants1 = res;
           console.log('==================================', this.historiqueAvenants1);
         }
-    );
+    ); */
   }
 
   /** afficher les details de l'avenant' */
@@ -2094,6 +2122,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantService.changeStatus(historiqueAvenant.id, state).subscribe(
         (res) => {
           this.historiqueAvenant = res;
+          this.onRowSelectPolice(res.police);
         }
     );
   }
@@ -2121,6 +2150,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   validerPrime(): void {
+    this.historiqueAvenantPrimes.forEach(hap => {
+      if (hap.fraisAccessoir) {
+        hap.fraisAccessoir = removeBlanks(hap.fraisAccessoir + '');
+      }
+      if (hap.fraisBadge) {
+        hap.fraisBadge = removeBlanks(hap.fraisBadge + '');
+      }
+      if (hap.primeNet) {
+        hap.primeNet = removeBlanks(hap.primeNet + '');
+      }
+      if (hap.primeTotal) {
+        hap.primeTotal = removeBlanks(hap.primeTotal + '');
+      }
+      if (hap.primeTTC) {
+        hap.primeTTC = removeBlanks(hap.primeTTC + '');
+      }
+    });
     this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
@@ -2135,5 +2181,33 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  setPolice(police: Police) {
+    this.policeItem = police;
+    /* this.historiqueAvenantListWithoutActiveList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id})));
+    this.store.dispatch(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id}));
+    this.historiqueAvenantListWithoutActiveList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        // this.loading = false;
+        this.historiqueAvenantListWithoutActiveList = value.slice();
+        console.log('................historiqueAvenantListWithoutActiveList............................');
+        console.log(this.historiqueAvenantList.length);
+      }
+    }); */
+  }
+
+  onRowEditInitPrime(historiqueAvenantPrime: HistoriqueAvenantPrime) {
+    this.clonedPPrime[historiqueAvenantPrime.id] = {...historiqueAvenantPrime};
+  }
+
+  onRowEditSavePrime(historiqueAvenantPrime: HistoriqueAvenantPrime) {
+      delete this.clonedPPrime[historiqueAvenantPrime.id];
+      // this.messageService.add({severity: 'success', summary: 'Success', detail: 'Product is updated'});
+  }
+
+  onRowEditCancelPrime(historiqueAvenantPrime: HistoriqueAvenantPrime, index: number) {
+    this.historiqueAvenantPrimes[index] = this.clonedPPrime[historiqueAvenantPrime.id];
+    delete this.clonedPPrime[historiqueAvenantPrime.id];
   }
 }

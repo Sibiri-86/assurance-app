@@ -235,6 +235,8 @@ import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglem
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 
+import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -421,7 +423,8 @@ import { PrefinancementEditionComponent } from './module/prestation/sinistre/pre
         PrefinancementValideComponent,
         OrdreReglementEditionComponent,
         OrdreReglementValideComponent,
-        PrefinancementEditionComponent
+        PrefinancementEditionComponent,
+        AvenantFacturationComponent
     ],
     providers: [
         {

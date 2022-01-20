@@ -30,6 +30,7 @@ export interface PlafondActe {
     nombre?: number;
     listeSousActe?: Array<PlafondSousActe>;
     etat?: Status;
+    sousActeListe?: SousActe[]
   }
 
 export interface PlafondSousActe {

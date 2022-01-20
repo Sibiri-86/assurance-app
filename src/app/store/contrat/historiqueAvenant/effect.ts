@@ -62,7 +62,7 @@ export class HistoriqueAvenantEffects {
             mergeMap(({policeId}) =>
                 this.historiqueAvenantService.getHistoriqueAvenants(policeId).pipe(
                     switchMap(value => [
-                        featureActions.setHistoriqueAvenant(value)
+                        featureActions.setHistoriqueAvenant({historiqueAvenantList: value})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 )
@@ -75,7 +75,7 @@ export class HistoriqueAvenantEffects {
             mergeMap(({avanantId, grpId}) =>
                 this.historiqueAvenantService.getHistoriquePlafonds(avanantId, grpId).pipe(
                     switchMap(value => [
-                        featureActions.setHistoriqueAvenant(value)
+                        featureActions.setHistoriqueAvenant({historiqueAvenantList: value})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 )
@@ -88,7 +88,7 @@ export class HistoriqueAvenantEffects {
             mergeMap(({avanantId, grpId}) =>
                 this.historiqueAvenantService.getHistoriquePlafondSousActes(avanantId, grpId).pipe(
                     switchMap(value => [
-                        featureActions.setHistoriqueAvenant(value)
+                        featureActions.setHistoriqueAvenant({historiqueAvenantList: value})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 )
@@ -101,7 +101,7 @@ export class HistoriqueAvenantEffects {
             mergeMap(({avanantId, grpId}) =>
                 this.historiqueAvenantService.getHistoriquePlafondFamilleActes(avanantId, grpId).pipe(
                     switchMap(value => [
-                        featureActions.setHistoriqueAvenant(value)
+                        featureActions.setHistoriqueAvenant({historiqueAvenantList: value})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 )
@@ -114,7 +114,20 @@ export class HistoriqueAvenantEffects {
             mergeMap(({avanantId, grpId}) =>
                 this.historiqueAvenantService.getHistoriquePlafondActes(avanantId, grpId).pipe(
                     switchMap(value => [
-                        featureActions.setHistoriqueAvenant(value)
+                        featureActions.setHistoriqueAvenant({historiqueAvenantList: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
+    getHistoriqueAvenantWithoutActive$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriquePlafondActeWithoutActive),
+            mergeMap(({policeId}) =>
+                this.historiqueAvenantService.getHistoriqueAvenantWithoutActive(policeId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenantWithoutActive({historiqueAvenantListWithoutActive: value.body})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 )

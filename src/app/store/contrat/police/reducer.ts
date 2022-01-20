@@ -7,7 +7,8 @@ const initialState : PoliceState = {
   policeList: null,
   statistique: null,
   rapport: null,
-  reportFile: null
+  reportFile: null,
+  exerciceActive: null
 };
 
 

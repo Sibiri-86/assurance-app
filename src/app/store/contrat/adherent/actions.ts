@@ -12,5 +12,8 @@ export const importAdherent = createAction('[App Init] import Adherent',  props<
 export const searchAdherent = createAction('[App Init] search Adherent',  props<{numero: number}>());
 export const selectedAdherentForSearch = createAction('[App Init] selected for search Adherent',  props<Adherent>());
 export const createAdherentwithFamille = createAction('[App Init] Create Adherent with famille', props<AdherentFamille>());
-export const importPhotosAdherent = createAction('[App Init] import photos adherent',  props<{file: File, idAdherent:string, idGroupe:string}>());
+export const importPhotosAdherent = createAction('[App Init] import photos adherent', 
+ props<{file: File, idAdherent:string, idGroupe:string}>());
 export const importPhotosAdherentLot = createAction('[App Init] import photos adherent lot',  props<{file: File[], idGroupe:string}>());
+export const loadListeActualisee = createAction('[App Init] load liste actualisee', props<{policeId: string}>());
+export const setListeActualisee = createAction('[App Init] set Adherent',  props<{listeActualisee: Adherent[]}>());
