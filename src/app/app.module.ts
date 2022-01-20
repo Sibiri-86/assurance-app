@@ -236,6 +236,7 @@ import { OrdreReglementValideComponent } from './module/prestation/ordre-regleme
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
+import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
 
 @NgModule({
     imports: [
@@ -328,8 +329,8 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
         KeycloakAngularModule,
         AppCodeModule,
         ReactiveFormsModule,
-        StoreModule.forRoot(reducers,  
-          {metaReducers, 
+        StoreModule.forRoot(reducers,
+          {metaReducers,
             runtimeChecks: {
               strictStateImmutability: false,
               strictActionImmutability: false,
@@ -424,7 +425,8 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
         OrdreReglementEditionComponent,
         OrdreReglementValideComponent,
         PrefinancementEditionComponent,
-        AvenantFacturationComponent
+        AvenantFacturationComponent,
+        TierPayantEditionComponent
     ],
     providers: [
         {

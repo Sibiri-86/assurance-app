@@ -50,6 +50,7 @@ import { PrefinancementValideComponent } from './module/prestation/sinistre/pref
 import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
+import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -104,7 +105,8 @@ import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteu
                     {path: 'pages/invoice', component: AppInvoiceComponent},
                     {path: 'pages/help', component: AppHelpComponent},
                     {path: 'pages/empty', component: EmptyDemoComponent},
-                    {path: 'documentation', component: DocumentationComponent}
+                    {path: 'documentation', component: DocumentationComponent},
+                    {path: 'prestation/tierPayant', component: TierPayantEditionComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},
