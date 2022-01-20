@@ -1602,7 +1602,7 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-4">
                                     <label for="dateEcheance">Date écheance</label>
-                                    <p-calendar id="dateEcheance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                    <p-calendar id="dateEcheance" [disabled]="adherentForm" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEcheance'">
                                     </app-entity-validation>
@@ -1643,48 +1643,48 @@
                                 </div>-->
 
                                 <div class="p-field p-col-4">
-                                    <label for="typePrime">Type de prime<span style="color: red !important;">*</span></label>
+                                    <label for="typePrime">Type de prime/an<span style="color: red !important;">*</span></label>
                                     <p-dropdown id="typePrime" dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PF'">
                                     <label for="primeFamille1">Prime famille /an</label>
-                                    <p-inputNumber formControlName="primeFamille" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeFamille" mode="decimal" locale="fr-FR"  required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PAE'">
                                     <label for="montantPrimeAdulte">Prime adulte /an</label>
-                                    <p-inputNumber formControlName="primeAdulte" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeAdulte" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code=='PAE'">
                                     <label for="montantPrimeEnfant">Prime enfant /an</label>
-                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PP'">
                                     <label for="montantPrimePersonne">Prime personne /an</label>
-                                    <p-inputNumber formControlName="primePersonne" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primePersonne" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PE'">
                                     <label for="montantPrimeEmploye">Prime employe /an</label>
-                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeConjoint">Prime conjoint /an</label>
-                                    <p-inputNumber formControlName="primeConjoint" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeConjoint" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeEnfant1">Prime enfant /an</label>
-                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeEnfant" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
                                     <label for="montantPrimeEmploye1">Prime employé /an</label>
-                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    <p-inputNumber formControlName="primeEmploye" mode="decimal" locale="fr-FR" required></p-inputNumber>
                                 </div>
                             </div>
                         </form>
@@ -1696,7 +1696,7 @@
                         </div>
                         <div *ngIf="!isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>-->
-                            <button [disabled]="primeForm?.invalid && primeForm?.invalid" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
+                            <button [disabled]="groupeForm?.invalid || primeForm?.invalid" pButton label="Suivant" icon="pi pi-angle-right" (click)="nextToAdherent()"></button>
                         </div>
                         <div *ngIf="isgroupEditing">
                             <!--<button [disabled]="primeForm?.invalid || groupeForm?.invalid" pButton pRipple label="Suivant" icon="pi pi-angle-right" (click)="saveNewGroupe()"></button>-->
@@ -1808,11 +1808,11 @@
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col-4">
-                                    <label for="matriculeGarant">Matricule Garant <span style="color: red">*</span> </label>
+                                    <label for="matriculeGarant">Matricule Garant </label>
                                     <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label for="matriculeSouscripteur">Matricule Souscripteur <span style="color: red">*</span> </label>
+                                    <label for="matriculeSouscripteur">Matricule Souscripteur </label>
                                     <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
                                 </div>
                             </div>
@@ -1880,7 +1880,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <!--<input pInputText type="number" [(ngModel)]="rowData.telephone" required>-->
-                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99" required></p-inputMask>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.numeroTelephone}}
@@ -1891,7 +1891,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateNaissance | formatTableValue : 'date'}}
@@ -1902,7 +1902,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateEntree | formatTableValue : 'date'}}
@@ -1914,7 +1914,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="genreList" [(ngModel)]="rowData.genre" optionLabel="libelle" placeholder="Select Make"
-                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                                            [style]="{'width':'100%'}" required></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.genre?.libelle}}
@@ -1926,7 +1926,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
-                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                                            [style]="{'width':'100%'}" required></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.qualiteAssure?.libelle}}
@@ -1953,15 +1953,15 @@
                     <br/>
                     <div class="p-grid p-justify-between">
                         <div>
-                            <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
+                            <button class="p-button-danger" pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
                         </div>
 
                         <div *ngIf="isImport === 'NON'">
-                            <button [disabled]="adherentForm?.invalid && groupeForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="enregistrerAdherent()"></button>
+                            <button class="p-button-warning" [disabled]="adherentForm?.invalid" pButton pRipple label="Ajouter à la liste" icon="pi pi-plus" (click)="enregistrerAdherent()"></button>
                         </div>
 
                         <div>
-                            <button pButton pRipple label="Valider" icon="pi pi-check" (click)="onCreateGroupe()"></button>
+                            <button class="p-button-success" pButton pRipple label="Enregistrer" [disabled]="!isEnreg && isImport === 'NON'" icon="pi pi-check" (click)="onCreateGroupe()"></button>
                         </div>
                     </div>
                 </div>
@@ -2433,14 +2433,15 @@
                 <label for="adherentSelected">Adhérent</label>
                 <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
                             (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal par son numéro, son nom et son prénom"
-                            optionLabel="fullName"></p-dropdown>
+                            optionLabel="fullName">
+                </p-dropdown>
             </div>
             <form (ngSubmit)="onCreateAddherent()"  [formGroup]="adherentForm">
                 <div class="card">
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="matriculeGarant">Matricule Garant <span style="color: red !important;">*</span></label>
+                            <label for="matriculeGarant">Matricule Garant</label>
                             <input id="matriculeGarant" type="text"  formControlName="matriculeGarant" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'matriculeGarant'">
@@ -2466,7 +2467,7 @@
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="matriculeSouscripteur">Matricule Souscripteur <span style="color: red">*</span> </label>
+                            <label for="matriculeSouscripteur">Matricule Souscripteur</label>
                             <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'matriculeSouscripteur'">
@@ -2578,7 +2579,7 @@
             <p-table #dtFamilleAdherent [value]="adherentFamilleList" dataKey="" editMode="row">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Mle. Garant</th>
+                        <th style="font-size: 12px !important; font-weight: bold !important;">Matricule Garant</th>
                         <th>Nom</th>
                         <th>Prenom</th>
                         <th>Telephone</th>
@@ -2691,24 +2692,11 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
             </div>
             <div>
-                <button pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
+                <button [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
             </div>
         </div>
     </ng-template>
 </p-dialog>
-
-
-<div class="p-grid">
-	<div class="p-col">
-		<div class="box">1</div>
-	</div>
-	<div class="p-col">
-		<div class="box">2</div>
-	</div>
-	<div class="p-col">
-		<div class="box">3</div>
-	</div>
-</div>
 
 
 <p-dialog [maximizable]="true" [(visible)]="infosAdherent" header="Adherent détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
@@ -2880,10 +2868,10 @@
 						<th style="width: 3rem">
 							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
 						</th>
-                        <th pSortableColumn="numero" style="min-width:100px" >N°<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule<p-sortIcon field="numero"></p-sortIcon></th>
                         <!--<th pSortableColumn="matricule" >Mle.<p-sortIcon field="matricule"></p-sortIcon></th>-->
-                        <th pSortableColumn="matriculeGarant" style="min-width:200px" >Mle. Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
-                        <th pSortableColumn="matriculeSouscripteur" style="min-width:200px" >Mle. Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th>
+                        <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                        <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px" >Nom<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="min-width:200px" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:200px" >Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
@@ -3349,7 +3337,7 @@
                 <p-fieldset legend="Frais" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoire">Frais accessoire</label>
+                            <label for="fraisAccessoire">Total Frais accessoire</label>
                             <input formControlName="fraisAccessoire" [value]="policeForm.get('fraisAccessoire').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisAccessoire'">
@@ -3357,7 +3345,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="fraisBadge">Frais badge</label>
+                            <label for="fraisBadge">Total Frais badge</label>
                             <input formControlName="fraisBadge" [value]="policeForm.get('fraisBadge').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisBadge'">

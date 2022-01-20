@@ -27,7 +27,7 @@
                 <form [formGroup]="myForm" *ngIf="!isRenouv">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
-                            <label for="nom">Numéro de l'avenant chez la garant <sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
+                            <label for="nom">Numéro de l'avenant chez le garant <sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-6">
@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="matriculeGarant">Matricule chez le garant <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                            <label for="matriculeGarant">Matricule chez le garant</label>
                             <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
                         </div>
 
