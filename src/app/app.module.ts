@@ -190,6 +190,7 @@ import { GarantComponent } from './module/contrat/garant/garant.component';
 import { IntermediaireComponent } from './module/contrat/intermediaire/intermediaire.component';
 import { GarantEffects } from './store/contrat/garant/effect';
 import {IntermediaireEffects} from './store/contrat/intermediaire/effects';
+import { PrefinancementEffects } from './store/prestation/prefinancement/effect';
 import {PoliceEffects} from './store/contrat/police/effect';
 import {GroupeEffects} from './store/contrat/groupe/effect';
 import { Plafond } from './store/contrat/plafond/model';
@@ -209,9 +210,9 @@ import { LoaderService,LoaderInterceptor } from './module/util/loader-util';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {BlockUIModule} from 'primeng/blockui';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
-import {AvenantIncorporationComponent} from "./module/contrat/avenant/avenant-incorporation/avenant-incorporation.component";
-import {GroupeComponent} from "./module/contrat/avenant/grpoue/groupe.component";
-import {HistoriqueAvenantEffects} from "./store/contrat/historiqueAvenant/effect";
+import {AvenantIncorporationComponent} from './module/contrat/avenant/avenant-incorporation/avenant-incorporation.component';
+import {GroupeComponent} from './module/contrat/avenant/grpoue/groupe.component';
+import {HistoriqueAvenantEffects} from './store/contrat/historiqueAvenant/effect';
 import { BanqueEffects } from './store/parametrage/Banques/effect';
 import { TauxCommissionIntermediaireEffects } from './store/parametrage/taux-commission-intermediaire/effect';
 import {AvenantRetraitComponent} from './module/contrat/avenant/avenant-retrait.component/avenant-retrait.component';
@@ -229,6 +230,10 @@ import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
 import { PlafondFamilleActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-famille-acte.component';
 import { PlafondActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-acte.component';
 import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-sous-acte/plafond-sous-acte.component';
+import { PrefinancementValideComponent } from './module/prestation/sinistre/prefinancement-valide/prefinancement-valide.component';
+import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
+import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
+import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 
 @NgModule({
     imports: [
@@ -331,8 +336,12 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modif
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
-             TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, QualiteMedecinEffects,PathologieEffects, ProduitPharmaceutiqueEffects,
-            RegionEffects, PlafondEffects, AdherentEffects, TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, SecteurEffects, ArrondissementEffects])
+             TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, 
+             QualiteMedecinEffects, PathologieEffects, ProduitPharmaceutiqueEffects,
+            RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
+             TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
+             DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, 
+             SecteurEffects, ArrondissementEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -408,7 +417,11 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modif
         BeginLowerCasePipe,
         PlafondFamilleActeComponent,
         PlafondActeComponent,
-        PlafondSousActeComponent
+        PlafondSousActeComponent,
+        PrefinancementValideComponent,
+        OrdreReglementEditionComponent,
+        OrdreReglementValideComponent,
+        PrefinancementEditionComponent
     ],
     providers: [
         {

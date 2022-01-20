@@ -57,6 +57,16 @@ updateAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);
   }
+  
+  searchAdherent(numero: number): Observable<Adherent> {
+    // @FIXME: post request
+    if(numero && numero!=0){
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByNumero/${numero}`).pipe(
+      map((response: Adherent) => response),
+      catchError(this.handleError())
+     );
+    }
+  }
 
 deleteAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request

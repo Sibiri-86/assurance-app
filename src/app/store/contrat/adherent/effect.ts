@@ -133,6 +133,26 @@ this.actions$.pipe(
 )
 );
 
+
+searchAdherent$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.searchAdherent),
+    mergeMap(({numero}) =>
+        this.AdherentService.searchAdherent(numero).pipe(
+            switchMap(value => [
+                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                featureActions.selectedAdherentForSearch(value)
+            ]),
+            catchError( (error) => {
+                    console.log('erreur ici');
+                    featureActions.selectedAdherentForSearch(null);
+                    return of(GlobalConfig.setStatus(StatusEnum.error, null, error));
+            })
+        )
+    )
+)
+);
+
 /**import photo par lot */
 importPhotosAdherentLot$ = createEffect(() =>
 this.actions$.pipe(

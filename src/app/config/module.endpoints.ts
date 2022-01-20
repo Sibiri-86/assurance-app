@@ -341,4 +341,9 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    
+    static readonly PRESTATION_PREFINANCEMENT = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
 }

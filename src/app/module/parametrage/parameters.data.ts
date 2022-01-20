@@ -1395,7 +1395,19 @@ export const DATA_DEFINITION = [
           field: 'idQualiteMedecin',
           optionLabel: 'libelle'
         }
-      }
+      },
+      
+      {
+        field: 'idPrestataire', header: 'Prestataire', width: 1, label: 'libellePrestataire', text_center: false,
+        validators: [Validators.required], type: 'dropdown', dropObj: {
+          action: prestataireActions.loadPrestataire(),
+          selector: prestataireList,
+          key: 'id',
+          field: 'idPrestataire',
+          optionLabel: 'libelle'
+        }
+      },
+      
     ],
     entityValidations: [
       {

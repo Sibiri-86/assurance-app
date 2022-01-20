@@ -7,6 +7,7 @@ import { Secteur } from '../../parametrage/secteur/model';
 import {TypeReport} from '../enum/model';
 import {HistoriqueAvenant} from '../historiqueAvenant/model';
 import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
+import { Prefinancement } from '../../prestation/prefinancement/model';
 
 export interface Police{
     id?: string;
@@ -37,6 +38,7 @@ export interface Police{
     fraisAccessoire?: number;
     fraisBadge?: number;
     valide?: boolean;
+    numero?: string;
 }
 
 export interface Statistique {
@@ -61,10 +63,10 @@ export interface ReportFile {
 }
 
 export interface Report {
-    typeReporting?: TypeReport,
+    typeReporting?: TypeReport;
     police?: Police;
     historiqueAvenant?: HistoriqueAvenant;
-
+    prefinancementDto?: Prefinancement;
 }
 
 export interface PoliceList {

@@ -45,7 +45,10 @@ import {IntermediaireComponent} from './module/contrat/intermediaire/intermediai
 import {PoliceComponent} from './module/contrat/police/police.component';
 import {AvenantComponent} from './module/contrat/avenant/avenant.component';
 import { BaremeComponent } from './module/contrat/bareme/bareme.component';
-
+import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
+import { PrefinancementValideComponent } from './module/prestation/sinistre/prefinancement-valide/prefinancement-valide.component';
+import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
+import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
 @NgModule({
     imports: [
@@ -66,6 +69,10 @@ import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteu
                     {path: 'contrat/police', component: PoliceComponent},
                     {path: 'contrat/bareme', component: BaremeComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
+                    {path: 'prestation/prefinancement', component: PrefinancementEditionComponent},
+                    {path: 'prestation/prefinancement/valide', component: PrefinancementValideComponent},
+                    {path: 'prestation/prefinancement/ordre-reglement', component: OrdreReglementEditionComponent},
+                    {path: 'prestation/prefinancement/ordre-reglement/valide', component: OrdreReglementValideComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

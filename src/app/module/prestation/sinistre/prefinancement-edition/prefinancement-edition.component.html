@@ -1,0 +1,431 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addPrefinancement()"></button>
+					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2"></button>
+				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            
+            
+            <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:100px">Numero Adherent<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                        <th style="min-width:150px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prefinancement>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
+                        </td>
+                        
+                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+                        </td>
+                        
+                        <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 
+                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(prefinancement)"></button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
+                    </td>
+                        
+                        <!--
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+                        </td>
+                        -->
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>  
+        
+        
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <p-table #dt [value]="prestationListPrefinancement" [columns]="cols" [rows]="10" [paginator]="true"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">montant rembourser <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="prestation"></p-tableCheckbox>
+                        </td>
+
+                        <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.coutUnitaire}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.debours}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.baseRemboursement}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{prestationListPrefinancement ? prestationListPrefinancement.length : 0 }} prestation(s).
+                    </div>
+                </ng-template>
+            </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog>
+        
+        
+        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <p-fieldset legend="Sinistre" toggleable="true">
+                <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">  
+                    <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div class="p-field p-col">
+                    <label for="refSinistre">Reference sinistre <span class="required">*</span></label>
+                    <input id="refSinistre" type="text" formControlName="referenceSinistreGarant" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                    <label for="refBordereau">Reference bordereau<span class="required">*</span></label>
+                    <input id="refBordereau" type="text" formControlName="referenceBordereau" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
+                        <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                    </div>
+                    
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+                        
+                        <div class="p-field p-col">
+                            <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
+                            <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                            <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="nomAdherent">Nom <span class="required">*</span></label>
+                            <input id="nomAdherent" type="text" formControlName="nomAdherent" pInputText>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                            <input id="prenomAdherent" type="text" formControlName="prenomAdherent" pInputText>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
+                            <input id="groupeAdherent" type="text" formControlName="numeroGroupe" pInputText>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="policeAdherent">Numero police<span class="required">*</span></label>
+                            <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText>
+                        </div>
+                        
+                    </div>
+                    
+                      
+                    <div class="p-fluid p-formgrid p-grid">
+                        
+                        <div class="p-field p-col">
+                            <label for="lastname2">Centre prescripteur</label>
+                            <p-dropdown dataKey="id" inputId="prestataire" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle"></p-dropdown>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="lastname2">Prescripteur</label>
+                            <p-dropdown dataKey="id" inputId="medecin" [filter]="true" showClear="true" [options]="medecinList" formControlName="medecin" optionLabel="nom" placeholder="Selectionnez le prescripteur">
+                                <ng-template let-medecin pTemplate="item">
+                                    <div class="medecin-item">
+                                        <span>{{medecin.nom}} {{medecin.prenom}} </span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="lastname2">Centre executeur</label>
+                            <p-dropdown dataKey="id" inputId="executeur" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle"></p-dropdown>
+                        </div>  
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+                        
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Famille acte</label>
+                            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" formControlName="garantie" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                        </div>
+                        
+                        <div class="p-field p-col-4">
+                            <label for="lastname2">Acte</label>
+                            <p-dropdown dataKey="id" inputId="acte" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle"></p-dropdown>
+                        </div>
+                    </div>
+                    
+                </form>  
+                </p-fieldset>
+                <hr/>  
+                <p-fieldset legend="Prestation" toggleable="true">
+                    
+                    <p-toolbar styleClass="p-mb-4">
+                        <ng-template pTemplate="left">
+                            <button pButton type="button" icon="pi pi-plus" class="p-button-text" [label]="'Ajouter'"
+                                    pAddRow [table]="dtPrestation" [newRow]="newRowPrestation()"></button>
+                        </ng-template>
+                    </p-toolbar>
+                    
+            <div class="p-grid">      
+            <div class="p-col">
+                <div class="box"> 
+                    <p-table #dtPrestation [value]="prestationList" dataKey="" editMode="row">
+                        
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th colspan="3" style="text-align: center;" >FRAIS REELS</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: center;">Sous Acte</th>
+                                <th style="text-align: center;">Cle</th>
+                                <th style="text-align: center;">Nb Acte</th>
+                                <th style="text-align: center;">Cout unitaire</th>
+                                <th style="text-align: center;">Debours réels</th>
+                                <th style="text-align: center;">Base remboursement</th>
+                                <th style="text-align: center;">Taux</th>
+                                <th style="text-align: center;">Montant remboursé</th>
+                                <th style="text-align: center;">Sort</th>
+                                <th style="text-align: center;">Observation</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                            <tr [pEditableRow]="rowData">
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="sousActeList" [(ngModel)]="rowData.sousActe" optionLabel="libelle"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData?.sousActe?.code}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="rowData.cle" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.cle | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="rowData.nombreActe" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData?.matriculeGarant}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="rowData.coutUnitaire" mode="decimal" locale="fr-FR" (onBlur)="calculCoutDebours(rowData, ri)"></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.coutUnitaire | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="rowData.debours" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.debours | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="rowData.baseRemboursement" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.baseRemboursement | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="tauxList" [(ngModel)]="rowData.taux" optionLabel="taux"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.taux.taux}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="rowData.montantRembourse" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData.montantRembourse | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="typeSort" [(ngModel)]="rowData.sort"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output" *ngIf="rowData.sort">
+                                            {{rowData?.sort}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <textarea  [cols]="3" [rows]="2" pInputTextarea [(ngModel)]="rowData.observation" autoResize="autoResize"> </textarea>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData?.observation}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td style="text-align:center">
+                                    <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitAdherentFamille(rowData, ri)"></button>
+                                    <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSaveAdherentFamille(rowData, ri)"></button>
+                                    <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelAdherentFamille(rowData, ri)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    </div>
+                </div>
+            </div>
+                    
+                </p-fieldset>
+                
+                
+                
+                    </div>
+
+                <div class="p-grid p-justify-between">
+                    <div>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
+                    </div>
+                    
+                    <div>
+                        <button type="button" pButton label="Ajouter à la liste" icon="pi pi-plus" (click)="addPrestation()" ></button>
+                        </div>
+                    <div>
+                        
+                    <button  [disabled]="prestationForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="validerPrefinancement()"></button>
+                    </div>
+                </div>
+                                    
+             </ng-template>
+            </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

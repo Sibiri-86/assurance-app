@@ -118,6 +118,9 @@ import {
 
   import * as historiqueAvenantReducer from '../contrat/historiqueAvenant/reducer';
   import * as historiqueAvenantState from '../contrat/historiqueAvenant/state';
+  
+  import * as prefinancementReducer from '../prestation/prefinancement/reducer';
+  import * as prefinancementState from '../prestation/prefinancement/state';
 
   import * as banqueReducer from '../parametrage/Banques/reducer';
   import * as banqueState from '../parametrage/Banques/state';
@@ -168,7 +171,8 @@ import { tauxcommissionintermediaireList } from '../parametrage/taux-commission-
     adherentState: adherentReducer.reducer,
     arrondissementState: arrondissementReducer.reducer,
     secteurState: secteurReducer.reducer,
-    historiqueAvenantState: historiqueAvenantReducer.reducer
+    historiqueAvenantState: historiqueAvenantReducer.reducer,
+    prefinancementState: prefinancementReducer.reducer
   };
   
   // console.log all actions
