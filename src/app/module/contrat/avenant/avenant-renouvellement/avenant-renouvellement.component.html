@@ -1,7 +1,24 @@
 <div class="p-fluid">
     <p-tabView>
-        <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
-
+        <p-tabPanel header="INFOS" leftIcon="pi pi-info" tooltip="Information sur la police" [style]="{'width': '100%'}">
+            <p-fieldset legend="Exercice" [transitionOptions]="'400ms'">
+                <form [formGroup]="exerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debut">Date d'effet</label>
+                            <p-calendar id="debut" [showIcon]="true" formControlName="debut"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance</label>
+                            <p-calendar id="fin" [showIcon]="true" formControlName="fin"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
@@ -284,8 +301,8 @@
                                 </div>
                                 <div class="p-field p-col-4">
                                     <label for="lastname2">Commune</label>
-                                    <p-dropdown dataKey="id" id="commune" inputId="cummune" [filter]="true"
-                                                showClear="true" [options]="communeList" formControlName="cummune"
+                                    <p-dropdown dataKey="id" id="commune" inputId="commune" [filter]="true"
+                                                showClear="true" [options]="communeList" formControlName="commune"
                                                 optionLabel="libelle"></p-dropdown>
                                 </div>
                             </div>
@@ -380,7 +397,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-users" tooltip="Groupe">
+        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
 
             <ng-template pTemplate="content">
                 <div class="p-grid">
@@ -414,6 +431,10 @@
                             <th>Domaine</th>
                             <th>Date effet</th>
                             <th>Status</th>
+                            <th>
+                                <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                                         icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                            </th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
@@ -421,7 +442,17 @@
                             <td>
                                 <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
-                            <td>{{plafond.garantie.libelle}}</td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.garantie?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
                             <!--
                             <td>{{plafond.montantPlafond}}</td>
                             -->
@@ -479,7 +510,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-multiSelect [options]="qualiteAssureList1"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
                                                        [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -542,7 +573,17 @@
                             <tr  [pEditableRow]="acte" class="colorZoneActe">
 
                                 <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
-                                <td>{{acte?.acte?.libelle}}</td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="acte.listeActe" [(ngModel)]="acte.acte" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.acte?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
                                 <td>
                                 </td>
                                 <td>
@@ -588,7 +629,7 @@
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{acte?.taux.taux}}
+                                            {{acte?.taux?.taux}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -713,7 +754,7 @@
                                                             [style]="{'width':'100%'}"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe?.taux.taux}}
+                                                {{sousActe?.taux?.taux}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -777,11 +818,75 @@
 </p-table>
 </ng-template>
         </p-tabPanel>
-        <p-tabPanel header="INCORPORATION" leftIcon="pi pi-cog" tooltip="BAREME">
+        <p-tabPanel header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
             <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
-        <p-tabPanel header="RETRAIT" leftIcon="pi pi-cog" tooltip="BAREME">
+        <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
+        </p-tabPanel>
+        <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
+            <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
+            <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
+                    </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>-->
+                        <th style="width: 7rem">Matricule</th>
+                        <th pSortableColumn="groupe" style="width: 12rem">Groupe<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" >Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 9rem" >Genre<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-adherent>
+                    <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
+                        <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
+                        <td><span class="p-column-title">{{adherent.numero}}</span></td>
+                        <td><span class="p-column-title">{{adherent.groupe?.libelle}}</span></td>
+                        <td><span class="p-column-title">{{adherent.nom | upercase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.prenom | beginLowerCase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.genre?.libelle | upercase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
+                        <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                        <td><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
+                        <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody" let-columns="columns">
+                    <tr style="height:34px">
+                        <div class="loading-text"></div>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="7" style="color: red; font-weight: bold">
+                            Aucun adhérent trouvé !
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{adherantPoliceListActualisee ? adherantPoliceListActualisee.length : 0 }} assurés
+                    </div>
+                </ng-template>
+            </p-table>
         </p-tabPanel>
     </p-tabView>
     <hr>

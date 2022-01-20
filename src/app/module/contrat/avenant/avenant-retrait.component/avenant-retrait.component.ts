@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Police} from '../../../../store/contrat/police/model';
+import {Exercice, Police} from '../../../../store/contrat/police/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
@@ -12,7 +12,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille, AdherentList} from '../../../../store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
-
+import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {
   HistoriqueAvenant,
@@ -21,6 +21,7 @@ import {
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {PoliceService} from '../../../../store/contrat/police/service';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -44,6 +45,7 @@ export class AvenantRetraitComponent implements OnInit {
   @Output() adherentFamilleEvent = new EventEmitter();
   adherantDeleteds: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
+  historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant> = [];
   nonRetirer = 'non retiré';
   retirer = 'retiré';
   myForm: FormGroup;
@@ -57,13 +59,19 @@ export class AvenantRetraitComponent implements OnInit {
     {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
     {libelle: 'GARANT', value: TypeDemandeur.GARANT}
   ];
+  private exercice: Exercice;
+  private exerciceForm: FormGroup;
+  private curentGroupe: Groupe;
+  customForm: FormGroup;
+  isNewGroupe = false;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
       private historiqueAvenantService: HistoriqueAvenantService,
       private adherentService: AdherentService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private policeService: PoliceService
   ) {}
 
   ngOnInit(): void {
@@ -88,10 +96,12 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
+          this.historiqueAveantAdherantsTMP = res;
           console.log('..................historiqueAveantAdherants...................');
           console.log(this.historiqueAveantAdherants);
         }
     );
+    this.loadActivedExercice(this.police);
   }
 
 
@@ -120,10 +130,11 @@ export class AvenantRetraitComponent implements OnInit {
       if (value) {
         // this.adherantGroupeListe = value.slice();
         console.log('*********adherantGroupeListe**********');
-        console.log(this.adherantGroupeListe);
+        console.log(value);
         // this.makeAderantFamille();
       }
     });
+    this.historiqueAveantAdherants = this.historiqueAveantAdherantsTMP.filter(ad => ad.adherent.groupe.id === this.groupe.id);
     this.historiqueAvenant.groupe = this.groupe;
   }
 
@@ -139,6 +150,11 @@ export class AvenantRetraitComponent implements OnInit {
     });
     this.familleAdherants = [];
     // this.adherantList = [];
+    this.exerciceForm = this.formBuilder.group({
+      debut: new FormControl(''),
+      fin: new FormControl('', [Validators.required]),
+      actived: new FormControl('', [Validators.required]),
+    });
   }
 
   onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
@@ -179,6 +195,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenant.numero = this.myForm.get('numero').value;
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    this.historiqueAvenant.exercice = this.exercice;
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
         this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
@@ -224,8 +241,19 @@ export class AvenantRetraitComponent implements OnInit {
         (res) => {
           if (res) {
             this.addMessage('error', 'Date d\'effet invalide',
-                'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
             this.myForm.patchValue({dateAvenant: null});
+          }
+        }
+    );
+  }
+  compareDateRetrait(haa: HistoriqueAvenantAdherant): void {
+    this.historiqueAvenantService.compareDate(haa.dateRetrait, this.myForm.get('dateAvenant').value).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date de retrait invalide',
+                'La date de retrait de l\'adherent ne peut pas être postérieure à celle de l\'avenant');
+            haa.dateRetrait = null;
           }
         }
     );
@@ -233,6 +261,43 @@ export class AvenantRetraitComponent implements OnInit {
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  onGroupeChange() {
+    this.curentGroupe = this.customForm.controls.groupe.value;
+    // this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe.id);
+  }
+  loadGoupeByPolice(): void {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.police.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
+  addGroupeNew(groupe: FormGroup): Groupe {
+    console.log(groupe);
+    this.curentGroupe = groupe as Groupe;
+    return this.curentGroupe;
+  }
+
+  private loadActivedExercice(police: Police): void {
+    if (police) {
+      this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+          (res) => {
+            this.exercice = res;
+            if (this.exercice) {
+              this.exerciceForm.patchValue({
+                debut: this.exercice.debut,
+                fin: this.exercice.fin,
+                actived: this.exercice.actived,
+              });
+            }
+          }
+      );
+    }
   }
 
 }

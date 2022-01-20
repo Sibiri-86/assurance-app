@@ -16,6 +16,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
+import {Exercice} from '../police/model';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -223,5 +224,15 @@ private handleError<T>() {
             default: break;
         }
         return null;
+    }
+
+    getDebutAvenantRenouvellement(policeId: string): Observable<HttpResponse<Exercice>> {
+    return this.http.get<Exercice>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/debut-avenant`,
+        {params: createRequestOption({policeId}), observe: 'response'});
+    }
+
+    getHistoriqueAvenantWithoutActive(policeId: string): Observable<HttpResponse<HistoriqueAvenant[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police`,
+            {params: createRequestOption({policeId}), observe: 'response'});
     }
 }

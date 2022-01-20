@@ -88,6 +88,19 @@ export class AdherentEffects {
         )
     )
     );
+    fetchListeAcutalisee$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadListeActualisee),
+        mergeMap(({policeId}) =>
+            this.AdherentService.getListeActualisee(policeId).pipe(
+                switchMap(value => [
+                    featureActions.setListeActualisee({listeActualisee: value})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
 
     /* fetchAdherentGroupe$ = createEffect(() =>
     this.actions$.pipe(

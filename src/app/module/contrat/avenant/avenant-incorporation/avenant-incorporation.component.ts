@@ -14,7 +14,7 @@ import {loadGenre} from '../../../../store/parametrage/genre/actions';
 import * as professionSelector from '../../../../store/parametrage/profession/selector';
 import {loadProfession} from '../../../../store/parametrage/profession/actions';
 import {Profession} from '../../../../store/parametrage/profession/model';
-import {Police} from '../../../../store/contrat/police/model';
+import {Exercice, Police} from '../../../../store/contrat/police/model';
 import {
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
@@ -25,6 +25,8 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {MessageService} from 'primeng/api';
 import {PoliceService} from '../../../../store/contrat/police/service';
+import {loadGroupe} from '../../../../store/contrat/groupe/actions';
+import {groupeList} from '../../../../store/contrat/groupe/selector';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -70,6 +72,14 @@ export class AvenantIncorporationComponent implements OnInit{
         {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
         {libelle: 'GARANT', value: TypeDemandeur.GARANT}
         ];
+    private exercice: Exercice;
+    private exerciceForm: FormGroup;
+    private curentGroupe: Groupe;
+    customForm: FormGroup;
+    groupePolicy: Array<Groupe> = [];
+    groupeList$: Observable<Array<Groupe>>;
+    groupeList: Array<Groupe>;
+    isNewGroupe = false;
 
     init(): void {
         this.historiqueAvenant1.file = new FormData();
@@ -92,7 +102,8 @@ export class AvenantIncorporationComponent implements OnInit{
             dateIncor: new FormControl(new Date(), [Validators.required]),
             matriculeGarant: new FormControl('', ),
             matriculeSouscripteur: new FormControl('', ),
-            familys: this.formBuilder.array([])
+            numero: new FormControl('', ),
+            familys: this.formBuilder.array([]),
         });
 
         this.newForm = this.formBuilder.group({
@@ -116,6 +127,11 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleForm = this.formBuilder.group({
             adherent: new FormControl(''),
             famille: new FormControl('', [Validators.required]),
+        });
+        this.exerciceForm = this.formBuilder.group({
+            debut: new FormControl(''),
+            fin: new FormControl('', [Validators.required]),
+            actived: new FormControl('', [Validators.required]),
         });
         this.myForm = this.formBuilder.group({
             numero: new FormControl(null, [Validators.required]),
@@ -161,6 +177,7 @@ export class AvenantIncorporationComponent implements OnInit{
                 this.professionList = value.slice();
             }
         });
+        this.loadGoupeByPolice();
     }
     constructor(
         private formBuilder: FormBuilder,
@@ -168,13 +185,18 @@ export class AvenantIncorporationComponent implements OnInit{
         private historiqueAvenantService: HistoriqueAvenantService,
         private messageService: MessageService,
         private policeService: PoliceService
-    ) {}
+    ) {
+        this.customForm = this.formBuilder.group({
+            groupe: new FormControl('')
+        });
+    }
 
     ngOnInit(): void {
         this.init();
         console.log('---------------------------------');
         console.log(this.adherentPrincipauxTMP);
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
+        this.loadActivedExercice(this.police);
     }
 
     addAdherentFamilleToList(): void {
@@ -202,9 +224,10 @@ export class AvenantIncorporationComponent implements OnInit{
                 break;
             default: break;
         }
+        this.historiqueAvenant1.exercice = this.exercice;
         this.historiqueAvenant1.fraisBadgetAccessoires = this.myForm.get('fraisBadgetAccessoires').value;
-        // this.historiqueAvenant1.fileToLoad = this.selectedFile;
-        // this.historiqueAvenant1.file.append('file', this.historiqueAvenant1.fileToLoad);
+        this.historiqueAvenant1.groupe = this.curentGroupe;
+        this.historiqueAvenant1.police = this.police;
         console.log('..........   historiqueAvenant  f  .............');
         console.log(this.historiqueAvenant1);
         this.adherentFamilleEvent.emit(this.historiqueAvenant1);
@@ -290,8 +313,11 @@ export class AvenantIncorporationComponent implements OnInit{
             referenceBancaire: adherent?.referenceBancaire,
             qualiteAssure: adherent?.qualiteAssure,
             genre: adherent?.genre,
-            dateEntree: new Date(adherent?.dateEntree)
+            dateEntree: new Date(adherent?.dateEntree),
+            numero: adherent.numero
         });
+        console.log('+++++ adherent.numero +++ ');
+        console.log(this.adherentForm.get('numero').value);
     }
 
     getFiles(event: File) {
@@ -365,4 +391,44 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     onDemandeurChange(): void { }
+
+    private loadActivedExercice(police: Police): void {
+        if (police) {
+            this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    if (this.exercice) {
+                        this.exerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin,
+                            actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
+        }
+    }
+    onGroupeChange() {
+        this.curentGroupe = this.customForm.controls.groupe.value;
+        this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe.id);
+    }
+    loadGoupeByPolice(): void {
+        if (this.police) {
+            this.groupeList$ = this.store.pipe(select(groupeList));
+            this.store.dispatch(loadGroupe({policeId: this.police.id}));
+            this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+                if (value) {
+                    this.groupePolicy = value.slice();
+                    console.log(this.groupePolicy);
+                }
+            });
+        }
+    }
+    addGroupeNew(groupe: FormGroup): Groupe {
+        console.log(groupe);
+        this.curentGroupe = groupe as Groupe;
+        return this.curentGroupe;
+    }
+    addGroupe() {
+    }
 }

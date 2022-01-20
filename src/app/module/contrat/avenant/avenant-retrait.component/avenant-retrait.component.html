@@ -1,5 +1,20 @@
 <div class="card">
     <div class="p-grid">
+        <!--<div class="p-fluid p-grid">
+
+            <div class="p-field p-col-4" *ngIf="!isNewGroupe">
+                <form [formGroup]="customForm">
+                    <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
+                                name="selectedGroup"
+                                [filter]="true" filterBy="libelle" [showClear]="true"
+                                placeholder="Choisir un groupe"
+                                (onChange)="onGroupeChange()">
+                    </p-dropdown>
+                </form>
+            </div>
+
+            <div class="p-field p-col-6"></div>
+        </div>-->
         <div class="p-field p-col-12">
             <div class="p-field p-col-7">
                 <div class="p-field-checkbox">
@@ -41,8 +56,22 @@
     </div>
     <div class="p-grid">
         <div class="p-col-12">
-        <p-fieldset legend="Avenant" toggleable="true">
-            <form [formGroup]="myForm" *ngIf="!isRenouv">
+            <p-fieldset legend="Exercice" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="exerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet</label>
+                            <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance</label>
+                            <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+        <p-fieldset legend="Avenant" toggleable="true" *ngIf="!isRenouv">
+            <form [formGroup]="myForm">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-6">
                         <label for="numero">Numéro de l'avenant chez la garant</label>
@@ -90,7 +119,7 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="nom">Numéro <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
                         <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
@@ -118,6 +147,7 @@
                         <td>
                             <span class="p-column-title">
                                 <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                       (change)="compareDateRetrait(historiqueAveantAdherant)"
                                        [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
                             <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
                                         dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"

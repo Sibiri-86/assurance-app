@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import { AdherentFamille } from "./model";
 import {Endpoints} from '../../../config/module.endpoints';
+import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class AdherentService {
@@ -88,6 +89,16 @@ private handleError<T>() {
     getAdherentPrincipauxByGroupe(idGpe: string): Observable<Adherent[]> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_PRINCIPAL_GROUPE)}/${idGpe}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getListeActualisee(policeId: string): Observable<Array<Adherent>> {
+        // @FIXME: get request
+        // adherent/liste-actualisee
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/liste-actualisee`
+        , {params: createRequestOption({policeId})}).pipe(
             map((response: Adherent[]) => response),
             catchError(this.handleError())
         );

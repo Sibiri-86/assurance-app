@@ -13,14 +13,18 @@ const initialState: HistoriqueAvenantState = {
     historiquePlafondGroupe: [],
     historiquePlafondGroupeFamilleActe: [],
     historiquePlafondGroupeActe: [],
-    historiquePlafondGroupeSousActe: []
+    historiquePlafondGroupeSousActe: [],
+    historiqueAvenantListWithoutActive: []
 };
 
 const featureReducer = createReducer(
   initialState,
   on(featureActions.setHistoriqueAvenant, (state, payload: any) => ({
-    ...state, adherentList: payload.historiqueAvenantList
-  }))
+    ...state, historiqueAvenantList: payload.historiqueAvenantList
+  })),
+    on(featureActions.setHistoriqueAvenant, (state, payload: any) => ({
+        ...state, historiqueAvenantListWithoutActive: payload.historiqueAvenantListWithoutActive
+      }))
 );
 
 export function reducer(state: HistoriqueAvenantState | undefined, action: Action) {

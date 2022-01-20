@@ -1,10 +1,10 @@
 import {Adherent, AdherentFamille} from '../adherent/model';
 import {Groupe} from '../groupe/model';
-import {Police} from '../police/model';
+import {Exercice, Police} from '../police/model';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Acte} from '../../parametrage/acte/model';
 import {SousActe} from '../../parametrage/sous-acte/model';
-import {Plafond} from '../plafond/model';
+import {Plafond, PlafondGroupe} from '../plafond/model';
 import {Garantie} from '../../parametrage/garantie/model';
 import {DimensionPeriode} from '../../parametrage/dimension-periode/model';
 import {Taux} from '../../parametrage/taux/model';
@@ -34,6 +34,7 @@ export interface HistoriqueAvenant {
     dateEcheance?: Date;
     historiqueAvenantPrimes?: HistoriqueAvenantPrime[];
     fraisBadgetAccessoires?: number;
+    exercice?: Exercice;
 }
 
 export enum TypeEtat {
@@ -71,6 +72,7 @@ export interface HistoriqueAvenantAdherant {
 
 export interface HistoriqueAvenantList {
     historiqueAvenantList?: Array<HistoriqueAvenant>;
+    historiqueAvenantListWithoutActive?: Array<HistoriqueAvenant>;
 }
 
 export class AvenantModification {
@@ -85,12 +87,16 @@ export class Avenant {
     historiqueAvenantAdherantDels?: HistoriqueAvenantAdherant[];
     groupe?: Groupe;
     historiqueAvenant?: HistoriqueAvenant;
-    plafondGroupe?: HistoriquePlafond;
-    plafondGroupeActes?: HistoriquePlafondActe[];
-    plafondGroupeSousActes?: HistoriquePlafondSousActe[];
-    plafondFamilleActes?: HistoriquePlafondFamilleActe[];
+    historiquePlafondGroupe?: HistoriquePlafond;
+    historiquePlafondGroupeActes?: HistoriquePlafondActe[];
+    historiquePlafondGroupeSousActes?: HistoriquePlafondSousActe[];
+    historiquePlafondFamilleActes?: HistoriquePlafondFamilleActe[];
     familles?: AdherentFamille[];
     historiqueGroupeDto?: HistoriqueGroupe;
+    plafondFamilleActes?: PlafondFamilleActe[];
+    plafondGroupeActes?: PlafondActe[];
+    plafondGroupeSousActes?: PlafondSousActe[];
+    plafondGroupe?: any;
 }
 
 export class HistoriqueGroupe {

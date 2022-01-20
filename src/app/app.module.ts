@@ -229,6 +229,7 @@ import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
 import { PlafondFamilleActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-famille-acte.component';
 import { PlafondActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-acte.component';
 import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-sous-acte/plafond-sous-acte.component';
+import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
 
 @NgModule({
     imports: [
@@ -408,7 +409,8 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modif
         BeginLowerCasePipe,
         PlafondFamilleActeComponent,
         PlafondActeComponent,
-        PlafondSousActeComponent
+        PlafondSousActeComponent,
+        AvenantFacturationComponent
     ],
     providers: [
         {

@@ -313,7 +313,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       matriculeSouscripteur: new FormControl('', [Validators.required]),
       dateNaissance: new FormControl('', [Validators.required]),
       matriculeGarant: new FormControl('', [Validators.required]),
-      // matriculeSouscripteur:new FormControl("", [Validators.required]),
+      numero: new FormControl('', [Validators.required]),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
       adresse: new FormControl('', [Validators.required]),
@@ -1128,6 +1128,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.groupe);
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
     this.adherentFamille = [];
+    this.FamilyListToImport = [];
+    this.groupe = {};
+    this.afficheDetail = false;
   }
 
   validerForm() {
@@ -1935,7 +1938,8 @@ changeGarantie(garantie, indexLigne: number) {
       referenceBancaire: adherent?.referenceBancaire,
       qualiteAssure: adherent?.qualiteAssure,
       genre: adherent?.genre,
-      dateEntree: new Date(adherent?.dateEntree)
+      dateEntree: new Date(adherent?.dateEntree),
+      numero: adherent.numero
     });
     console.log('***************this.adherentForm*******************', this.adherentForm);
   }
@@ -1963,6 +1967,8 @@ changeGarantie(garantie, indexLigne: number) {
     console.log(event);
     this.policeService.loadAdherentsByExcelFile(event).subscribe(
         (res) => {
+          console.log('liste des adhérents === ');
+          console.log(res);
           /* res.forEach(adherentFamille => {
             console.log(adherentFamille.adherent.profession);
             console.log(adherentFamille.famille);

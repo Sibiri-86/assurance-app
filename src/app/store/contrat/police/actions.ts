@@ -18,4 +18,5 @@ export const FetchReport = createAction('[Report] Fetch Report', props<Report>()
 export const setReport = createAction('[set Report] set Report', props<{reportFile: ArrayBuffer}>());
 export const loadPoliceByAffaireNouvelle = createAction('[load Police] load PoliceByAffaireNouvelle');
 export const deValiderPolice = createAction('[App Init] deValider Police', props<Police>());
+export const getActiveExerciceByPolice = createAction('[App Init] get active exercice', props<{policeId: string}>());
 

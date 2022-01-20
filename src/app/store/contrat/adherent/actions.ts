@@ -10,3 +10,5 @@ export const loadAdherent = createAction('[App Init] load Adherent', props<{idGr
 export const setAdherent = createAction('[App Init] set Adherent',  props<AdherentList>());
 export const importAdherent = createAction('[App Init] import Adherent',  props<{file: File}>());
 export const createAdherentwithFamille = createAction('[App Init] Create Adherent with famille', props<AdherentFamille>());
+export const loadListeActualisee = createAction('[App Init] load liste actualisee', props<{policeId: string}>());
+export const setListeActualisee = createAction('[App Init] set Adherent',  props<{listeActualisee: Adherent[]}>());

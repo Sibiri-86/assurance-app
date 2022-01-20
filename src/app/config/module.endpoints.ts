@@ -341,4 +341,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/historique-plafond-groupe-famille-acte`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+
+    static readonly CONTRAT_POLICE_ACTIVE_EXERCICE = {
+        prod: `${SERVICE_PREFIX}/contrat/police/exercice/active`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+
 }

@@ -37,4 +37,5 @@ export interface AdherentFamille {
 
 export interface AdherentList{
     adherentDtoList: Array<Adherent>;
+    listeActualisee: Array<Adherent>;
 }
