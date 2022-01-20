@@ -62,6 +62,7 @@ export class PrefinancementEditionComponent implements OnInit {
   prestationList: Array<FraisReels>;
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
+  sousActeListFilter: Array<SousActe>;
   destroy$ = new Subject<boolean>();
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
@@ -93,7 +94,6 @@ export class PrefinancementEditionComponent implements OnInit {
   constructor( private store: Store<AppState>,
     private confirmationService: ConfirmationService,
     private formBuilder: FormBuilder,  private messageService: MessageService) {
-    
    }
    
    onCreate() {
@@ -110,14 +110,14 @@ export class PrefinancementEditionComponent implements OnInit {
       dateSoins: new FormControl(''),
       dateDeclaration: new FormControl(''),
       matriculeAdherent: new FormControl(''),
-      garantie:new FormControl(''),
-      acte:new FormControl(''),
-      nomAdherent: new FormControl(''),
+      garantie: new FormControl(''),
+      acte: new FormControl(''),
+      nomAdherent: new FormControl({value: '', disabled: true}),
       prestataire: new FormControl(''),
-      prenomAdherent: new FormControl(''),
+      prenomAdherent: new FormControl({value: '', disabled: true}),
       medecin: new FormControl(''),
-      numeroGroupe: new FormControl(''),
-      numeroPolice: new FormControl('')
+      numeroGroupe: new FormControl({value: '', disabled: true}),
+      numeroPolice: new FormControl({value: '', disabled: true})
     });
 
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -157,6 +157,7 @@ export class PrefinancementEditionComponent implements OnInit {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
+        this.sousActeListFilter = this.sousActeList;
       }
     });
     
@@ -226,6 +227,12 @@ export class PrefinancementEditionComponent implements OnInit {
     });
     
   }
+
+  
+  selectActe(event){
+    console.log(event);
+    this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+  }
   
   editerPrestation(pref:Prefinancement) {
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
@@ -252,6 +259,11 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestationList[ri].baseRemboursement =   this.prestationList[ri].debours;
     this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement*(this.prestationList[ri].taux.taux/100); 
   }
+  
+  setNombreActe(data: FraisReels, ri){
+    this.prestationList[ri].nombreActe = data.cle;
+  }
+
   rechercherAdherent(event){
     console.log(event.target.value);
     this.prestationForm.get('nomAdherent').setValue('');
@@ -320,14 +332,14 @@ export class PrefinancementEditionComponent implements OnInit {
 
 
 export interface FraisReels {
-  nombreActe?: string,
-  coutUnitaire?: number,
-  debours?: number,
-  sousActe?: SousActe,
-  cle?: number,
-  baseRemboursement?: number,
-  taux?:Taux,
-  montantRembourse?:number,
-  sort?:Sort,
-  observation?:string
+  nombreActe?: number;
+  coutUnitaire?: number;
+  debours?: number;
+  sousActe?: SousActe;
+  cle?: number;
+  baseRemboursement?: number;
+  taux?: Taux;
+  montantRembourse?: number;
+  sort?: Sort;
+  observation?: string;
 }

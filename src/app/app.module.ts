@@ -94,7 +94,6 @@ import {AppActionBarComponent} from './app.actionbar.component';
 import {AppConfigComponent} from './app.config.component';
 import {AppTopBarComponent} from './app.topbar.component';
 import {AppFooterComponent} from './app.footer.component';
-
 // Demo pages
 import {AppCodeModule} from './app.code.component';
 import {DashboardDemoComponent} from './demo/view/dashboarddemo.component';
@@ -174,12 +173,10 @@ import { TypeAffaireEffects } from './store/parametrage/type-affaire/effect';
 import { TypePrimeEffects } from './store/parametrage/type-prime/effect';
 import { GenreEffects } from './store/parametrage/genre/effect';
 import { ModePaiementEffects } from './store/parametrage/mode-paiement/effect';
-
 import { RegionEffects } from './store/parametrage/region/effect';
 import { DepartementEffects } from './store/parametrage/departement/effect';
 import { VilleEffects } from './store/parametrage/ville/effect';
 import { CommuneEffects } from './store/parametrage/commune/effect';
-
 import {metaReducers, reducers} from './store/global/index';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationService,MessageService} from 'primeng/api';
@@ -234,7 +231,6 @@ import { PrefinancementValideComponent } from './module/prestation/sinistre/pref
 import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
-
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
 
 @NgModule({
