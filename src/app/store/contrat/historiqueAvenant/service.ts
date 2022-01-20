@@ -115,6 +115,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         data.append('numeroGarant', historiqueAvenant.numeroGarant.toString());
         data.append('dateAvenant', historiqueAvenant.dateAvenant.toString());
         data.append('groupeId', historiqueAvenant.groupe.id);
+        data.append('fraisBadgetAccessoires', historiqueAvenant.fraisBadgetAccessoires.toString());
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
