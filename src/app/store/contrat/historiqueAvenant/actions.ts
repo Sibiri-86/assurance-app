@@ -19,3 +19,7 @@ export const setHistoriqueAvenantWithoutActive = createAction('[App Init] set Hi
 	props<{historiqueAvenantListWithoutActive: HistoriqueAvenant[]}>());
 export const loadHistoriquePlafondActeWithoutActive = createAction('[App Init] load HistoriquePlafondActe without active',
 	props<{policeId: string}>());
+export const loadHistoriqueAvenantByExercice = createAction('[App Init] load HistoriqueAvenant by exercice',
+	props<{exerciceId: string}>());
+export const setHistoriqueAvenantByExercice = createAction('[App Init] set HistoriqueAvenant by exercice',
+	props<{historiqueAvenantListByExercie: HistoriqueAvenant[]}>());

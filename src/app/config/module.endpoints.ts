@@ -351,4 +351,8 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/police/exercice/active`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    static readonly CONTRAT_EXERCICE = {
+        prod: `${SERVICE_PREFIX}/contrat/exercice`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
 }

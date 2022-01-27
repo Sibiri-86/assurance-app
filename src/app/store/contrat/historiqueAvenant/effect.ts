@@ -146,4 +146,16 @@ export class HistoriqueAvenantEffects {
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));
+    findHistoriqueAvenantByExercice$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadHistoriqueAvenantByExercice),
+            mergeMap(({exerciceId}) =>
+                this.historiqueAvenantService.findHistoriqueAvenantByExercice(exerciceId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenantByExercice({historiqueAvenantListByExercie: value.body})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
 }

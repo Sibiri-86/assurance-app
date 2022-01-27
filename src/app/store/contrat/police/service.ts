@@ -113,9 +113,4 @@ export class PoliceService {
         return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data,
             {headers: headers});
     }
-
-    getActiveExerciceByPolice(policeId: string): Observable<any> {
-      return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_ACTIVE_EXERCICE)}`,
-          {params: createRequestOption({policeId})});
-    }
 }

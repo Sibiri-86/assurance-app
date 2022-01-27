@@ -127,6 +127,8 @@ import {
   import * as tauxCommissionIntermediaireReducer from '../parametrage/taux-commission-intermediaire/reducer';
   import * as tauxCommissionIntermediaireState from '../parametrage/taux-commission-intermediaire/state';
 import { tauxcommissionintermediaireList } from '../parametrage/taux-commission-intermediaire/selector';
+import * as exerciceReducer from '../contrat/exercice/reducer';
+import * as exerciceState from '../contrat/exercice/state';
 
   export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
@@ -172,7 +174,8 @@ import { tauxcommissionintermediaireList } from '../parametrage/taux-commission-
     arrondissementState: arrondissementReducer.reducer,
     secteurState: secteurReducer.reducer,
     historiqueAvenantState: historiqueAvenantReducer.reducer,
-    prefinancementState: prefinancementReducer.reducer
+    prefinancementState: prefinancementReducer.reducer,
+    exerciceState: exerciceReducer.reducer
   };
   
   // console.log all actions

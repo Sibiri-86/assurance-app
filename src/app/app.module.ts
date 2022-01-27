@@ -236,6 +236,7 @@ import { OrdreReglementValideComponent } from './module/prestation/ordre-regleme
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
+import {ExerciceEffects} from './store/contrat/exercice/effect';
 
 @NgModule({
     imports: [
@@ -343,7 +344,7 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, 
-             SecteurEffects, ArrondissementEffects])
+             SecteurEffects, ArrondissementEffects, ExerciceEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

@@ -1143,6 +1143,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.FamilyListToImport = [];
     this.groupe = {};
     this.afficheDetail = false;
+    this.displayDialogFormAddGroupe = false;
   }
 
   validerForm() {

@@ -3,12 +3,11 @@ import * as featureActions from './actions';
 import { PoliceList, Rapport, ReportFile, Statistique } from './model';
 import {PoliceState} from './state';
 
-const initialState : PoliceState = {
+const initialState: PoliceState = {
   policeList: null,
   statistique: null,
   rapport: null,
   reportFile: null,
-  exerciceActive: null
 };
 
 

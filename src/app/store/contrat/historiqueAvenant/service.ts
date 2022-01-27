@@ -16,7 +16,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
-import {Exercice} from '../police/model';
+import {Exercice} from '../exercice/model';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -113,9 +113,15 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         data.append('file', file);
         data.append('typeHistoriqueAvenant', historiqueAvenant.typeHistoriqueAvenant);
         data.append('numeroGarant', historiqueAvenant.numeroGarant.toString());
-        data.append('dateAvenant', historiqueAvenant.dateAvenant.toString());
+        const date = new Date();
+        date.setFullYear(historiqueAvenant.dateAvenant.getFullYear(), historiqueAvenant.dateAvenant.getMonth(),
+        historiqueAvenant.dateAvenant.getDay());
+        data.append('year', historiqueAvenant.dateAvenant.getFullYear().toString());
+        data.append('month', historiqueAvenant.dateAvenant.getMonth() + 1 + '');
+        data.append('day', historiqueAvenant.dateAvenant.getDate().toString());
         data.append('groupeId', historiqueAvenant.groupe.id);
-        data.append('fraisBadgetAccessoires', historiqueAvenant.fraisBadgetAccessoires.toString());
+        data.append('fraisAccessoires', historiqueAvenant.fraisAccessoires.toString());
+        data.append('fraisBadges', historiqueAvenant.fraisBadges.toString());
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
@@ -131,7 +137,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     }
 
     compareDate(debut?: Date, fin?: Date): Observable<any> {
-        // @FIXME: post request
+        console.log('date = ' + debut.getMonth());
         const avenant: HistoriqueAvenant = {};
         avenant.dateEffet = debut;
         avenant.dateAvenant = fin;
@@ -221,7 +227,8 @@ private handleError<T>() {
             case TypeHistoriqueAvenant.INCORPORATION:
                 return this.http.get('assets/excell/Model_import_incorporation.xlsx', {responseType: 'blob'});
             case TypeHistoriqueAvenant.RETRAIT:
-                return this.http.get('assets/excell/Model_excel_import_retrait.xlsx', {responseType: 'blob'});
+                return this.http.get('assets/excell/model_retrait_adhérent.xlsx', {responseType: 'blob'});
+                // return this.http.get('assets/excell/Model_excel_import_retrait.xlsx', {responseType: 'blob'});
             default: break;
         }
         return null;
@@ -235,5 +242,14 @@ private handleError<T>() {
     getHistoriqueAvenantWithoutActive(policeId: string): Observable<HttpResponse<HistoriqueAvenant[]>> {
         return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police`,
             {params: createRequestOption({policeId}), observe: 'response'});
+    }
+
+    findHistoriqueAvenantByExercice(exerciceId: string): Observable<HttpResponse<HistoriqueAvenant[]>> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/by-exercice`,
+            {params: createRequestOption({exerciceId}), observe: 'response'})
+            .pipe(
+                map((response: any) => response),
+                catchError(this.handleError())
+            );
     }
 }

@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {Police, Report} from '../../../store/contrat/police/model';
+import {Exercice} from '../../../store/contrat/exercice/model';
 import {Groupe} from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
 import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
@@ -114,6 +115,8 @@ import {TypeReport} from '../../../store/contrat/enum/model';
 import {printPdfFile, removeBlanks} from '../../util/common-util';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import {historiqueAvenantListWithoutActive} from '../../../store/contrat/historiqueAvenant/selector';
+import * as exerciceSelector from '../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
 
 @Component({
   selector: 'app-avenant',
@@ -283,6 +286,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   infosPolice = false;
   private clonedPPrime: { [s: string]: HistoriqueAvenantPrime; } = {};
   private historiqueAvenantPrimesTMP: HistoriqueAvenantPrime[] = [];
+  exerciceList$: Observable<Array<Exercice>>;
+  exerciceList: Array<Exercice>;
+  curentExercice: Exercice = {};
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -831,14 +837,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           }
         });
 
-    this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPoliceByAffaireNouvelle());
-    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.loading = false;
-        this.policeList = value.slice();
-      }
-    });
+    this.loadPoliceListe();
 
 
     this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
@@ -1590,6 +1589,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('==================================', this.historiqueAvenants1);
         }
     ); */
+    this.loadExerciceByPolice(police);
   }
 
   /** afficher les details de l'avenant' */
@@ -2123,6 +2123,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res) => {
           this.historiqueAvenant = res;
           this.onRowSelectPolice(res.police);
+          this.loadPoliceListe();
         }
     );
   }
@@ -2171,6 +2172,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res) => {
           this.historiqueAvenantPrimes = res;
           this.displayDialogPrime = false;
+          this.onExerciceChange();
         }
     );
   }
@@ -2209,5 +2211,58 @@ export class AvenantComponent implements OnInit, OnDestroy {
   onRowEditCancelPrime(historiqueAvenantPrime: HistoriqueAvenantPrime, index: number) {
     this.historiqueAvenantPrimes[index] = this.clonedPPrime[historiqueAvenantPrime.id];
     delete this.clonedPPrime[historiqueAvenantPrime.id];
+  }
+
+  loadExerciceByPolice(police: Police): void {
+    console.log('policeId === ' + police.id);
+    this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+    this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+    this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+        (value => {
+          this.exerciceList = value;
+          console.log('liste === ');
+          console.log(this.exerciceList);
+        })
+    );
+    // this.exerciceList = [];
+  }
+
+  onExerciceChange(): void {
+    console.log('curent exo === ');
+    console.log(this.curentExercice);
+    /* if (this.curentExercice && this.curentExercice.id !== '') {
+      this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+      this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenantByExercice({exerciceId: this.curentExercice.id}));
+      this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        if (value) {
+          // this.loading = false;
+          this.historiqueAvenants1 = value.slice();
+          console.log('................historiqueAvenantListWithoutActiveList............................');
+          console.log(this.historiqueAvenantList.length);
+        }
+      });
+    } else { */
+    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: this.police.id}));
+    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        // this.loading = false;
+        this.historiqueAvenants1 = value.slice();
+        console.log('................historiqueAvenantListWithoutActiveList............................');
+        console.log(this.historiqueAvenantList.length);
+      }
+    });
+    // }
+  }
+
+  private loadPoliceListe() {
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPoliceByAffaireNouvelle());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+      }
+    });
   }
 }

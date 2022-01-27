@@ -14,7 +14,8 @@ const initialState: HistoriqueAvenantState = {
     historiquePlafondGroupeFamilleActe: [],
     historiquePlafondGroupeActe: [],
     historiquePlafondGroupeSousActe: [],
-    historiqueAvenantListWithoutActive: []
+    historiqueAvenantListWithoutActive: [],
+    historiqueAvenantListByExercie: []
 };
 
 const featureReducer = createReducer(
@@ -24,6 +25,9 @@ const featureReducer = createReducer(
   })),
     on(featureActions.setHistoriqueAvenant, (state, payload: any) => ({
         ...state, historiqueAvenantListWithoutActive: payload.historiqueAvenantListWithoutActive
+      })),
+    on(featureActions.setHistoriqueAvenantByExercice, (state, payload: any) => ({
+        ...state, historiqueAvenantListByExercie: payload.historiqueAvenantListByExercie
       }))
 );
 

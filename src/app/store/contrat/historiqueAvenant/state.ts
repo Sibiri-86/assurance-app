@@ -13,4 +13,5 @@ export interface HistoriqueAvenantState {
     historiquePlafondGroupeActe: Array<HistoriquePlafondActe>;
     historiquePlafondGroupeSousActe: Array<HistoriquePlafondSousActe>;
     historiqueAvenantListWithoutActive: Array<HistoriqueAvenant>;
+    historiqueAvenantListByExercie: Array<HistoriqueAvenant>;
 }

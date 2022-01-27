@@ -14,7 +14,8 @@ import {loadGenre} from '../../../../store/parametrage/genre/actions';
 import * as professionSelector from '../../../../store/parametrage/profession/selector';
 import {loadProfession} from '../../../../store/parametrage/profession/actions';
 import {Profession} from '../../../../store/parametrage/profession/model';
-import {Exercice, Police} from '../../../../store/contrat/police/model';
+import {Exercice} from '../../../../store/contrat/exercice/model';
+import {Police} from '../../../../store/contrat/police/model';
 import {
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
@@ -27,6 +28,9 @@ import {MessageService} from 'primeng/api';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {groupeList} from '../../../../store/contrat/groupe/selector';
+import {ExerciceService} from '../../../../store/contrat/exercice/service';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -80,7 +84,9 @@ export class AvenantIncorporationComponent implements OnInit{
     groupeList$: Observable<Array<Groupe>>;
     groupeList: Array<Groupe>;
     isNewGroupe = false;
-
+    exercice$: Observable<Exercice>;
+    exerciceList$: Observable<Array<Exercice>>;
+    exerciceList: Array<Exercice>;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -138,7 +144,8 @@ export class AvenantIncorporationComponent implements OnInit{
             dateIncorparation: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required]),
-            fraisBadgetAccessoires: new FormControl(null, [Validators.required]),
+            fraisBadges: new FormControl(null, [Validators.required]),
+            fraisAccessoires: new FormControl(null, [Validators.required]),
         });
         this.familles = [];
         this.adherentFamille =  {
@@ -184,7 +191,8 @@ export class AvenantIncorporationComponent implements OnInit{
         private store: Store<AppState>,
         private historiqueAvenantService: HistoriqueAvenantService,
         private messageService: MessageService,
-        private policeService: PoliceService
+        private policeService: PoliceService,
+        private exerciceService: ExerciceService
     ) {
         this.customForm = this.formBuilder.group({
             groupe: new FormControl('')
@@ -225,7 +233,8 @@ export class AvenantIncorporationComponent implements OnInit{
             default: break;
         }
         this.historiqueAvenant1.exercice = this.exercice;
-        this.historiqueAvenant1.fraisBadgetAccessoires = this.myForm.get('fraisBadgetAccessoires').value;
+        this.historiqueAvenant1.fraisBadges = this.myForm.get('fraisBadges').value;
+        this.historiqueAvenant1.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
         this.historiqueAvenant1.groupe = this.curentGroupe;
         this.historiqueAvenant1.police = this.police;
         console.log('..........   historiqueAvenant  f  .............');
@@ -394,7 +403,9 @@ export class AvenantIncorporationComponent implements OnInit{
 
     private loadActivedExercice(police: Police): void {
         if (police) {
-            this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+            this.exercice$ = this.store.pipe(select(exerciceSelector.selectActiveExercice));
+            this.store.dispatch(featureExerciceAction.loadExerciceActif({policeId: police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
                 (res) => {
                     this.exercice = res;
                     if (this.exercice) {
