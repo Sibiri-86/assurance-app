@@ -31,6 +31,9 @@ export interface Adherent{
     urlPhoto?: string;
 }
 
+export interface AdherentResearchReponse {
+    adherent?: Adherent;
+}
 export interface AdherentFamille {
    adherent?: Adherent;
    famille?: Array<Adherent>;

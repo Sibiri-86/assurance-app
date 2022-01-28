@@ -2202,20 +2202,10 @@
                                 <p-tableCheckbox [value]="groupe"></p-tableCheckbox>
                             </td>
                             <td><span class="p-column-title">{{groupe.numeroGroupe}}</span>
-                            <td><span class="p-column-title">{{groupe.libelle}}</span>
-
-                            </td>
-                            <td><span class="p-column-title">{{groupe.taux.taux}}</span>
-
-                            </td>
-                            <td><span class="p-column-title">{{groupe.duree}}</span>
-
-                            </td>
-
-                            <td>
-                                <span class="p-column-title" *ngFor="let t of groupe.territorialite">{{t.libelle}} </span>
-                            </td>
-
+                            <td><span class="p-column-title">{{groupe.libelle}}</span></td>
+                            <td><span class="p-column-title">{{groupe.taux.taux}}</span></td>
+                            <td><span class="p-column-title">{{groupe.duree}}</span></td>
+                            <td><span class="p-column-title" *ngFor="let t of groupe.territorialite">{{t.libelle}} </span></td>
                             <td>
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editGroupe(groupe)"></button>
                                 <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteGroupe(groupe)"></button>

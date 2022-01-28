@@ -47,7 +47,36 @@ export class PrefinancementEffects {
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             ));
-            
+
+        /** delete prefinancement */
+            deletePrefinancement$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.deletePrefinancement),
+                mergeMap(({prefinancement}) =>
+                    this.prefinancementService.deletePrefinancement(prefinancement).pipe(
+                        switchMap(value => [
+                                // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadPrefinancement()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                    ));
+        /** delete ordre de reglement */
+        deleteOrdreDeReglement$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.deleteOrdreDeReglement),
+                mergeMap(({ordreReglement}) =>
+                    this.prefinancementService.deleteOrdreReglement(ordreReglement).pipe(
+                        switchMap(value => [
+                                // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadOrdreReglement()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                    ));
+        /** lister tous les ordres de reglement valide */
         loadReglementValide$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.loadOrdreReglementValide),
@@ -81,6 +110,20 @@ export class PrefinancementEffects {
         ofType(featureActions.createPrefinancement),
         mergeMap(({prefinancement}) =>
             this.prefinancementService.posPrefinancement(prefinancement).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadPrefinancement()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+        
+    deletePrestation$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.deletePrestation),
+        mergeMap((prestation) =>
+            this.prefinancementService.deletePrestation(prestation).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.loadPrefinancement()

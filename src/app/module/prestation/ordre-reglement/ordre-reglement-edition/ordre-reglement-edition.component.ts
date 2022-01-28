@@ -49,6 +49,9 @@ import { Status } from 'src/app/store/global-config/model';
 import { status } from "../../../../store/global-config/selector";
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { printPdfFile } from 'src/app/module/util/common-util';
+import { Report } from 'src/app/store/contrat/police/model';
+import { TypeReport } from 'src/app/store/contrat/enum/model';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -60,14 +63,25 @@ export class OrdreReglementEditionComponent implements OnInit {
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
   cols: any[];
-  displaySinistre =false;
+  displaySinistre = false;
   prefinancement: Array<Prefinancement>;
+  report: Report = {};
+  selectedOrdreReglement: OrdreReglement [];
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private formBuilder: FormBuilder,  private messageService: MessageService) { }
 
   ngOnInit(): void {
+    
+    this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
+    this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
+    
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
     this.store.dispatch(featureActionPrefinancement.loadOrdreReglement());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -87,6 +101,31 @@ export class OrdreReglementEditionComponent implements OnInit {
         this.store.dispatch(featureActionPrefinancement.validerOrdreReglement({ordre, etat: TypeEtatOrdreReglement.VALIDE}));
       },
     });
+  }
+
+  supprimerOrdreReglement() {
+    if (!this.selectedOrdreReglement) {
+      this.showToast('error', 'INFORMATION', 'aucun ordre de reglement selectionné');
+    } else {
+      this.confirmationService.confirm({
+        message: 'voulez-vous supprimer l\'ordre de reglement',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.store.dispatch(featureActionPrefinancement.deleteOrdreDeReglement({ordreReglement: this.selectedOrdreReglement}));
+      }
+     });
+    }
+  }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  imprimer(pref: OrdreReglement) {
+    this.report.typeReporting = TypeReport.ORDRE_REGLEMENT;
+    this.report.ordreReglementDto = pref;
+    this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
   }
 
   voirSinistre(ordre: OrdreReglement) {

@@ -1396,7 +1396,6 @@ export const DATA_DEFINITION = [
           optionLabel: 'libelle'
         }
       },
-      
       {
         field: 'idPrestataire', header: 'Prestataire', width: 1, label: 'libellePrestataire', text_center: false,
         validators: [Validators.required], type: 'dropdown', dropObj: {
@@ -1406,8 +1405,7 @@ export const DATA_DEFINITION = [
           field: 'idPrestataire',
           optionLabel: 'libelle'
         }
-      },
-      
+      }
     ],
     entityValidations: [
       {
@@ -1551,6 +1549,16 @@ export const DATA_DEFINITION = [
       {
         field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
         validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'idSousActe', header: 'Sous acte', width: 1, labelMulti: 'idSousActe', text_center: false,
+        validators: [Validators.required], type: 'multiselect', dropObj: {
+          action: sousActeActions.loadSousActe(),
+          selector: sousacteList,
+          key: 'id',
+          field: 'idSousActe',
+          optionLabel: 'libelle'
+        }
       }
     ],
     entityValidations: [

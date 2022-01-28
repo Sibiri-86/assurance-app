@@ -156,11 +156,7 @@ this.actions$.pipe(
                 //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.selectedAdherentForSearch(value)
             ]),
-            catchError( (error) => {
-                    console.log('erreur ici');
-                    featureActions.selectedAdherentForSearch(null);
-                    return of(GlobalConfig.setStatus(StatusEnum.error, null, error));
-            })
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )
     )
 )

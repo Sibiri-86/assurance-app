@@ -5,7 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList } from "./model";
+import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from "./model";
 import { TypeEtatSinistre } from "src/app/module/common/models/enum.etat.sinistre";
 import { TypeEtatOrdreReglement } from "src/app/module/common/models/emum.etat.ordre-reglement";
 import { Report } from "../../contrat/police/model";
@@ -32,7 +32,21 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/etat/${etat}`, prefinancement);
   }
   
-  
+  deletePrestation(prestation: Prestation): Observable<any> {
+    // @FIXME: post request
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/prestation/${prestation.id}`, null);
+  }
+
+  deletePrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
+    // @FIXME: post request
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}`, prefinancement);
+  }
+
+  deleteOrdreReglement(ordreReglement: Array<OrdreReglement>): Observable<any> {
+    // @FIXME: post request
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement`, ordreReglement);
+  }
+
   putUpdateOrdreReglement(ordre: OrdreReglement, etat: TypeEtatOrdreReglement): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/etat/${etat}`, ordre);

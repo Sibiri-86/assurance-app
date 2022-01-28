@@ -1,7 +1,7 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './actions';
 
-import { Adherent, AdherentList } from './model';
+import { Adherent, AdherentList, AdherentResearchReponse } from './model';
 import {AdherentState} from './state';
 
 const initialState : AdherentState = {
@@ -16,8 +16,8 @@ const featureReducer = createReducer(
   on(featureActions.setAdherent, (state, payload: AdherentList) => ({
     ...state, adherentList: payload.adherentDtoList
   })),
-  on(featureActions.selectedAdherentForSearch, (state, payload: Adherent) => ({
-    ...state, selectedAdherentResearch: payload
+  on(featureActions.selectedAdherentForSearch, (state, payload: AdherentResearchReponse) => ({
+    ...state, selectedAdherentResearch: payload.adherent
   })),
   on(featureActions.setListeActualisee, (state, payload) => ({
     ...state, listeActualisee: payload.listeActualisee

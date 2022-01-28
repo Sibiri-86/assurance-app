@@ -49,6 +49,9 @@ import { Status } from 'src/app/store/global-config/model';
 import { status } from "../../../../store/global-config/selector";
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { printPdfFile } from 'src/app/module/util/common-util';
+import { Report } from 'src/app/store/contrat/police/model';
+import { TypeReport } from 'src/app/store/contrat/enum/model';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -62,12 +65,21 @@ export class OrdreReglementValideComponent implements OnInit {
   cols: any[];
   displaySinistre =false;
   prefinancement: Array<Prefinancement>;
+  report: Report = {};
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
+    this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
+    
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
     this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValide());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -88,7 +100,13 @@ export class OrdreReglementValideComponent implements OnInit {
       },
     });
   }
-  
+
+  imprimer(pref: OrdreReglement) {
+    this.report.typeReporting = TypeReport.ORDRE_REGLEMENT;
+    this.report.ordreReglementDto = pref;
+    this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
+  }
+
   voirSinistre(ordre: OrdreReglement) {
     this.displaySinistre = true;
     this.prefinancement = ordre.prefinancement;

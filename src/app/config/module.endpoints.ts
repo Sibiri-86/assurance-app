@@ -62,7 +62,7 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/parametrage/typeProfession`,
         mock: `assets/mock/parametrage/typeProfession.mock.json`
     };
-    
+
     static readonly PARAMETRAGE_TYPE_STATUS = {
         prod: `${SERVICE_PREFIX}/parametrage/typeStatus`,
         mock: `assets/mock/parametrage/typeStatus.mock.json`

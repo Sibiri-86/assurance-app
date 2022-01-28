@@ -1,5 +1,5 @@
 import { from } from "rxjs";
-import {Adherent, AdherentList} from "./model";
+import {Adherent, AdherentList, AdherentResearchReponse} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -59,11 +59,11 @@ updateAdherent(Adherent: Adherent): Observable<any> {
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);
   }
   
-  searchAdherent(numero: number): Observable<Adherent> {
+  searchAdherent(numero: number): Observable<AdherentResearchReponse> {
     // @FIXME: post request
     if(numero && numero!=0){
     return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByNumero/${numero}`).pipe(
-      map((response: Adherent) => response),
+      map((response: AdherentResearchReponse) => response),
       catchError(this.handleError())
      );
     }

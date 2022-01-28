@@ -150,9 +150,10 @@ export class ParametrageComponent implements OnInit {
   showToast(severity: string, summary: string, detail: string) {
     this.messageService.add({severity, summary, detail});
   }
-  
+
   onCreate() {
     const savedObj = this.editForm.value;
+    console.log(savedObj);
     this.store.dispatch(this.selectedDataDef.store.createAction(savedObj));
   }
 
@@ -172,7 +173,7 @@ export class ParametrageComponent implements OnInit {
     console.log(data);
     this.store.dispatch(this.selectedDataDef.store.updateAction(data));
   }
-  
+
   onRowEditCancel(refObj: any, index: number) {
     delete this.clonedRefObj[refObj[this.objKey]];
   }

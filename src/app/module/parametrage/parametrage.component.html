@@ -69,6 +69,13 @@
                               [(ngModel)]="clonedRefObj[rowData[objKey]][col.field]" [required]="col.required"
                               [filter]="true" [showClear]="true" [virtualScroll]="true">
                         </p-dropdown>
+                        
+                        <p-multiSelect *ngIf="col.type === 'multiselect'" [options]="dropdownObservableObj[col.field]"
+                              [autoDisplayFirst]="clonedRefObj[rowData[objKey]][col.field]"
+                              [(ngModel)]="clonedRefObj[rowData[objKey]][col.field]" [required]="col.required"
+                              [filter]="true" [showClear]="true" [virtualScroll]="true">
+                        </p-multiSelect>
+                        
                         </ng-template>
 
                         <ng-template pTemplate="output">
@@ -78,10 +85,15 @@
                             </span>
                         </ng-template>
                         <ng-template #otherfield>
-                              <span *ngIf="col.label">
+                            <div *ngIf="col.labelMulti">
+                                <span  *ngFor="let sousActe of rowData[col.labelMulti]">
+                                    {{sousActe}}
+                                  </span> 
+                            </div>
+                            <span *ngIf="col.label">
                                 {{rowData[col.label] }}
                               </span>
-                              <span *ngIf="!col.label">
+                              <span *ngIf="!col.label && !col.labelMulti">
                                 {{rowData[col.label] || rowData[col.field] }}
                               </span>
                         </ng-template>
@@ -138,6 +150,15 @@
                                     [pTooltip]="col.tooltip || col.header" [showClear]="true" [style]="{'minWidth':'100%'}"
                                     tooltipPosition="bottom">
                                 </p-dropdown>
+                            </div>
+                            
+                            <div class="p-field" *ngIf="col.type === 'multiselect'">
+                                <label>{{col.header}}</label>
+                                <p-multiSelect [autoDisplayFirst]="false" [filter]="true"
+                                    [formControl]="editForm.controls[col.field]" [options]="dropdownObservableObj[col.field]"
+                                    [pTooltip]="col.tooltip || col.header" [showClear]="true" [style]="{'minWidth':'100%'}"
+                                    tooltipPosition="bottom">
+                                </p-multiSelect>
                             </div>
 
                         <!--
