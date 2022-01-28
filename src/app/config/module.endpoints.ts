@@ -351,4 +351,9 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/police/exercice/active`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+
+    static readonly PRESTATION_TIER_PAYANT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
 }

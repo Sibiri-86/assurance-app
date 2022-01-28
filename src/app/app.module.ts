@@ -232,6 +232,8 @@ import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglem
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
+import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
+import {TierPayantEffects} from './store/prestation/tierPayant/effect';
 
 @NgModule({
     imports: [
@@ -324,8 +326,8 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
         KeycloakAngularModule,
         AppCodeModule,
         ReactiveFormsModule,
-        StoreModule.forRoot(reducers,  
-          {metaReducers, 
+        StoreModule.forRoot(reducers,
+          {metaReducers,
             runtimeChecks: {
               strictStateImmutability: false,
               strictActionImmutability: false,
@@ -339,7 +341,7 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, 
-             SecteurEffects, ArrondissementEffects])
+             SecteurEffects, ArrondissementEffects, TierPayantEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -420,7 +422,8 @@ import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-fa
         OrdreReglementEditionComponent,
         OrdreReglementValideComponent,
         PrefinancementEditionComponent,
-        AvenantFacturationComponent
+        AvenantFacturationComponent,
+        TierPayantEditionComponent
     ],
     providers: [
         {

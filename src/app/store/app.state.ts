@@ -42,6 +42,8 @@ import {HistoriqueAvenantState} from "./contrat/historiqueAvenant/state";
 import { BanqueState } from './parametrage/Banques/state';
 import { TauxCommissionIntermediaireState } from './parametrage/taux-commission-intermediaire/state';
 import { PrefinancementState } from './prestation/prefinancement/state';
+import {SinistreTierPayantState} from './prestation/tierPayant/state';
+import {SinistreTierPayant} from './prestation/tierPayant/model';
 
 export interface AppState {
   garantieState: GarantieState
@@ -88,4 +90,5 @@ export interface AppState {
   banqueState: BanqueState
   tauxCommissionIntermediaireState: TauxCommissionIntermediaireState
   prefinancementState: PrefinancementState
+  tierPayantState: SinistreTierPayantState
 }
