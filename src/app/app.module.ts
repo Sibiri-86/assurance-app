@@ -234,6 +234,7 @@ import { PrefinancementEditionComponent } from './module/prestation/sinistre/pre
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
 import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
 import {TierPayantEffects} from './store/prestation/tierPayant/effect';
+import {ExerciceEffects} from './store/contrat/exercice/effect';
 
 @NgModule({
     imports: [
@@ -340,8 +341,8 @@ import {TierPayantEffects} from './store/prestation/tierPayant/effect';
              QualiteMedecinEffects, PathologieEffects, ProduitPharmaceutiqueEffects,
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
-             DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, 
-             SecteurEffects, ArrondissementEffects, TierPayantEffects])
+             DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
+             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

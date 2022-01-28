@@ -42,53 +42,55 @@ import {HistoriqueAvenantState} from "./contrat/historiqueAvenant/state";
 import { BanqueState } from './parametrage/Banques/state';
 import { TauxCommissionIntermediaireState } from './parametrage/taux-commission-intermediaire/state';
 import { PrefinancementState } from './prestation/prefinancement/state';
+import {ExerciceState} from './contrat/exercice/state';
 import {SinistreTierPayantState} from './prestation/tierPayant/state';
 import {SinistreTierPayant} from './prestation/tierPayant/model';
 
 export interface AppState {
-  garantieState: GarantieState
-  secteurActiviteState: SecteurActiviteState
-  globalState: GlobalState
-  acteState: ActeState
-  sousActeState: SousActeState
-  tauxState: TauxState
-  dimensionPeriodeState: DimensionPeriodeState
-  territorialiteState: TerritorialiteState
-  typeGarantState: TypeGarantState
-  garantState: GarantState
-  qualiteAssureState: QualiteAssureState
-  categorieSocioProfessionnelState: CategorieSocioProfessionnelState
-  professionState: ProfessionState
-  statusState: StatusState
-  typePrestataireState: TypePrestataireState
-  prestataireState:PrestataireState
-  naturePrestataireState: NaturePrestataireState
-  medecinState: MedecinState
-  qualiteMedecinState: QualiteMedecinState
-  produitPharmaceutiqueState: ProduitPharmaceutiqueState
-  pathologieState: PathologieState
-  typeAvenantState: TypeAvenantState
-  typeAffaireState: TypeAffaireState
-  typePrimeState: TypePrimeState
-  genreState: GenreState
-  modePaiementState: ModePaiementState
-  villeState: VilleState
-  departementState: DepartementState
-  regionState: RegionState
-  communeState: CommuneState
-  paysState: PaysState
-  zonePaysState: ZonePaysState
-  intermediaireState: IntermediaireState
-  policeState: PoliceState
-  groupeState: GroupeState
-  typeIntermediaireState: TypeIntermediaireState
-  plafondState: PlafondState
-  adherentState: AdherentState
-  arrondissementState: ArrondissementState
-  secteurState: SecteurState
-  historiqueAvenantState: HistoriqueAvenantState
-  banqueState: BanqueState
-  tauxCommissionIntermediaireState: TauxCommissionIntermediaireState
-  prefinancementState: PrefinancementState
-  tierPayantState: SinistreTierPayantState
+  garantieState: GarantieState;
+  secteurActiviteState: SecteurActiviteState;
+  globalState: GlobalState;
+  acteState: ActeState;
+  sousActeState: SousActeState;
+  tauxState: TauxState;
+  dimensionPeriodeState: DimensionPeriodeState;
+  territorialiteState: TerritorialiteState;
+  typeGarantState: TypeGarantState;
+  garantState: GarantState;
+  qualiteAssureState: QualiteAssureState;
+  categorieSocioProfessionnelState: CategorieSocioProfessionnelState;
+  professionState: ProfessionState;
+  statusState: StatusState;
+  typePrestataireState: TypePrestataireState;
+  prestataireState:PrestataireState;
+  naturePrestataireState: NaturePrestataireState;
+  medecinState: MedecinState;
+  qualiteMedecinState: QualiteMedecinState;
+  produitPharmaceutiqueState: ProduitPharmaceutiqueState;
+  pathologieState: PathologieState;
+  typeAvenantState: TypeAvenantState;
+  typeAffaireState: TypeAffaireState;
+  typePrimeState: TypePrimeState;
+  genreState: GenreState;
+  modePaiementState: ModePaiementState;
+  villeState: VilleState;
+  departementState: DepartementState;
+  regionState: RegionState;
+  communeState: CommuneState;
+  paysState: PaysState;
+  zonePaysState: ZonePaysState;
+  intermediaireState: IntermediaireState;
+  policeState: PoliceState;
+  groupeState: GroupeState;
+  typeIntermediaireState: TypeIntermediaireState;
+  plafondState: PlafondState;
+  adherentState: AdherentState;
+  arrondissementState: ArrondissementState;
+  secteurState: SecteurState;
+  historiqueAvenantState: HistoriqueAvenantState;
+  banqueState: BanqueState;
+  tauxCommissionIntermediaireState: TauxCommissionIntermediaireState;
+  prefinancementState: PrefinancementState;
+  tierPayantState: SinistreTierPayantState;
+  exerciceState: ExerciceState;
 }

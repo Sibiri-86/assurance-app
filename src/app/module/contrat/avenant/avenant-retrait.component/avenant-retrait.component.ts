@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Exercice, Police} from '../../../../store/contrat/police/model';
+import {Police} from '../../../../store/contrat/police/model';
+import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
@@ -22,6 +23,7 @@ import {
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PoliceService} from '../../../../store/contrat/police/service';
+import {ExerciceService} from '../../../../store/contrat/exercice/service';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -71,7 +73,8 @@ export class AvenantRetraitComponent implements OnInit {
       private historiqueAvenantService: HistoriqueAvenantService,
       private adherentService: AdherentService,
       private formBuilder: FormBuilder,
-      private policeService: PoliceService
+      private policeService: PoliceService,
+      private exerciceService: ExerciceService
   ) {}
 
   ngOnInit(): void {
@@ -285,7 +288,7 @@ export class AvenantRetraitComponent implements OnInit {
 
   private loadActivedExercice(police: Police): void {
     if (police) {
-      this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+      this.exerciceService.getActiveExerciceByPolice(police.id).subscribe(
           (res) => {
             this.exercice = res;
             if (this.exercice) {

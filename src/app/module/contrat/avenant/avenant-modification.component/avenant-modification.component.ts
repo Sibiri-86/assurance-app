@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Exercice, Police} from '../../../../store/contrat/police/model';
+import {Police} from '../../../../store/contrat/police/model';
+import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
@@ -82,6 +83,7 @@ import {PlafondService} from '../../../../store/contrat/plafond/service';
 import {TypeBareme} from '../../../common/models/bareme.enum';
 import {Status as Etat} from '../../../common/models/etat.enum';
 import {PoliceService} from '../../../../store/contrat/police/service';
+import {ExerciceService} from '../../../../store/contrat/exercice/service';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -191,7 +193,8 @@ export class AvenantModificationComponent implements OnInit {
       private adherentService: AdherentService,
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
       private plafondService: PlafondService,
-      private policeService: PoliceService
+      private policeService: PoliceService,
+      private exerciceService: ExerciceService
   ) {
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
@@ -1199,7 +1202,7 @@ export class AvenantModificationComponent implements OnInit {
 
   private loadActivedExercice(police: Police): void {
     if (police) {
-      this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+      this.exerciceService.getActiveExerciceByPolice(police.id).subscribe(
           (res) => {
             this.exercice = res;
             if (this.exercice) {

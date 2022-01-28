@@ -5,3 +5,4 @@ export const historiquePlafondGroupeFamilleActe = (state: AppState) => state.his
 export const historiquePlafondGroupeActe = (state: AppState) => state.historiqueAvenantState.historiquePlafondGroupeActe;
 export const historiquePlafondGroupeSousActe = (state: AppState) => state.historiqueAvenantState.historiquePlafondGroupeSousActe;
 export const historiqueAvenantListWithoutActive = (state: any) => state.historiqueAvenantState.historiqueAvenantListWithoutActive;
+export const historiqueAvenantListByExercice = (state: any) => state.historiqueAvenantState.historiqueAvenantListByExercie;

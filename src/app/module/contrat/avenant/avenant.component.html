@@ -1952,6 +1952,14 @@
                     <mark>{{police.nom}}</mark>
                 </h4>
                 <div class="card">
+                    <div class="p-grid">
+                        <div class="p-col-4">
+                            <label for="fraisBadge">Exercice</label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="numero" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" [dataKey]="id" filterBy="numero" [showClear]="true" (onChange)="onExerciceChange()">
+                            </p-dropdown>
+                        </div>
+                    </div>
                     <p-table #dt [value]="historiqueAvenants1" [columns]="cols" [rows]="10" [paginator]="true"
                              [globalFilterFields]="['typeHistoriqueAvenant']"
                              [rowHover]="true" dataKey="id"
@@ -1962,10 +1970,10 @@
                             <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                                 <h5 class="p-m-0"></h5>
                                 <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                               placeholder="Rechercher le type d'avenant..."/>
-                        </span>
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder="Rechercher le type d'avenant..."/>
+                                </span>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
@@ -1998,13 +2006,13 @@
                                 <td><span class="p-column-title">{{rowdata.police.duree}}</span>
                                 </td>
                                 <td><span
-                                        class="p-column-title">{{rowdata.dateEffet | formatTableValue : 'date'}}</span>
+                                        class="p-column-title">{{rowdata.dateAvenant | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
                                     <span class="p-column-title">{{rowdata.dateEcheance | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
-                                    <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDE</span>
+                                    <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDÉ</span>
                                     <span *ngIf="!rowdata?.valide" style="color: red; font-weight: bold">EN ATTENTE ...</span>
 
                                 </td>
@@ -3456,9 +3464,18 @@
                               Prime Enfant :<span style="font-weight: bold">{{historiqueAvenantPrime.primeEnfant | formatTableValue: 'number':true}} </span>
                           </span>
                           <span *ngIf="historiqueAvenantPrime?.groupe?.typePrime.code === 'PECE'">
-                              Prime Employé : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEmploye | formatTableValue: 'number':true}} </span> <br>
+                              Prime Employée : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEmploye | formatTableValue: 'number':true}} </span> <br>
                               Prime Enfant : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEnfant | formatTableValue: 'number':true}}</span> <br>
                               Prime Conjoint : <span style="font-weight: bold">{{historiqueAvenantPrime.primeConjoint | formatTableValue: 'number':true}}</span>
+                          </span>
+                          <span *ngIf="historiqueAvenantPrime?.groupe?.typePrime.code === 'PP'">
+                              Prime Personne : <span style="font-weight: bold">{{historiqueAvenantPrime.primePersonne | formatTableValue: 'number':true}} </span> <br>
+                          </span>
+                          <span *ngIf="historiqueAvenantPrime?.groupe?.typePrime.code === 'PF'">
+                              Prime Famille : <span style="font-weight: bold">{{historiqueAvenantPrime.primeFamille | formatTableValue: 'number':true}} </span> <br>
+                          </span>
+                          <span *ngIf="historiqueAvenantPrime?.groupe?.typePrime.code === 'PE'">
+                              Prime Employée : <span style="font-weight: bold">{{historiqueAvenantPrime.primeEmploye | formatTableValue: 'number':true}} </span> <br>
                           </span>
                       </td>
                       <td>
@@ -3492,10 +3509,10 @@
                   </tr>
                   <tr *ngIf="!historiqueAvenantPrime.groupe"
                       style="background-color: lightcyan; color: #27a22d; font-weight: bold; font-size: large; height: 4em; border-radius: 1em">
-                      <td>Frais Badges: {{historiqueAvenantPrime.fraisBadge | formatTableValue: 'number':true}}</td>
-                      <td>Frais Accesoires: {{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</td>
-                      <td colspan="2">Prime net Total : {{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</td>
-                      <td colspan="2">Prime total HT : {{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</td>
+                      <td>Frais Badges <br> {{historiqueAvenantPrime.fraisBadge | formatTableValue: 'number':true}}</td>
+                      <td>Frais Accesoires <br> {{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</td>
+                      <td colspan="2">Prime net Totale <br> {{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</td>
+                      <td colspan="1">Prime totale HT <br> {{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</td>
                       <td>
                           <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPrime(historiqueAvenantPrime)"></button>
                           <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePrime(historiqueAvenantPrime)"></button>

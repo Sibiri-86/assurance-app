@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Exercice, Police} from '../../../../store/contrat/police/model';
+import {Police} from '../../../../store/contrat/police/model';
+import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
@@ -80,6 +81,7 @@ import { loadListeActualisee } from '../../../../store/contrat/adherent/actions'
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {PoliceService} from '../../../../store/contrat/police/service';
+import {ExerciceService} from '../../../../store/contrat/exercice/service';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -197,7 +199,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         private adherentService: AdherentService,
         private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
         private plafondService: PlafondService,
-        private policeService: PoliceService
+        private policeService: PoliceService,
+        private exerciceService: ExerciceService
     ) {
         this.groupeForm = this.formBuilder.group({
             id: new FormControl(null),
@@ -1067,7 +1070,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     private loadActivedExercice(police: Police): void {
         if (police) {
-            this.policeService.getActiveExerciceByPolice(police.id).subscribe(
+            this.exerciceService.getActiveExerciceByPolice(police.id).subscribe(
                 (res) => {
                     this.exercice = res;
                     if (this.exercice) {

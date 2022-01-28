@@ -1,6 +1,6 @@
 import {Adherent, AdherentFamille} from '../adherent/model';
 import {Groupe} from '../groupe/model';
-import {Exercice, Police} from '../police/model';
+import {Police} from '../police/model';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Acte} from '../../parametrage/acte/model';
 import {SousActe} from '../../parametrage/sous-acte/model';
@@ -13,6 +13,7 @@ import {TypePrime} from '../../parametrage/type-prime/model';
 import {Territorialite} from '../../parametrage/territorialite/model';
 import {Commune} from '../../parametrage/commune/model';
 import {Prime} from '../prime/model';
+import {Exercice} from '../exercice/model';
 
 export interface HistoriqueAvenant {
     id?: string;
@@ -33,7 +34,8 @@ export interface HistoriqueAvenant {
     dateEffet?: Date;
     dateEcheance?: Date;
     historiqueAvenantPrimes?: HistoriqueAvenantPrime[];
-    fraisBadgetAccessoires?: number;
+    fraisAccessoires?: number;
+    fraisBadges?: number;
     exercice?: Exercice;
 }
 
