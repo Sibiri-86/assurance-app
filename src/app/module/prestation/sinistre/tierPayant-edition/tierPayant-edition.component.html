@@ -16,7 +16,7 @@
 			</p-toolbar>
             
             
-            <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -43,33 +43,33 @@
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-prefinancement>
+                <ng-template pTemplate="body" let-tierPayant>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{tierPayant.numeroSinistre}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
                         
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSoins | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.numero}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+                            <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.nom}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+                            <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.prenom}}</span>
                         </td>
                         
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
-                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 
-                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(prefinancement)"></button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(tierPayant)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
+                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(tierPayant)"></button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>
                         
                         <!--
@@ -87,7 +87,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+                        {{sinistreTierPayantDTOList ? sinistreTierPayantDTOList.length : 0 }} sinistre(s).
                     </div>
                 </ng-template>
             </p-table>
@@ -103,9 +103,6 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
                         <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
@@ -116,9 +113,6 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-prestation>
                     <tr>
-                        <td>
-                            <p-tableCheckbox [value]="prestation"></p-tableCheckbox>
-                        </td>
 
                         <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
                         </td>
@@ -149,11 +143,6 @@
                 <p-fieldset legend="Sinistre" toggleable="true">
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">  
                     <div class="p-fluid p-formgrid p-grid">
-                    
-                    <div class="p-field p-col">
-                    <label for="refSinistre">Reference sinistre <span class="required">*</span></label>
-                    <input id="refSinistre" type="text" formControlName="referenceSinistreGarant" pInputText>
-                    </div>
 
                     <div class="p-field p-col">
                     <label for="refBordereau">Reference bordereau<span class="required">*</span></label>
@@ -164,15 +153,16 @@
                         <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
                         <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
                     </div>
-                    
-                    </div>
-                    
-                    <div class="p-fluid p-formgrid p-grid">
-                        
+
                         <div class="p-field p-col">
                             <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
                             <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
                         </div>
+                    
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+
                         
                         <div class="p-field p-col">
                             <label for="matriculeAdherent">Matricule assuré<span class="required">*</span></label>
@@ -181,37 +171,40 @@
                         
                         <div class="p-field p-col">
                             <label for="nomAdherent">Nom <span class="required">*</span></label>
-                            <input id="nomAdherent" type="text" formControlName="nomAdherent" pInputText disabled>
+                            <input id="nomAdherent" type="text" formControlName="nomAdherent" pInputText >
                         </div>
-                        
+
+                        <div class="p-field p-col">
+                            <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                            <input id="prenomAdherent" type="text" formControlName="prenomAdherent" pInputText >
+                        </div>
+
+
                     </div>
                     
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col">
-                            <label for="nomAdherent">Prenom<span class="required">*</span></label>
-                            <input id="prenomAdherent" type="text" formControlName="prenomAdherent" pInputText disabled>
-                        </div>
-                        
+
                         <div class="p-field p-col">
                             <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
-                            <input id="groupeAdherent" type="text" formControlName="numeroGroupe" pInputText disabled>
+                            <input id="groupeAdherent" type="text" formControlName="numeroGroupe" pInputText >
                         </div>
                         
                         <div class="p-field p-col">
                             <label for="policeAdherent">Numero police<span class="required">*</span></label>
-                            <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText disabled>
+                            <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText >
                         </div>
-                        
-                    </div>
-                    
-                      
-                    <div class="p-fluid p-formgrid p-grid">
-                        
+
                         <div class="p-field p-col">
                             <label for="lastname2">Centre prescripteur</label>
                             <p-dropdown dataKey="id" inputId="prestataire" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle"></p-dropdown>
                         </div>
-                        
+
+
+                    </div>
+                    
+                      
+                    <div class="p-fluid p-formgrid p-grid">
+
                         <div class="p-field p-col">
                             <label for="lastname2">Prescripteur</label>
                             <p-dropdown dataKey="id" inputId="medecin" [filter]="true" showClear="true" [options]="medecinList" formControlName="medecin" optionLabel="nom" placeholder="Selectionnez le prescripteur">
@@ -226,16 +219,17 @@
                         <div class="p-field p-col">
                             <label for="lastname2">Centre executeur</label>
                             <p-dropdown dataKey="id" inputId="executeur" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle"></p-dropdown>
-                        </div>  
-                    </div>
-                    
-                    <div class="p-fluid p-formgrid p-grid">
-                        
+                        </div>
+
                         <div class="p-field p-col-4">
                             <label for="lastname2">Famille acte</label>
                             <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" formControlName="garantie" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
                         </div>
-                        
+
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+
                         <div class="p-field p-col-4">
                             <label for="lastname2">Acte</label>
                             <p-dropdown dataKey="id" inputId="acte" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle"></p-dropdown>
@@ -418,7 +412,7 @@
                         </div>
                     <div>
                         
-                    <button  [disabled]="prestationForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="validerPrefinancement()"></button>
+                    <button  [disabled]="prestationForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="validerTierPayant()"></button>
                     </div>
                 </div>
                                     

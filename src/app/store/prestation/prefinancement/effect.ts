@@ -76,7 +76,7 @@ export class PrefinancementEffects {
             ))
         ));
     
-    createPrefinancement$ = createEffect(() =>
+    createPrefinancement$ = createEffect(()=>
     this.actions$.pipe(
         ofType(featureActions.createPrefinancement),
         mergeMap(({prefinancement}) =>

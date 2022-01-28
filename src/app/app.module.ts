@@ -233,6 +233,7 @@ import { OrdreReglementValideComponent } from './module/prestation/ordre-regleme
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
 import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
+import {TierPayantEffects} from './store/prestation/tierPayant/effect';
 
 @NgModule({
     imports: [
@@ -340,7 +341,7 @@ import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayan
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects, 
-             SecteurEffects, ArrondissementEffects])
+             SecteurEffects, ArrondissementEffects, TierPayantEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

@@ -321,7 +321,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       dateNaissance: new FormControl('', [Validators.required]),
       matriculeGarant: new FormControl('', ),
       // matriculeSouscripteur:new FormControl("", [Validators.required]),
-      numero: new FormControl('', [Validators.required]),
+      numero: new FormControl('', ),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
       adresse: new FormControl('', [Validators.required]),
