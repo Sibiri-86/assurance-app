@@ -43,9 +43,9 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Tier-Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
-                                    /* {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide']},
-                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement']},
-                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide']}, */
+                                    {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
+                                     {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
+                                    /*{label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide']}, */
                                 ]
                             }
                         ]

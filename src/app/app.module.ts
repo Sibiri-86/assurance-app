@@ -232,9 +232,11 @@ import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglem
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { PrefinancementEditionComponent } from './module/prestation/sinistre/prefinancement-edition/prefinancement-edition.component';
 import { AvenantFacturationComponent } from './module/contrat/avenant/avenant-facturation/avenant-facturation.component';
-import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
+import {TierPayantEditionComponent} from './module/prestation/tier-payant/tierPayant-edition/tierPayant-edition.component';
 import {TierPayantEffects} from './store/prestation/tierPayant/effect';
 import {ExerciceEffects} from './store/contrat/exercice/effect';
+import {TierPayantValideComponent} from './module/prestation/tier-payant/tier-payant-valide/tier-payant-valide.component';
+import {OrdreReglementTierPayantEditionComponent} from './module/prestation/tier-payant/ordre-reglement-edition/ordre-reglement-tier-payant-edition.component';
 
 @NgModule({
     imports: [
@@ -424,7 +426,9 @@ import {ExerciceEffects} from './store/contrat/exercice/effect';
         OrdreReglementValideComponent,
         PrefinancementEditionComponent,
         AvenantFacturationComponent,
-        TierPayantEditionComponent
+        TierPayantEditionComponent,
+        TierPayantValideComponent,
+        OrdreReglementTierPayantEditionComponent
     ],
     providers: [
         {

@@ -14,17 +14,17 @@ export interface Sinistre {
 }
 
 
-/*export interface OrdreReglementList {
+export interface OrdreReglementList {
     ordreReglementDtoList?: Array<OrdreReglement>;
-}*/
+}
 
 export interface OrdreReglement{
-    id?: string,
-    numero?: string,
-    numeroBordereau?: string,
-    police?: Police,
-    // prefinancement?: Array<Prefinancement>,
-    etat?: TypeEtatOrdreReglement
+    id?: string;
+    numero?: string;
+    numeroBordereau?: string;
+    police?: Police;
+    tierPayant?: Array<SinistreTierPayant>;
+    etat?: TypeEtatOrdreReglement;
 }
 
 export interface SinistreTierPayant {
@@ -32,6 +32,7 @@ export interface SinistreTierPayant {
     dateSoins?: Date;
     referenceBordereau?: string;
     dateDeclaration?: Date;
+    dateSaisie?: Date;
     adherent?: Adherent;
     numeroSinistre?: string;
     ordreReglement?: OrdreReglement;
