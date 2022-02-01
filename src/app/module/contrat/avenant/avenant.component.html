@@ -3437,16 +3437,16 @@
                       <th pSortableColumn="nom">Frais badge
                           <p-sortIcon field="nom"></p-sortIcon>
                       </th>-->
-                      <th pSortableColumn="prenom">Montant(s) prime
+                      <th pSortableColumn="prenom">prime
                           <p-sortIcon field="prenom"></p-sortIcon>
                       </th>
-                      <th pSortableColumn="numero">Prime Net
+                      <th pSortableColumn="numero">Prime Nette
                           <p-sortIcon field="dateNaissance"></p-sortIcon>
                       </th>
                       <!--<th pSortableColumn="numero" style="width: 12rem">Taxe
                           <p-sortIcon field="dateNaissance"></p-sortIcon>
                       </th>-->
-                      <th pSortableColumn="lieuNaissance">Prime Hors Taxe
+                      <th pSortableColumn="lieuNaissance">Prime Totale
                           <p-sortIcon field="lieuNaissance"></p-sortIcon>
                       </th>
                       <th>Actions</th>
@@ -3502,16 +3502,19 @@
                           </p-cellEditor>
                       </td>
                       <td>
-                          <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPrime(historiqueAvenantPrime)"></button>
-                          <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePrime(historiqueAvenantPrime)"></button>
-                          <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPrime(historiqueAvenantPrime, ri)"></button>
+                          <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info"
+                                  (click)="onRowEditInitPrime(historiqueAvenantPrime)" [disabled]="historiqueAvenantPrime.status"></button>
+                          <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success"
+                                  style="margin-right: .5em" (click)="onRowEditSavePrime(historiqueAvenantPrime)"></button>
+                          <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger"
+                                  (click)="onRowEditCancelPrime(historiqueAvenantPrime, ri)"></button>
                       </td>
                   </tr>
                   <tr *ngIf="!historiqueAvenantPrime.groupe"
                       style="background-color: lightcyan; color: #27a22d; font-weight: bold; font-size: large; height: 4em; border-radius: 1em">
                       <td>Frais Badges <br> {{historiqueAvenantPrime.fraisBadge | formatTableValue: 'number':true}}</td>
                       <td>Frais Accesoires <br> {{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</td>
-                      <td colspan="2">Prime net Totale <br> {{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</td>
+                      <td colspan="2">Prime nette Totale <br> {{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</td>
                       <td colspan="1">Prime totale HT <br> {{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</td>
                       <td>
                           <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPrime(historiqueAvenantPrime)"></button>

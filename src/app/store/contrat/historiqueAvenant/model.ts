@@ -188,6 +188,7 @@ export interface HistoriqueAvenantPrime {
     fraisAccessoir?: number;
     primeTTC?: number;
     taxeTTC?: number;
+    status?: boolean;
 }
 
 export enum TypeDemandeur {

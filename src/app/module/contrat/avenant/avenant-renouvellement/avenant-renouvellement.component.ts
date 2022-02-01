@@ -200,7 +200,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
         private plafondService: PlafondService,
         private policeService: PoliceService,
-        private exerciceService: ExerciceService
+        private exerciceService: ExerciceService,
     ) {
         this.groupeForm = this.formBuilder.group({
             id: new FormControl(null),
@@ -1177,5 +1177,14 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     appliquerPlafond() {
         this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+    }
+
+    findListeActualisee(police: Police): void {
+        this.historiqueAvenantAdherentService.getListActualisee(police.id).subscribe(
+            (res) => {
+                console.log('----------------------------');
+                console.log(res);
+            }
+        );
     }
 }

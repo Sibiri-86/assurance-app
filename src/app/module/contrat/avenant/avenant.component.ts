@@ -711,12 +711,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.entete = 'Avenant de Renouvellement';
           this.addAvenantRenouvellement();
       }},
-      {label: 'Facturation', icon: 'pi pi-euro', command: () => {
+      /* {label: 'Facturation', icon: 'pi pi-euro', command: () => {
           this.initDisplayAvenant();
           this.isAvenantFacturation = true;
           this.entete = 'Avenant de Suspension';
           this.addAvenantFacturation();
-      }},
+      }}, */
       {label: 'Suspension', icon: 'pi pi-pause', command: () => {
           this.initDisplayAvenant();
           this.isAvenantSuspension = true;
@@ -2167,6 +2167,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (hap.primeTTC) {
         hap.primeTTC = removeBlanks(hap.primeTTC + '');
       }
+      hap.status = true;
     });
     this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
