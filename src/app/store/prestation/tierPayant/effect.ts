@@ -58,4 +58,120 @@ export class TierPayantEffects {
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));
+
+    /** update etat tier payant */
+    updateEtatValiderTierPayant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.updateEtatValiderTierPayant),
+            mergeMap(({tierPayant, etat}) =>
+                this.tierPayantService.putUpdateTierPayant(tierPayant, etat).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayant()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /** lister tous les ordres de reglement valide */
+    loadTierPayantReglementValide$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantOrdreReglementValide),
+            mergeMap(() =>
+                this.tierPayantService.$getTierPayantOrdreReglementValide().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setTierPayantLoadOrdreReglement(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    loadTierPayantValide$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantValide),
+            mergeMap(() =>
+                this.tierPayantService.$getTierPayantValide().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /** update etat tier-payant */
+    updateETatAnnulerTierPayant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.updateEtatAnnulerTierPayant),
+            mergeMap(({tierPayant, etat}) =>
+                this.tierPayantService.putUpdateTierPayant(tierPayant, etat).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayantValide()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /** creer un ordre de reglement */
+    createTierPayantOrdreReglement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.createTierPayantOrdreReglement),
+            mergeMap(({tierPayant}) =>
+                this.tierPayantService.postTierPayantOrdreReglement(tierPayant).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayantValide()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+    deletePrestation$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deletePrestationTierPayant),
+            mergeMap((prestation) =>
+                this.tierPayantService.deletePrestation(prestation).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayant()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /** delete TieerPayant */
+    deletePrefinancement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteTierPayant),
+            mergeMap(({tierPayant}) =>
+                this.tierPayantService.deleteTierPayant(tierPayant).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayant()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    loadReglementTierPayant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadOrdreReglementTierPayant),
+            mergeMap(() =>
+                this.tierPayantService.$getOrdreReglement().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
 }

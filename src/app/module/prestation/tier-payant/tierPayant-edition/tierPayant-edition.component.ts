@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
 import {
-    ControlContainer,
+    ControlContainer, FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
@@ -51,6 +51,13 @@ import {printPdfFile} from 'src/app/module/util/common-util';
 import {TypeReport} from 'src/app/store/contrat/enum/model';
 import {Report} from 'src/app/store/contrat/police/model';
 import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
+import {Pathologie} from '../../../../store/parametrage/pathologie/model';
+import * as pathologieSelector from '../../../../store/parametrage/pathologie/selector';
+import {loadPathologie} from '../../../../store/parametrage/pathologie/actions';
+import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/model';
+import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
+import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
+import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 
 
 @Component({
@@ -91,6 +98,15 @@ export class TierPayantEditionComponent implements OnInit {
     displayPrestation = false;
     prestationListPrefinancement: Array<Prestation>;
     report: Report = {};
+    sousActeListFilter: Array<SousActe>;
+    pathologieList: Array<Pathologie>;
+    pathologieList$: Observable<Array<Pathologie>>;
+    produitPharmaceutiqueList$: Observable<Array<ProduitPharmaceutique>>;
+    produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
+    TierPayantSelected: SinistreTierPayant[];
+    prestationListPrefinancementFilter: Array<Prestation>;
+
+
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -98,29 +114,52 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     onCreate() {
+        /** fonction pour enregistrer la prestation */
+        console.log('creation tierPayant');
+        this.prefinancementModel = this.prestationForm.value;
+        this.prefinancementModel.dateSaisie = new Date();
+        this.prefinancementModel.adherent = this.adherentSelected;
+        this.tierPayantList.push(this.prefinancementModel);
+        this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+        console.log('*********************************this.prefinancementModel***********************************', this.prefinancementModel);
+        // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
+        console.log(this.prefinancementModel);
+        this.tierPayantList = [];
+        this.prestationForm.reset();
+    }
 
+    addPrestation1() {
+        this.prefinancementModel.prestation = this.prestationList;
+        this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
+        this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
+        this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
+        this.prefinancementModel.adherent = this.adherentSelected;
+        this.tierPayantList.push(this.prefinancementModel);
+        this.prestationList = [];
+        this.prestationForm.reset();
     }
 
     ngOnInit(): void {
         this.prestationList = [];
         this.prestationForm = this.formBuilder.group({
             // domaine: new FormControl({}),
-            id: new FormControl(''),
-            referenceSinistreGarant: new FormControl(''),
-            referenceBordereau: new FormControl(''),
+            id: new FormControl(),
+            referenceSinistreGarant: new FormControl(),
+            referenceBordereau: new FormControl(),
             dateSoins: new FormControl(''),
             dateDeclaration: new FormControl(''),
+            dateSaisie: new FormControl({value: '', disabled: true}),
             matriculeAdherent: new FormControl(''),
             garantie: new FormControl(''),
             acte: new FormControl(''),
             nomAdherent: new FormControl({value: '', disabled: true}),
-            prestataire: new FormControl(''),
             prenomAdherent: new FormControl({value: '', disabled: true}),
-            medecin: new FormControl(''),
             numeroGroupe: new FormControl({value: '', disabled: true}),
-            numeroPolice: new FormControl({value: '', disabled: true})
+            numeroPolice: new FormControl({value: '', disabled: true}),
+            prestation: this.formBuilder.array([])
         });
 
+        this.prestationForm.get('dateSaisie').setValue(new Date());
         this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
         this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
             .subscribe(bytes => {
@@ -152,14 +191,14 @@ export class TierPayantEditionComponent implements OnInit {
             }
         });
 
-        this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+        /* this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
         this.store.dispatch(loadSousActe());
         this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             if (value) {
                 console.log(this.sousActeList);
                 this.sousActeList = value.slice();
             }
-        });
+        }); */
 
         this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
         this.store.dispatch(loadTaux());
@@ -206,8 +245,41 @@ export class TierPayantEditionComponent implements OnInit {
             }
         });
 
+        this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+        this.store.dispatch(loadSousActe());
+        this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                console.log(this.sousActeList);
+                this.sousActeList = value.slice();
+                this.sousActeListFilter = this.sousActeList;
+            }
+        });
+
+        this.pathologieList$ = this.store.pipe(select(pathologieSelector.pathologieList));
+        this.store.dispatch(loadPathologie());
+        this.pathologieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.pathologieList = value.slice();
+            }
+        });
+
+        this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
+        this.store.dispatch(loadProduitPharmaceutique());
+        this.produitPharmaceutiqueList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.produitPharmaceutiqueList = value.slice();
+            }
+        });
+
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
+    }
+
+    selectActe(event){
+        console.log(event);
+        this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
     }
 
     imprimer(pref: SinistreTierPayant) {
@@ -216,18 +288,17 @@ export class TierPayantEditionComponent implements OnInit {
         this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
     }
 
-    /* validerPrestation(pref: Prefinancement) {
+     validerPrestation(pref: SinistreTierPayant) {
       this.confirmationService.confirm({
         message: 'voulez-vous valider le sinistre',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
+          this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
             etat: TypeEtatSinistre.VALIDE}));
         },
       });
-
-    } */
+    }
 
     editerPrestation(pref: SinistreTierPayant) {
         this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
@@ -238,7 +309,13 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
         this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
         this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
-        this.prestationList = pref.prestation;
+        this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+        for (const pr of pref.prestation) {
+            const formPrestation: FormGroup = this.createItem();
+            formPrestation.patchValue(pr);
+            this.prestation.push(formPrestation);
+        }
+        // this.prestationList = pref.prestation;
         console.log('****************pref.prestation****************', pref.prestation);
         this.displayFormPrefinancement = true;
     }
@@ -246,6 +323,7 @@ export class TierPayantEditionComponent implements OnInit {
     voirPrestation(pref: SinistreTierPayant) {
         this.displayPrestation = true;
         this.prestationListPrefinancement = pref.prestation;
+        this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
     }
 
     calculCoutDebours(data: FraisReels, ri: number) {
@@ -271,18 +349,6 @@ export class TierPayantEditionComponent implements OnInit {
         console.log('********************this.tierPayantList**************************', this.tierPayantList);
         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
         this.tierPayantList = [];
-        this.prestationList = [];
-        this.prestationForm.reset();
-    }
-
-    // permet d'enregistrer une prestation par famille
-    addPrestation() {
-        this.prefinancementModel.prestation = this.prestationList;
-        this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
-        this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
-        this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
-        this.prefinancementModel.adherent = this.adherentSelected;
-        this.tierPayantList.push(this.prefinancementModel);
         this.prestationList = [];
         this.prestationForm.reset();
     }
@@ -318,6 +384,90 @@ export class TierPayantEditionComponent implements OnInit {
                   */
             }
         });
+    }
+
+    calculDebours(i: number) {
+        const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+        if (this.prestationForm.get('prestation').value[i].nombreActe &&
+            this.prestationForm.get('prestation').value[i].coutUnitaire) {
+            myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
+                    this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
+                    this.prestationForm.get('prestation').value[i].nombreActe *
+                    this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
+                    (this.prestationForm.get('prestation').value[i].nombreActe *
+                        this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
+        }
+    }
+
+
+    get prestation() {
+        return this.prestationForm.controls.prestation as FormArray;
+    }
+
+    addItemPrestation(): void {
+        const formPrestation: FormGroup = this.createItem();
+        this.prestation.push(formPrestation);
+    }
+
+    deleteItemPrestation(i: number) {
+        this.prestation.removeAt(i);
+    }
+
+    createItem(): FormGroup {
+        return this.formBuilder.group({
+            id: new FormControl(),
+            nombreActe: new FormControl(),
+            coutUnitaire: new FormControl(),
+            debours: new FormControl({disabled: true}),
+            sousActe: new FormControl(),
+            baseRemboursement: new FormControl({disabled: true}),
+            taux: new FormControl({disabled: true}),
+            montantRembourse: new FormControl({disabled: true}),
+            sort: new FormControl(),
+            observation: new FormControl(),
+            prestataire: new FormControl(),
+            produitPharmaceutique: new FormControl(),
+            pathologie: new FormControl(),
+            medecin: new FormControl()
+        });
+    }
+
+    closeDialog() {
+        this.tierPayantList = [];
+        this.prestationForm.reset();
+        this.prestation.clear();
+        console.log(this.prestation);
+        this.displayFormPrefinancement = false;
+    }
+
+    supprimerPrestation(prestation: Prestation) {
+        this.confirmationService.confirm({
+            message: 'voulez-vous supprimer la prestation',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.store.dispatch(featureActionTierPayant.deletePrestationTierPayant(prestation));
+                this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
+            },
+        });
+    }
+
+    supprimerPrefinancement() {
+        console.log(this.TierPayantSelected);
+        if (!this.TierPayantSelected) {
+            this.showToast('error', 'INFORMATION', 'aucun tier-payant selectionné');
+        } else {
+            this.confirmationService.confirm({
+                message: 'voulez-vous supprimer le sinistre',
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                    this.store.dispatch(featureActionTierPayant.deleteTierPayant({tierPayant: this.TierPayantSelected}));
+                    this.TierPayantSelected = [];
+                }
+            });
+        }
     }
 
 }

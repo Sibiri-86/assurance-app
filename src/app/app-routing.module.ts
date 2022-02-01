@@ -50,7 +50,9 @@ import { PrefinancementValideComponent } from './module/prestation/sinistre/pref
 import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
 import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteur.component';
-import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayant-edition/tierPayant-edition.component';
+import {TierPayantEditionComponent} from './module/prestation/tier-payant/tierPayant-edition/tierPayant-edition.component';
+import {TierPayantValideComponent} from './module/prestation/tier-payant/tier-payant-valide/tier-payant-valide.component';
+import {OrdreReglementTierPayantEditionComponent} from './module/prestation/tier-payant/ordre-reglement-edition/ordre-reglement-tier-payant-edition.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -107,6 +109,8 @@ import {TierPayantEditionComponent} from './module/prestation/sinistre/tierPayan
                     {path: 'pages/empty', component: EmptyDemoComponent},
                     {path: 'documentation', component: DocumentationComponent},
                     {path: 'prestation/tierPayant', component: TierPayantEditionComponent},
+                    {path: 'prestation/tierPayant/valide', component: TierPayantValideComponent},
+                    {path: 'prestation/tierPayant/ordre-reglement', component: OrdreReglementTierPayantEditionComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},
