@@ -80,6 +80,12 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             {params: createRequestOption({avenantId, groupeId})});
     }
 
+    getListActualisee(poliuceId: string): Observable<any> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/liste-liste-actualisee`,
+            {params: createRequestOption(poliuceId)}
+        );
+    }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

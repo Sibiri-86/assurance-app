@@ -12,6 +12,10 @@ import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import {takeUntil} from 'rxjs/operators';
+import {Exercice} from '../../../../store/contrat/exercice/model';
 
 @Component({
   selector: 'app-avenant-resiliation',
@@ -20,7 +24,7 @@ import {AdherentService} from '../../../../store/contrat/adherent/service';
 })
 export class AvenantResiliationComponent implements OnInit {
 
-  @Input() police: Police = {};
+  @Input() police: Police;
   @Output() eventEmitterResiliation = new EventEmitter();
   destroy$ = new Subject<boolean>();
   groupe: Groupe;
@@ -32,6 +36,9 @@ export class AvenantResiliationComponent implements OnInit {
     {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
     {libelle: 'GARANT', value: TypeDemandeur.GARANT}
   ];
+  exercice$: Observable<Exercice>;
+  private exercice: Exercice;
+  private exerciceForm: FormGroup;
 
   constructor(
       private store: Store<AppState>,
@@ -44,6 +51,7 @@ export class AvenantResiliationComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
+    this.loadActivedExercice(this.police);
   }
   init() {
     this.myForm = this.formBuilder.group({
@@ -52,6 +60,11 @@ export class AvenantResiliationComponent implements OnInit {
       observation: new FormControl(null),
       typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
+    });
+    this.exerciceForm = this.formBuilder.group({
+      debut: new FormControl(''),
+      fin: new FormControl('', [Validators.required]),
+      actived: new FormControl('', [Validators.required]),
     });
   }
 
@@ -87,5 +100,24 @@ export class AvenantResiliationComponent implements OnInit {
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  private loadActivedExercice(police: Police): void {
+    if (police) {
+      this.exercice$ = this.store.pipe(select(exerciceSelector.selectActiveExercice));
+      this.store.dispatch(featureExerciceAction.loadExerciceActif({policeId: police.id}));
+      this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+          (res) => {
+            this.exercice = res;
+            if (this.exercice) {
+              this.exerciceForm.patchValue({
+                debut: this.exercice.debut,
+                fin: this.exercice.fin,
+                actived: this.exercice.actived,
+              });
+            }
+          }
+      );
+    }
   }
 }

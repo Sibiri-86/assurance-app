@@ -24,6 +24,9 @@ import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -61,6 +64,7 @@ export class AvenantRetraitComponent implements OnInit {
     {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
     {libelle: 'GARANT', value: TypeDemandeur.GARANT}
   ];
+  exercice$: Observable<Exercice>;
   private exercice: Exercice;
   private exerciceForm: FormGroup;
   private curentGroupe: Groupe;
@@ -74,7 +78,8 @@ export class AvenantRetraitComponent implements OnInit {
       private adherentService: AdherentService,
       private formBuilder: FormBuilder,
       private policeService: PoliceService,
-      private exerciceService: ExerciceService
+      private exerciceService: ExerciceService,
+      private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
   ) {}
 
   ngOnInit(): void {
@@ -105,6 +110,7 @@ export class AvenantRetraitComponent implements OnInit {
         }
     );
     this.loadActivedExercice(this.police);
+    this.findListeActualisee(this.police);
   }
 
 
@@ -212,8 +218,8 @@ export class AvenantRetraitComponent implements OnInit {
       default: break;
     }
     this.adherantDeleteds.forEach(haa => {
-      haa.deleted = true;
-      haa.adherent.groupe = this.groupe;
+      // haa.deleted = true;
+      // haa.adherent.groupe = this.groupe;
       // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
     });
     this.historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
@@ -288,7 +294,9 @@ export class AvenantRetraitComponent implements OnInit {
 
   private loadActivedExercice(police: Police): void {
     if (police) {
-      this.exerciceService.getActiveExerciceByPolice(police.id).subscribe(
+      this.exercice$ = this.store.pipe(select(exerciceSelector.selectActiveExercice));
+      this.store.dispatch(featureExerciceAction.loadExerciceActif({policeId: police.id}));
+      this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
           (res) => {
             this.exercice = res;
             if (this.exercice) {
@@ -301,6 +309,15 @@ export class AvenantRetraitComponent implements OnInit {
           }
       );
     }
+  }
+
+  findListeActualisee(police: Police): void {
+    this.historiqueAvenantAdherantService.getListActualisee(police.id).subscribe(
+        (res) => {
+          console.log('----------------------------');
+          console.log(res);
+        }
+    );
   }
 
 }

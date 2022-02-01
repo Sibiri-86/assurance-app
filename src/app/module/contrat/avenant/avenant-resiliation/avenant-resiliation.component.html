@@ -1,6 +1,20 @@
 <div class="card">
     <div class="p-grid">
         <div class="p-col-12">
+            <p-fieldset legend="Exercice" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="exerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet</label>
+                            <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance</label>
+                            <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
             <p-fieldset legend="Avenant" toggleable="true">
                 <form [formGroup]="myForm" *ngIf="!isRenouv" (ngSubmit)="createAvenantSuspension()">
                     <div class="p-fluid p-formgrid p-grid">

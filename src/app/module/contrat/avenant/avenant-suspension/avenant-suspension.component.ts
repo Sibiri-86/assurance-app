@@ -19,6 +19,9 @@ import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {takeUntil} from 'rxjs/operators';
 import * as adherantSelector from '../../../../store/contrat/adherent/selector';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import {Exercice} from '../../../../store/contrat/exercice/model';
 
 @Component({
   selector: 'app-avenant-suspension',
@@ -52,6 +55,9 @@ export class AvenantSuspensionComponent implements OnInit {
     {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
     {libelle: 'GARANT', value: TypeDemandeur.GARANT}
   ];
+  exercice$: Observable<Exercice>;
+  private exercice: Exercice;
+  private exerciceForm: FormGroup;
 
   constructor(
       private store: Store<AppState>,
@@ -60,7 +66,13 @@ export class AvenantSuspensionComponent implements OnInit {
       private historiqueAvenantService: HistoriqueAvenantService,
       private adherentService: AdherentService,
       private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.exerciceForm = this.formBuilder.group({
+      debut: new FormControl(''),
+      fin: new FormControl('', [Validators.required]),
+      actived: new FormControl('', [Validators.required]),
+    });
+  }
 
   ngOnInit(): void {
     this.init();
@@ -88,6 +100,8 @@ export class AvenantSuspensionComponent implements OnInit {
           console.log(this.historiqueAveantAdherants);
         }
     );
+
+    this.loadActivedExercice(this.police);
   }
 
 
@@ -130,6 +144,8 @@ export class AvenantSuspensionComponent implements OnInit {
       observation: new FormControl(null),
       typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
+      fraisBadges: new FormControl(0, [Validators.required]),
+      fraisAccessoires: new FormControl(0, [Validators.required]),
     });
     this.newForm = this.formBuilder.group({
       groupe: new FormControl(null, [Validators.required]),
@@ -194,5 +210,24 @@ export class AvenantSuspensionComponent implements OnInit {
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  private loadActivedExercice(police: Police): void {
+    if (police) {
+      this.exercice$ = this.store.pipe(select(exerciceSelector.selectActiveExercice));
+      this.store.dispatch(featureExerciceAction.loadExerciceActif({policeId: police.id}));
+      this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+          (res) => {
+            this.exercice = res;
+            if (this.exercice) {
+              this.exerciceForm.patchValue({
+                debut: this.exercice.debut,
+                fin: this.exercice.fin,
+                actived: this.exercice.actived,
+              });
+            }
+          }
+      );
+    }
   }
 }
