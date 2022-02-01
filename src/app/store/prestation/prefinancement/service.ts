@@ -27,6 +27,11 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/enregistrer`, prefinancement);
   }
   
+  checkPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/consulter`, prefinancement);
+  }
+  
   putUpdatePrefinancement(prefinancement: Prefinancement, etat: TypeEtatSinistre): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/etat/${etat}`, prefinancement);

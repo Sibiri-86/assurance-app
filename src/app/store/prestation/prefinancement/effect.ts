@@ -17,8 +17,7 @@ export class PrefinancementEffects {
         private prefinancementService: PrefinancementService
     ) {
     }
-    
-    
+
     loadPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadPrefinancement),
@@ -32,8 +31,7 @@ export class PrefinancementEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
-        
-        
+
     loadReglement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadOrdreReglement),
@@ -90,7 +88,7 @@ export class PrefinancementEffects {
                             // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         ))
                     ));
-          
+
     loadPrefinancementValide$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadPrefinancementValide),
@@ -104,8 +102,8 @@ export class PrefinancementEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
-    
-    createPrefinancement$ = createEffect(()=>
+
+    createPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createPrefinancement),
         mergeMap(({prefinancement}) =>
@@ -118,7 +116,21 @@ export class PrefinancementEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
-        
+
+    checkPrefinancement$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.checkPrefinancement),
+        mergeMap(({prefinancement}) =>
+            this.prefinancementService.checkPrefinancement(prefinancement).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    //featureActions.loadPrefinancement()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
     deletePrestation$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.deletePrestation),
@@ -132,7 +144,7 @@ export class PrefinancementEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
-        
+
     /**creer un ordre de reglement */
     createOrdreReglement$ = createEffect(() =>
     this.actions$.pipe(
@@ -147,7 +159,7 @@ export class PrefinancementEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
-        
+
     /**update etat prefinancement */
     updateETatAnnulerPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
@@ -191,7 +203,7 @@ export class PrefinancementEffects {
                             // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         ))
                     ));
-                    
+
                 updateETatDeValiderOrdreReglement$ = createEffect(() =>
                     this.actions$.pipe(
                             ofType(featureActions.deValiderOrdreReglement),
@@ -227,7 +239,7 @@ export class PrefinancementEffects {
                                     this.prefinancementService.$getReport(report).pipe(
                                         switchMap(value => [
                                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                                            featureActions.setReportPrestation({reportFile:value})
+                                            featureActions.setReportPrestation({reportFile: value})
                                         ]),
                                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

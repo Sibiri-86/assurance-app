@@ -60,6 +60,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TauxCommissionIntermediaireEffects } from 'src/app/store/parametrage/taux-commission-intermediaire/effect';
 import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
+import { Dialog } from 'primeng/dialog/dialog';
 
 
 @Component({
@@ -128,7 +129,7 @@ export class PrefinancementEditionComponent implements OnInit {
 
    createItem(): FormGroup {
     return this.formBuilder.group({
-      id: new FormControl(''),
+      id: new FormControl(),
       nombreActe: new FormControl(),
       coutUnitaire: new FormControl(),
       debours: new FormControl({disabled: true}),
@@ -136,12 +137,12 @@ export class PrefinancementEditionComponent implements OnInit {
       baseRemboursement: new FormControl({disabled: true}),
       taux: new FormControl({disabled: true}),
       montantRembourse: new FormControl({disabled: true}),
-      sort: new FormControl(''),
+      sort: new FormControl(),
       observation: new FormControl(),
-      prestataire: new FormControl(''),
-      produitPharmaceutique: new FormControl(''),
-      pathologie: new FormControl(''),
-      medecin: new FormControl('')
+      prestataire: new FormControl(),
+      produitPharmaceutique: new FormControl(),
+      pathologie: new FormControl(),
+      medecin: new FormControl()
     });
   }
 
@@ -348,7 +349,7 @@ export class PrefinancementEditionComponent implements OnInit {
 
   calculDebours(i: number) {
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-    myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+    myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
     this.prestationForm.get('prestation').value[i].coutUnitaire) {
       myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
@@ -358,6 +359,13 @@ export class PrefinancementEditionComponent implements OnInit {
       (this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
     }
+    this.prefinancementModel = this.prestationForm.value;
+    this.prefinancementModel.dateSaisie = new Date();
+    this.prefinancementModel.adherent = this.adherentSelected;
+    this.prefinancementList.push(this.prefinancementModel);
+    this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
+    this.prefinancementList = [];
+    this.prefinancementModel = {};
   }
 
   calculCoutDebours(data: FraisReels, ri: number) {
@@ -370,11 +378,12 @@ export class PrefinancementEditionComponent implements OnInit {
     */
   }
 
-  setNombreActe(data: FraisReels, ri){
+  setNombreActe(data: FraisReels, ri) {
     this.prestationList[ri].nombreActe = data.cle;
   }
 
-  rechercherAdherent(event){
+  rechercherAdherent(event) {
+    if (event.target.value !== '') {
     console.log(event.target.value);
     this.prestationForm.get('nomAdherent').setValue('');
     this.prestationForm.get('prenomAdherent').setValue('');
@@ -382,6 +391,7 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestationForm.get('numeroPolice').setValue('');
     this.adherentSelected = null;
     this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+    }
   }
 
   // valider prefinancement
@@ -392,14 +402,14 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestationList = [];
     this.prestationForm.reset();
   }
-  
+
   closeDialog() {
    this.prefinancementList = [];
    this.prestationForm.reset();
    this.prestation.clear();
    console.log(this.prestation);
   }
-  
+
   /** enregistrement cas de prefinancement */
   onCreate() {
     /** fonction pour enregistrer la prestation */ 
@@ -413,6 +423,7 @@ export class PrefinancementEditionComponent implements OnInit {
    console.log(this.prefinancementModel);
    this.prefinancementList = [];
    this.prestationForm.reset();
+   //this.prestationForm.get('dateSaisie').setValue(new Date());
    }
 
   // permet d'enregistrer une prestation par famille
@@ -432,12 +443,17 @@ export class PrefinancementEditionComponent implements OnInit {
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
   }
   
+  showDialogPlafondMaximized(dialog: Dialog) {
+    dialog.maximized = true;
+  }
+  
   newRowPrestation() {
     return {taux: this.taux};
   }
 
   addPrefinancement(){
     this.displayFormPrefinancement = true;
+    this.prestationForm.get('dateSaisie').setValue(new Date());
   }
   
   showToast(severity: string, summary: string, detail: string) {

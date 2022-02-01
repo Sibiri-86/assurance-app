@@ -153,7 +153,7 @@
         </p-dialog>
         
         
-        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
             <ng-template pTemplate="content">
                 <div class="card">
                 
@@ -232,7 +232,7 @@
                     
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">
-                            <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                            <button pButton [disabled]="!adherentSelected" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                     class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                         </div>
                  
@@ -292,12 +292,17 @@
                                 <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
                                             showClear="true" [options]="medecinList"
                                             formControlName="medecin" placeholder="Select medecin"
-                                            optionLabel="libelle"></p-dropdown>   
+                                            optionLabel="nom">
+                                            <ng-template let-medecin pTemplate="item">
+                                                    <span>{{medecin.nom}}  </span>
+                                                    <span>{{medecin.prenom}}</span>
+                                            </ng-template>
+                                </p-dropdown>
                             </div>
                             
                             <div class="p-field p-col">
                                 <label for="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte" (onBlur)="calculDebours(i)"></p-inputNumber>  
+                                <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>  
                             </div>
                                
                            </div>
@@ -325,7 +330,7 @@
                            
                            <div class="p-fluid p-formgrid p-grid">
                                
-                            <div class="p-field p-col">
+                            <div class="p-field p-col-4">
                                 <label for="sousActe">Taux <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                 <p-dropdown inputId="taux" dataKey="id" [filter]="true"
                                             showClear="true" [options]="tauxList"
@@ -338,12 +343,14 @@
                                 <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" ></p-inputNumber>  
                             </div>
                             
+                            <!--
                             <div class="p-field p-col-4">
                                 <label for="sousActe">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                 <p-dropdown inputId="sort"  [filter]="true"
                                             showClear="true" [options]="typeSort"
-                                            formControlName="sort"></p-dropdown>       
+                                            formControlName="sort"></p-dropdown>
                             </div>
+                            -->
                                
                            </div>
                            
@@ -359,9 +366,13 @@
                             <button pButton pRipple icon="pi pi-plus" pTooltip="Supprimer prestation" label="Supprimer prestation"
                                     class="p-button-success" type="button" (click)="deleteItemPrestation(i)"></button>
                            </div>
+                           <div class="p-field p-col-2">
+                            <button pButton [disabled]="!adherentSelected" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                                    class="p-button-success" type="button" (click)="addItemPrestation()"></button>
+                        </div>
                         </div>         
                            
-                    </p-fieldset>     
+                    </p-fieldset>
                             
                         </div>
                         </div>
@@ -373,7 +384,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
             </form> 

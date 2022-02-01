@@ -1,17 +1,16 @@
-import { TypeEtatOrdreReglement } from "src/app/module/common/models/emum.etat.ordre-reglement";
-import { Sort } from "src/app/module/common/models/sort.enum";
-import { Adherent } from "../../contrat/adherent/model";
-import { Police } from "../../contrat/police/model";
-import { Medecin } from "../../parametrage/medecin/model";
-import { Prestataire } from "../../parametrage/prestataire/model";
-import { SousActe } from "../../parametrage/sous-acte/model";
-import { Taux } from "../../parametrage/taux/model";
+import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { Sort } from 'src/app/module/common/models/sort.enum';
+import { Adherent } from '../../contrat/adherent/model';
+import { Police } from '../../contrat/police/model';
+import { Medecin } from '../../parametrage/medecin/model';
+import { Prestataire } from '../../parametrage/prestataire/model';
+import { SousActe } from '../../parametrage/sous-acte/model';
+import { Taux } from '../../parametrage/taux/model';
 
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
     police?: string;
-    
 }
 
 
@@ -19,9 +18,9 @@ export interface OrdreReglementList {
     ordreReglementDtoList?: Array<OrdreReglement>;
 }
 
-export interface OrdreReglement{
+export interface OrdreReglement {
     id?: string;
-    dateSaisie?: Date;
+    date?: Date;
     numero?: string;
     numeroBordereau?: string;
     police?: Police;

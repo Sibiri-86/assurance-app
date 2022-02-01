@@ -134,8 +134,8 @@ this.actions$.pipe(
 importPhotosAdherent$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importPhotosAdherent),
-    mergeMap(({file,idAdherent,idGroupe}) =>
-        this.AdherentService.pushPhotosAdherent(file,idAdherent).pipe(
+    mergeMap(({file, idAdherent, idGroupe}) =>
+        this.AdherentService.pushPhotosAdherent(file, idAdherent).pipe(
             switchMap(value => [
                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.loadAdherent({idGroupe: idGroupe})
@@ -156,7 +156,7 @@ this.actions$.pipe(
                 //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.selectedAdherentForSearch(value)
             ]),
-                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )
     )
 )
@@ -166,7 +166,7 @@ this.actions$.pipe(
 importPhotosAdherentLot$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importPhotosAdherentLot),
-    mergeMap(({file,idGroupe}) =>
+    mergeMap(({file, idGroupe}) =>
         this.AdherentService.pushPhotosAdherentLot(file).pipe(
             switchMap(value => [
                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),

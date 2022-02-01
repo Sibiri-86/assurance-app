@@ -28,3 +28,4 @@ export const deletePrefinancement = createAction('[delete prefinancement] delete
     Array<Prefinancement>}>());
 export const deleteOrdreDeReglement = createAction('[delete ordre de reglement] delete ordreReglement', props<{ordreReglement:
         Array<OrdreReglement>}>());
+export const checkPrefinancement = createAction('[App Init] Check Prefinancement', props<{prefinancement: Array<Prefinancement>}>());

@@ -53,18 +53,18 @@ posAdherent(Adherent: Adherent): Observable<any> {
     headers.set('Accept', 'application/json');
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/lot`, data, { headers: headers });
   }
-  
-updateAdherent(Adherent: Adherent): Observable<any> {
+
+  updateAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);
   }
-  
+
   searchAdherent(numero: number): Observable<AdherentResearchReponse> {
     // @FIXME: post request
-    if(numero && numero!=0){
+    if(numero && numero!=0) {
     return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByNumero/${numero}`).pipe(
-      map((response: AdherentResearchReponse) => response),
-      catchError(this.handleError())
+      map((response: AdherentResearchReponse) => response)
+      //catchError(this.handleError())
      );
     }
   }
