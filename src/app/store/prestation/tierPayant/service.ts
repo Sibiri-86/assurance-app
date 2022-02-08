@@ -1,15 +1,19 @@
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-// import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList } from "./model";
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Report } from '../../contrat/police/model';
-import {SinistreTierPayant, SinistreTierPayantList} from './model';
-import {OrdreReglementList, Prefinancement, PrefinancementList, Prestation} from '../prefinancement/model';
+import {
+    OrdreReglementTierPayant,
+    OrdreReglementTierPayantList,
+    Prestation,
+    SinistreTierPayant,
+    SinistreTierPayantList
+} from './model';
 
 @Injectable({providedIn: 'root'})
 export class TierPayantService {
@@ -41,10 +45,10 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/etat/${etat}`, tierPayant);
     }
 
-    $getTierPayantOrdreReglementValide(): Observable<OrdreReglementList> {
+    $getTierPayantOrdreReglementValide(): Observable<OrdreReglementTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/valide`).pipe(
-            map((response: OrdreReglementList) => response),
+            map((response: OrdreReglementTierPayantList) => response),
             catchError(this.handleError())
         );
     }
@@ -72,12 +76,17 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
         return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}`, tierPayant);
     }
 
-    $getOrdreReglement(): Observable<OrdreReglementList> {
+    $getOrdreReglement(): Observable<OrdreReglementTierPayantList> {
         // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement`).pipe(
-            map((response: OrdreReglementList) => response),
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/list`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
             catchError(this.handleError())
         );
+    }
+
+    putUpdateTierPayantOrdreReglement(ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/etat/${etat}`, ordre);
     }
 
 private handleError<T>() {

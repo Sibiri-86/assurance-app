@@ -43,7 +43,7 @@ import {Adherent} from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import {Prefinancement, Prestation} from 'src/app/store/prestation/prefinancement/model';
+import {Prestation} from 'src/app/store/prestation/tierPayant/model';
 import {Status} from 'src/app/store/global-config/model';
 import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
@@ -121,6 +121,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+        // tslint:disable-next-line:max-line-length
         console.log('*********************************this.prefinancementModel***********************************', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
         console.log(this.prefinancementModel);
@@ -146,7 +147,6 @@ export class TierPayantEditionComponent implements OnInit {
             id: new FormControl(),
             referenceSinistreGarant: new FormControl(),
             referenceBordereau: new FormControl(),
-            dateSoins: new FormControl(''),
             dateDeclaration: new FormControl(''),
             dateSaisie: new FormControl({value: '', disabled: true}),
             matriculeAdherent: new FormControl(''),
@@ -308,7 +308,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
         this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
-        this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+        // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
         this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
         for (const pr of pref.prestation) {
             const formPrestation: FormGroup = this.createItem();
@@ -363,6 +363,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     addTierPayant() {
+        this.prestationForm.get('dateSaisie').setValue(new Date());
         this.displayFormPrefinancement = true;
     }
 
@@ -429,7 +430,9 @@ export class TierPayantEditionComponent implements OnInit {
             prestataire: new FormControl(),
             produitPharmaceutique: new FormControl(),
             pathologie: new FormControl(),
-            medecin: new FormControl()
+            medecin: new FormControl(),
+            numeroFacture: new FormControl(),
+            dateSoins: new FormControl()
         });
     }
 

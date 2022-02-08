@@ -8,7 +8,7 @@ import {TypeReport} from '../enum/model';
 import {HistoriqueAvenant} from '../historiqueAvenant/model';
 import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
 import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/model';
-import {SinistreTierPayant} from '../../prestation/tierPayant/model';
+import {OrdreReglementTierPayant, SinistreTierPayant} from '../../prestation/tierPayant/model';
 
 export interface Police{
     id?: string;
@@ -71,6 +71,7 @@ export interface Report {
     prefinancementDto?: Prefinancement;
     ordreReglementDto?: OrdreReglement;
     sinistreTierPayantDTO?: SinistreTierPayant;
+    ordreReglementTierPayant?: OrdreReglementTierPayant;
 }
 
 export interface PoliceList {

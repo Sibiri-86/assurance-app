@@ -2,8 +2,16 @@ import { createAction, props } from '@ngrx/store';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { Report } from '../../contrat/police/model';
-import {SinistreTierPayant, SinistreTierPayantList, OrdreReglementList, Prestation} from './model';
-// import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList } from './model';
+import {
+    SinistreTierPayant,
+    SinistreTierPayantList,
+    Prestation,
+    OrdreReglementTierPayantList,
+    OrdreReglementTierPayant
+} from './model';
+
+
+
 export const createTierPayant = createAction('[App Init] Create TierPayant', props<{tierPayant: Array<SinistreTierPayant>}>());
 export const setTierPayant = createAction('[App Init] set TierPayant',  props<SinistreTierPayantList>());
 export const loadTierPayant = createAction('[App Init] load tierPayant');
@@ -12,7 +20,7 @@ export const setReportTierPayant = createAction('[set Report] set Report tierPay
 export const updateEtatValiderTierPayant = createAction('[App Init] update etat valider TierPayant',
     props<{tierPayant: SinistreTierPayant, etat: TypeEtatSinistre}>());
 export const loadTierPayantOrdreReglementValide = createAction('[App Init] load tier payant ordre reglement valide');
-export const setTierPayantLoadOrdreReglement = createAction('[App Init] set tier payant ordre reglement',  props<OrdreReglementList>());
+// export const setTierPayantLoadOrdreReglement = createAction('[App Init] set tier payant ordre reglement',  props<OrdreReglementList>());
 export const loadTierPayantValide = createAction('[App Init] load TierPayant valide');
 export const updateEtatAnnulerTierPayant = createAction('[App Init] update etat annuler TierPayant',
     props<{tierPayant: SinistreTierPayant, etat: TypeEtatSinistre}>());
@@ -22,7 +30,10 @@ export const deletePrestationTierPayant = createAction('[set Report] delete pres
 export const deleteTierPayant = createAction('[delete TierPayant] delete TierPayant', props<{tierPayant:
         Array<SinistreTierPayant>}>());
 export const loadOrdreReglementTierPayant = createAction('[App Init] load TierPayantReglement');
-export const setLoadOrdreReglementTierPayant = createAction('[App Init] set ordre reglement tierPayant',  props<OrdreReglementList>());
+export const setLoadOrdreReglementTierPayant = createAction('[App Init] set ordre reglement tierPayant',
+    props<OrdreReglementTierPayantList>());
+export const validerTierPayantOrdreReglement = createAction('[App Init] valider TierPayant ordre reglement',
+    props<{ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement}>());
 
 
 
