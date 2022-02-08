@@ -2150,7 +2150,8 @@
 </p-dialog>
 
 
-<p-dialog  [maximizable]="true" [(visible)]="displayDialogFormGroupe" header="Groupe" [modal]="true" styleClass="p-fluid" [style]="{'width':'1100px'}">
+<p-dialog  [maximizable]="true" [(visible)]="displayDialogFormGroupe" header="Groupe" [modal]="true"
+           styleClass="p-fluid" [style]="{'width':'1100px'}" (onHide)="loadAllPolice()">
     <ng-template pTemplate="content">
         <div class="">
             <div class="card">
@@ -3079,14 +3080,14 @@
 </p-dialog>
 
 
-<p-dialog [maximizable]="true" [(visible)]="displayDialogFormPolice" header="Police" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}" (onHide)="policeForm.reset()">
+<p-dialog [maximizable]="true" [(visible)]="displayDialogFormPolice" header="Police" [modal]="true" styleClass="p-fluid" [style]="{width: '80%'}" (onHide)="policeForm.reset()">
     <ng-template pTemplate="content">
         <form (ngSubmit)="onCreate()"  [formGroup]="policeForm" >
             <div class="card">
                 <p-fieldset legend="Exercice" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="dateEffet">Date effet</label>
+                            <label for="dateEffet">Date effet <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-calendar  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'dateEffet'">
@@ -3094,7 +3095,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="firstname2">Type durée</label>
+                            <label for="firstname2">Type durée <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'typeDuree'">
@@ -3102,7 +3103,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Durée</label>
+                            <label for="lastname2">Durée <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="lastname2" type="number" (input)="onRefreshDateEcheance($event.target.value)"  formControlName="duree" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'duree'">
@@ -3110,7 +3111,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Date échéance</label>
+                            <label for="lastname2">Date échéance <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'dateEcheance'">
@@ -3123,13 +3124,13 @@
                         <div class="p-field p-col-4">
                             <label for="lastname2">Garant</label>
                             <p-dropdown dataKey="id" inputId="garant" [filter]="true" showClear="true" [options]="garantList" formControlName="garant" placeholder="Select" optionLabel="nom"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'garant'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Intermediaire</label>
+                            <label for="lastname2">Intermediaire <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="intermediaire" [filter]="true" showClear="true" [options]="intermediaireList" formControlName="intermediaire" placeholder="Select" optionLabel="nom"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'intermediaire'">
@@ -3137,7 +3138,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Taux de couverture</label>
+                            <label for="lastname2">Taux de couverture <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'taux'">
@@ -3145,7 +3146,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Taux de commission intermediaire en %</label>
+                            <label for="lastname2">Taux de commission intermediaire en % <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="taux commission intermediaire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="tauxCommissionIntermediaire" placeholder="Select" optionLabel="taux"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="policeForm" [entityField]="'taux'">
@@ -3153,7 +3154,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="firstname2">Territorialité</label>
+                            <label for="firstname2">Territorialité <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true" showClear="true" [options]="territorialiteList" formControlName="territorialite" placeholder="Select" optionLabel="libelle"></p-multiSelect>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'territorialite'">
@@ -3161,7 +3162,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="firstname2">Nom du souscripteur</label>
+                            <label for="firstname2">Nom du souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="nom" type="text"  required formControlName="nom"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'nom'">
@@ -3169,7 +3170,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Contact souscripteur</label>
+                            <label for="lastname2">Contact souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-inputMask formControlName="contact" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contact'">
@@ -3177,7 +3178,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="firstname2">Adresse email souscripteur</label>
+                            <label for="firstname2">Adresse email souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="adresseEmailSouscripteur" type="text" formControlName="adresseEmail" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'adresseEmail'">
@@ -3185,7 +3186,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="adressePostale">Adresse postale souscripteur</label>
+                            <label for="adressePostale">Adresse postale souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="adressePostale" type="text" formControlName="adressePostale" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'adressePostale'">
@@ -3193,7 +3194,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Secteur activité souscripteur</label>
+                            <label for="lastname2">Secteur activité souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="secteurActivite" [filter]="true" showClear="true" [options]="secteurActiviteList" formControlName="secteurActivite" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'secteurActivite'">
@@ -3201,7 +3202,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">IFU souscripteur</label>
+                            <label for="lastname2">IFU souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="ifu" type="text" formControlName="numeroIfu" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'numeroIfu'">
@@ -3209,14 +3210,14 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Personne ressource</label>
+                            <label for="lastname2">Personne ressource <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="personneRess" type="text" formControlName="personneRessource" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'personneRessource'">
                             </app-entity-validation>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Contact Personne ressource</label>
+                            <label for="lastname2">Contact Personne ressource <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-inputMask formControlName="contactPersonneRessource" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'contactPersonneRessource'">
@@ -3224,7 +3225,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Email Personne ressource</label>
+                            <label for="lastname2">Email Personne ressource <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="emailPers" type="email" formControlName="emailPersonneRessource" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'emailPersonneRessource'">
@@ -3232,15 +3233,15 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="refPolice">Reference police du garant</label>
+                            <label for="refPolice">Reference police du garant </label>
                             <input id="referencePolice" type="text" formControlName="referencePolice" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'referencePolice'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">RCCM souscripteur</label>
+                            <label for="lastname2">RCCM souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="rccm" type="text" formControlName="rccm" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'rccm'">
@@ -3254,25 +3255,25 @@
                         <div class="p-field p-col">
                             <label for="pays">Pays</label>
                             <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" (onChange)="changeCountry($event)" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'pays'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Region</label>
+                            <label for="lastname2">Région</label>
                             <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'region'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
 
                         <div class="p-field p-col">
                             <label for="lastname2">Province</label>
                             <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList"  (onChange)="changeDepartement($event)" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'departement'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
                     </div>
 
@@ -3290,9 +3291,9 @@
                         <div class="p-field p-col-4">
                             <label for="arrondissement">Arrondissement</label>
                             <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
+                            <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'arrondissement'">
-                            </app-entity-validation>
+                            </app-entity-validation>-->
                         </div>
 
                         <div class="p-field p-col-4">
@@ -3308,7 +3309,7 @@
                 <p-fieldset legend="Frais" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoire">Total Frais accessoire</label>
+                            <label for="fraisAccessoire">Total Frais accessoire <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input formControlName="fraisAccessoire" [value]="policeForm.get('fraisAccessoire').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisAccessoire'">
@@ -3316,7 +3317,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="fraisBadge">Total Frais badge</label>
+                            <label for="fraisBadge">Total Frais badge <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input formControlName="fraisBadge" [value]="policeForm.get('fraisBadge').value | formatTableValue: 'number':true"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'fraisBadge'">

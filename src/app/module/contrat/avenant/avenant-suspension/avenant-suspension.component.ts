@@ -22,6 +22,7 @@ import * as featureActionAdherent from '../../../../store/contrat/adherent/actio
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import {Exercice} from '../../../../store/contrat/exercice/model';
+import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 
 @Component({
   selector: 'app-avenant-suspension',
@@ -65,7 +66,8 @@ export class AvenantSuspensionComponent implements OnInit {
       private confirmationService: ConfirmationService,
       private historiqueAvenantService: HistoriqueAvenantService,
       private adherentService: AdherentService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
   ) {
     this.exerciceForm = this.formBuilder.group({
       debut: new FormControl(''),
@@ -92,14 +94,15 @@ export class AvenantSuspensionComponent implements OnInit {
       }
     });
     this.groupe = {};
+    this.findListeActualisee(this.police);
 
-    this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPoliceAndUnsuspend(this.police.id).subscribe(
+    /* this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPoliceAndUnsuspend(this.police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
           console.log('..................historiqueAveantAdherants...................');
           console.log(this.historiqueAveantAdherants);
         }
-    );
+    ); */
 
     this.loadActivedExercice(this.police);
   }
@@ -229,5 +232,13 @@ export class AvenantSuspensionComponent implements OnInit {
           }
       );
     }
+  }
+
+  findListeActualisee(police: Police): void {
+    this.historiqueAvenantAdherantService.getListActualisee(police.id).subscribe(
+        (res) => {
+          this.historiqueAveantAdherants = res;
+        }
+    );
   }
 }
