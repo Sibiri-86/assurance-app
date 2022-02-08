@@ -2266,4 +2266,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  onChangePrimeNet(): void {
+    this.historiqueAvenantPrimes.forEach(hap => {
+      if (hap.primeNet) {
+        hap.primeNet = removeBlanks(hap.primeNet + '');
+      }
+      if (hap.primeTotal) {
+        hap.primeTotal = removeBlanks(hap.primeTotal + '');
+      }
+      if (!hap.groupe) {
+        hap.primeNet = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeNet).reduce((a, b) => a + b);
+        hap.primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeTotal).reduce((a, b) => a + b);
+      }
+    });
+  }
 }

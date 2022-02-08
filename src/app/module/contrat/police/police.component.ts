@@ -293,6 +293,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   indexActeExpand:number;
   displayRecap = false;
   isEnreg: boolean;
+  groupeListPolice$: Observable<Array<Groupe>>;
+  groupeListPolice: Array<Groupe>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -336,7 +338,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.policeForm = this.formBuilder.group({
       id: new FormControl(''),
       numero: new FormControl(''),
-      garant: new FormControl('', [Validators.required]),
+      garant: new FormControl(''),
       intermediaire: new FormControl('', [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
@@ -811,8 +813,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((value) => {
         if (value) {
           this.qualiteAssureList = value.slice();
-          this.qualitePrincipalList = this.qualiteAssureList.filter(element => element.code === 'ADHERENT');
-          this.membreList =  this.qualiteAssureList.filter(element => element.code != 'ADHERENT');
+          this.qualitePrincipalList = this.qualiteAssureList.filter(elem => elem.code === 'ADHERENT');
+          this.membreList =  this.qualiteAssureList.filter(elem => elem.code !== 'ADHERENT');
         }
       });
 
@@ -868,16 +870,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
-    this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPolice());
-    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.loading = false;
-        this.policeList = value.slice();
-        console.log('+++++++++++this.policeList+++++++++++++');
-        console.log(this.policeList);
-      }
-    });
+    this.loadAllPolice();
 
     this.paysList$ = this.store.pipe(select(paysSelector.paysList));
     this.store.dispatch(loadPays());
@@ -1138,7 +1131,17 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.groupe.adherentFamille = this.adherentFamille;
     console.log(this.groupe);
+    this.groupeListPolice$ = this.store.pipe(select(groupeList));
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
+    this.store.dispatch(featureActionGroupe.loadGroupe({policeId: this.police.id}));
+    this.groupeListPolice$.pipe(takeUntil(this.destroy$)).subscribe(
+        (res) => {
+          if (res) {
+            this.groupeListPolice = res;
+            this.police.listGroupe = res;
+          }
+        }
+    );
     this.adherentFamille = [];
     this.FamilyListToImport = [];
     this.groupe = {};
@@ -2121,6 +2124,9 @@ changeGarantie(garantie, indexLigne: number) {
 
   getAdherentFiles(event: any): void {
     console.log(event);
+    this.FamilyListToImport = [];
+    this.adherentFamille = [];
+    this.afficheDetail = false;
     this.policeService.loadAdherentsByExcelFile(event).subscribe(
         (res) => {
           console.log('liste des adhérents === ');
@@ -2163,5 +2169,18 @@ changeGarantie(garantie, indexLigne: number) {
 
   deleteGroupe(groupe): void {
     this.store.dispatch(featureActionGroupe.deleteGroupe(groupe));
+  }
+
+  private loadAllPolice(): void {
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPolice());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+        console.log('+++++++++++this.policeList+++++++++++++');
+        console.log(this.policeList);
+      }
+    });
   }
 }

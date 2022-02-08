@@ -27,6 +27,7 @@ import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
+import {HistoriqueAdherent} from '../../../../store/contrat/historiqueAvenantAdherent/model';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -101,14 +102,14 @@ export class AvenantRetraitComponent implements OnInit {
     });
     this.groupe = {};
 
-    this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
+    /* this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPolice(this.police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
           this.historiqueAveantAdherantsTMP = res;
           console.log('..................historiqueAveantAdherants...................');
           console.log(this.historiqueAveantAdherants);
         }
-    );
+    ); */
     this.loadActivedExercice(this.police);
     this.findListeActualisee(this.police);
   }
@@ -167,33 +168,18 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
-    const value: boolean = !historiqueAvenantAdherant.selected;
+    // const value: boolean = !historiqueAvenantAdherant.selected;
     console.log(historiqueAvenantAdherant);
-    historiqueAvenantAdherant.selected = value;
-    /*
-    if (historiqueAvenantAdherant.selected) {
-      this.historiqueAveantAdherants.forEach(haa => {
-        if (haa && haa.adherent && haa.adherent.adherentPrincipal && haa.adherent.adherentPrincipal.id &&
-            haa.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
-          this.adherantDeleteds.push(haa);
-          haa.selected = value;
+    // historiqueAvenantAdherant.selected = value;
+    const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
+    historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
+    historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherants;
+    this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
+        (res) => {
+          this.historiqueAveantAdherants = res;
+          // this.historiqueAveantAdherantsTMP = res;
         }
-        console.log('******1*******' + this.adherantDeleteds.length);
-      });
-    } else {
-      const idx = this.adherantDeleteds.indexOf(historiqueAvenantAdherant);
-      this.adherantDeleteds.splice(idx, 1);
-      if (historiqueAvenantAdherant.adherent.adherentPrincipal === null) {
-        this.historiqueAveantAdherants.forEach(elem => {
-          if (elem.adherent.adherentPrincipal != null && elem.adherent.adherentPrincipal.id === historiqueAvenantAdherant.adherent.id) {
-            const idx1 = this.adherantDeleteds.indexOf(elem);
-            this.adherantDeleteds.splice(idx1, 1);
-            elem.selected = value;
-          }
-        });
-      }
-    }
-    */
+    );
   }
 
   addAdherentFamilleToList(): void {
@@ -217,13 +203,15 @@ export class AvenantRetraitComponent implements OnInit {
         break;
       default: break;
     }
-    this.adherantDeleteds.forEach(haa => {
+    // this.adherantDeleteds.forEach(haa => {
       // haa.deleted = true;
       // haa.adherent.groupe = this.groupe;
-      // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    });
-    this.historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
-    this.historiqueAvenant.historiqueAvenantAdherant1s = this.historiqueAveantAdherants.filter(e => !e.selected);
+      // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT; historiqueAvenantAdherants
+    // });
+    // this.historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
+    this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherants.filter(e => e.selected);
+    console.log('******* liste des adhérents à supprimer **************');
+    console.log(this.historiqueAvenant);
     this.adherentFamilleEvent.emit(this.historiqueAvenant);
     this.init();
   }
@@ -314,8 +302,8 @@ export class AvenantRetraitComponent implements OnInit {
   findListeActualisee(police: Police): void {
     this.historiqueAvenantAdherantService.getListActualisee(police.id).subscribe(
         (res) => {
-          console.log('----------------------------');
-          console.log(res);
+          this.historiqueAveantAdherants = res;
+          this.historiqueAveantAdherantsTMP = res;
         }
     );
   }

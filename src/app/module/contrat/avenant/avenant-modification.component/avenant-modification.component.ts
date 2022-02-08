@@ -84,6 +84,7 @@ import {TypeBareme} from '../../../common/models/bareme.enum';
 import {Status as Etat} from '../../../common/models/etat.enum';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
+import {Prime} from '../../../../store/contrat/prime/model';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -783,7 +784,7 @@ export class AvenantModificationComponent implements OnInit {
       dateEffet: new Date(group.dateEffet),
       // typeDuree: {},
       dateEcheance: new Date(group.dateEcheance),
-      commune: group.commune
+      commune: group.commune,
     });
 
     this.primeForm.patchValue({
@@ -1035,6 +1036,8 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.objet.historiqueAvenant.exercice = this.exercice;
+    this.objet.groupe.prime = this.primeForm.get(['prime']).value;
+    this.objet.groupe.typePrime = this.primeForm.get(['typeprime']).value;
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
         this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
