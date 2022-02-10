@@ -1,7 +1,8 @@
 import {props, createAction} from '@ngrx/store';
 import { PlafondFamilleActe } from '../../parametrage/plafond/model';
 import { Groupe } from '../groupe/model';
-import { Bareme, BaremeList, Plafond, PlafondConfig, PlafondGroupe, PlafondList } from './model';
+import {Bareme, BaremeList, Plafond, PlafondConfig, PlafondGroupe, PlafondGroupeFamilleActeListe, PlafondList} from './model';
+import {Adherent} from '../adherent/model';
 
 export const createPlafond = createAction('[App Init] Create Plafond', props<Plafond>());
 export const updatePlafond = createAction('[App Init] update Plafond', props<Plafond>());
@@ -22,3 +23,7 @@ export const loadBareme = createAction('[App Init] load Bareme');
 export const setBareme = createAction('[App Init] set bareme',  props<BaremeList>());
 /**pour recuperer la configuration du bareme */
 export const loadBaremeConfig = createAction('[App Init] load Bareme',  props<{typeBareme: string, taux: number}>());
+export const loadFamilleActeEnCours = createAction('[App Init] load Famille Acte en Cours',
+    props<{numero: number}>());
+export const setPlafondGroupeFamilleActe = createAction('[App Init] set Plafond Groupe Famille Acte',
+    props<{plafondEnCours: PlafondFamilleActe[]}>());

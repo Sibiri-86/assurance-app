@@ -19,6 +19,7 @@ import * as tauxSelector from '../../../../store/parametrage/taux/selector';
 import {Sort} from '../../../common/models/sort.enum';
 import {loadGarantie} from '../../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
+import * as plafondSelector from '../../../../store/contrat/plafond/selector';
 
 import {loadPrestataire} from '../../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
@@ -42,8 +43,9 @@ import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
 import {Adherent} from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
+import * as featureActionPlafond from '../../../../store/contrat/plafond/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import {Prefinancement, Prestation} from 'src/app/store/prestation/prefinancement/model';
+import {Prestation} from 'src/app/store/prestation/tierPayant/model';
 import {Status} from 'src/app/store/global-config/model';
 import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
@@ -58,6 +60,8 @@ import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharm
 import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
 import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
+import {PlafondFamilleActe} from '../../../../store/parametrage/plafond/model';
+import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 
 
 @Component({
@@ -105,6 +109,8 @@ export class TierPayantEditionComponent implements OnInit {
     produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
     TierPayantSelected: SinistreTierPayant[];
     prestationListPrefinancementFilter: Array<Prestation>;
+    familleActeEnCours$: Observable<PlafondFamilleActe[]>;
+    familleActeEnCours: PlafondFamilleActe[];
 
 
 
@@ -121,6 +127,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+        // tslint:disable-next-line:max-line-length
         console.log('*********************************this.prefinancementModel***********************************', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
         console.log(this.prefinancementModel);
@@ -140,13 +147,12 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.prestationList = [];
+        // this.prestationList = [];
         this.prestationForm = this.formBuilder.group({
             // domaine: new FormControl({}),
             id: new FormControl(),
             referenceSinistreGarant: new FormControl(),
             referenceBordereau: new FormControl(),
-            dateSoins: new FormControl(''),
             dateDeclaration: new FormControl(''),
             dateSaisie: new FormControl({value: '', disabled: true}),
             matriculeAdherent: new FormControl(''),
@@ -308,7 +314,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
         this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
-        this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+        // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
         this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
         for (const pr of pref.prestation) {
             const formPrestation: FormGroup = this.createItem();
@@ -341,7 +347,16 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroGroupe').setValue('');
         this.prestationForm.get('numeroPolice').setValue('');
         this.adherentSelected = null;
-        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+        this.store.dispatch(featureActionAdherent.searchAssureAndFamilleActe({numero: event.target.value}));
+
+        this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
+        this.store.dispatch(featureActionPlafond.loadFamilleActeEnCours({numero: event.target.value}));
+        this.familleActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.familleActeEnCours = value.slice();
+                console.log('++++++++++++++++++++++++++++++++++++familleActeEnCours+++', this.familleActeEnCours);
+            }
+        });
     }
 
     // valider TierPayant
@@ -363,6 +378,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     addTierPayant() {
+        this.prestationForm.get('dateSaisie').setValue(new Date());
         this.displayFormPrefinancement = true;
     }
 
@@ -429,7 +445,11 @@ export class TierPayantEditionComponent implements OnInit {
             prestataire: new FormControl(),
             produitPharmaceutique: new FormControl(),
             pathologie: new FormControl(),
-            medecin: new FormControl()
+            medecin: new FormControl(),
+            numeroFacture: new FormControl(),
+            dateSoins: new FormControl(),
+            acte: new FormControl(null),
+            familleActe: new FormControl(null)
         });
     }
 

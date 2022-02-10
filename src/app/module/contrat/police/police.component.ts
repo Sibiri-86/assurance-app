@@ -293,6 +293,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   indexActeExpand:number;
   displayRecap = false;
   isEnreg: boolean;
+  groupeListPolice$: Observable<Array<Groupe>>;
+  groupeListPolice: Array<Groupe>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -336,7 +338,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.policeForm = this.formBuilder.group({
       id: new FormControl(''),
       numero: new FormControl(''),
-      garant: new FormControl('', [Validators.required]),
+      garant: new FormControl(''),
       intermediaire: new FormControl('', [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
@@ -811,8 +813,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((value) => {
         if (value) {
           this.qualiteAssureList = value.slice();
-          this.qualitePrincipalList = this.qualiteAssureList.filter(element => element.code === 'ADHERENT');
-          this.membreList =  this.qualiteAssureList.filter(element => element.code != 'ADHERENT');
+          this.qualitePrincipalList = this.qualiteAssureList.filter(elem => elem.code === 'ADHERENT');
+          this.membreList =  this.qualiteAssureList.filter(elem => elem.code !== 'ADHERENT');
         }
       });
 
@@ -868,16 +870,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
-    this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPolice());
-    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.loading = false;
-        this.policeList = value.slice();
-        console.log('+++++++++++this.policeList+++++++++++++');
-        console.log(this.policeList);
-      }
-    });
+    this.loadAllPolice();
 
     this.paysList$ = this.store.pipe(select(paysSelector.paysList));
     this.store.dispatch(loadPays());
@@ -1138,7 +1131,17 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.groupe.adherentFamille = this.adherentFamille;
     console.log(this.groupe);
+    this.groupeListPolice$ = this.store.pipe(select(groupeList));
     this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
+    this.store.dispatch(featureActionGroupe.loadGroupe({policeId: this.police.id}));
+    this.groupeListPolice$.pipe(takeUntil(this.destroy$)).subscribe(
+        (res) => {
+          if (res) {
+            this.groupeListPolice = res;
+            this.police.listGroupe = res;
+          }
+        }
+    );
     this.adherentFamille = [];
     this.FamilyListToImport = [];
     this.groupe = {};
@@ -1643,25 +1646,20 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /** verifier la date Effet du groupe avec celle de la police */
-  checkDateEffet(){
-     for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
-    this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
-    for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
-      this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
-      for (var k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
-        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
-        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
-      }
-    }
+  checkDateEffet(): void {
+    this.historiqueAvenantService.compareDate(this.groupeForm.get('dateEffet').value, this.police.dateEffet).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet du groupe ne peut pas être postérieure à celle de la police');
+            this.groupeForm.patchValue({dateEffet: null});
+          }
+        }
+    );
   }
-    if (this.groupeForm.get('dateEffet').value){
-      if (new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
-        this.valideDateEffet = false;
-        this.showToast("error", "INFORMATION", "la date effet du groupe doit etre superieure à celle de la police");
-      } else {
-        this.valideDateEffet = true;
-      }
-    }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   appliquerConfiguration() {
@@ -2121,6 +2119,9 @@ changeGarantie(garantie, indexLigne: number) {
 
   getAdherentFiles(event: any): void {
     console.log(event);
+    this.FamilyListToImport = [];
+    this.adherentFamille = [];
+    this.afficheDetail = false;
     this.policeService.loadAdherentsByExcelFile(event).subscribe(
         (res) => {
           console.log('liste des adhérents === ');
@@ -2163,5 +2164,18 @@ changeGarantie(garantie, indexLigne: number) {
 
   deleteGroupe(groupe): void {
     this.store.dispatch(featureActionGroupe.deleteGroupe(groupe));
+  }
+
+  private loadAllPolice(): void {
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPolice());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+        console.log('+++++++++++this.policeList+++++++++++++');
+        console.log(this.policeList);
+      }
+    });
   }
 }

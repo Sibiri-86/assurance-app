@@ -1,7 +1,7 @@
 import {SinistreTierPayantState} from './state';
 import * as featureActions from './action';
 import { Action, createReducer, on } from '@ngrx/store';
-import {OrdreReglementList, SinistreTierPayantList} from './model';
+import {OrdreReglementTierPayantList, SinistreTierPayantList} from './model';
 import {ReportFile} from '../../contrat/police/model';
 
 const initialState: SinistreTierPayantState = {
@@ -15,8 +15,8 @@ const featureReducer = createReducer(
     on(featureActions.setTierPayant, (state, payload: SinistreTierPayantList) => ({
       ...state, sinsitreTierPayantList: payload.sinistreTierPayantDTOList
     })),
-    on(featureActions.setLoadOrdreReglementTierPayant, (state, payload: OrdreReglementList) => ({
-        ...state, ordreReglementTierPayantList: payload.ordreReglementDtoList
+    on(featureActions.setLoadOrdreReglementTierPayant, (state, payload: OrdreReglementTierPayantList) => ({
+        ...state, ordreReglementTierPayantList: payload.ordreReglementTierPayantDTOList
       })),
     on(featureActions.setReportTierPayant, (state, payload: ReportFile) => ({
         ...state, reportFile: payload.reportFile

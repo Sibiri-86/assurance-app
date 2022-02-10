@@ -40,7 +40,7 @@ export class AppMenuComponent implements OnInit {
                                 ]
                             },
                             {
-                                label: 'Tier-Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
+                                label: 'Tiers Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
                                     {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},

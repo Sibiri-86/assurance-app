@@ -38,3 +38,7 @@ export interface PlafondList {
 export interface PlafondGroupe {
     plafond: Plafond
 }
+
+export interface PlafondGroupeFamilleActeListe {
+    plafondGroupeFamilleActeListe?: Array<PlafondFamilleActe>;
+}

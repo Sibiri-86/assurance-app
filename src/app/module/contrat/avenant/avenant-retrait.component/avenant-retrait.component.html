@@ -117,7 +117,6 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
@@ -131,7 +130,8 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant>
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td>
-                            <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)"></p-checkbox>
+                            <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
                         </td>
                         <td>{{historiqueAveantAdherant.adherent?.numero}}</td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom}}</span>

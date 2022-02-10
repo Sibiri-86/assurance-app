@@ -1,7 +1,7 @@
-import {OrdreReglement, SinistreTierPayant} from './model';
+import {OrdreReglementTierPayant, SinistreTierPayant} from './model';
 
 export interface SinistreTierPayantState {
     sinsitreTierPayantList: Array<SinistreTierPayant>;
     reportFile: ArrayBuffer;
-    ordreReglementTierPayantList: Array<OrdreReglement>;
+    ordreReglementTierPayantList: Array<OrdreReglementTierPayant>;
 }

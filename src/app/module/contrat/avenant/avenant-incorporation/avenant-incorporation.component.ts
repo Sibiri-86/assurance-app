@@ -381,7 +381,7 @@ export class AvenantIncorporationComponent implements OnInit{
             (res) => {
                 if (res) {
                     this.addMessage('error', 'Date d\'effet invalide',
-                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                        'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
                     this.adherentForm.patchValue({dateIncor: null});
                 }
             }

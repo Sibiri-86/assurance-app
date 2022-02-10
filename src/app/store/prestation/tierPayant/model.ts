@@ -5,8 +5,7 @@ import { Medecin } from '../../parametrage/medecin/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
-import {TypeEtatSinistre} from '../../../module/common/models/enum.etat.sinistre';
-
+import {OrdreReglement} from '../prefinancement/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -14,11 +13,11 @@ export interface Sinistre {
 }
 
 
-export interface OrdreReglementList {
-    ordreReglementDtoList?: Array<OrdreReglement>;
+export interface OrdreReglementTierPayantList {
+    ordreReglementTierPayantDTOList?: Array<OrdreReglementTierPayant>;
 }
 
-export interface OrdreReglement{
+export interface OrdreReglementTierPayant{
     id?: string;
     numero?: string;
     numeroBordereau?: string;
@@ -35,7 +34,7 @@ export interface SinistreTierPayant {
     dateSaisie?: Date;
     adherent?: Adherent;
     numeroSinistre?: string;
-    ordreReglement?: OrdreReglement;
+    ordreReglementTierPayant?: OrdreReglementTierPayant;
     prestation?: Array<Prestation>;
 }
 
@@ -50,6 +49,7 @@ export interface Prestation {
     sousActe?: SousActe;
     prestataire?: Prestataire;
     medecin?: Medecin;
+    dateSoins?: Date;
 }
 
 export interface SinistreTierPayantList {

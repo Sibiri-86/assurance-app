@@ -1,4 +1,10 @@
-import {HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantAdherentList, HistoriqueAvenantList} from './model';
+import {
+    HistoriqueAdherent,
+    HistoriqueAvenant,
+    HistoriqueAvenantAdherant,
+    HistoriqueAvenantAdherentList,
+    HistoriqueAvenantList
+} from './model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -80,9 +86,15 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             {params: createRequestOption({avenantId, groupeId})});
     }
 
-    getListActualisee(poliuceId: string): Observable<any> {
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/liste-liste-actualisee`,
-            {params: createRequestOption(poliuceId)}
+    getListActualisee(policeId: string): Observable<any> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/liste-actualisee`,
+            {params: createRequestOption({policeId})}
+        );
+    }
+
+    manageSelectionListe(historiqueAdherent: HistoriqueAdherent): Observable<any> {
+        return this.http.post<any>( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/manage-selection`,
+            historiqueAdherent
         );
     }
 

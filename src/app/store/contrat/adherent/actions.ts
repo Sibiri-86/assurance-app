@@ -17,3 +17,5 @@ export const importPhotosAdherent = createAction('[App Init] import photos adher
 export const importPhotosAdherentLot = createAction('[App Init] import photos adherent lot',  props<{file: File[], idGroupe: string}>());
 export const loadListeActualisee = createAction('[App Init] load liste actualisee', props<{policeId: string}>());
 export const setListeActualisee = createAction('[App Init] set Adherent',  props<{listeActualisee: Adherent[]}>());
+export const searchAssureAndFamilleActe = createAction('[App Init] search Assure',  props<{numero: number}>());
+

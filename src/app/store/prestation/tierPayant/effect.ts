@@ -75,7 +75,7 @@ export class TierPayantEffects {
         ));
 
     /** lister tous les ordres de reglement valide */
-    loadTierPayantReglementValide$ = createEffect(() =>
+   /* loadTierPayantReglementValide$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.loadTierPayantOrdreReglementValide),
             mergeMap(() =>
@@ -87,7 +87,7 @@ export class TierPayantEffects {
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
-        ));
+        ));*/
 
     loadTierPayantValide$ = createEffect(() =>
         this.actions$.pipe(
@@ -169,6 +169,22 @@ export class TierPayantEffects {
                     switchMap(value => [
                         // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /* Valider ordre de reglement */
+
+    updateETatValiderOrdreReglement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.validerTierPayantOrdreReglement),
+            mergeMap(({ordre, etat}) =>
+                this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, etat).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadOrdreReglementTierPayant
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

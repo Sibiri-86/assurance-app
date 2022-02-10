@@ -8,7 +8,8 @@ import {TypeReport} from '../enum/model';
 import {HistoriqueAvenant} from '../historiqueAvenant/model';
 import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
 import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/model';
-import {SinistreTierPayant} from '../../prestation/tierPayant/model';
+import {OrdreReglementTierPayant, SinistreTierPayant} from '../../prestation/tierPayant/model';
+import {Groupe} from '../groupe/model';
 
 export interface Police{
     id?: string;
@@ -41,6 +42,7 @@ export interface Police{
     valide?: boolean;
     numero?: string;
     historiqueAvenantListWithoutActiveList?: HistoriqueAvenant[];
+    listGroupe?: Groupe[];
 }
 
 export interface Statistique {
@@ -71,6 +73,7 @@ export interface Report {
     prefinancementDto?: Prefinancement;
     ordreReglementDto?: OrdreReglement;
     sinistreTierPayantDTO?: SinistreTierPayant;
+    ordreReglementTierPayant?: OrdreReglementTierPayant;
 }
 
 export interface PoliceList {

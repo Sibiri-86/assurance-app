@@ -1,5 +1,5 @@
 import { Groupe } from "../groupe/model";
-import {PlafondSousActe} from '../../parametrage/plafond/model';
+import {PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Genre} from '../../parametrage/genre/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 import {Profession} from '../../parametrage/profession/model';
@@ -33,6 +33,7 @@ export interface Adherent{
 
 export interface AdherentResearchReponse {
     adherent?: Adherent;
+    plafondFamilleActeDtoList?: Array<PlafondFamilleActe>;
 }
 export interface AdherentFamille {
    adherent?: Adherent;

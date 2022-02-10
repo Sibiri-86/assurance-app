@@ -1,0 +1,4 @@
+export enum TypeSinistre {
+    PREFINANCEMENT = 'PREFINANCEMENT',
+    TIERPAYANT = 'TIERPAYANT'
+}

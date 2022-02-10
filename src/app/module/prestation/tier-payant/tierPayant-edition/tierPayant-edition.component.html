@@ -36,7 +36,7 @@
                         </th>
                         <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
                         <th pSortableColumn="duree" style="min-width:100px">Numero Adherent<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
@@ -53,8 +53,8 @@
                         <td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
 
-                        <td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
-                        </td>
+                        <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>-->
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.numero}}</span>
                         </td>
@@ -94,7 +94,7 @@
         </div>
 
 
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1350px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
@@ -103,17 +103,21 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nombreActe" style="width: 150px">nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Sous acte<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="width: 150px">montant rembourser <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">montant remboursé <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numeroFacture" style="width: 175px">Numéro de facture  <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateSoins" style="width: 150px">Date Soins <p-sortIcon field="duree"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prestation>
                     <tr>
 
+                        <td><span class="p-column-title">{{prestation.nombreActe}}</span>
                         <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.coutUnitaire}}</span>
@@ -122,8 +126,9 @@
                         </td>
                         <td><span class="p-column-title">{{prestation.baseRemboursement}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
-                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span></td>
+                        <td><span class="p-column-title">{{prestation.numeroFacture}}</span></td>
+                        <td><span class="p-column-title">{{prestation.dateSoins | formatTableValue: 'date'}}</span></td>
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerPrestation(prestation)"></button>
                         </td>
@@ -140,7 +145,7 @@
         </p-dialog>
 
 
-        <p-dialog [maximizable]="true" [style]="{width: '1500px'}" [(visible)]="displayFormPrefinancement" header="Tier Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+        <p-dialog [maximizable]="true" [style]="{width: '1500px'}" [(visible)]="displayFormPrefinancement" header="Tiers Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
             <ng-template pTemplate="content">
                 <div class="card">
 
@@ -157,23 +162,18 @@
                                 </div>
 
                                 <div class="p-field p-col">
-                                    <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
-                                    <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
-                                </div>
-
-                                <div class="p-field p-col">
                                     <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
+                                                formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                                 </div>
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
-
-                                <div class="p-field p-col">
-                                    <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
-                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
-                                </div>
 
                                 <div class="p-field p-col">
                                     <label for="nomAdherent">Nom <span class="required">*</span></label>
@@ -185,41 +185,26 @@
                                     <input id="prenomAdherent" type="text" formControlName="prenomAdherent" pInputText>
                                 </div>
 
-                            </div>
-
-                            <div class="p-fluid p-formgrid p-grid">
-
-
                                 <div class="p-field p-col">
                                     <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
                                     <input id="groupeAdherent" type="text" formControlName="numeroGroupe" pInputText>
                                 </div>
 
-                                <div class="p-field p-col">
-                                    <label for="policeAdherent">Numero police<span class="required">*</span></label>
-                                    <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText>
-                                </div>
-
-                                <div class="p-field p-col-4">
-                                    <label for="lastname2">Famille acte</label>
-                                    <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
-                                </div>
-
                             </div>
-
-
 
                             <div class="p-fluid p-formgrid p-grid">
 
                                 <div class="p-field p-col-4">
-                                    <label for="lastname2">Acte</label>
-                                    <p-dropdown dataKey="id" inputId="acte" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                                    <label for="policeAdherent">Numero police<span class="required">*</span></label>
+                                    <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText>
                                 </div>
+
                             </div>
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
-                                <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                                <button pButton [disabled]="!adherentSelected"
+                                        pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
 
@@ -231,14 +216,40 @@
 
 
                         <div formArrayName="prestation" *ngFor="let item of prestationForm.get('prestation')['controls']; let i = index;">
-                            <div [formGroupName]="i">
+                            <div [formGroup]="item">
 
                                 <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
 
                                     <div class="p-fluid p-formgrid p-grid">
 
                                         <div class="p-field p-col">
-                                            <label for="sousActe">SousActe <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="numeroFacture" >Numéro Facture<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <input id="numeroFacture" type="text" formControlName="numeroFacture" placeholder="numero de facture" pInputText>
+
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <label for="dateSoins">Date de soins <span style="color: red !important;">*</span></label>
+                                            <p-calendar id="dateSoins"   [showIcon]="true" dateFormat="dd/mm/yy" placeholder="date de Soins" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                                        </div>
+
+                                        <div class="p-field p-col">
+                                            <label for="familleActe">Famille acte</label>
+                                            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true"
+                                                        [options]="garanties" formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie()"></p-dropdown>
+                                        </div>
+
+                                        <div class="p-field p-col">
+                                            <label for="acte">Acte</label>
+                                            <p-dropdown dataKey="id" inputId="acte" [autoDisplayFirst]="false" [filter]="true" showClear="true"
+                                                        [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <label for="sousActe" id="sousActe">SousActe <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="sousActeListFilter"
                                                         formControlName="sousActe" placeholder="Select sous-acte"
@@ -246,7 +257,7 @@
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="sousActe">Pathologie <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="pathologie" id="pathologie">Pathologie <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="pathologieList"
                                                         formControlName="pathologie" placeholder="Select pathologie "
@@ -254,25 +265,25 @@
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="produit">Produit pharmaceutique<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="produitPharmaceutiqueList"
                                                         formControlName="produitPharmaceutique" placeholder="Select produit pharmaceutique "
                                                         optionLabel="libelle"></p-dropdown>
                                         </div>
                                         <div class="p-field p-col">
-                                            <label for="medecin">Prestataire<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="prestataire" id="prestataire">Prestataire<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="prestataireList"
                                                         formControlName="prestataire" placeholder="Select prestataire"
                                                         optionLabel="libelle"></p-dropdown>
                                         </div>
+
                                     </div>
 
                                     <div class="p-fluid p-formgrid p-grid">
-
                                         <div class="p-field p-col">
-                                            <label for="medecin">Medecin<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="medecin" id="medecin">Medecin<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="medecinList"
                                                         formControlName="medecin" placeholder="Select medecin"
@@ -280,56 +291,51 @@
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="nombreActe" id="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte" (onBlur)="calculDebours(i)"></p-inputNumber>
                                         </div>
-
                                         <div class="p-field p-col">
-                                            <label for="nombreActe">Cout unitaire <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="coutUnitaire" mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours(i)"></p-inputNumber>
                                         </div>
-
                                         <div class="p-field p-col">
-                                            <label for="nombreActe">Debours <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="debours" id="debours">Debours <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="debours" mode="decimal" locale="fr-FR"></p-inputNumber>
                                         </div>
 
                                     </div>
 
                                     <div class="p-fluid p-formgrid p-grid">
-
                                         <div class="p-field p-col">
-                                            <label for="nombreActe">Base remboursement<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="baseRemboursement" id="baseRemboursement">Base remboursement<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="baseRemboursement" mode="decimal" locale="fr-FR" placeholder="base de remboursement"></p-inputNumber>
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="sousActe">Taux <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <label for="taux" id="taux">Taux <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="taux" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="tauxList"
                                                         formControlName="taux" placeholder="Select taux"
                                                         optionLabel="taux"></p-dropdown>
                                         </div>
-
-                                        <div class="p-field p-col">
-                                            <label for="nombreActe">Montant remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                        <div class="p-field p-col-3">
+                                            <label for="montantRembourse" id="montantRembourse">Montant remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                         </div>
 
-                                        <div class="p-field p-col">
-                                            <label for="sousActe">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                        <div class="p-field p-col-3">
+                                            <label for="sort" id="sort">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="sort"  [filter]="true"
                                                         showClear="true" [options]="typeSort"
                                                         formControlName="sort"></p-dropdown>
                                         </div>
 
                                     </div>
-
                                     <div class="p-fluid p-formgrid p-grid">
-                                        <div class="p-field p-col">
-                                            <label for="observation">Observation</label>
-                                            <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
-                                        </div>
+                                    <div class="p-field p-col">
+                                        <label for="observation" id="observation">Observation</label>
+                                        <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
+                                    </div>
                                     </div>
 
                                     <div class="p-fluid p-formgrid p-grid">
@@ -351,7 +357,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!adherentSelected"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>

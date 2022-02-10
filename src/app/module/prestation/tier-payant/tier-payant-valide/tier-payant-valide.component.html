@@ -33,12 +33,11 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="numero" style="min-width:60px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="min-width:60px" >Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:100px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:60px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:60px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:60px">Reference bordereau<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="matricule" style="min-width:60px" >Matricule assuré<p-sortIcon field="matricule"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:175px">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="min-width:250px">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="dateDeclaration" style="min-width:60px">Date declaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
+                        <th pSortableColumn="referenceBordereau" style="min-width:60px">Reference bordereau<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -61,15 +60,13 @@
                         </td>
                         <td><span class="p-column-title" >{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
-                        <td><span class="p-column-title" >{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
-                        </td>
                         <td><span class="p-column-title" >{{tierPayant.referenceBordereau}}</span>
                         </td>
                         
                         <td>
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
-                            <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-danger p-mr-2" (click)="annulerPrestation(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
+                            <button pButton icon="pi pi-times" pTooltip="Dé-valider le sinistre" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(tierPayant)"></button>
                     </td>
                         
                         <!--
@@ -102,24 +99,19 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="width: 150px">Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px" >SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" >Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px" >Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="width: 150px">Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" >Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="width: 150px">montant rembourser <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" >Date de soins <p-sortIcon field="duree"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prestation>
                     <tr>
-                        <td>
-                            <p-tableCheckbox [value]="prestation"></p-tableCheckbox>
-                        </td>
 
                         <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
                         </td>
@@ -134,6 +126,8 @@
                         <td><span class="p-column-title">{{prestation.taux.taux}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.dateSoins}}</span>
                         </td>
                     </tr>
                 </ng-template>
