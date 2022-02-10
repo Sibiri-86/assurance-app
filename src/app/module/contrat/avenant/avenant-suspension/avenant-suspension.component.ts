@@ -170,6 +170,7 @@ export class AvenantSuspensionComponent implements OnInit {
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.SUSPENSION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
+    this.historiqueAvenant.exercice = this.exercice;
     this.historiqueAvenant.historiqueAvenantAdherants = this.adherantSuspendds;
     this.eventEmitterSuspension.emit(this.historiqueAvenant);
     this.init();

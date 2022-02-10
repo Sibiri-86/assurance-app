@@ -9,11 +9,11 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-6">
                                     <label for="debit">Date d'effet</label>
-                                    <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                                    <input id="debit" type="date" formControlName="debut" pInputText disabled="true" style="font-weight: bolder; color: green" />
                                 </div>
                                 <div class="p-field p-col-6">
                                     <label for="fin">Date d'échéance</label>
-                                    <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                                    <input style="font-weight: bolder; color: green" id="fin" type="date" formControlName="fin" pInputText disabled="true" />
                                 </div>
                             </div>
                         </form>
@@ -233,6 +233,7 @@
                 </div>
                 <div class="p-col-12">
                     <!--<app-avenant-groupe [obj]="obj" (groupeEvent)="obj = $event"></app-avenant-groupe>-->
+                    <!---->
                     <p-fieldset legend="Caracteristique" toggleable="true">
                         <form [formGroup]="groupeForm">
                             <h5></h5>
@@ -411,7 +412,7 @@
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
                                     [filter]="true" filterBy="libelle" [showClear]="true"
                                     placeholder="Choisir un groupe"
-                                    (onChange)="loadPlafondConfigBygroupe()" [style]="{'width': '100%'}">
+                                    (onChange)="loadPlafondConfigBygroupe(); getPlafondGroupeByGroupe()" [style]="{'width': '100%'}">
                         </p-dropdown>
                     </div>
                 </div>
@@ -423,6 +424,25 @@
                         <button pButton pRipple type="button" (click)="viderRecap()" label="Reinitialiser"></button>
                     </div>
                 </div>-->
+                <p-fieldset legend="Plafond groupe" toggleable="true">
+                    <form [formGroup]="plafondForm">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-4">
+                                <label for="plafond1">Plafond Annuel par famille</label>
+                                <p-inputNumber id="plafond1" inputId="integeronly" formControlName="plafondAnnuelleFamille"></p-inputNumber>
+                                <!--<input id="plafond1" type="text" formControlName="plafondAnnuelleFamille" pInputText>-->
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label for="plafond2">Plafond annuel par personne</label>
+                                <p-inputNumber id="plafond2" inputId="integeronly" formControlName="plafondAnnuellePersonne"></p-inputNumber>
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label for="plafond3">Plafond global internationnal</label>
+                                <p-inputNumber id="plafond3" inputId="integeronly" formControlName="plafondGlobalInternationnal"></p-inputNumber>
+                            </div>
+                        </div>
+                    </form>
+                </p-fieldset>
                 <p-table #dtConfigurationPlafond [value]="plafondFamilleActePlafongConfig" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
                     <ng-template pTemplate="header">
                         <tr>
@@ -543,7 +563,7 @@
                                         <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
-                                    <ng-template pTemplate="output" *ngIf="plafond.etat">
+                                    <ng-template pTemplate="output">
                                         {{plafond?.etat}}
                                     </ng-template>
                                 </p-cellEditor>
@@ -903,7 +923,7 @@
                                             <p-calendar  [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorparation"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant.dateIncorparation | formatTableValue : 'date'}}
+                                            {{historiqueAveantAdherant.dateIncor | formatTableValue : 'date'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -933,59 +953,6 @@
                             </tr>
                         </ng-template>
                     </p-table>
-
-                    <!--<p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
-                             [rowHover]="true" dataKey="id"
-                             styleClass="p-datatable-customers"
-                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
-                        <ng-template pTemplate="caption">
-                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                <h5 class="p-m-0"></h5>
-                                <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
-                        </span>
-                            </div>
-                        </ng-template>
-
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="width: 3rem">
-                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
-                                <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-                                <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                                <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
-                                <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
-                                <th></th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-historiqueAveantAdherant>
-                            <tr>
-                                <td>
-                                    <p-tableCheckbox [value]="historiqueAveantAdherant"></p-tableCheckbox>
-                                </td>
-                                <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom}}</span>
-
-                                </td>
-                                <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom}}</span>
-
-                                </td>
-                                <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
-
-                                </td>
-                                <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
-                                <td>
-
-                                </td>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="summary">
-                            <div class="p-d-flex p-ai-center p-jc-between">
-                                {{historiqueAveantAdherants ? historiqueAveantAdherants.length : 0 }} adherent(s) au total.
-                            </div>
-                        </ng-template>
-                    </p-table>-->
                 </div>
             </div>
         </p-tabPanel>

@@ -300,6 +300,7 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   findListeActualisee(police: Police): void {
+    console.log('police id === ' + police.id);
     this.historiqueAvenantAdherantService.getListActualisee(police.id).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;

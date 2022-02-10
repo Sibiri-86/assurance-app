@@ -2166,7 +2166,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.store.dispatch(featureActionGroupe.deleteGroupe(groupe));
   }
 
-  private loadAllPolice(): void {
+  loadAllPolice(): void {
     this.policeList$ = this.store.pipe(select(policeList));
     this.store.dispatch(loadPolice());
     this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
