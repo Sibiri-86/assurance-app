@@ -246,6 +246,13 @@
                                                            [formGroup]="groupeForm" [entityField]="'nom'">
                                     </app-entity-validation>
                                 </div>
+                                <div class="p-field p-col-4">
+                                    <label for="description">Description</label>
+                                    <input id="description" type="text" formControlName="description" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'description'">
+                                    </app-entity-validation>
+                                </div>
 
                                 <div class="p-field p-col-4">
                                     <label for="lastname2">Taux de couverture</label>
@@ -311,6 +318,7 @@
                                                 showClear="true" [options]="communeList" formControlName="commune"
                                                 optionLabel="libelle"></p-dropdown>
                                 </div>
+
                             </div>
                         </form>
                     </p-fieldset>

@@ -765,7 +765,14 @@ export class AvenantRenouvellementComponent implements OnInit {
             duree: group.duree,
             dateEffet: new Date(),
             typeDuree: {},
-            dateEcheance: group.dateEcheance
+            dateEcheance: group.dateEcheance,
+            numeroGroupe: group.numeroGroupe,
+            typePrime: group.typePrime,
+            adresse: group.adresse,
+            prime: group.prime,
+            police: group.police,
+            commune: group.commune,
+            description: group.description
         });
 
         this.primeForm.patchValue({

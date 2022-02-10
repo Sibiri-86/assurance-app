@@ -790,6 +790,7 @@ export class AvenantModificationComponent implements OnInit {
       adresse: group.adresse,
       prime: group.prime,
       police: group.police,
+      description: group.description
     });
 
     this.primeForm.patchValue({
