@@ -462,13 +462,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
     this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
-      if(value.id) {
+     // if(value.id) {
       //this.plafondGroupe = value;
       console.log(value);
       this.plafondForm.patchValue(value);
       /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
-      }
+      //}
 
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
