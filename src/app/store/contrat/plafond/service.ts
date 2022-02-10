@@ -9,6 +9,7 @@ import {Endpoints} from '../../../config/module.endpoints';
 import { Groupe } from "../groupe/model";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {createRequestOption} from '../../../module/util/loader-util';
+import {AdherentResearchReponse} from '../adherent/model';
 
 @Injectable({providedIn: 'root'})
 export class PlafondService {
@@ -114,6 +115,16 @@ private handleError<T>() {
         return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/sous-acte-groupe`,
             {params: createRequestOption({idGroupe}), observe: 'response'}
         );
+    }
+
+    getPlafondEnCours(numero: number): Observable<Array<PlafondFamilleActe>> {
+        // @FIXME: post request
+        if (numero && numero !== 0) {
+            return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/getPlafondByAssureId/${numero}`).pipe(
+                map((response: Array<PlafondFamilleActe>) => response)
+                // catchError(this.handleError())
+            );
+        }
     }
 }
 

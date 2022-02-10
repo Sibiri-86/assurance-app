@@ -163,7 +163,8 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
+                                                formControlName="dateDeclaration" appendTo="body"></p-calendar>
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
@@ -202,7 +203,8 @@
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
-                                <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                                <button pButton [disabled]="!adherentSelected"
+                                        pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
 
@@ -214,7 +216,7 @@
 
 
                         <div formArrayName="prestation" *ngFor="let item of prestationForm.get('prestation')['controls']; let i = index;">
-                            <div [formGroupName]="i">
+                            <div [formGroup]="item">
 
                                 <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
 
@@ -231,13 +233,15 @@
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="lastname2">Famille acte</label>
-                                            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                                            <label for="familleActe">Famille acte</label>
+                                            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true"
+                                                        [options]="garanties" formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie()"></p-dropdown>
                                         </div>
 
                                         <div class="p-field p-col">
-                                            <label for="lastname2">Acte</label>
-                                            <p-dropdown dataKey="id" inputId="acte" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                                            <label for="acte">Acte</label>
+                                            <p-dropdown dataKey="id" inputId="acte" [autoDisplayFirst]="false" [filter]="true" showClear="true"
+                                                        [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                                         </div>
 
 

@@ -178,4 +178,20 @@ this.actions$.pipe(
 )
 );
 
+    /* Recherche d'assuré pour la prestation: cas tier-payant*/
+    searchAssure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.searchAssureAndFamilleActe),
+            mergeMap(({numero}) =>
+                this.AdherentService.searchAssure(numero).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.selectedAdherentForSearch(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
+
 }

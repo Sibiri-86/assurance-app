@@ -1646,25 +1646,20 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /** verifier la date Effet du groupe avec celle de la police */
-  checkDateEffet(){
-     for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
-    this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
-    for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
-      this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
-      for (var k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
-        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
-        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
-      }
-    }
+  checkDateEffet(): void {
+    this.historiqueAvenantService.compareDate(this.groupeForm.get('dateEffet').value, this.police.dateEffet).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet du groupe ne peut pas être postérieure à celle de la police');
+            this.groupeForm.patchValue({dateEffet: null});
+          }
+        }
+    );
   }
-    if (this.groupeForm.get('dateEffet').value){
-      if (new Date(this.groupeForm.get('dateEffet').value).getTime() < new Date(this.police.dateEffet).getTime()){
-        this.valideDateEffet = false;
-        this.showToast("error", "INFORMATION", "la date effet du groupe doit etre superieure à celle de la police");
-      } else {
-        this.valideDateEffet = true;
-      }
-    }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   appliquerConfiguration() {

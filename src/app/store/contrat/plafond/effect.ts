@@ -192,4 +192,20 @@ this.actions$.pipe(
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
                 ));
+
+    /* Recherche de la famille d'acte auquel a droit un assuré*/
+    searchAssure = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadFamilleActeEnCours),
+            mergeMap(({numero}) =>
+                this.PlafondService.getPlafondEnCours(numero).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPlafondGroupeFamilleActe({plafondEnCours: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
 }

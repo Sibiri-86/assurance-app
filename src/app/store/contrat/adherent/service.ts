@@ -137,5 +137,15 @@ private handleError<T>() {
         );
     }
 
+    searchAssure(numero: number): Observable<AdherentResearchReponse> {
+        // @FIXME: post request
+        if (numero && numero !== 0) {
+            return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureByNumero/${numero}`).pipe(
+                map((response: AdherentResearchReponse) => response)
+                // catchError(this.handleError())
+            );
+        }
+    }
+
 }
 
