@@ -7,18 +7,19 @@ import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
   templateUrl: './app.topbar.component.html'
 })
 export class AppTopBarComponent {
-    name:string="";
-    role:string ="";
+    name = '';
+    role = '';
     constructor(public app: AppMainComponent, public keycloak: KeycloakService) {
       this.keycloak.loadUserProfile().then(profile => {
-        this.name =profile.firstName + " "+ profile.lastName;
-        if(profile['attributes'].role.length!=0){
-        this.role=profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+        this.name = profile.firstName + ' ' + profile.lastName;
+        if (profile['attributes'].role.length != 0){
+        this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
         }
       })
     }
 
-    lagout(){
-      this.keycloak.logout();
+    async lagout() {
+      console.log('deconnecter');
+      await this.keycloak.logout();
     }
 }

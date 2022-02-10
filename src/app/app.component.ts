@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
     ripple: boolean;
     destroy$: Subject<boolean> = new Subject<boolean>();
     callRefreshStartTime: number;
-    seconds:number;
+    seconds: number;
 
     constructor(private primengConfig: PrimeNGConfig, private router: Router, private keycloakService: KeycloakService) {
      }
