@@ -115,5 +115,11 @@ private handleError<T>() {
             {params: createRequestOption({idGroupe}), observe: 'response'}
         );
     }
+
+    getPlafondGroupeByGroupe(groupeId: string): Observable<HttpResponse<Plafond>> {
+        return this.http.get<PlafondSousActe>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/plafond-goupe-by-groupe`,
+            {params: createRequestOption({groupeId}), observe: 'response'}
+        );
+    }
 }
 

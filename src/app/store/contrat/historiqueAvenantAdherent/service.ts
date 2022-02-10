@@ -87,7 +87,7 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
     }
 
     getListActualisee(policeId: string): Observable<any> {
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/liste-actualisee`,
+        return this.http.get<any>( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/liste-actualisee`,
             {params: createRequestOption({policeId})}
         );
     }

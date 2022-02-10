@@ -75,6 +75,7 @@ export class AvenantResiliationComponent implements OnInit {
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RESILIATION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
+    this.historiqueAvenant.exercice = this.exercice;
     this.eventEmitterResiliation.emit(this.historiqueAvenant);
     this.init();
   }

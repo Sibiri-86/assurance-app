@@ -37,6 +37,8 @@ export interface HistoriqueAvenant {
     fraisAccessoires?: number;
     fraisBadges?: number;
     exercice?: Exercice;
+    dateSuspension?: Date;
+    dateResiliation?: Date;
 }
 
 export enum TypeEtat {

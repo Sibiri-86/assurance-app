@@ -3540,7 +3540,7 @@
               </div>
               <div class="p-col-2">
                   <button type="button" pButton pRipple label="Valider Prime" icon="pi pi-save" class="p-button p-button-success"
-                      (click)="validerPrime()">
+                      (click)="validerPrime()" [disabled]="historiqueAvenantPrimes[0].status">
                   </button>
               </div>
           </div>

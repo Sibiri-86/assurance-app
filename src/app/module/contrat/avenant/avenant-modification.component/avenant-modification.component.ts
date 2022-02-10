@@ -195,7 +195,7 @@ export class AvenantModificationComponent implements OnInit {
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
       private plafondService: PlafondService,
       private policeService: PoliceService,
-      private exerciceService: ExerciceService
+      private exerciceService: ExerciceService,
   ) {
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
@@ -785,6 +785,11 @@ export class AvenantModificationComponent implements OnInit {
       // typeDuree: {},
       dateEcheance: new Date(group.dateEcheance),
       commune: group.commune,
+      numeroGroupe: group.numeroGroupe,
+      typePrime: group.typePrime,
+      adresse: group.adresse,
+      prime: group.prime,
+      police: group.police,
     });
 
     this.primeForm.patchValue({
@@ -1023,9 +1028,10 @@ export class AvenantModificationComponent implements OnInit {
       });
     } */
     this.objet.groupe = this.groupeForm.value || this.groupeSelected;
-    this.objet.plafondGroupeActes = this.plafondActe;
-    this.objet.plafondFamilleActes = this.plafondFamilleActe;
-    this.objet.plafondGroupeSousActes = this.plafondSousActe;
+    this.objet.groupe.police = this.police;
+    this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
+    this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+    this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
     if (this.plafondForm.value) {
@@ -1036,8 +1042,9 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.objet.historiqueAvenant.exercice = this.exercice;
+    // this.objet.groupe = this.groupeForm.value;
     this.objet.groupe.prime = this.primeForm.get(['prime']).value;
-    this.objet.groupe.typePrime = this.primeForm.get(['typeprime']).value;
+    // this.objet.groupe.typePrime = this.primeForm.get(['typeprime']).value;
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
         this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
@@ -1157,13 +1164,13 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   loadPlafondConfigBygroupe() {
-    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
+    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
             (res) => {
               this.plafondFamilleActePlafongConfig = res.body;
               console.log(res);
             }
     );
-    this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
+    this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig?.id).subscribe(
         (res) => {
           this.plafondActePlafongConfig = res.body;
           this.plafondFamilleActePlafongConfig.forEach(pfapc => {
@@ -1171,7 +1178,7 @@ export class AvenantModificationComponent implements OnInit {
           });
         }
     );
-    this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
+    this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig?.id).subscribe(
         (res) => {
           this.plafondSousActePlafongConfig = res.body;
           this.plafondFamilleActePlafongConfig.forEach(pfapc => {
@@ -1311,5 +1318,20 @@ export class AvenantModificationComponent implements OnInit {
       psa.sousActe = sousActe;
       plafondActe.listeSousActe.push(psa);
     });
+  }
+
+  getPlafondGroupeByGroupe(): void {
+    this.plafondService.getPlafondGroupeByGroupe(this.groupePlafongConfig.id).subscribe(
+        (res) => {
+          if (res) {
+            this.plafondForm.patchValue({
+              domaine: res.body.domaine,
+              plafondAnnuelleFamille: res.body.plafondAnnuelleFamille,
+              plafondAnnuellePersonne: res.body.plafondAnnuellePersonne,
+              plafondGlobalInternationnal: res.body.plafondGlobalInternationnal
+            });
+          }
+        }
+    );
   }
 }
