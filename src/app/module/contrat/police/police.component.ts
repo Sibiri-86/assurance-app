@@ -469,7 +469,6 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
       //}
-
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }
     });

@@ -1,13 +1,14 @@
 import { PrefinancementState } from "./state";
 import * as featureActions from "./action";
 import { Action, createReducer, on } from "@ngrx/store";
-import { OrdreReglementList, PrefinancementList } from "./model";
+import { CheckPrefinancementReponse, OrdreReglementList, PrefinancementList } from "./model";
 import { ReportFile } from "../../contrat/police/model";
 
-const initialState : PrefinancementState = {
+const initialState: PrefinancementState = {
     prefinancementList: null,
     ordreReglementList: null,
-    reportFile: null
+    reportFile: null,
+    checkPrefinancementReponse: null
   };
   
 const featureReducer = createReducer(
@@ -20,6 +21,9 @@ const featureReducer = createReducer(
       })),
     on(featureActions.setReportPrestation, (state, payload: ReportFile) => ({
         ...state, reportFile: payload.reportFile
+      })),
+    on(featureActions.setCheckPrefinancement, (state, payload: CheckPrefinancementReponse) => ({
+        ...state, checkPrefinancementReponse: payload.prefinancementCheckReponse
       }))
   );
   

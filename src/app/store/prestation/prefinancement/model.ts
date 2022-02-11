@@ -4,6 +4,7 @@ import { Adherent } from '../../contrat/adherent/model';
 import { Police } from '../../contrat/police/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
+import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
 
@@ -30,7 +31,7 @@ export interface OrdreReglement {
 
 export interface Prefinancement {
     id?: string;
-    dateSoins?: Date;
+    //dateSoins?: Date;
     referenceBordereau?: string;
     dateSaisie?: Date;
     dateDeclaration?: Date;
@@ -53,8 +54,15 @@ export interface Prestation {
     sousActe?: SousActe;
     prestataire?: Prestataire;
     medecin?: Medecin;
+    /*ajout des autres informations*/
+    dateSoins?: Date;
+    produitPharmaceutique: Array<ProduitPharmaceutique>;
 }
 
-export interface PrefinancementList{
+export interface PrefinancementList {
     prefinancementDtoList: Array<Prefinancement>;
+}
+
+export interface CheckPrefinancementReponse {
+    prefinancementCheckReponse: Array<Prefinancement>;
 }

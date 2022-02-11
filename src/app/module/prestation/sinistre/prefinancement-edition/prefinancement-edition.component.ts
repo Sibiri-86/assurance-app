@@ -102,12 +102,14 @@ export class PrefinancementEditionComponent implements OnInit {
   prefinancementDtoList: Array<Prefinancement>;
   selectedPrefinancement: Prefinancement[];
   cols: any[];
+  tab: number[] = [];
   taux: Taux;
   displayPrestation = false;
   prestationListPrefinancement: Array<Prestation>;
   prestationListPrefinancementFilter: Array<Prestation>;
   report: Report = {};
   public defaultDate: Date;
+  checkControl = true;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -124,6 +126,15 @@ export class PrefinancementEditionComponent implements OnInit {
   }
 
    deleteItemPrestation(i: number) {
+    /**verifier si lelements est dans tab */
+    for (const f of this.tab){
+      if (f === i) {
+        this.tab.splice(i);
+      }
+    }
+    if (!this.tab.length) {
+      this.checkControl = true;
+    }
     this.prestation.removeAt(i);
    }
 
@@ -142,23 +153,24 @@ export class PrefinancementEditionComponent implements OnInit {
       prestataire: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
+      dateSoins: new FormControl(''),
+      acte: new FormControl(''),
       medecin: new FormControl()
     });
   }
 
   ngOnInit(): void {
-    //this.prestationList = [];
+    //this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse));
 
+    //this.prestationList = [];
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
       id: new FormControl(),
       referenceSinistreGarant: new FormControl(''),
       referenceBordereau: new FormControl(''),
       dateSaisie: new FormControl({value: '', disabled: true}),
-      dateSoins: new FormControl(''),
       dateDeclaration: new FormControl(''),
       matriculeAdherent: new FormControl(''),
-      acte: new FormControl(''),
       nomAdherent: new FormControl({value: '', disabled: true}),
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
@@ -319,11 +331,12 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
-    this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+    //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
     this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
     for (const pr of pref.prestation) {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
+    formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
@@ -363,7 +376,15 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prefinancementModel.dateSaisie = new Date();
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
+    /* executer le controle de la prestation */
     this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (!value) {
+        this.tab.push(i);
+        this.checkControl = false;
+      }
+    });
     this.prefinancementList = [];
     this.prefinancementModel = {};
   }
@@ -430,7 +451,7 @@ export class PrefinancementEditionComponent implements OnInit {
   addPrestation(){
     this.prefinancementModel.prestation = this.prestationList;
     this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
-    this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
+    //this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
     this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
@@ -490,4 +511,6 @@ export interface FraisReels {
   montantRembourse?: number;
   sort?: Sort;
   observation?: string;
+  dateSoins?: Date;
+  produitPharmaceutique: Array<ProduitPharmaceutique>;
 }

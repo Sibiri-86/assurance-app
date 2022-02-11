@@ -36,7 +36,6 @@
                         </th>
                         <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
@@ -52,9 +51,6 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
-                        
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSoins | formatTableValue : 'date'}}</span>
-                        </td>
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
                         </td>
@@ -64,13 +60,12 @@
                         <td>
                             <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
                         </td>
-                        
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 
                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(prefinancement)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
-                    </td>
+                        </td>
                         
                         <!--
                         <td>
@@ -82,7 +77,6 @@
                             <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
                         </td>
                         -->
-                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
@@ -94,7 +88,7 @@
         </div>  
         
         
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
@@ -106,6 +100,7 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
+                        <th pSortableColumn="numero" style="width: 150px">Date soins<p-sortIcon field="dateSoins"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="width: 150px">Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
@@ -121,7 +116,8 @@
                         <td>
                             <p-tableCheckbox [value]="prestation"></p-tableCheckbox>
                         </td>
-
+                        <td><span class="p-column-title">{{prestation.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
                         <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.nombreActe}}</span>
@@ -162,16 +158,11 @@
                     
                     <p-fieldset legend="Sinistre" toggleable="true">
                         
-                    <div class="p-fluid p-formgrid p-grid">
-
-                        <div class="p-field p-col">
-                            <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
-                            <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
-                        </div>
+                <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col">
-                        <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
-                        <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                        <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
+                        <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
                     </div>
                     
                     <div class="p-field p-col">
@@ -179,15 +170,14 @@
                         <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
                     </div>
                     
+                    <div class="p-field p-col">
+                        <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                        <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                     </div>
                     
-                    <div class="p-fluid p-formgrid p-grid">
-                        
-                        <div class="p-field p-col">
-                            <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
-                            <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
-                        </div>
-                        
+                </div>
+                    
+                <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="nomAdherent">Nom <span class="required">*</span></label>
                             <input id="nomAdherent" type="text" formControlName="nomAdherent" pInputText>
@@ -198,35 +188,17 @@
                             <input id="prenomAdherent" type="text" formControlName="prenomAdherent" pInputText>
                         </div>
                         
-                    </div>
-                    
-                    <div class="p-fluid p-formgrid p-grid">
-                        
-                        
-                        <div class="p-field p-col">
+                        <div class="p-field p-col-4">
                             <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
                             <input id="groupeAdherent" type="text" formControlName="numeroGroupe" pInputText>
                         </div>
                         
-                        <div class="p-field p-col">
-                            <label for="policeAdherent">Numero police<span class="required">*</span></label>
-                            <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText>
-                        </div>
-                        
-                        <div class="p-field p-col-4">
-                            <label for="lastname2">Famille acte</label>
-                            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
-                        </div>
-                        
                     </div>
                     
-                      
-                    
                     <div class="p-fluid p-formgrid p-grid">
-                        
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Acte</label>
-                            <p-dropdown dataKey="id" inputId="acte" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                            <label for="policeAdherent">Numero police<span class="required">*</span></label>
+                            <input id="policeAdherent" type="text" formControlName="numeroPolice" pInputText>
                         </div>
                     </div>
                     
@@ -247,8 +219,18 @@
                         <div [formGroupName]="i">
                             
                     <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
-                            
+                        
                         <div class="p-fluid p-formgrid p-grid">
+                            
+                            <div class="p-field p-col">
+                                <label for="lastname2">Famille acte</label>
+                                <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                            </div>
+                            
+                            <div class="p-field p-col">
+                                <label for="lastname2">Acte</label>
+                                <p-dropdown dataKey="id" inputId="acte" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                            </div>  
                             
                             <div class="p-field p-col">
                                 <label for="sousActe">SousActe <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -257,6 +239,9 @@
                                             formControlName="sousActe" placeholder="Select sous-acte"
                                             optionLabel="libelle"></p-dropdown>        
                             </div>
+                        </div>
+                            
+                        <div class="p-fluid p-formgrid p-grid">
                             
                             <div class="p-field p-col">
                                 <label for="sousActe">Pathologie <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -268,12 +253,16 @@
                             
                             <div class="p-field p-col">
                                 <label for="produit">Produit pharmaceutique<sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                <p-dropdown inputId="produitPharmaceutique" dataKey="id" [filter]="true"
+                                <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                             showClear="true" [options]="produitPharmaceutiqueList"
                                             formControlName="produitPharmaceutique" placeholder="Select produit pharmaceutique "
-                                            optionLabel="libelle"></p-dropdown>      
+                                            optionLabel="libelle"></p-multiSelect>  
                             </div>
                             
+                            <div class="p-field p-col">
+                                <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
+                                <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                            </div>
                             
                            </div>
                            
@@ -384,7 +373,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!adherentSelected" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length || !checkControl" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
             </form> 

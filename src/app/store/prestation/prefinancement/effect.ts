@@ -124,9 +124,14 @@ export class PrefinancementEffects {
             this.prefinancementService.checkPrefinancement(prefinancement).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    //featureActions.loadPrefinancement()
+                    //featureActions.setCheckPrefinancement(value)
                 ]),
-                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                catchError(error => {
+                    featureActions.setCheckPrefinancement(null);
+                    console.log('test');
+                    return of(GlobalConfig.setStatus(StatusEnum.error, null, error));
+                })
+                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));

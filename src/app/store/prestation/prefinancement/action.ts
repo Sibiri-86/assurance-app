@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { Report } from '../../contrat/police/model';
-import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
+import { CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
 export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
 export const setPrefinancement = createAction('[App Init] set Prefinancement',  props<PrefinancementList>());
 export const loadPrefinancement = createAction('[App Init] load prefinancement');
@@ -29,3 +29,4 @@ export const deletePrefinancement = createAction('[delete prefinancement] delete
 export const deleteOrdreDeReglement = createAction('[delete ordre de reglement] delete ordreReglement', props<{ordreReglement:
         Array<OrdreReglement>}>());
 export const checkPrefinancement = createAction('[App Init] Check Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
+export const setCheckPrefinancement = createAction('[App Init] Check Prefinancement reponse', props<CheckPrefinancementReponse>());
