@@ -1,4 +1,5 @@
 <div class="card">
+    <span style="color: red; font-size: 1.8em; text-align: center">{{message}}</span>
     <div class="p-grid">
         <!--<div class="p-fluid p-grid">
 
@@ -15,7 +16,7 @@
 
             <div class="p-field p-col-6"></div>
         </div>-->
-        <div class="p-field p-col-12">
+        <div class="p-field p-col-12" *ngIf="!isRenouv">
             <div class="p-field p-col-7">
                 <div class="p-field-checkbox">
                     <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel ?</label>
@@ -43,7 +44,7 @@
                 </div>
             </form>
         </div>
-        <div class="p-col-9">
+        <div class="p-col-9" *ngIf="!isRenouv">
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-4"><br>
                     <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"

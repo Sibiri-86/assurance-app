@@ -1983,14 +1983,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log(event);
   }
 
-  getAvenantRenouvellement(event: any): void {
+  getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;
-    const historiqueAvenant: HistoriqueAvenant = {};
-    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+    let historiqueAvenant: HistoriqueAvenant = {};
+    historiqueAvenant = event.historiqueAvenant;
     avenant.historiqueAvenant = historiqueAvenant;
     console.log('********************Avenant renouvellement************************');
     console.log(event);
-    this.historiqueAvenantService.postAvenant(avenant).subscribe(
+    this.historiqueAvenantService.postAvenant(event).subscribe(
         (res) => {
           console.log('***************RETOUR RENOUV********************');
           if (res) {
