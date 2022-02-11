@@ -21,11 +21,11 @@
             </p-fieldset>
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-4">
                             <label for="numero">Numéro de l'avenant chez le garant</label>
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-4">
                             <label for="dateAvenant">Date de l'avenant</label>
                             <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
                                         dateFormat="dd/mm/yy" inputId="calendar"
@@ -43,15 +43,23 @@
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
                         </div>-->
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-4">
                             <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
                                         [options]="demandeursList" formControlName="demandeur"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-4">
                             <label for="nom">Motif</label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText/>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisAccessoires">Total Frais Accessoires</label>
+                            <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisBadges">Total Frais Badges</label>
+                            <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
                         </div>
                     </div>
                 </form>
