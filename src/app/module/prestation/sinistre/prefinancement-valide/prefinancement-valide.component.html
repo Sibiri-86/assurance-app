@@ -34,7 +34,6 @@
                         <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="min-width:200px">Reference bordereau<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
@@ -52,8 +51,6 @@
                         <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{prefinancement.referenceBordereau}}</span>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSoins | formatTableValue : 'date'}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>

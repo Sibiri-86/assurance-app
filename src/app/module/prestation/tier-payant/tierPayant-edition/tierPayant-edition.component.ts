@@ -522,7 +522,6 @@ export class TierPayantEditionComponent implements OnInit {
 
 }
 
-
 export interface FraisReels {
     nombreActe?: string;
     coutUnitaire?: number;
@@ -534,4 +533,5 @@ export interface FraisReels {
     montantRembourse?: number;
     sort?: Sort;
     observation?: string;
+    produitPharmaceutique: Array<ProduitPharmaceutique>;
 }

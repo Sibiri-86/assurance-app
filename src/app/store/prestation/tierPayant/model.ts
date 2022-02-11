@@ -3,6 +3,7 @@ import { Adherent } from '../../contrat/adherent/model';
 import { Police } from '../../contrat/police/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
+import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
 import {OrdreReglement} from '../prefinancement/model';
@@ -50,6 +51,7 @@ export interface Prestation {
     prestataire?: Prestataire;
     medecin?: Medecin;
     dateSoins?: Date;
+    produitPharmaceutique: Array<ProduitPharmaceutique>;
 }
 
 export interface SinistreTierPayantList {
