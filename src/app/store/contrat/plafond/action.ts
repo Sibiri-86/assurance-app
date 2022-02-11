@@ -1,5 +1,5 @@
 import {props, createAction} from '@ngrx/store';
-import { PlafondFamilleActe } from '../../parametrage/plafond/model';
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import { Groupe } from '../groupe/model';
 import {Bareme, BaremeList, Plafond, PlafondConfig, PlafondGroupe, PlafondGroupeFamilleActeListe, PlafondList} from './model';
 import {Adherent} from '../adherent/model';
@@ -26,4 +26,13 @@ export const loadBaremeConfig = createAction('[App Init] load Bareme',  props<{t
 export const loadFamilleActeEnCours = createAction('[App Init] load Famille Acte en Cours',
     props<{numero: number}>());
 export const setPlafondGroupeFamilleActe = createAction('[App Init] set Plafond Groupe Famille Acte',
-    props<{plafondEnCours: PlafondFamilleActe[]}>());
+    props<{plafondEnCours: Array<PlafondFamilleActe>}>());
+export const loadActeEnCours = createAction('[App Init] load Acte en Cours',
+    props<{idPGFA: string}>());
+export const setPlafondGroupeActe = createAction('[App Init] set Plafond Groupe Acte',
+    props<{plafondActeEnCours: Array<PlafondActe>}>());
+
+export const loadSousActeEnCours = createAction('[App Init] load Sous Acte en Cours',
+    props<{idPGA: string}>());
+export const setPlafondGroupeSousActe = createAction('[App Init] set Plafond Groupe Sous Acte',
+    props<{plafondSousActeEnCours: Array<PlafondSousActe>}>());
