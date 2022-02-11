@@ -754,7 +754,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     setGroupeAndPrime(group: Groupe): void {
         console.log('++++  group.prime ++++');
-        console.log(group.prime);
+        console.log(group);
         this.groupeForm.patchValue({
             id: group?.id || null,
             libelle: group?.libelle,
@@ -780,7 +780,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             primeEnfant: group.prime?.primeEnfant,
             primeFamille: group.prime?.primeFamille,
             primeAdulte: group.prime?.primeAdulte,
-            primePersonne: group.prime.primeAdulte,
+            // primePersonne: group.prime.primeEmploye,
             primeAnnuelle: group.prime?.primeAnnuelle,
         });
         // this.selectedTypePrime = group.prime.typePrime;
@@ -993,6 +993,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.exercice = this.exercice;
         this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
+        this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
+        this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
