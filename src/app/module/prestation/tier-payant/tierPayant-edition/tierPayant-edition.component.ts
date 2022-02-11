@@ -522,7 +522,6 @@ export class TierPayantEditionComponent implements OnInit {
 
 }
 
-
 export interface FraisReels {
     nombreActe?: string;
     coutUnitaire?: number;
