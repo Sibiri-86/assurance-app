@@ -264,7 +264,9 @@ export class AvenantRenouvellementComponent implements OnInit {
             dateEffet: new FormControl(null, ),
             dateEcheance: new FormControl(null, ),
             observation: new FormControl(null, [Validators.required]),
-            demandeur: new FormControl(null, [Validators.required])
+            demandeur: new FormControl(null, [Validators.required]),
+            fraisBadges: new FormControl(null, [Validators.required]),
+            fraisAccessoires: new FormControl(null, [Validators.required]),
         });
 
         this.entityValidations = [
