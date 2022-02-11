@@ -1117,6 +1117,10 @@
                         <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondAnnuelleFamille" (blur) ='saisiePrimeFamille()'></p-inputNumber>
                     </div>
 
+                    <div class="p-field p-col">
+                        <label for="plafondGlobalEvacuationSanitaire">Plafond global d'évacuation sanitaire</label>
+                        <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondGlobalEvacuationSanitaire"></p-inputNumber>
+                    </div>
                     <div class="p-field p-col" *ngIf="isInternationalGroupe">
                         <label for="montantPrimeEnfant">Plafond global international</label>
                         <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondGlobalInternationnal"></p-inputNumber>

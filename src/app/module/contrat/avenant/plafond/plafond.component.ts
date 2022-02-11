@@ -21,7 +21,8 @@ export class PlafondComponent implements OnInit {
       // domaine: new FormControl({}),
       plafondAnnuelleFamille: new FormControl(''),
       plafondAnnuellePersonne: new FormControl(''),
-      plafondGlobalInternationnal: new FormControl('')
+      plafondGlobalInternationnal: new FormControl(''),
+      plafondGlobalEvacuationSanitaire: new FormControl('')
     });
   }
 

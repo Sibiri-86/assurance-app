@@ -12,6 +12,7 @@ export interface Plafond {
     plafondAnnuellePersonne?: number;
     plafondFamilleActe?: Array<PlafondFamilleActe>;
     groupe?: Groupe;
+    plafondGlobalEvacuationSanitaire?: number;
 }
 
 export interface PlafondConfig {

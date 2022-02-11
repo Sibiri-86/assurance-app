@@ -1029,8 +1029,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     deleteAdherant(historiqueAvenant: HistoriqueAvenant) {
         console.log('********retour***********');
         console.log(historiqueAvenant);
-        this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherants;
-        this.objet.historiqueAvenantAdherants = historiqueAvenant.historiqueAvenantAdherant1s;
+        this.objet.historiqueAvenantAdherants = historiqueAvenant.historiqueAvenantAdherants;
+        // this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherant1s;
     }
 
     getNewDate(value: number): Date {
@@ -1072,31 +1072,33 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.messageService.add({severity: severite, summary: resume, detail: detaile});
     }
     loadPlafondConfigBygroupe() {
-        this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
-            (res) => {
-                this.plafondFamilleActePlafongConfig = res.body;
-                console.log(res);
-            }
-        );
-        this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
-            (res) => {
-                this.plafondActePlafongConfig = res.body;
-                // this.plafondFamilleActePlafongConfig.forEach(pfapc => {
+        if (this.groupePlafongConfig) {
+            this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
+                (res) => {
+                    this.plafondFamilleActePlafongConfig = res.body;
+                    console.log(res);
+                }
+            );
+            this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
+                (res) => {
+                    this.plafondActePlafongConfig = res.body;
+                    // this.plafondFamilleActePlafongConfig.forEach(pfapc => {
                     // pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.)
-                // });
-            }
-        );
-        this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
-            (res) => {
-                this.plafondSousActePlafongConfig = res.body;
-                this.plafondFamilleActePlafongConfig.forEach(pfapc => {
-                    this.plafondActePlafongConfig.forEach(papc => {
-                        papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
+                    // });
+                }
+            );
+            this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
+                (res) => {
+                    this.plafondSousActePlafongConfig = res.body;
+                    this.plafondFamilleActePlafongConfig.forEach(pfapc => {
+                        this.plafondActePlafongConfig.forEach(papc => {
+                            papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
+                        });
+                        pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.acte.libelleTypeGarantie === pfapc.garantie.libelle);
                     });
-                    pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.acte.libelleTypeGarantie === pfapc.garantie.libelle);
-                });
-            }
-        );
+                }
+            );
+        }
     }
     changeTypeDuree(){
         this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
