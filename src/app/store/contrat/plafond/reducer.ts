@@ -8,7 +8,9 @@ const initialState : PlafondState = {
   plafondGroupe: null,
   baremeList: null,
   plafondConfig: null,
-  plafondGroupeFamilleActeListe: null
+  plafondGroupeFamilleActeListe: null,
+  plafondGroupeActeListe: null,
+  plafondGroupeSousActeListe: null
 };
 
 const featureReducer = createReducer(
@@ -26,7 +28,13 @@ const featureReducer = createReducer(
     ...state, plafondConfig: payload.dtoList
   })),
     on(featureActions.setPlafondGroupeFamilleActe, (state, payload) => ({
-    ...state, plafondEnCours: payload.plafondEnCours
+    ...state, plafondGroupeFamilleActeListe: payload.plafondEnCours
+  })),
+    on(featureActions.setPlafondGroupeActe, (state, payload) => ({
+    ...state, plafondGroupeActeListe: payload.plafondActeEnCours
+  })),
+    on(featureActions.setPlafondGroupeSousActe, (state, payload) => ({
+    ...state, plafondGroupeSousActeListe: payload.plafondSousActeEnCours
   }))
 );
 

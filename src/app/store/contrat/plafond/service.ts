@@ -127,6 +127,22 @@ private handleError<T>() {
         }
       }
 
+      getPlafondActeEnCours(idPGFA: string): Observable<Array<PlafondActe>> {
+        // @FIXME: post request
+            return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeActesByPlafondFamilleActeId/${idPGFA}`).pipe(
+                map((response: Array<PlafondActe>) => response)
+                // catchError(this.handleError())
+            );
+      }
+
+      getPlafondSousActeEnCours(idPGA: string): Observable<Array<PlafondSousActe>> {
+        // @FIXME: post request
+            return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeSousActesByPlafondActeId/${idPGA}`).pipe(
+                map((response: Array<PlafondSousActe>) => response)
+                // catchError(this.handleError())
+            );
+      }
+
     getPlafondGroupeByGroupe(groupeId: string): Observable<HttpResponse<Plafond>> {
         return this.http.get<PlafondSousActe>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/plafond-goupe-by-groupe`,
             {params: createRequestOption({groupeId}), observe: 'response'}

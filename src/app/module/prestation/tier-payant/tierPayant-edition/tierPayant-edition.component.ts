@@ -60,7 +60,7 @@ import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharm
 import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
 import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
-import {PlafondFamilleActe} from '../../../../store/parametrage/plafond/model';
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 
 
@@ -110,7 +110,12 @@ export class TierPayantEditionComponent implements OnInit {
     TierPayantSelected: SinistreTierPayant[];
     prestationListPrefinancementFilter: Array<Prestation>;
     familleActeEnCours$: Observable<PlafondFamilleActe[]>;
-    familleActeEnCours: PlafondFamilleActe[];
+    familleActeEnCours: Array<PlafondFamilleActe>;
+    familleActeEnCour: PlafondFamilleActe;
+    acteEnCours$: Observable<PlafondActe[]>;
+    acteEnCours: Array<PlafondActe>;
+    sousActeEnCours$: Observable<PlafondSousActe[]>;
+    sousActeEnCours: Array<PlafondSousActe>;
 
 
 
@@ -284,8 +289,16 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     selectActe(event){
-        console.log(event);
-        this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+        this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
+        this.store.dispatch(featureActionPlafond.loadSousActeEnCours({idPGA: event.value.acte.id}));
+        console.log('++++++++++++++++++++++++++++++++++++event.value.acte.id+++', event.value.acte.id);
+        this.sousActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
+            if (value) {
+                this.sousActeEnCours = value.slice();
+                console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.sousActeEnCours);
+            }
+        });
     }
 
     imprimer(pref: SinistreTierPayant) {
@@ -352,6 +365,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
         this.store.dispatch(featureActionPlafond.loadFamilleActeEnCours({numero: event.target.value}));
         this.familleActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
             if (value) {
                 this.familleActeEnCours = value.slice();
                 console.log('++++++++++++++++++++++++++++++++++++familleActeEnCours+++', this.familleActeEnCours);
@@ -368,9 +382,25 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
     }
 
-    changeGarantie(garantie) {
-        console.log(garantie);
-        this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+    changeGarantie(event) {
+        this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
+        this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
+        console.log('++++++++++++++++++++++++++++++++++++item+++', event.value.garantie.id);
+        this.acteEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
+            if (value) {
+                this.acteEnCours = value.slice();
+                console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
+            }
+        });
+    }
+
+    getfamilleActeEnCourId(): string {
+        if (this.familleActeEnCour !== null) {
+            return this.familleActeEnCour?.id;
+        } else {
+            return null;
+        }
     }
 
     newRowPrestation() {

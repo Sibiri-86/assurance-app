@@ -208,4 +208,36 @@ this.actions$.pipe(
             )
         )
     );
+
+    /* Recherche de l'acte auquel a droit un assuré*/
+    searchAssureActe = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadActeEnCours),
+            mergeMap(({idPGFA}) =>
+                this.PlafondService.getPlafondActeEnCours(idPGFA).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPlafondGroupeActe({plafondActeEnCours: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
+
+    /* Recherche du sous-acte auquel a droit un assuré*/
+    searchAssureSousActe = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadSousActeEnCours),
+            mergeMap(({idPGA}) =>
+                this.PlafondService.getPlafondSousActeEnCours(idPGA).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPlafondGroupeSousActe({plafondSousActeEnCours: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
 }
