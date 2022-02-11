@@ -534,4 +534,5 @@ export interface FraisReels {
     montantRembourse?: number;
     sort?: Sort;
     observation?: string;
+    produitPharmaceutique: Array<ProduitPharmaceutique>;
 }
