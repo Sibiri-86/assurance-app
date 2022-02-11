@@ -71,6 +71,7 @@ export class AvenantRetraitComponent implements OnInit {
   private curentGroupe: Groupe;
   customForm: FormGroup;
   isNewGroupe = false;
+  @Input() message: string;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -186,30 +187,29 @@ export class AvenantRetraitComponent implements OnInit {
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
     // const historiqueAvenant: HistoriqueAvenant = {};
-    this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
-    this.historiqueAvenant.numero = this.myForm.get('numero').value;
-    this.historiqueAvenant.groupe = this.groupe;
-    this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
-    this.historiqueAvenant.exercice = this.exercice;
-    switch (this.myForm.get('demandeur').value.value) {
-      case TypeDemandeur.GARANT:
-        this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
-        break;
-      case TypeDemandeur.SOUSCRIPTEUR:
-        this.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
-        break;
-      case TypeDemandeur.VIMSO:
-        this.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
-        break;
-      default: break;
+    if (!this.isRenouv) {
+      this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+      this.historiqueAvenant.numero = this.myForm.get('numero').value;
+      this.historiqueAvenant.groupe = this.groupe;
+      this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      this.historiqueAvenant.exercice = this.exercice;
+      switch (this.myForm.get('demandeur').value.value) {
+        case TypeDemandeur.GARANT:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+          break;
+        case TypeDemandeur.SOUSCRIPTEUR:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+          break;
+        case TypeDemandeur.VIMSO:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
+          break;
+        default:
+          break;
+      }
+      this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherants.filter(e => e.selected);
+    } else {
+      this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherants;
     }
-    // this.adherantDeleteds.forEach(haa => {
-      // haa.deleted = true;
-      // haa.adherent.groupe = this.groupe;
-      // haa.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT; historiqueAvenantAdherants
-    // });
-    // this.historiqueAvenant.historiqueAvenantAdherants = this.adherantDeleteds;
-    this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherants.filter(e => e.selected);
     console.log('******* liste des adhérents à supprimer **************');
     console.log(this.historiqueAvenant);
     this.adherentFamilleEvent.emit(this.historiqueAvenant);

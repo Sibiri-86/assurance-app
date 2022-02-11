@@ -4,21 +4,22 @@ import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {Groupe} from '../../../../store/contrat/groupe/model';
 import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
-import {loadAdherent} from '../../../../store/contrat/adherent/actions';
+import {loadListeActualisee} from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
-    AvenantModification,
     HistoriqueAvenant,
-    HistoriqueAvenantAdherant, TypeDemandeur, TypeHistoriqueAvenant
+    HistoriqueAvenantAdherant,
+    TypeDemandeur,
+    TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
-import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import * as genreSelector from '../../../../store/parametrage/genre/selector';
 import {loadGenre} from '../../../../store/parametrage/genre/actions';
@@ -58,7 +59,6 @@ import {SecteurActivite} from '../../../../store/parametrage/secteur-activite/mo
 import {DimensionPeriode} from '../../../../store/parametrage/dimension-periode/model';
 import * as featureActionsPlafond from '../../../../store/contrat/plafond/action';
 import {Plafond} from '../../../../store/contrat/plafond/model';
-import * as policeSelector from '../../../../store/contrat/police/selector';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {loadGarantie} from '../../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
@@ -69,16 +69,12 @@ import {Taux} from '../../../../store/parametrage/taux/model';
 import * as territorialiteSelector from '../../../../store/parametrage/territorialite/selector';
 import {loadTerritorialite} from '../../../../store/parametrage/territorialite/actions';
 import {Territorialite} from '../../../../store/parametrage/territorialite/model';
-import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 import {PlafondService} from '../../../../store/contrat/plafond/service';
 import {TypeBareme} from '../../../common/models/bareme.enum';
 import {Status as Etat} from '../../../common/models/etat.enum';
 import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model';
-import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
 import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-assure/selector';
-import { loadListeActualisee } from '../../../../store/contrat/adherent/actions';
-import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
@@ -265,8 +261,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.myForm = this.formBuilder.group({
             numero: new FormControl(null),
             dateAvenant: new FormControl(null, [Validators.required]),
-            dateEffet: new FormControl(null, [Validators.required]),
-            dateEcheance: new FormControl(null, [Validators.required]),
+            dateEffet: new FormControl(null, ),
+            dateEcheance: new FormControl(null, ),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required])
         });
@@ -763,9 +759,16 @@ export class AvenantRenouvellementComponent implements OnInit {
             taux: group?.taux,
             territorialite: group.territorialite || [],
             duree: group.duree,
-            dateEffet: new Date(),
+            dateEffet: new Date(group.dateEffet),
             typeDuree: {},
-            dateEcheance: group.dateEcheance
+            dateEcheance: new Date(group.dateEcheance),
+            numeroGroupe: group.numeroGroupe,
+            typePrime: group?.typePrime,
+            adresse: group?.adresse,
+            prime: group?.prime,
+            police: group?.police,
+            commune: group?.commune,
+            description: group?.description
         });
 
         this.primeForm.patchValue({
@@ -936,9 +939,37 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.plafondSousActe.forEach(pa => {
             pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
         });
-        this.objet.plafondGroupeActes = this.plafondActe;
-        this.objet.plafondFamilleActes = this.plafondFamilleActe;
-        this.objet.plafondGroupeSousActes = this.plafondSousActe;
+        this.plafondFamilleActePlafongConfig.forEach(pfa => {
+            if (pfa.montantPlafond) {
+                pfa.montantPlafond = parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+            }
+            if (pfa.nombre) {
+                pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
+            }
+            if (pfa.listeActe) {
+                pfa.listeActe.forEach(pa => {
+                    if (pa.nombre) {
+                        pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
+                    }
+                    if (pa.montantPlafond) {
+                        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+                    }
+                    if (pa.listeSousActe) {
+                        pa.listeSousActe.forEach(psa => {
+                            if (psa.nombre) {
+                                psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
+                            }
+                            if (psa.montantPlafond) {
+                                psa.montantPlafond = parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
+        this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+        this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
         this.objet.police = this.police;
         // this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
         /* this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
@@ -958,6 +989,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
         this.historiqueAvenant.exercice = this.exercice;
+        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+        this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
@@ -1086,6 +1119,9 @@ export class AvenantRenouvellementComponent implements OnInit {
                                         fin: new Date(this.exercice.fin),
                                         actived: this.exercice.actived,
                                         police: this.exercice.police
+                                    });
+                                    this.myForm.patchValue({
+                                        dateAvenant: new Date(response.body.debut)
                                     });
                                 }
                             }

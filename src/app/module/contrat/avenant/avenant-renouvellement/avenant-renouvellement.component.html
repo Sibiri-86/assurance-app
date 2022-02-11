@@ -26,12 +26,12 @@
                             <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="dateIncorparation">Date de l'avenant</label>
-                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                            <label for="dateAvenant">Date de l'avenant</label>
+                            <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
                         </div>
-                        <div class="p-field p-col-6">
+                        <!--<div class="p-field p-col-6">
                             <label for="dateEffetA">Date d'effet du renouvellement</label>
                             <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
                                         dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
@@ -42,7 +42,7 @@
                             <p-calendar id="dateEcheance" [showIcon]="true" formControlName="dateEcheance"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
-                        </div>
+                        </div>-->
                         <div class="p-field p-col-6">
                             <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
@@ -238,6 +238,14 @@
                                     <input id="nom" type="text" formControlName="libelle" pInputText>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'nom'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="description">Description</label>
+                                    <input id="description" type="text" formControlName="description" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'description'">
                                     </app-entity-validation>
                                 </div>
 
@@ -822,7 +830,9 @@
             <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
-            <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
+            <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
+            [message]="'Veuillier selectionner les adherents à supprimer'">
+            </app-avenant-retrait>
         </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
             <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
