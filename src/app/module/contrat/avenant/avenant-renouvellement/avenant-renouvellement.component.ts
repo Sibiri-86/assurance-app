@@ -783,6 +783,8 @@ export class AvenantRenouvellementComponent implements OnInit {
             // primePersonne: group.prime.primeEmploye,
             primeAnnuelle: group.prime?.primeAnnuelle,
         });
+        this.selectedTypePrime = group.typePrime;
+        console.log(this.groupeForm.value);
         // this.selectedTypePrime = group.prime.typePrime;
     }
 
