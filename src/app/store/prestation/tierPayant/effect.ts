@@ -177,16 +177,78 @@ export class TierPayantEffects {
 
     /* Valider ordre de reglement */
 
-    updateETatValiderOrdreReglement$ = createEffect(() =>
+    updateEtatValiderOrdreReglement$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.validerTierPayantOrdreReglement),
             mergeMap(({ordre, etat}) =>
                 this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, etat).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadOrdreReglementTierPayant
+                        featureActions.loadOrdreReglementTierPayant()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    loadReglementValide$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantOrdreReglementValide),
+            mergeMap(() =>
+                this.tierPayantService.$getTierPayantOrdreReglementValide().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    updateETatDeValiderOrdreReglement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deValiderOrdreReglement),
+            mergeMap(({ordre, etat}) =>
+                this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, etat).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayantOrdreReglementValide()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    /** delete ordre de reglement */
+    deleteOrdreDeReglement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteTierPayantOrdreDeReglement),
+            mergeMap(({ordreReglement}) =>
+                this.tierPayantService.deleteOrdreReglement(ordreReglement).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadOrdreReglementTierPayant()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+    checkTierPayant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.checkTierPayant),
+            mergeMap(({tierPayant}) =>
+                this.tierPayantService.checkTierPayant(tierPayant).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        // featureActions.setCheckPrefinancement(value)
+                    ]),
+                    catchError(error => {
+                        featureActions.setTierPayantResponse(null);
+                        console.log('test');
+                        return of(GlobalConfig.setStatus(StatusEnum.error, null, error));
+                    })
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));

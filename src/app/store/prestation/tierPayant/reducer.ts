@@ -1,13 +1,15 @@
 import {SinistreTierPayantState} from './state';
 import * as featureActions from './action';
 import { Action, createReducer, on } from '@ngrx/store';
-import {OrdreReglementTierPayantList, SinistreTierPayantList} from './model';
+import {CheckTierPayantReponse, OrdreReglementTierPayantList, SinistreTierPayantList} from './model';
 import {ReportFile} from '../../contrat/police/model';
+import {CheckPrefinancementReponse, OrdreReglementList} from '../prefinancement/model';
 
 const initialState: SinistreTierPayantState = {
     sinsitreTierPayantList: null,
     reportFile: null,
     ordreReglementTierPayantList: null,
+    checkTierPayantReponse: null,
   };
 
 const featureReducer = createReducer(
@@ -20,6 +22,9 @@ const featureReducer = createReducer(
       })),
     on(featureActions.setReportTierPayant, (state, payload: ReportFile) => ({
         ...state, reportFile: payload.reportFile
+    })),
+    on(featureActions.setTierPayantResponse, (state, payload: CheckTierPayantReponse) => ({
+        ...state, checkTierPayantReponse: payload.TierPayantCheckReponse
     }))
   );
 export function reducer(state: SinistreTierPayantState | undefined, action: Action) {

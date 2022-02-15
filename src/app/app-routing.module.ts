@@ -53,6 +53,7 @@ import { SouscripteurComponent } from './module/contrat/souscripteur/souscripteu
 import {TierPayantEditionComponent} from './module/prestation/tier-payant/tierPayant-edition/tierPayant-edition.component';
 import {TierPayantValideComponent} from './module/prestation/tier-payant/tier-payant-valide/tier-payant-valide.component';
 import {OrdreReglementTierPayantEditionComponent} from './module/prestation/tier-payant/ordre-reglement-edition/ordre-reglement-tier-payant-edition.component';
+import {TierPayantOrdreReglementValideComponent} from './module/prestation/tier-payant/Tier-Payant-ordre-reglement-valide/tier-payant-ordre-reglement-valide.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -111,6 +112,7 @@ import {OrdreReglementTierPayantEditionComponent} from './module/prestation/tier
                     {path: 'prestation/tierPayant', component: TierPayantEditionComponent},
                     {path: 'prestation/tierPayant/valide', component: TierPayantValideComponent},
                     {path: 'prestation/tierPayant/ordre-reglement', component: OrdreReglementTierPayantEditionComponent},
+                    {path: 'prestation/tierPayant/ordre-reglement/valide', component: TierPayantOrdreReglementValideComponent},
                 ]
             },
             {path: 'error', component: AppErrorComponent},
