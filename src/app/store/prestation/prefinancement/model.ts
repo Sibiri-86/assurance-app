@@ -53,6 +53,7 @@ export interface Prestation {
     observation?: string;
     sousActe?: SousActe;
     prestataire?: Prestataire;
+    centreExecutant?: Prestataire;
     medecin?: Medecin;
     /*ajout des autres informations*/
     dateSoins?: Date;
@@ -63,6 +64,12 @@ export interface PrefinancementList {
     prefinancementDtoList: Array<Prefinancement>;
 }
 
+export interface CheckPrefinancementResult {
+montantRembourse?: number;
+code?: number;
+message?: string;
+}
+
 export interface CheckPrefinancementReponse {
-    prefinancementCheckReponse: Array<Prefinancement>;
+    list: Array<CheckPrefinancementResult>;
 }

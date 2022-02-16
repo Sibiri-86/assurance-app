@@ -83,6 +83,8 @@ export class PrefinancementEditionComponent implements OnInit {
   acteList: Array<Acte>;
   prestataireList$: Observable<Array<Prestataire>>;
   prestataireList: Array<Prestataire>;
+  prestatairePrescripteur: Array<Prestataire>;
+  prestataireExecutant: Array<Prestataire>;
   medecinList$: Observable<Array<Medecin>>;
   medecinList: Array<Medecin>;
   pathologieList$: Observable<Array<Pathologie>>;
@@ -141,20 +143,21 @@ export class PrefinancementEditionComponent implements OnInit {
    createItem(): FormGroup {
     return this.formBuilder.group({
       id: new FormControl(),
-      nombreActe: new FormControl(),
-      coutUnitaire: new FormControl(),
-      debours: new FormControl({disabled: true}),
-      sousActe: new FormControl(),
-      baseRemboursement: new FormControl({disabled: true}),
-      taux: new FormControl({disabled: true}),
-      montantRembourse: new FormControl({disabled: true}),
+      nombreActe: new FormControl('', [Validators.required]),
+      coutUnitaire: new FormControl('', [Validators.required]),
+      debours: new FormControl(),
+      sousActe: new FormControl([Validators.required]),
+      baseRemboursement: new FormControl(),
+      taux: new FormControl(),
+      montantRembourse: new FormControl(),
       sort: new FormControl(),
       observation: new FormControl(),
       prestataire: new FormControl(),
+      centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
-      dateSoins: new FormControl(''),
-      acte: new FormControl(''),
+      dateSoins: new FormControl('', [Validators.required]),
+      acte: new FormControl(),
       medecin: new FormControl()
     });
   }
@@ -259,6 +262,8 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.prestataireList = value.slice();
+        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire === 'Clinique');
+        this.prestataireExecutant = this.prestataireList.filter(ele => ele.libelleTypePrestataire !== 'Clinique');
       }
     });
 
@@ -337,6 +342,10 @@ export class PrefinancementEditionComponent implements OnInit {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
     formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+    formPrestation.get('debours').setValue(pr.debours);
+    formPrestation.get('taux').setValue(pr.taux);
+    formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+    formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
@@ -380,9 +389,23 @@ export class PrefinancementEditionComponent implements OnInit {
     this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
+
+
+
       if (!value) {
         this.tab.push(i);
         this.checkControl = false;
+        // mettre le montant à Zero pour non rembourser.
+        myForm.patchValue({montantRembourse: 0});
+      } else {
+        for (const f of this.tab){
+          if (f === i) {
+            this.tab.splice(i);
+          }
+        }
+        if (!this.tab.length) {
+          this.checkControl = true;
+        }
       }
     });
     this.prefinancementList = [];
