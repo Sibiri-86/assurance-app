@@ -2019,7 +2019,8 @@
                                 <td colspan="2">
                                     <div class="p-grid p-mt-1">
                                         <div class="p-col- p-mr-2">
-                                            <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide)" [(ngModel)]="rowdata.valide"></p-inputSwitch>
+                                            <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide)" [(ngModel)]="rowdata.valide"
+                                                           [disabled]="!disableAvenant(rowdata)"></p-inputSwitch>
                                         </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"

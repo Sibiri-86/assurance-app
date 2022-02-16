@@ -100,21 +100,21 @@ import {
   AvenantModification,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
-  HistoriqueAvenantList, HistoriqueAvenantPrime,
+  HistoriqueAvenantList,
+  HistoriqueAvenantPrime,
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
   HistoriquePlafondSousActe,
+  TypeDemandeur,
   TypeHistoriqueAvenant,
 } from '../../../store/contrat/historiqueAvenant/model';
 import {loadProfession} from '../../../store/parametrage/profession/actions';
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 import {HistoriqueAvenantAdherentService} from '../../../store/contrat/historiqueAvenantAdherent/service';
-import {HistoriqueAvenantAdherentList} from '../../../store/contrat/historiqueAvenantAdherent/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
 import {printPdfFile, removeBlanks} from '../../util/common-util';
 import {AdherentService} from '../../../store/contrat/adherent/service';
-import {historiqueAvenantListWithoutActive} from '../../../store/contrat/historiqueAvenant/selector';
 import * as exerciceSelector from '../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
 
@@ -1471,13 +1471,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('**************HistoriqueAvenan-----t***------*************');
     console.log(historiqueAvenant);
     this.historiqueAvenant = historiqueAvenant;
-    // this.historiqueAvenant.police = this.policeItem;
-    // this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenant.id = null;
-    // this.historiqueAvenant.groupe = this.curentGroupe;
-    // this.historiqueAvenant.observation = historiqueAvenant.observation;
-    // this.historiqueAvenant.aderants = historiqueAvenant.aderants;
-    // this.historiqueAvenant.fileToLoad = historiqueAvenant.fileToLoad;
     this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
     console.log('**************HistoriqueAvenan-----t****************');
     console.log(this.historiqueAvenant);
@@ -2282,5 +2276,41 @@ export class AvenantComponent implements OnInit, OnDestroy {
             .map(elem => elem.primeTotal).reduce((a, b) => a + b);
       }
     });
+  }
+
+  disableAvenant(historiqueAvenant: HistoriqueAvenant): boolean {
+    // const value = false;
+    switch (historiqueAvenant.typeHistoriqueAvenant) {
+      case TypeHistoriqueAvenant.RETRAIT:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
+          return true;
+        }
+        return false;
+      case TypeHistoriqueAvenant.INCORPORATION:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
+          return true;
+        }
+        return false;
+      case TypeHistoriqueAvenant.AFAIRE_NOUVELLE:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
+          return true;
+        }
+        return false;
+      case TypeHistoriqueAvenant.MODIFICATION:
+        return false;
+      case TypeHistoriqueAvenant.RENOUVELLEMENT:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
+          return true;
+        }
+        return false;
+      case TypeHistoriqueAvenant.RESILIATION:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0 || historiqueAvenant.typeDemandeur !== TypeDemandeur.VIMSO) {
+          return true;
+        }
+        return false;
+      case TypeHistoriqueAvenant.SUSPENSION:
+        return false;
+      default: return false;
+    }
   }
 }

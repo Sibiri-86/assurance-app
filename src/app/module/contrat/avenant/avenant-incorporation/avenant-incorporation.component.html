@@ -69,7 +69,7 @@
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold; font-size: 1.5em">*</sup></label>
+                            <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold; size: 1.7em">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                     appendTo="body"></p-calendar>
@@ -165,7 +165,7 @@
                         </div>
                         <div class="p-field p-col-3">
                             <label for="dateIncor">Date d'incorporation <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                            <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncor"
+                            <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncorporation"
                                         dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDateIncorp()"
                                         appendTo="body"></p-calendar>
                         </div>
@@ -204,7 +204,7 @@
                         </div>
                         <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
-                                    class="p-button p-button-success" type="button" (click)="voirLaliste()">
+                                    class="p-button p-button-success" type="button" (click)="voirLaliste()" [disabled]="adherentFamilleListe.length === 0">
                             </button>
                         </div>
 
@@ -246,9 +246,9 @@
                                                    formControlName="dateEntree" pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'dateIncor' + ri">Date Incorpotration <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                            <input [id]="'dateIncor' + ri" type="date" [name]="'dateIncor' + ri"
-                                                   formControlName="dateIncor" pInputText/>
+                                            <label [for]="'dateIncorporation' + ri">Date Incorpotration <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <input [id]="'dateIncorporation' + ri" type="date" [name]="'dateIncorporation' + ri"
+                                                   formControlName="dateIncorporation" pInputText/>
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'nom1' + ri">Genre <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -290,13 +290,15 @@
                         </button>
                     </div>
                     <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
-                        <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button" [disabled]="adherentForm.value.valid === null"
-                                class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()">
+                        <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
+                                class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()"
+                                >
                         </button>
                     </div>
                     <div class="p-field p-col-2 p-ac-center">
                         <button pButton pRipple icon="pi pi-save" pTooltip="Valider la viste des incorporés" label="Enregistrer"
-                                class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()">
+                                class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
                         </button>
                     </div>
                 </div>
