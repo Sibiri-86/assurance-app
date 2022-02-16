@@ -374,9 +374,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('nomGroupeAdherent').setValue('');
         this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
-        this.store.dispatch(featureActionAdherent.searchAssureAndFamilleActe({numero: event.target.value}));
+        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
 
-        this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
+        /* this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
         this.store.dispatch(featureActionPlafond.loadFamilleActeEnCours({numero: event.target.value}));
         this.familleActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log('++++++++++++++++++++++++++++++++++++value+++', value);
@@ -384,7 +384,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.familleActeEnCours = value.slice();
                 console.log('++++++++++++++++++++++++++++++++++++familleActeEnCours+++', this.familleActeEnCours);
             }
-        });
+        }); */
     }
 
     // valider TierPayant
