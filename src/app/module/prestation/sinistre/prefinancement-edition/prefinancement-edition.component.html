@@ -351,6 +351,23 @@
                            </div>
                            
                            <div class="p-fluid p-formgrid p-grid">
+                               
+                            <div class="p-field p-col-4">
+                                <label for="nombreActe">Montant remboursé restant<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
+                            </div>
+                            
+                            <div class="p-field p-col-4">
+                                <label for="sousActe">Decision <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <p-dropdown inputId="decision" [filter]="true"
+                                            showClear="true" [options]="typeSort"
+                                            formControlName="sort"
+                                             [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                            </div>
+                               
+                           </div>
+                           
+                           <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
                             <label for="observation">Observation</label>
                             <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>

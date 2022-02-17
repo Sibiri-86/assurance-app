@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -112,6 +112,7 @@ export class PrefinancementEditionComponent implements OnInit {
   report: Report = {};
   public defaultDate: Date;
   checkControl = true;
+  checkPrefinancementResult: Array<CheckPrefinancementResult>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -151,6 +152,7 @@ export class PrefinancementEditionComponent implements OnInit {
       taux: new FormControl(),
       montantRembourse: new FormControl(),
       sort: new FormControl(),
+      montantRestant: new FormControl(),
       observation: new FormControl(),
       prestataire: new FormControl(),
       centreExecutant: new FormControl(),
@@ -370,7 +372,7 @@ export class PrefinancementEditionComponent implements OnInit {
   }
 
   calculDebours(i: number) {
-    const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+    let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
     this.prestationForm.get('prestation').value[i].coutUnitaire) {
@@ -389,24 +391,19 @@ export class PrefinancementEditionComponent implements OnInit {
     this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
-
-
-
       if (!value) {
-        this.tab.push(i);
-        this.checkControl = false;
-        // mettre le montant à Zero pour non rembourser.
-        myForm.patchValue({montantRembourse: 0});
+
       } else {
-        for (const f of this.tab){
-          if (f === i) {
-            this.tab.splice(i);
-          }
+        this.checkPrefinancementResult = value.slice();
+        console.log(this.checkPrefinancementResult);
+        for (let j = 0; j < this.checkPrefinancementResult.length; j++){
+          myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
+          myForm.patchValue({montantRembourse: this.checkPrefinancementResult[j].montantRembourse,
+            sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
+            observation: this.checkPrefinancementResult[j].message
+          });
         }
-        if (!this.tab.length) {
-          this.checkControl = true;
         }
-      }
     });
     this.prefinancementList = [];
     this.prefinancementModel = {};

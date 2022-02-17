@@ -1,6 +1,7 @@
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Sort } from 'src/app/module/common/models/sort.enum';
 import { Adherent } from '../../contrat/adherent/model';
+import { TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
@@ -68,6 +69,8 @@ export interface CheckPrefinancementResult {
 montantRembourse?: number;
 code?: number;
 message?: string;
+montantRestant?: number;
+sort?: Sort;
 }
 
 export interface CheckPrefinancementReponse {
