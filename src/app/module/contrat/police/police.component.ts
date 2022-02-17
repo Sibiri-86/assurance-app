@@ -312,7 +312,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       id: new FormControl(''),
       plafondAnnuelleFamille: new FormControl(''),
       plafondAnnuellePersonne: new FormControl(''),
-      plafondGlobalInternationnal: new FormControl('')
+      plafondGlobalInternationnal: new FormControl(''),
+      plafondGlobalEvacuationSanitaire: new FormControl('')
     });
 
     this.adherentForm = this.formBuilder.group({
@@ -1679,6 +1680,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.plafond.plafondAnnuelleFamille = removeBlanks(this.plafond.plafondAnnuelleFamille + '');
     this.plafond.plafondAnnuellePersonne = removeBlanks(this.plafond.plafondAnnuellePersonne + '');
     this.plafond.plafondGlobalInternationnal = removeBlanks(this.plafond.plafondGlobalInternationnal + '');
+    this.plafond.plafondGlobalEvacuationSanitaire = removeBlanks(this.plafond.plafondGlobalEvacuationSanitaire + '');
 
     for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
       this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
