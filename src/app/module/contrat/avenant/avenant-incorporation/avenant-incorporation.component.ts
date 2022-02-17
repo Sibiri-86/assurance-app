@@ -91,56 +91,55 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
         this.adherentForm = this.formBuilder.group({
-            id: new FormControl(null),
-            nom: new FormControl('', [Validators.required]),
-            prenom: new FormControl('', [Validators.required]),
-            dateNaissance: new FormControl('', [Validators.required]),
-            lieuNaissance: new FormControl('', [Validators.required]),
-            numeroTelephone: new FormControl('', [Validators.required]),
-            adresse: new FormControl('', [Validators.required]),
-            adresseEmail: new FormControl('', [Validators.required]),
-            profession: new FormControl('', [Validators.required]),
-            referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl('', [Validators.required]),
-            genre: new FormControl('', [Validators.required]),
-            dateIncorporation: new FormControl('', [Validators.required]),
-            dateEntree: new FormControl('', [Validators.required]),
-            dateIncor: new FormControl(new Date(), [Validators.required]),
-            matriculeGarant: new FormControl('', ),
-            matriculeSouscripteur: new FormControl('', ),
-            numero: new FormControl('', ),
+            id: new FormControl(0),
+            nom: new FormControl(null, [Validators.required]),
+            prenom: new FormControl(null, [Validators.required]),
+            dateNaissance: new FormControl(null, [Validators.required]),
+            lieuNaissance: new FormControl(null, [Validators.required]),
+            numeroTelephone: new FormControl(null, [Validators.required]),
+            adresse: new FormControl(null),
+            adresseEmail: new FormControl(null, [Validators.email]),
+            profession: new FormControl(null, [Validators.required]),
+            referenceBancaire: new FormControl(null),
+            qualiteAssure: new FormControl(null, [Validators.required]),
+            genre: new FormControl(null, [Validators.required]),
+            dateIncorporation: new FormControl(null, [Validators.required]),
+            dateEntree: new FormControl(null, [Validators.required]),
+            // dateIncor: new FormControl(new Date(), [Validators.required]),
+            matriculeGarant: new FormControl(null, ),
+            matriculeSouscripteur: new FormControl(null, ),
+            numero: new FormControl(null, ),
             familys: this.formBuilder.array([]),
         });
 
         this.newForm = this.formBuilder.group({
-            id: new FormControl(null),
-            nom: new FormControl('', [Validators.required]),
-            prenom: new FormControl('', [Validators.required]),
-            dateNaissance: new FormControl('', [Validators.required]),
-            matricule: new FormControl(''),
-            lieuNaissance: new FormControl('', [Validators.required]),
-            numeroTelephone: new FormControl('', [Validators.required]),
-            adresse: new FormControl('', [Validators.required]),
-            adresseEmail: new FormControl('', [Validators.required]),
-            profession: new FormControl('', [Validators.required]),
-            referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl('', [Validators.required]),
-            genre: new FormControl('', [Validators.required]),
+            id: new FormControl(),
+            nom: new FormControl(null, [Validators.required]),
+            prenom: new FormControl(null, [Validators.required]),
+            dateNaissance: new FormControl(null, [Validators.required]),
+            matricule: new FormControl(null),
+            lieuNaissance: new FormControl(null, [Validators.required]),
+            numeroTelephone: new FormControl(null),
+            adresse: new FormControl(null),
+            adresseEmail: new FormControl(null),
+            profession: new FormControl(null, [Validators.required]),
+            referenceBancaire: new FormControl(null),
+            qualiteAssure: new FormControl(null, [Validators.required]),
+            genre: new FormControl(null, [Validators.required]),
             dateIncorporation: new FormControl(new Date(), [Validators.required]),
             dateEntree: new FormControl(new Date(), [Validators.required]),
-            dateIncor: new FormControl(new Date(), [Validators.required]),
         });
         this.adherentFamilleForm = this.formBuilder.group({
-            adherent: new FormControl(''),
-            famille: new FormControl('', [Validators.required]),
+            adherent: new FormControl(null),
+            famille: new FormControl(null),
         });
         this.exerciceForm = this.formBuilder.group({
-            debut: new FormControl(''),
-            fin: new FormControl('', [Validators.required]),
-            actived: new FormControl('', [Validators.required]),
+            debut: new FormControl(null),
+            fin: new FormControl(null, [Validators.required]),
+            actived: new FormControl(null, [Validators.required]),
         });
         this.myForm = this.formBuilder.group({
-            numero: new FormControl(null, [Validators.required]),
+            numero: new FormControl(null),
             dateIncorparation: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required]),
@@ -195,7 +194,7 @@ export class AvenantIncorporationComponent implements OnInit{
         private exerciceService: ExerciceService
     ) {
         this.customForm = this.formBuilder.group({
-            groupe: new FormControl('')
+            groupe: new FormControl(null)
         });
     }
 
@@ -246,7 +245,7 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('----------------------------------');
         console.log(this.familys);
         const formAdherent: FormGroup = this.createForm();
-        formAdherent.patchValue({dateIncor: this.adherentForm.get('dateIncorporation').value});
+        formAdherent.patchValue({dateIncorporation: this.adherentForm.get('dateIncorporation').value});
         // formAdherent.controls.f
         this.familys.push(formAdherent);
         this.familles.forEach(family => {
@@ -265,21 +264,20 @@ export class AvenantIncorporationComponent implements OnInit{
     createForm(): FormGroup {
         return this.formBuilder.group({
             id: new FormControl(null),
-            nom: new FormControl('', [Validators.required]),
-            prenom: new FormControl('', [Validators.required]),
-            dateNaissance: new FormControl('', [Validators.required]),
-            matricule: new FormControl(''),
-            lieuNaissance: new FormControl('', [Validators.required]),
-            numeroTelephone: new FormControl('', [Validators.required]),
-            adresse: new FormControl('', [Validators.required]),
-            adresseEmail: new FormControl('', [Validators.required]),
+            nom: new FormControl(null, [Validators.required]),
+            prenom: new FormControl(null, [Validators.required]),
+            dateNaissance: new FormControl(null, [Validators.required]),
+            matricule: new FormControl(null),
+            lieuNaissance: new FormControl(null, [Validators.required]),
+            numeroTelephone: new FormControl(null),
+            adresse: new FormControl(null),
+            adresseEmail: new FormControl(null),
             profession: {},
-            referenceBancaire: new FormControl(''),
-            qualiteAssure: new FormControl('', [Validators.required]),
-            genre: new FormControl('', [Validators.required]),
-            dateIncorporation: new FormControl('', [Validators.required]),
-            dateEntree: new FormControl('', [Validators.required]),
-            dateIncor: new FormControl(new Date(), [Validators.required]),
+            referenceBancaire: new FormControl(null),
+            qualiteAssure: new FormControl(null, [Validators.required]),
+            genre: new FormControl(null, [Validators.required]),
+            dateIncorporation: new FormControl(null, [Validators.required]),
+            dateEntree: new FormControl(null, [Validators.required]),
         });
     }
 
@@ -309,7 +307,7 @@ export class AvenantIncorporationComponent implements OnInit{
     setAdherentPrincipal(adherent: Adherent): void {
         console.log('***************adherent*******************', adherent);
         this.adherentForm.patchValue({
-            id: adherent?.id || null,
+            id: adherent?.id,
             nom: adherent?.nom,
             prenom: adherent?.prenom,
             dateNaissance: new Date(adherent?.dateNaissance),
@@ -323,6 +321,7 @@ export class AvenantIncorporationComponent implements OnInit{
             qualiteAssure: adherent?.qualiteAssure,
             genre: adherent?.genre,
             dateEntree: new Date(adherent?.dateEntree),
+            dateIncorporation: new Date(adherent?.dateIncorporation),
             numero: adherent.numero
         });
         console.log('+++++ adherent.numero +++ ');
@@ -377,23 +376,23 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     compareDateIncorp(): void {
-        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.police.dateEffet).subscribe(
             (res) => {
                 if (res) {
                     this.addMessage('error', 'Date d\'effet invalide',
                         'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
-                    this.adherentForm.patchValue({dateIncor: null});
+                    this.adherentForm.patchValue({dateIncorporation: null});
                 }
             }
         );
     }
     compareDateMembre(): void {
-        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncor').value, this.police.dateEffet).subscribe(
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.police.dateEffet).subscribe(
             (res) => {
                 if (res) {
                     this.addMessage('error', 'Date d\'effet invalide',
                         'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
-                    this.adherentForm.patchValue({dateIncor: null});
+                    this.adherentForm.patchValue({dateIncorporation: null});
                 }
             }
         );

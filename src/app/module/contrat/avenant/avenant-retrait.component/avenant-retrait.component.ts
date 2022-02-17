@@ -151,7 +151,7 @@ export class AvenantRetraitComponent implements OnInit {
 
   init() {
     this.myForm = this.formBuilder.group({
-      numero: new FormControl(null, [Validators.required]),
+      numero: new FormControl(null),
       dateAvenant: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),

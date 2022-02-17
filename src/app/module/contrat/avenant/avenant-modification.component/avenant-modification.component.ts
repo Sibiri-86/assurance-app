@@ -206,7 +206,13 @@ export class AvenantModificationComponent implements OnInit {
       dateEffet: new FormControl('', [Validators.required]),
       typeDuree: new FormControl('', [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
-      commune: new FormControl('', [Validators.required])
+      commune: new FormControl('', [Validators.required]),
+      numeroGroupe: new FormControl('', [Validators.required]),
+      typePrime: new FormControl('', [Validators.required]),
+      adresse: new FormControl('', [Validators.required]),
+      prime: new FormControl('', [Validators.required]),
+      police: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
     });
 
     this.primeForm = this.formBuilder.group({
@@ -252,7 +258,7 @@ export class AvenantModificationComponent implements OnInit {
     });
 
     this.myForm = this.formBuilder.group({
-      numero: new FormControl(null, [Validators.required]),
+      numero: new FormControl(null, ),
       dateAvenant: new FormControl(null, [Validators.required]),
       dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
@@ -775,14 +781,14 @@ export class AvenantModificationComponent implements OnInit {
   setGroupeAndPrime(group: Groupe): void {
     console.log('***********group************');
     console.log(group);
-    this.groupeForm.patchValue({
+    this.groupeForm.setValue({
       id: group?.id || null,
       libelle: group?.libelle,
       taux: group?.taux,
       territorialite: group.territorialite || [],
-      duree: group.duree,
+      duree: group?.duree,
       dateEffet: new Date(group.dateEffet),
-      // typeDuree: {},
+      typeDuree: {},
       dateEcheance: new Date(group.dateEcheance),
       commune: group.commune,
       numeroGroupe: group.numeroGroupe,

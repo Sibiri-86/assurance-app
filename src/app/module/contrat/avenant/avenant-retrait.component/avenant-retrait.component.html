@@ -76,7 +76,7 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-6">
                         <label for="numero">Numéro de l'avenant chez le garant</label>
-                        <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                     </div>
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait</label>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="p-field p-col-6">
                         <label for="observation">Motif</label>
-                        <input id="observation" type="text" required formControlName="observation" pInputText>
+                        <input id="observation" type="text" formControlName="observation" pInputText>
                     </div>
                 </div>
             </form>
@@ -188,7 +188,8 @@
             </div>
             <div class="p-field p-col-2 p-ac-center">
                 <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
-                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()">
+                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                [disabled]="myForm.invalid">
                 </button>
             </div>
         </div>
