@@ -2150,7 +2150,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
-  validerPrime(): void {
+  validerPrime(historiqueAvenant: HistoriqueAvenant): void {
     this.historiqueAvenantPrimes.forEach(hap => {
       if (hap.fraisAccessoir) {
         hap.fraisAccessoir = removeBlanks(hap.fraisAccessoir + '');
@@ -2168,14 +2168,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
         hap.primeTTC = removeBlanks(hap.primeTTC + '');
       }
       hap.status = true;
+      hap.historiqueAvenant = {};
     });
-    this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
+    historiqueAvenant.historiqueAvenantPrimes = this.historiqueAvenantPrimes;
+    this.historiqueAvenantService.misAJoursHistoriqueAvenant(historiqueAvenant).subscribe(
+        (res) => {
+          historiqueAvenant = res;
+          this.displayDialogPrime = false;
+          this.onExerciceChange();
+        }
+    );
+    /* this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
           this.displayDialogPrime = false;
           this.onExerciceChange();
         }
-    );
+    ); */
   }
   annulerPrime(): void {
       this.historiqueAvenantPrimes = [];

@@ -158,4 +158,18 @@ export class HistoriqueAvenantEffects {
                 )
             )
         ));
+
+    /*misAJoursHistoriqueAvenant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.misAJours),
+            mergeMap((ha: HistoriqueAvenant) =>
+                this.historiqueAvenantService.misAJoursHistoriqueAvenant(ha).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadHistoriqueAvenant()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));*/
 }

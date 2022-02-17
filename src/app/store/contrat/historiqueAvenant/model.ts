@@ -29,6 +29,7 @@ export interface HistoriqueAvenant {
     file?: FormData;
     fileToLoad?: File;
     valide?: boolean;
+    validePrime?: boolean;
     observation?: string;
     typeDemandeur?: TypeDemandeur;
     dateEffet?: Date;
