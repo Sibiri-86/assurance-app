@@ -14,6 +14,7 @@ import {
     SinistreTierPayant,
     SinistreTierPayantList
 } from './model';
+import {OrdreReglement, OrdreReglementList, Prefinancement} from '../prefinancement/model';
 
 @Injectable({providedIn: 'root'})
 export class TierPayantService {
@@ -47,7 +48,7 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
 
     $getTierPayantOrdreReglementValide(): Observable<OrdreReglementTierPayantList> {
         // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/valide`).pipe(
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/valideList`).pipe(
             map((response: OrdreReglementTierPayantList) => response),
             catchError(this.handleError())
         );
@@ -86,7 +87,17 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
 
     putUpdateTierPayantOrdreReglement(ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement): Observable<any> {
         // @FIXME: post request
-        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/etat/${etat}`, ordre);
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/valider/${etat}`, ordre);
+    }
+
+    deleteOrdreReglement(ordreReglement: Array<OrdreReglementTierPayant>): Observable<any> {
+        // @FIXME: post request
+        return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/del`, ordreReglement);
+    }
+
+    checkTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/consulter`, tierPayant);
     }
 
 private handleError<T>() {

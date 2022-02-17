@@ -6,7 +6,9 @@ import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
-import {OrdreReglement} from '../prefinancement/model';
+import {OrdreReglement, Prefinancement} from '../prefinancement/model';
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
+import {Acte} from '../../parametrage/acte/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -37,6 +39,7 @@ export interface SinistreTierPayant {
     numeroSinistre?: string;
     ordreReglementTierPayant?: OrdreReglementTierPayant;
     prestation?: Array<Prestation>;
+    numeroFacture?: string;
 }
 
 export interface Prestation {
@@ -47,13 +50,19 @@ export interface Prestation {
     taux?: Taux;
     montantRembourse?: number;
     observation?: string;
-    sousActe?: SousActe;
+    sousActe?: PlafondSousActe;
     prestataire?: Prestataire;
     medecin?: Medecin;
     dateSoins?: Date;
     produitPharmaceutique: Array<ProduitPharmaceutique>;
+    familleActe?: PlafondFamilleActe;
+    acte?: PlafondActe;
 }
 
 export interface SinistreTierPayantList {
     sinistreTierPayantDTOList: Array<SinistreTierPayant>;
+}
+
+export interface CheckTierPayantReponse {
+    TierPayantCheckReponse: Array<SinistreTierPayant>;
 }

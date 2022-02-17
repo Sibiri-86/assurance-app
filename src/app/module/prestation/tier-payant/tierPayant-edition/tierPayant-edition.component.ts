@@ -62,6 +62,7 @@ import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-p
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
+import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
 
 
 @Component({
@@ -116,6 +117,8 @@ export class TierPayantEditionComponent implements OnInit {
     acteEnCours: Array<PlafondActe>;
     sousActeEnCours$: Observable<PlafondSousActe[]>;
     sousActeEnCours: Array<PlafondSousActe>;
+    checkControl = true;
+    tab: number[] = [];
 
 
 
@@ -167,7 +170,10 @@ export class TierPayantEditionComponent implements OnInit {
             prenomAdherent: new FormControl({value: '', disabled: true}),
             numeroGroupe: new FormControl({value: '', disabled: true}),
             numeroPolice: new FormControl({value: '', disabled: true}),
-            prestation: this.formBuilder.array([])
+            prestation: this.formBuilder.array([]),
+            numeroFacture: new FormControl(),
+            nomGroupeAdherent: new FormControl({value: '', disabled: true}),
+            nomPoliceAdherent: new FormControl({value: '', disabled: true}),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -190,6 +196,8 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
                 this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+                this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+                this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
             }
         });
 
@@ -289,7 +297,8 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     selectActe(event){
-        this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
+        this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+        /* this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
         this.store.dispatch(featureActionPlafond.loadSousActeEnCours({idPGA: event.value.acte.id}));
         console.log('++++++++++++++++++++++++++++++++++++event.value.acte.id+++', event.value.acte.id);
         this.sousActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -298,7 +307,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.sousActeEnCours = value.slice();
                 console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.sousActeEnCours);
             }
-        });
+        }); */
     }
 
     imprimer(pref: SinistreTierPayant) {
@@ -327,6 +336,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
         this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+        this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
+        this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
+        this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
         // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
         this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
         for (const pr of pref.prestation) {
@@ -359,6 +371,8 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('prenomAdherent').setValue('');
         this.prestationForm.get('numeroGroupe').setValue('');
         this.prestationForm.get('numeroPolice').setValue('');
+        this.prestationForm.get('nomGroupeAdherent').setValue('');
+        this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
         this.store.dispatch(featureActionAdherent.searchAssureAndFamilleActe({numero: event.target.value}));
 
@@ -383,7 +397,8 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     changeGarantie(event) {
-        this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
+        this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === event.value.id);
+        /* this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
         this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
         console.log('++++++++++++++++++++++++++++++++++++item+++', event.value.garantie.id);
         this.acteEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -392,7 +407,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.acteEnCours = value.slice();
                 console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
             }
-        });
+        }); */
     }
 
     getfamilleActeEnCourId(): string {
@@ -444,6 +459,21 @@ export class TierPayantEditionComponent implements OnInit {
                     (this.prestationForm.get('prestation').value[i].nombreActe *
                         this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
         }
+        this.prefinancementModel = this.prestationForm.value;
+        this.prefinancementModel.dateSaisie = new Date();
+        this.prefinancementModel.adherent = this.adherentSelected;
+        this.tierPayantList.push(this.prefinancementModel);
+        /* executer le controle de la prestation */
+        this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
+        this.store.pipe(select(tierPayantSelector.checkTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (!value) {
+                this.tab.push(i);
+                this.checkControl = false;
+            }
+        });
+        this.tierPayantList = [];
+        this.prefinancementModel = {};
     }
 
 
@@ -476,10 +506,10 @@ export class TierPayantEditionComponent implements OnInit {
             produitPharmaceutique: new FormControl(),
             pathologie: new FormControl(),
             medecin: new FormControl(),
-            numeroFacture: new FormControl(),
             dateSoins: new FormControl(),
             acte: new FormControl(null),
-            familleActe: new FormControl(null)
+            familleActe: new FormControl(null),
+            centreExecutant: new FormControl(null),
         });
     }
 

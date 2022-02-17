@@ -1,27 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import {
-  FormBuilder,
-} from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { takeUntil } from 'rxjs/operators';
+import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import {OrdreReglementTierPayant, SinistreTierPayant} from 'src/app/store/prestation/tierPayant/model';
-import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
+import { OrdreReglement, Prefinancement } from 'src/app/store/prestation/prefinancement/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
-import { TypeReport } from 'src/app/store/contrat/enum/model';
-import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
-import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
-import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
+import {OrdreReglementTierPayant, SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
+import {TypeReport} from '../../../../store/contrat/enum/model';
+import {TypeEtatOrdreReglement} from '../../../common/models/emum.etat.ordre-reglement';
 
 @Component({
-  selector: 'app-ordre-reglement-edition',
-  templateUrl: './ordre-reglement-tier-payant-edition.component.html',
-  styleUrls: ['./ordre-reglement-tier-payant-edition.component.scss']
+  selector: 'app-ordre-reglement-valide',
+  templateUrl: './tier-payant-ordre-reglement-valide.component.html',
+  styleUrls: ['./tier-payant-ordre-reglement-valide.component.scss']
 })
-export class OrdreReglementTierPayantEditionComponent implements OnInit {
+export class TierPayantOrdreReglementValideComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
@@ -29,14 +26,12 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   displaySinistre = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
   report: Report = {};
-  selectedOrdreReglement: OrdreReglementTierPayant [];
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
-              private formBuilder: FormBuilder,  private messageService: MessageService) { }
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
-
     this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -46,43 +41,24 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
         });
 
     this.ordreReglementList$ = this.store.pipe(select(tierPayantSelector.ordreReglementTierPayantList));
-    this.store.dispatch(featureActionTierPayant.loadOrdreReglementTierPayant());
+    this.store.dispatch(featureActionTierPayant.loadTierPayantOrdreReglementValide());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
         this.ordreReglementList = value.slice();
-      }
+    }
     });
   }
 
-  validerOrdreReglement(ordre: OrdreReglementTierPayant){
+  deValiderOrdreReglement(ordre: OrdreReglementTierPayant) {
     this.confirmationService.confirm({
-      message: 'voulez-vous valider cet ordre de reglement',
+      message: 'voulez-vous annuler cet ordre de reglement',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionTierPayant.validerTierPayantOrdreReglement({ordre, etat: TypeEtatOrdreReglement.VALIDE}));
+        this.store.dispatch(featureActionTierPayant.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.INITIAL}));
       },
     });
-  }
-
-  supprimerOrdreReglement() {
-    if (!this.selectedOrdreReglement) {
-      this.showToast('error', 'INFORMATION', 'aucun ordre de reglement selectionné');
-    } else {
-      this.confirmationService.confirm({
-        message: 'voulez-vous supprimer l\'ordre de reglement',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.store.dispatch(featureActionTierPayant.deleteTierPayantOrdreDeReglement({ordreReglement: this.selectedOrdreReglement}));
-        }
-      });
-    }
-  }
-
-  showToast(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity, summary, detail });
   }
 
   imprimer(pref: OrdreReglementTierPayant) {
