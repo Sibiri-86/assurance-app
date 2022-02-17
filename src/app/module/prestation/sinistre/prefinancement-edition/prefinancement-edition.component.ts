@@ -265,7 +265,7 @@ export class PrefinancementEditionComponent implements OnInit {
       if (value) {
         this.prestataireList = value.slice();
         this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire === 'Clinique');
-        this.prestataireExecutant = this.prestataireList.filter(ele => ele.libelleTypePrestataire !== 'Clinique');
+        this.prestataireExecutant = this.prestataireList;
       }
     });
 

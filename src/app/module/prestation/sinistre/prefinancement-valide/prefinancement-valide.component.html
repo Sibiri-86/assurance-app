@@ -108,6 +108,7 @@
                         <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="width: 150px">montant rembourser <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">Decision<p-sortIcon field="decision"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -130,6 +131,8 @@
                         <td><span class="p-column-title">{{prestation.taux.taux}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sort}}</span>
                         </td>
                     </tr>
                 </ng-template>
