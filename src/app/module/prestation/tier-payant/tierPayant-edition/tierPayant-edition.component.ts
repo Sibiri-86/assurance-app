@@ -45,7 +45,7 @@ import * as featureActionAdherent from '../../../../store/contrat/adherent/actio
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as featureActionPlafond from '../../../../store/contrat/plafond/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import {Prestation} from 'src/app/store/prestation/tierPayant/model';
+import {CheckTierPayantResult, Prestation} from 'src/app/store/prestation/tierPayant/model';
 import {Status} from 'src/app/store/global-config/model';
 import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
@@ -63,6 +63,7 @@ import * as featureActionPrefinancement from '../../../../store/prestation/prefi
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
+import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
 
 
 @Component({
@@ -119,6 +120,7 @@ export class TierPayantEditionComponent implements OnInit {
     sousActeEnCours: Array<PlafondSousActe>;
     checkControl = true;
     tab: number[] = [];
+    checkTierPayantResult: Array<CheckTierPayantResult>;
 
 
 
@@ -448,8 +450,8 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     calculDebours(i: number) {
-        const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+        let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
         if (this.prestationForm.get('prestation').value[i].nombreActe &&
             this.prestationForm.get('prestation').value[i].coutUnitaire) {
             myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
@@ -465,11 +467,21 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantList.push(this.prefinancementModel);
         /* executer le controle de la prestation */
         this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
-        this.store.pipe(select(tierPayantSelector.checkTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (!value) {
                 this.tab.push(i);
                 this.checkControl = false;
+            } else {
+                this.checkTierPayantResult = value.slice();
+                console.log('**********************************', this.checkTierPayantResult);
+                for (let j = 0; j < this.checkTierPayantResult.length; j++){
+                    myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
+                    myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
+                        sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
+                        observation: this.checkTierPayantResult[j].message
+                    });
+                }
             }
         });
         this.tierPayantList = [];
@@ -563,5 +575,6 @@ export interface FraisReels {
     montantRembourse?: number;
     sort?: Sort;
     observation?: string;
+    dateSoins?: Date;
     produitPharmaceutique: Array<ProduitPharmaceutique>;
 }

@@ -322,7 +322,7 @@
 
                                         <div class="p-field p-col">
                                             <label for="nombreActe" id="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                            <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte" (onBlur)="calculDebours(i)"></p-inputNumber>
+                                            <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
                                         </div>
                                         <div class="p-field p-col">
                                             <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -352,15 +352,26 @@
                                             <label for="montantRembourse" id="montantRembourse">Montant remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                         </div>
-                                        <div class="p-field p-col-3">
+                                        <!--<div class="p-field p-col-3">
                                             <label for="sort" id="sort">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="sort"  [filter]="true"
                                                         showClear="true" [options]="typeSort"
                                                         formControlName="sort"></p-dropdown>
+                                        </div>-->
+                                        <div class="p-field p-col-3">
+                                            <label for="nombreActe">Montant remboursé restant<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>
                                         </div>
 
                                     </div>
                                     <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col-3">
+                                            <label for="sousActe">Decision <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <p-dropdown inputId="decision" [filter]="true"
+                                                        showClear="true" [options]="typeSort"
+                                                        formControlName="sort"
+                                                        [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                                        </div>
                                     <div class="p-field p-col">
                                         <label for="observation" id="observation">Observation</label>
                                         <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>

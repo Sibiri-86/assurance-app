@@ -9,6 +9,7 @@ import { Taux } from '../../parametrage/taux/model';
 import {OrdreReglement, Prefinancement} from '../prefinancement/model';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Acte} from '../../parametrage/acte/model';
+import {Sort} from '../../../module/common/models/sort.enum';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -65,4 +66,16 @@ export interface SinistreTierPayantList {
 
 export interface CheckTierPayantReponse {
     TierPayantCheckReponse: Array<SinistreTierPayant>;
+}
+
+export interface CheckTierPayantResult {
+    montantRembourse?: number;
+    code?: number;
+    message?: string;
+    montantRestant?: number;
+    sort?: Sort;
+}
+
+export interface CheckTierPayantReponse {
+    list: Array<CheckTierPayantResult>;
 }
