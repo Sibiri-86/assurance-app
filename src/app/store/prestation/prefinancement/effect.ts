@@ -124,7 +124,7 @@ export class PrefinancementEffects {
             this.prefinancementService.checkPrefinancement(prefinancement).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    //featureActions.setCheckPrefinancement(value)
+                    featureActions.setCheckPrefinancement(value)
                 ]),
                 catchError(error => {
                     featureActions.setCheckPrefinancement(null);

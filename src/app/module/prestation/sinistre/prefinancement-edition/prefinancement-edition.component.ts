@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -83,6 +83,8 @@ export class PrefinancementEditionComponent implements OnInit {
   acteList: Array<Acte>;
   prestataireList$: Observable<Array<Prestataire>>;
   prestataireList: Array<Prestataire>;
+  prestatairePrescripteur: Array<Prestataire>;
+  prestataireExecutant: Array<Prestataire>;
   medecinList$: Observable<Array<Medecin>>;
   medecinList: Array<Medecin>;
   pathologieList$: Observable<Array<Pathologie>>;
@@ -110,6 +112,7 @@ export class PrefinancementEditionComponent implements OnInit {
   report: Report = {};
   public defaultDate: Date;
   checkControl = true;
+  checkPrefinancementResult: Array<CheckPrefinancementResult>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -141,20 +144,22 @@ export class PrefinancementEditionComponent implements OnInit {
    createItem(): FormGroup {
     return this.formBuilder.group({
       id: new FormControl(),
-      nombreActe: new FormControl(),
-      coutUnitaire: new FormControl(),
-      debours: new FormControl({disabled: true}),
-      sousActe: new FormControl(),
-      baseRemboursement: new FormControl({disabled: true}),
-      taux: new FormControl({disabled: true}),
-      montantRembourse: new FormControl({disabled: true}),
+      nombreActe: new FormControl('', [Validators.required]),
+      coutUnitaire: new FormControl('', [Validators.required]),
+      debours: new FormControl(),
+      sousActe: new FormControl([Validators.required]),
+      baseRemboursement: new FormControl(),
+      taux: new FormControl(),
+      montantRembourse: new FormControl(),
       sort: new FormControl(),
+      montantRestant: new FormControl(),
       observation: new FormControl(),
       prestataire: new FormControl(),
+      centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
-      dateSoins: new FormControl(''),
-      acte: new FormControl(''),
+      dateSoins: new FormControl('', [Validators.required]),
+      acte: new FormControl(),
       medecin: new FormControl()
     });
   }
@@ -259,6 +264,8 @@ export class PrefinancementEditionComponent implements OnInit {
     this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.prestataireList = value.slice();
+        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire === 'Clinique');
+        this.prestataireExecutant = this.prestataireList.filter(ele => ele.libelleTypePrestataire !== 'Clinique');
       }
     });
 
@@ -337,6 +344,10 @@ export class PrefinancementEditionComponent implements OnInit {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
     formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+    formPrestation.get('debours').setValue(pr.debours);
+    formPrestation.get('taux').setValue(pr.taux);
+    formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+    formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
@@ -361,7 +372,7 @@ export class PrefinancementEditionComponent implements OnInit {
   }
 
   calculDebours(i: number) {
-    const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+    let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
     this.prestationForm.get('prestation').value[i].coutUnitaire) {
@@ -381,9 +392,18 @@ export class PrefinancementEditionComponent implements OnInit {
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (!value) {
-        this.tab.push(i);
-        this.checkControl = false;
-      }
+
+      } else {
+        this.checkPrefinancementResult = value.slice();
+        console.log(this.checkPrefinancementResult);
+        for (let j = 0; j < this.checkPrefinancementResult.length; j++){
+          myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
+          myForm.patchValue({montantRembourse: this.checkPrefinancementResult[j].montantRembourse,
+            sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
+            observation: this.checkPrefinancementResult[j].message
+          });
+        }
+        }
     });
     this.prefinancementList = [];
     this.prefinancementModel = {};

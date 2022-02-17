@@ -10,7 +10,7 @@ const initialState: PrefinancementState = {
     reportFile: null,
     checkPrefinancementReponse: null
   };
-  
+
 const featureReducer = createReducer(
     initialState,
     on(featureActions.setPrefinancement, (state, payload: PrefinancementList) => ({
@@ -23,7 +23,7 @@ const featureReducer = createReducer(
         ...state, reportFile: payload.reportFile
       })),
     on(featureActions.setCheckPrefinancement, (state, payload: CheckPrefinancementReponse) => ({
-        ...state, checkPrefinancementReponse: payload.prefinancementCheckReponse
+        ...state, checkPrefinancementReponse: payload.list
       }))
   );
   

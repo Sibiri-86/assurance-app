@@ -4,7 +4,7 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-					<button pButton pRipple label="Créer un ordre de paiement" class="p-button-success p-mr-2 p-mb-2" (click)="creerOrdreRglement()"></button>
+					<button [disabled]="!disableButtomOrdreReglement" pButton pRipple label="Créer un ordre de paiement" class="p-button-success p-mr-2 p-mb-2" (click)="creerOrdreRglement()"></button>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -13,10 +13,10 @@
 				</ng-template>
                 -->
 			</p-toolbar>
-            <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="prefinancementDtoList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
-                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectPrefinancement">
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectPrefinancement">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
@@ -33,7 +33,7 @@
                         </th>
                         <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Reference bordereau<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:200px">Date de saisie<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
@@ -41,7 +41,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prefinancement>
-                    <tr>
+                    <tr [pSelectableRow]="prefinancement">
                         <td>
                             <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
                         </td>
@@ -50,7 +50,7 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.referenceBordereau}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSaisie | formatTableValue : 'date'}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
@@ -66,7 +66,7 @@
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 
                             <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="annulerPrestation(prefinancement)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
-                    </td>
+                        </td>
                         
                         <!--
                         <td>

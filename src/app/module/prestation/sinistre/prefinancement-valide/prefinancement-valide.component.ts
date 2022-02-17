@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import {
   ControlContainer,
@@ -51,6 +51,7 @@ import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { Report } from 'src/app/store/contrat/police/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
+import { Table } from 'primeng/table';
 
 
 @Component({
@@ -59,7 +60,7 @@ import { printPdfFile } from 'src/app/module/util/common-util';
   styleUrls: ['./prefinancement-valide.component.scss']
 })
 export class PrefinancementValideComponent implements OnInit {
-  displayFormPrefinancement= false;
+  displayFormPrefinancement = false;
   prestationList: Array<FraisReels>;
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
@@ -86,23 +87,69 @@ export class PrefinancementValideComponent implements OnInit {
   prefinancementDtoList$: Observable<Array<Prefinancement>>;
   prefinancementDtoList: Array<Prefinancement>;
   cols: any[];
-  taux:Taux;
+  taux: Taux;
   displayPrestation = false;
   prestationListPrefinancement: Array<Prestation>;
+  @ViewChild(Table) dataTableComponent: Table;
   selectPrefinancement: Prefinancement[];
   report: Report = {};
+  disableButtomOrdreReglement = true;
+  tab: Array<string> = [];
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService) {
    }
-   
+
    imprimer(pref: Prefinancement) {
     this.report.typeReporting = TypeReport.PREFINANCEMENT_FICHE_DETAIL_REMBOURSEMENT;
     this.report.prefinancementDto = pref;
     this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
   }
-  
+
    onCreate() {
+
+   }
+
+   onRowUnselectSinistre(event){
+     console.log(this.tab);
+     let check = true;
+     for (const f of this.tab){
+      if (!this.selectPrefinancement.every(elem => elem.id !== f)){
+        check = false;
+        return;
+      }
+    }
+     if (check) {
+    this.disableButtomOrdreReglement = true;
+    }
+   }
+
+   onRowSelectSinistre(event) {
+    if (this.selectPrefinancement && this.selectPrefinancement.length > 1 && event.data.adherent.adherentPrincipal &&
+      !this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.adherentPrincipal &&
+      this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.id !== event.data.adherentPrincipal.id){
+        this.disableButtomOrdreReglement = false;
+        this.tab.push(event.data.id);
+        this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+      }
+
+    if (this.selectPrefinancement && this.selectPrefinancement.length > 1 && !event.data.adherent.adherentPrincipal &&
+        this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.adherentPrincipal &&
+        this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.adherentPrincipal.id !== event.data.adherent.id){
+          this.disableButtomOrdreReglement = false;
+          this.tab.push(event.data.id);
+          this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+        }
+
+    if (this.selectPrefinancement && this.selectPrefinancement.length > 1 && !event.data.adherent.adherentPrincipal &&
+          !this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.adherentPrincipal &&
+          event.data.adherent.id !== this.selectPrefinancement[this.selectPrefinancement.length - 2].adherent.id){
+            this.disableButtomOrdreReglement = false;
+            this.tab.push(event.data.id);
+            this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+          }
+
+    console.log(this.selectPrefinancement);
    }
 
   ngOnInit(): void {
@@ -115,8 +162,8 @@ export class PrefinancementValideComponent implements OnInit {
       dateSoins: new FormControl(''),
       dateDeclaration: new FormControl(''),
       matriculeAdherent: new FormControl(''),
-      garantie:new FormControl(''),
-      acte:new FormControl(''),
+      garantie: new FormControl(''),
+      acte: new FormControl(''),
       nomAdherent: new FormControl(''),
       prestataire: new FormControl(''),
       prenomAdherent: new FormControl(''),
@@ -125,20 +172,22 @@ export class PrefinancementValideComponent implements OnInit {
       numeroPolice: new FormControl('')
     });
 
+    /*
     this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
-    this.store.dispatch(featureActionAdherent.searchAdherent({numero:null}));
+    this.store.dispatch(featureActionAdherent.searchAdherent({numero: null}));
     this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
         console.log(value);
-        this.adherentSelected =value;
+        this.adherentSelected = value;
         this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
         this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
-      } 
+      }
     });
-    
+    */
+
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -146,7 +195,7 @@ export class PrefinancementValideComponent implements OnInit {
                 printPdfFile(bytes);
         }
     });
-    
+
     this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
     this.store.dispatch(featureActionPrefinancement.loadPrefinancementValide());
     this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -156,7 +205,7 @@ export class PrefinancementValideComponent implements OnInit {
         //this.prefinancementDtoList = this.prefinancementDtoList.filter(element => !element.ordreReglement);
       }
     });
-    
+
     this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -165,18 +214,18 @@ export class PrefinancementValideComponent implements OnInit {
         this.sousActeList = value.slice();
       }
     });
-    
+
     this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
     this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.tauxList = value.slice();
-        if(this.tauxList){
+        if (this.tauxList){
         this.taux = this.tauxList[0];
         }
       }
     });
-    
+
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -184,8 +233,7 @@ export class PrefinancementValideComponent implements OnInit {
         this.garanties = value.slice();
       }
     });
-    
-    
+
     this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
     this.store.dispatch(loadPrestataire());
     this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -214,22 +262,23 @@ export class PrefinancementValideComponent implements OnInit {
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
+
   
   
-  annulerPrestation(pref:Prefinancement) {
+  annulerPrestation(pref: Prefinancement) {
     this.confirmationService.confirm({
       message: 'voulez-vous annuler le sinistre',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.updateEtatAnnulerPrefinancement({prefinancement:pref, 
+        this.store.dispatch(featureActionPrefinancement.updateEtatAnnulerPrefinancement({prefinancement: pref, 
           etat: TypeEtatSinistre.ANNULE}));
       },
     });
   }
   
   creerOrdreRglement() {
-    if(!this.selectPrefinancement || !this.selectPrefinancement.length) {
+    if (!this.selectPrefinancement || !this.selectPrefinancement.length) {
       this.showToast('error', 'INFORMATION', 'Veuillez selectionner au moins un sinistre');
     } else {
       
@@ -238,28 +287,28 @@ export class PrefinancementValideComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.store.dispatch(featureActionPrefinancement.createOrdreReglement({prefinancement:this.selectPrefinancement}));
+          this.store.dispatch(featureActionPrefinancement.createOrdreReglement({prefinancement: this.selectPrefinancement}));
         },
       });
     }
   }
   
-  validerPrestation(pref:Prefinancement){
+  validerPrestation(pref: Prefinancement){
     
   }
   
   
-  voirPrestation(pref:Prefinancement){
+  voirPrestation(pref: Prefinancement){
     this.displayPrestation = true;
     this.prestationListPrefinancement = pref.prestation;
   }
   
-  calculCoutDebours(data: FraisReels, ri:number){
+  calculCoutDebours(data: FraisReels, ri: number){
     console.log(this.prestationList);
     console.log(data);
     this.prestationList[ri].debours = data.coutUnitaire * Number(data.nombreActe);
     this.prestationList[ri].baseRemboursement =   this.prestationList[ri].debours;
-    this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement*(this.prestationList[ri].taux.taux/100); 
+    this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement * (this.prestationList[ri].taux.taux / 100); 
   }
   rechercherAdherent(event){
     console.log(event.target.value);
@@ -268,13 +317,13 @@ export class PrefinancementValideComponent implements OnInit {
     this.prestationForm.get('numeroGroupe').setValue('');
     this.prestationForm.get('numeroPolice').setValue('');
     this.adherentSelected = null;
-    this.store.dispatch(featureActionAdherent.searchAdherent({numero:event.target.value}));
+    this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
   }
   
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
-    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement:this.prefinancementList}));
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
   }
   
   // permet d'enregistrer une prestation par famille
@@ -282,11 +331,11 @@ export class PrefinancementValideComponent implements OnInit {
   
   changeGarantie(garantie) {
     console.log(garantie);
-    this.acteListFilter = this.acteList.filter(element=> element.idTypeGarantie === garantie.value.id);
+    this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
   }
   
   newRowPrestation() {
-    return {taux:this.taux};
+    return {taux: this.taux};
   }
 
   addPrefinancement(){
@@ -323,8 +372,8 @@ export interface FraisReels {
   sousActe?: SousActe,
   cle?: number,
   baseRemboursement?: number,
-  taux?:Taux,
-  montantRembourse?:number,
-  sort?:Sort,
-  observation?:string
+  taux?: Taux,
+  montantRembourse?: number,
+  sort?: Sort,
+  observation?: string
 }
