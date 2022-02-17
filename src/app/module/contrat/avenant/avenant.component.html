@@ -1931,13 +1931,13 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoire">Frais accessoire</label>
+                            <label for="fraisAccessoire">Frais accessoires</label>
                             <div>
                                 <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
                             </div>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisBadge">Frais badge</label>
+                            <label for="fraisBadge">Frais badges</label>
                             <div>
                                 <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
                             </div>
@@ -2036,7 +2036,7 @@
                                         </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-dollar" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
-                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowdata.valide">
+                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowdata.valide || rowdata.historiqueAvenantPrimes.length > 0">
                                             </button>
                                         </div>
                                         <div class="p-col-">
