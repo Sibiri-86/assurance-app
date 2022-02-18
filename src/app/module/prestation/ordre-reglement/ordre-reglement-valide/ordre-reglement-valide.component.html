@@ -78,19 +78,39 @@
             </p-table>
         </div>
         
+        
+        
+        
+        
         <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <label for="matricule" class="p-sr-only">Matricule</label>
+                            <input id="matricule" type="text" pInputText placeholder="Matricule">
+                        </div>
+                        <div class="p-field">
+                            <label for="dateSoins" class="p-sr-only">Date soins</label>
+                            <p-calendar  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" placeholder="Date declaration"></p-calendar>
+                        </div>
+                        <div class="p-field">
+                            <button pButton pRipple type="button" label="Rechercher"></button>
+                        </div>
+                        
+                    </div>
+                    
                     <p-table #dt [value]="prefinancement" [columns]="cols" [rows]="10" [paginator]="true"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
-                <ng-template pTemplate="header">
+               
+                     <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Date saisie<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -103,7 +123,7 @@
                         <td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{prefinance.dateSaisie | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
