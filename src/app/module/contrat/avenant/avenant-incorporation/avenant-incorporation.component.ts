@@ -110,6 +110,7 @@ export class AvenantIncorporationComponent implements OnInit{
             matriculeSouscripteur: new FormControl(null, ),
             numero: new FormControl(null, ),
             familys: this.formBuilder.array([]),
+            manageIncorporation: new FormControl(1),
         });
 
         this.newForm = this.formBuilder.group({

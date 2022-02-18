@@ -29,6 +29,7 @@ export interface Adherent{
     matriculeSouscripteur?: string;
     fullName?: string;
     urlPhoto?: string;
+    manageIncorporation?: number;
 }
 
 export interface AdherentResearchReponse {
