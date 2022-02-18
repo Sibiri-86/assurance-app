@@ -241,7 +241,7 @@ export class TierPayantEffects {
                 this.tierPayantService.checkTierPayant(tierPayant).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        // featureActions.setCheckPrefinancement(value)
+                        featureActions.setTierPayantResponse(value)
                     ]),
                     catchError(error => {
                         featureActions.setTierPayantResponse(null);

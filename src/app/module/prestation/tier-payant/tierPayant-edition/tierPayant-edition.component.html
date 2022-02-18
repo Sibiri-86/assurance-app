@@ -35,13 +35,14 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:200px">Numéro sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
-                        <th pSortableColumn="duree" style="min-width:100px">Numero Adherent<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="min-width:100px">Numero de facture<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:50px">Numéro d'assuré <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" >Numéro de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:100px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="min-width:200px">Prénom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -58,21 +59,24 @@
                         <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
                         </td>-->
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.numero}}</span>
+                            <span class="p-column-title" style="min-width:50px">{{tierPayant.adherent.numero}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{tierPayant.numeroFacture}}</span>
+                            <span class="p-column-title" >{{tierPayant.numeroFacture}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.nom}}</span>
+                            <span class="p-column-title" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.nom}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.prenom}}</span>
                         </td>
 
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="editerPrestation(tierPayant)"></button>
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="editerPrestation(tierPayant)"></button>
                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>
@@ -99,7 +103,7 @@
         </div>
 
 
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1100px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
@@ -108,12 +112,15 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="nombreActe" style="width: 150px">nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="nombreActe" style="width: 120px">nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 200px">Sous acte<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 120px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 120px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="width: 150px">montant remboursé <p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateSoins" style="width: 150px">Date Soins <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 120px">montant remboursé <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateSoins" style="width: 120px">Date Soins <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 120px">Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 120px">Decision<p-sortIcon field="decision"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -121,14 +128,20 @@
                     <tr>
 
                         <td><span class="p-column-title">{{prestation.nombreActe}}</span>
+                        <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
+                        </td>
                         <td><span class="p-column-title">{{prestation.coutUnitaire}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.debours}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.baseRemboursement}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span></td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse | formatTableValue: 'number':true}}</span></td>
                         <td><span class="p-column-title">{{prestation.dateSoins | formatTableValue: 'date'}}</span></td>
+                        <td><span class="p-column-title">{{prestation.taux.taux}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sort}}</span>
+                        </td>
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerPrestation(prestation)"></button>
                         </td>
@@ -171,14 +184,21 @@
                                     <input id="numeroFacture" type="text" formControlName="numeroFacture" placeholder="numero de facture" pInputText>
 
                                 </div>
+
                                 <div class="p-field p-col">
-                                    <label for="matriculeAdherent">Matricule adhérent<sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                    <label for="dateFacture">Date de Facture<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                    <p-calendar id="dateFacture"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
+                                                formControlName="dateFacture" appendTo="body"></p-calendar>
                                 </div>
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Matricule adhérent<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                </div>
 
                                 <div class="p-field p-col">
                                     <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -194,14 +214,15 @@
                                     <label for="groupeAdherent">Numéro du groupe<span class="required">*</span></label>
                                     <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
                                 </div>
-                                <div class="p-field p-col">
-                                    <label for="nomGroupeAdherent">Nom du groupe<span class="required">*</span></label>
-                                    <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
-                                </div>
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="nomGroupeAdherent">Nom du groupe<span class="required">*</span></label>
+                                    <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
+                                </div>
 
                                 <div class="p-field p-col-3">
                                     <label for="policeAdherent">Numéro de la police<span class="required">*</span></label>
@@ -216,7 +237,8 @@
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
-                                <button pButton [disabled]="!adherentSelected"
+                                <button pButton [disabled]="!adherentSelected || !prestationForm.get('dateDeclaration').value
+                                || !prestationForm.get('numeroFacture').value"
                                         pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
@@ -293,10 +315,16 @@
 
                                         <div class="p-field p-col">
                                             <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique</label>
-                                            <p-dropdown inputId="produitPharmaceutique" dataKey="id" [filter]="true"
+                                            <!--<p-dropdown inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="produitPharmaceutiqueList"
                                                         formControlName="produitPharmaceutique" placeholder="Select produit pharmaceutique "
-                                                        optionLabel="libelle"></p-dropdown>
+                                                        optionLabel="libelle">
+                                            </p-dropdown>-->
+                                            <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
+                                                           showClear="true" [options]="produitPharmaceutiqueList"
+                                                           formControlName="produitPharmaceutique" placeholder="Select produit pharmaceutique "
+                                                           optionLabel="libelle">
+                                            </p-multiSelect>
                                         </div>
 
                                     </div>
@@ -312,7 +340,7 @@
 
                                         <div class="p-field p-col">
                                             <label for="nombreActe" id="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                            <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte" (onBlur)="calculDebours(i)"></p-inputNumber>
+                                            <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
                                         </div>
                                         <div class="p-field p-col">
                                             <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -342,15 +370,26 @@
                                             <label for="montantRembourse" id="montantRembourse">Montant remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                         </div>
-                                        <div class="p-field p-col-3">
+                                        <!--<div class="p-field p-col-3">
                                             <label for="sort" id="sort">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
                                             <p-dropdown inputId="sort"  [filter]="true"
                                                         showClear="true" [options]="typeSort"
                                                         formControlName="sort"></p-dropdown>
+                                        </div>-->
+                                        <div class="p-field p-col-3">
+                                            <label for="nombreActe">Montant remboursé restant<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>
                                         </div>
 
                                     </div>
                                     <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col-3">
+                                            <label for="sousActe">Decision <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                            <p-dropdown inputId="decision" [filter]="true"
+                                                        showClear="true" [options]="typeSort"
+                                                        formControlName="sort"
+                                                        [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                                        </div>
                                     <div class="p-field p-col">
                                         <label for="observation" id="observation">Observation</label>
                                         <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
@@ -376,7 +415,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple [disabled]="prestationForm?.controls.invalid"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!adherentSelected || !prestationForm.get('prestation').value"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>

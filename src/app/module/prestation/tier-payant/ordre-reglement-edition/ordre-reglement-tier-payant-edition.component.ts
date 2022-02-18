@@ -15,6 +15,7 @@ import { TypeReport } from 'src/app/store/contrat/enum/model';
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -33,7 +34,9 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
-              private formBuilder: FormBuilder,  private messageService: MessageService) { }
+              private formBuilder: FormBuilder,  private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+    this.breadcrumbService.setItems([{ label: 'Tiers Payant | Ordre de règlement édition' }]);
+  }
 
   ngOnInit(): void {
 

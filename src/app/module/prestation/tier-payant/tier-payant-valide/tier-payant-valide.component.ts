@@ -54,6 +54,7 @@ import { printPdfFile } from 'src/app/module/util/common-util';
 import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 
 @Component({
@@ -96,12 +97,16 @@ export class TierPayantValideComponent implements OnInit {
   report: Report = {};
   sinistreTierPayantDTOList: Array<SinistreTierPayant>;
   sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
+  disableButtomOrdreReglement = true;
+  tab: Array<string> = [];
 
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
-               private confirmationService: ConfirmationService,  private messageService: MessageService) {
-   }
+               private confirmationService: ConfirmationService,  private messageService: MessageService,
+               private breadcrumbService: BreadcrumbService) {
+    this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre valide' }]);
+  }
 
   imprimer(pref: SinistreTierPayant) {
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
@@ -313,6 +318,48 @@ export class TierPayantValideComponent implements OnInit {
           */
       }
     });
+  }
+
+  onRowSelectSinistre(event) {
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && event.data.adherent.adherentPrincipal &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id !== event.data.adherentPrincipal.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal.id !== event.data.adherent.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        event.data.adherent.id !== this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    console.log(this.selectTierPayant);
+  }
+
+  onRowUnselectSinistre(event){
+    console.log(this.tab);
+    let check = true;
+    for (const f of this.tab){
+      if (!this.selectTierPayant.every(elem => elem.id !== f)){
+        check = false;
+        return;
+      }
+    }
+    if (check) {
+      this.disableButtomOrdreReglement = true;
+    }
   }
 
 }

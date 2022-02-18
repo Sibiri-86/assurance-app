@@ -45,7 +45,7 @@ import * as featureActionAdherent from '../../../../store/contrat/adherent/actio
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as featureActionPlafond from '../../../../store/contrat/plafond/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import {Prestation} from 'src/app/store/prestation/tierPayant/model';
+import {CheckTierPayantResult, Prestation} from 'src/app/store/prestation/tierPayant/model';
 import {Status} from 'src/app/store/global-config/model';
 import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
@@ -63,6 +63,8 @@ import * as featureActionPrefinancement from '../../../../store/prestation/prefi
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
+import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 
 @Component({
@@ -119,12 +121,15 @@ export class TierPayantEditionComponent implements OnInit {
     sousActeEnCours: Array<PlafondSousActe>;
     checkControl = true;
     tab: number[] = [];
+    checkTierPayantResult: Array<CheckTierPayantResult>;
 
 
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
-                private formBuilder: FormBuilder, private messageService: MessageService) {
+                private formBuilder: FormBuilder, private messageService: MessageService,
+                private breadcrumbService: BreadcrumbService) {
+        this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre édition' }]);
     }
 
     onCreate() {
@@ -174,6 +179,7 @@ export class TierPayantEditionComponent implements OnInit {
             numeroFacture: new FormControl(),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
+            dateFacture: new FormControl(),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -374,9 +380,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('nomGroupeAdherent').setValue('');
         this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
-        this.store.dispatch(featureActionAdherent.searchAssureAndFamilleActe({numero: event.target.value}));
+        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
 
-        this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
+        /* this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
         this.store.dispatch(featureActionPlafond.loadFamilleActeEnCours({numero: event.target.value}));
         this.familleActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log('++++++++++++++++++++++++++++++++++++value+++', value);
@@ -384,7 +390,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.familleActeEnCours = value.slice();
                 console.log('++++++++++++++++++++++++++++++++++++familleActeEnCours+++', this.familleActeEnCours);
             }
-        });
+        }); */
     }
 
     // valider TierPayant
@@ -448,8 +454,8 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     calculDebours(i: number) {
-        const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+        let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
         if (this.prestationForm.get('prestation').value[i].nombreActe &&
             this.prestationForm.get('prestation').value[i].coutUnitaire) {
             myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
@@ -465,11 +471,21 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantList.push(this.prefinancementModel);
         /* executer le controle de la prestation */
         this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
-        this.store.pipe(select(tierPayantSelector.checkTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (!value) {
                 this.tab.push(i);
                 this.checkControl = false;
+            } else {
+                this.checkTierPayantResult = value.slice();
+                console.log('**********************************', this.checkTierPayantResult);
+                for (let j = 0; j < this.checkTierPayantResult.length; j++){
+                    myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
+                    myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
+                        sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
+                        observation: this.checkTierPayantResult[j].message
+                    });
+                }
             }
         });
         this.tierPayantList = [];
@@ -563,5 +579,6 @@ export interface FraisReels {
     montantRembourse?: number;
     sort?: Sort;
     observation?: string;
+    dateSoins?: Date;
     produitPharmaceutique: Array<ProduitPharmaceutique>;
 }

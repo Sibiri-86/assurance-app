@@ -252,4 +252,9 @@ private handleError<T>() {
                 catchError(this.handleError())
             );
     }
+
+    misAJoursHistoriqueAvenant(ha: HistoriqueAvenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/misAJours`, ha);
+    }
 }

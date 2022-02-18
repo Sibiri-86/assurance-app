@@ -40,9 +40,9 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:200px">Numéro<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:200px">Numéro police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
@@ -98,24 +98,24 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!--<th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
+                        </th>-->
+                        <!--<th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>-->
                         <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="width: 150px">Prenom<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 200px">Numéro sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 200px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 250px">Prénom<p-sortIcon field="duree"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prefinance>
                     <tr>
-                        <td>
+                        <!--<td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
-                        </td>
-                        <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
-                        </td>
+                        </td>-->
+                        <!--<td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>-->
                         <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title">{{prefinance.numeroSinistre}}</span>

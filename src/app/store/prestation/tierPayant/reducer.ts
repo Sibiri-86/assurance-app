@@ -24,7 +24,7 @@ const featureReducer = createReducer(
         ...state, reportFile: payload.reportFile
     })),
     on(featureActions.setTierPayantResponse, (state, payload: CheckTierPayantReponse) => ({
-        ...state, checkTierPayantReponse: payload.TierPayantCheckReponse
+        ...state, checkTierPayantReponse: payload.list
     }))
   );
 export function reducer(state: SinistreTierPayantState | undefined, action: Action) {

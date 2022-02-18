@@ -12,6 +12,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import {OrdreReglementTierPayant, SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
 import {TypeReport} from '../../../../store/contrat/enum/model';
 import {TypeEtatOrdreReglement} from '../../../common/models/emum.etat.ordre-reglement';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -29,7 +30,9 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
-              private messageService: MessageService) { }
+              private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+  this.breadcrumbService.setItems([{ label: 'Tiers Payant | Ordre de règlement valide' }]);
+}
 
   ngOnInit(): void {
     this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
