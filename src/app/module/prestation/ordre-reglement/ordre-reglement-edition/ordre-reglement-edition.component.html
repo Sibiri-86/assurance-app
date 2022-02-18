@@ -88,7 +88,7 @@
             </p-table>
         </div>
         
-        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinsitre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prefinancement" [columns]="cols" [rows]="10" [paginator]="true"
@@ -100,7 +100,7 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Date saisie<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -113,7 +113,7 @@
                         <td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{prefinance.dateSaisie | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>

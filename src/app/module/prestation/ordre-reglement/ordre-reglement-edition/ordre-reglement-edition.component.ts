@@ -52,6 +52,7 @@ import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.o
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
+import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -68,12 +69,13 @@ export class OrdreReglementEditionComponent implements OnInit {
   report: Report = {};
   selectedOrdreReglement: OrdreReglement [];
 
-  constructor(private store: Store<AppState>,
-              private confirmationService: ConfirmationService,
-              private formBuilder: FormBuilder,  private messageService: MessageService) { }
+  constructor( private store: Store<AppState>,
+               private confirmationService: ConfirmationService,
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+     this.breadcrumbService.setItems([{ label: 'Ordre de reglement edition' }]);
+}
 
   ngOnInit(): void {
-    
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {

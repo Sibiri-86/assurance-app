@@ -61,6 +61,7 @@ import { TauxCommissionIntermediaireEffects } from 'src/app/store/parametrage/ta
 import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
 import { Dialog } from 'primeng/dialog/dialog';
+import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 
 @Component({
@@ -116,7 +117,8 @@ export class PrefinancementEditionComponent implements OnInit {
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+                this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
 
    get prestation() {

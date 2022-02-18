@@ -78,7 +78,7 @@
             </p-table>
         </div>
         
-        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinsitre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prefinancement" [columns]="cols" [rows]="10" [paginator]="true"

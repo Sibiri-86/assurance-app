@@ -52,6 +52,7 @@ import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.o
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
+import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -67,9 +68,11 @@ export class OrdreReglementValideComponent implements OnInit {
   prefinancement: Array<Prefinancement>;
   report: Report = {};
 
-  constructor(private store: Store<AppState>,
-              private confirmationService: ConfirmationService,
-              private messageService: MessageService) { }
+  constructor( private store: Store<AppState>,
+               private confirmationService: ConfirmationService,
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+     this.breadcrumbService.setItems([{ label: 'Ordre de reglement valide' }]);
+}
 
   ngOnInit(): void {
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));

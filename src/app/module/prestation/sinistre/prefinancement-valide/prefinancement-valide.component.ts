@@ -52,6 +52,7 @@ import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { Report } from 'src/app/store/contrat/police/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Table } from 'primeng/table';
+import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 
 @Component({
@@ -96,9 +97,11 @@ export class PrefinancementValideComponent implements OnInit {
   disableButtomOrdreReglement = true;
   tab: Array<string> = [];
 
-  constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
-               private confirmationService: ConfirmationService,  private messageService: MessageService) {
-   }
+  constructor( private store: Store<AppState>,
+               private confirmationService: ConfirmationService,
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+     this.breadcrumbService.setItems([{ label: 'Sinistre valide' }]);
+}
 
    imprimer(pref: Prefinancement) {
     this.report.typeReporting = TypeReport.PREFINANCEMENT_FICHE_DETAIL_REMBOURSEMENT;
