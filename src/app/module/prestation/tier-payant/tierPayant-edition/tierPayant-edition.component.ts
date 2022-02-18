@@ -176,6 +176,7 @@ export class TierPayantEditionComponent implements OnInit {
             numeroFacture: new FormControl(),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
+            dateFacture: new FormControl(),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());

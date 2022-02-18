@@ -5,7 +5,7 @@
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
 					<button pButton pRipple label="Ordre de paiement" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
-                            (click)="creerOrdreRglement()"  [disabled]="selectTierPayant?.length<1" ></button>
+                            (click)="creerOrdreRglement()"></button>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -17,7 +17,8 @@
             <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
-                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectTierPayant">
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
+                     (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectTierPayant">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
@@ -42,7 +43,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tierPayant>
-                    <tr>
+                    <tr [pSelectableRow]="tierPayant">
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>

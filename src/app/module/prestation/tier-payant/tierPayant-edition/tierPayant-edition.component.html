@@ -38,9 +38,10 @@
                         <th pSortableColumn="numero" style="min-width:200px">Numéro sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
-                        <th pSortableColumn="duree" style="min-width:100px">Numéro d'assuré <p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="min-width:100px">Numéro de facture<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:50px">Numéro d'assuré <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" >Numéro de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:100px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prénom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
@@ -58,13 +59,16 @@
                         <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
                         </td>-->
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.numero}}</span>
+                            <span class="p-column-title" style="min-width:50px">{{tierPayant.adherent.numero}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{tierPayant.numeroFacture}}</span>
+                            <span class="p-column-title" >{{tierPayant.numeroFacture}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.nom}}</span>
+                            <span class="p-column-title" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant.adherent.nom}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.prenom}}</span>
@@ -174,14 +178,21 @@
                                     <input id="numeroFacture" type="text" formControlName="numeroFacture" placeholder="numero de facture" pInputText>
 
                                 </div>
+
                                 <div class="p-field p-col">
-                                    <label for="matriculeAdherent">Matricule adhérent<sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                    <label for="dateFacture">Date de Facture<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                    <p-calendar id="dateFacture"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
+                                                formControlName="dateFacture" appendTo="body"></p-calendar>
                                 </div>
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Matricule adhérent<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                </div>
 
                                 <div class="p-field p-col">
                                     <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -197,14 +208,15 @@
                                     <label for="groupeAdherent">Numéro du groupe<span class="required">*</span></label>
                                     <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
                                 </div>
-                                <div class="p-field p-col">
-                                    <label for="nomGroupeAdherent">Nom du groupe<span class="required">*</span></label>
-                                    <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
-                                </div>
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="nomGroupeAdherent">Nom du groupe<span class="required">*</span></label>
+                                    <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
+                                </div>
 
                                 <div class="p-field p-col-3">
                                     <label for="policeAdherent">Numéro de la police<span class="required">*</span></label>

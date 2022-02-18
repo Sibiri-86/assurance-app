@@ -96,6 +96,8 @@ export class TierPayantValideComponent implements OnInit {
   report: Report = {};
   sinistreTierPayantDTOList: Array<SinistreTierPayant>;
   sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
+  disableButtomOrdreReglement = true;
+  tab: Array<string> = [];
 
 
 
@@ -313,6 +315,48 @@ export class TierPayantValideComponent implements OnInit {
           */
       }
     });
+  }
+
+  onRowSelectSinistre(event) {
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && event.data.adherent.adherentPrincipal &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id !== event.data.adherentPrincipal.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal.id !== event.data.adherent.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
+        event.data.adherent.id !== this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id){
+      this.disableButtomOrdreReglement = false;
+      this.tab.push(event.data.id);
+      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+    }
+
+    console.log(this.selectTierPayant);
+  }
+
+  onRowUnselectSinistre(event){
+    console.log(this.tab);
+    let check = true;
+    for (const f of this.tab){
+      if (!this.selectTierPayant.every(elem => elem.id !== f)){
+        check = false;
+        return;
+      }
+    }
+    if (check) {
+      this.disableButtomOrdreReglement = true;
+    }
   }
 
 }

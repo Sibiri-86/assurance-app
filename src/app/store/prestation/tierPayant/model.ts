@@ -41,6 +41,7 @@ export interface SinistreTierPayant {
     ordreReglementTierPayant?: OrdreReglementTierPayant;
     prestation?: Array<Prestation>;
     numeroFacture?: string;
+    dateFacture?: Date;
 }
 
 export interface Prestation {
