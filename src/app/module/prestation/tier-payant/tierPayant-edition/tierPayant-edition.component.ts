@@ -64,6 +64,7 @@ import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../stor
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
 import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 
 @Component({
@@ -126,7 +127,9 @@ export class TierPayantEditionComponent implements OnInit {
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
-                private formBuilder: FormBuilder, private messageService: MessageService) {
+                private formBuilder: FormBuilder, private messageService: MessageService,
+                private breadcrumbService: BreadcrumbService) {
+        this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre édition' }]);
     }
 
     onCreate() {

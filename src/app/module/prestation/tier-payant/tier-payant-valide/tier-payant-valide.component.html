@@ -5,7 +5,7 @@
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
 					<button pButton pRipple label="Ordre de paiement" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
-                            (click)="creerOrdreRglement()"></button>
+                            (click)="creerOrdreRglement()" [disabled]="!disableButtomOrdreReglement"></button>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -14,7 +14,7 @@
 				</ng-template>
                 -->
 			</p-toolbar>
-            <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="sinistreTierPayantDTOList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"

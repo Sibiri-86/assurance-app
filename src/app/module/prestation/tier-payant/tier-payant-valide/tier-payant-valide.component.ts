@@ -54,6 +54,7 @@ import { printPdfFile } from 'src/app/module/util/common-util';
 import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
+import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 
 @Component({
@@ -102,8 +103,10 @@ export class TierPayantValideComponent implements OnInit {
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
-               private confirmationService: ConfirmationService,  private messageService: MessageService) {
-   }
+               private confirmationService: ConfirmationService,  private messageService: MessageService,
+               private breadcrumbService: BreadcrumbService) {
+    this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre valide' }]);
+  }
 
   imprimer(pref: SinistreTierPayant) {
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
