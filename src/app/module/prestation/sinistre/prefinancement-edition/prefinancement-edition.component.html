@@ -127,15 +127,15 @@
                         <td><span class="p-column-title">{{prestation.nombreActe}}</span>
                         </td>
                         
-                        <td><span class="p-column-title">{{prestation.coutUnitaire}}</span>
+                        <td><span class="p-column-title">{{prestation.coutUnitaire| formatTableValue: 'number':true}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prestation.debours}}</span>
+                        <td><span class="p-column-title">{{prestation.debours| formatTableValue: 'number':true}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prestation.baseRemboursement}}</span>
+                        <td><span class="p-column-title">{{prestation.baseRemboursement| formatTableValue: 'number':true}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.taux.taux}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
+                        <td><span class="p-column-title">{{prestation.montantRembourse| formatTableValue: 'number':true}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.sort}}</span>
                         </td>
