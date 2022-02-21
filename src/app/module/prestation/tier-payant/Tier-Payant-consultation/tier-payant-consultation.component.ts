@@ -16,10 +16,10 @@ import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
-  templateUrl: './tier-payant-ordre-reglement-valide.component.html',
-  styleUrls: ['./tier-payant-ordre-reglement-valide.component.scss']
+  templateUrl: './tier-payant-consultation.component.html',
+  styleUrls: ['./tier-payant-consultation.component.scss']
 })
-export class TierPayantOrdreReglementValideComponent implements OnInit {
+export class TierPayantConsultationComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
@@ -31,7 +31,7 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
-  this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE REGLEMENT VALIDE' }]);
+  this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | CONSULTATION' }]);
 }
 
   ngOnInit(): void {

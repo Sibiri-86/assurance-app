@@ -35,7 +35,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private formBuilder: FormBuilder,  private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([{ label: 'Tiers Payant | Ordre de règlement édition' }]);
+    this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE REGLEMENT EDITION' }]);
   }
 
   ngOnInit(): void {

@@ -105,7 +105,7 @@ export class TierPayantValideComponent implements OnInit {
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre valide' }]);
+    this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE VALIDE' }]);
   }
 
   imprimer(pref: SinistreTierPayant) {

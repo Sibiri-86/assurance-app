@@ -129,7 +129,7 @@ export class TierPayantEditionComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService) {
-        this.breadcrumbService.setItems([{ label: 'Tiers Payant | Sinistre édition' }]);
+        this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
 
     onCreate() {
