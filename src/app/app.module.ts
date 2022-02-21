@@ -238,6 +238,7 @@ import {ExerciceEffects} from './store/contrat/exercice/effect';
 import {TierPayantValideComponent} from './module/prestation/tier-payant/tier-payant-valide/tier-payant-valide.component';
 import {OrdreReglementTierPayantEditionComponent} from './module/prestation/tier-payant/ordre-reglement-edition/ordre-reglement-tier-payant-edition.component';
 import {TierPayantOrdreReglementValideComponent} from './module/prestation/tier-payant/Tier-Payant-ordre-reglement-valide/tier-payant-ordre-reglement-valide.component';
+import {TierPayantConsultationComponent} from './module/prestation/tier-payant/Tier-Payant-consultation/tier-payant-consultation.component';
 
 @NgModule({
     imports: [
@@ -430,7 +431,8 @@ import {TierPayantOrdreReglementValideComponent} from './module/prestation/tier-
         TierPayantEditionComponent,
         TierPayantValideComponent,
         OrdreReglementTierPayantEditionComponent,
-        TierPayantOrdreReglementValideComponent
+        TierPayantOrdreReglementValideComponent,
+        TierPayantConsultationComponent
     ],
     providers: [
         {
