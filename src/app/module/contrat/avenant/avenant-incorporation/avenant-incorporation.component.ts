@@ -217,7 +217,7 @@ export class AvenantIncorporationComponent implements OnInit{
         });
         this.historiqueAvenant1.aderants = this.adherentFamilleListe;
         this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-        this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value;
+        this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
         switch (this.myForm.get('demandeur').value.value) {
