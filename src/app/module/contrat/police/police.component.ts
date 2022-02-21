@@ -720,7 +720,6 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentFamilleList = [];
     this.adherentFamille = [];
     this.adherentWithFamille = {};
-
     this.baremeList$ = this.store.pipe(select(plafondSelector.plafondConfig));
     this.baremeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {

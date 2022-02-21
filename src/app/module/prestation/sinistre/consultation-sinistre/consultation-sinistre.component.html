@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="p-formgroup-inline">
+        <div class="p-field">
+            <label for="matricule" class="p-sr-only">Matricule</label>
+            <input id="matricule" type="number" pInputText placeholder="Matricule" [(ngModel)]="matricule">
+        </div>
+        
+        <p-calendar [showIcon]="true" inputId="icon"></p-calendar>
+        
+        <div class="p-field">
+            <label for="dateSoins" class="p-sr-only">Date soins</label>
+            
+            <p-calendar [showIcon]="true" inputId="icon" ></p-calendar>
+            
+        </div>
+        <div class="p-field">
+            <button pButton pRipple type="button" (click)="rechercherSinistre()" label="Rechercher"></button>
+        </div>
+    </div>

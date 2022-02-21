@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import {
   ControlContainer,
@@ -69,7 +69,7 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
   templateUrl: './prefinancement-edition.component.html',
   styleUrls: ['./prefinancement-edition.component.scss']
 })
-export class PrefinancementEditionComponent implements OnInit {
+export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayFormPrefinancement = false;
   prestationList: Array<FraisReels>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -518,7 +518,13 @@ export class PrefinancementEditionComponent implements OnInit {
       }
     });
   }
-  
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    // Now let's also unsubscribe from the subject itself:
+    this.destroy$.unsubscribe();
+  }
+
 }
 
 

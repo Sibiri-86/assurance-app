@@ -20,3 +20,4 @@ export const loadPoliceByAffaireNouvelle = createAction('[load Police] load Poli
 export const deValiderPolice = createAction('[App Init] deValider Police', props<Police>());
 export const getActiveExerciceByPolice = createAction('[App Init] get active exercice', props<{policeId: string}>());
 
+
