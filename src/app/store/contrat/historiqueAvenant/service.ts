@@ -114,8 +114,6 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         data.append('typeHistoriqueAvenant', historiqueAvenant.typeHistoriqueAvenant);
         if (historiqueAvenant.numeroGarant !== null && historiqueAvenant.numeroGarant !== undefined) {
             data.append('numeroGarant', historiqueAvenant.numeroGarant?.toString());
-        } else {
-            data.append('numeroGarant', null);
         }
         const date = new Date();
         date.setFullYear(historiqueAvenant.dateAvenant.getFullYear(), historiqueAvenant.dateAvenant.getMonth(),
