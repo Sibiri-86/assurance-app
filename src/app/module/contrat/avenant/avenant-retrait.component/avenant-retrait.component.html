@@ -189,7 +189,7 @@
             <div class="p-field p-col-2 p-ac-center">
                 <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm.invalid">
+                [disabled]="myForm.invalid && adherantDeleteds?.length < 0">
                 </button>
             </div>
         </div>
