@@ -78,6 +78,7 @@ import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-as
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
+import {removeBlanks} from '../../../util/common-util';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -997,9 +998,9 @@ export class AvenantRenouvellementComponent implements OnInit {
                 });
             }
         });
-        this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
-        this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-        this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
+        // this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
+        // this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+        // this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
         this.objet.police = this.police;
         // this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
         /* this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
@@ -1023,6 +1024,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
         this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
+        this.objet.historiqueAvenantAdherants.forEach(haa => haa.id = null);
+        this.objet.historiqueAvenantAdherantDels.forEach(haa => haa.id = null);
         this.objet.historiqueAvenant = this.historiqueAvenant;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
@@ -1038,11 +1041,31 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
         this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
         this.objet.groupe = this.groupeForm.value;
-        // this.objet.groupe.typePrime = this.primeForm.get('prime').value;
-        this.objet.groupe.prime = this.groupeForm.get('typePrime').value;
+        this.objet.groupe.prime = this.primeForm.value;
+        this.objet.groupe.typePrime = this.primeForm.get('prime').value;
         this.objet.groupe.police = this.police;
-        console.log('******************************************************');
+        if (this.objet.groupe.prime.primeAdulte) {
+            this.objet.groupe.prime.primeAdulte = removeBlanks(this.objet.groupe.prime.primeAdulte + '');
+        }
+        if (this.objet.groupe.prime.primeAnnuelle) {
+            this.objet.groupe.prime.primeAnnuelle = removeBlanks(this.objet.groupe.prime.primeAnnuelle + '');
+        }
+        if (this.objet.groupe.prime.primeConjoint) {
+            this.objet.groupe.prime.primeConjoint = removeBlanks(this.objet.groupe.prime.primeConjoint + '');
+        }
+        if (this.objet.groupe.prime.primeEmploye) {
+            this.objet.groupe.prime.primeEmploye = removeBlanks(this.objet.groupe.prime.primeEmploye + '');
+        }
+        if (this.objet.groupe.prime.primeEnfant) {
+            this.objet.groupe.prime.primeEnfant = removeBlanks(this.objet.groupe.prime.primeEnfant + '');
+        }
+        if (this.objet.groupe.prime.primeFamille) {
+            this.objet.groupe.prime.primeFamille = removeBlanks(this.objet.groupe.prime.primeFamille + '');
+        }
+        console.log('*********************aveanant*********************************');
         console.log(this.objet);
+        console.log('*********************avenant.groupe.prime*********************************');
+        console.log(this.objet.groupe);
         this.eventEmitterM.emit(this.objet);
     }
 
@@ -1111,25 +1134,24 @@ export class AvenantRenouvellementComponent implements OnInit {
                     console.log(res);
                 }
             );
-            this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
+            /* this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
                 (res) => {
                     this.plafondActePlafongConfig = res.body;
-                    // this.plafondFamilleActePlafongConfig.forEach(pfapc => {
-                    // pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.)
-                    // });
+
                 }
             );
             this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
                 (res) => {
                     this.plafondSousActePlafongConfig = res.body;
                     this.plafondFamilleActePlafongConfig.forEach(pfapc => {
+                        pfapc.groupe = this.groupePlafongConfig;
                         this.plafondActePlafongConfig.forEach(papc => {
-                            papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
+                            papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.plafondGroupeActe.id === papc.id);
                         });
-                        pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.acte.idTypeGarantie === pfapc.garantie.id);
+                        pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.plafondGroupeFamilleActe.id === pfapc.id);
                     });
                 }
-            );
+            ); */
         }
     }
     changeTypeDuree(){

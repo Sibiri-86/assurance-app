@@ -6,6 +6,7 @@ import { Taux } from '../taux/model';
 import { QualiteAssure } from '../qualite-assure/model';
 import { Etat } from 'src/app/module/common/models/model';
 import { Status } from 'src/app/module/common/models/etat.enum';
+import {Groupe} from '../../contrat/groupe/model';
 
 export interface PlafondFamilleActe {
     id?: string;
@@ -18,6 +19,7 @@ export interface PlafondFamilleActe {
     listeActe?: Array<PlafondActe>;
     domaine?: Array<QualiteAssure>;
     etat?: Status;
+    groupe?: Groupe;
   }
 
 export interface PlafondActe {
@@ -30,7 +32,8 @@ export interface PlafondActe {
     nombre?: number;
     listeSousActe?: Array<PlafondSousActe>;
     etat?: Status;
-    sousActeListe?: SousActe[]
+    sousActeListe?: SousActe[];
+    plafondGroupeFamilleActe?: PlafondFamilleActe;
   }
 
 export interface PlafondSousActe {
@@ -43,4 +46,5 @@ export interface PlafondSousActe {
     dimensionPeriode?: DimensionPeriode;
     nombre?: number;
     etat?: Status;
+    plafondGroupeActe?: PlafondActe;
 }

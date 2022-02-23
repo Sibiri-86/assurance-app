@@ -23,7 +23,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="numero">Numéro de l'avenant chez le garant</label>
-                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                            <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-4">
                             <label for="dateAvenant">Date de l'avenant</label>
@@ -339,72 +339,72 @@
                                 </div>-->
 
                                 <div class="p-field p-col-4">
-                                    <label for="typePrime">Type de prime /AN</label>
+                                    <label for="typePrime">Type de prime /période</label>
                                     <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
                                                 showClear="true" [options]="typePrimeList" formControlName="prime"
                                                 optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PF'">
-                                    <label for="primeFamille">Prime par famille /AN</label>
+                                    <label for="primeFamille">Prime par famille</label>
                                     <input id="primeFamille" type="text" pInputText
                                            [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true"
                                            formControlName="primeFamille">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PA'">
-                                    <label for="montantPrimeAdulte">Prime par adulte /AN</label>
+                                    <label for="montantPrimeAdulte">Prime par adulte</label>
                                     <input id="montantPrimeAdulte" type="text" pInputText formControlName="primeAdulte"
                                            [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PAE'">
-                                    <label for="montantPrimeEnfant">Prime par enfant /AN</label>
+                                    <label for="montantPrimeEnfant">Prime par enfant</label>
                                     <input id="montantPrimeEnfant" type="text" pInputText formControlName="primeEnfant"
                                            [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PP'">
-                                    <label for="montantPrimePersonne">Prime par personne /AN</label>
+                                    <label for="montantPrimePersonne">Prime par personne</label>
                                     <input id="montantPrimePersonne" type="text" pInputText
                                            formControlName="primePersonne"
                                            [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PE'">
-                                    <label for="montantPrimeEmploye">Prime par employé /AN</label>
+                                    <label for="montantPrimeEmploye">Prime par employé</label>
                                     <input id="montantPrimeEmploye" type="text" pInputText
                                            formControlName="primeEmploye"
                                            [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PC'">
-                                    <label for="montantPrimeConjoint">Prime par conjoint /AN</label>
+                                    <label for="montantPrimeConjoint">Prime par conjoint</label>
                                     <input id="montantPrimeConjoint" type="text" pInputText
                                            formControlName="primeConjoint"
                                            [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
-                                    <label for="montantPrimeEnfant1">Prime par enfant /AN</label>
+                                    <label for="montantPrimeEnfant1">Prime par enfant</label>
                                     <input id="montantPrimeEnfant1" type="text" pInputText formControlName="primeEnfant"
                                            [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PAE'">
-                                    <label for="montantPrimeAdulte1">Prime par adulte /AN</label>
+                                    <label for="montantPrimeAdulte1">Prime par adulte </label>
                                     <input id="montantPrimeAdulte1" type="text" pInputText formControlName="primeAdulte"
                                            [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true">
                                 </div>
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
-                                    <label for="montantPrimeEmploye1">Prime par employé /AN</label>
+                                    <label for="montantPrimeEmploye1">Prime par employé </label>
                                     <input id="montantPrimeEmploye1" type="text" pInputText
                                            formControlName="primeEmploye"
                                            [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true">
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PECE'">
-                                    <label for="montantPrimeConjoint1">Prime par conjoint /AN</label>
+                                    <label for="montantPrimeConjoint1">Prime par conjoint </label>
                                     <input id="montantPrimeConjoint1" type="text" pInputText
                                            formControlName="primeConjoint"
                                            [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true">
