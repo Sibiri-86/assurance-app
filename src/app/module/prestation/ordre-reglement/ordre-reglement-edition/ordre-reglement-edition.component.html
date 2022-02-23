@@ -21,6 +21,9 @@
 				</ng-template>
                 -->
 			</p-toolbar>
+            
+           
+            
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
@@ -63,6 +66,7 @@
                         
                         <td style="min-width:150px">
                         <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <button pButton  pRipple icon="pi pi-eye" pTooltip="consulter" class="p-button-rounded p-button-help p-mr-2" (click)="consulter(ordre)"></button>
                         <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerOrdreReglement(ordre)"></button>
                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
                         </td>
@@ -87,6 +91,8 @@
                 </ng-template>
             </p-table>
         </div>
+        <!-- integrer consultation ordre de reglement  -->
+        <app-ordre-reglement-consultation [ordreReglement]="ordreReglement" [showDialog]="showDetailOrdreReglement" (desactiveDialog)="desactiveDialog($event)" ></app-ordre-reglement-consultation>
         
         <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
             <ng-template pTemplate="content">
