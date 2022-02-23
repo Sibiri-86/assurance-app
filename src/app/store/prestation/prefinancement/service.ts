@@ -1,19 +1,20 @@
-import { from } from "rxjs";
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { from } from 'rxjs';
+import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from "./model";
-import { TypeEtatSinistre } from "src/app/module/common/models/enum.etat.sinistre";
-import { TypeEtatOrdreReglement } from "src/app/module/common/models/emum.etat.ordre-reglement";
-import { Report } from "../../contrat/police/model";
+import { OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
+import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
+import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { Report } from '../../contrat/police/model';
+import {formatDate} from '@angular/common';
 
 @Injectable({providedIn: 'root'})
 export class PrefinancementService {
 constructor(private http: HttpClient) {
-    
+
 }
 
 
@@ -26,17 +27,23 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/enregistrer`, prefinancement);
   }
-  
+
   checkPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/consulter`, prefinancement);
   }
   
+  searchPrefinancement(matricule: number, dateDeclaration: string): Observable<any> {
+    // @FIXME: post request
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/consulter`, {params :
+      this.createRequestOption({matricule, dateDeclaration})});
+  }
+
   putUpdatePrefinancement(prefinancement: Prefinancement, etat: TypeEtatSinistre): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/etat/${etat}`, prefinancement);
   }
-  
+
   deletePrestation(prestation: Prestation): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/prestation/${prestation.id}`, null);
@@ -56,14 +63,14 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/etat/${etat}`, ordre);
   }
-  
+
   $getReport(report: Report): Observable<ArrayBuffer> {
     // @FIXME: get request
     return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/report`,
      report, {responseType: 'arraybuffer'});
 }
-  
-    
+
+
   $getOrdreReglement(): Observable<OrdreReglementList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement`).pipe(
@@ -79,7 +86,7 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
         catchError(this.handleError())
     );
   }
-  
+
   $getPrefinancement(): Observable<PrefinancementList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}`).pipe(
@@ -94,6 +101,24 @@ $getPrefinancementValide(): Observable<PrefinancementList> {
         map((response: PrefinancementList) => response),
         catchError(this.handleError())
     );
+}
+
+private createRequestOption = (req?: any): HttpParams => {
+  let options: HttpParams = new HttpParams();
+  if (req) {
+    Object.keys(req).forEach(key => {
+      if (key !== 'sort' && key !== 'type' &&
+          req[key] !== null && req[key] !== undefined) {
+        options = options.set(key, req[key]);
+      }
+    });
+    if (req.sort) {
+      req.sort.forEach(val => {
+        options = options.append('sort', val);
+      });
+    }
+  }
+  return options;
 }
 
 private handleError<T>() {

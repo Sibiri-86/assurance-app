@@ -30,3 +30,6 @@ export const deleteOrdreDeReglement = createAction('[delete ordre de reglement] 
         Array<OrdreReglement>}>());
 export const checkPrefinancement = createAction('[App Init] Check Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
 export const setCheckPrefinancement = createAction('[App Init] Check Prefinancement reponse', props<CheckPrefinancementReponse>());
+/** */
+export const searchPrefinancement = createAction('[App Init] search prefinancement', props<{matricule: number,
+     dateDeclaration: string}>() );

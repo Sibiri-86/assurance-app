@@ -10,33 +10,16 @@ import {
 } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { loadSousActe } from '../../../../store/parametrage/sous-acte/actions';
-import * as sousActeSelector from '../../../../store/parametrage/sous-acte/selector';
 import { takeUntil } from 'rxjs/operators';
-import { SousActe } from 'src/app/store/parametrage/sous-acte/model';
-import { Taux } from '../../../../store/parametrage/taux/model';
-import { loadTaux } from '../../../../store/parametrage/taux/actions';
-import * as tauxSelector from '../../../../store/parametrage/taux/selector';
-import { Sort } from '../../../common/models/sort.enum';
-import { loadGarantie } from '../../../../store/parametrage/garantie/actions';
-import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
-
-import { loadPrestataire} from '../../../../store/parametrage/prestataire/actions';
-import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
-
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
 import * as prefinancementActions from '../../../../store/prestation/prefinancement/action';
-
 import { loadMedecin} from '../../../../store/parametrage/medecin/actions';
 import * as medecinSelector from '../../../../store/parametrage/medecin/selector';
 import {medecinList} from '../../../../store/parametrage/medecin/selector';
-
 import { loadActe } from '../../../../store/parametrage/acte/actions';
 import * as acteSelector from '../../../../store/parametrage/acte/selector';
-
 import { loadPathologie } from 'src/app/store/parametrage/pathologie/actions';
 import * as pathologieSelector from '../../../../store/parametrage/pathologie/selector';
-
 import { loadProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/actions';
 import * as produitPharmaceutiqueSelector from 'src/app/store/parametrage/produit-pharmaceutique/selector';
 import { Acte } from 'src/app/store/parametrage/acte/model';
@@ -56,11 +39,9 @@ import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { Report } from 'src/app/store/contrat/police/model';
-import { TauxCommissionIntermediaireEffects } from 'src/app/store/parametrage/taux-commission-intermediaire/effect';
-import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
-import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
 import { Dialog } from 'primeng/dialog/dialog';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-consultation-sinistre',
@@ -71,19 +52,136 @@ export class ConsultationSinistreComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   matricule: number;
   dateSoins: Date;
+  cols: any;
+  prefinancementDtoList$: Observable<Array<Prefinancement>>;
+  prefinancementDtoList: Array<Prefinancement>;
+  report: Report = {};
+  prestationForm: FormGroup;
+  displayFormPrefinancement = false;
+  adherentSelected: Adherent;
+  selectPrefinancement: Prefinancement;
+
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
      this.breadcrumbService.setItems([{ label: 'Sinistre consultation' }]);
 }
 
+get prestation() {
+  return this.prestationForm.controls.prestation as FormArray;
+ }
+
+createItem(): FormGroup {
+  return this.formBuilder.group({
+    id: new FormControl(),
+    nombreActe: new FormControl('', [Validators.required]),
+    coutUnitaire: new FormControl('', [Validators.required]),
+    debours: new FormControl(),
+    sousActe: new FormControl([Validators.required]),
+    baseRemboursement: new FormControl(),
+    taux: new FormControl(),
+    montantRembourse: new FormControl(),
+    sort: new FormControl(),
+    montantRestant: new FormControl(),
+    observation: new FormControl(),
+    prestataire: new FormControl(),
+    centreExecutant: new FormControl(),
+    produitPharmaceutique: new FormControl(),
+    pathologie: new FormControl(),
+    dateSoins: new FormControl('', [Validators.required]),
+    acte: new FormControl(),
+    medecin: new FormControl()
+  });
+  }
+
   ngOnInit(): void {
 
+    this.prestationForm = this.formBuilder.group({
+      // domaine: new FormControl({}),
+      id: new FormControl(),
+      referenceSinistreGarant: new FormControl(),
+      referenceBordereau: new FormControl(),
+      dateSaisie: new FormControl(),
+      dateDeclaration: new FormControl(),
+      matriculeAdherent: new FormControl(),
+      nomAdherent: new FormControl(),
+      prenomAdherent: new FormControl(),
+      numeroGroupe: new FormControl(),
+      numeroPolice: new FormControl(),
+      prestation: this.formBuilder.array([])
+    });
+
+    this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
+    this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
+
+    this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
+    this.store.dispatch(featureActionPrefinancement.searchPrefinancement({matricule: null, dateDeclaration: null}));
+    this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.prefinancementDtoList = value.slice();
+      }
+    });
+
+  }
+
+  showDialogPlafondMaximized(dialog: Dialog) {
+    dialog.maximized = true;
+  }
+
+  closeDialog() {
+    this.prestationForm.reset();
+    this.prestation.clear();
+    console.log(this.prestation);
+   }
+
+  editerPrestation(pref: Prefinancement) {
+    this.selectPrefinancement = pref;
+    console.log(pref);
+    this.adherentSelected = pref.adherent;
+    this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+    this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
+    this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
+    this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+    this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
+    this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
+    this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+    //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+    this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+    for (const pr of pref.prestation) {
+    const formPrestation: FormGroup = this.createItem();
+    formPrestation.patchValue(pr);
+    formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+    formPrestation.get('debours').setValue(pr.debours);
+    formPrestation.get('taux').setValue(pr.taux);
+    formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+    formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+    this.prestation.push(formPrestation);
+    }
+    this.displayFormPrefinancement = true;
+    this.prestationForm.disable();
+  }
+
+  imprimer(pref: Prefinancement) {
+    this.report.typeReporting = TypeReport.PREFINANCEMENT_FICHE_DETAIL_REMBOURSEMENT;
+    this.report.prefinancementDto = pref;
+    this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
   }
 
   rechercherSinistre() {
     console.log('**********************************matricule******************' + this.matricule);
     console.log('**********************************dateSoins******************' + this.dateSoins);
+    let dateS = null;
+    if (this.dateSoins){
+      dateS =  formatDate(this.dateSoins, 'dd/MM/yyyy', 'en-fr');
+    }
+    this.store.dispatch(featureActionPrefinancement.searchPrefinancement({matricule: this.matricule,
+      dateDeclaration: dateS}));
   }
 
   ngOnDestroy() {

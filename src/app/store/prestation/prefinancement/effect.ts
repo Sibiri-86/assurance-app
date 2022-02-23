@@ -32,6 +32,20 @@ export class PrefinancementEffects {
             ))
         ));
 
+    searchPrefinancement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.searchPrefinancement),
+            mergeMap(({matricule, dateDeclaration}) =>
+                this.prefinancementService.searchPrefinancement(matricule, dateDeclaration).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPrefinancement(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
     loadReglement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadOrdreReglement),
