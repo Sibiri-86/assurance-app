@@ -74,7 +74,7 @@ import {BreadcrumbService} from '../../../../app.breadcrumb.service';
     styleUrls: ['./tierPayant-edition.component.scss']
 })
 export class TierPayantEditionComponent implements OnInit {
-    displayFormPrefinancement = false;
+    displayFormPrefinancement: boolean;
     prestationList: Array<FraisReels>;
     sousActeList$: Observable<Array<SousActe>>;
     sousActeList: Array<SousActe>;
@@ -122,6 +122,8 @@ export class TierPayantEditionComponent implements OnInit {
     checkControl = true;
     tab: number[] = [];
     checkTierPayantResult: Array<CheckTierPayantResult>;
+    isDetail: boolean;
+    editForm: FormGroup;
 
 
 
@@ -357,10 +359,44 @@ export class TierPayantEditionComponent implements OnInit {
         this.displayFormPrefinancement = true;
     }
 
-    voirPrestation(pref: SinistreTierPayant) {
-        this.displayPrestation = true;
-        this.prestationListPrefinancement = pref.prestation;
-        this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+    voirPrestation(pref?: SinistreTierPayant, isDetail?: boolean) {
+        console.log('****************pref****************', pref);
+        console.log('****************isDetail****************', isDetail);
+        if (this.displayFormPrefinancement) {
+            this.displayFormPrefinancement = false;
+            this.isDetail = false;
+            this.prestationForm.reset();
+            this.prestationForm.enable({onlySelf: false, emitEvent: true});
+            this.prestationListPrefinancement = pref.prestation;
+            this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+        } else {
+            if (pref) {
+                this.isDetail = isDetail;
+                this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+                this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
+                this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
+                this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+                this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
+                this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
+                this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+                this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
+                this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
+                this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
+                // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+                this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+                for (const pr of pref.prestation) {
+                    const formPrestation: FormGroup = this.createItem();
+                    formPrestation.patchValue(pr);
+                    this.prestation.push(formPrestation);
+                }
+                if (this.isDetail) {
+                    this.prestationForm.disable({onlySelf: false, emitEvent: true});
+                }
+            }
+            this.displayFormPrefinancement = true;
+        }
+
+
     }
 
     calculCoutDebours(data: FraisReels, ri: number) {

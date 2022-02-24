@@ -75,8 +75,8 @@
                         </td>
 
                         <td style="min-width:150px">
-                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="editerPrestation(tierPayant)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant, true)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="voirPrestation(tierPayant, false)"></button>
                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>

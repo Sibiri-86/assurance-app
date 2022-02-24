@@ -266,7 +266,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.prestataireList = value.slice();
-        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire === 'Clinique');
+        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire.toUpperCase() === 'CLINIQUE');
         this.prestataireExecutant = this.prestataireList;
       }
     });

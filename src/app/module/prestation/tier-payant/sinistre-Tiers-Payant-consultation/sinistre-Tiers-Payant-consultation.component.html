@@ -18,7 +18,7 @@
         </div>
         
         
-        <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+        <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
         [rowHover]="true" dataKey="id"
         styleClass="p-datatable-customers"
         currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -35,7 +35,7 @@
            <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
            <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
            <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
-           <th pSortableColumn="status" style="min-width:200px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+           <!--<th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="dateEcheance"></p-sortIcon></th>-->
            <th style="min-width:150px"></th>
        </tr>
    </ng-template>
@@ -59,9 +59,9 @@
            <td>
                <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
            </td>
-           <td>
-            <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
-           </td>
+           <!--<td>
+               <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
+           </td>-->
            <td style="min-width:150px">
                <!--
                <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
@@ -73,7 +73,7 @@
    </ng-template>
    <ng-template pTemplate="summary">
        <div class="p-d-flex p-ai-center p-jc-between">
-           {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+           {{sinistreTierPayantDTOList ? sinistreTierPayantDTOList.length : 0 }} sinistre(s).
        </div>
    </ng-template>
 </p-table>
@@ -88,7 +88,7 @@
 
 
 
-<p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+<p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Tiers Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
     <ng-template pTemplate="content">
         <div class="card">
             

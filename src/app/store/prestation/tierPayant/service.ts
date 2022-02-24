@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -100,11 +100,36 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/consulter`, tierPayant);
     }
 
+    searchTiersPayant(matricule: number, dateDeclaration: string): Observable<any> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/search`, {params :
+                this.createRequestOption({matricule, dateDeclaration})});
+    }
+
+    private createRequestOption = (req?: any): HttpParams => {
+        let options: HttpParams = new HttpParams();
+        if (req) {
+            Object.keys(req).forEach(key => {
+                if (key !== 'sort' && key !== 'type' &&
+                    req[key] !== null && req[key] !== undefined) {
+                    options = options.set(key, req[key]);
+                }
+            });
+            if (req.sort) {
+                req.sort.forEach(val => {
+                    options = options.append('sort', val);
+                });
+            }
+        }
+        return options;
+    }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
         return throwError(error.message || 'Something went wrong');
     };
-
-
 }
+
+
+
 }
