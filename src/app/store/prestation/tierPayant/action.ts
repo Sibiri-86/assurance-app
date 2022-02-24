@@ -39,6 +39,9 @@ export const deleteTierPayantOrdreDeReglement = createAction('[delete ordre de r
 export const checkTierPayant = createAction('[App Init] Check TierPayant', props<{tierPayant: Array<SinistreTierPayant>}>());
 export const setTierPayantResponse = createAction('[App Init] Check TierPayant reponse', props<CheckTierPayantReponse>());
 
+export const searchTiersPayant = createAction('[App Init] search TierPayant', props<{matricule: number,
+    dateDeclaration: string}>() );
+
 
 
 

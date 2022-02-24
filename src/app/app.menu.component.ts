@@ -45,9 +45,10 @@ export class AppMenuComponent implements OnInit {
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
                                     {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
+                                    {label: 'Consultation', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
                                     {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
                                     {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
-                                    {label: 'Consultation', icon: '', routerLink: ['/prestation/tierPayant/consultation']}
+                                    /* {label: 'sinistre | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ORD']}*/
                                 ]
                             }
                         ]

@@ -252,4 +252,18 @@ export class TierPayantEffects {
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));
+
+    searchTiersPayant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.searchTiersPayant),
+            mergeMap(({matricule, dateDeclaration}) =>
+                this.tierPayantService.searchTiersPayant(matricule, dateDeclaration).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
 }
