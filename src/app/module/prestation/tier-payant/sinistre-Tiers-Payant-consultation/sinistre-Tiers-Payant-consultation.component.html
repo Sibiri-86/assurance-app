@@ -1,0 +1,274 @@
+<div class="p-grid">
+<div class="p-col-12">
+	<p-toast></p-toast>
+<div class="card">
+    <div class="p-formgroup-inline">
+        <div class="p-field">
+            <label for="matricule" class="p-sr-only">Matricule</label>
+            <input id="matricule" type="number" pInputText placeholder="Matricule" [(ngModel)]="matricule">
+        </div>
+        
+        <div class="p-field">
+            <label for="dateSoins" class="p-sr-only">Date declaration</label>
+            <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateSoins" placeholder="Date declaration" ></p-calendar>
+            
+        </div>
+        <div class="p-field">
+            <button pButton pRipple type="button" (click)="rechercherSinistre()" label="Rechercher"></button>
+        </div>
+        
+        
+        <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+        [rowHover]="true" dataKey="id"
+        styleClass="p-datatable-customers"
+        currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+   <ng-template pTemplate="caption">
+   </ng-template>
+   <ng-template pTemplate="header">
+       <tr>
+           <th style="width: 3rem">
+               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+           </th>
+           <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+           <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
+           <th pSortableColumn="nom" style="min-width:200px">Date saisie<p-sortIcon field="nom"></p-sortIcon></th>
+           <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
+           <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
+           <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
+           <!--<th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="dateEcheance"></p-sortIcon></th>-->
+           <th style="min-width:150px"></th>
+       </tr>
+   </ng-template>
+   <ng-template pTemplate="body" let-prefinancement>
+       <tr>
+           <td>
+               <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
+           </td>
+           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+           </td>
+           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
+           </td>
+           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSaisie | formatTableValue : 'date'}}</span>
+           </td>
+           <td>
+               <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+           </td>
+           <td>
+               <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+           </td>
+           <td>
+               <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+           </td>
+           <!--<td>
+               <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
+           </td>-->
+           <td style="min-width:150px">
+               <!--
+               <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
+               -->
+               <button pButton  pRipple icon="pi pi-eye" pTooltip="voir detail" class="p-button-rounded p-button-help p-mr-2" (click)="editerPrestation(prefinancement)"></button> 
+               <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
+           </td>
+       </tr>
+   </ng-template>
+   <ng-template pTemplate="summary">
+       <div class="p-d-flex p-ai-center p-jc-between">
+           {{sinistreTierPayantDTOList ? sinistreTierPayantDTOList.length : 0 }} sinistre(s).
+       </div>
+   </ng-template>
+</p-table>
+
+
+
+
+
+
+</div> 
+</div>
+
+
+
+<p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Tiers Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+    <ng-template pTemplate="content">
+        <div class="card">
+            
+        <p-fieldset legend="Sinistre" toggleable="true">
+                
+           <div class="p-fluid p-formgrid p-grid">
+
+            <div class="p-field p-col">
+                <label for="dateEffet">Date de saisie</label>
+                <span> {{selectPrefinancement.dateSaisie  | formatTableValue : 'date'}}</span>
+            </div>
+            
+            <div class="p-field p-col">
+                <label for="dateEffet">Date de declaration</label>
+                <span> {{selectPrefinancement.dateDeclaration  | formatTableValue : 'date'}}</span>
+            </div>
+            
+            <div class="p-field p-col">
+                <label for="matriculeAdherent">Matricule adhérent</label>
+                <span> {{selectPrefinancement.adherent.numero}}</span>
+            </div>
+            
+           </div>
+            
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="nomAdherent">Nom</label>
+                    <span> {{selectPrefinancement.adherent.nom}}</span>
+                </div>
+                
+                <div class="p-field p-col">
+                    <label for="nomAdherent">Prenom</label>
+                    <span> {{selectPrefinancement.adherent.prenom}}</span>
+                </div>
+                
+                <div class="p-field p-col-4">
+                    <label for="groupeAdherent">Numero groupe</label>
+                    <span> {{selectPrefinancement.adherent.groupe.numeroGroupe}}</span>
+                </div> 
+            </div>
+            
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4">
+                    <label for="policeAdherent">Numero police</label>
+                    <span> {{selectPrefinancement.adherent.groupe.police.numero}}</span>
+                </div>
+            </div>
+    
+         
+        </p-fieldset>
+        
+        <hr/>  
+                
+        <div *ngFor="let prestation of selectPrefinancement.prestation;let i = index;">
+            <div>
+            <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
+                
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div class="p-field p-col">
+                        <label for="lastname2">Sous acte</label>
+                        <span> {{prestation?.sousActe?.libelle}}</span>
+                    </div>
+                </div>
+                    
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div class="p-field p-col">
+                        <label for="sousActe">Pathologie</label>
+                        <span> {{prestation?.pathologie?.libelle}}</span>  
+                    </div>
+                    
+                    <div class="p-field p-col">
+                        <label for="produit">Produit pharmaceutique</label>
+                        <span *ngFor="let p of prestation.produitPharmaceutique"> {{p?.libelle}}</span> 
+                    </div>
+                    
+                    <div class="p-field p-col">
+                        <label for="dateEffet">Date de soins</label>
+                        <span> {{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
+                    </div>
+                    
+                   </div>
+                   
+                   <div class="p-fluid p-formgrid p-grid">
+                       
+                    <div class="p-field p-col">
+                        <label for="centre">Centre prescripteur</label>
+                        <span> {{prestation?.prestataire?.libelle}}</span>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                        <label for="medecin">Centre executant</label>
+                        <span> {{prestation?.centreExecutant?.libelle}}</span>
+                    </div>
+                       
+                    <div class="p-field p-col">
+                        <label for="medecin">Medecin</label>
+                        <span> {{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
+                    </div>
+                       
+                   </div>
+                   
+                   
+                   <div class="p-fluid p-formgrid p-grid">
+                       
+                    <div class="p-field p-col">
+                        <label for="nombreActe">Nombre Acte</label>
+                        <span> {{prestation.nombreActe}}</span>
+                    </div>
+                       
+                    <div class="p-field p-col">
+                        <label for="nombreActe">Cout unitaire</label>
+                        <span> {{prestation.coutUnitaire}}</span>
+                    </div>
+                       
+                    <div class="p-field p-col">
+                        <label for="nombreActe">Debours</label>
+                        <span> {{prestation.debours}}</span>  
+                    </div>
+                    
+                   </div>
+                   
+                   
+                   <div class="p-fluid p-formgrid p-grid">
+                       
+                    <div class="p-field p-col">
+                        <label for="nombreActe">Base remboursement</label>
+                        <span> {{prestation.baseRemboursement}}</span>
+                    </div>
+                       
+                    <div class="p-field p-col-4">
+                        <label for="sousActe">Taux</label>
+                        <span> {{prestation?.taux?.taux}}</span>
+                    </div>
+                       
+                    <div class="p-field p-col-4">
+                        <label for="nombreActe">Montant remboursé</label>
+                        <span> {{prestation.montantRembourse}}</span>
+                    </div>
+                    
+                    <!--
+                    <div class="p-field p-col-4">
+                        <label for="sousActe">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                        <p-dropdown inputId="sort"  [filter]="true"
+                                    showClear="true" [options]="typeSort"
+                                    formControlName="sort"></p-dropdown>
+                    </div>
+                    -->
+                       
+                   </div>
+                   
+                   <div class="p-fluid p-formgrid p-grid">
+                       
+                    <div class="p-field p-col-4">
+                        <label for="nombreActe">Montant remboursé restant</label>
+                        <span> {{prestation.montantRestant}}</span>
+                    </div>
+                    
+                    <div class="p-field p-col-4">
+                        <label for="sousActe">Decision</label>
+                        <span> {{prestation.sort}}</span>
+                    </div>
+                       
+                   </div>
+                   
+                   <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-4">
+                    <label for="observation">Observation</label>
+                    <span> {{prestation.observation}}</span>
+                    </div>
+                   </div>       
+                   
+            </p-fieldset>
+                    
+                </div>
+                </div>
+       </div>    
+       </ng-template>   
+    </p-dialog>
+    
+</div> 
+</div>

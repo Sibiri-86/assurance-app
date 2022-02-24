@@ -10,6 +10,7 @@ import {OrdreReglement, Prefinancement} from '../prefinancement/model';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Acte} from '../../parametrage/acte/model';
 import {Sort} from '../../../module/common/models/sort.enum';
+import {TypeEtatSinistre} from '../../../module/common/models/enum.etat.sinistre';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -42,6 +43,7 @@ export interface SinistreTierPayant {
     prestation?: Array<Prestation>;
     numeroFacture?: string;
     dateFacture?: Date;
+    etat?: TypeEtatSinistre;
 }
 
 export interface Prestation {
