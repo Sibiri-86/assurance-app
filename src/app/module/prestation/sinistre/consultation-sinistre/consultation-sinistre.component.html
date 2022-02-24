@@ -146,7 +146,7 @@
                     
                     <div class="p-field p-col">
                         <label for="lastname2">Sous acte</label>
-                        <span> {{prestation.sousActe.libelle}}</span>
+                        <span> {{prestation?.sousActe?.libelle}}</span>
                     </div>
                 </div>
                     
@@ -154,17 +154,17 @@
                     
                     <div class="p-field p-col">
                         <label for="sousActe">Pathologie</label>
-                        <span> {{prestation.pathologie.libelle}}</span>     
+                        <span> {{prestation?.pathologie?.libelle}}</span>  
                     </div>
                     
                     <div class="p-field p-col">
                         <label for="produit">Produit pharmaceutique</label>
-                        <span *ngFor="let p of prestation.produitPharmaceutique"> {{p.libelle}}</span> 
+                        <span *ngFor="let p of prestation.produitPharmaceutique"> {{p?.libelle}}</span> 
                     </div>
                     
                     <div class="p-field p-col">
                         <label for="dateEffet">Date de soins</label>
-                        <span> {{prestation.dateSoins  | formatTableValue : 'date'}}</span>
+                        <span> {{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
                     </div>
                     
                    </div>
@@ -173,17 +173,17 @@
                        
                     <div class="p-field p-col">
                         <label for="centre">Centre prescripteur</label>
-                        <span> {{prestation.prestataire.libelle}}</span>
+                        <span> {{prestation?.prestataire?.libelle}}</span>
                     </div>
                     
                     <div class="p-field p-col">
                         <label for="medecin">Centre executant</label>
-                        <span> {{prestation.centreExecutant.libelle}}</span>
+                        <span> {{prestation?.centreExecutant?.libelle}}</span>
                     </div>
                        
                     <div class="p-field p-col">
                         <label for="medecin">Medecin</label>
-                        <span> {{prestation.medecin.nom}} {{prestation.medecin.premon}}</span>
+                        <span> {{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
                     </div>
                        
                    </div>
@@ -218,12 +218,12 @@
                        
                     <div class="p-field p-col-4">
                         <label for="sousActe">Taux</label>
-                        <span> {{prestation.taux.taux}}</span>
+                        <span> {{prestation?.taux?.taux}}</span>
                     </div>
                        
                     <div class="p-field p-col-4">
                         <label for="nombreActe">Montant remboursé</label>
-                        <span> {{prestation.montantRembourse}}</span> 
+                        <span> {{prestation.montantRembourse}}</span>
                     </div>
                     
                     <!--
