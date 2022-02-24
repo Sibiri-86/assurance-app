@@ -99,6 +99,8 @@ export class TierPayantValideComponent implements OnInit {
   sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
   disableButtomOrdreReglement = true;
   tab: Array<string> = [];
+  isDetail: boolean;
+  editForm: FormGroup;
 
 
 
