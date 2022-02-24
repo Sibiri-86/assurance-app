@@ -12,7 +12,8 @@ import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
-import {loadListeActualisee} from '../../../../store/contrat/adherent/actions';
+import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
+import * as loadListeActualisee from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
     HistoriqueAvenant,
@@ -187,6 +188,9 @@ export class AvenantRenouvellementComponent implements OnInit {
     curentPolice: Police;
     private exerciceForm: FormGroup;
     private exercice: Exercice;
+    adherentList$: Observable<Array<Adherent>>;
+    adherentList: Array<Adherent>;
+    displayDialogFormAdherent = false;
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -696,7 +700,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         );
 
         this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
-        this.store.dispatch(loadListeActualisee({policeId: this.curentPolice.id}));
+        this.store.dispatch(loadListeActualisee.loadListeActualisee({policeId: this.curentPolice.id}));
         this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
             .subscribe((value1) => {
                 if (value1) {
@@ -1284,5 +1288,17 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log(res);
             }
         );
+    }
+
+    voirAdherent(groupe: Groupe) {
+        this.displayDialogFormAdherent = true;
+        // this.groupe = groupe;
+        this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: groupe.id}));
+        this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.adherentList = value.slice();
+            }
+        });
     }
 }
