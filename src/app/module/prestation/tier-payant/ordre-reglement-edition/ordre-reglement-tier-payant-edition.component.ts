@@ -16,6 +16,7 @@ import * as tierPayantSelector from '../../../../store/prestation/tierPayant/sel
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
+import {OrdreReglement} from '../../../../store/prestation/prefinancement/model';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -31,6 +32,8 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   sinistreTierPayant: Array<SinistreTierPayant>;
   report: Report = {};
   selectedOrdreReglement: OrdreReglementTierPayant [];
+  ordreReglement: OrdreReglementTierPayant;
+  showDetailOrdreReglement = false;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -99,6 +102,18 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
     this.displaySinistre = true;
     this.sinistreTierPayant = ordre.tierPayant;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
+  }
+
+  desactiveDialog(event) {
+    console.log('desactive dialog');
+    this.showDetailOrdreReglement = false;
+  }
+
+  consulter(ordre: OrdreReglementTierPayant){
+    this.ordreReglement = ordre;
+    this.showDetailOrdreReglement = true;
+    console.log('*************************yes********************' + this.showDetailOrdreReglement);
+
   }
 
 }

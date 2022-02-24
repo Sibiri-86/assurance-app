@@ -12,30 +12,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { takeUntil } from 'rxjs/operators';
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
-import * as prefinancementActions from '../../../../store/prestation/prefinancement/action';
-import { loadMedecin} from '../../../../store/parametrage/medecin/actions';
-import * as medecinSelector from '../../../../store/parametrage/medecin/selector';
-import {medecinList} from '../../../../store/parametrage/medecin/selector';
-import { loadActe } from '../../../../store/parametrage/acte/actions';
-import * as acteSelector from '../../../../store/parametrage/acte/selector';
-import { loadPathologie } from 'src/app/store/parametrage/pathologie/actions';
-import * as pathologieSelector from '../../../../store/parametrage/pathologie/selector';
-import { loadProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/actions';
-import * as produitPharmaceutiqueSelector from 'src/app/store/parametrage/produit-pharmaceutique/selector';
-import { Acte } from 'src/app/store/parametrage/acte/model';
-import { Garantie } from 'src/app/store/parametrage/garantie/model';
-import { element } from 'protractor';
-import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
-import { Medecin } from 'src/app/store/parametrage/medecin/model';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
-import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
-import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
-import { Status } from 'src/app/store/global-config/model';
-import { status } from '../../../../store/global-config/selector';
-import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { Report } from 'src/app/store/contrat/police/model';
@@ -129,15 +108,6 @@ createItem(): FormGroup {
         this.sinistreTierPayantDTOList = value.slice();
       }
     });
-
-    /*this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
-    this.store.dispatch(featureActionPrefinancement.searchPrefinancement({matricule: null, dateDeclaration: null}));
-    this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log(value);
-      if (value) {
-        this.prefinancementDtoList = value.slice();
-      }
-    });*/
 
   }
 
