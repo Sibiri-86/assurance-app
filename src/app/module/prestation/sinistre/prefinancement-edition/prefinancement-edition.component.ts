@@ -266,7 +266,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.prestataireList = value.slice();
-        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire.toUpperCase() === 'CLINIQUE');
+       // this.prestataireList.filter(ele => console.log('***************' + ele.libelleTypePrestataire.toUpperCase()));
+        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire &&
+           ele.libelleTypePrestataire.toUpperCase() !== 'PHARMACIE');
+        console.log(this.prestatairePrescripteur);
         this.prestataireExecutant = this.prestataireList;
       }
     });
@@ -287,7 +290,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         this.acteListFilter = this.acteList;
       }
     });
-    
+
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
