@@ -44,11 +44,12 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Tiers Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
                                 items: [
-                                    {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
-                                    {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
-                                    {label: 'Consultation', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
-                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
-                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
+                                    {label: 'Sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
+                                    {label: 'Sinistre | Valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
+                                    {label: 'Sinistre | Consultation ', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
+                                    {label: 'Ordre règlement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
+                                    {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
+                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
                                     /* {label: 'sinistre | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ORD']}*/
                                 ]
                             }
