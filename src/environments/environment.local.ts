@@ -1,5 +1,5 @@
 export const environment = {
-    production: true,
+    production: false,
     keycloakConfig: {
         url: 'http://localhost:8080/auth',
         realm: 'Vimso',
