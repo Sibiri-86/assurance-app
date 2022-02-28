@@ -35,9 +35,10 @@ export class AppMenuComponent implements OnInit {
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/prefinancement']},
                                     {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide']},
-                                    {label: 'consultation | sinistre', icon: '', routerLink: ['/prestation/prefinancement/consultation']},
+                                    {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation']},
                                     {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement']},
                                     {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide']},
+                                    {label: 'ordre reglement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation']}
                                 ]
                             },
                             {

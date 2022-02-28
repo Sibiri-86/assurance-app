@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Taux} from '../../../../../../../store/parametrage/taux/model';

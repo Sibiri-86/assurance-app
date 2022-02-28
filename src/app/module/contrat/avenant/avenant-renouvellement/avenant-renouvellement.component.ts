@@ -167,7 +167,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
     typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
     adherentFamilleListe: AdherentFamille[] = [];
-    private myForm: FormGroup;
+    myForm: FormGroup;
     typeDureeSelected = '';
     plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
     plafondActePlafongConfig: Array<PlafondActe> = [];
@@ -185,7 +185,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         {libelle: 'GARANT', value: TypeDemandeur.GARANT}
     ];
     curentPolice: Police;
-    private exerciceForm: FormGroup;
+    exerciceForm: FormGroup;
     private exercice: Exercice;
     constructor(
         private store: Store<AppState>,

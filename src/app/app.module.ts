@@ -242,6 +242,7 @@ import { ConsultationSinistreComponent } from './module/prestation/sinistre/cons
 import {TierPayantConsultationComponent} from './module/prestation/tier-payant/Ordre-Reglement-Tier-Payant-consultation/tier-payant-consultation.component';
 import { OrdreReglementConsultationComponent } from './module/prestation/ordre-reglement/ordre-reglement-consultation/ordre-reglement-consultation.component';
 import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier-payant/sinistre-Tiers-Payant-consultation/sinistre-Tiers-Payant-consultation.component';
+import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
 
 @NgModule({
     imports: [
@@ -438,7 +439,8 @@ import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier
         ConsultationSinistreComponent,
         TierPayantConsultationComponent,
         OrdreReglementConsultationComponent,
-        SinistreTiersPayantConsultationComponent
+        SinistreTiersPayantConsultationComponent,
+        OrdreReglementRechercheComponent
     ],
     providers: [
         {

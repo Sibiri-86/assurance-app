@@ -33,3 +33,5 @@ export const setCheckPrefinancement = createAction('[App Init] Check Prefinancem
 /** */
 export const searchPrefinancement = createAction('[App Init] search prefinancement', props<{matricule: number,
      dateDeclaration: string}>() );
+export const searchOrdreReglement = createAction('[App Init] search ordre reglement', props<{numero: string,
+        date: string}>() );

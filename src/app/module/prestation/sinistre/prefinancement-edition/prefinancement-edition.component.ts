@@ -300,6 +300,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.report.prefinancementDto = pref;
     this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
   }
+  
   validerPrestation(pref: Prefinancement) {
     this.confirmationService.confirm({
       message: 'voulez-vous valider le sinistre',

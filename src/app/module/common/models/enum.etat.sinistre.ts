@@ -1,5 +1,6 @@
 export enum TypeEtatSinistre {
-    VALIDE='VALIDE',
-    ANNULE='ANNULE',
-    AVANTPROJET='AVANTPROJET',
+    VALIDE = 'VALIDE',
+    ENCOURS = 'ENCOURS',
+    ANNULE = 'ANNULE',
+    DEVALIDE = 'DEVALIDE',
 }
