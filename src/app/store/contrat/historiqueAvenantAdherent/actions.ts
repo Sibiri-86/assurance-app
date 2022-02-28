@@ -3,5 +3,8 @@ import {HistoriqueAvenant, HistoriqueAvenantAdherentList, HistoriqueAvenantList}
 import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
 export const loadHistoriqueAvenantAdherent = createAction('[App Init] load AvenantAdherent', props<{haId: string}>());
 export const setHistoriqueAvenantAdherent = createAction('[App Init] set AvenantAdherent',  props<HistoriqueAvenantAdherentList>());
-export const loadHistoriqueAvenantAdherentByHistoriqueIdAndTypeHistorique = createAction('[App Init] load AvenantAdherentByHistoriqueIdAndTypeHistorique', props<{typeHistorique: TypeHistoriqueAvenant, haId: string}>());
+export const loadHistoriqueAvenantAdherentByHistoriqueIdAndTypeHistorique = createAction('[App Init] load ' +
+    'AvenantAdherentByHistoriqueIdAndTypeHistorique', props<{typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string}>());
+export const LoadHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse = createAction('[App Init] load ' +
+    'HistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse', props<{haId: string}>());
 

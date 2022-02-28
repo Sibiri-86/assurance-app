@@ -2173,7 +2173,7 @@
             <ng-template pTemplate="content">
                 <div class="">
                     <div class="card">
-                        <p-table #dt [value]="historiqueAvenantAdherents2" [columns]="cols" [rows]="10"
+                        <p-table #dt [value]="historiqueAvenantAdherent1s" [columns]="cols" [rows]="10"
                                  [paginator]="true"
                                  [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
                                  [rowHover]="true" dataKey="id"
@@ -2257,7 +2257,7 @@
                             </ng-template>
                             <ng-template pTemplate="summary">
                                 <div class="p-d-flex p-ai-center p-jc-between">
-                                    {{historiqueAvenantAdherents2 ? historiqueAvenantAdherents2.length : 0 }} assuré(s).
+                                    {{historiqueAvenantAdherent1s ? historiqueAvenantAdherent1s.length : 0 }} assuré(s).
                                 </div>
                             </ng-template>
                         </p-table>
@@ -2367,7 +2367,7 @@
         <ng-template pTemplate="content">
             <div class="">
                 <div class="card">
-                    <p-table #dt [value]="historiqueAvenantAdherents3" [columns]="cols" [rows]="10"
+                    <p-table #dt [value]="historiqueAvenantAdherent1s" [columns]="cols" [rows]="10"
                              [paginator]="true"
                              [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
                              [rowHover]="true" dataKey="id"
@@ -2460,7 +2460,7 @@
                         </ng-template>
                         <ng-template pTemplate="summary">
                             <div class="p-d-flex p-ai-center p-jc-between">
-                                {{historiqueAvenantAdherents3 ? historiqueAvenantAdherents3.length : 0 }} assuré(s).
+                                {{historiqueAvenantAdherent1s ? historiqueAvenantAdherent1s.length : 0 }} assuré(s).
                             </div>
                         </ng-template>
                     </p-table>
@@ -2911,7 +2911,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowdata>
-                        <tr [ngClass]="{'colorZone': !rowdata?.adherentPrincipal}">
+                        <tr [ngClass]="{'colorZone': !rowdata?.adherent?.adherentPrincipal}">
                             <td><span class="p-column-title">{{rowdata?.numero}}</span></td>
                             <td><span class="p-column-title">{{rowdata?.matriculeGarant}}</span></td>
                             <td><span class="p-column-title">{{rowdata?.adherent?.nom}}</span>
