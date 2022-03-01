@@ -75,6 +75,7 @@ import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 })
 export class TierPayantEditionComponent implements OnInit {
     displayFormPrefinancement: boolean;
+    isModif: boolean;
     prestationList: Array<FraisReels>;
     sousActeList$: Observable<Array<SousActe>>;
     sousActeList: Array<SousActe>;
@@ -166,13 +167,11 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm = this.formBuilder.group({
             // domaine: new FormControl({}),
             id: new FormControl(),
-            referenceSinistreGarant: new FormControl(),
-            referenceBordereau: new FormControl(),
-            dateDeclaration: new FormControl(''),
+            /* referenceSinistreGarant: new FormControl(),
+            referenceBordereau: new FormControl(),*/
             dateSaisie: new FormControl({value: '', disabled: true}),
-            matriculeAdherent: new FormControl(''),
-            garantie: new FormControl(''),
-            acte: new FormControl(''),
+            /* garantie: new FormControl(''),
+            acte: new FormControl(''),*/
             nomAdherent: new FormControl({value: '', disabled: true}),
             prenomAdherent: new FormControl({value: '', disabled: true}),
             nomAssurePrin: new FormControl({value: '', disabled: true}),
@@ -180,10 +179,13 @@ export class TierPayantEditionComponent implements OnInit {
             numeroGroupe: new FormControl({value: '', disabled: true}),
             numeroPolice: new FormControl({value: '', disabled: true}),
             prestation: this.formBuilder.array([]),
-            numeroFacture: new FormControl(),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
             dateFacture: new FormControl(),
+            prestataire: new FormControl(),
+            numeroFacture: new FormControl(),
+            matriculeAdherent: new FormControl(),
+            dateDeclaration: new FormControl(),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -207,6 +209,9 @@ export class TierPayantEditionComponent implements OnInit {
                 if (this.adherentSelected.adherentPrincipal != null) {
                     this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
                     this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+                } else {
+                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
                 }
                 this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
@@ -347,6 +352,8 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
         this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
         this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+        this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
+        this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
         this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
         this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
@@ -373,18 +380,32 @@ export class TierPayantEditionComponent implements OnInit {
             this.isDetail = false;
             this.prestationForm.reset();
             this.prestationForm.enable({onlySelf: false, emitEvent: true});
-            this.prestationListPrefinancement = pref.prestation;
-            this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+            // this.prestationListPrefinancement = pref.prestation;
+            // this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
         } else {
             if (pref) {
                 this.isDetail = isDetail;
-                this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+                // this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+                /** Activer les autres champs*/
+                this.prestationForm.get('dateFacture').enable();
+                this.prestationForm.get('numeroFacture').enable();
+                this.prestationForm.get('matriculeAdherent').enable();
+                this.prestationForm.get('dateDeclaration').enable();
+                this.prestationForm.get('prestataire').enable();
+                /** Recuperer les infos de tous les champs*/
+                // tslint:disable-next-line:no-unused-expression
+                this.isModif === false;
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+                this.prestationForm.get('nomAssurePrin').setValue(pref.adherent.adherentPrincipal.nom);
+                this.prestationForm.get('prenomAssurePrin').setValue(pref.adherent.adherentPrincipal.prenom);
                 this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
+                this.prestationForm.get('prestataire').setValue(this.prestataireList.find(p => p.id === pref.prestataire.id));
+                console.log('***************pref.prestataire.libelle******************', pref.prestataire);
                 this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+                this.prestationForm.get('dateFacture').setValue(new Date(pref.dateFacture));
                 this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
@@ -473,6 +494,14 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     addTierPayant() {
+        this.prestationForm.reset();
+        this.prestation.clear();
+        // this.prestationForm.enable({onlySelf: false, emitEvent: true});
+        this.prestationForm.get('dateFacture').enable();
+        this.prestationForm.get('numeroFacture').enable();
+        this.prestationForm.get('matriculeAdherent').enable();
+        this.prestationForm.get('dateDeclaration').enable();
+        this.prestationForm.get('prestataire').enable();
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.displayFormPrefinancement = true;
     }
@@ -577,8 +606,8 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantList = [];
         this.prestationForm.reset();
         this.prestation.clear();
-        console.log(this.prestation);
-        this.displayFormPrefinancement = false;
+        console.log('******************this.prestation************************', this.prestation);
+        // this.displayFormPrefinancement = false;
     }
 
     supprimerPrestation(prestation: Prestation) {

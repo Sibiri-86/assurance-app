@@ -43,6 +43,7 @@ export interface SinistreTierPayant {
     prestation?: Array<Prestation>;
     numeroFacture?: string;
     dateFacture?: Date;
+    prestataire?: Prestataire;
     etat?: TypeEtatSinistre;
 }
 
