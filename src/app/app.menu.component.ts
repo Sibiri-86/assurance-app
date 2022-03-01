@@ -35,19 +35,21 @@ export class AppMenuComponent implements OnInit {
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/prefinancement']},
                                     {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide']},
-                                    {label: 'consultation | sinistre', icon: '', routerLink: ['/prestation/prefinancement/consultation']},
+                                    {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation']},
                                     {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement']},
                                     {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide']},
+                                    {label: 'ordre reglement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation']}
                                 ]
                             },
                             {
                                 label: 'Tiers Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
                                 items: [
-                                    {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
-                                    {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
-                                    {label: 'Consultation', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
-                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
-                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
+                                    {label: 'Sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
+                                    {label: 'Sinistre | Valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
+                                    {label: 'Sinistre | Consultation ', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
+                                    {label: 'Ordre règlement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
+                                    {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
+                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
                                     /* {label: 'sinistre | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ORD']}*/
                                 ]
                             }

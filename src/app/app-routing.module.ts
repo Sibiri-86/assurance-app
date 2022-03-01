@@ -57,7 +57,7 @@ import {TierPayantOrdreReglementValideComponent} from './module/prestation/tier-
 import { ConsultationSinistreComponent } from './module/prestation/sinistre/consultation-sinistre/consultation-sinistre.component';
 import {TierPayantConsultationComponent} from './module/prestation/tier-payant/Ordre-Reglement-Tier-Payant-consultation/tier-payant-consultation.component';
 import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier-payant/sinistre-Tiers-Payant-consultation/sinistre-Tiers-Payant-consultation.component';
-
+import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -82,6 +82,7 @@ import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier
                     {path: 'prestation/prefinancement/consultation', component: ConsultationSinistreComponent},
                     {path: 'prestation/prefinancement/ordre-reglement', component: OrdreReglementEditionComponent},
                     {path: 'prestation/prefinancement/ordre-reglement/valide', component: OrdreReglementValideComponent},
+                    {path: 'prestation/prefinancement/ordre-reglement/consultation', component: OrdreReglementRechercheComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

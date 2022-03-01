@@ -69,6 +69,15 @@
                                     "maximumError": "10kb"
                                 }
                             ]
+                        },
+                        "local": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.local.ts"
+                                }
+                            ]
+                         
                         }
                     }
                 },
@@ -81,7 +90,11 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "prestige:build:production"
+                        },
+                        "local": {
+                            "browserTarget": "prestige:build:local"
                         }
+                        
                     }
                 },
                 "extract-i18n": {

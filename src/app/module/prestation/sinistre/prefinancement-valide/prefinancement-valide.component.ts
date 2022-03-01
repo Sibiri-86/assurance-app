@@ -266,16 +266,14 @@ export class PrefinancementValideComponent implements OnInit {
     this.checkStatus();
   }
 
-  
-  
   annulerPrestation(pref: Prefinancement) {
     this.confirmationService.confirm({
       message: 'voulez-vous annuler le sinistre',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.updateEtatAnnulerPrefinancement({prefinancement: pref, 
-          etat: TypeEtatSinistre.ANNULE}));
+        this.store.dispatch(featureActionPrefinancement.updateEtatAnnulerPrefinancement({prefinancement: pref,
+          etat: TypeEtatSinistre.ENCOURS}));
       },
     });
   }
@@ -284,7 +282,6 @@ export class PrefinancementValideComponent implements OnInit {
     if (!this.selectPrefinancement || !this.selectPrefinancement.length) {
       this.showToast('error', 'INFORMATION', 'Veuillez selectionner au moins un sinistre');
     } else {
-      
       this.confirmationService.confirm({
         message: 'voulez-vous creer l\'ordre de reglement',
         header: 'Confirmation',

@@ -38,6 +38,12 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/consulter`, {params :
       this.createRequestOption({matricule, dateDeclaration})});
   }
+  
+  searchOrdreReglement(numero: string, date: string): Observable<any> {
+    // @FIXME: post request
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/consulter`, {params :
+      this.createRequestOption({numero, date})});
+  }
 
   putUpdatePrefinancement(prefinancement: Prefinancement, etat: TypeEtatSinistre): Observable<any> {
     // @FIXME: post request

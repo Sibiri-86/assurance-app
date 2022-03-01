@@ -26,24 +26,24 @@
    </ng-template>
    <ng-template pTemplate="header">
        <tr>
-           <th style="width: 3rem">
+           <!--<th style="width: 3rem">
                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-           </th>
+           </th>-->
            <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
            <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
            <th pSortableColumn="nom" style="min-width:200px">Date saisie<p-sortIcon field="nom"></p-sortIcon></th>
            <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
            <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
            <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
-           <!--<th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="dateEcheance"></p-sortIcon></th>-->
+           <th pSortableColumn="status" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
            <th style="min-width:150px"></th>
        </tr>
    </ng-template>
    <ng-template pTemplate="body" let-prefinancement>
        <tr>
-           <td>
+           <!--<td>
                <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
-           </td>
+           </td>-->
            <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
            </td>
            <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
@@ -59,9 +59,12 @@
            <td>
                <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
            </td>
-           <!--<td>
-               <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
-           </td>-->
+           <td>
+               <span *ngIf="prefinancement?.etat ==='VALIDE'" class="p-badge p-badge-success">{{prefinancement.etat}}</span>
+               <span *ngIf="prefinancement?.etat ==='INVALIDE'" class="p-badge p-badge-warning">EN ATTENTE</span>
+               <span *ngIf="prefinancement?.etat === null " class="p-badge p-badge-warning">EN ATTENTE</span>
+               <span *ngIf="prefinancement?.etat ==='ANNULE'" class="p-badge p-badge-danger">{{prefinancement.etat}}</span>
+           </td>
            <td style="min-width:150px">
                <!--
                <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>

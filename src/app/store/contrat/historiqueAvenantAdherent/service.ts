@@ -38,6 +38,16 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(haId: string):
+    Observable<Array<HistoriqueAvenantAdherant>> {
+        // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/false`,
+        {params: createRequestOption({haId})}).pipe(
+            map((response: Array<HistoriqueAvenantAdherant>) => response),
+            catchError(this.handleError())
+        );
+    }
+
     getAvenantModificationInfo(typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string, policeId: string):
     Observable<Avenant> {
         // @FIXME: get request

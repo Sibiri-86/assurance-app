@@ -166,7 +166,7 @@ export class AvenantModificationComponent implements OnInit {
   objet: Avenant = {};
   typeDuree: any = [{label: 'Jour', value: 'Jour'},
     {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
-  private myForm: FormGroup;
+  myForm: FormGroup;
   typeDureeSelected: string;
   historiqueAvenant: HistoriqueAvenant = {};
   qualiteAssureList1: Array<QualiteAssure>;
