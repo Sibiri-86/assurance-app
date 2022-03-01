@@ -195,31 +195,42 @@
 
                             <div class="p-fluid p-formgrid p-grid">
 
-                                <div class="p-field p-col">
-                                    <label for="matriculeAdherent">Matricule adhérent<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <div class="p-field p-col-3">
+                                    <label for="matriculeAdherent">Matricule assuré<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                     <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                                 </div>
 
-                                <div class="p-field p-col">
+                                <div class="p-field p-col-3">
                                     <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
                                 </div>
 
-                                <div class="p-field p-col">
-                                    <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                                <div class="p-field p-col-3">
+                                    <label for="nomAdherent">Prénom<span class="required">*</span></label>
                                     <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
                                 </div>
-
-                                <div class="p-field p-col">
-                                    <label for="groupeAdherent">Numéro du groupe<span class="required">*</span></label>
-                                    <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
+                                <div class="p-field p-col-3" >
+                                    <label for="nomAdherent">Nom Assuré Principal <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="nomAssurePrin" class="champ" type="text" formControlName="nomAssurePrin" pInputText>
                                 </div>
+
+                                <div class="p-field p-col-3">
+                                    <label for="nomAdherent">Prénom Assuré Principal<span class="required">*</span></label>
+                                    <input id="prenomAssurePrin" class="champ" type="text" formControlName="prenomAssurePrin" pInputText>
+                                </div>
+
+
 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
 
-                                <div class="p-field p-col">
+                                <div class="p-field p-col-3">
+                                    <label for="groupeAdherent">Numéro du groupe<span class="required">*</span></label>
+                                    <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
+                                </div>
+
+                                <div class="p-field p-col-3">
                                     <label for="nomGroupeAdherent">Nom du groupe<span class="required">*</span></label>
                                     <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
                                 </div>
@@ -415,7 +426,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple [disabled]="!adherentSelected || !prestationForm.get('prestation').value"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>

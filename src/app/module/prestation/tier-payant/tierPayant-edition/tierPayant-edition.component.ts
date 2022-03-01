@@ -175,6 +175,8 @@ export class TierPayantEditionComponent implements OnInit {
             acte: new FormControl(''),
             nomAdherent: new FormControl({value: '', disabled: true}),
             prenomAdherent: new FormControl({value: '', disabled: true}),
+            nomAssurePrin: new FormControl({value: '', disabled: true}),
+            prenomAssurePrin: new FormControl({value: '', disabled: true}),
             numeroGroupe: new FormControl({value: '', disabled: true}),
             numeroPolice: new FormControl({value: '', disabled: true}),
             prestation: this.formBuilder.array([]),
@@ -202,6 +204,10 @@ export class TierPayantEditionComponent implements OnInit {
                 this.adherentSelected = value;
                 this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
                 this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+                if (this.adherentSelected.adherentPrincipal != null) {
+                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+                }
                 this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
@@ -411,6 +417,8 @@ export class TierPayantEditionComponent implements OnInit {
         console.log(event.target.value);
         this.prestationForm.get('nomAdherent').setValue('');
         this.prestationForm.get('prenomAdherent').setValue('');
+        this.prestationForm.get('nomAssurePrin').setValue('');
+        this.prestationForm.get('prenomAssurePrin').setValue('');
         this.prestationForm.get('numeroGroupe').setValue('');
         this.prestationForm.get('numeroPolice').setValue('');
         this.prestationForm.get('nomGroupeAdherent').setValue('');
