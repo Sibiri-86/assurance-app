@@ -1290,7 +1290,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         );
     }
 
-    voirAdherent(groupe: Groupe) {
+    voirAdherent(groupe: Groupe): void {
         this.displayDialogFormAdherent = true;
         // this.groupe = groupe;
         this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
@@ -1300,5 +1300,14 @@ export class AvenantRenouvellementComponent implements OnInit {
                 this.adherentList = value.slice();
             }
         });
+    }
+
+    annulerGroupe(): void {
+        this.groupeForm.reset({});
+        this.primeForm.reset({});
+    }
+
+    validerGroupe(): void {
+
     }
 }

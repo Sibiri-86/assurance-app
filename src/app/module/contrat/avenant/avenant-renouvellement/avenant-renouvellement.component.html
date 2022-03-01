@@ -457,6 +457,15 @@
                             </div>
                         </form>
                     </p-fieldset>
+                    <div class="p-grid">
+                        <div class="p-col-4"></div>
+                        <div class="p-col-2">
+                            <button pButton pRipple label="Annuler la modification" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
+                        </div>
+                        <div class="p-col-2">
+                            <button type="button" [disabled]="groupeForm.invalid || primeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
