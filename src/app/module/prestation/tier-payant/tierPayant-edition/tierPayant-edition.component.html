@@ -166,7 +166,7 @@
                 <div class="card">
 
 
-                    <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">
+                    <form  [formGroup]="prestationForm">
 
                         <p-fieldset legend="Sinistre" toggleable="true">
 
@@ -428,7 +428,7 @@
 
                                     <div class="p-fluid p-formgrid p-grid">
                                         <div class="p-field p-col-2">
-                                            <button pButton pRipple icon="pi pi-plus" *ngIf="isModif" pTooltip="Supprimer prestation" label="Supprimer prestation"
+                                            <button pButton pRipple icon="pi pi-plus" *ngIf="!isDetail && isModif" pTooltip="Supprimer prestation" label="Supprimer prestation"
                                                     class="p-button-success" type="button" (click)="deleteItemPrestation(i)">
                                             </button>
                                         </div>
@@ -443,10 +443,10 @@
 
                         <div class="p-grid p-justify-between">
                             <div>
-                                <button pButton pRipple label="Quitter" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple *ngIf="!isDetail" [disabled]="prestationForm.invalid" (click)="onCreate()"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>

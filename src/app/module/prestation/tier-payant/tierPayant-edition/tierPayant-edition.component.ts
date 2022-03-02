@@ -178,14 +178,14 @@ export class TierPayantEditionComponent implements OnInit {
             prenomAssurePrin: new FormControl({value: '', disabled: true}),
             numeroGroupe: new FormControl({value: '', disabled: true}),
             numeroPolice: new FormControl({value: '', disabled: true}),
-            prestation: this.formBuilder.array([]),
+            prestation: this.formBuilder.array([], Validators.required),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
-            dateFacture: new FormControl(),
-            prestataire: new FormControl(),
-            numeroFacture: new FormControl(),
-            matriculeAdherent: new FormControl(),
-            dateDeclaration: new FormControl(),
+            dateFacture: new FormControl('', Validators.required),
+            prestataire: new FormControl('', Validators.required),
+            numeroFacture: new FormControl('', Validators.required),
+            matriculeAdherent: new FormControl('', Validators.required),
+            dateDeclaration: new FormControl('', Validators.required),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -392,9 +392,10 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('matriculeAdherent').enable();
                 this.prestationForm.get('dateDeclaration').enable();
                 this.prestationForm.get('prestataire').enable();
+                // tslint:disable-next-line:jsdoc-format
                 /** Recuperer les infos de tous les champs*/
                 // tslint:disable-next-line:no-unused-expression
-                this.isModif === false;
+                // this.isModif === true;
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
@@ -417,6 +418,8 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestation.push(formPrestation);
                 }
                 if (this.isDetail) {
+                    // tslint:disable-next-line:no-unused-expression
+                    // this.isModif === false;
                     this.prestationForm.disable({onlySelf: false, emitEvent: true});
                 }
             }
@@ -582,22 +585,22 @@ export class TierPayantEditionComponent implements OnInit {
     createItem(): FormGroup {
         return this.formBuilder.group({
             id: new FormControl(),
-            nombreActe: new FormControl(),
-            coutUnitaire: new FormControl(),
+            nombreActe: new FormControl(null, Validators.required),
+            coutUnitaire: new FormControl(null, Validators.required),
             debours: new FormControl({disabled: true}),
-            sousActe: new FormControl(),
+            sousActe: new FormControl(null, Validators.required),
             baseRemboursement: new FormControl({disabled: true}),
-            taux: new FormControl({disabled: true}),
-            montantRembourse: new FormControl({disabled: true}),
+            taux: new FormControl({disabled: true}, Validators.required),
+            montantRembourse: new FormControl({disabled: true}, Validators.required),
             sort: new FormControl(),
             observation: new FormControl(),
             prestataire: new FormControl(),
             produitPharmaceutique: new FormControl(),
             pathologie: new FormControl(),
             medecin: new FormControl(),
-            dateSoins: new FormControl(),
-            acte: new FormControl(null),
-            familleActe: new FormControl(null),
+            dateSoins: new FormControl(null, Validators.required),
+            acte: new FormControl(null, Validators.required),
+            familleActe: new FormControl(null, Validators.required),
             centreExecutant: new FormControl(null),
         });
     }
@@ -607,7 +610,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
         this.prestation.clear();
         console.log('******************this.prestation************************', this.prestation);
-        // this.displayFormPrefinancement = false;
+        this.displayFormPrefinancement = false;
     }
 
     supprimerPrestation(prestation: Prestation) {
@@ -625,7 +628,7 @@ export class TierPayantEditionComponent implements OnInit {
     supprimerPrefinancement() {
         console.log(this.TierPayantSelected);
         if (!this.TierPayantSelected) {
-            this.showToast('error', 'INFORMATION', 'aucun tier-payant selectionné');
+            this.showToast('error', 'INFORMATION', 'aucun tiers-payant selectionné');
         } else {
             this.confirmationService.confirm({
                 message: 'voulez-vous supprimer le sinistre',
