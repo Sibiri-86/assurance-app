@@ -101,7 +101,7 @@
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
             <p-table #dt [value]="historiqueAveantAdherants" [rows]="15" [paginator]="true"
-                     [globalFilterFields]="['adherent?.numero', 'adherent?.prenom', 'adherent?.nom']"
+                     [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
                      [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
@@ -147,12 +147,12 @@
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
                         <td>
                             <span class="p-column-title">
-                                <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                <!--<input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
                                        (change)="compareDateRetrait(historiqueAveantAdherant)"
-                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
-                            <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
+                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
+                            <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
                                         dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
-                                        appendTo="body"></p-calendar>-->
+                                        appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"></p-calendar>
                             </span>
                         </td>
                         <td>

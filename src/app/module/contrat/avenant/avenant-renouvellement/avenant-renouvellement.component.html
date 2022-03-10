@@ -22,11 +22,11 @@
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="numero">Numéro de l'avenant chez le garant</label>
+                            <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="dateAvenant">Date de l'avenant</label>
+                            <label for="dateAvenant">Date de l'avenant <sup></sup></label>
                             <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
@@ -50,15 +50,15 @@
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Motif</label>
+                            <label for="nom">Motif <sup></sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText/>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoires">Total Frais Accessoires</label>
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup></sup></label>
                             <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisBadges">Total Frais Badges</label>
+                            <label for="fraisBadges">Total Frais Badges <sup></sup></label>
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Date echeance</label>
+                        <label for="lastname2">Date échéance</label>
                         <div>
                             <span>{{police.dateEcheance}}</span>
                         </div>
@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numero IFU</label>
+                        <label for="lastname2">Numéro IFU</label>
                         <div>
                             <span>{{police.numeroIfu}}</span>
                         </div>
@@ -337,6 +337,7 @@
                                     <label for="firstname2">Type durée</label>
                                     <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true"
                                                 showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree"
+                                                [autoDisplayFirst]="false"
                                                 formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="policeForm" [entityField]="'typeDuree'">
@@ -387,6 +388,7 @@
                                     <label for="typePrime">Type de prime /période</label>
                                     <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
                                                 showClear="true" [options]="typePrimeList" formControlName="prime"
+                                                [autoDisplayFirst]="false"
                                                 optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
@@ -473,7 +475,7 @@
                 <ng-template pTemplate="content">
                     <div class="">
                         <div class="card">
-                            <p-table #dt [value]="adherentList" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                            <p-table #dt [value]="adherentList" [rows]="10" [paginator]="true" [globalFilterFields]="['numero', 'prenom', 'nom', 'matriculeGarant', 'matriculeSouscripteur']"
                                      [rowHover]="true" dataKey="id"
                                      styleClass="p-datatable-customers"
                                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
@@ -502,7 +504,6 @@
                                         <!--<th pSortableColumn="lieuNaissance" style="width: 12rem" >Lieu de naissance <p-sortIcon field="lieuNaissance"></p-sortIcon></th>-->
                                         <th pSortableColumn="numeroTelephone" style="min-width:200px"  >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
                                         <!--<th pSortableColumn="adresse" style="width: 10rem">Adresse<p-sortIcon field="adresse"></p-sortIcon></th>-->
-                                        <th style="width:300px"></th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-adherent>
@@ -518,12 +519,6 @@
                                         <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
                                         <td style="min-width:200px"><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
                                         <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
-                                        <td style="width:300px">
-                                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
-                                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerAdherent(adherent)"></button>
-                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-warning p-mr-2" (click)="voirDetailAdherent(adherent)"></button>
-                                            <button *ngIf="adherent.urlPhoto" pButton pRipple icon="pi pi-search" pTooltip="voir photos" class="p-button-rounded p-button-warning" (click)="voirPhotos(adherent)"></button>
-                                        </td>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="summary">
@@ -962,8 +957,8 @@
             <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
-            <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
-            [message]="'Veuillier selectionner les adherents à supprimer'">
+            <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
+            [message]="'Veuillier selectionner les adherents à supprimer'" [avenantDate]="exercice.debut">
             </app-avenant-retrait>
         </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">

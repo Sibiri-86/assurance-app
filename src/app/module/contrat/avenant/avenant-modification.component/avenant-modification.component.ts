@@ -4,25 +4,25 @@ import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
 import {takeUntil} from 'rxjs/operators';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {Groupe} from '../../../../store/contrat/groupe/model';
 import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent} from '../../../../store/contrat/adherent/model';
-import {loadAdherent} from '../../../../store/contrat/adherent/actions';
+import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import {
   Avenant,
-  AvenantModification,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
-  HistoriquePlafondSousActe, TypeDemandeur
+  HistoriquePlafondSousActe,
+  TypeDemandeur
 } from '../../../../store/contrat/historiqueAvenant/model';
-import { groupeList } from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import * as genreSelector from '../../../../store/parametrage/genre/selector';
 import {loadGenre} from '../../../../store/parametrage/genre/actions';
@@ -62,7 +62,6 @@ import {SecteurActivite} from '../../../../store/parametrage/secteur-activite/mo
 import {DimensionPeriode} from '../../../../store/parametrage/dimension-periode/model';
 import * as featureActionsPlafond from '../../../../store/contrat/plafond/action';
 import {Plafond} from '../../../../store/contrat/plafond/model';
-import * as policeSelector from '../../../../store/contrat/police/selector';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
 import {loadGarantie} from '../../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
@@ -84,7 +83,8 @@ import {TypeBareme} from '../../../common/models/bareme.enum';
 import {Status as Etat} from '../../../common/models/etat.enum';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
-import {Prime} from '../../../../store/contrat/prime/model';
+import * as adherentSelector from '../../../../store/contrat/adherent/selector';
+import {TypeDuree} from '../../../../store/contrat/enum/model';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -164,8 +164,8 @@ export class AvenantModificationComponent implements OnInit {
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
   objet: Avenant = {};
-  typeDuree: any = [{label: 'Jour', value: 'Jour'},
-    {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+  typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
+    {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
   myForm: FormGroup;
   typeDureeSelected: string;
   historiqueAvenant: HistoriqueAvenant = {};
@@ -185,6 +185,9 @@ export class AvenantModificationComponent implements OnInit {
   private exercice: Exercice;
   private exerciceForm: FormGroup;
   private curentGroupe: Groupe;
+  adherentList$: Observable<Array<Adherent>>;
+  displayDialogFormAdherent = false;
+  adherentList: Array<Adherent>;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -814,7 +817,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onRefreshDateEcheanceForGroupe() {
-    if (this.groupeForm.get('duree').value !== null && this.groupeForm.get('typeDuree').value !== null
+    if (this.groupeForm.get('dateEffet').value !== null && this.groupeForm.get('typeDuree').value !== null
         && this.groupeForm.get('duree').value !== null) {
       this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value,
           this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value)
@@ -1051,6 +1054,12 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.exercice = this.exercice;
     // this.objet.groupe = this.groupeForm.value;
     this.objet.groupe.prime = this.primeForm.get(['prime']).value;
+    this.groupes.forEach(gp => {
+      gp.typeDuree = this.typeDuree.find(e => e.libelle === gp.typeDuree)[0].value;
+    });
+    this.objet.groupes = this.groupeListes;
+    // this.objet.groupe = this.groupeForm.value;
+    // this.objet.groupe.prime = this.primeForm.value;
     // this.objet.groupe.typePrime = this.primeForm.get(['typeprime']).value;
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
@@ -1340,5 +1349,68 @@ export class AvenantModificationComponent implements OnInit {
           }
         }
     );
+  }
+  voirAdherent(groupe: Groupe): void {
+    this.displayDialogFormAdherent = true;
+    // this.groupe = groupe;
+    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: groupe.id}));
+    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.adherentList = value.slice();
+      }
+    });
+  }
+
+  annulerGroupe(): void {
+    this.groupeForm.reset({});
+    this.primeForm.reset({});
+  }
+
+  validerGroupe(): void {
+    this.groupeListes.forEach(grp =>  {
+      if (grp.id === this.groupeForm.get('id').value) {
+        grp = this.groupeForm.value;
+        switch (this.primeForm.get('prime').value) {
+          case 'PE':
+            this.primeForm.patchValue({
+              primeFamille: null,
+              primeEnfant: null,
+              primeConjoint: null,
+              primeAdulte: null
+            });
+            break;
+          case 'PAE':
+            this.primeForm.patchValue({
+              primeFamille: null,
+              primeConjoint: null,
+              primeEmploye: null
+            });
+            break;
+          case 'PECE':
+            this.primeForm.patchValue({
+              primeFamille: null,
+              primeAdulte: null
+            });
+            break;
+          default:
+            this.primeForm.patchValue({
+              primeFamille: null,
+              primeEnfant: null,
+              primeConjoint: null,
+              primeAdulte: null,
+              primeEmploye: null
+            });
+            break;
+        }
+        grp.typePrime = this.primeForm.get('prime').value;
+        grp.prime = this.primeForm.value;
+        console.log('actual prime is ====  ');
+        console.log(this.primeForm.value);
+        console.log('groupe array is ====  ');
+        console.log(this.groupeForm);
+      }
+    });
+
   }
 }

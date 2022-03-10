@@ -5,6 +5,7 @@ import { Police } from '../police/model';
 import { Prime } from '../prime/model';
 import { AdherentFamille } from '../adherent/model';
 import { Commune } from '../../parametrage/commune/model';
+import {TypeDuree} from '../enum/model';
 
 export interface Groupe {
     id?: string;
@@ -24,6 +25,7 @@ export interface Groupe {
     adherentFamille?: Array<AdherentFamille>;
     groupeId?: string;
     listGroupe?: Array<Groupe>;
+    typeDuree?: TypeDuree;
 }
 
 export interface GroupeList{

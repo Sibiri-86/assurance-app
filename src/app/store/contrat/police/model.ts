@@ -4,7 +4,7 @@ import { Territorialite } from '../../parametrage/territorialite/model';
 import {SecteurActivite} from '../../parametrage/secteur-activite/model';
 import { Taux } from '../../parametrage/taux/model';
 import { Secteur } from '../../parametrage/secteur/model';
-import {TypeReport} from '../enum/model';
+import {TypeDuree, TypeReport} from '../enum/model';
 import {HistoriqueAvenant} from '../historiqueAvenant/model';
 import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-intermediaire/model';
 import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/model';
@@ -24,7 +24,6 @@ export interface Police{
     dateValidation?: Date;
     adressePostale?: string;
     referencePolice?: string;
-    typeDuree?: string;
     nom?: string;
     tauxCommissionIntermediaire?: TauxCommissionIntermediaire;
     code?: string;
@@ -43,6 +42,7 @@ export interface Police{
     numero?: string;
     historiqueAvenantListWithoutActiveList?: HistoriqueAvenant[];
     listGroupe?: Groupe[];
+    typeDuree?: TypeDuree;
 }
 
 export interface Statistique {

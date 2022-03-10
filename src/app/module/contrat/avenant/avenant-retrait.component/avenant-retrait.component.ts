@@ -72,6 +72,7 @@ export class AvenantRetraitComponent implements OnInit {
   customForm: FormGroup;
   isNewGroupe = false;
   @Input() message: string;
+  @Input() avenantDate: Date;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -178,7 +179,9 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;
-          // this.historiqueAveantAdherantsTMP = res;
+          this.historiqueAveantAdherants.forEach(haa => {
+            haa.dateRetrait = this.myForm.get('dateAvenant').value;
+          });
         }
     );
   }
@@ -234,26 +237,53 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   compareDate(): void {
-    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.police.dateEffet).subscribe(
-        (res) => {
-          if (res) {
-            this.addMessage('error', 'Date d\'effet invalide',
-                'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
-            this.myForm.patchValue({dateAvenant: null});
+    if (this.myForm.get('dateAvenant').value !== null) {
+      this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.exercice.debut).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date d\'effet invalide',
+                  'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
+              this.myForm.patchValue({dateAvenant: null});
+            }
           }
-        }
-    );
+      );
+    } else {
+      this.historiqueAvenantService.compareDate(this.avenantDate, this.exercice.debut).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date d\'effet invalide',
+                  'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
+              this.myForm.patchValue({dateAvenant: null});
+            }
+          }
+      );
+    }
   }
   compareDateRetrait(haa: HistoriqueAvenantAdherant): void {
-    this.historiqueAvenantService.compareDate(haa.dateRetrait, this.myForm.get('dateAvenant').value).subscribe(
-        (res) => {
-          if (res) {
-            this.addMessage('error', 'Date de retrait invalide',
-                'La date de retrait de l\'adherent ne peut pas être postérieure à celle de l\'avenant');
-            haa.dateRetrait = null;
+    console.log('**********   ' + haa);
+    console.log('*****this.avenantDate*****   ');
+    console.log(this.avenantDate);
+    if (this.myForm.get('dateAvenant').value !== null) {
+      this.historiqueAvenantService.compareDate(haa.dateRetrait, this.myForm.get('dateAvenant').value).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date de retrait invalide',
+                  'La date de retrait de l\'adherent ne peut pas être antérieure à celle de l\'avenant');
+              haa.dateRetrait = null;
+            }
           }
-        }
-    );
+      );
+    } else {
+      this.historiqueAvenantService.compareDate(haa.dateRetrait, this.avenantDate).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date de retrait invalide',
+                  'La date de retrait de l\'adherent ne peut pas être antérieure à celle de l\'avenant');
+              haa.dateRetrait = null;
+            }
+          }
+      );
+    }
   }
 
   addMessage(severite: string, resume: string, detaile: string): void {

@@ -1,0 +1,192 @@
+<div class="p-card">
+    <div class="p-field p-grid p-col-12">
+        <p-table #dt [value]="historiqueAvenantAdherants" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
+                 [rowHover]="true" dataKey="id"
+                 styleClass="p-datatable-customers"
+                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                    <h5 class="p-m-0"></h5>
+                    <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
+                        </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <!--<th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>-->
+                    <th pSortableColumn="matriculeGarant" style="width: 12rem">Matricule<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                    <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                    <th pSortableColumn="prenom" style="width: 9rem" >Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                    <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                    <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                    <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                    <!--<th pSortableColumn="numeroTelephone" style="width: 10rem" >Date d'incorporation <p-sortIcon field="numeroTelephone"></p-sortIcon></th>-->
+                    <th style="width: 5em"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-historiqueAvenantAdherant>
+                <tr [ngClass]="{'colorZone': !historiqueAvenantAdherant.adherent.adherentPrincipal}">
+                    <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numero}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.nom | upercase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.prenom | beginLowerCase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent?.qualiteAssure?.libelle}}</span></td>
+                    <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numeroTelephone | formatTableValue : 'number'}}</span></td>
+                    <!--<td><span class="p-column-title">{{adherent.dateIncorparation | formatTableValue : 'date'}}</span></td>-->
+                    <td style="width: 5em">
+                        <button pButton pRipple icon="pi pi-pencil" pTooltip="modifier" type="button"
+                                class="p-button p-button-icon" label="" (click)="edit(historiqueAvenantAdherant)">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody" let-columns="columns">
+                <tr style="height:34px">
+                    <div class="loading-text"></div>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="7" style="color: red; font-weight: bold">
+                        Aucun adhérent trouvé !
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    {{historiqueAvenantAdherants ? historiqueAvenantAdherants.length : 0 }} assurés
+                </div>
+            </ng-template>
+        </p-table>
+</div>
+    <p-dialog [maximizable]="true" [(visible)]="editWiew"
+              [modal]="true" styleClass="p-fluid" [style]="{width: '90em'}" (onHide)="annuler()">
+        <form (ngSubmit)="enregistrer()" [formGroup]="adherentForm">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-3">
+                    <label for="nom">Nom <sup style="color: red !important; font-size: 1.4em">*</sup></label>
+                    <input id="nom" type="text" required formControlName="nom" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="prenom">Prénom (s) <sup style="color: red !important; font-size: 1.4em">*</sup></label>
+                    <input id="prenom" type="text" formControlName="prenom" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="tel">Téléphone <sup style="color: red !important; font-size: 1.4em">*</sup></label>
+                    <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                    <!--<input id="tel" type="number" formControlName="numeroTelephone" pInputText>-->
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="matriculeGarant">Matricule chez le garant <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                    <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="matriculeSouscripteur">Matricule chez le souscripteur <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                    <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="mail">Adresse Email <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <input id="mail" type="email" formControlName="adresseEmail"
+                           pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="adresse">Adresse <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <input id="adresse" type="text" formControlName="adresse" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="ref">Réference bancaire <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                    <input id="ref" type="text" formControlName="referenceBancaire" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="naiss">Date de naissance <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-calendar [showIcon]="true" formControlName="dateNaissance" id="naiss"
+                                dateFormat="dd/mm/yy" inputId="calendar"
+                                appendTo="body"></p-calendar>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="lieu">Lieu de naissance <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <input id="lieu" type="text" formControlName="lieuNaissance" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="entre">Date entrée <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-calendar [showIcon]="true" formControlName="dateEntree"
+                                dateFormat="dd/mm/yy" inputId="calendar"
+                                appendTo="body"></p-calendar>
+                </div>
+                <div class="p-field p-col-3">
+                    <label for="dateIncor">Date d'incorporation <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncorporation"
+                                dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDateIncorp()"
+                                appendTo="body"></p-calendar>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="genre">Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-dropdown inputId="genre" dataKey="id" [filter]="true" showClear="true"
+                                [options]="genreList" formControlName="genre"
+                                placeholder="Select" optionLabel="libelle"></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="profession">Profession<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-dropdown inputId="profession" dataKey="id" [filter]="true"
+                                showClear="true" [options]="professionList"
+                                formControlName="profession" placeholder="Select"
+                                optionLabel="libelle"></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="quali">Qualité assuré <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-dropdown inputId="qualiteAssure" dataKey="id" [filter]="true"
+                                showClear="true" [options]="qualiteAssureList1"
+                                formControlName="qualiteAssure" placeholder="Select"
+                                optionLabel="libelle"></p-dropdown>
+                </div>
+
+                <!-- <div class="p-field p-col-3">
+                     <label for="matri">Matricule</label>
+                     <input id="matri" type="text" formControlName="matricule" pInputText>
+                 </div>-->
+                <div class="p-field p-col-4"></div>
+                <div class="p-field p-col-2">
+                    <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                            class="p-button-danger" type="button" (click)="annuler()"></button>
+                </div>
+                <div class="p-field p-col-2">
+                    <button pButton pRipple icon="pi pi-check" pTooltip="Enregistrer" label="Enregistrer"
+                            class="p-button p-button-success" type="submit">
+                    </button>
+                </div>
+            </div>
+        </form>
+    </p-dialog>
+
+    <div class="p-fluid p-formgrid p-grid p-mt-2">
+        <div class="p-field p-col-4"></div>
+        <div class="p-field p-col-2">
+            <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                    class="p-button-danger" type="button" (click)="annuler()"></button>
+        </div>
+        <div class="p-field p-col-2">
+            <button pButton pRipple icon="pi pi-check" pTooltip="Valider" label="Enregistrer"
+                    class="p-button p-button-success" type="button" (click)="valider()">
+            </button>
+        </div>
+    </div>
+</div>

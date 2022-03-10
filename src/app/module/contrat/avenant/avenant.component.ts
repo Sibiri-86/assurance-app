@@ -289,6 +289,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   exerciceList$: Observable<Array<Exercice>>;
   exerciceList: Array<Exercice>;
   curentExercice: Exercice = {};
+  etat = 'CREATE';
+  entete = '';
+  historiqueAvenat: HistoriqueAvenant = {};
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -973,7 +976,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   // fonction pour creer adherent.
-  entete = '';
   onCreateAddherent() {
     console.log(this.adherentForm.value);
     console.log(this.adherentFamilleList);
@@ -1470,19 +1472,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
   addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
     console.log('**************HistoriqueAvenan-----t***------*************');
     console.log(historiqueAvenant);
-    this.historiqueAvenant = historiqueAvenant;
-    this.historiqueAvenant.id = null;
-    this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
-    console.log('**************HistoriqueAvenan-----t****************');
-    console.log(this.historiqueAvenant);
-    if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
-        && this.historiqueAvenant.fileToLoad.size > 0) {
-      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
-        historiqueAvenant: this.historiqueAvenant,
-        file: this.historiqueAvenant.fileToLoad
-      }));
+    if (historiqueAvenant.id == null) {
+      this.historiqueAvenant = historiqueAvenant;
+      this.historiqueAvenant.id = null;
+      this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
+      console.log('**************HistoriqueAvenan-----t****************');
+      console.log(this.historiqueAvenant);
+      if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
+          && this.historiqueAvenant.fileToLoad.size > 0) {
+        this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
+          historiqueAvenant: this.historiqueAvenant,
+          file: this.historiqueAvenant.fileToLoad
+        }));
+      } else {
+        this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+      }
     } else {
-      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
+      this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(historiqueAvenant));
     }
     this.initDisplayAvenant();
     this.dissplayavenant = false;
@@ -2320,5 +2326,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
         return false;
       default: return false;
     }
+  }
+
+  onUpdateAvenant(rowdata: HistoriqueAvenant): void {
+    console.log('modification en cours ..........');
+    this.historiqueAvenant = rowdata;
+    this.etat = 'UPDATE';
+    this.initDisplayAvenant();
+    this.isAvenantIncorporation = true;
+    this.addAvenant();
+    this.entete = 'Avenant d\'incorporation';
   }
 }
