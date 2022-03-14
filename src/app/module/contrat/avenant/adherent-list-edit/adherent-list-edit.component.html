@@ -24,7 +24,7 @@
                     <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                     <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
                     <!--<th pSortableColumn="numeroTelephone" style="width: 10rem" >Date d'incorporation <p-sortIcon field="numeroTelephone"></p-sortIcon></th>-->
-                    <th style="width: 5em"></th>
+                    <th style="width: 6em"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-historiqueAvenantAdherant>
@@ -38,9 +38,12 @@
                     <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
                     <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numeroTelephone | formatTableValue : 'number'}}</span></td>
                     <!--<td><span class="p-column-title">{{adherent.dateIncorparation | formatTableValue : 'date'}}</span></td>-->
-                    <td style="width: 5em">
-                        <button pButton pRipple icon="pi pi-pencil" pTooltip="modifier" type="button"
-                                class="p-button p-button-icon" label="" (click)="edit(historiqueAvenantAdherant)">
+                    <td style="width: 6em">
+                        <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button"
+                                class="p-button-warning p-button-icon p-mr-2" label="" (click)="edit(historiqueAvenantAdherant)">
+                        </button>
+                        <button pButton pRipple icon="pi pi-eye" pTooltip="Visualiser" type="button"
+                                class="p-button-info p-button-icon" label="" (click)="view(historiqueAvenantAdherant)">
                         </button>
                     </td>
                 </tr>
@@ -159,25 +162,45 @@
                                 optionLabel="libelle"></p-dropdown>
                 </div>
 
+                <div class="p-field p-col-3">
+                    <label for="groupe">Groupe<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                    <p-dropdown inputId="groupe" dataKey="id" [filter]="true"
+                                showClear="true" [options]="groupeList"
+                                formControlName="groupe" placeholder="Select"
+                                optionLabel="libelle"></p-dropdown>
+                </div>
+                <div class="p-field p-col-3">
+                    <label for="adherentPrincipal">Adhérent Principal</label>
+                    <p-dropdown inputId="groupe" dataKey="id" [filter]="true"
+                                showClear="true" [options]="adherentList"
+                                formControlName="adherentPrincipal" placeholder="Select"
+                                optionLabel="fullName"></p-dropdown>
+                </div>
+
                 <!-- <div class="p-field p-col-3">
                      <label for="matri">Matricule</label>
                      <input id="matri" type="text" formControlName="matricule" pInputText>
                  </div>-->
+                <div class="p-field p-col-12"></div>
                 <div class="p-field p-col-4"></div>
-                <div class="p-field p-col-2">
+                <div class="p-field p-col-2" *ngIf="etat !== 'VIEW'">
                     <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                            class="p-button-danger" type="button" (click)="annuler()"></button>
+                </div>
+                <div class="p-field p-col-2" *ngIf="etat === 'VIEW'">
+                    <button pButton pRipple icon="pi pi-times" pTooltip="Quitter" label="Quitter"
                             class="p-button-danger" type="button" (click)="annuler()"></button>
                 </div>
                 <div class="p-field p-col-2">
                     <button pButton pRipple icon="pi pi-check" pTooltip="Enregistrer" label="Enregistrer"
-                            class="p-button p-button-success" type="submit">
+                            class="p-button p-button-success" type="submit" *ngIf="etat !== 'VIEW'">
                     </button>
                 </div>
             </div>
         </form>
     </p-dialog>
 
-    <div class="p-fluid p-formgrid p-grid p-mt-2">
+    <div class="p-fluid p-formgrid p-grid p-mt-2" *ngIf="etat !== 'VIEW'">
         <div class="p-field p-col-4"></div>
         <div class="p-field p-col-2">
             <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"

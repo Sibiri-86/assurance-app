@@ -15,6 +15,10 @@ import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model'
 import {Genre} from '../../../../store/parametrage/genre/model';
 import {AppState} from '../../../../store/app.state';
 import {HistoriqueAvenantAdherant} from '../../../../store/contrat/historiqueAvenant/model';
+import {Groupe} from '../../../../store/contrat/groupe/model';
+import {loadGroupe} from '../../../../store/contrat/groupe/actions';
+import {groupeList} from '../../../../store/contrat/groupe/selector';
+import {AdherentService} from '../../../../store/contrat/adherent/service';
 
 @Component({
   selector: 'app-adherent-list-edit',
@@ -37,8 +41,16 @@ export class AdherentListEditComponent implements OnInit {
   genreList$: Observable<Array<Genre>>;
   editWiew = false;
   historiqueAvenantAdherantTMPs: Array<HistoriqueAvenantAdherant> = [];
+  etat = 'EDIT';
+  stat = false;
+  groupePolicy: Array<Groupe> = [];
+  groupeList$: Observable<Array<Groupe>>;
+  groupeList: Array<Groupe>;
 
-  constructor(private formBuilder: FormBuilder, private store: Store<AppState>) {
+  constructor(
+      private formBuilder: FormBuilder,
+      private store: Store<AppState>,
+      private adherentService: AdherentService) {
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(0),
       nom: new FormControl(null, [Validators.required]),
@@ -60,6 +72,8 @@ export class AdherentListEditComponent implements OnInit {
       numero: new FormControl(null, ),
       familys: this.formBuilder.array([]),
       manageIncorporation: new FormControl(1),
+      groupe: new FormControl('', [Validators.required]),
+      adherentPrincipal: new FormControl('')
     });
   }
 
@@ -73,7 +87,7 @@ export class AdherentListEditComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((value) => {
           if (value) {
-            this.qualiteAssureList1 = value.slice(); //.filter(e => e.code === 'ADHERENT');
+            this.qualiteAssureList1 = value.slice(); // .filter(e => e.code === 'ADHERENT');
             this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
           }
         });
@@ -95,6 +109,8 @@ export class AdherentListEditComponent implements OnInit {
       }
     });
     this.adherentList = [];
+    this.loadGoupeByPolice();
+    this.loadAdherentPrincipalByPolice();
     // this.createAdherents();
   }
   /* createAdherents(): void {
@@ -119,7 +135,11 @@ export class AdherentListEditComponent implements OnInit {
   } */
 
   edit(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
-    console.log('***************historiqueAvenantAdherant*******************', historiqueAvenantAdherant);
+    console.log('***************historiqueAvenantAdherant*********1**********', historiqueAvenantAdherant);
+    let group: Groupe = {};
+    if (this.groupeList.filter(g => g.id === historiqueAvenantAdherant.adherent?.groupe?.id)) {
+      group = this.groupeList.filter(g => g.id === historiqueAvenantAdherant.adherent?.groupe?.id)[0];
+    }
     this.adherentForm.patchValue({
       id: historiqueAvenantAdherant.adherent?.id,
       nom: historiqueAvenantAdherant.adherent?.nom,
@@ -136,8 +156,42 @@ export class AdherentListEditComponent implements OnInit {
       genre: historiqueAvenantAdherant.adherent?.genre,
       dateEntree: new Date(historiqueAvenantAdherant.adherent?.dateEntree),
       dateIncorporation: new Date(historiqueAvenantAdherant.adherent?.dateIncorporation),
-      numero: historiqueAvenantAdherant.adherent?.numero
+      numero: historiqueAvenantAdherant.adherent?.numero,
+      groupe: group,
+      adherentPrincipal: historiqueAvenantAdherant.adherent.adherentPrincipal,
     });
+    this.editWiew = true;
+  }
+
+  view(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+    console.log('***************historiqueAvenantAdherant*********2**********', historiqueAvenantAdherant);
+    let group: Groupe = {};
+    if (this.groupeList.filter(g => g.id === historiqueAvenantAdherant.adherent?.groupe?.id)) {
+      group = this.groupeList.filter(g => g.id === historiqueAvenantAdherant.adherent?.groupe?.id)[0];
+    }
+    this.etat = 'VIEW';
+    this.stat = true;
+    this.adherentForm.patchValue({
+      id: historiqueAvenantAdherant.adherent?.id,
+      nom: historiqueAvenantAdherant.adherent?.nom,
+      prenom: historiqueAvenantAdherant.adherent?.prenom,
+      dateNaissance: new Date(historiqueAvenantAdherant.adherent?.dateNaissance),
+      matriculeGarant: historiqueAvenantAdherant.adherent?.matriculeGarant,
+      lieuNaissance: historiqueAvenantAdherant.adherent?.lieuNaissance,
+      numeroTelephone: historiqueAvenantAdherant.adherent?.numeroTelephone,
+      adresse: historiqueAvenantAdherant.adherent?.adresse,
+      adresseEmail: historiqueAvenantAdherant.adherent?.adresseEmail,
+      profession: historiqueAvenantAdherant.adherent?.profession,
+      referenceBancaire: historiqueAvenantAdherant.adherent?.referenceBancaire,
+      qualiteAssure: historiqueAvenantAdherant.adherent?.qualiteAssure,
+      genre: historiqueAvenantAdherant.adherent?.genre,
+      dateEntree: new Date(historiqueAvenantAdherant.adherent?.dateEntree),
+      dateIncorporation: new Date(historiqueAvenantAdherant.adherent?.dateIncorporation),
+      numero: historiqueAvenantAdherant.adherent?.numero,
+      groupe: group,
+      adherentPrincipal: historiqueAvenantAdherant.adherent.adherentPrincipal,
+    });
+    this.adherentForm.disable();
     this.editWiew = true;
   }
 
@@ -174,5 +228,28 @@ export class AdherentListEditComponent implements OnInit {
   valider(): void {
     this.historiqueAvenantAdherantList.emit(this.historiqueAvenantAdherants);
     // this.annuler();
+  }
+
+  loadGoupeByPolice(): void {
+    if (this.historiqueAvenantAdherants[0].avenant.police.id) {
+      this.groupeList$ = this.store.pipe(select(groupeList));
+      this.store.dispatch(loadGroupe({policeId: this.historiqueAvenantAdherants[0].avenant.police.id}));
+      this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        if (value) {
+          this.groupeList = value.slice();
+          console.log(this.groupePolicy);
+        }
+      });
+    }
+  }
+
+  loadAdherentPrincipalByPolice(): void {
+    if (this.historiqueAvenantAdherants[0].avenant.police.id) {
+      this.adherentService.getAdherentPrincipalByPolice(this.historiqueAvenantAdherants[0].avenant.police.id).subscribe(
+          (res: Adherent[]) => {
+            this.adherentList = res;
+          }
+      );
+    }
   }
 }

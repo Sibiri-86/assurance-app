@@ -104,6 +104,9 @@ export class AvenantIncorporationComponent implements OnInit{
         if (this.etat !== 'CREATE') {
             this.updateAvenant(this.avenantId);
         }
+        if (this.etat !== 'VIEW') {
+            this.updateAvenant(this.avenantId);
+        }
 
         this.qualiteAssureList$ = this.store.pipe(
             select(qualiteAssureSelector.qualiteAssureList)
@@ -201,6 +204,7 @@ export class AvenantIncorporationComponent implements OnInit{
             id: new FormControl(null),
             numero: new FormControl(null),
             dateIncorparation: new FormControl(null, [Validators.required]),
+            dateAvenant: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required]),
             fraisBadges: new FormControl(null, [Validators.required]),
@@ -227,7 +231,8 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.aderants = this.adherentFamilleListe;
         this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
-        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateEffet = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
@@ -482,6 +487,7 @@ export class AvenantIncorporationComponent implements OnInit{
         // this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateEffet = this.myForm.get('dateEffet').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:

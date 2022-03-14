@@ -1593,35 +1593,42 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   /** afficher les details de l'avenant' */
-  onRowSelectAvenant(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
-    console.log('=======================================', typeHistoriqueAvenant);
-    switch (typeHistoriqueAvenant) {
+  onRowSelectAvenant(avenant: HistoriqueAvenant) {
+    this.etat = 'VIEW';
+    this.historiqueAvenant = avenant;
+    // console.log('=======================================', typeHistoriqueAvenant);
+    switch (avenant.typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION: {
-        this.viewAvenantIncorp(avenant, typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantIncorporation = true;
+        this.addAvenant();
+        this.entete = 'Avenant d\'incorporation';
         break;
+        // this.viewAvenantIncorp(avenant, avenant.typeHistoriqueAvenant);
+        // break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
-        this.viewAvenantRetrait(avenant, typeHistoriqueAvenant);
+        this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-        this.viewAvenantRenouvellement(avenant, typeHistoriqueAvenant);
+        this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
-        this.viewAvenantAffaireNouvelle(avenant, typeHistoriqueAvenant);
+        this.viewAvenantAffaireNouvelle(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RESILIATION: {
-        this.viewAvenantResiliation(avenant, typeHistoriqueAvenant);
+        this.viewAvenantResiliation(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.SUSPENSION: {
-        this.viewAvenantSuspension(avenant, typeHistoriqueAvenant);
+        this.viewAvenantSuspension(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.MODIFICATION: {
-        this.viewAvenantModification(avenant, typeHistoriqueAvenant);
+        this.viewAvenantModification(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       default: {
@@ -2331,6 +2338,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
   onUpdateAvenant(rowdata: HistoriqueAvenant): void {
     console.log('modification en cours ..........');
     this.historiqueAvenant = rowdata;
+    switch (rowdata.typeHistoriqueAvenant) {
+      case TypeHistoriqueAvenant.INCORPORATION:
+        this.initDisplayAvenant();
+        this.isAvenantIncorporation = true;
+        this.addAvenant();
+        this.entete = 'Avenant d\'incorporation';
+        break;
+      case TypeHistoriqueAvenant.RETRAIT:
+        this.initDisplayAvenant();
+        this.isAvenantRetrait = true;
+        this.addAvenant();
+        this.entete = 'Avenant d\'incorporation';
+        break;
+      default: break;
+    }
     this.etat = 'UPDATE';
     this.initDisplayAvenant();
     this.isAvenantIncorporation = true;

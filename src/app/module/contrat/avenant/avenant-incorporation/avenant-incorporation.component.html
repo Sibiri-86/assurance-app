@@ -51,11 +51,11 @@
                 <form [formGroup]="exerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
-                            <label for="debit">Date d'effet</label>
+                            <label for="debit">Date d'effet de l'exercice</label>
                             <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="fin">Date d'échéance</label>
+                            <label for="fin">Date d'échéance de l'exercice</label>
                             <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
                         </div>
                     </div>
@@ -69,6 +69,12 @@
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">
+                            <label for="nom">Date d'Avenant<sup style="color: red; font-weight: bold;">*</sup></label>
+                            <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
+                                    dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()" [disabled]="etat === 'VIEW'"
+                                    appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-4">
                             <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold;">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()" [disabled]="etat === 'VIEW'"
@@ -78,7 +84,7 @@
                             <label for="dateIncorparation">Initiateur <sup style="color: red;">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
-                                        placeholder="Select" optionLabel="libelle" [disabled]="etat === 'VOIR'"></p-dropdown>
+                                        placeholder="Select" optionLabel="libelle" [disabled]="etat === 'VIEW'"></p-dropdown>
                         </div>
                         <div class="p-field p-col-4">
                             <label for="fraisAccessoires">Total Frais Accessoires</label>
@@ -95,7 +101,7 @@
                     </div>
                 </form>
             </p-fieldset>
-            <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'UPDATE'">
+            <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat === 'CREATE'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
                     <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
@@ -278,7 +284,7 @@
 
                 </form>
             </p-fieldset>
-            <div class="p-fluid formgrig p-col-12 p-mt-3" *ngIf="etat !== 'UPDATE'">
+            <div class="p-fluid formgrig p-col-12 p-mt-3" *ngIf="etat === 'CREATE'">
                 <div class="p-grid">
                     <div class="p-col-12">
                         <hr>

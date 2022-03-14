@@ -1,11 +1,11 @@
-import { from } from "rxjs";
-import {Adherent, AdherentList, AdherentResearchReponse} from "./model";
+
+import {Adherent, AdherentList, AdherentResearchReponse} from './model';
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
-import { AdherentFamille } from "./model";
+import { AdherentFamille } from './model';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
 
@@ -145,6 +145,16 @@ private handleError<T>() {
                 // catchError(this.handleError())
             );
         }
+    }
+
+    getAdherentPrincipalByPolice(policeId: string): Observable<Array<Adherent>> {
+        // @FIXME: get request
+        // adherent/liste-actualisee
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/find-adherent-principal-by-police`
+            , {params: createRequestOption({policeId})}).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
     }
 
 }

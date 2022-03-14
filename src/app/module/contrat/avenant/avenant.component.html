@@ -2025,7 +2025,7 @@
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant)">
+                                                    (click)="onRowSelectAvenant(rowdata)">
                                             </button>
                                             <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier"
                                                     class="p-button-rounded p-button-warning p-mr-2 p-mr-2"
@@ -3409,28 +3409,7 @@
 <ng-template pTemplate="content">
   <div class="">
       <div class="card">
-          <p-table #dt [value]="historiqueAvenantPrimes" [columns]="cols" [rows]="10"
-                   editMode="row" [rowHover]="true" dataKey="id">
-              <!--<ng-template pTemplate="caption">
-                  <div class="p-d-flex p-flex-column table-header">
-                      <div class="p-grid">
-                          <div class="p-col-9">
-                                  <span class="p-input-icon-left">
-                                      <i class="pi pi-search"></i>
-                                      <input pInputText type="text"
-                                             (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                             placeholder="Rechercher..." [style]="{width: '20%'}"/>
-                                  </span>
-                          </div>
-                          <div class="p-col-2">
-                                  <span class="p-input-icon-right">
-                                  </span>
-                          </div>
-                      </div>
-
-                  </div>
-              </ng-template>-->
-
+          <p-table #dt [value]="historiqueAvenantPrimes" [columns]="cols" [rows]="10" editMode="row" [rowHover]="true" dataKey="id">
               <ng-template pTemplate="header">
                   <tr>
                       <th pSortableColumn="nom">Groupe
