@@ -506,6 +506,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('dateDeclaration').enable();
         this.prestationForm.get('prestataire').enable();
         this.prestationForm.get('dateSaisie').setValue(new Date());
+        this.isDetail = false;
         this.displayFormPrefinancement = true;
     }
 
