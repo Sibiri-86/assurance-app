@@ -1,59 +1,77 @@
 import { Component, OnInit } from '@angular/core';
 import { AppMainComponent } from './app.main.component';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { Function } from './module/common/config/role.user';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './app.menu.component.html'
 })
 export class AppMenuComponent implements OnInit {
-
     model: any[];
-
-    constructor(public app: AppMainComponent) {}
-
+    constructor(public app: AppMainComponent, private keycloak: KeycloakService) {}
     ngOnInit() {
         this.model = [
-            {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/']},
-            {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage']},
+            {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: true},
+            {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage'],
+            visible: this.keycloak.isUserInRole(Function.sm_parametrage)},
             {
                 label: 'Production', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
+                 visible: this.keycloak.isUserInRole(Function.sm_production),
                 items: [
-                    {label: 'garant', icon: '', routerLink: ['/contrat/garant']},
-                    {label: 'intermediaire', icon: '', routerLink: ['/contrat/intermediaire']},
-                    {label: 'Barème', icon: '', routerLink: ['/contrat/bareme']},
-                    {label: 'police', icon: '', routerLink: ['/contrat/police']},
-                    //{label: 'affaire nouvelle', icon: '', routerLink: ['/contrat/affaire-nouvelle/souscripteur']},
-                    {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant']},
-                    //{label: 'proposition', icon: '', routerLink: ['/proposition']}
+                    {label: 'garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
+                    {label: 'intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
+                    visible: this.keycloak.isUserInRole(Function.sm_intermediaire)},
+                    {label: 'Barème', icon: '', routerLink: ['/contrat/bareme'], visible: this.keycloak.isUserInRole(Function.sm_bareme)},
+                    {label: 'police', icon: '', routerLink: ['/contrat/police'], visible: this.keycloak.isUserInRole(Function.sm_police)},
+                    {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant'],
+                    visible: this.keycloak.isUserInRole(Function.sm_avenant)}
                 ]
             },
             {
-                label: 'Prestation', icon: 'pi pi-fw pi-compass',
+                label: 'Prestation', icon: 'pi pi-fw pi-compass', visible: false,
                         items: [
                             {
                                 label: 'prefinancement', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
+                                visible: this.keycloak.isUserInRole(Function.sm_prefinancement),
                                 items: [
-                                    {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/prefinancement']},
-                                    {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide']},
-                                    {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation']},
-                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement']},
-                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide']},
-                                    {label: 'ordre reglement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation']}
+                                    {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/prefinancement'], visible: 
+                                    this.keycloak.isUserInRole(Function.sm_sinistre_edition)},
+                                    {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide'],
+                                     visible: this.keycloak.isUserInRole(Function.sm_sinistre_valide)},
+                                    {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_sinistre_consultation)},
+                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_edition)},
+                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_valide)},
+                                    {label: 'ordre reglement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_consultation)}
                                 ]
                             },
                             {
                                 label: 'Tiers Payant', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
+                                visible: this.keycloak.isUserInRole(Function.sm_tiers_payant),
                                 items: [
-                                    {label: 'Sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant']},
-                                    {label: 'Sinistre | Valide', icon: '', routerLink: ['/prestation/tierPayant/valide']},
-                                    {label: 'Sinistre | Consultation ', icon: '', routerLink: ['/prestation/tierPayant/consultation']},
-                                    {label: 'Ordre règlement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement']},
-                                    {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
-                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide']},
-                                    /* {label: 'sinistre | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ORD']}*/
+                                    {label: 'Sinistre | Edition', icon: '', routerLink: ['/prestation/tierPayant'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_sinistre_edition)},
+                                    {label: 'Sinistre | Valide', icon: '', routerLink: ['/prestation/tierPayant/valide'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_sinistre_valide)},
+                                    {label: 'Sinistre | Consultation ', icon: '', routerLink: ['/prestation/tierPayant/consultation'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_consultation)},
+                                    {label: 'Ordre règlement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_edition)},
+                                    {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_valide)},
+                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
+                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)}
                                 ]
                             }
                         ]
+            },
+            {
+                label: 'Medical', icon: 'pi pi-fw pi-star', routerLink: ['/medical'],
+                 visible: true,
+                items: [
+                    {label: 'bon-de-prise-en-charge', icon: '', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
+                ]
             },
             /*
             {
@@ -157,7 +175,7 @@ export class AppMenuComponent implements OnInit {
             }
             */
         ];
-        
+
     }
-    
+
 }

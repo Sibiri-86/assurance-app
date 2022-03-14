@@ -42,6 +42,19 @@ export interface Prefinancement {
     prestation?: Array<Prestation>;
 }
 
+export interface BonPriseEnCharge {
+    id?: string;
+    //dateSoins?: Date;
+    referenceBordereau?: string;
+    dateSaisie?: Date;
+    dateDeclaration?: Date;
+    adherent?: Adherent;
+    numeroSinistre?: string;
+    souscripteur: string;
+    prestataire: Prestataire;
+    prestation?: Array<Prestation>;
+}
+
 export interface Prestation {
     id?: string;
     coutUnitaire?: number;

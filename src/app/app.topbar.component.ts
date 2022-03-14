@@ -10,6 +10,7 @@ export class AppTopBarComponent {
     name = '';
     role = '';
     constructor(public app: AppMainComponent, public keycloak: KeycloakService) {
+      console.log('les roles du user est'+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
         if (profile['attributes'].role.length != 0){
