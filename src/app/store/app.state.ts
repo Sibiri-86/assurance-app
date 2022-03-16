@@ -38,13 +38,14 @@ import {PlafondState} from './contrat/plafond/state';
 import { AdherentState } from './contrat/adherent/state';
 import { ArrondissementState } from './parametrage/arrondissement/state';
 import { SecteurState } from './parametrage/secteur/state';
-import {HistoriqueAvenantState} from "./contrat/historiqueAvenant/state";
+import {HistoriqueAvenantState} from './contrat/historiqueAvenant/state';
 import { BanqueState } from './parametrage/Banques/state';
 import { TauxCommissionIntermediaireState } from './parametrage/taux-commission-intermediaire/state';
 import { PrefinancementState } from './prestation/prefinancement/state';
 import {ExerciceState} from './contrat/exercice/state';
 import {SinistreTierPayantState} from './prestation/tierPayant/state';
 import {SinistreTierPayant} from './prestation/tierPayant/model';
+import { BonPriseEnChargeState } from './medical/bon-prise-en-charge/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -93,4 +94,5 @@ export interface AppState {
   prefinancementState: PrefinancementState;
   tierPayantState: SinistreTierPayantState;
   exerciceState: ExerciceState;
+  bonPriseEnChargeState: BonPriseEnChargeState;
 }
