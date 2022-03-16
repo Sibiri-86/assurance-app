@@ -245,6 +245,8 @@ import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier
 import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
 import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
 import { BonPriseEnChargeEffects } from './store/medical/bon-prise-en-charge/effect';
+import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -442,7 +444,8 @@ import { BonPriseEnChargeEffects } from './store/medical/bon-prise-en-charge/eff
         OrdreReglementConsultationComponent,
         SinistreTiersPayantConsultationComponent,
         OrdreReglementRechercheComponent,
-        BonPriseEnChargeComponent
+        BonPriseEnChargeComponent,
+        OrdonnaceMedicalComponent
     ],
     providers: [
         {

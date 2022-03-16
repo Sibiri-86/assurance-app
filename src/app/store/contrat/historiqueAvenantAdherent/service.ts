@@ -38,6 +38,16 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    getHistoriqueAvenantAdherentsByHistoriqueId(haId: string):
+    Observable<Array<HistoriqueAvenantAdherant>> {
+        // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/retire`,
+        {params: createRequestOption({haId})}).pipe(
+            map((response: Array<HistoriqueAvenantAdherant>) => response),
+            catchError(this.handleError())
+        );
+    }
+
     findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(haId: string):
     Observable<Array<HistoriqueAvenantAdherant>> {
         // @FIXME: get request
