@@ -29,7 +29,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Prestation', icon: 'pi pi-fw pi-compass', visible: false,
+                label: 'Prestation', icon: 'pi pi-fw pi-compass', visible: this.keycloak.isUserInRole(Function.sm_prestation),
                         items: [
                             {
                                 label: 'prefinancement', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
@@ -70,7 +70,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'Medical', icon: 'pi pi-fw pi-star', routerLink: ['/medical'],
                  visible: true,
                 items: [
-                    {label: 'bon-de-prise-en-charge', icon: '', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
+                    {label: 'bon-de-prise-en-charge', icon: 'pi pi-pencil', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
+                    {label: 'ordonnance médical', icon: 'pi pi-pencil', routerLink: ['/medical/ordonnace-medical'], visible: true},
                 ]
             },
             /*

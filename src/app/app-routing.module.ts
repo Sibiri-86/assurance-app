@@ -59,6 +59,7 @@ import {TierPayantConsultationComponent} from './module/prestation/tier-payant/O
 import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier-payant/sinistre-Tiers-Payant-consultation/sinistre-Tiers-Payant-consultation.component';
 import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
 import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
+import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -123,6 +124,7 @@ import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/
                     {path: 'prestation/tierPayant/ordre-reglement/valide', component: TierPayantOrdreReglementValideComponent},
                     {path: 'prestation/tierPayant/ORD', component: TierPayantConsultationComponent},
                     {path: 'prestation/tierPayant/consultation', component: SinistreTiersPayantConsultationComponent},
+                    {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent}
                 ]
             },
             {path: 'error', component: AppErrorComponent},

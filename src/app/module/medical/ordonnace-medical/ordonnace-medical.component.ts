@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
 import {
     ControlContainer, FormArray,
@@ -9,30 +9,30 @@ import {
 } from '@angular/forms';
 import {select, Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/app.state';
-import {loadSousActe} from '../../../../store/parametrage/sous-acte/actions';
-import * as sousActeSelector from '../../../../store/parametrage/sous-acte/selector';
+import {loadSousActe} from '../../../store/parametrage/sous-acte/actions';
+import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
 import {takeUntil} from 'rxjs/operators';
 import {SousActe} from 'src/app/store/parametrage/sous-acte/model';
-import {Taux} from '../../../../store/parametrage/taux/model';
-import {loadTaux} from '../../../../store/parametrage/taux/actions';
-import * as tauxSelector from '../../../../store/parametrage/taux/selector';
-import {Sort} from '../../../common/models/sort.enum';
-import {loadGarantie} from '../../../../store/parametrage/garantie/actions';
-import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
-import * as plafondSelector from '../../../../store/contrat/plafond/selector';
+import {Taux} from '../../../store/parametrage/taux/model';
+import {loadTaux} from '../../../store/parametrage/taux/actions';
+import * as tauxSelector from '../../../store/parametrage/taux/selector';
+import {Sort} from '../../common/models/sort.enum';
+import {loadGarantie} from '../../../store/parametrage/garantie/actions';
+import * as garantieSelector from '../../../store/parametrage/garantie/selector';
+import * as plafondSelector from '../../../store/contrat/plafond/selector';
 
-import {loadPrestataire} from '../../../../store/parametrage/prestataire/actions';
-import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
+import {loadPrestataire} from '../../../store/parametrage/prestataire/actions';
+import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
 
-import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
-import * as tierPayantActions from '../../../../store/prestation/tierPayant/action';
+import * as tierPayantSelector from '../../../store/prestation/tierPayant/selector';
+import * as tierPayantActions from '../../../store/prestation/tierPayant/action';
 
-import {loadMedecin} from '../../../../store/parametrage/medecin/actions';
-import * as medecinSelector from '../../../../store/parametrage/medecin/selector';
-import {medecinList} from '../../../../store/parametrage/medecin/selector';
+import {loadMedecin} from '../../../store/parametrage/medecin/actions';
+import * as medecinSelector from '../../../store/parametrage/medecin/selector';
+import {medecinList} from '../../../store/parametrage/medecin/selector';
 
-import {loadActe} from '../../../../store/parametrage/acte/actions';
-import * as acteSelector from '../../../../store/parametrage/acte/selector';
+import {loadActe} from '../../../store/parametrage/acte/actions';
+import * as acteSelector from '../../../store/parametrage/acte/selector';
 
 import {Acte} from 'src/app/store/parametrage/acte/model';
 import {Garantie} from 'src/app/store/parametrage/garantie/model';
@@ -41,40 +41,39 @@ import {Prestataire} from 'src/app/store/parametrage/prestataire/model';
 import {Medecin} from 'src/app/store/parametrage/medecin/model';
 import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
 import {Adherent} from 'src/app/store/contrat/adherent/model';
-import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
-import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
-import * as featureActionPlafond from '../../../../store/contrat/plafond/action';
-import * as adherentSelector from '../../../../store/contrat/adherent/selector';
+import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
+import * as featureActionTierPayant from '../../../store/prestation/tierPayant/action';
+import * as featureActionPlafond from '../../../store/contrat/plafond/action';
+import * as adherentSelector from '../../../store/contrat/adherent/selector';
 import {CheckTierPayantResult, Prestation} from 'src/app/store/prestation/tierPayant/model';
 import {Status} from 'src/app/store/global-config/model';
-import {status} from '../../../../store/global-config/selector';
-import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
+import {status} from '../../../store/global-config/selector';
+import {TypeEtatSinistre} from '../../common/models/enum.etat.sinistre';
 import {printPdfFile} from 'src/app/module/util/common-util';
 import {TypeReport} from 'src/app/store/contrat/enum/model';
 import {Report} from 'src/app/store/contrat/police/model';
-import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
-import {Pathologie} from '../../../../store/parametrage/pathologie/model';
-import * as pathologieSelector from '../../../../store/parametrage/pathologie/selector';
-import {loadPathologie} from '../../../../store/parametrage/pathologie/actions';
-import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/model';
-import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
-import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
-import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
-import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
-import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
-import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
-import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
-import {BreadcrumbService} from '../../../../app.breadcrumb.service';
+import {SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
+import {Pathologie} from '../../../store/parametrage/pathologie/model';
+import * as pathologieSelector from '../../../store/parametrage/pathologie/selector';
+import {loadPathologie} from '../../../store/parametrage/pathologie/actions';
+import {ProduitPharmaceutique} from '../../../store/parametrage/produit-pharmaceutique/model';
+import * as produitPharmaceutiqueSelector from '../../../store/parametrage/produit-pharmaceutique/selector';
+import {loadProduitPharmaceutique} from '../../../store/parametrage/produit-pharmaceutique/actions';
+import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
+import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../store/parametrage/plafond/model';
+import {loadFamilleActeEnCours} from '../../../store/contrat/plafond/action';
+import * as prefinancementSelector from '../../../store/prestation/prefinancement/selector';
+import {CheckPrefinancementResult} from '../../../store/prestation/prefinancement/model';
+import {BreadcrumbService} from '../../../app.breadcrumb.service';
 
 
 @Component({
-    // tslint:disable-next-line:component-selector
-    selector: 'app-tierPayant',
-    templateUrl: './tierPayant-edition.component.html',
-    styleUrls: ['./tierPayant-edition.component.scss']
+  selector: 'app-ordonnace-medical',
+  templateUrl: './ordonnace-medical.component.html',
+  styleUrls: ['./ordonnace-medical.component.scss']
 })
-export class TierPayantEditionComponent implements OnInit {
-    displayFormPrefinancement: boolean;
+export class OrdonnaceMedicalComponent implements OnInit {
+  displayFormPrefinancement: boolean;
     isModif: boolean;
     prestationList: Array<FraisReels>;
     sousActeList$: Observable<Array<SousActe>>;
@@ -132,7 +131,7 @@ export class TierPayantEditionComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService) {
-        this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
+        this.breadcrumbService.setItems([{ label: 'Ordonnance Médical' }]);
     }
 
     onCreate() {
@@ -181,11 +180,12 @@ export class TierPayantEditionComponent implements OnInit {
             prestation: this.formBuilder.array([], Validators.required),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
-            dateFacture: new FormControl('', Validators.required),
+            // dateFacture: new FormControl('', Validators.required),
             prestataire: new FormControl('', Validators.required),
-            numeroFacture: new FormControl('', Validators.required),
+            prescripteur: new FormControl('', Validators.required),
+            // numeroFacture: new FormControl('', Validators.required),
             matriculeAdherent: new FormControl('', Validators.required),
-            dateDeclaration: new FormControl('', Validators.required),
+            // dateDeclaration: new FormControl('', Validators.required),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -500,10 +500,10 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
         this.prestation.clear();
         // this.prestationForm.enable({onlySelf: false, emitEvent: true});
-        this.prestationForm.get('dateFacture').enable();
-        this.prestationForm.get('numeroFacture').enable();
+        // this.prestationForm.get('dateFacture').enable();
+        // this.prestationForm.get('numeroFacture').enable();
         this.prestationForm.get('matriculeAdherent').enable();
-        this.prestationForm.get('dateDeclaration').enable();
+        // this.prestationForm.get('dateDeclaration').enable();
         this.prestationForm.get('prestataire').enable();
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.isDetail = false;

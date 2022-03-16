@@ -1595,7 +1595,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
-        this.viewAvenantRetrait(avenant, typeHistoriqueAvenant);
+        this.viewAvenantRetrait(avenant);
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
@@ -1637,17 +1637,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.displayDialogFormAdherentIncorp = true;
   }
 
-  viewAvenantRetrait(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  viewAvenantRetrait(avenant: HistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
-    console.log(typeof typeHistoriqueAvenant);
-    this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id).subscribe(
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueId(avenant.id).subscribe(
         (res: Array<HistoriqueAvenantAdherant>) => {
           console.log('=====================res=============', res);
           this.historiqueAvenantAdherent1s = res;
           /* console.log('=====================res=============', res);
           this.historiqueAvenantAdherents2 = this.historiqueAvenantAdherent1s
               .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);*/
-          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
           console.log('=====================historiqueAvenantAdherent1s=============', this.historiqueAvenantAdherent1s);
         }
     );
