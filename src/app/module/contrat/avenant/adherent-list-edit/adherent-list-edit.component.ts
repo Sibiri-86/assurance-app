@@ -219,6 +219,9 @@ export class AdherentListEditComponent implements OnInit {
     this.editWiew = false;
   }
 
+  compareDateIncorp(){
+  }
+
   annulerModif(): void {
     this.adherentForm.reset({});
     this.editWiew = false;

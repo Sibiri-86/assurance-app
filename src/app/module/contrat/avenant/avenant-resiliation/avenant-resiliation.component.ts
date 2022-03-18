@@ -38,7 +38,7 @@ export class AvenantResiliationComponent implements OnInit {
   ];
   exercice$: Observable<Exercice>;
   private exercice: Exercice;
-  private exerciceForm: FormGroup;
+  exerciceForm: FormGroup;
   @Input() avenantId: string;
   @Input() etat: string;
 
