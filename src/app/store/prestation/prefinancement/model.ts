@@ -40,6 +40,7 @@ export interface Prefinancement {
     numeroSinistre?: string;
     ordreReglement?: OrdreReglement;
     prestation?: Array<Prestation>;
+    prestataire?: Prestataire;
 }
 
 export interface BonPriseEnCharge {
@@ -71,7 +72,15 @@ export interface Prestation {
     medecin?: Medecin;
     /*ajout des autres informations*/
     dateSoins?: Date;
-    produitPharmaceutique: Array<ProduitPharmaceutique>;
+    produitPharmaceutique?: Array<ProduitPharmaceutique>;
+    /*ajout information pour bon de prise en charge*/
+    idTaux?: string;
+    idSousActe?: string;
+    idMedecin?: string;
+    idAdherent?: string;
+    idPathologie?: string;
+    idPrestataire?: string;
+    codeSousActe?: string;
 }
 
 export interface PrefinancementList {

@@ -1,5 +1,5 @@
 import { from } from 'rxjs';
-import {BonPriseEnCharge, BonPriseEnChargeList} from './model';
+import {BonPriseEnCharge, BonPriseEnChargeList, Report} from './model';
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -33,6 +33,12 @@ updateBons(bon: BonPriseEnCharge): Observable<any> {
 deleteBons(bon: BonPriseEnCharge): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/${bon.id}`, null);
+}
+
+$getReport(report: Report): Observable<ArrayBuffer> {
+    // @FIXME: get request
+    return this.http.post( `${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/report`,
+     report, {responseType: 'arraybuffer'});
 }
 
 private handleError<T>() {

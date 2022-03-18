@@ -4,7 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { BonPriseEnChargeService } from './service';
 import * as featureActions from './actions';
-import {BonPriseEnCharge} from './model';
+import {BonPriseEnCharge, Report} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -58,6 +58,20 @@ export class BonPriseEnChargeEffects {
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
                 ));
+
+    fetchReportBon$ = createEffect(() =>
+                            this.actions$.pipe(
+                                ofType(featureActions.FetchReportBon),
+                                mergeMap((report: Report) =>
+                                    this.bonPriseEnChargeService.$getReport(report).pipe(
+                                        switchMap(value => [
+                                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                            featureActions.setReportBon({reportFile: value})
+                                        ]),
+                                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                    ))
+                                ));
 
     fetchBon$ = createEffect(() =>
     this.actions$.pipe(

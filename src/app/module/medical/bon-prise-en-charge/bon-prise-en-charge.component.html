@@ -15,7 +15,7 @@
                 -->
 			</p-toolbar>
             
-            <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectedPrefinancement">
@@ -33,47 +33,46 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:100px">Numeros<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:200px">Nom adhérent<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Prenom adhérent<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Qualite assuré<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Numéro police<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:100px">Prestataire<p-sortIcon field="duree"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-prefinancement>
+                <ng-template pTemplate="body" let-bon>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="bon"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.numeros}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.nom}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.prenom}}</span>
                         </td>
-                        <td>
-                            <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.typeQualiteAssure}}</span>
                         </td>
-                        <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.numeroPolice}}</span>
                         </td>
-                        <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.nomSouscripteur}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
+                            <span class="p-column-title" style="min-width:100px">{{bon.nomPrestataire}}</span>
                         </td>
+                        
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
-                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 
-                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(prefinancement)"></button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(bon)"></button>
+                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(bon)"></button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(bon)"></button>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+                        {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon(s).
                     </div>
                 </ng-template>
             </p-table>
@@ -397,7 +396,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length || prestationForm?.invalid" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                </form> 

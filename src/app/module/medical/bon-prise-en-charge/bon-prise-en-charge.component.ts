@@ -49,12 +49,16 @@ import { status } from '../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../common/models/enum.etat.sinistre';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
-import { Report } from 'src/app/store/contrat/police/model';
+import { Report } from 'src/app/store/medical/bon-prise-en-charge/model';
 import { TauxCommissionIntermediaireEffects } from 'src/app/store/parametrage/taux-commission-intermediaire/effect';
 import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
 import { Dialog } from 'primeng/dialog/dialog';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { BonPriseEnCharge } from 'src/app/store/medical/bon-prise-en-charge/model';
+import * as featureActionBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/actions';
+import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/selector';
+import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -106,6 +110,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   public defaultDate: Date;
   checkControl = true;
   checkPrefinancementResult: Array<CheckPrefinancementResult>;
+  test: Array<SelectItem>;
+  bonPriseEnCharge: BonPriseEnCharge = {};
+  bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
+  bonPriseEnChargeList: Array<BonPriseEnCharge>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -174,13 +182,13 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
       numeroPolice: new FormControl({value: '', disabled: true}),
-      prestataire: new FormControl(''),
+      prestataire: new FormControl(Validators.required),
       souscripteur: new FormControl({value: '', disabled: true}),
       prestation: this.formBuilder.array([])
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
-    this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
-    this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    this.store.dispatch(featureActionBonPriseEnCharge.setBon(null));
+    this.store.pipe(select(selectorsBonPriseEnCharge.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
                 printPdfFile(bytes);
@@ -201,6 +209,15 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
         //this.taux = this.adherentSelected.groupe.taux;
+      }
+    });
+
+    this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+    this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.bonPriseEnChargeList = value.slice();
       }
     });
 
@@ -291,12 +308,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.checkStatus();
   }
 
-  imprimer(pref: Prefinancement) {
-    this.report.typeReporting = TypeReport.PREFINANCEMENT_FICHE_DETAIL_REMBOURSEMENT;
-    this.report.prefinancementDto = pref;
-    this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
+  imprimer(bon: BonPriseEnCharge) {
+    this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
+    this.report.bon = bon;
+    this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
   }
-  
+
   validerPrestation(pref: Prefinancement) {
     this.confirmationService.confirm({
       message: 'voulez-vous valider le sinistre',
@@ -455,18 +472,45 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
 
   /** enregistrement cas de prefinancement */
   onCreate() {
+    /*fonction pour enregitrer un bon de prise en charge*/
+    this.bonPriseEnCharge.prestations = [];
+    this.prefinancementModel = this.prestationForm.value;
+    this.bonPriseEnCharge.idAdherent = this.adherentSelected.id;
+    this.bonPriseEnCharge.idPrestataire = this.prefinancementModel.prestataire.id;
+    this.bonPriseEnCharge.idPolice = this.adherentSelected.groupe.police.id;
+    //this.bonPriseEnCharge.prestations = this.prefinancementModel.prestation;
+    const prest: Prestation = {};
+    prest.produitPharmaceutique = [];
+    for (const prestation of this.prefinancementModel.prestation){
+      prest.idMedecin = prestation.medecin.id;
+      //prest.idPathologie = prestation.p;
+      prest.idSousActe = prestation.sousActe.id;
+      prest.codeSousActe = prestation.sousActe.code;
+      prest.idTaux = prestation.taux.id;
+      prest.montantRembourse = prestation.montantRembourse;
+      prest.nombreActe = prestation.nombreActe;
+      prest.observation = prestation.observation;
+      prest.montantRembourse = prestation.montantRembourse;
+      prest.debours = prestation.debours;
+      for (const produitPharmaceutique of prestation.produitPharmaceutique) {
+        const produit: ProduitPharmaceutique = {};
+        produit.idProduitPharmaceutique = produitPharmaceutique.id;
+        prest.produitPharmaceutique.push(produit);
+      }
+      this.bonPriseEnCharge.prestations.push(prest);
+    }
+    console.log(this.bonPriseEnCharge);
+    this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
     /** fonction pour enregistrer la prestation */ 
-   console.log('creation prefinancement');
-   this.prefinancementModel = this.prestationForm.value;
-   this.prefinancementModel.dateSaisie = new Date();
-   this.prefinancementModel.adherent = this.adherentSelected;
-   this.prefinancementList.push(this.prefinancementModel);
-   this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
-  // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-   console.log(this.prefinancementModel);
-   this.prefinancementList = [];
-   this.prestationForm.reset();
-   //this.prestationForm.get('dateSaisie').setValue(new Date());
+   //console.log('creation prefinancement');
+   //this.prefinancementModel = this.prestationForm.value;
+   //this.prefinancementModel.dateSaisie = new Date();
+   //this.prefinancementModel.adherent = this.adherentSelected;
+   //this.prefinancementList.push(this.prefinancementModel);
+   //this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+   //console.log(this.prefinancementModel);
+   //this.prefinancementList = [];
+   //this.prestationForm.reset();
    }
 
   // permet d'enregistrer une prestation par famille
@@ -480,16 +524,16 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationList = [];
     this.prestationForm.reset();
   }
-  
+
   changeGarantie(garantie) {
     console.log(garantie);
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
   }
-  
+
   showDialogPlafondMaximized(dialog: Dialog) {
     dialog.maximized = true;
   }
-  
+
   newRowPrestation() {
     return {taux: this.taux};
   }
@@ -498,11 +542,11 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.displayFormPrefinancement = true;
     this.prestationForm.get('dateSaisie').setValue(new Date());
   }
-  
+
   showToast(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }
-  
+
   checkStatus() {
     this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
       if (statusObj) {

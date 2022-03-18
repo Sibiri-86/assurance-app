@@ -2,5 +2,10 @@
     "/assurance/*":{
         "target":"http://localhost:9090",
         "secure": false
+    },
+    
+    "/medical/*":{
+        "target":"http://localhost:8002",
+        "secure": false
     }
 }
