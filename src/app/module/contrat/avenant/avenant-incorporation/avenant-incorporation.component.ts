@@ -39,7 +39,8 @@ import * as featureExerciceAction from '../../../../store/contrat/exercice/actio
 })
 export class AvenantIncorporationComponent implements OnInit{
 
-    // @Input groupe: Groupe;
+    @Input() avenantId: string;
+    @Input() etat: string;
     @Output() adherentFamilleEvent = new EventEmitter();
     @Input() police: Police;
    //  newgroupe: Groupe;
@@ -87,9 +88,68 @@ export class AvenantIncorporationComponent implements OnInit{
     exercice$: Observable<Exercice>;
     exerciceList$: Observable<Array<Exercice>>;
     exerciceList: Array<Exercice>;
+    viewListeEdit = false;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
+        this.familles = [];
+        this.adherentFamille =  {
+            adherent: {},
+            famille: []
+        };
+
+        this.adherentListGroupe = [];
+
+        console.log(' *** etat === ' + this.etat);
+        if (this.etat !== 'CREATE') {
+            this.updateAvenant(this.avenantId);
+        }
+        if (this.etat !== 'VIEW') {
+            this.updateAvenant(this.avenantId);
+        }
+
+        this.qualiteAssureList$ = this.store.pipe(
+            select(qualiteAssureSelector.qualiteAssureList)
+        );
+        this.store.dispatch(loadQualiteAssure());
+        this.qualiteAssureList$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((value) => {
+                if (value) {
+                    this.qualiteAssureList1 = value.slice().filter(e => e.code === 'ADHERENT');
+                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
+                }
+            });
+        this.genreList$ = this.store.pipe(select(genreSelector.genreList));
+        this.store.dispatch(loadGenre());
+        this.genreList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.genreList = value.slice();
+            }
+        });
+
+        this.professionList$ = this.store.pipe(
+            select(professionSelector.professionList)
+        );
+        this.store.dispatch(loadProfession());
+        this.professionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.professionList = value.slice();
+            }
+        });
+        this.loadGoupeByPolice();
+    }
+    constructor(
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
+        private historiqueAvenantService: HistoriqueAvenantService,
+        private messageService: MessageService,
+        private policeService: PoliceService,
+        private exerciceService: ExerciceService
+    ) {
+        this.customForm = this.formBuilder.group({
+            groupe: new FormControl(null)
+        });
         this.adherentForm = this.formBuilder.group({
             id: new FormControl(0),
             nom: new FormControl(null, [Validators.required]),
@@ -135,67 +195,20 @@ export class AvenantIncorporationComponent implements OnInit{
             famille: new FormControl(null),
         });
         this.exerciceForm = this.formBuilder.group({
+            id: new FormControl(null),
             debut: new FormControl(null),
             fin: new FormControl(null, [Validators.required]),
             actived: new FormControl(null, [Validators.required]),
         });
         this.myForm = this.formBuilder.group({
+            id: new FormControl(null),
             numero: new FormControl(null),
             dateIncorparation: new FormControl(null, [Validators.required]),
+            dateAvenant: new FormControl(null, [Validators.required]),
             observation: new FormControl(null, [Validators.required]),
             demandeur: new FormControl(null, [Validators.required]),
             fraisBadges: new FormControl(null, [Validators.required]),
             fraisAccessoires: new FormControl(null, [Validators.required]),
-        });
-        this.familles = [];
-        this.adherentFamille =  {
-            adherent: {},
-            famille: []
-        };
-
-        this.adherentListGroupe = [];
-
-        this.qualiteAssureList$ = this.store.pipe(
-            select(qualiteAssureSelector.qualiteAssureList)
-        );
-        this.store.dispatch(loadQualiteAssure());
-        this.qualiteAssureList$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((value) => {
-                if (value) {
-                    this.qualiteAssureList1 = value.slice().filter(e => e.code === 'ADHERENT');
-                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
-                }
-            });
-        this.genreList$ = this.store.pipe(select(genreSelector.genreList));
-        this.store.dispatch(loadGenre());
-        this.genreList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.genreList = value.slice();
-            }
-        });
-
-        this.professionList$ = this.store.pipe(
-            select(professionSelector.professionList)
-        );
-        this.store.dispatch(loadProfession());
-        this.professionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.professionList = value.slice();
-            }
-        });
-        this.loadGoupeByPolice();
-    }
-    constructor(
-        private formBuilder: FormBuilder,
-        private store: Store<AppState>,
-        private historiqueAvenantService: HistoriqueAvenantService,
-        private messageService: MessageService,
-        private policeService: PoliceService,
-        private exerciceService: ExerciceService
-    ) {
-        this.customForm = this.formBuilder.group({
-            groupe: new FormControl(null)
         });
     }
 
@@ -203,6 +216,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
         console.log('---------------------------------');
         console.log(this.adherentPrincipauxTMP);
+        console.log(this.police);
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         this.loadActivedExercice(this.police);
     }
@@ -218,7 +232,8 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.aderants = this.adherentFamilleListe;
         this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
-        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateEffet = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
@@ -377,22 +392,22 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     compareDateIncorp(): void {
-        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.police.dateEffet).subscribe(
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.myForm.get('dateIncorparation').value).subscribe(
             (res) => {
                 if (res) {
-                    this.addMessage('error', 'Date d\'effet invalide',
-                        'La date d\'effet de l\'avenant ne peut pas être postérieure à celle de la police');
+                    this.addMessage('error', 'Date d\'incorporation invalide',
+                        'La date d\'incorporation de l\'adherent de peut pas être antérieure à celle de l\'avenant');
                     this.adherentForm.patchValue({dateIncorporation: null});
                 }
             }
         );
     }
-    compareDateMembre(): void {
-        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.police.dateEffet).subscribe(
+    compareDateEntreeMembre(): void {
+        this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.myForm.get('dateIncorporation').value).subscribe(
             (res) => {
                 if (res) {
-                    this.addMessage('error', 'Date d\'effet invalide',
-                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                    this.addMessage('error', 'Date d\'incorporation invalide',
+                        'La date d\'incorporation de l\'adherent de peut pas être antérieure à celle de l\'avenant');
                     this.adherentForm.patchValue({dateIncorporation: null});
                 }
             }
@@ -441,5 +456,62 @@ export class AvenantIncorporationComponent implements OnInit{
         return this.curentGroupe;
     }
     addGroupe() {
+    }
+
+    updateAvenant(avenantId: string): void {
+        if (avenantId) {
+            this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+                (res: HistoriqueAvenant) => {
+                    this.historiqueAvenant1 = res;
+                    this.historiqueAvenantAdherants = res.historiqueAvenantAdherants;
+                    this.myForm.setValue({
+                        id: res.id,
+                        numero: res.numero,
+                        dateIncorparation: new Date(res.dateAvenant),
+                        dateAvenant: new Date(res.dateAvenant),
+                        observation: res.observation,
+                        demandeur: res.typeDemandeur,
+                        fraisBadges: res.fraisBadges,
+                        fraisAccessoires: res.fraisAccessoires
+                    });
+                    this.exercice = res.exercice;
+                    this.exerciceForm.setValue({
+                        id: res.exercice.id,
+                        debut: res.exercice.debut,
+                        fin: res.exercice.fin,
+                        actived: res.exercice.actived
+                    });
+                }
+            );
+            this.viewListeEdit = true;
+        }
+    }
+
+    listeModifier(event: any): void {
+        // this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+        this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
+        this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
+        this.historiqueAvenant1.dateEffet = this.myForm.get('dateEffet').value;
+        this.historiqueAvenant1.observation = this.myForm.get('observation').value;
+        switch (this.myForm.get('demandeur').value.value) {
+            case TypeDemandeur.GARANT:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
+                break;
+            case TypeDemandeur.SOUSCRIPTEUR:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+                break;
+            case TypeDemandeur.VIMSO:
+                this.historiqueAvenant1.typeDemandeur = TypeDemandeur.VIMSO;
+                break;
+            default: break;
+        }
+        // this.historiqueAvenant1.exercice = this.exercice;
+        this.historiqueAvenant1.fraisBadges = this.myForm.get('fraisBadges').value;
+        this.historiqueAvenant1.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
+        // this.historiqueAvenant1.groupe = this.curentGroupe;
+        this.historiqueAvenant1.historiqueAvenantAdherants = event;
+        console.log('..... Liste modifier .....', this.historiqueAvenant1);
+        this.adherentFamilleEvent.emit(this.historiqueAvenant1);
+        this.init();
     }
 }

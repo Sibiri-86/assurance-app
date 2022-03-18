@@ -22,4 +22,11 @@ export enum TypeReport {
     ORDRE_REGLEMENT_TIER_PAYANT = 'ORDRE_REGLEMENT_TIER_PAYANT',
     /** type report pour le module medical */
     BONPRISEENCHARGE = 'BONPRISEENCHARGE'
-    }
+}
+
+export enum TypeDuree {
+    JOUR = 'JOUR',
+    MOI = 'MOIS',
+    ANNEE = 'ANNEE'
+}
+

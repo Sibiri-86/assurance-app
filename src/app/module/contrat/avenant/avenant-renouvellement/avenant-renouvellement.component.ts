@@ -12,7 +12,8 @@ import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
-import {loadListeActualisee} from '../../../../store/contrat/adherent/actions';
+import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
+import * as loadListeActualisee from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
     HistoriqueAvenant,
@@ -79,6 +80,7 @@ import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import {removeBlanks} from '../../../util/common-util';
+import {TypeDuree} from '../../../../store/contrat/enum/model';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -165,7 +167,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         plafondGroupeSousActes: []
     };
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
-    typeDuree: any = [{label: 'Jour', value: 'Jour'}, {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
     adherentFamilleListe: AdherentFamille[] = [];
     myForm: FormGroup;
     typeDureeSelected = '';
@@ -187,6 +189,9 @@ export class AvenantRenouvellementComponent implements OnInit {
     curentPolice: Police;
     exerciceForm: FormGroup;
     private exercice: Exercice;
+    adherentList$: Observable<Array<Adherent>>;
+    adherentList: Array<Adherent>;
+    displayDialogFormAdherent = false;
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -539,12 +544,12 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loadActivedExercice(this.police);
         this.curentPolice = this.police;
         this.historiqueAveantAdherants = [];
         this.adherantListTmp = [];
         console.log('.............1................');
         console.log(this.police);
-        this.loadActivedExercice(this.curentPolice);
         this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
         this.store.dispatch(loadGroupe({policeId: this.police.id}));
         this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -696,7 +701,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         );
 
         this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
-        this.store.dispatch(loadListeActualisee({policeId: this.curentPolice.id}));
+        this.store.dispatch(loadListeActualisee.loadListeActualisee({policeId: this.curentPolice.id}));
         this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
             .subscribe((value1) => {
                 if (value1) {
@@ -771,7 +776,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             territorialite: group.territorialite || [],
             duree: group.duree,
             dateEffet: new Date(group.dateEffet),
-            typeDuree: {},
+            typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
             dateEcheance: new Date(group.dateEcheance),
             numeroGroupe: group.numeroGroupe,
             typePrime: group?.typePrime,
@@ -800,7 +805,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         }); */
 
         this.primeForm.patchValue({
-            prime: group.prime,
+            prime: group.typePrime,
             primeEmploye: group.prime?.primeEmploye,
             primeConjoint: group.prime?.primeConjoint,
             primeEnfant: group.prime?.primeEnfant,
@@ -1040,6 +1045,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             default: break;
         }
         this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+        this.objet.groupes = this.groupeListes;
         this.objet.groupe = this.groupeForm.value;
         this.objet.groupe.prime = this.primeForm.value;
         this.objet.groupe.typePrime = this.primeForm.get('prime').value;
@@ -1284,5 +1290,69 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log(res);
             }
         );
+    }
+
+    voirAdherent(groupe: Groupe): void {
+        this.displayDialogFormAdherent = true;
+        // this.groupe = groupe;
+        this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: groupe.id}));
+        this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.adherentList = value.slice();
+            }
+        });
+    }
+
+    annulerGroupe(): void {
+        this.groupeForm.reset({});
+        this.primeForm.reset({});
+    }
+
+    validerGroupe(): void {
+        this.groupeListes.forEach(grp =>  {
+            if (grp.id === this.groupeForm.get('id').value) {
+                grp = this.groupeForm.value;
+                switch (this.primeForm.get('prime').value) {
+                    case 'PE':
+                        this.primeForm.patchValue({
+                            primeFamille: null,
+                            primeEnfant: null,
+                            primeConjoint: null,
+                            primeAdulte: null
+                        });
+                        break;
+                    case 'PAE':
+                        this.primeForm.patchValue({
+                            primeFamille: null,
+                            primeConjoint: null,
+                            primeEmploye: null
+                        });
+                        break;
+                    case 'PECE':
+                        this.primeForm.patchValue({
+                            primeFamille: null,
+                            primeAdulte: null
+                        });
+                        break;
+                    default:
+                        this.primeForm.patchValue({
+                            primeFamille: null,
+                            primeEnfant: null,
+                            primeConjoint: null,
+                            primeAdulte: null,
+                            primeEmploye: null
+                        });
+                        break;
+                }
+                grp.typePrime = this.primeForm.get('prime').value;
+                grp.prime = this.primeForm.value;
+                console.log('actual prime is ====  ');
+                console.log(this.primeForm.value);
+                console.log('groupe array is ====  ');
+                console.log(this.groupeForm);
+            }
+        });
+
     }
 }

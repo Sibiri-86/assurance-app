@@ -1,139 +1,119 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
-import { takeUntil } from "rxjs/operators";
-import { ConfirmationService, MessageService, SelectItem } from "primeng/api";
-import { Police, Rapport } from "../../../store/contrat/police/model";
-import { Groupe } from "../../../store/contrat/groupe/model";
+import {AfterViewInit, Component, OnDestroy, OnInit} from "@angular/core";
+import {takeUntil} from "rxjs/operators";
+import {ConfirmationService, MenuItem, MessageService} from "primeng/api";
+import {Police, Rapport, Report} from "../../../store/contrat/police/model";
+import {Groupe} from "../../../store/contrat/groupe/model";
 import * as featureAction from "../../../store/contrat/police/actions";
-import { policeList } from "../../../store/contrat/police/selector";
-import { groupeList } from "../../../store/contrat/groupe/selector";
-import { AdherentList, Adherent } from "../../../store/contrat/adherent/model";
-import { Pays } from "../../../store/parametrage/pays/model";
-import { Taux } from "../../../store/parametrage/taux/model";
-import { Genre, GenreList } from "../../../store/parametrage/genre/model";
-import { Profession } from "../../../store/parametrage/profession/model";
-import { QualiteAssure } from "../../../store/parametrage/qualite-assure/model";
-import { Territorialite } from "../../../store/parametrage/territorialite/model";
-import { Garantie } from "../../../store/parametrage/garantie/model";
-import { SousActe } from "../../../store/parametrage/sous-acte/model";
-import { Acte } from "../../../store/parametrage/acte/model";
-import { Departement } from "../../../store/parametrage/departement/model";
-import { DimensionPeriode } from "../../../store/parametrage/dimension-periode/model";
-import { Commune } from "../../../store/parametrage/commune/model";
-import { TypePrime } from "../../../store/parametrage/type-prime/model";
-import { Region } from "../../../store/parametrage/region/model";
-import { SecteurActivite } from "../../../store/parametrage/secteur-activite/model";
-import { Observable, of, Subject } from "rxjs";
-import { Status as Etat } from '../../common/models/etat.enum';
-import {
-  ControlContainer,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import { select, Store } from "@ngrx/store";
-import { AppState } from "src/app/store/app.state";
-import { loadPays } from "../../../store/parametrage/pays/actions";
+import {policeList, selectByteFile} from "../../../store/contrat/police/selector";
+import {groupeList} from "../../../store/contrat/groupe/selector";
+import {Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
+import {Pays} from "../../../store/parametrage/pays/model";
+import {Taux} from "../../../store/parametrage/taux/model";
+import {Genre} from "../../../store/parametrage/genre/model";
+import {Profession} from "../../../store/parametrage/profession/model";
+import {QualiteAssure} from "../../../store/parametrage/qualite-assure/model";
+import {Territorialite} from "../../../store/parametrage/territorialite/model";
+import {Garantie} from "../../../store/parametrage/garantie/model";
+import {SousActe} from "../../../store/parametrage/sous-acte/model";
+import {Acte} from "../../../store/parametrage/acte/model";
+import {Departement} from "../../../store/parametrage/departement/model";
+import {DimensionPeriode} from "../../../store/parametrage/dimension-periode/model";
+import {Commune} from "../../../store/parametrage/commune/model";
+import {TypePrime} from "../../../store/parametrage/type-prime/model";
+import {Region} from "../../../store/parametrage/region/model";
+import {SecteurActivite} from "../../../store/parametrage/secteur-activite/model";
+import {Observable, Subject} from "rxjs";
+import {Status as Etat} from '../../common/models/etat.enum';
+import {FormBuilder, FormControl, FormGroup, Validators,} from "@angular/forms";
+import {select, Store} from "@ngrx/store";
+import {AppState} from "src/app/store/app.state";
+import {loadPays} from "../../../store/parametrage/pays/actions";
 import * as paysSelector from "../../../store/parametrage/pays/selector";
 
-import { loadRegion } from "../../../store/parametrage/region/actions";
+import {loadRegion} from "../../../store/parametrage/region/actions";
 import * as regionSelector from "../../../store/parametrage/region/selector";
 
-import { loadDepartement } from "../../../store/parametrage/departement/actions";
+import {loadDepartement} from "../../../store/parametrage/departement/actions";
 import * as departementSelector from "../../../store/parametrage/departement/selector";
 
-import { loadCommune } from "../../../store/parametrage/commune/actions";
+import {loadCommune} from "../../../store/parametrage/commune/actions";
 import * as communeSelector from "../../../store/parametrage/commune/selector";
 
-import { loadTaux } from "../../../store/parametrage/taux/actions";
+import {loadTaux} from "../../../store/parametrage/taux/actions";
 import * as tauxSelector from "../../../store/parametrage/taux/selector";
 
-import { loadTerritorialite } from "../../../store/parametrage/territorialite/actions";
+import {loadTerritorialite} from "../../../store/parametrage/territorialite/actions";
 import * as territorialiteSelector from "../../../store/parametrage/territorialite/selector";
 
-import { loadGarant } from "../../../store/contrat/garant/actions";
+import {loadGarant} from "../../../store/contrat/garant/actions";
 import * as garantSelector from "../../../store/contrat/garant/selector";
 
 import * as featureActionGroupe from "../../../store/contrat/groupe/actions";
-import * as groupeSelector from "../../../store/contrat/groupe/selector";
 
 import * as featureActionAdherent from "../../../store/contrat/adherent/actions";
 import * as adherentSelector from "../../../store/contrat/adherent/selector";
+import * as adherantSelector from "../../../store/contrat/adherent/selector";
 
-import { loadIntermediaire } from "../../../store/contrat/intermediaire/actions";
+import {loadIntermediaire} from "../../../store/contrat/intermediaire/actions";
 import * as intermediaireSelector from "../../../store/contrat/intermediaire/selector";
 
-import { Garant, GarantList } from "../../../store/contrat/garant/model";
-import {
-  Intermediaire,
-  IntermediaireList,
-} from "../../../store/contrat/intermediaire/model";
+import {Garant} from "../../../store/contrat/garant/model";
+import {Intermediaire,} from "../../../store/contrat/intermediaire/model";
 
-import { loadSecteurActivite } from "../../../store/parametrage/secteur-activite/actions";
+import {loadSecteurActivite} from "../../../store/parametrage/secteur-activite/actions";
 import * as secteurActiviteSelector from "../../../store/parametrage/secteur-activite/selector";
 
-import { loadDimensionPeriode } from "../../../store/parametrage/dimension-periode/actions";
+import {loadDimensionPeriode} from "../../../store/parametrage/dimension-periode/actions";
 import * as dimensionPeriodeSelector from "../../../store/parametrage/dimension-periode/selector";
 
-import { loadPolice } from "src/app/store/contrat/police/actions";
-import { loadGroupe } from "src/app/store/contrat/groupe/actions";
+import {loadPolice} from "src/app/store/contrat/police/actions";
+import {loadGroupe} from "src/app/store/contrat/groupe/actions";
 
 import * as policeSelector from "src/app/store/contrat/police/selector";
 
-import { loadGarantie } from "../../../store/parametrage/garantie/actions";
+import {loadGarantie} from "../../../store/parametrage/garantie/actions";
 import * as garantieSelector from "../../../store/parametrage/garantie/selector";
 
-import { loadActe } from "../../../store/parametrage/acte/actions";
+import {loadActe} from "../../../store/parametrage/acte/actions";
 import * as acteSelector from "../../../store/parametrage/acte/selector";
 
-import { loadSousActe } from "../../../store/parametrage/sous-acte/actions";
+import {loadSousActe} from "../../../store/parametrage/sous-acte/actions";
 import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector";
 
-import { loadGenre } from "../../../store/parametrage/genre/actions";
+import {loadGenre} from "../../../store/parametrage/genre/actions";
 import * as genreSelector from "../../../store/parametrage/genre/selector";
 import * as featureActionsPlafond from "../../../store/contrat/plafond/action";
 import * as plafondSelector from "../../../store/contrat/plafond/selector";
-import { loadProfession } from "../../../store/parametrage/profession/actions";
+import {loadProfession} from "../../../store/parametrage/profession/actions";
 import * as professionSelector from "../../../store/parametrage/profession/selector";
 
-import { loadQualiteAssure } from "../../../store/parametrage/qualite-assure/actions";
+import {loadQualiteAssure} from "../../../store/parametrage/qualite-assure/actions";
 import * as qualiteAssureSelector from "../../../store/parametrage/qualite-assure/selector";
 import {Status} from "../../../store/global-config/model";
-import { status } from "../../../store/global-config/selector";
-import { EntityValidations } from "../../common/models/validation";
-import { BreadcrumbService } from "../../../app.breadcrumb.service";
-import { loadTypePrime } from "../../../store/parametrage/type-prime/actions";
+import {status} from "../../../store/global-config/selector";
+import {EntityValidations} from "../../common/models/validation";
+import {BreadcrumbService} from "../../../app.breadcrumb.service";
+import {loadTypePrime} from "../../../store/parametrage/type-prime/actions";
 import * as typePrimeSelector from "../../../store/parametrage/type-prime/selector";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
-import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuItem} from 'primeng/api';
-import { Bareme, Plafond } from "src/app/store/contrat/plafond/model";
-import ThirdPartyDraggable from "@fullcalendar/interaction/interactions-external/ThirdPartyDraggable";
-import { element } from "protractor";
-import { AdherentFamille } from "../../../store/contrat/adherent/model";
-import { ContentObserver } from "@angular/cdk/observers";
-import { printPdfFile, removeBlanks } from "../../util/common-util";
-import { selectByteFile } from "../../../store/contrat/police/selector";
-import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
-import { Secteur } from 'src/app/store/parametrage/secteur/model';
-import { ArrondissementService } from 'src/app/store/parametrage/arrondissement/service';
+import {Plafond} from "src/app/store/contrat/plafond/model";
+import {printPdfFile, removeBlanks} from "../../util/common-util";
+import {Arrondissement} from 'src/app/store/parametrage/arrondissement/model';
+import {Secteur} from 'src/app/store/parametrage/secteur/model';
 import * as secteurAction from '../../../store/parametrage/secteur/actions';
-import {loadSecteur} from '../../../store/parametrage/secteur/actions';
 import * as secteurSelector from '../../../store/parametrage/secteur/selector';
 
 import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
-import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
 import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
-import { Report } from "../../../store/contrat/police/model";
-import { TypeReport } from "src/app/store/contrat/enum/model";
+import {TypeDuree, TypeReport} from "src/app/store/contrat/enum/model";
 import {Prime} from '../../../store/contrat/prime/model';
 import {AdherentService} from '../../../store/contrat/adherent/service';
-import * as adherantSelector from '../../../store/contrat/adherent/selector';
-import { TauxCommissionIntermediaire } from "src/app/store/parametrage/taux-commission-intermediaire/model";
-import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
+import {TauxCommissionIntermediaire} from "src/app/store/parametrage/taux-commission-intermediaire/model";
+import * as tauxCommissionIntermediaireSelector
+  from '../../../store/parametrage/taux-commission-intermediaire/selector';
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import {PoliceService} from '../../../store/contrat/police/service';
-import { TypeBareme } from "../../common/models/bareme.enum";
+import {TypeBareme} from "../../common/models/bareme.enum";
 import {TypeHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/model';
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 
@@ -251,8 +231,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   displayParametragePlafond: boolean = false;
   domaineSelected: QualiteAssure;
   isInternationalGroupe: boolean;
-  typeDuree: any = [{label: 'Jour', value: 'Jour'},
-  {label: 'Mois', value: 'Mois'}, {label: 'Année', value: 'Annee'}];
+  typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
+  {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
   secteurList: Array<Secteur>;
   secteurList$: Observable<Array<Secteur>>;
   arrondissementList$: Observable<Array<Arrondissement>>;
@@ -324,7 +304,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       dateNaissance: new FormControl('', [Validators.required]),
       matriculeGarant: new FormControl('', ),
       // matriculeSouscripteur:new FormControl("", [Validators.required]),
-      numero: new FormControl('', ),
+      numero: new FormControl(null, ),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
       adresse: new FormControl('', [Validators.required]),
@@ -333,7 +313,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       referenceBancaire: new FormControl(''),
       qualiteAssure: new FormControl('', [Validators.required]),
       genre: new FormControl('', [Validators.required]),
-      dateEntree: new FormControl('', [Validators.required])
+      dateEntree: new FormControl('', [Validators.required]),
+      manageIncorporation: 0
     });
 
     this.policeForm = this.formBuilder.group({
@@ -380,7 +361,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       adresse:  new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
-      dateEcheance: new FormControl('')
+      dateEcheance: new FormControl(''),
     });
 
     this.primeForm = this.formBuilder.group({
@@ -1191,22 +1172,39 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
 
-    changeTypeDuree() {
+    /* changeTypeDuree() {
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
       }
+    } */
+
+  changeTypeDuree(){
+    this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+    console.log('value === ' + this.typeDureeSelected);
+    if (this.groupeForm.get('duree')) {
+      this.onRefreshDateEcheance(this.groupeForm.get('duree').value);
     }
+    // this.onRefreshDateEcheanceForGroupe();
+  }
+
+  onRefreshDateEcheance(value: number) {
+    this.policeForm
+        .get('dateEcheance')
+        .setValue(
+            this.getNewDate(value)
+        );
+  }
 
 
     validerRecap() {
 
       this.confirmationService.confirm({
-        message: "Etes vous sur de vouloir valider?",
+        message: "Etes vous sûre de vouloir valider?",
         header: "Confirmation",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          for( let prop of this.plafondFamilleActeConstruct){
+          for ( let prop of this.plafondFamilleActeConstruct){
             this.plafondActuelleConfiguration.push(prop);
             this.displayPrevisualiserParametrage = false;
           }
@@ -1244,19 +1242,19 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
 
-  onRefreshDateEcheance(value: number) {
+  /* onRefreshDateEcheance(value: number) {
     this.policeForm
       .get("dateEcheance")
       .setValue(
         this.getNewDate(value)
       );
-  }
+  } */
 
   onRefreshDateEcheanceForGroupe(value: number) {
     this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
     console.log(this.typeDureeSelected);
     this.groupeForm
-      .get("dateEcheance")
+      .get('dateEcheance')
       .setValue(
         this.getNewDateForGroupe(value)
       );
@@ -1265,8 +1263,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   checkStatus() {
     this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
       if (statusObj) {
-        //this.loading = false;
-        this.showToast(statusObj.status, "INFORMATION", statusObj.message);
+        // this.loading = false;
+        this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
         /*
           if (this.isAdding && statusObj.status === StatusEnum.success) {
             this.display = false;
@@ -2177,5 +2175,71 @@ changeGarantie(garantie, indexLigne: number) {
         console.log(this.policeList);
       }
     });
+  }
+
+  getDateEcheance(): void {
+    console.log('+++++++++++durée+++++++++++' + this.policeForm.get('duree').value);
+    if (this.policeForm.get('dateEffet').value !== null && this.policeForm.get('typeDuree').value !== null
+        && this.policeForm.get('duree').value !== null && this.policeForm.get('duree').value !== '') {
+      this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value,
+          this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value)
+          .subscribe((res) => {
+            this.policeForm.patchValue({dateEcheance: new Date(res.body)});
+            console.log('date fin = ' + this.policeForm.get('dateEcheance').value);
+          });
+    }
+  }
+
+  getDateEcheanceGroupe(): void {
+    console.log('+++++++++++durée+++++++++++' + this.groupeForm.get('duree').value);
+    if (this.groupeForm.get('dateEffet').value !== null && this.groupeForm.get('typeDuree').value !== null
+        && this.groupeForm.get('duree').value !== null && this.groupeForm.get('duree').value !== '') {
+      this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value,
+          this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value)
+          .subscribe((res) => {
+            this.groupeForm.patchValue({dateEcheance: new Date(res.body)});
+            console.log('date fin = ' + this.groupeForm.get('dateEcheance').value);
+          });
+    }
+  }
+
+  compareEnfantDateNaiss(rowData) {
+    this.historiqueAvenantService.compareDate(rowData.dateNaissance, this.adherentForm.get('dateNaissance').value).subscribe(
+        (res) => {
+          if (res) {
+            this.addMessage('error', 'Date de naissance invalide',
+                'La date de naissance de l\'enfant ne peut pas être antérieure à celle de l\'adhérent');
+            rowData.dateNaissance = null;
+          }
+        }
+    );
+  }
+  compareEnfantDateNaissAddAherentToGroupe(rowData) {
+    console.log('start .......');
+    if (rowData.qualiteAssure.code === 'ENFANT') {
+      this.historiqueAvenantService.compareDate(rowData.dateNaissance, this.adherentForm.get('dateNaissance').value).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date de naissance invalide',
+                  'La date de naissance de l\'enfant ne peut pas être antérieure à celle de l\'adhérent');
+              rowData.dateNaissance = null;
+            }
+          }
+      );
+    }
+  }
+  compareEnfantDateEntreAddAherentToGroupe(rowData) {
+    console.log('start ....1...');
+    if (rowData.qualiteAssure.code === 'ENFANT') {
+      this.historiqueAvenantService.compareDate(rowData.dateEntree, this.adherentForm.get('dateEntree').value).subscribe(
+          (res) => {
+            if (res) {
+              this.addMessage('error', 'Date d\'entrée invalide',
+                  'La date d\'entrée de l\'enfant ne peut pas être antérieure à celle de l\'adhérent');
+              rowData.dateEntree = null;
+            }
+          }
+      );
+    }
   }
 }

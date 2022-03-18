@@ -8,7 +8,7 @@ import {
     HistoriquePlafondFamilleActe,
     HistoriquePlafondSousActe,
     TypeHistoriqueAvenant
-} from "./model";
+} from './model';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {throwError, Observable, of} from 'rxjs';
@@ -139,7 +139,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     }
 
     compareDate(debut?: Date, fin?: Date): Observable<any> {
-        console.log('date = ' + debut.getMonth());
+        // console.log('date = ' + debut.getMonth());
         const avenant: HistoriqueAvenant = {};
         avenant.dateEffet = debut;
         avenant.dateAvenant = fin;
@@ -258,5 +258,10 @@ private handleError<T>() {
     misAJoursHistoriqueAvenant(ha: HistoriqueAvenant): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/misAJours`, ha);
+    }
+    getsHistoriqueAvenantById(avenantId: string): Observable<any> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-by-id`,
+            {params: createRequestOption({avenantId})});
     }
 }

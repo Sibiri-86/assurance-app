@@ -1747,11 +1747,11 @@
                   [style]="{width: '1400px'}" (onHide)="delAvenenant()" [maximizable]="true">
             <div class="card">
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
-                    <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe"
+                    <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                                (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
-                    <app-avenant-retrait [police]="policeItem" [isRenouv]="false"
+                    <app-avenant-retrait [police]="policeItem" [isRenouv]="false" [avenantDate]="" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantModification">
@@ -1763,11 +1763,11 @@
                                                 (eventEmitterM)="getAvenantRenouvellement($event)"></app-avenant-renouvellement>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">
-                    <app-avenant-resiliation [police]="policeItem"
+                    <app-avenant-resiliation [police]="policeItem"  [etat]="etat" [avenantId]="historiqueAvenant.id"
                                                 (eventEmitterResiliation)="getAvenantResiliation($event)"></app-avenant-resiliation>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantSuspension">
-                    <app-avenant-suspension [police]="policeItem"
+                    <app-avenant-suspension [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                                 (eventEmitterSuspension)="getAvenantSuspension($event)"></app-avenant-suspension>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantFacturation">
@@ -2001,7 +2001,9 @@
                             <tr>
                                 <td><span class="p-column-title">{{rowdata?.numero}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{rowdata.typeHistoriqueAvenant}}</span>
+                                <td>
+                                    <span *ngIf="rowdata.typeHistoriqueAvenant.toString() === 'AFAIRE_NOUVELLE'" class="p-column-title">AFFAIRE NOUVELLE</span>
+                                    <span *ngIf="rowdata.typeHistoriqueAvenant.toString() !== 'AFAIRE_NOUVELLE'" class="p-column-title">{{rowdata.typeHistoriqueAvenant}}</span>
                                 </td>
                                 <td><span class="p-column-title">{{rowdata.police.duree}}</span>
                                 </td>
@@ -2025,7 +2027,11 @@
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="onRowSelectAvenant(rowdata, rowdata.typeHistoriqueAvenant)">
+                                                    (click)="onRowSelectAvenant(rowdata)">
+                                            </button>
+                                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier"
+                                                    class="p-button-rounded p-button-warning p-mr-2 p-mr-2"
+                                                    (click)="onUpdateAvenant(rowdata)" [disabled]="rowdata.valide">
                                             </button>
                                         </div>
                                         <div class="p-col-">
@@ -2036,7 +2042,7 @@
                                         </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-dollar" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
-                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowdata.valide || rowdata.historiqueAvenantPrimes.length > 0">
+                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowData?.historiqueAvenantPrimes?.length > 1">
                                             </button>
                                         </div>
                                         <div class="p-col-">
@@ -2135,18 +2141,18 @@
                                 <tr [ngClass]="{'colorZone': !adherentHis.adherent.adherentPrincipal}">
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.numero}}</span></td>
                                     <td><span class="p-column-title">{{adherentHis?.adherent?.matriculeGarant}}</span></td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.nom}}</span></td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.prenom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.nom}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.prenom}}</span></td>
                                     <td><span
-                                            class="p-column-title">{{adherentHis.adherent.dateNaissance | formatTableValue : 'date'}}</span>
+                                            class="p-column-title">{{adherentHis?.adherent?.dateNaissance | formatTableValue : 'date'}}</span>
                                     </td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.lieuNaissance}}</span></td>
-                                    <td><span class="p-column-title">{{adherentHis.adherent.numeroTelephone}}</span>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.lieuNaissance}}</span></td>
+                                    <td><span class="p-column-title">{{adherentHis?.adherent?.numeroTelephone}}</span>
                                     </td>
                                     <td><span class="p-column-title">{{adherentHis?.dateIncorporation}}</span>
                                     </td>
                                     <td><span
-                                            class="p-column-title">{{adherentHis.adherent.qualiteAssure.libelle}}</span>
+                                            class="p-column-title">{{adherentHis?.adherent?.qualiteAssure?.libelle}}</span>
                                     </td>
                                     <!-- <td>
                                         <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>
@@ -3405,28 +3411,7 @@
 <ng-template pTemplate="content">
   <div class="">
       <div class="card">
-          <p-table #dt [value]="historiqueAvenantPrimes" [columns]="cols" [rows]="10"
-                   editMode="row" [rowHover]="true" dataKey="id">
-              <!--<ng-template pTemplate="caption">
-                  <div class="p-d-flex p-flex-column table-header">
-                      <div class="p-grid">
-                          <div class="p-col-9">
-                                  <span class="p-input-icon-left">
-                                      <i class="pi pi-search"></i>
-                                      <input pInputText type="text"
-                                             (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                             placeholder="Rechercher..." [style]="{width: '20%'}"/>
-                                  </span>
-                          </div>
-                          <div class="p-col-2">
-                                  <span class="p-input-icon-right">
-                                  </span>
-                          </div>
-                      </div>
-
-                  </div>
-              </ng-template>-->
-
+          <p-table #dt [value]="historiqueAvenantPrimes" [columns]="cols" [rows]="10" editMode="row" [rowHover]="true" dataKey="id">
               <ng-template pTemplate="header">
                   <tr>
                       <th pSortableColumn="nom">Groupe

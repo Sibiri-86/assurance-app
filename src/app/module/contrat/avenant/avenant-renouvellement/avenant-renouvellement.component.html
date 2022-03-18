@@ -22,11 +22,11 @@
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="numero">Numéro de l'avenant chez le garant</label>
+                            <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="dateAvenant">Date de l'avenant</label>
+                            <label for="dateAvenant">Date de l'avenant <sup></sup></label>
                             <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
@@ -50,15 +50,15 @@
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Motif</label>
+                            <label for="nom">Motif <sup></sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText/>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoires">Total Frais Accessoires</label>
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup></sup></label>
                             <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisBadges">Total Frais Badges</label>
+                            <label for="fraisBadges">Total Frais Badges <sup></sup></label>
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="p-field p-col-4">
-                        <label for="lastname2">Date echeance</label>
+                        <label for="lastname2">Date échéance</label>
                         <div>
                             <span>{{police.dateEcheance}}</span>
                         </div>
@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="p-field p-col">
-                        <label for="lastname2">Numero IFU</label>
+                        <label for="lastname2">Numéro IFU</label>
                         <div>
                             <span>{{police.numeroIfu}}</span>
                         </div>
@@ -228,11 +228,56 @@
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
             <div class="p-grid">
                 <div class="p-col-12">
-                    <label class="p-fieldset-content">Choisir le Groupe</label>
-                    <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelected"
-                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
-                                (onChange)="loadAherantByGroupe()" [style]="{'width': '40%'}">
-                    </p-dropdown>
+                    <p-table #dt [value]="groupeListes" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [rowHover]="true" dataKey="id"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
+                            </span>
+
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th pSortableColumn="numeroGroupe" style="width: 4rem">N° <p-sortIcon field="numero.groupe"></p-sortIcon></th>
+                                <th pSortableColumn="nom">Libelle <p-sortIcon field="garant.nom"></p-sortIcon></th>
+                                <th pSortableColumn="intermediaire" style="width: 12rem">Taux <p-sortIcon field="intermediaire.nom"></p-sortIcon></th>
+                                <th pSortableColumn="numero">Duree<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="width: 12rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-groupe>
+                            <tr>
+                                <td>
+                                    <p-tableCheckbox [value]="groupe"></p-tableCheckbox>
+                                </td>
+                                <td><span class="p-column-title">{{groupe.numeroGroupe}}</span>
+                                <td><span class="p-column-title">{{groupe.libelle}}</span></td>
+                                <td><span class="p-column-title">{{groupe.taux.taux}}</span></td>
+                                <td><span class="p-column-title">{{groupe.duree}}</span></td>
+                                <td><span class="p-column-title" *ngFor="let t of groupe.territorialite">{{t.libelle}} </span></td>
+                                <td class="p-text-left">
+                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="groupeSelected = groupe; loadAherantByGroupe()"></button>
+                                    <button pButton  pRipple icon="pi pi-eye" pTooltip="voir adherent" class="p-button-rounded p-button-info p-mr-2" (click)="voirAdherent(groupe)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{groupeListes ? groupeListes.length : 0 }} groupe(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
                 </div>
                 <div class="p-col-12">
                     <!--<app-avenant-groupe [obj]="obj" (groupeEvent)="obj = $event"></app-avenant-groupe>-->
@@ -292,6 +337,7 @@
                                     <label for="firstname2">Type durée</label>
                                     <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true"
                                                 showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree"
+                                                [autoDisplayFirst]="false"
                                                 formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="policeForm" [entityField]="'typeDuree'">
@@ -342,6 +388,7 @@
                                     <label for="typePrime">Type de prime /période</label>
                                     <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
                                                 showClear="true" [options]="typePrimeList" formControlName="prime"
+                                                [autoDisplayFirst]="false"
                                                 optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
@@ -412,8 +459,78 @@
                             </div>
                         </form>
                     </p-fieldset>
+                    <div class="p-grid">
+                        <div class="p-col-4"></div>
+                        <div class="p-col-2">
+                            <button pButton pRipple label="Annuler la modification" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
+                        </div>
+                        <div class="p-col-2">
+                            <button type="button" [disabled]="groupeForm.invalid || primeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+                <ng-template pTemplate="content">
+                    <div class="">
+                        <div class="card">
+                            <p-table #dt [value]="adherentList" [rows]="10" [paginator]="true" [globalFilterFields]="['numero', 'prenom', 'nom', 'matriculeGarant', 'matriculeSouscripteur']"
+                                     [rowHover]="true" dataKey="id"
+                                     styleClass="p-datatable-customers"
+                                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}"/>
+                    </span>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule<p-sortIcon field="numero"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="matricule" >Mle.<p-sortIcon field="matricule"></p-sortIcon></th>-->
+                                        <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                                        <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th>
+                                        <th pSortableColumn="nom" style="min-width:200px" >Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                                        <th pSortableColumn="prenom" style="min-width:200px" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
+                                        <th pSortableColumn="numero" style="min-width:200px" >Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="lieuNaissance" style="width: 12rem" >Lieu de naissance <p-sortIcon field="lieuNaissance"></p-sortIcon></th>-->
+                                        <th pSortableColumn="numeroTelephone" style="min-width:200px"  >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="adresse" style="width: 10rem">Adresse<p-sortIcon field="adresse"></p-sortIcon></th>-->
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-adherent>
+                                    <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
+                                        <td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
+                                        <td style="min-width:100px"><span class="p-column-title">{{adherent.numero}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeSouscripteur}}</span></td>
+                                        <!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.nom}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.prenom}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
+                                        <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
+                                        <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        {{adherentList ? adherentList.length : 0 }} assuré(s).
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dialog>
         </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
 
@@ -840,8 +957,8 @@
             <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
-            <app-avenant-retrait [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
-            [message]="'Veuillier selectionner les adherents à supprimer'">
+            <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
+            [message]="'Veuillier selectionner les adherents à supprimer'" [avenantDate]="exercice.debut">
             </app-avenant-retrait>
         </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
