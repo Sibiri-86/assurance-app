@@ -2031,7 +2031,7 @@
                                             </button>
                                             <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier"
                                                     class="p-button-rounded p-button-warning p-mr-2 p-mr-2"
-                                                    (click)="onUpdateAvenant(rowdata)" >
+                                                    (click)="onUpdateAvenant(rowdata)" [disabled]="rowdata.valide">
                                             </button>
                                         </div>
                                         <div class="p-col-">
