@@ -65,7 +65,7 @@
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="nom">Numéro de l'avenant chez le garant</label>
+                            <label for="nom">Numéro de l'avenant chez le garant<sup style="color: red; font-weight: bold;"></sup></label>
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">
@@ -87,15 +87,15 @@
                                         placeholder="Select" optionLabel="libelle" [disabled]="etat === 'VIEW'"></p-dropdown>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoires">Total Frais Accessoires</label>
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red; font-weight: bold;"></sup></label>
                             <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisBadges">Total Frais Badges</label>
+                            <label for="fraisBadges">Total Frais Badges <sup style="color: red; font-weight: bold;"></sup></label>
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Motif</label>
+                            <label for="nom">Motif <sup style="color: red; font-weight: bold;"></sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                     </div>

@@ -192,7 +192,7 @@ export class AdherentListEditComponent implements OnInit {
       adherentPrincipal: historiqueAvenantAdherant.adherent.adherentPrincipal,
     });
     this.adherentForm.disable();
-    this.editWiew = true;
+    this.editWiew = false;
   }
 
   addAdherentFamilleToList() {}

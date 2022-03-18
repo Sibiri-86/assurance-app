@@ -1,7 +1,7 @@
 <div class="card">
     <div class="p-grid">
         <div class="p-col-12">
-            <p-fieldset legend="Exercice" toggleable="true" *ngIf="!isRenouv">
+            <p-fieldset legend="Exercice" toggleable="true">
                 <form [formGroup]="exerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
@@ -16,7 +16,7 @@
                 </form>
             </p-fieldset>
             <p-fieldset legend="Avenant" toggleable="true">
-                <form [formGroup]="myForm" *ngIf="!isRenouv" (ngSubmit)="createAvenantSuspension()">
+                <form [formGroup]="myForm" (ngSubmit)="createAvenantSuspension()">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
                             <label for="numero">Numéro de l'avenant chez le garant <sup style="color: red; size: 1.7em">*</sup></label>
@@ -40,14 +40,14 @@
                         </div>
                         <div class="p-field p-col-5"></div>
                         <div class="p-field p-col-2 p-ac-center">
-                            <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                            <button type="button" pButton pRipple icon="pi pi-times" pTooltip="Annuler"
                                     class="p-button p-button-warning" label="Annuler"
                                     (click)="init()">
                             </button>
                         </div>
                         <div class="p-field p-col-2 p-ac-center">
                             <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
-                                    class="p-button p-button-success" type="submit">
+                                    class="p-button p-button-success" type="submit" [disabled]="etat === 'VIEW'">
                             </button>
                         </div>
                     </div>

@@ -75,11 +75,11 @@
             <form [formGroup]="myForm">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-6">
-                        <label for="numero">Numéro de l'avenant chez le garant</label>
+                        <label for="numero">Numéro de l'avenant chez le garant <sup style="color: red; size: 1.7em"></sup></label>
                         <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                     </div>
                     <div class="p-field p-col-6">
-                        <label for="dateIncorparation">Date de retrait</label>
+                        <label for="dateIncorparation">Date de retrait <sup style="color: red; size: 1.7em">*</sup></label>
                         <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
                                     dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
                     </div>
@@ -90,7 +90,7 @@
                                     placeholder="Select" optionLabel="libelle"></p-dropdown>
                     </div>
                     <div class="p-field p-col-6">
-                        <label for="observation">Motif</label>
+                        <label for="observation">Motif <sup style="color: red; size: 1.7em">*</sup></label>
                         <input id="observation" type="text" formControlName="observation" pInputText>
                     </div>
                 </div>
@@ -131,7 +131,8 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant>
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td>
-                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)"></p-checkbox>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
+                            [disabled]="etat === 'VIEW'"></p-checkbox>
                             <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
                         </td>
                         <td>{{historiqueAveantAdherant.adherent?.numero}}</td>
@@ -143,7 +144,7 @@
                         </td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
 
-                        </td>
+                        </td> 
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
                         <td>
                             <span class="p-column-title">
@@ -152,7 +153,8 @@
                                        [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
                             <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
                                         dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
-                                        appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"></p-calendar>
+                                        appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"
+                                        [disabled]="etat === 'VIEW'"></p-calendar>
                             </span>
                         </td>
                         <td>
@@ -183,13 +185,13 @@
             <div class="p-field p-col-2 p-ac-center">
                 <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
                         class="p-button p-button-warning" label="Annuler"
-                        (click)="init()">
+                        (click)="init()" type="button">
                 </button>
             </div>
             <div class="p-field p-col-2 p-ac-center">
                 <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm.invalid && adherantDeleteds?.length < 0">
+                [disabled]="myForm.invalid && adherantDeleteds?.length < 0 || etat === 'VIEW'">
                 </button>
             </div>
         </div>

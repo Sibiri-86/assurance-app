@@ -258,7 +258,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantListWithoutActiveList: Array<HistoriqueAvenant>;
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantList: Array<HistoriqueAvenant>;
-  historiqueAvenants1: HistoriqueAvenantList;
+  historiqueAvenants1: Array<HistoriqueAvenant>;
   historiqueAvenants1$: Observable<any>;
   historiqueAvenantAdherents: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherent1s: Array<HistoriqueAvenantAdherant>;
@@ -1412,6 +1412,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   delAvenenant(): void {
     this.dissplayavenant = false;
     this.init();
+    this.historiqueAvenant = {};
+    
   }
 
   loadGoupeByPolice(): void {
@@ -1579,8 +1581,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (value) {
         // this.loading = false;
         this.historiqueAvenants1 = value.slice();
+        this.historiqueAvenants1.forEach(element => {
+          console.log('.........1........', element.validePrime);
+          element.isPossible = this.calculePossible(element);
+          console.log('.........2........', element.isPossible);
+        });
         console.log('................historiqueAvenantListWithoutActiveList............................');
-        console.log(this.historiqueAvenantList.length);
+        console.log(this.historiqueAvenants1);
       }
     });
     /* this.historiqueAvenantService.getHistoriqueAvenants(this.police.id).subscribe(
@@ -1608,11 +1615,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
         // break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
-        this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantRetrait = true;
+        this.addAvenant();
+        this.entete = 'Avenant de retrait';
+        // this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
-        this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantRenouvellement = true;
+        this.addAvenant();
+        this.entete = 'Avenant de renouvellement'.toUpperCase();
+        // this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -1620,15 +1635,27 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.RESILIATION: {
-        this.viewAvenantResiliation(avenant, avenant.typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantResiliation = true;
+        this.addAvenant();
+        this.entete = 'Avenant de résiliation'.toUpperCase();
+        // this.viewAvenantResiliation(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.SUSPENSION: {
-        this.viewAvenantSuspension(avenant, avenant.typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantSuspension = true;
+        this.addAvenant();
+        this.entete = 'Avenant de suspension'.toUpperCase();
+        // this.viewAvenantSuspension(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.MODIFICATION: {
-        this.viewAvenantModification(avenant, avenant.typeHistoriqueAvenant);
+        this.initDisplayAvenant();
+        this.isAvenantModification = true;
+        this.addAvenant();
+        this.entete = 'Avenant de modification'.toUpperCase();
+        // this.viewAvenantModification(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       default: {
@@ -2330,7 +2357,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
         return false;
       case TypeHistoriqueAvenant.SUSPENSION:
-        return false;
+        return true;
       default: return false;
     }
   }
@@ -2341,22 +2368,76 @@ export class AvenantComponent implements OnInit, OnDestroy {
     switch (rowdata.typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION:
         this.initDisplayAvenant();
+        this.isAvenantRetrait = false;
         this.isAvenantIncorporation = true;
         this.addAvenant();
         this.entete = 'Avenant d\'incorporation';
         break;
       case TypeHistoriqueAvenant.RETRAIT:
         this.initDisplayAvenant();
+        this.isAvenantIncorporation = false;
         this.isAvenantRetrait = true;
         this.addAvenant();
-        this.entete = 'Avenant d\'incorporation';
+        this.entete = 'Avenant de retrait';
+        break;
+      case TypeHistoriqueAvenant.SUSPENSION:
+        this.initDisplayAvenant();
+        this.isAvenantSuspension = true;
+        this.addAvenant();
+        this.policeItem = rowdata.police;
+        this.entete = 'Avenant de suspension'.toUpperCase();
+        break;
+      case TypeHistoriqueAvenant.RESILIATION:
+        this.initDisplayAvenant();
+        this.isAvenantResiliation = true;
+        this.addAvenant();
+        this.entete = 'Avenant de résiliation'.toUpperCase();
         break;
       default: break;
     }
     this.etat = 'UPDATE';
-    this.initDisplayAvenant();
-    this.isAvenantIncorporation = true;
-    this.addAvenant();
-    this.entete = 'Avenant d\'incorporation';
+    // this.initDisplayAvenant();
+    // this.isAvenantIncorporation = true;
+    // this.addAvenant();
+    // this.entete = 'Avenant d\'incorporation';
+  }
+
+  calculePossible(avenant: HistoriqueAvenant): boolean {
+    console.log('rowData ====  ', avenant);
+    let isPossible: boolean = true;
+    switch (avenant?.typeHistoriqueAvenant) {
+      case TypeHistoriqueAvenant.AFAIRE_NOUVELLE :
+        console.log('rowData 1  ');
+        isPossible = avenant.validePrime;
+        break;
+      case TypeHistoriqueAvenant.INCORPORATION :
+        console.log('rowData 2  ');
+        isPossible = !avenant.valide;
+        break;
+      case TypeHistoriqueAvenant.RETRAIT :
+        console.log('rowData 3  ');
+        isPossible = !avenant.valide;
+        break;
+      case TypeHistoriqueAvenant.MODIFICATION :
+        console.log('rowData 4  ');
+        isPossible = false;
+        break;
+      case TypeHistoriqueAvenant.RENOUVELLEMENT :
+        console.log('rowData 5  ');
+        isPossible = !avenant.valide;
+        break;
+      case TypeHistoriqueAvenant.RESILIATION :
+        console.log('rowData 6  ');
+        if (avenant.typeDemandeur === TypeDemandeur.SOUSCRIPTEUR) {
+          isPossible = !avenant.valide;
+        } else {
+          isPossible = false;
+        }
+        break;
+     default:
+      isPossible = false;
+       break;
+    }
+    return isPossible ;
   }
 }

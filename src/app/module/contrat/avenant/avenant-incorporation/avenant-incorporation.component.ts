@@ -216,6 +216,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
         console.log('---------------------------------');
         console.log(this.adherentPrincipauxTMP);
+        console.log(this.police);
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         this.loadActivedExercice(this.police);
     }
@@ -458,29 +459,32 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     updateAvenant(avenantId: string): void {
-        this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
-            (res: HistoriqueAvenant) => {
-                this.historiqueAvenant1 = res;
-                this.historiqueAvenantAdherants = res.historiqueAvenantAdherants;
-                this.myForm.setValue({
-                    id: res.id,
-                    numero: res.numero,
-                    dateIncorparation: new Date(res.dateAvenant),
-                    observation: res.observation,
-                    demandeur: res.typeDemandeur,
-                    fraisBadges: res.fraisBadges,
-                    fraisAccessoires: res.fraisAccessoires
-                });
-                this.exercice = res.exercice;
-                this.exerciceForm.setValue({
-                    id: res.exercice.id,
-                    debut: new Date(res.exercice.debut),
-                    fin: new Date(res.exercice.fin),
-                    actived: res.exercice.actived
-                });
-            }
-        );
-        this.viewListeEdit = true;
+        if (avenantId) {
+            this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+                (res: HistoriqueAvenant) => {
+                    this.historiqueAvenant1 = res;
+                    this.historiqueAvenantAdherants = res.historiqueAvenantAdherants;
+                    this.myForm.setValue({
+                        id: res.id,
+                        numero: res.numero,
+                        dateIncorparation: new Date(res.dateAvenant),
+                        dateAvenant: new Date(res.dateAvenant),
+                        observation: res.observation,
+                        demandeur: res.typeDemandeur,
+                        fraisBadges: res.fraisBadges,
+                        fraisAccessoires: res.fraisAccessoires
+                    });
+                    this.exercice = res.exercice;
+                    this.exerciceForm.setValue({
+                        id: res.exercice.id,
+                        debut: res.exercice.debut,
+                        fin: res.exercice.fin,
+                        actived: res.exercice.actived
+                    });
+                }
+            );
+            this.viewListeEdit = true;
+        }
     }
 
     listeModifier(event: any): void {

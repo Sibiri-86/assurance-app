@@ -59,6 +59,8 @@ export class AvenantSuspensionComponent implements OnInit {
   exercice$: Observable<Exercice>;
   private exercice: Exercice;
   private exerciceForm: FormGroup;
+  @Input() avenantId: string;
+  @Input() etat: string;
 
   constructor(
       private store: Store<AppState>,
@@ -77,6 +79,7 @@ export class AvenantSuspensionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('..............avenant-retrait...... ID........' + this.avenantId);
     this.init();
     this.groupe = {};
     console.log('..............police.avenant-retrait..............');
@@ -105,6 +108,7 @@ export class AvenantSuspensionComponent implements OnInit {
     ); */
 
     this.loadActivedExercice(this.police);
+    this.updateAvenant(this.avenantId);
   }
 
 
@@ -142,8 +146,10 @@ export class AvenantSuspensionComponent implements OnInit {
 
   init() {
     this.myForm = this.formBuilder.group({
+      id: new FormControl(null),
       numero: new FormControl(null, [Validators.required]),
       dateAvenant: new FormControl(null, [Validators.required]),
+      dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null),
       typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
@@ -171,6 +177,8 @@ export class AvenantSuspensionComponent implements OnInit {
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
     this.historiqueAvenant.exercice = this.exercice;
+    this.historiqueAvenant.police = this.police;
+    this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
     this.historiqueAvenant.historiqueAvenantAdherants = this.adherantSuspendds;
     this.eventEmitterSuspension.emit(this.historiqueAvenant);
     this.init();
@@ -242,4 +250,45 @@ export class AvenantSuspensionComponent implements OnInit {
         }
     );
   }
+
+  updateAvenant(avenantId: string): void {
+    console.log('Modification / Visualisation avenant suspension')
+    this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+        (res: HistoriqueAvenant) => {
+            this.historiqueAvenant = res;
+            this.police = res.police;
+            this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
+            this.historiqueAveantAdherants.forEach(haa => {
+              if(haa.id) {
+                haa.dateRetrait = new Date(haa.dateRetrait);
+              } else{
+                haa.dateRetrait = null;
+              } 
+            });
+            this.myForm.setValue({
+                id: avenantId,
+                numero: res.numero,
+                dateAvenant: new Date(res.dateAvenant),
+                observation: res.observation,
+                demandeur: res.typeDemandeur,
+                typeDemandeur: res.typeDemandeur,
+                fraisBadges: 0,
+                fraisAccessoires: 0,
+                dateEffet: new Date(res.dateAvenant),
+            });
+            if(this.etat === 'VIEW') {
+              this.myForm.disable();
+            }
+            this.exercice = res.exercice;
+            this.exerciceForm.patchValue({
+                id: res.exercice.id,
+                debut: new Date(res.exercice.debut),
+                fin: new Date(res.exercice.fin),
+                actived: res.exercice.actived
+            });
+            console.log('avenant de retrait ==== ', this.historiqueAvenant);
+        }
+    );
+    // this.viewListeEdit = true;
+}
 }

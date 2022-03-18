@@ -73,9 +73,7 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        <th style="width: 3rem"></th>
                         <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
@@ -88,7 +86,8 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant>
                     <tr>
                         <td>
-                            <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)"
+                            [disabled]="etat === 'VIEW'"></p-checkbox>
                         </td>
                         <td>{{historiqueAveantAdherant.adherent.numero}}</td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom | upercase}}</span>
@@ -104,7 +103,7 @@
                         <td>
                             <span class="p-column-title">
                                 <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
-                                       [(ngModel)]="historiqueAveantAdherant.dateSuspension" pInputText [disabled]="!historiqueAveantAdherant.selected"/>
+                                       [(ngModel)]="historiqueAveantAdherant.dateSuspension" pInputText [disabled]="!historiqueAveantAdherant.selected || etat === 'VIEW'"/>
                                 <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
                                             dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
                                             appendTo="body"></p-calendar>-->

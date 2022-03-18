@@ -39,6 +39,8 @@ export class AvenantResiliationComponent implements OnInit {
   exercice$: Observable<Exercice>;
   private exercice: Exercice;
   private exerciceForm: FormGroup;
+  @Input() avenantId: string;
+  @Input() etat: string;
 
   constructor(
       private store: Store<AppState>,
@@ -52,16 +54,22 @@ export class AvenantResiliationComponent implements OnInit {
   ngOnInit(): void {
     this.init();
     this.loadActivedExercice(this.police);
+    this.updateAvenant(this.avenantId);
   }
   init() {
     this.myForm = this.formBuilder.group({
+      id: new FormControl(null),
       numero: new FormControl(null, [Validators.required]),
       dateAvenant: new FormControl(null, [Validators.required]),
       observation: new FormControl(null),
       typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
+      dateEffet: new FormControl(null, [Validators.required]),
+      fraisBadges: 0,
+      fraisAccessoires: 0,
     });
     this.exerciceForm = this.formBuilder.group({
+      id: new FormControl(null),
       debut: new FormControl(''),
       fin: new FormControl('', [Validators.required]),
       actived: new FormControl('', [Validators.required]),
@@ -70,12 +78,15 @@ export class AvenantResiliationComponent implements OnInit {
 
   createAvenantSuspension(): void {
     this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+    this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
     this.historiqueAvenant.numero = this.myForm.get('numero').value;
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RESILIATION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
     this.historiqueAvenant.exercice = this.exercice;
+    // this.historiqueAvenant.police = this.police;
+
     this.eventEmitterResiliation.emit(this.historiqueAvenant);
     this.init();
   }
@@ -120,5 +131,44 @@ export class AvenantResiliationComponent implements OnInit {
           }
       );
     }
+  }
+
+  updateAvenant(avenantId: string): void {
+    this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+        (res: HistoriqueAvenant) => {
+            this.historiqueAvenant = res;
+          
+            // this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
+            /* this.historiqueAveantAdherants.forEach(haa => {
+              if(haa.id) {
+                haa.dateRetrait = new Date(haa.dateRetrait);
+              } else{
+                haa.dateRetrait = null;
+              } 
+            }); */
+            this.myForm.setValue({
+                id: avenantId,
+                numero: res.numero,
+                dateAvenant: new Date(res.dateAvenant),
+                observation: res.observation,
+                demandeur: res.typeDemandeur,
+                fraisBadges: 0,
+                fraisAccessoires: 0,
+                dateEffet: new Date(res.dateAvenant),
+                typeDemandeur: res.typeDemandeur,
+            });
+            if(this.etat === 'VIEW') {
+              this.myForm.disable();
+            }
+            this.exercice = res.exercice;
+            this.exerciceForm.patchValue({
+                id: res.exercice.id,
+                debut: res.exercice.debut,
+                fin: res.exercice.fin,
+                actived: res.exercice.actived
+            });
+            console.log('avenant de résiliation ==== ', this.historiqueAvenant);
+        }
+    );
   }
 }

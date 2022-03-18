@@ -2955,7 +2955,7 @@
                 <p-fieldset legend="Identification" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Garant</label>
+                            <label for="lastname2">Garant <span style="color: red !important; font-size: 1.4em"></span></label>
                             <p-dropdown dataKey="id" inputId="garant" [filter]="true" showClear="true" [options]="garantList" formControlName="garant" placeholder="Select" optionLabel="nom"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'garant'">
@@ -3066,7 +3066,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="refPolice">Reference police du garant </label>
+                            <label for="refPolice">Reference police du garant <span style="color: red !important; font-size: 1.4em"></span></label>
                             <input id="referencePolice" type="text" formControlName="referencePolice" pInputText>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'referencePolice'">
@@ -3122,7 +3122,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="arrondissement">Arrondissement</label>
+                            <label for="arrondissement">Arrondissement <span class="required">*</span></label>
                             <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'arrondissement'">
