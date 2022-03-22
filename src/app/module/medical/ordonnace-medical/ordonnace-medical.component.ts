@@ -65,6 +65,9 @@ import {loadFamilleActeEnCours} from '../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../store/prestation/prefinancement/selector';
 import {CheckPrefinancementResult} from '../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
+import { OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, TypeQuantite } from 'src/app/store/medical/ordonnance-medical/model';
+import * as featureActionOrdonnanceMedical from '../../../store/medical/ordonnance-medical/actions';
+
 
 
 @Component({
@@ -96,7 +99,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     adherentSelected$: Observable<Adherent>;
     medecinListFilter: Array<SelectItem>;
     tierPayantList: Array<SinistreTierPayant> = [];
-    prefinancementModel: SinistreTierPayant = {};
+    ordonnance: OrdonnanceMedical = {};
     statusObject$: Observable<Status>;
     sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
     sinistreTierPayantDTOList: Array<SinistreTierPayant>;
@@ -124,6 +127,16 @@ export class OrdonnaceMedicalComponent implements OnInit {
     checkTierPayantResult: Array<CheckTierPayantResult>;
     isDetail: boolean;
     editForm: FormGroup;
+    ordonnanceMedicalProduitPharmaceutiqueList: Array<OrdonnanceMedicalProduitPharmaceutique>;
+
+    typeQuantiteList: any = [
+        {libelle: 'BOÎTE', value: TypeQuantite.BOITE},
+        {libelle: 'PAQUET', value: TypeQuantite.PAQUET},
+        {libelle: 'PLAQUETTE', value: TypeQuantite.PLAQUETTE},
+        {libelle: 'FLACON', value: TypeQuantite.FLACON},
+        {libelle: 'TUBE', value: TypeQuantite.TUBE},
+        {libelle: 'UNITAIRE', value: TypeQuantite.UNITAIRE}
+        ];
 
 
 
@@ -137,55 +150,52 @@ export class OrdonnaceMedicalComponent implements OnInit {
     onCreate() {
         /** fonction pour enregistrer la prestation */
         console.log('creation tierPayant');
-        this.prefinancementModel = this.prestationForm.value;
-        this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = this.adherentSelected;
-        this.tierPayantList.push(this.prefinancementModel);
-        this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
-        // tslint:disable-next-line:max-line-length
-        console.log('*********************************this.prefinancementModel***********************************', this.prefinancementModel);
-        // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-        console.log(this.prefinancementModel);
-        this.tierPayantList = [];
-        this.prestationForm.reset();
+        this.ordonnance = this.prestationForm.value;
+        this.ordonnance.dateSaisie = new Date();
+        this.ordonnance.idAdherent = this.adherentSelected.id;
+        this.ordonnance.idPrescripteur = this.prestationForm.get('prescripteur').value.id;
+        this.ordonnance.idPrestataire = this.prestationForm.get('prestataire').value.id;
+        // this.ordonnanceMedicalProduitPharmaceutiqueList.push(this.ordonnanceMedicalProduitPharmaceutiques);
+        this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
+        console.log('******************this.ordonnance********************', this.ordonnance);
+        // this.tierPayantList.push(this.prefinancementModel);
+        //this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+        //this.tierPayantList = [];
+        //this.prestationForm.reset();
+    }
+
+    selectActe(){
+        
     }
 
     addPrestation1() {
-        this.prefinancementModel.prestation = this.prestationList;
+        /* this.prefinancementModel.prestation = this.prestationList;
         this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
         this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
         this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
         this.prefinancementModel.adherent = this.adherentSelected;
-        this.tierPayantList.push(this.prefinancementModel);
+        this.tierPayantList.push(this.prefinancementModel); */
         this.prestationList = [];
         this.prestationForm.reset();
     }
 
     ngOnInit(): void {
-        // this.prestationList = [];
         this.prestationForm = this.formBuilder.group({
-            // domaine: new FormControl({}),
             id: new FormControl(),
-            /* referenceSinistreGarant: new FormControl(),
-            referenceBordereau: new FormControl(),*/
             dateSaisie: new FormControl({value: '', disabled: true}),
-            /* garantie: new FormControl(''),
-            acte: new FormControl(''),*/
             nomAdherent: new FormControl({value: '', disabled: true}),
             prenomAdherent: new FormControl({value: '', disabled: true}),
             nomAssurePrin: new FormControl({value: '', disabled: true}),
             prenomAssurePrin: new FormControl({value: '', disabled: true}),
             numeroGroupe: new FormControl({value: '', disabled: true}),
             numeroPolice: new FormControl({value: '', disabled: true}),
-            prestation: this.formBuilder.array([], Validators.required),
+            // prestation: this.formBuilder.array([], Validators.required),
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
-            // dateFacture: new FormControl('', Validators.required),
             prestataire: new FormControl('', Validators.required),
             prescripteur: new FormControl('', Validators.required),
-            // numeroFacture: new FormControl('', Validators.required),
             matriculeAdherent: new FormControl('', Validators.required),
-            // dateDeclaration: new FormControl('', Validators.required),
+            ordonnanceMedicalProduitPharmaceutiques: this.formBuilder.array([], Validators.required),
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -229,35 +239,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
             }
         });
 
-        /* this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
-        this.store.dispatch(loadSousActe());
-        this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                console.log(this.sousActeList);
-                this.sousActeList = value.slice();
-            }
-        }); */
-
-        this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
-        this.store.dispatch(loadTaux());
-        this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.tauxList = value.slice();
-                if (this.tauxList) {
-                    this.taux = this.tauxList[0];
-                }
-            }
-        });
-
-        this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
-        this.store.dispatch(loadGarantie());
-        this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.garanties = value.slice();
-            }
-        });
-
-
         this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
         this.store.dispatch(loadPrestataire());
         this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -265,44 +246,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 this.prestataireList = value.slice();
             }
         });
-
-        this.medecinList$ = this.store.pipe(select(medecinSelector.medecinList));
-        this.store.dispatch(loadMedecin());
-        this.medecinList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.medecinList = value.slice();
-            }
-        });
-
-        this.acteList$ = this.store.pipe(select(acteSelector.acteList));
-        this.store.dispatch(loadActe());
-        this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                this.acteList = value.slice();
-                this.acteListFilter = this.acteList;
-            }
-        });
-
-        this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
-        this.store.dispatch(loadSousActe());
-        this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            if (value) {
-                console.log(this.sousActeList);
-                this.sousActeList = value.slice();
-                this.sousActeListFilter = this.sousActeList;
-            }
-        });
-
-        this.pathologieList$ = this.store.pipe(select(pathologieSelector.pathologieList));
-        this.store.dispatch(loadPathologie());
-        this.pathologieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log(value);
-            if (value) {
-                this.pathologieList = value.slice();
-            }
-        });
-
-        this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
+       this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
         this.store.dispatch(loadProduitPharmaceutique());
         this.produitPharmaceutiqueList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
@@ -313,20 +257,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
-    }
-
-    selectActe(event){
-        this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
-        /* this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
-        this.store.dispatch(featureActionPlafond.loadSousActeEnCours({idPGA: event.value.acte.id}));
-        console.log('++++++++++++++++++++++++++++++++++++event.value.acte.id+++', event.value.acte.id);
-        this.sousActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
-            if (value) {
-                this.sousActeEnCours = value.slice();
-                console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.sousActeEnCours);
-            }
-        }); */
     }
 
     imprimer(pref: SinistreTierPayant) {
@@ -365,9 +295,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
         for (const pr of pref.prestation) {
             const formPrestation: FormGroup = this.createItem();
             formPrestation.patchValue(pr);
-            this.prestation.push(formPrestation);
+            this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
         }
-        // this.prestationList = pref.prestation;
         console.log('****************pref.prestation****************', pref.prestation);
         this.displayFormPrefinancement = true;
     }
@@ -380,22 +309,15 @@ export class OrdonnaceMedicalComponent implements OnInit {
             this.isDetail = false;
             this.prestationForm.reset();
             this.prestationForm.enable({onlySelf: false, emitEvent: true});
-            // this.prestationListPrefinancement = pref.prestation;
-            // this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+            
         } else {
             if (pref) {
                 this.isDetail = isDetail;
-                // this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
-                /** Activer les autres champs*/
                 this.prestationForm.get('dateFacture').enable();
                 this.prestationForm.get('numeroFacture').enable();
                 this.prestationForm.get('matriculeAdherent').enable();
                 this.prestationForm.get('dateDeclaration').enable();
                 this.prestationForm.get('prestataire').enable();
-                // tslint:disable-next-line:jsdoc-format
-                /** Recuperer les infos de tous les champs*/
-                // tslint:disable-next-line:no-unused-expression
-                // this.isModif === true;
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
@@ -415,11 +337,9 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 for (const pr of pref.prestation) {
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
-                    this.prestation.push(formPrestation);
+                    this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
                 }
                 if (this.isDetail) {
-                    // tslint:disable-next-line:no-unused-expression
-                    // this.isModif === false;
                     this.prestationForm.disable({onlySelf: false, emitEvent: true});
                 }
             }
@@ -427,14 +347,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
         }
 
 
-    }
-
-    calculCoutDebours(data: FraisReels, ri: number) {
-        console.log(this.prestationList);
-        console.log(data);
-        this.prestationList[ri].debours = data.coutUnitaire * Number(data.nombreActe);
-        this.prestationList[ri].baseRemboursement = this.prestationList[ri].debours;
-        this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement * (this.prestationList[ri].taux.taux / 100);
     }
 
     rechercherAdherent(event) {
@@ -449,16 +361,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
         this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
-
-        /* this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
-        this.store.dispatch(featureActionPlafond.loadFamilleActeEnCours({numero: event.target.value}));
-        this.familleActeEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
-            if (value) {
-                this.familleActeEnCours = value.slice();
-                console.log('++++++++++++++++++++++++++++++++++++familleActeEnCours+++', this.familleActeEnCours);
-            }
-        }); */
     }
 
     // valider TierPayant
@@ -468,20 +370,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.tierPayantList = [];
         this.prestationList = [];
         this.prestationForm.reset();
-    }
-
-    changeGarantie(event) {
-        this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === event.value.id);
-        /* this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
-        this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
-        console.log('++++++++++++++++++++++++++++++++++++item+++', event.value.garantie.id);
-        this.acteEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
-            if (value) {
-                this.acteEnCours = value.slice();
-                console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
-            }
-        }); */
     }
 
     getfamilleActeEnCourId(): string {
@@ -498,12 +386,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
 
     addTierPayant() {
         this.prestationForm.reset();
-        this.prestation.clear();
-        // this.prestationForm.enable({onlySelf: false, emitEvent: true});
-        // this.prestationForm.get('dateFacture').enable();
-        // this.prestationForm.get('numeroFacture').enable();
+        // this.ordonnanceMedicalProduitPharmaceutiques.clear();
         this.prestationForm.get('matriculeAdherent').enable();
-        // this.prestationForm.get('dateDeclaration').enable();
         this.prestationForm.get('prestataire').enable();
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.isDetail = false;
@@ -518,100 +402,42 @@ export class OrdonnaceMedicalComponent implements OnInit {
     checkStatus() {
         this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
             if (statusObj) {
-                // this.loading = false;
                 this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
-                /*
-                  if (this.isAdding && statusObj.status === StatusEnum.success) {
-                    this.display = false;
-                    this.isAdding = false;
-                  }
-                  this.loading = false;
-                  */
             }
         });
     }
 
-    calculDebours(i: number) {
-        let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
-        if (this.prestationForm.get('prestation').value[i].nombreActe &&
-            this.prestationForm.get('prestation').value[i].coutUnitaire) {
-            myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
-                    this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
-                    this.prestationForm.get('prestation').value[i].nombreActe *
-                    this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
-                    (this.prestationForm.get('prestation').value[i].nombreActe *
-                        this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
-        }
-        this.prefinancementModel = this.prestationForm.value;
-        this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = this.adherentSelected;
-        this.tierPayantList.push(this.prefinancementModel);
-        /* executer le controle de la prestation */
-        this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
-        this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log(value);
-            if (!value) {
-                this.tab.push(i);
-                this.checkControl = false;
-            } else {
-                this.checkTierPayantResult = value.slice();
-                console.log('**********************************', this.checkTierPayantResult);
-                for (let j = 0; j < this.checkTierPayantResult.length; j++){
-                    myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
-                    myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
-                        sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
-                        observation: this.checkTierPayantResult[j].message
-                    });
-                }
-            }
-        });
-        this.tierPayantList = [];
-        this.prefinancementModel = {};
-    }
-
-
-    get prestation() {
-        return this.prestationForm.controls.prestation as FormArray;
+    get ordonnanceMedicalProduitPharmaceutiques() {
+        return this.prestationForm.controls.ordonnanceMedicalProduitPharmaceutiques as FormArray;
     }
 
     addItemPrestation(): void {
         const formPrestation: FormGroup = this.createItem();
-        this.prestation.push(formPrestation);
+        this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
     }
 
     deleteItemPrestation(i: number) {
-        this.prestation.removeAt(i);
+        this.ordonnanceMedicalProduitPharmaceutiques.removeAt(i);
     }
 
     createItem(): FormGroup {
         return this.formBuilder.group({
             id: new FormControl(),
-            nombreActe: new FormControl(null, Validators.required),
-            coutUnitaire: new FormControl(null, Validators.required),
-            debours: new FormControl({disabled: true}),
-            sousActe: new FormControl(null, Validators.required),
-            baseRemboursement: new FormControl({disabled: true}),
-            taux: new FormControl({disabled: true}, Validators.required),
-            montantRembourse: new FormControl({disabled: true}, Validators.required),
-            sort: new FormControl(),
-            observation: new FormControl(),
-            prestataire: new FormControl(),
-            produitPharmaceutique: new FormControl(),
-            pathologie: new FormControl(),
-            medecin: new FormControl(),
-            dateSoins: new FormControl(null, Validators.required),
-            acte: new FormControl(null, Validators.required),
-            familleActe: new FormControl(null, Validators.required),
-            centreExecutant: new FormControl(null),
+            quantite: new FormControl(null, Validators.required),
+            observation: new FormControl(null, Validators.required),
+            /* prestataire: new FormControl(),
+            centreExecutant: new FormControl(null), */
+            pharmaceutique: new FormControl(),
+            dateSaisie: new FormControl(null),
+            typeQuantite: new FormControl(null, [Validators.required]),
         });
     }
 
     closeDialog() {
         this.tierPayantList = [];
         this.prestationForm.reset();
-        this.prestation.clear();
-        console.log('******************this.prestation************************', this.prestation);
+        this.ordonnanceMedicalProduitPharmaceutiques.clear();
+        console.log('******************this.prestation************************', this.ordonnanceMedicalProduitPharmaceutiques);
         this.displayFormPrefinancement = false;
     }
 

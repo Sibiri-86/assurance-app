@@ -247,6 +247,7 @@ import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/
 import { BonPriseEnChargeEffects } from './store/medical/bon-prise-en-charge/effect';
 import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 import { AdherentListEditComponent } from './module/contrat/avenant/adherent-list-edit/adherent-list-edit.component';
+import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/effect';
 
 @NgModule({
     imports: [
@@ -354,7 +355,7 @@ import { AdherentListEditComponent } from './module/contrat/avenant/adherent-lis
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
-             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects, BonPriseEnChargeEffects])
+             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
