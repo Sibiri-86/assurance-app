@@ -39,7 +39,7 @@
                     <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numeroTelephone | formatTableValue : 'number'}}</span></td>
                     <!--<td><span class="p-column-title">{{adherent.dateIncorparation | formatTableValue : 'date'}}</span></td>-->
                     <td style="width: 6em">
-                        <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button"
+                        <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button" [disabled]="statut === 'VIEW'"
                                 class="p-button-warning p-button-icon p-mr-2" label="" (click)="edit(historiqueAvenantAdherant)">
                         </button>
                         <button pButton pRipple icon="pi pi-eye" pTooltip="Visualiser" type="button"

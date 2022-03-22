@@ -1609,16 +1609,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.initDisplayAvenant();
         this.isAvenantIncorporation = true;
         this.addAvenant();
-        this.entete = 'Avenant d\'incorporation';
+        this.entete = 'Avenant d\'incorporation'.toUpperCase();
         break;
         // this.viewAvenantIncorp(avenant, avenant.typeHistoriqueAvenant);
         // break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
+        // this.viewAvenantRetrait(avenant);
         this.initDisplayAvenant();
         this.isAvenantRetrait = true;
         this.addAvenant();
-        this.entete = 'Avenant de retrait';
+        this.entete = 'Avenant de retrait'.toUpperCase();
         // this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -1677,17 +1678,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.displayDialogFormAdherentIncorp = true;
   }
 
-  viewAvenantRetrait(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  viewAvenantRetrait(avenant: HistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
-    console.log(typeof typeHistoriqueAvenant);
-    this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id).subscribe(
+    this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueId(avenant.id).subscribe(
         (res: Array<HistoriqueAvenantAdherant>) => {
           console.log('=====================res=============', res);
           this.historiqueAvenantAdherent1s = res;
           /* console.log('=====================res=============', res);
           this.historiqueAvenantAdherents2 = this.historiqueAvenantAdherent1s
               .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);*/
-          console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
           console.log('=====================historiqueAvenantAdherent1s=============', this.historiqueAvenantAdherent1s);
         }
     );
@@ -2368,14 +2367,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
     switch (rowdata.typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION:
         this.initDisplayAvenant();
-        this.isAvenantRetrait = false;
         this.isAvenantIncorporation = true;
         this.addAvenant();
         this.entete = 'Avenant d\'incorporation';
         break;
       case TypeHistoriqueAvenant.RETRAIT:
         this.initDisplayAvenant();
-        this.isAvenantIncorporation = false;
         this.isAvenantRetrait = true;
         this.addAvenant();
         this.entete = 'Avenant de retrait';

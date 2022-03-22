@@ -12,25 +12,25 @@ import { AppMainComponent } from './app.main.component';
     /* tslint:enable:component-selector */
     template: `
           <ng-container>
-              <a [attr.href]="item.url" (click)="itemClick($event)" *ngIf="!item.routerLink || item.items" pRipple [ngClass]="item.class"
+              <a [attr.href]="item.url" (click)="itemClick($event)" *ngIf="(!item.routerLink || item.items)&& (item.visible)" pRipple [ngClass]="item.class"
                  (mouseenter)="onMouseEnter()" (keydown.enter)="itemClick($event)" [attr.target]="item.target" [attr.tabindex]="0">
 				  <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
                   <span class="layout-menuitem-text">{{item.label}}</span>
                   <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
               </a>
-              <a (click)="itemClick($event)" (mouseenter)="onMouseEnter()" *ngIf="item.routerLink && !item.items" pRipple [ngClass]="item.class"
+              <a (click)="itemClick($event)" (mouseenter)="onMouseEnter()" *ngIf="item.routerLink && !item.items && item.visible" pRipple [ngClass]="item.class"
                  [routerLink]="item.routerLink" routerLinkActive="active-menuitem-routerlink" [routerLinkActiveOptions]="{exact: true}"
                  [attr.target]="item.target" [attr.tabindex]="0">
 				  <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
 				  <span class="layout-menuitem-text">{{item.label}}</span>
                   <i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
               </a>
-              <ul *ngIf="item.items && (active || animating || selectedKey)"
+              <ul *ngIf="item.items && (active || animating || selectedKey) && item.visible"
                   (@children.done)="onAnimationDone()" [ngStyle]="{'padding': active && root ? '':'0'}"
                   [@children]="(app.isHorizontal() && root && !app.isMobile()) ? (active? 'visible' : 'hidden')
                   : (active ? 'visibleAnimated' : 'hiddenAnimated')">
                   <ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
-                      <li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeClass"></li>
+                      <li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeClass" *ngIf="child.visible"></li>
                   </ng-template>
               </ul>
           </ng-container>

@@ -318,7 +318,7 @@
     <div class="p-fluid p-formgrid p-grid" *ngIf="viewListeEdit">
         <div class="p-field p-col-12">
                     <app-adherent-list-edit [historiqueAvenantAdherants]="historiqueAvenantAdherants" *ngIf="historiqueAvenantAdherants?.length > 0"
-                    (historiqueAvenantAdherantList)="listeModifier($event)">
+                    (historiqueAvenantAdherantList)="listeModifier($event)" [statut]="etat">
                     </app-adherent-list-edit>
 
         </div>

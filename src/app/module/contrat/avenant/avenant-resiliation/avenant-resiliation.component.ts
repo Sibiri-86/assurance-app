@@ -37,7 +37,7 @@ export class AvenantResiliationComponent implements OnInit {
     {libelle: 'GARANT', value: TypeDemandeur.GARANT}
   ];
   exercice$: Observable<Exercice>;
-  exercice: Exercice;
+  private exercice: Exercice;
   exerciceForm: FormGroup;
   @Input() avenantId: string;
   @Input() etat: string;

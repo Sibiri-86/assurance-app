@@ -29,6 +29,7 @@ export class AdherentListEditComponent implements OnInit {
 
   @Input() historiqueAvenantAdherants: Array<HistoriqueAvenantAdherant>;
   @Output() historiqueAvenantAdherantList = new EventEmitter();
+  @Input() statut: string;
   adherentList: Array<Adherent>;
   adherentForm: FormGroup;
   professionList: Array<Profession>;
@@ -78,6 +79,7 @@ export class AdherentListEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('satus ==== ' + this.statut);
     this.historiqueAvenantAdherantTMPs = this.historiqueAvenantAdherants;
     this.qualiteAssureList$ = this.store.pipe(
         select(qualiteAssureSelector.qualiteAssureList)
@@ -217,6 +219,9 @@ export class AdherentListEditComponent implements OnInit {
   annuler(): void {
     // this.adherentForm.reset({});
     this.editWiew = false;
+  }
+
+  compareDateIncorp(){
   }
 
   annulerModif(): void {

@@ -243,6 +243,9 @@ import {TierPayantConsultationComponent} from './module/prestation/tier-payant/O
 import { OrdreReglementConsultationComponent } from './module/prestation/ordre-reglement/ordre-reglement-consultation/ordre-reglement-consultation.component';
 import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier-payant/sinistre-Tiers-Payant-consultation/sinistre-Tiers-Payant-consultation.component';
 import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
+import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
+import { BonPriseEnChargeEffects } from './store/medical/bon-prise-en-charge/effect';
+import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 import { AdherentListEditComponent } from './module/contrat/avenant/adherent-list-edit/adherent-list-edit.component';
 
 @NgModule({
@@ -351,7 +354,7 @@ import { AdherentListEditComponent } from './module/contrat/avenant/adherent-lis
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
-             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects])
+             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects, BonPriseEnChargeEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -442,6 +445,8 @@ import { AdherentListEditComponent } from './module/contrat/avenant/adherent-lis
         OrdreReglementConsultationComponent,
         SinistreTiersPayantConsultationComponent,
         OrdreReglementRechercheComponent,
+        BonPriseEnChargeComponent,
+        OrdonnaceMedicalComponent,
         AdherentListEditComponent
     ],
     providers: [

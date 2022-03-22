@@ -7,4 +7,7 @@ export const loadHistoriqueAvenantAdherentByHistoriqueIdAndTypeHistorique = crea
     'AvenantAdherentByHistoriqueIdAndTypeHistorique', props<{typeHistoriqueAvenant: TypeHistoriqueAvenant, haId: string}>());
 export const LoadHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse = createAction('[App Init] load ' +
     'HistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse', props<{haId: string}>());
+export const loadHistoriqueAvenantAdherentByHistoriqueId = createAction('[App Init] load ' +
+    'AvenantAdherentByHistoriqueIdAndTypeHistorique', props<{haId: string}>());
+
 
