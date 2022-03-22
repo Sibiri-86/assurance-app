@@ -383,8 +383,8 @@ export class AvenantRetraitComponent implements OnInit {
             this.exercice = res.exercice;
             this.exerciceForm.patchValue({
                 id: res.exercice.id,
-                debut: new Date(res.exercice.debut),
-                fin: new Date(res.exercice.fin),
+                debut: res.exercice.debut,
+                fin: res.exercice.fin,
                 actived: res.exercice.actived
             });
             console.log('avenant de retrait ==== ', this.historiqueAvenant);

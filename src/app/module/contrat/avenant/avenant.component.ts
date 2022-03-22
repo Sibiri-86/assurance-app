@@ -1609,17 +1609,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.initDisplayAvenant();
         this.isAvenantIncorporation = true;
         this.addAvenant();
-        this.entete = 'Avenant d\'incorporation';
+        this.entete = 'Avenant d\'incorporation'.toUpperCase();
         break;
         // this.viewAvenantIncorp(avenant, avenant.typeHistoriqueAvenant);
         // break;
       }
       case TypeHistoriqueAvenant.RETRAIT: {
-        this.viewAvenantRetrait(avenant);
+        // this.viewAvenantRetrait(avenant);
         this.initDisplayAvenant();
         this.isAvenantRetrait = true;
         this.addAvenant();
-        this.entete = 'Avenant de retrait';
+        this.entete = 'Avenant de retrait'.toUpperCase();
         // this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -2367,14 +2367,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
     switch (rowdata.typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION:
         this.initDisplayAvenant();
-        this.isAvenantRetrait = false;
         this.isAvenantIncorporation = true;
         this.addAvenant();
         this.entete = 'Avenant d\'incorporation';
         break;
       case TypeHistoriqueAvenant.RETRAIT:
         this.initDisplayAvenant();
-        this.isAvenantIncorporation = false;
         this.isAvenantRetrait = true;
         this.addAvenant();
         this.entete = 'Avenant de retrait';
