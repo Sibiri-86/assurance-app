@@ -24,7 +24,7 @@ import * as plafondSelector from '../../../store/contrat/plafond/selector';
 import {loadPrestataire} from '../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
 
-import * as tierPayantSelector from '../../../store/prestation/tierPayant/selector';
+import * as ordonnanceMedicalSelector from '../../../store/medical/ordonnance-medical/selector';
 import * as tierPayantActions from '../../../store/prestation/tierPayant/action';
 
 import {loadMedecin} from '../../../store/parametrage/medecin/actions';
@@ -67,6 +67,10 @@ import {CheckPrefinancementResult} from '../../../store/prestation/prefinancemen
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, TypeQuantite } from 'src/app/store/medical/ordonnance-medical/model';
 import * as featureActionOrdonnanceMedical from '../../../store/medical/ordonnance-medical/actions';
+import * as selectorsOrdonnanceMedicale from '../../../store/medical/ordonnance-medical/selector';
+import * as featureActionOrdonnanceMedicale from '../../../store/medical/ordonnance-medical/actions';
+
+
 
 
 
@@ -106,7 +110,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
     cols: any[];
     taux: Taux;
     displayPrestation = false;
-    prestationListPrefinancement: Array<Prestation>;
     report: Report = {};
     sousActeListFilter: Array<SousActe>;
     pathologieList: Array<Pathologie>;
@@ -114,7 +117,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
     produitPharmaceutiqueList$: Observable<Array<ProduitPharmaceutique>>;
     produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
     TierPayantSelected: SinistreTierPayant[];
-    prestationListPrefinancementFilter: Array<Prestation>;
     familleActeEnCours$: Observable<PlafondFamilleActe[]>;
     familleActeEnCours: Array<PlafondFamilleActe>;
     familleActeEnCour: PlafondFamilleActe;
@@ -128,6 +130,11 @@ export class OrdonnaceMedicalComponent implements OnInit {
     isDetail: boolean;
     editForm: FormGroup;
     ordonnanceMedicalProduitPharmaceutiqueList: Array<OrdonnanceMedicalProduitPharmaceutique>;
+    ordonnanceMedicaleProduit: OrdonnanceMedicalProduitPharmaceutique = {};
+    ordonnanceMedicalList$: Observable<Array<OrdonnanceMedicalProduitPharmaceutique>>;
+    ordonnaceMedicalProduitPharmaceutiqueDTOList: Array<OrdonnanceMedicalProduitPharmaceutique>;
+    prestationListPrefinancement: Array<OrdonnanceMedical>;
+    prestationListPrefinancementFilter: Array<OrdonnanceMedical>;
 
     typeQuantiteList: any = [
         {libelle: 'BOÎTE', value: TypeQuantite.BOITE},
@@ -152,16 +159,16 @@ export class OrdonnaceMedicalComponent implements OnInit {
         console.log('creation tierPayant');
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = new Date();
-        this.ordonnance.idAdherent = this.adherentSelected.id;
-        this.ordonnance.idPrescripteur = this.prestationForm.get('prescripteur').value.id;
-        this.ordonnance.idPrestataire = this.prestationForm.get('prestataire').value.id;
-        // this.ordonnanceMedicalProduitPharmaceutiqueList.push(this.ordonnanceMedicalProduitPharmaceutiques);
+        this.ordonnance.adherent = this.adherentSelected;
+        this.ordonnance.prescripteur = this.prestationForm.get('prescripteur').value;
+        this.ordonnance.prestataire= this.prestationForm.get('prestataire').value;
+        this.ordonnance.ordonnanceMedicalProduitPharmaceutiques.forEach(element => { const el: any = element.typeQuantite;
+            element.typeQuantite = el.value;
+            console.log('******************element.typeQuantite********************', element.typeQuantite);
+        });
         this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
         console.log('******************this.ordonnance********************', this.ordonnance);
-        // this.tierPayantList.push(this.prefinancementModel);
-        //this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
-        //this.tierPayantList = [];
-        //this.prestationForm.reset();
+        this.prestationForm.reset();
     }
 
     selectActe(){
@@ -199,8 +206,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
-        this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
-        this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+        this.store.dispatch(featureActionOrdonnanceMedical.setReportOrdonnance(null));
+        this.store.pipe(select(ordonnanceMedicalSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
             .subscribe(bytes => {
                 if (bytes) {
                     printPdfFile(bytes);
@@ -230,15 +237,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
             }
         });
 
-        this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
-        this.store.dispatch(featureActionTierPayant.loadTierPayant());
-        this.sinistreTierPayantDTOList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log(value);
-            if (value) {
-                this.sinistreTierPayantDTOList = value.slice();
-            }
-        });
-
         this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
         this.store.dispatch(loadPrestataire());
         this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -255,15 +253,26 @@ export class OrdonnaceMedicalComponent implements OnInit {
             }
         });
 
+    this.ordonnanceMedicalList$ = this.store.pipe(select(selectorsOrdonnanceMedicale.ordonnanceMedicalProduitPharmaceutiqueList));
+    this.store.dispatch(featureActionOrdonnanceMedicale.loadOrdonnance());
+    this.ordonnanceMedicalList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.ordonnaceMedicalProduitPharmaceutiqueDTOList = value.slice();
+        console.log('***************this.ordonnaceMedicalProduitPharmaceutiqueDTOList*****************', this.ordonnaceMedicalProduitPharmaceutiqueDTOList);
+      }
+    });
+
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
     }
 
-    imprimer(pref: SinistreTierPayant) {
-        this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
-        this.report.sinistreTierPayantDTO = pref;
-        this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
-    }
+    imprimer(ordonnance: OrdonnanceMedical) {
+        this.report.typeReporting = TypeReport.ORDONNANCEMEDICALE;
+        this.report.ordonnanceMedical = ordonnance;
+        console.log('***************this.ordonnance*****************', ordonnance);
+        this.store.dispatch(featureActionOrdonnanceMedical.FetchReportOrdonnance(this.report));
+      }
 
      validerPrestation(pref: SinistreTierPayant) {
       this.confirmationService.confirm({
@@ -300,6 +309,13 @@ export class OrdonnaceMedicalComponent implements OnInit {
         console.log('****************pref.prestation****************', pref.prestation);
         this.displayFormPrefinancement = true;
     }
+
+    voirPrestation1(pref: OrdonnanceMedical){
+        console.log('///////////////////pref////////////////////////',pref);
+        this.displayPrestation = true;
+        this.prestationListPrefinancement = pref.ordonnanceMedicalProduitPharmaceutiques;
+        this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+      }
 
     voirPrestation(pref?: SinistreTierPayant, isDetail?: boolean) {
         console.log('****************pref****************', pref);
@@ -441,7 +457,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.displayFormPrefinancement = false;
     }
 
-    supprimerPrestation(prestation: Prestation) {
+   /*  supprimerPrestation(prestation: Prestation) {
         this.confirmationService.confirm({
             message: 'voulez-vous supprimer la prestation',
             header: 'Confirmation',
@@ -451,7 +467,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
             },
         });
-    }
+    } */
 
     supprimerPrefinancement() {
         console.log(this.TierPayantSelected);

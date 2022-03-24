@@ -10,6 +10,7 @@ import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-i
 import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/model';
 import {OrdreReglementTierPayant, SinistreTierPayant} from '../../prestation/tierPayant/model';
 import {Groupe} from '../groupe/model';
+import { OrdonnanceMedical } from '../../medical/ordonnance-medical/model';
 
 export interface Police{
     id?: string;
@@ -74,6 +75,7 @@ export interface Report {
     ordreReglementDto?: OrdreReglement;
     sinistreTierPayantDTO?: SinistreTierPayant;
     ordreReglementTierPayant?: OrdreReglementTierPayant;
+    ordonnanceMedical?: OrdonnanceMedical;
 }
 
 export interface PoliceList {
