@@ -264,4 +264,10 @@ private handleError<T>() {
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-by-id`,
             {params: createRequestOption({avenantId})});
     }
+
+    getsHistoriqueAvenantModifReview(avenantId: string): Observable<Avenant> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-by-id`,
+            {params: createRequestOption({avenantId})});
+    }
 }

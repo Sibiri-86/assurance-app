@@ -100,7 +100,8 @@ export class AvenantModificationComponent implements OnInit {
   groupes: Array<Groupe>;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
-  // @Input() avenantModification: AvenantModification;
+  @Input() avenantId: string;
+  @Input() etat: string;
   @Output() eventEmitterM = new EventEmitter();
   destroy$ = new Subject<boolean>();
   obj: any = {group: {}, prime: {}};
@@ -261,11 +262,14 @@ export class AvenantModificationComponent implements OnInit {
     });
 
     this.myForm = this.formBuilder.group({
+      id: new FormControl(null),
       numero: new FormControl(null, ),
       dateAvenant: new FormControl(null, [Validators.required]),
       dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
+      fraisBadges:new FormControl(null),
+      fraisAccessoires: new FormControl(null),
     });
 
     this.entityValidations = [
@@ -534,6 +538,7 @@ export class AvenantModificationComponent implements OnInit {
     ];
 
     this.plafondForm = this.formBuilder.group({
+      id: new FormControl(null),
       domaine: new FormControl(''),
       plafondAnnuelleFamille: new FormControl(''),
       plafondAnnuellePersonne: new FormControl(''),
@@ -541,6 +546,7 @@ export class AvenantModificationComponent implements OnInit {
     });
 
     this.exerciceForm = this.formBuilder.group({
+      id: new FormControl(null),
       debut: new FormControl(''),
       fin: new FormControl('', [Validators.required]),
       actived: new FormControl('', [Validators.required]),
@@ -564,6 +570,8 @@ export class AvenantModificationComponent implements OnInit {
   isRenouv = false;
 
   ngOnInit(): void {
+    console.log('police ----->  ', this.police);
+    console.log('avenantId ----->  ', this.avenantId);
     this.objet = {
       historiqueAvenant: {},
       historiqueAvenantAdherants: [],
@@ -581,7 +589,7 @@ export class AvenantModificationComponent implements OnInit {
     this.adherantListTmp = [];
     console.log('.............................');
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
-    this.store.dispatch(loadGroupe({policeId: this.police.id}));
+    this.store.dispatch(loadGroupe({policeId: this.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeListes = value.slice();
@@ -729,6 +737,7 @@ export class AvenantModificationComponent implements OnInit {
     this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
     this.loadActivedExercice(this.police);
+    this.updateAvenant(this.avenantId);
   }
 
   addSousActe() {
@@ -1047,6 +1056,7 @@ export class AvenantModificationComponent implements OnInit {
     if (this.plafondForm.value) {
     this.objet.plafondGroupe = this.plafondForm.value;
     }
+    this.objet.historiqueAvenant.id = this.myForm.get('id').value;
     this.objet.historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
@@ -1054,8 +1064,9 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.exercice = this.exercice;
     // this.objet.groupe = this.groupeForm.value;
     this.objet.groupe.prime = this.primeForm.get(['prime']).value;
-    this.groupes.forEach(gp => {
-      gp.typeDuree = this.typeDuree.find(e => e.libelle === gp.typeDuree)[0].value;
+    this.groupeListes.forEach(gp => {
+      console.log(' groupe infos === ', this.typeDuree.find(e => e.value === gp.typeDuree));
+      gp.typeDuree = this.typeDuree.find(e => e.value === gp.typeDuree).value;
     });
     this.objet.groupes = this.groupeListes;
     // this.objet.groupe = this.groupeForm.value;
@@ -1412,5 +1423,46 @@ export class AvenantModificationComponent implements OnInit {
       }
     });
 
+  }
+
+  updateAvenant(avenantId: string): void {
+    if (avenantId) {
+        this.historiqueAvenantService.getsHistoriqueAvenantModifReview(avenantId).subscribe(
+            (res: Avenant) => {
+              console.log('res ============ ');
+              console.log(res);
+              this.police = res.police;
+                // this.historiqueAvenant1 = res;
+                this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
+                this.myForm.setValue({
+                    id: res.historiqueAvenant.id,
+                    numero: res.historiqueAvenant.numero,
+                    dateEffet: res.historiqueAvenant.dateAvenant,
+                    dateAvenant: res.historiqueAvenant.dateAvenant,
+                    observation: res.historiqueAvenant.observation,
+                    demandeur: res.historiqueAvenant.typeDemandeur,
+                    fraisBadges: res.historiqueAvenant.fraisBadges,
+                    fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
+                  
+                });
+                this.objet.historiqueAvenant.id = res.historiqueAvenant.id;
+                this.exercice = res.historiqueAvenant.exercice;
+                this.exerciceForm.setValue({
+                    id: res.historiqueAvenant.exercice.id,
+                    debut: res.historiqueAvenant.exercice.debut,
+                    fin: res.historiqueAvenant.exercice.fin,
+                    actived: res.historiqueAvenant.exercice.actived
+                });
+                this.exerciceForm.disable();
+                if (this.etat === 'VIEW') {
+                  this.myForm.disable();
+                  this.groupeForm.disable();
+                  this.primeForm.disable();
+                  this.groupeForm.disable();
+                }
+            }
+        );
+        // this.viewListeEdit = true;
+    }
   }
 }
