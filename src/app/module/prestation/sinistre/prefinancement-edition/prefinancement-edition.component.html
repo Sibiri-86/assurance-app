@@ -190,10 +190,20 @@
                     
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="policeAdherent">Numero police<span class="required">*</span></label>
+                            <label for="policeAdherent">Numero police</label>
                             <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" pInputText>
                         </div>
+                        
+                        <div class="p-field p-col-4">
+                            <label for="medecin">Bon de prise en charge</label>
+                            <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="bonPriseEnChargeList"
+                                        formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
+                                        optionLabel="numeros" (onChange)="onRowSelectBon($event)"></p-dropdown>
+                        </div>
                     </div>
+                    
+                    
                     
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">

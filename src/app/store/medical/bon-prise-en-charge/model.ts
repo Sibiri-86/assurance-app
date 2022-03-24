@@ -1,28 +1,19 @@
+import { Adherent } from '../../contrat/adherent/model';
 import { TypeReport } from '../../contrat/enum/model';
+import { Police } from '../../contrat/police/model';
+import { Prestataire } from '../../parametrage/prestataire/model';
 import { Prestation } from '../../prestation/prefinancement/model';
 
 export interface BonPriseEnCharge {
     id?: string;
     dateDeclaration?: Date;
-    idAdherent?: string;
-    idPrestataire?: string;
-    idPolice?: string;
-    nom?: string;
+    adherent?: Adherent;
+    prestataire?: Prestataire;
+    police?: Police;
     numeros?: string;
     date?: Date;
-    prenom?: string;
-    nomPrestataire?: string;
-    prestations?: Array<Prestation>;
-    dateNaissance?: Date;
-    lieuNaissance?: string;
-    numeroTelephone?: string;
-    adresse?: string;
-    numeroPolice?: string;
-    nomSouscripteur?: string;
-    adresseSouscripteur?: string;
-    dateEffet?: Date;
-    dateEcheance?: Date;
-    typeQualiteAssure?: string;
+    status?: string;
+    prestation?: Array<Prestation>;
 }
 
 export interface ReportFile {
@@ -31,7 +22,7 @@ export interface ReportFile {
 
 export interface Report {
     typeReporting?: TypeReport;
-    bon?: BonPriseEnCharge;
+    bonPriseEnChargeDto?: BonPriseEnCharge;
 }
 
 export interface BonPriseEnChargeList{

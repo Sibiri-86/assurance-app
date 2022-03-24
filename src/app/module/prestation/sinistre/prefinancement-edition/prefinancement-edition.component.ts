@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { BonPriseEnCharge, CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -62,6 +62,8 @@ import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
 import { Dialog } from 'primeng/dialog/dialog';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
+import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
 
 
 @Component({
@@ -114,6 +116,9 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   public defaultDate: Date;
   checkControl = true;
   checkPrefinancementResult: Array<CheckPrefinancementResult>;
+  bonPriseEnCharge: BonPriseEnCharge = {};
+  bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
+  bonPriseEnChargeList: Array<BonPriseEnCharge>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -191,6 +196,16 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         if (bytes) {
                 printPdfFile(bytes);
         }
+    });
+
+    // chargement des bons de prise en charge
+    this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+    this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.bonPriseEnChargeList = value.slice();
+      }
     });
 
     // this.adherentSelected$ = ;
@@ -332,6 +347,22 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   selectActe(event){
     console.log(event);
     this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+  }
+
+  onRowSelectBon($event){
+    console.log($event.value);
+    for (const pr of $event.value.prestation) {
+      const formPrestation: FormGroup = this.createItem();
+      pr.id = null;
+      formPrestation.patchValue(pr);
+      formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+      formPrestation.get('debours').setValue(pr.debours);
+      formPrestation.get('taux').setValue(pr.taux);
+      formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+      formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+      this.prestation.push(formPrestation);
+      }
+    this.displayFormPrefinancement = true;
   }
 
   editerPrestation(pref: Prefinancement) {

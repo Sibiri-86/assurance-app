@@ -51,8 +51,8 @@ export interface BonPriseEnCharge {
     dateDeclaration?: Date;
     adherent?: Adherent;
     numeroSinistre?: string;
-    souscripteur: string;
-    prestataire: Prestataire;
+    souscripteur?: string;
+    prestataire?: Prestataire;
     prestation?: Array<Prestation>;
 }
 
@@ -74,13 +74,6 @@ export interface Prestation {
     dateSoins?: Date;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
     /*ajout information pour bon de prise en charge*/
-    idTaux?: string;
-    idSousActe?: string;
-    idMedecin?: string;
-    idAdherent?: string;
-    idPathologie?: string;
-    idPrestataire?: string;
-    codeSousActe?: string;
 }
 
 export interface PrefinancementList {

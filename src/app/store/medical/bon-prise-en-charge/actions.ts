@@ -8,3 +8,5 @@ export const setBon = createAction('[App Init] set Bon Prise en charge',  props<
 export const importBon = createAction('[App Init] import Bon Prise en charge',  props<{file: File}>());
 export const setReportBon = createAction('[set Report] set Report Bon', props<{reportFile: ArrayBuffer}>());
 export const FetchReportBon = createAction('[Report] Fetch Report Bon', props<Report>());
+export const valideBon = createAction('[App Init] Bon Prise en charge valide', props<BonPriseEnCharge>());
+export const invalideBon = createAction('[App Init] Bon Prise en charge invalide', props<BonPriseEnCharge>());

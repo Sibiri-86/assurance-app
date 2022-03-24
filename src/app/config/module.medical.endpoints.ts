@@ -1,8 +1,13 @@
-export const SERVICE_PREFIX = `/medical`;
+export const SERVICE_PREFIX = `/assurance/medical`;
 
 export class EndpointsMedical {
     static readonly BONPRISEENCHARGE = {
         prod: `${SERVICE_PREFIX}/bonPriseEnCharge`,
+        mock: `assets/mock/bonPriseEnCharge.mock.json`
+    };
+
+    static readonly CONVENTION = {
+        prod: `${SERVICE_PREFIX}/convention`,
         mock: `assets/mock/bonPriseEnCharge.mock.json`
     };
 

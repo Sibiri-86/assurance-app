@@ -25,6 +25,16 @@ posBons(bon: BonPriseEnCharge): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}`, bon);
   }
 
+posvalideBons(bon: BonPriseEnCharge): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/valide`, bon);
+  }
+
+posInvalideBons(bon: BonPriseEnCharge): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/invalide`, bon);
+  }
+
 updateBons(bon: BonPriseEnCharge): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/${bon.id}`, bon);

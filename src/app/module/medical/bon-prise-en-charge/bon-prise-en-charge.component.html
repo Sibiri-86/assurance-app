@@ -49,23 +49,23 @@
                             <p-tableCheckbox [value]="bon"></p-tableCheckbox>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{bon.numeros}}</span>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.nom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.adherent.nom}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.prenom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.adherent.prenom}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.typeQualiteAssure}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.adherent.qualiteAssure.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.numeroPolice}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.police.numero}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.nomSouscripteur}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.police.nom}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:100px">{{bon.nomPrestataire}}</span>
+                            <span class="p-column-title" style="min-width:100px">{{bon.prestataire.libelle}}</span>
                         </td>
-                        
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(bon)"></button>
-                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPrestation(bon)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editer(bon)"></button>
+                            <button *ngIf="bon.status==='VALIDE'" pButton icon="pi pi-times" pTooltip="invalider" class="p-button-rounded p-button-info p-mr-2" (click)="inValider(bon)"></button>
+                            <button *ngIf="bon.status!=='VALIDE'" pButton icon="pi pi-check" pTooltip="valider" class="p-button-rounded p-button-info p-mr-2" (click)="valider(bon)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(bon)"></button>
                         </td>
                     </tr>

@@ -310,7 +310,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
 
   imprimer(bon: BonPriseEnCharge) {
     this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
-    this.report.bon = bon;
+    this.report.bonPriseEnChargeDto = bon;
     this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
   }
 
@@ -347,10 +347,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
   }
 
-  editerPrestation(pref: Prefinancement) {
+  editer(pref: BonPriseEnCharge) {
     console.log(pref);
     this.adherentSelected = pref.adherent;
-    this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+    //this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
     this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
@@ -358,7 +358,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
-    this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+    this.prestationForm.get('dateSaisie').setValue(new Date(pref.date));
     for (const pr of pref.prestation) {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
@@ -472,18 +472,15 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
 
   /** enregistrement cas de prefinancement */
   onCreate() {
-    /*fonction pour enregitrer un bon de prise en charge*/
-    this.bonPriseEnCharge.prestations = [];
-    this.prefinancementModel = this.prestationForm.value;
-    this.bonPriseEnCharge.idAdherent = this.adherentSelected.id;
-    this.bonPriseEnCharge.idPrestataire = this.prefinancementModel.prestataire.id;
-    this.bonPriseEnCharge.idPolice = this.adherentSelected.groupe.police.id;
-    //this.bonPriseEnCharge.prestations = this.prefinancementModel.prestation;
+    this.bonPriseEnCharge.prestation = [];
+    this.bonPriseEnCharge = this.prestationForm.value;
+    this.bonPriseEnCharge.adherent = this.adherentSelected;
+    this.bonPriseEnCharge.police = this.adherentSelected.groupe.police;
+    /*
     const prest: Prestation = {};
     prest.produitPharmaceutique = [];
     for (const prestation of this.prefinancementModel.prestation){
       prest.idMedecin = prestation.medecin.id;
-      //prest.idPathologie = prestation.p;
       prest.idSousActe = prestation.sousActe.id;
       prest.codeSousActe = prestation.sousActe.code;
       prest.idTaux = prestation.taux.id;
@@ -499,20 +496,34 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       }
       this.bonPriseEnCharge.prestations.push(prest);
     }
+    */
     console.log(this.bonPriseEnCharge);
     this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
-    /** fonction pour enregistrer la prestation */ 
-   //console.log('creation prefinancement');
-   //this.prefinancementModel = this.prestationForm.value;
-   //this.prefinancementModel.dateSaisie = new Date();
-   //this.prefinancementModel.adherent = this.adherentSelected;
-   //this.prefinancementList.push(this.prefinancementModel);
-   //this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
-   //console.log(this.prefinancementModel);
-   //this.prefinancementList = [];
-   //this.prestationForm.reset();
    }
 
+   valider(bon: BonPriseEnCharge){
+     console.log(bon);
+    this.confirmationService.confirm({
+      message: "Etes vous sûre de vouloir valider?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(featureActionBonPriseEnCharge.valideBon(bon));
+      },
+    });
+   }
+
+   inValider(bon: BonPriseEnCharge){
+    this.confirmationService.confirm({
+      message: "Etes vous sûre de vouloir valider?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(featureActionBonPriseEnCharge.invalideBon(bon));
+      },
+    });
+
+   }
   // permet d'enregistrer une prestation par famille
   addPrestation(){
     this.prefinancementModel.prestation = this.prestationList;

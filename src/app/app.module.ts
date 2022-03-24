@@ -248,6 +248,7 @@ import { BonPriseEnChargeEffects } from './store/medical/bon-prise-en-charge/eff
 import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 import { AdherentListEditComponent } from './module/contrat/avenant/adherent-list-edit/adherent-list-edit.component';
 import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/effect';
+import { ConventionComponent } from './module/medical/convention/convention.component';
 
 @NgModule({
     imports: [
@@ -448,7 +449,8 @@ import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/ef
         OrdreReglementRechercheComponent,
         BonPriseEnChargeComponent,
         OrdonnaceMedicalComponent,
-        AdherentListEditComponent
+        AdherentListEditComponent,
+        ConventionComponent
     ],
     providers: [
         {

@@ -46,6 +46,7 @@ import {ExerciceState} from './contrat/exercice/state';
 import {SinistreTierPayantState} from './prestation/tierPayant/state';
 import {SinistreTierPayant} from './prestation/tierPayant/model';
 import { BonPriseEnChargeState } from './medical/bon-prise-en-charge/state';
+import { ConventionState } from './medical/convention/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -95,4 +96,5 @@ export interface AppState {
   tierPayantState: SinistreTierPayantState;
   exerciceState: ExerciceState;
   bonPriseEnChargeState: BonPriseEnChargeState;
+  conventionState: ConventionState;
 }

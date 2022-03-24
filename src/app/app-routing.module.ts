@@ -60,6 +60,7 @@ import {SinistreTiersPayantConsultationComponent} from './module/prestation/tier
 import { OrdreReglementRechercheComponent } from './module/prestation/ordre-reglement/ordre-reglement-recherche/ordre-reglement-recherche.component';
 import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
 import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
+import { ConventionComponent } from './module/medical/convention/convention.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -86,6 +87,7 @@ import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/or
                     {path: 'prestation/prefinancement/ordre-reglement/valide', component: OrdreReglementValideComponent},
                     {path: 'prestation/prefinancement/ordre-reglement/consultation', component: OrdreReglementRechercheComponent},
                     {path: 'medical/bon-prise-en-charge', component: BonPriseEnChargeComponent},
+                    {path: 'medical/convention', component: ConventionComponent},
                     {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

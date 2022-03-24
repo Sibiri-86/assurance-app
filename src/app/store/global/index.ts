@@ -133,6 +133,7 @@ import * as exerciceState from '../contrat/exercice/state';
 import * as tierPayantReducer from '../prestation/tierPayant/reducer';
 import * as tierPayantState from '../prestation/tierPayant/state';
 import * as bonPriseEnChargeReducer from '../medical/bon-prise-en-charge/reducer';
+import * as conventionReducer from '../medical/convention/reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
@@ -181,7 +182,8 @@ export const reducers: ActionReducerMap<AppState> = {
     prefinancementState: prefinancementReducer.reducer,
     exerciceState: exerciceReducer.reducer,
     tierPayantState: tierPayantReducer.reducer,
-    bonPriseEnChargeState: bonPriseEnChargeReducer.reducer
+    bonPriseEnChargeState: bonPriseEnChargeReducer.reducer,
+    conventionState: conventionReducer.reducer
 };
 
   
@@ -193,5 +195,4 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
         return reducer(state, action);
     };
 }
-
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [debug] : [];

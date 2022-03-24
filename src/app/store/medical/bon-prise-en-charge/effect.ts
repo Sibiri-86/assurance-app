@@ -31,6 +31,32 @@ export class BonPriseEnChargeEffects {
             ))
         ));
 
+    valideBons$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.valideBon),
+        mergeMap((bon: BonPriseEnCharge) =>
+            this.bonPriseEnChargeService.posvalideBons(bon).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadBon()
+                ]),
+                catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
+    invalideBons$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.invalideBon),
+            mergeMap((bon: BonPriseEnCharge) =>
+                this.bonPriseEnChargeService.posInvalideBons(bon).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadBon()
+                    ]),
+                    catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
      updateBon$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.updateBon),
