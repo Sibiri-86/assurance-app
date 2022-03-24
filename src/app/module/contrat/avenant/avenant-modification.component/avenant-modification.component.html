@@ -66,21 +66,21 @@
                             <div class="p-field p-col">
                                 <label for="lastname2">Garant</label>
                                 <div>
-                                    <span>{{police.garant.nom}}</span>
+                                    <span>{{police?.garant?.nom}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Intermediaire</label>
                                 <div>
-                                    <span>{{police.intermediaire.nom}}</span>
+                                    <span>{{police?.intermediaire?.nom}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Taux de couverture</label>
                                 <div>
-                                    <span>{{police.taux.taux}}</span>
+                                    <span>{{police?.taux?.taux}}</span>
                                 </div>
                             </div>
                         </div>
@@ -90,21 +90,21 @@
                             <div class="p-field p-col">
                                 <label for="firstname2">Territorialité</label>
                                 <div>
-                                    <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
+                                    <span *ngFor="let t of police?.territorialite">{{t?.libelle}} </span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="dateEffet">Date effet</label>
                                 <div>
-                                    <span>{{police.dateEffet}}</span>
+                                    <span>{{police?.dateEffet}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col-4">
                                 <label for="lastname2">Date d'écheance</label>
                                 <div>
-                                    <span>{{police.dateEcheance}}</span>
+                                    <span>{{police?.dateEcheance}}</span>
                                 </div>
                             </div>
 
@@ -114,21 +114,21 @@
                             <div class="p-field p-col">
                                 <label for="firstname2">Nom du souscripteur</label>
                                 <div>
-                                    <span>{{police.nom}}</span>
+                                    <span>{{police?.nom}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Contact</label>
                                 <div>
-                                    <span>{{police.contact}}</span>
+                                    <span>{{police?.contact}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="firstname2">Adresse mail</label>
                                 <div>
-                                    <span>{{police.adresseEmail}}</span>
+                                    <span>{{police?.adresseEmail}}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,21 +138,21 @@
                             <div class="p-field p-col">
                                 <label for="adressePostale">Adresse postale</label>
                                 <div>
-                                    <span>{{police.adressePostale}}</span>
+                                    <span>{{police?.adressePostale}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Secteur d'activité</label>
                                 <div>
-                                    <span>{{police.secteurActivite.libelle}}</span>
+                                    <span>{{police?.secteurActivite?.libelle}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Numero IFU</label>
                                 <div>
-                                    <span>{{police.numeroIfu}}</span>
+                                    <span>{{police?.numeroIfu}}</span>
                                 </div>
                             </div>
                         </div>
@@ -162,21 +162,21 @@
                             <div class="p-field p-col">
                                 <label for="lastname2">Personne ressource</label>
                                 <div>
-                                    <span>{{police.personneRessource}}</span>
+                                    <span>{{police?.personneRessource}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Contact personne ressource</label>
                                 <div>
-                                    <span>{{police.contactPersonneRessource}}</span>
+                                    <span>{{police?.contactPersonneRessource}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="refPolice">Reference police</label>
                                 <div>
-                                    <span>{{police.referencePolice}}</span>
+                                    <span>{{police?.referencePolice}}</span>
                                 </div>
                             </div>
                         </div>
@@ -186,21 +186,21 @@
                             <div class="p-field p-col">
                                 <label for="lastname2">RCCM</label>
                                 <div>
-                                    <span>{{police.rccm}}</span>
+                                    <span>{{police?.rccm}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Numero police</label>
                                 <div>
-                                    <span>{{police.numero}}</span>
+                                    <span>{{police?.numero}}</span>
                                 </div>
                             </div>
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Secteur</label>
                                 <div>
-                                    <span>{{police.secteur.libelle}}</span>
+                                    <span>{{police?.secteur?.libelle}}</span>
                                 </div>
                             </div>
                         </div>
@@ -1010,7 +1010,7 @@
                                 <td>{{historiqueAveantAdherant.adherent.numero}}</td>
                                 <td>
                                     <p-cellEditor>
-                                        <ng-template pTemplate="input">
+                                        <ng-template pTemplate="input" *ngIf="etat !== 'UPDATE'">
                                             <input pInputText type="text"
                                                    [(ngModel)]="historiqueAveantAdherant.adherent.nom">
                                         </ng-template>

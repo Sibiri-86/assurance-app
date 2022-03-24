@@ -96,7 +96,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     groupes: Array<Groupe>;
     groupeListes: Array<Groupe>;
     groupeList$: Observable<Array<Groupe>>;
-    // @Input() avenantModification: AvenantModification;
+    @Input() etat: string;
+    @Input() avenantId: string;
     @Output() eventEmitterM = new EventEmitter();
     destroy$ = new Subject<boolean>();
     obj: any = {group: {}, prime: {}};
@@ -713,6 +714,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         // this.loadListeActualisee();
         this.loadAdherantByPolice();
         this.addFamilleActe(this.police);
+        this.updateAvenant(this.avenantId);
     }
 
     addSousActe() {
@@ -1355,4 +1357,42 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
 
     }
+
+    updateAvenant(avenantId: string): void {
+        if (avenantId) {
+            this.historiqueAvenantService.getsHistoriqueAvenantModifReview(avenantId).subscribe(
+                (res: Avenant) => {
+                  console.log('res ============ ');
+                  console.log(res);
+                  this.police = res.police;
+                    // this.historiqueAvenant1 = res;
+                    this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
+                    this.myForm.setValue({
+                        id: res.historiqueAvenant.id,
+                        numero: res.historiqueAvenant.numero,
+                        dateEffet: res.historiqueAvenant.dateAvenant,
+                        dateAvenant: res.historiqueAvenant.dateAvenant,
+                        observation: res.historiqueAvenant.observation,
+                        demandeur: res.historiqueAvenant.typeDemandeur,
+                        fraisBadges: res.historiqueAvenant.fraisBadges,
+                        fraisAccessoires: res.historiqueAvenant.fraisAccessoires
+                    });
+                    this.exercice = res.historiqueAvenant.exercice;
+                    this.exerciceForm.setValue({
+                        id: res.historiqueAvenant.exercice.id,
+                        debut: res.historiqueAvenant.exercice.debut,
+                        fin: res.historiqueAvenant.exercice.fin,
+                        actived: res.historiqueAvenant.exercice.actived
+                    });
+    
+                    if (this.etat === 'VIEW') {
+                      this.myForm.disable();
+                      this.exerciceForm.disable();
+                      this.groupeForm.disable();
+                    }
+                }
+            );
+            // this.viewListeEdit = true;
+        }
+      }
 }

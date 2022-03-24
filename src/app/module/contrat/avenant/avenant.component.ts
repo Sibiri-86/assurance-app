@@ -1652,6 +1652,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.MODIFICATION: {
+        this.policeItem = avenant.police;
         this.initDisplayAvenant();
         this.isAvenantModification = true;
         this.addAvenant();
@@ -1993,12 +1994,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }*/
   }
 
-  getAvenantModification(event: any) {
-    const avenant: Avenant = event;
+  getAvenantModification(avenant: any) {
+    // const avenant: Avenant = event;
     // avenant.
-    const historiqueAvenant: HistoriqueAvenant = {};
-    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
-    avenant.historiqueAvenant = historiqueAvenant;
+    // const historiqueAvenant: HistoriqueAvenant = {};
+    // historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
+    // avenant.historiqueAvenant = historiqueAvenant;
+    avenant.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
     this.historiqueAvenantService.postAvenant(avenant).subscribe(
         (res) => {
           console.log('***************RETOUR********************');
@@ -2012,7 +2014,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
     );
     console.log('********************Avenant modification************************');
-    console.log(event);
+    console.log(avenant);
   }
 
   getAvenantRenouvellement(event: Avenant): void {
@@ -2389,6 +2391,19 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantResiliation = true;
         this.addAvenant();
         this.entete = 'Avenant de résiliation'.toUpperCase();
+        break;
+      case TypeHistoriqueAvenant.MODIFICATION:
+        this.initDisplayAvenant();
+        this.isAvenantModification = true;
+        this.addAvenant();
+        this.entete = 'Avenant de modification'.toUpperCase();
+        this.policeItem = rowdata.police;
+        break;
+      case TypeHistoriqueAvenant.RENOUVELLEMENT:
+        this.initDisplayAvenant();
+        this.isAvenantRenouvellement = true;
+        this.addAvenant();
+        this.entete = 'Avenant de rnouvellement';
         break;
       default: break;
     }
