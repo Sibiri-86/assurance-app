@@ -15,4 +15,14 @@ export class EndpointsMedical {
         prod: `${SERVICE_PREFIX}/ordonnanceMedical/createOrdonnance`,
         mock: `assets/mock/ordonnanceMedical.mock.json`
     };
+
+    static readonly ORDONNANCE_MEDICALE_LOAD = {
+        prod: `${SERVICE_PREFIX}/ordonnanceMedical/getOrdonnance`,
+        mock: `assets/mock/ordonnanceMedical.mock.json`
+    };
+
+    static readonly ORDONNANCE_MEDICALE_REPORT = {
+        prod: `${SERVICE_PREFIX}/ordonnanceMedical/report`,
+        mock: `assets/mock/ordonnanceMedical.mock.json`
+    };
 }

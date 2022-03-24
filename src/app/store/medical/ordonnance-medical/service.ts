@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import { EndpointsMedical } from 'src/app/config/module.medical.endpoints';
-import { OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique } from './model';
+import { OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, OrdonnanceMedicalProduitPharmaceutiqueList, Report } from './model';
 
 @Injectable({providedIn: 'root'})
 export class OrdonnanceMedicaleService {
@@ -16,6 +16,20 @@ postOrdonnanceMedicale(ordonnace: OrdonnanceMedical): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_CREATED)}`, ordonnace);
   }
+
+  $getOrdonnanceMedicale(): Observable<OrdonnanceMedicalProduitPharmaceutiqueList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_LOAD)}`).pipe(
+      map((response: OrdonnanceMedicalProduitPharmaceutiqueList) => response),
+      catchError(this.handleError())
+    );
+  }
+
+  $getReportOrdonnance(report: Report): Observable<ArrayBuffer> {
+    // @FIXME: get request
+    return this.http.post( `${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_REPORT)}`,
+     report, {responseType: 'arraybuffer'});
+}
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {

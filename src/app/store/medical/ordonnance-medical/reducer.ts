@@ -1,22 +1,23 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './actions';
-import {BonPriseEnChargeState} from './state';
+import { OrdonnanceMedicalProduitPharmaceutiqueList, ReportFile } from './model';
+import { OrdonnanceMedicaleState } from './state';
 
-const initialState: BonPriseEnChargeState = {
-  bonPriseEnChargeList: null,
+const initialState: OrdonnanceMedicaleState = {
+  ordonnanceMedicalProduitPharmaceutiqueList: null,
   reportFile: null
 };
 
-/* const featureReducer = createReducer(
+const featureReducer = createReducer(
   initialState,
-  on(featureActions.setBon, (state, payload: BonPriseEnChargeList) => ({
-    ...state, bonPriseEnChargeList: payload.bonPriseEnChargeList
+  on(featureActions.setOrdonnance, (state, payload: OrdonnanceMedicalProduitPharmaceutiqueList) => ({
+    ...state, ordonnanceMedicalProduitPharmaceutiqueList: payload.ordonnaceMedicalProduitPharmaceutiqueDTOList
   })),
-  on(featureActions.setReportBon, (state, payload: ReportFile) => ({
+  on(featureActions.setReportOrdonnance, (state, payload: ReportFile) => ({
     ...state, reportFile: payload.reportFile
   })),
-); */
+);
 
-/* export function reducer(state: BonPriseEnChargeState | undefined, action: Action) {
+ export function reducer(state: OrdonnanceMedicaleState | undefined, action: Action) {
   return featureReducer(state, action);
-} */
+}

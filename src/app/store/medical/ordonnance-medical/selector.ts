@@ -1,3 +1,5 @@
 import {AppState} from '../../app.state';
-export const bonPriseEnChargeList = (state: AppState) => state.bonPriseEnChargeState.bonPriseEnChargeList;
-export const selectByteFile = (state: AppState) => state.bonPriseEnChargeState.reportFile;
+
+export const ordonnanceMedicalProduitPharmaceutiqueList = (state: AppState) => state.ordonnanceMedicaleState.ordonnanceMedicalProduitPharmaceutiqueList;
+export const selectByteFile = (state: AppState) => state.ordonnanceMedicaleState.reportFile;
+

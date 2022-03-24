@@ -47,6 +47,8 @@ import {SinistreTierPayantState} from './prestation/tierPayant/state';
 import {SinistreTierPayant} from './prestation/tierPayant/model';
 import { BonPriseEnChargeState } from './medical/bon-prise-en-charge/state';
 import { ConventionState } from './medical/convention/state';
+import { OrdonnanceMedicalProduitPharmaceutique } from './medical/ordonnance-medical/model';
+import { OrdonnanceMedicaleState } from './medical/ordonnance-medical/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -97,4 +99,5 @@ export interface AppState {
   exerciceState: ExerciceState;
   bonPriseEnChargeState: BonPriseEnChargeState;
   conventionState: ConventionState;
+  ordonnanceMedicaleState: OrdonnanceMedicaleState;
 }

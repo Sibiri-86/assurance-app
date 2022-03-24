@@ -1,3 +1,6 @@
+import { Adherent } from '../../contrat/adherent/model';
+import { TypeReport } from '../../contrat/enum/model';
+import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 
 export interface OrdonnanceMedicalProduitPharmaceutique {
@@ -13,9 +16,9 @@ export interface OrdonnanceMedicalProduitPharmaceutique {
 export interface OrdonnanceMedical{
     id?: number;
     dateSaisie?: Date;
-    idAdherent?: string;
-    idPrestataire?:string;
-    idPrescripteur?: string;
+    adherent?: Adherent;
+    prestataire?:Prestataire;
+    prescripteur?: Prestataire;
     ordonnanceMedicalProduitPharmaceutiques?: Array<OrdonnanceMedicalProduitPharmaceutique>;
 }
 
@@ -28,15 +31,16 @@ export enum TypeQuantite {
     UNITAIRE = 'UNITAIRE',
 }
 
-/* export interface ReportFile {
-    reportFile?: ArrayBuffer;
+export interface OrdonnanceMedicalProduitPharmaceutiqueList{
+    ordonnaceMedicalProduitPharmaceutiqueDTOList?: Array<OrdonnanceMedical>;
 }
 
 export interface Report {
     typeReporting?: TypeReport;
-    bon?: BonPriseEnCharge;
+    ordonnance?: OrdonnanceMedical;
 }
 
-export interface BonPriseEnChargeList{
-    bonPriseEnChargeList?: Array<BonPriseEnCharge>;
-} */
+export interface ReportFile {
+    reportFile?: ArrayBuffer;
+}
+
