@@ -911,7 +911,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
-                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                                            [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{sousActe?.taux?.taux}}
@@ -936,7 +936,8 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                                <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
+                                                <!-- <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{sousActe.dateEffet | formatTableValue : 'date'}}

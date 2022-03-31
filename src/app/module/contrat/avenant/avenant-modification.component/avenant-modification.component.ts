@@ -17,6 +17,7 @@ import {
   Avenant,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
+  HistoriqueGroupe,
   HistoriquePlafond,
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
@@ -189,6 +190,8 @@ export class AvenantModificationComponent implements OnInit {
   adherentList$: Observable<Array<Adherent>>;
   displayDialogFormAdherent = false;
   adherentList: Array<Adherent>;
+  historiqueGroupes: HistoriqueGroupe[] = [];
+  numero: number;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -270,6 +273,7 @@ export class AvenantModificationComponent implements OnInit {
       demandeur: new FormControl(null, [Validators.required]),
       fraisBadges:new FormControl(null),
       fraisAccessoires: new FormControl(null),
+    
     });
 
     this.entityValidations = [
@@ -572,6 +576,7 @@ export class AvenantModificationComponent implements OnInit {
   ngOnInit(): void {
     console.log('police ----->  ', this.police);
     console.log('avenantId ----->  ', this.avenantId);
+    console.log('etat ----->  ', this.etat);
     this.objet = {
       historiqueAvenant: {},
       historiqueAvenantAdherants: [],
@@ -582,7 +587,6 @@ export class AvenantModificationComponent implements OnInit {
       plafondGroupeSousActes: [],
       plafondFamilleActes: [],
       familles: [],
-      groupe: {},
       adhrents: [],
     };
     this.historiqueAveantAdherants = [];
@@ -1046,8 +1050,8 @@ export class AvenantModificationComponent implements OnInit {
         pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
       });
     } */
-    this.objet.groupe = this.groupeForm.value || this.groupeSelected;
-    this.objet.groupe.police = this.police;
+    // this.objet.groupe = this.groupeForm.value || this.groupeSelected;
+    // this.objet.groupe.police = this.police;
     this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
     this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
     this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
@@ -1058,20 +1062,19 @@ export class AvenantModificationComponent implements OnInit {
     }
     this.objet.historiqueAvenant.id = this.myForm.get('id').value;
     this.objet.historiqueAvenant.numeroGarant = this.myForm.get('numero').value;
+    this.objet.historiqueAvenant.numero = this.numero;
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.objet.historiqueAvenant.exercice = this.exercice;
     // this.objet.groupe = this.groupeForm.value;
-    this.objet.groupe.prime = this.primeForm.get(['prime']).value;
+    // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
     this.groupeListes.forEach(gp => {
       console.log(' groupe infos === ', this.typeDuree.find(e => e.value === gp.typeDuree));
       gp.typeDuree = this.typeDuree.find(e => e.value === gp.typeDuree).value;
     });
     this.objet.groupes = this.groupeListes;
-    // this.objet.groupe = this.groupeForm.value;
-    // this.objet.groupe.prime = this.primeForm.value;
-    // this.objet.groupe.typePrime = this.primeForm.get(['typeprime']).value;
+    
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
         this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
@@ -1084,6 +1087,7 @@ export class AvenantModificationComponent implements OnInit {
         break;
       default: break;
     }
+    this.objet.historiqueGroupes = this.historiqueGroupes;
     console.log(this.objet);
     this.eventEmitterM.emit(this.objet);
   }
@@ -1432,20 +1436,21 @@ export class AvenantModificationComponent implements OnInit {
               console.log('res ============ ');
               console.log(res);
               this.police = res.police;
-                // this.historiqueAvenant1 = res;
+                this.historiqueGroupes = res.historiqueGroupes;
                 this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-                this.myForm.setValue({
+                this.numero = res.historiqueAvenant.numero;
+                this.myForm.patchValue({
                     id: res.historiqueAvenant.id,
                     numero: res.historiqueAvenant.numero,
-                    dateEffet: res.historiqueAvenant.dateAvenant,
-                    dateAvenant: res.historiqueAvenant.dateAvenant,
+                    dateEffet: new Date(res.historiqueAvenant.dateAvenant),
+                    dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
                     observation: res.historiqueAvenant.observation,
                     demandeur: res.historiqueAvenant.typeDemandeur,
                     fraisBadges: res.historiqueAvenant.fraisBadges,
                     fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
                   
                 });
-                this.objet.historiqueAvenant.id = res.historiqueAvenant.id;
+                this.objet.historiqueAvenant.id = res.historiqueAvenant?.id;
                 this.exercice = res.historiqueAvenant.exercice;
                 this.exerciceForm.setValue({
                     id: res.historiqueAvenant.exercice.id,
@@ -1464,5 +1469,25 @@ export class AvenantModificationComponent implements OnInit {
         );
         // this.viewListeEdit = true;
     }
+  }
+
+  changeFamilleActeDate(plafondFamilleActe: PlafondFamilleActe): void {
+    console.log('famille acte date effe change ==== ' + plafondFamilleActe.dateEffet);
+    plafondFamilleActe.listeActe.forEach(plafondActe => {
+        plafondActe.dateEffet = plafondFamilleActe.dateEffet;
+        plafondActe.listeSousActe.forEach(sousActe => {
+            sousActe.dateEffet = plafondFamilleActe.dateEffet;
+        });
+    });
+  }
+
+  changeFamilleActeTaux(plafondFamilleActe: PlafondFamilleActe): void {
+      console.log('famille acte date effe change ==== ' + plafondFamilleActe.taux.taux);
+      plafondFamilleActe.listeActe.forEach(plafondActe => {
+          plafondActe.taux = plafondFamilleActe.taux;
+          plafondActe.listeSousActe.forEach(sousActe => {
+              sousActe.taux = plafondFamilleActe.taux;
+          });
+      });
   }
 }

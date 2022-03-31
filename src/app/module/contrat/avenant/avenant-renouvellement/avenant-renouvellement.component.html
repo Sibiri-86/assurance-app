@@ -4,14 +4,24 @@
             <p-fieldset legend="Exercice" [transitionOptions]="'400ms'">
                 <form [formGroup]="exerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
-                            <label for="debut">Date d'effet</label>
+                        <div class="p-field p-col-3">
+                            <label for="debut">Date d'effet <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-calendar id="debut" [showIcon]="true" formControlName="debut"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
                         </div>
-                        <div class="p-field p-col-6">
-                            <label for="fin">Date d'échéance</label>
+                        <div class="p-field p-col-3">
+                            <label for="dateIncorparation">Type durée <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDuree" dataKey="id" [filter]="true" showClear="true" id="typeDuree"
+                                        [options]="typeDuree" formControlName="typeDuree" (onChange)="changeTypeDuree()"
+                                        placeholder="Select" optionLabel="label"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="nom">Durée <sup style="color: red; size: 1.7em"></sup></label>
+                            <input id="durée" type="text" required formControlName="duree" pInputText (change)="onRefreshDateEcheanceForGroupe()"/>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-calendar id="fin" [showIcon]="true" formControlName="fin"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
@@ -634,7 +644,7 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
-                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                                    [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{plafond?.taux?.taux}}
@@ -659,10 +669,12 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
+                                        <!-- <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet" (onSelect)="changeFamilleActeDate(plafond)" 
+                                            dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
                                     </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{plafond.dateEffet | formatTableValue : 'date'}}
+                                    <ng-template pTemplate="output" >
+                                        {{plafond?.dateEffet | formatTableValue : 'date'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -954,11 +966,12 @@
 </ng-template>
         </p-tabPanel>
         <p-tabPanel header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
-            <app-avenant-incorporation [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
+            <app-avenant-incorporation *ngIf="groupeListes?.length > 0" [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)" [groupesInput]="groupeListes"></app-avenant-incorporation>
+            <app-avenant-incorporation *ngIf="groupeListes?.length === 0" [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
-            [message]="'Veuillier selectionner les adherents à supprimer'" [avenantDate]="exercice.debut">
+            [message]="'Veuillier selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
             </app-avenant-retrait>
         </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">

@@ -1,3 +1,4 @@
+import { TypeDuree } from '../enum/model';
 import {Police} from '../police/model';
 
 export interface Exercice {
@@ -7,4 +8,6 @@ export interface Exercice {
 	police?: Police;
 	deleted?: boolean;
 	actived?: boolean;
+	typeDuree?: TypeDuree;
+	duree?: number,
 }

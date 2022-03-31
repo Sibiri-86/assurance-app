@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
-import {Police, Report} from '../../../store/contrat/police/model';
+import {Police, Rapport, Report} from '../../../store/contrat/police/model';
 import {Exercice} from '../../../store/contrat/exercice/model';
 import {Groupe} from '../../../store/contrat/groupe/model';
 import * as featureAction from '../../../store/contrat/police/actions';
-import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
+import {policeList, rapport, selectByteFile} from '../../../store/contrat/police/selector';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {groupeList} from '../../../store/contrat/groupe/selector';
 import {Adherent, AdherentFamille} from '../../../store/contrat/adherent/model';
@@ -25,7 +25,7 @@ import {Region} from '../../../store/parametrage/region/model';
 import {SecteurActivite} from '../../../store/parametrage/secteur-activite/model';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {select, Store} from '@ngrx/store';
+import {props, select, Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/app.state';
 import {loadPays} from '../../../store/parametrage/pays/actions';
 import * as paysSelector from '../../../store/parametrage/pays/selector';
@@ -95,6 +95,7 @@ import * as featureActionAdherent from '../../../store/contrat/adherent/actions'
 
 import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
 import * as historiqueAvenantSelector from '../../../store/contrat/historiqueAvenant/selector';
+import * as historiqueAvenantAction from '../../../store/contrat/historiqueAvenant/actions';
 import {
   Avenant,
   AvenantModification,
@@ -117,6 +118,7 @@ import {printPdfFile, removeBlanks} from '../../util/common-util';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import * as exerciceSelector from '../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
+// import * from 
 
 @Component({
   selector: 'app-avenant',
@@ -159,10 +161,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   dissplayavenant = false;
   adherentListGroupe: Array<Adherent>;
   isNewGroupe = false;
-
+  stat: Rapport;
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
-
+  viewStat = false;
   garantList$: Observable<Array<Garant>>;
   garantList: Array<Garant>;
 
@@ -292,6 +294,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   etat = 'CREATE';
   entete = '';
   historiqueAvenat: HistoriqueAvenant = {};
+  statList$: Observable<any>;
+  statList: Subscription;
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -1624,6 +1628,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
+        this.policeItem = avenant.police;
         this.initDisplayAvenant();
         this.isAvenantRenouvellement = true;
         this.addAvenant();
@@ -2346,7 +2351,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
         return false;
       case TypeHistoriqueAvenant.MODIFICATION:
-        return false;
+        return true;
       case TypeHistoriqueAvenant.RENOUVELLEMENT:
         if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
           return true;
@@ -2403,7 +2408,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.initDisplayAvenant();
         this.isAvenantRenouvellement = true;
         this.addAvenant();
-        this.entete = 'Avenant de rnouvellement';
+        this.entete = 'Avenant de rnouvellement'.toUpperCase();
+        this.policeItem = rowdata.police;
         break;
       default: break;
     }
@@ -2452,4 +2458,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }
     return isPossible ;
   }
+
+  supprimerAvenant(rowdata: HistoriqueAvenant): void {
+    this.store.dispatch(historiqueAvenantAction.deleteHistoriqueAvenant(rowdata));
+    // this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+  }
+
+  getStatistique(police: Police): void {
+    console.log('get statistique police ....start...');
+    this.policeService.rapportPolice(police).subscribe(
+      (res) => {
+        this.stat = res;
+        this.viewStat = true;
+        console.log('get statistique police ....end...', res);
+      }
+    );
+  }
+
+  hideStat(): void {
+    this.viewStat = false;
+  }
+
 }

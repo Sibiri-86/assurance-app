@@ -1180,20 +1180,33 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     } */
 
   changeTypeDuree(){
-    this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+    this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     console.log('value === ' + this.typeDureeSelected);
-    if (this.groupeForm.get('duree')) {
-      this.onRefreshDateEcheance(this.groupeForm.get('duree').value);
+    if (this.policeForm.get('duree').value) {
+      this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
+      this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value ).subscribe(
+        (res) => {
+          this.policeForm.patchValue({
+            dateEcheance: res.body
+          });
+        }
+      );
     }
     // this.onRefreshDateEcheanceForGroupe();
   }
 
-  onRefreshDateEcheance(value: number) {
-    this.policeForm
-        .get('dateEcheance')
-        .setValue(
-            this.getNewDate(value)
+  onRefreshDateEcheance() {
+    if (this.policeForm.get('typeDuree')) {
+      this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
+        this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value ).subscribe(
+          (res) => {
+            this.policeForm.patchValue({
+              dateEcheance: new Date(res.body)
+            });
+          }
         );
+    }
+     // this.getNewDate(value)
   }
 
 
@@ -1234,30 +1247,41 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.store.dispatch(featureActionsPlafond.loadPlafondConfig({typeBareme: this.bareme, taux: this.taux.taux}));
     }
 
-    changeTypeDureeGroupe(event){
+    changeTypeDureeGroupe(){
       this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
       console.log(this.typeDureeSelected);
-      if (this.dateEcheance && this.groupeForm.get('duree')){
-        this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
-        }
+      if (this.groupeForm.get('duree').value) {
+        this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value, 
+        this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value ).subscribe(
+          (res) => {
+            this.groupeForm.patchValue({
+              dateEcheance: new Date(res.body)
+            });
+          }
+        );
       }
+      /* onRefreshDateEcheance(value: number) {
+        this.policeForm
+          .get("dateEcheance")
+          .setValue(
+            this.getNewDate(value)
+          );
+      } */
+  }
 
-  /* onRefreshDateEcheance(value: number) {
-    this.policeForm
-      .get("dateEcheance")
-      .setValue(
-        this.getNewDate(value)
-      );
-  } */
-
-  onRefreshDateEcheanceForGroupe(value: number) {
-    this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+  onRefreshDateEcheanceForGroupe() {
+    // this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
     console.log(this.typeDureeSelected);
-    this.groupeForm
-      .get('dateEcheance')
-      .setValue(
-        this.getNewDateForGroupe(value)
+    if (this.groupeForm.get('duree').value) {
+      this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value, 
+      this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value ).subscribe(
+        (res) => {
+          this.groupeForm.patchValue({
+            dateEcheance: new Date(res.body)
+          });
+        }
       );
+    }
   }
 
   checkStatus() {

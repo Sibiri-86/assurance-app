@@ -355,41 +355,43 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   updateAvenant(avenantId: string): void {
-    this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
-        (res: HistoriqueAvenant) => {
-            this.historiqueAvenant = res;
-            this.police = res.police;
-            this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-            this.historiqueAveantAdherants.forEach(haa => {
-              if(haa.id) {
-                haa.dateRetrait = new Date(haa.dateRetrait);
-              } else{
-                haa.dateRetrait = null;
-              } 
-            });
-            this.myForm.setValue({
-                id: avenantId,
-                numero: res.numero,
-                dateAvenant: new Date(res.dateAvenant),
-                observation: res.observation,
-                demandeur: res.typeDemandeur,
-                fraisBadges: 0,
-                fraisAccessoires: 0,
-                dateEffet: new Date(res.dateAvenant),
-            });
-            if(this.etat === 'VIEW') {
-              this.myForm.disable();
-            }
-            this.exercice = res.exercice;
-            this.exerciceForm.patchValue({
-                id: res.exercice.id,
-                debut: res.exercice.debut,
-                fin: res.exercice.fin,
-                actived: res.exercice.actived
-            });
-            console.log('avenant de retrait ==== ', this.historiqueAvenant);
-        }
-    );
+    if (avenantId && avenantId !== undefined) {
+      this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+          (res: HistoriqueAvenant) => {
+              this.historiqueAvenant = res;
+              this.police = res.police;
+              this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
+              this.historiqueAveantAdherants.forEach(haa => {
+                if(haa.id) {
+                  haa.dateRetrait = new Date(haa.dateRetrait);
+                } else{
+                  haa.dateRetrait = null;
+                } 
+              });
+              this.myForm.setValue({
+                  id: avenantId,
+                  numero: res.numero,
+                  dateAvenant: new Date(res.dateAvenant),
+                  observation: res.observation,
+                  demandeur: res.typeDemandeur,
+                  fraisBadges: 0,
+                  fraisAccessoires: 0,
+                  dateEffet: new Date(res.dateAvenant),
+              });
+              if(this.etat === 'VIEW') {
+                this.myForm.disable();
+              }
+              this.exercice = res.exercice;
+              this.exerciceForm.patchValue({
+                  id: res.exercice.id,
+                  debut: res.exercice.debut,
+                  fin: res.exercice.fin,
+                  actived: res.exercice.actived
+              });
+              console.log('avenant de retrait ==== ', this.historiqueAvenant);
+          }
+      );
+    }
     // this.viewListeEdit = true;
   }
 

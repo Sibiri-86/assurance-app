@@ -31,6 +31,7 @@ import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -43,19 +44,19 @@ export class AvenantIncorporationComponent implements OnInit{
     @Input() etat: string;
     @Output() adherentFamilleEvent = new EventEmitter();
     @Input() police: Police;
-   //  newgroupe: Groupe;
+    //  newgroupe: Groupe;
     adherentForm: FormGroup;
     myForm: FormGroup;
-    adherentListGroupe: Array<Adherent>;
+    adherentListGroupe: Array<Adherent> = [];
     adherentFamille: AdherentFamille;
-    familles: Array<Adherent>;
+    familles: Array<Adherent> = [];
     newForm: FormGroup;
     adherentFamilleForm: FormGroup;
-    qualiteAssureList1: Array<QualiteAssure>;
-    qualiteAssureList2: Array<QualiteAssure>;
+    qualiteAssureList1: Array<QualiteAssure> = [];
+    qualiteAssureList2: Array<QualiteAssure> = [];
     qualiteAssureList$: Observable<Array<QualiteAssure>>;
     destroy$ = new Subject<boolean>();
-    genreList: Array<Genre>;
+    genreList: Array<Genre> = [];
     genreList$: Observable<Array<Genre>>;
     professionList: Array<Profession>;
     professionList$: Observable<Array<Profession>>;
@@ -65,9 +66,9 @@ export class AvenantIncorporationComponent implements OnInit{
     obj: any = {group: {}, prime: {}};
     adherentSelected: Adherent = {};
     adherentPrincipaux1: Adherent[];
-    @Input() adherentPrincipauxTMP: Array<Adherent>;
-    groupes: Array<Groupe>;
-    adherentPrincipaux: Array<Adherent>;
+    @Input() adherentPrincipauxTMP: Array<Adherent> = [];
+    groupes: Array<Groupe> = [];
+    adherentPrincipaux: Array<Adherent> = [];
     viewListe = false;
     selectedFile: File;
     historiqueAvenant1: HistoriqueAvenant = {};
@@ -89,6 +90,7 @@ export class AvenantIncorporationComponent implements OnInit{
     exerciceList$: Observable<Array<Exercice>>;
     exerciceList: Array<Exercice>;
     viewListeEdit = false;
+    @Input() groupesInput: Array<Groupe>;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -145,7 +147,8 @@ export class AvenantIncorporationComponent implements OnInit{
         private historiqueAvenantService: HistoriqueAvenantService,
         private messageService: MessageService,
         private policeService: PoliceService,
-        private exerciceService: ExerciceService
+        private exerciceService: ExerciceService,
+        private adherentService: AdherentService
     ) {
         this.customForm = this.formBuilder.group({
             groupe: new FormControl(null)
@@ -219,6 +222,11 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log(this.police);
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         this.loadActivedExercice(this.police);
+        console.log('-------------groupesInput--------------------' + this.groupesInput);
+        if (this.groupesInput) {
+            console.log('-------------groupesInput--------------------' + this.groupesInput.length);
+            this.groupePolicy = this.groupesInput;
+        }
     }
 
     addAdherentFamilleToList(): void {
@@ -437,6 +445,15 @@ export class AvenantIncorporationComponent implements OnInit{
     onGroupeChange() {
         this.curentGroupe = this.customForm.controls.groupe.value;
         this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe.id);
+        if (this.groupesInput) {
+            console.log('-------------groupesInput--------------------' + this.groupesInput.length);
+            this.groupePolicy = this.groupesInput;
+            this.adherentService.getAdherentPrincipauxByGroupe(this.curentGroupe.id).subscribe(
+                (res: Adherent[]) => {
+                    this.adherentPrincipaux = res;
+                }
+            );
+        }
     }
     loadGoupeByPolice(): void {
         if (this.police) {
@@ -459,7 +476,7 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     updateAvenant(avenantId: string): void {
-        if (avenantId) {
+        if (avenantId && avenantId !== undefined) {
             this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
                 (res: HistoriqueAvenant) => {
                     this.historiqueAvenant1 = res;
