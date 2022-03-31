@@ -31,6 +31,32 @@ export class ConventionEffects {
             ))
         ));
 
+    updateConvention$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.updateConvention),
+        mergeMap((convention: Convention) =>
+            this.conventionService.$putConvention(convention).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadConvention()
+                ]),
+                catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+        
+        deleteConvention$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteConvention),
+            mergeMap((convention: Convention) =>
+                this.conventionService.$deleteConvention(convention).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadConvention()
+                    ]),
+                    catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
     fetchConvention$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.loadConvention),

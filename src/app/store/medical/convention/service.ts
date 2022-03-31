@@ -20,12 +20,21 @@ $posConvention(convention: Convention): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}`, convention);
   }
 
+$putConvention(convention: Convention): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}`, convention);
+  }
 $getConvention(): Observable<ConventionList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}`).pipe(
       map((response: ConventionList) => response),
       catchError(this.handleError())
     );
+  }
+
+  $deleteConvention(convention: Convention): Observable<any> {
+    // @FIXME: post request
+    return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}`, convention);
   }
 
   private handleError<T>() {

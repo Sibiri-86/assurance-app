@@ -11,25 +11,25 @@ import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-i
 import { Banque } from '../../parametrage/Banques/model';
 
 export interface Intermediaire {
-    id?: string,
-    nom?: string,
-    code?: string,
-    contact?: string,
-    adresseEmail?: string,
-    adressePostale?: string,
-    typeIntermediaire?: TypeIntermediaire,
-    personneRessource?: string,
-    numeroCompteBancaire1?: string,
-    numeroCompteBancaire2?: string,
-    numeroIfu?: string,
-    periodiciteAppelFond?: DimensionPeriode,
-    rccm?: string,
-    taux?: TauxCommissionIntermediaire,
-    secteur?: Secteur,
-    banque1?: Banque,
-    banque2?: Banque
+    id?: string;
+    nom?: string;
+    code?: string;
+    contact?: string;
+    adresseEmail?: string;
+    adressePostale?: string;
+    typeIntermediaire?: TypeIntermediaire;
+    personneRessource?: string;
+    numeroCompteBancaire1?: string;
+    numeroCompteBancaire2?: string;
+    numeroIfu?: string;
+    periodiciteAppelFond?: DimensionPeriode;
+    rccm?: string;
+    taux?: TauxCommissionIntermediaire;
+    secteur?: Secteur;
+    banque1?: Banque;
+    banque2?: Banque;
 }
 
 export interface IntermediaireList{
-    intermediaireDtoList: Array<Intermediaire>
+    intermediaireDtoList: Array<Intermediaire>;
 }

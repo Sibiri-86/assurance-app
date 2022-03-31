@@ -249,6 +249,8 @@ import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/or
 import { AdherentListEditComponent } from './module/contrat/avenant/adherent-list-edit/adherent-list-edit.component';
 import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/effect';
 import { ConventionComponent } from './module/medical/convention/convention.component';
+import { ConventionEffects } from './store/medical/convention/effect';
+import { MedicalPipe } from './module/medical/pipes/medical.pipe';
 
 @NgModule({
     imports: [
@@ -356,7 +358,8 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
-             SecteurEffects, ArrondissementEffects, TierPayantEffects, ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects])
+             SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -450,7 +453,8 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
         BonPriseEnChargeComponent,
         OrdonnaceMedicalComponent,
         AdherentListEditComponent,
-        ConventionComponent
+        ConventionComponent,
+        MedicalPipe
     ],
     providers: [
         {

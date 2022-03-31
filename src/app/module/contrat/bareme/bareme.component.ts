@@ -21,7 +21,8 @@ import * as tauxSelector from "../../../store/parametrage/taux/selector";
 import { DimensionPeriode } from "../../../store/parametrage/dimension-periode/model";
 import { loadDimensionPeriode } from "../../../store/parametrage/dimension-periode/actions";
 import * as dimensionPeriodeSelector from "../../../store/parametrage/dimension-periode/selector";
-import { Status } from '../../common/models/etat.enum';
+import {Status}  from '../../common/models/etat.enum';
+import {Status as St} from '../../../store/global-config/model';
 import { loadQualiteAssure } from "../../../store/parametrage/qualite-assure/actions";
 import * as qualiteAssureSelector from "../../../store/parametrage/qualite-assure/selector";
 import * as featureActionsPlafond from "../../../store/contrat/plafond/action";
@@ -39,6 +40,7 @@ import { removeBlanks } from '../../util/common-util';
 import { Bareme } from 'src/app/store/contrat/plafond/model';
 import { Taux } from 'src/app/store/parametrage/taux/model';
 import { QualiteAssure } from 'src/app/store/parametrage/qualite-assure/model';
+import {status} from '../../../store/global-config/selector';
 @Component({
   selector: 'app-bareme',
   templateUrl: './bareme.component.html',
@@ -82,18 +84,21 @@ export class BaremeComponent implements OnInit, OnDestroy {
   typeEtat = Object.keys(Status).map(key => ({ label: Status[key], value: key }));
   cols: any[];
   displayVoirBareme = false;
+  statusObject$: Observable<St>;
+  displayPrevisualiserParametrageEdition = false;
 
-  constructor(private breadcrumbService: BreadcrumbService, private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
-    private store: Store<AppState>) {
+  constructor(private breadcrumbService: BreadcrumbService, private messageService: MessageService,
+              private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
+              private store: Store<AppState>) {
 
     this.breadcrumbService.setItems([
       {label: 'Barème'}
     ]);
 
 
-  this.baremeForm = this.formBuilder.group({
+    this.baremeForm = this.formBuilder.group({
     // domaine: new FormControl({}),
-    id:new FormControl(null),
+    id: new FormControl(null),
     libelle: new FormControl(null, [Validators.required]),
     description: new FormControl(null, [Validators.required]),
     taux: new FormControl(null, [Validators.required]),
@@ -103,7 +108,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void{
-    this.listeEtat =[{libelle:'ACTIVER', identifiant:1}, {libelle:'DESACTIVER', identifiant:2}];
+    this.listeEtat = [{libelle: 'ACTIVER', identifiant: 1}, {libelle: 'DESACTIVER', identifiant: 2}];
 
     this.baremeList$ = this.store.pipe(select(plafondSelector.baremeList));
     this.store.dispatch(featureActionsPlafond.loadBareme());
@@ -198,8 +203,33 @@ export class BaremeComponent implements OnInit, OnDestroy {
         sousActe: {}
       }
     ];
+    this.statusObject$ = this.store.pipe(select(status));
+    this.checkStatus();
   }
 
+  voirParametrageEdition() {
+    this.displayPrevisualiserParametrageEdition = true;
+  }
+
+  checkStatus() {
+    this.statusObject$.pipe(takeUntil(this.destroy$))
+        .subscribe(statusObj => {
+          if (statusObj) {
+            this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
+            /*
+            if (this.isAdding && statusObj.status === StatusEnum.success) {
+              this.display = false;
+              this.isAdding = false;
+            }
+            this.loading = false;
+            */
+          }
+        });
+  }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({severity, summary, detail});
+  }
 
   expandActe(i){
     console.log(i);
@@ -247,36 +277,38 @@ export class BaremeComponent implements OnInit, OnDestroy {
     //this.plafondActuelleConfiguration[indexGarantie].listeActe[index] = this.clonedPlafondConfiguration[plafond.acte.id];
     //delete this.clonedPlafondConfiguration[plafond.acte.id];
   }
-
   
-
   voirParametrage() {
     this.displayPrevisualiserParametrage = true;
     }
 
-
+    closePrevisualisation(){
+      console.log('yes');
+      this.plafondFamilleActeConstruct = [];
+    }
 
   validerPlafond() {
+    this.dispplayDialogueBareme = false;
     this.bareme = this.baremeForm.value;
-    for(var i=0; i<this.plafondFamilleActeConstruct.length; i++){
-      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond+'');
-      for(var j=0; j<this.plafondFamilleActeConstruct[i].listeActe.length; j++){
-        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond+'');
-        for(var k =0; k<this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond+'');
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe+'');
+    for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
+      for (let j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
+        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
+        for (let k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
+          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
         }
       }
     }
     this.bareme.baremeFamilleActe = this.plafondFamilleActeConstruct;
     console.log(this.bareme);
-    if(!this.baremeForm.value.id){
+    if (!this.baremeForm.value.id){
     this.store.dispatch(featureActionsPlafond.createBareme(this.bareme));
     } else {
     this.store.dispatch(featureActionsPlafond.updateBareme(this.bareme));
     }
     //this.store.dispatch(featureActionsPlafond.createPlafond(this.plafond));
-    this.plafondFamilleActe = [{garantie:{}}];
+    this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
     this.countfamilleActe = 0;
@@ -284,16 +316,18 @@ export class BaremeComponent implements OnInit, OnDestroy {
   }
 
  quitter() {
-  this.dispplayDialogueBareme= false;
+  this.dispplayDialogueBareme = false;
   this.baremeForm.reset();
+  this.plafondFamilleActeConstruct = [];
 }
 
-  modifierBareme(bareme:Bareme) {
+  modifierBareme(bareme: Bareme) {
+    console.log(bareme);
     this.baremeForm.patchValue(bareme);
     this.plafondFamilleActeConstruct = bareme.baremeFamilleActe;
     // changer les dates effet à la date du jour
     for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++) {
-      this.plafondFamilleActeConstruct[i].dateEffet= new Date();
+      this.plafondFamilleActeConstruct[i].dateEffet = new Date();
       for (let j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
         this.plafondFamilleActeConstruct[i].listeActe[j].dateEffet = new Date();
         for (let k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++) {
@@ -301,7 +335,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.dispplayDialogueBareme= true;
+    this.dispplayDialogueBareme = true;
 }
 
   supprimerBareme(bareme: Bareme) {
@@ -331,30 +365,30 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
-    for( var i=0; i<this.plafondFamilleActeConstruct.length; i++){
+    for ( let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
       /** verifier si la garantie existe deja, juste le modifier */
-      if(this.plafondFamilleActeConstruct[i].garantie.id===rowData.garantie.id) {
+      if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id) {
         console.log('oui');
         this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
         this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         this.plafondFamilleActeTemp.listeActe = this.plafondActe;
         console.log(i);
         /** enregistrer */
-        this.plafondFamilleActeConstruct[i]=this.plafondFamilleActeTemp;
+        this.plafondFamilleActeConstruct[i] = this.plafondFamilleActeTemp;
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
         }
     }
 
     /** si la garantie n'est pas encore ajouté, ajouter */
-    this.plafondFamilleActeConstruct.forEach( async (element,index)=>{
-    if(element.garantie.id===rowData.garantie.id) {
+    this.plafondFamilleActeConstruct.forEach( async (element, index) => {
+    if (element.garantie.id === rowData.garantie.id) {
     console.log('oui');
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
     console.log(index);
-    this.plafondFamilleActeConstruct[index]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     return;
     }
@@ -365,7 +399,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
-    this.plafondFamilleActeConstruct[this.countfamilleActe]=this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     console.log(this.countfamilleActe);
     this.countfamilleActe++;
@@ -379,7 +413,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
  }
   
   onRowEditInit(plafondFamilleActe: PlafondFamilleActe, montantPlafondFamilleActe) {
-    if(this.plafondFamilleActe[0].montantPlafond){
+    if (this.plafondFamilleActe[0].montantPlafond){
     montantPlafondFamilleActe = this.plafondFamilleActe[0].montantPlafond.toLocaleString('fr');
     }
     this.clonedPlafondFamilleActe[plafondFamilleActe.garantie.id] = {
@@ -442,20 +476,20 @@ changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
   this.plafondSousActe = [];
   this.displayActe = true;
- if(this.plafondActe.length===0){
-    for(var j=0; j<this.acteList.length; j++){
-    if(this.acteList[j].idTypeGarantie === garantie.value.id) {
+  if (this.plafondActe.length === 0){
+    for (let j = 0; j < this.acteList.length; j++){
+    if (this.acteList[j].idTypeGarantie === garantie.value.id) {
       this.plafondSousActe = [];
       // recuperer les sous actes de l'acte
-      for(var i=0; i<this.sousActeList.length; i++){
-        if(this.sousActeList[i].idTypeActe === this.acteList[j].id) {
-          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe:this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0})
+      for (let i = 0; i < this.sousActeList.length; i++){
+        if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0})
         }
       }
-      this.plafondActe.push({id: this.acteList[j].id, acte:this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe});
+      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe});
     }
   }
-  console.log(this.plafondActe);
+    console.log(this.plafondActe);
   }
 }
 
@@ -463,7 +497,7 @@ changeGarantie(garantie, indexLigne: number) {
 
 
   ajouterBareme(){
-    this.dispplayDialogueBareme= true;
+    this.dispplayDialogueBareme = true;
   }
 
   ngOnDestroy() {

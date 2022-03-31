@@ -60,6 +60,8 @@ import * as featureActionBonPriseEnCharge from '../../../store/medical/bon-prise
 import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/selector';
 import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
 import { Convention } from 'src/app/store/medical/convention/model';
+import * as conventionSelector from 'src/app/store/medical/convention/selector';
+import * as conventionAction from 'src/app/store/medical/convention/actions';
 
 
 @Component({
@@ -90,11 +92,16 @@ export class ConventionComponent implements OnInit, OnDestroy {
   cols: any[];
   conventionList$: Observable<Array<Convention>>;
   conventionList: Array<Convention>;
+  conventionListFilter: Array<Convention>;
   displayFormConvention = false;
+  convention: Convention = {};
+  statusObject$: Observable<Status>;
 
   constructor( private store: Store<AppState>,
-               private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private confirmation: ConfirmationService,
+               private formBuilder: FormBuilder,
+               private messageService: MessageService,
+               private breadcrumbService: BreadcrumbService) {
      this.breadcrumbService.setItems([{ label: 'Convention' }]);
 }
 
@@ -104,6 +111,15 @@ export class ConventionComponent implements OnInit, OnDestroy {
       montant: new FormControl(),
       sousActe: new FormControl(),
       prestataire: new FormControl()
+    });
+
+    this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
+    this.store.dispatch(conventionAction.loadConvention());
+    this.conventionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.conventionList = value.slice();
+        this.conventionListFilter = this.conventionList;
+      }
     });
 
     this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
@@ -140,6 +156,8 @@ export class ConventionComponent implements OnInit, OnDestroy {
         this.acteListFilter = this.acteList;
       }
     });
+    this.statusObject$ = this.store.pipe(select(status));
+    this.checkStatus();
   }
 
 
@@ -148,22 +166,85 @@ export class ConventionComponent implements OnInit, OnDestroy {
     this.displayFormConvention = true;
   }
 
-  supprimerConvention() {
-
+  annulerSaisie() {
+    this.closeDialog();
   }
 
-  annulerSaisie() {
+  closeDialog(){
+    this.conventionForm.reset();
     this.displayFormConvention = false;
   }
 
   onCreate(){
+    this.convention = this.conventionForm.value;
+    if (this.convention.id){
+      this.store.dispatch(conventionAction.updateConvention(this.convention));
+    }else{
+    this.store.dispatch(conventionAction.createConvention(this.convention));
+    }
+    this.conventionForm.reset();
+    this.convention = {};
+  }
+
+
+  selectPrestataire($event) {
+    console.log($event.value);
+    this.conventionListFilter = this.conventionList.filter(element1 => element1.prestataire.id === $event.value.id);
+  }
+
+  editer(convention: Convention){
+  this.conventionForm.patchValue(convention);
+  this.displayFormConvention = true;
+  }
+
+  supprimer(convention: Convention){
+    this.confirmation.confirm({
+      message: "voulez-vous supprimer la convention?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(conventionAction.deleteConvention(convention));
+      },
+    });
 
   }
 
-  closeDialog(){
+  supprimerConvention(){
+    this.confirmation.confirm({
+      message: 'voulez-vous supprimer la convention?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        //this.store.dispatch(conventionAction.deleteConvention(convention));
+      },
+    });
 
   }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  checkStatus() {
+    this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
+      if (statusObj) {
+        // this.loading = false;
+        this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
+        /*
+          if (this.isAdding && statusObj.status === StatusEnum.success) {
+            this.display = false;
+            this.isAdding = false;
+          }
+          this.loading = false;
+          */
+      }
+    });
+  }
+
   ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Now let's also unsubscribe from the subject itself:
+    this.destroy$.unsubscribe();
   }
 
 }

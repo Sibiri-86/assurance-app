@@ -109,8 +109,8 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
 
   constructor(private formBuilder: FormBuilder,
-    private store: Store<AppState>, private messageService: MessageService, 
-    private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) { 
+              private store: Store<AppState>, private messageService: MessageService, 
+              private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) { 
       this.intermediaireForm = this.formBuilder.group({
         id: new FormControl(''),
         code: new FormControl(''),
@@ -140,7 +140,7 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
 
 ngOnInit(): void {
     this.intermediaireList = [];
-  this.entityValidations = [
+    this.entityValidations = [
     {
       field: 'nom',
       validations: [
@@ -316,9 +316,9 @@ ngOnInit(): void {
     }
   ];
 
-  this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
-  this.store.dispatch(banqueAction.loadBanque());
-  this.banqueList$.pipe(takeUntil(this.destroy$))
+    this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
+    this.store.dispatch(banqueAction.loadBanque());
+    this.banqueList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.banqueList = value.slice();
@@ -326,18 +326,18 @@ ngOnInit(): void {
   });
 
   
-  this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
-  this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
-  this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+    this.tauxCommissionIntermediaireList$=this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
+    this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
+    this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.tauxCommissionIntermediaireList = value.slice();
               }
   });
 
-  this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
-  this.store.dispatch(loadTaux());
-  this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+    this.store.dispatch(loadTaux());
+    this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if (value) {
 
       this.tauxList = value.slice();
@@ -345,9 +345,9 @@ ngOnInit(): void {
     }
   });
 
-  this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
-  this.store.dispatch(arrondissementAction.loadArrondissement());
-  this.arrondissementList$.pipe(takeUntil(this.destroy$))
+    this.arrondissementList$=this.store.pipe(select(arrondissementSelector.arrondissementList));
+    this.store.dispatch(arrondissementAction.loadArrondissement());
+    this.arrondissementList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 //this.loading = false;
@@ -355,9 +355,9 @@ ngOnInit(): void {
               }
   });
 
-  this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
-  this.store.dispatch(secteurAction.loadSecteur());
-  this.secteurList$.pipe(takeUntil(this.destroy$))
+    this.secteurList$=this.store.pipe(select(secteurSelector.secteurList));
+    this.store.dispatch(secteurAction.loadSecteur());
+    this.secteurList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 //this.loading = false;
@@ -365,27 +365,27 @@ ngOnInit(): void {
               }
   });
 
-  this.typeIntermediaireList$=this.store.pipe(select(typeIntermediaireSelector.typeIntermediaireList));
-  this.store.dispatch(loadTypeIntermediaire());
-  this.typeIntermediaireList$.pipe(takeUntil(this.destroy$))
+    this.typeIntermediaireList$=this.store.pipe(select(typeIntermediaireSelector.typeIntermediaireList));
+    this.store.dispatch(loadTypeIntermediaire());
+    this.typeIntermediaireList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.typeIntermediaireList = value.slice();
               }
   });
 
-  this.intermediaireList$=this.store.pipe(select(intermediaireList));
-  this.store.dispatch(loadIntermediaire());
-  this.intermediaireList$.pipe(takeUntil(this.destroy$))
+    this.intermediaireList$=this.store.pipe(select(intermediaireList));
+    this.store.dispatch(loadIntermediaire());
+    this.intermediaireList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.intermediaireList = value.slice();
               }
   });
 
-  this.paysList$=this.store.pipe(select(paysSelector.paysList));
-  this.store.dispatch(loadPays());
-  this.paysList$.pipe(takeUntil(this.destroy$))
+    this.paysList$=this.store.pipe(select(paysSelector.paysList));
+    this.store.dispatch(loadPays());
+    this.paysList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.paysList = value.slice();
@@ -393,52 +393,52 @@ ngOnInit(): void {
   });
 
 
-  this.regionList$=this.store.pipe(select(regionSelector.regionList));
-  this.store.dispatch(loadRegion());
-  this.regionList$.pipe(takeUntil(this.destroy$))
+    this.regionList$=this.store.pipe(select(regionSelector.regionList));
+    this.store.dispatch(loadRegion());
+    this.regionList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.regionList = value.slice();
               }
   });
 
-  this.departementList$=this.store.pipe(select(departementSelector.departementList));
-  this.store.dispatch(loadDepartement());
-  this.departementList$.pipe(takeUntil(this.destroy$))
+    this.departementList$=this.store.pipe(select(departementSelector.departementList));
+    this.store.dispatch(loadDepartement());
+    this.departementList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.departementList = value.slice();
               }
   });
 
-  this.communeList$=this.store.pipe(select(communeSelector.communeList));
-  this.store.dispatch(loadCommune());
-  this.communeList$.pipe(takeUntil(this.destroy$))
+    this.communeList$=this.store.pipe(select(communeSelector.communeList));
+    this.store.dispatch(loadCommune());
+    this.communeList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.communeList = value.slice();
               }
   });
 
-  this.secteurActiviteList$=this.store.pipe(select(secteurActiviteSelector.secteurActiviteList));
-  this.store.dispatch(loadSecteurActivite());
-  this.secteurActiviteList$.pipe(takeUntil(this.destroy$))
+    this.secteurActiviteList$=this.store.pipe(select(secteurActiviteSelector.secteurActiviteList));
+    this.store.dispatch(loadSecteurActivite());
+    this.secteurActiviteList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.secteurActiviteList = value.slice();
               }
   });
 
-  this.dimensionPeriodeList$=this.store.pipe(select(dimensionPeriodeSelector.dimensionPeriodeList));
-  this.store.dispatch(loadDimensionPeriode());
-  this.dimensionPeriodeList$.pipe(takeUntil(this.destroy$))
+    this.dimensionPeriodeList$=this.store.pipe(select(dimensionPeriodeSelector.dimensionPeriodeList));
+    this.store.dispatch(loadDimensionPeriode());
+    this.dimensionPeriodeList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
                 this.dimensionPeriodeList = value.slice();
               }
   });
 
-  this.statusObject$ = this.store.pipe(select(status));
+    this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
 
 }
@@ -527,8 +527,6 @@ annulerSaisie() {
 }
 
 editIntermediaire(intermediaire: Intermediaire) {
-//this.intermediaireForm.get('id').setValue(intermediaire.id);
-//this.intermediaireForm.get('code').setValue(intermediaire.code);
 this.intermediaire = {...intermediaire};
 console.log(this.intermediaire);
 this.intermediaireForm.patchValue(this.intermediaire);

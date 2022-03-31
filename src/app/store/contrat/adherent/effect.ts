@@ -4,6 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { AdherentService } from './service';
 import * as featureActions from './actions';
+import * as featureActionsPolice from '../police/actions';
 import {Adherent, AdherentFamille} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
@@ -38,7 +39,8 @@ export class AdherentEffects {
             this.AdherentService.posAdherentWithFamille(adherent).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadAdherent({idGroupe: adherent.adherent.groupe.id})
+                    featureActions.loadAdherent({idGroupe: adherent.adherent.groupe.id}),
+                    featureActionsPolice.loadRapport(adherent.adherent.groupe.police),
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

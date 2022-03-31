@@ -15,17 +15,14 @@
                 -->
 			</p-toolbar>
             
-            <p-table #dt [value]="conventionList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="conventionListFilter" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
-                        <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
-                        </span>
+                        <p-dropdown dataKey="id" inputId="prestataire"  [autoDisplayFirst]="false" placeholder="Selectionnez le prestataire" [filter]="true" showClear="true" [options]="prestataireList" optionLabel="libelle" appendTo="body" (onChange)="selectPrestataire($event)"></p-dropdown>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -35,7 +32,7 @@
                         </th>
                         <th pSortableColumn="duree" style="min-width:100px">prestataire<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:200px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Montant<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Montant en FCFA<p-sortIcon field="nom"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -47,11 +44,11 @@
                         <td><span class="p-column-title" style="min-width:200px">{{convention.sousActe.libelle}}</span>
                         <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{convention.montant}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.montant | formatTableValue: 'number':true}}</span>
                         </td>
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editer(convention)"></button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(convention)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-info" (click)="supprimer(convention)"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -63,19 +60,19 @@
             </p-table>
         </div> 
         
-        <p-dialog [maximizable]="true"   [(visible)]="displayFormConvention" header="Ajouter convention" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()" [style]="{width: '1200px'}">
+        <p-dialog [maximizable]="true"   [(visible)]="displayFormConvention" header="Ajouter convention" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()" [style]="{width: '1000px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                 <form (ngSubmit)="onCreate()"  [formGroup]="conventionForm">     
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="lastname2">Famille acte</label>
-                        <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                        <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)" appendTo="body"></p-dropdown>
                     </div>
                     
                     <div class="p-field p-col">
                         <label for="lastname2">Acte</label>
-                        <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                        <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" optionLabel="libelle" (onChange)="selectActe($event)" appendTo="body"></p-dropdown>
                     </div> 
                     
                     <div class="p-field p-col">
@@ -83,14 +80,14 @@
                         <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
                                     showClear="true" [options]="sousActeList"
                                     formControlName="sousActe"  [autoDisplayFirst]="false"
-                                    optionLabel="libelle"></p-dropdown>    
+                                    optionLabel="libelle" appendTo="body"></p-dropdown>    
                     </div>
                 </div>
                 
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-4">
                         <label for="lastname2">Prestataire</label>
-                        <p-dropdown dataKey="id" inputId="prestataire"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle"></p-dropdown>
+                        <p-dropdown dataKey="id" inputId="prestataire"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle" appendTo="body"></p-dropdown>
                     </div> 
                     <div class="p-field p-col-4">
                         <label for="montant">Montant</label>
@@ -111,5 +108,6 @@
             </div> 
         </ng-template>
         </p-dialog>
+        <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
 </div>

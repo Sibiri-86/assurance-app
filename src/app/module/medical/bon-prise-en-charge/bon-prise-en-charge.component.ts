@@ -114,11 +114,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   bonPriseEnCharge: BonPriseEnCharge = {};
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
+  typeBon: Array<SelectItem>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Bon de prise en charge' }]);
+                this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
 
    get prestation() {
@@ -167,6 +168,8 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.typeBon = [{label: 'PRISE-EN-CHARGE', value: 'PRISEENCHARGE'},
+    {label: 'ENTENTE-PREALABLE', value: 'ENTENTEPREALABLE'}];
     //this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse));
 
     //this.prestationList = [];
@@ -182,7 +185,8 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
       numeroPolice: new FormControl({value: '', disabled: true}),
-      prestataire: new FormControl(Validators.required),
+      prestataire: new FormControl('', Validators.required),
+      typeBon: new FormControl('', Validators.required),
       souscripteur: new FormControl({value: '', disabled: true}),
       prestation: this.formBuilder.array([])
     });
@@ -320,7 +324,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref, 
+        this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE}));
       },
     });
@@ -377,7 +381,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationListPrefinancement = pref.prestation;
     this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
   }
-  
+
   supprimerPrestation(prestation: Prestation) {
     this.confirmationService.confirm({
       message: 'voulez-vous supprimer la prestation',
@@ -434,7 +438,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     console.log(data);
     this.prestationList[ri].debours = data.coutUnitaire * Number(data.nombreActe);
     this.prestationList[ri].baseRemboursement =   this.prestationList[ri].debours;
-    this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement*(this.prestationList[ri].taux.taux/100); 
+    this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement*(this.prestationList[ri].taux.taux/100);
     */
   }
 
@@ -503,10 +507,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
 
    valider(bon: BonPriseEnCharge){
      console.log(bon);
-    this.confirmationService.confirm({
-      message: "Etes vous sûre de vouloir valider?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+     this.confirmationService.confirm({
+      message: 'Etes vous sûre de vouloir valider?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionBonPriseEnCharge.valideBon(bon));
       },
@@ -515,9 +519,9 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
 
    inValider(bon: BonPriseEnCharge){
     this.confirmationService.confirm({
-      message: "Etes vous sûre de vouloir valider?",
-      header: "Confirmation",
-      icon: "pi pi-exclamation-triangle",
+      message: 'Etes vous sûre de vouloir valider?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionBonPriseEnCharge.invalideBon(bon));
       },

@@ -579,7 +579,7 @@
                                             <p-inputNumber [(ngModel)]="sousActe.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="plafond/acte"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{sousActe.montantPlafond}}
+                                            {{sousActe.montantPlafondParActe}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -2675,12 +2675,15 @@
                             <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="image" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
                         </div>
                     </ng-template>
-                    <!--
+                    
                     <ng-template pTemplate="right">
-                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-                        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+                        <p-dropdown inputId="garant" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="garantList"
+                                        [autoDisplayFirst]="false"
+                                        placeholder="Selectionnez le garant"
+                                        optionLabel="nom"></p-dropdown>
                     </ng-template>
-                    -->
+                    
                 </p-toolbar>
                 <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                          [rowHover]="true" dataKey="id"

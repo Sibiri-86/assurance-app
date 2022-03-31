@@ -8,6 +8,7 @@ import {Bareme, Plafond} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 import { Groupe } from '../groupe/model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class PlafondEffects {
@@ -129,7 +130,9 @@ this.actions$.pipe(
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                    featureActions.loadBareme()
                 ]),
-                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                catchError((error: HttpErrorResponse) => {
+                    return of(GlobalConfig.setStatus(StatusEnum.error, null, error));
+                })
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));

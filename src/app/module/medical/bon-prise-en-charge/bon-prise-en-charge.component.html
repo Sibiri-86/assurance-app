@@ -36,7 +36,7 @@
                         <th pSortableColumn="duree" style="min-width:100px">Numeros<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:200px">Nom adhérent<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Prenom adhérent<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Qualite assuré<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Type bon<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Numéro police<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Prestataire<p-sortIcon field="duree"></p-sortIcon></th>
@@ -53,7 +53,7 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{bon.adherent.prenom}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.adherent.qualiteAssure.libelle}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bon.typeBon | medical:'displayTypeBon'}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{bon.police.numero}}</span>
                         </td>
@@ -201,6 +201,17 @@
                             <label for="souscripteur">Souscripteur</label>
                             <input id="souscripteurAdherent" class="champ" type="text" formControlName="souscripteur" pInputText>
                         </div>
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="medecin">Type bon</label>
+                            <p-dropdown inputId="bon"  [filter]="true"
+                                        showClear="true" [options]="typeBon"
+                                        formControlName="typeBon"  [autoDisplayFirst]="false"
+                                        ></p-dropdown>
+                        </div>
+                        
                     </div>
                     
                     <div class="p-field p-col-2"></div>
@@ -396,7 +407,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length || prestationForm?.invalid" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length || !prestationForm?.valid" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                </form> 
