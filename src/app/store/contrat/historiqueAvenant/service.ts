@@ -51,7 +51,9 @@ updateHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
 
 deleteHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/${historiqueAvenant.id}`, null);
+    console.clear();
+    console.log('suppression en cours ....');
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/delete/${historiqueAvenant.id}`);
 }
 
 getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAvenantAdherant[]> {

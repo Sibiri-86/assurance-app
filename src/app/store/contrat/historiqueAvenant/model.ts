@@ -91,7 +91,6 @@ export class Avenant {
     adhrents?: Adherent[];
     historiqueAvenantAdherants?: HistoriqueAvenantAdherant[];
     historiqueAvenantAdherantDels?: HistoriqueAvenantAdherant[];
-    groupe?: Groupe;
     groupes?: Groupe[];
     historiqueAvenant?: HistoriqueAvenant;
     historiquePlafondGroupe?: HistoriquePlafond;
@@ -104,6 +103,7 @@ export class Avenant {
     plafondGroupeActes?: PlafondActe[];
     plafondGroupeSousActes?: PlafondSousActe[];
     plafondGroupe?: any;
+    historiqueGroupes?: HistoriqueGroupe[];
 }
 
 export class HistoriqueGroupe {

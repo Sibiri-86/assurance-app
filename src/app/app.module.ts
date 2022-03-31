@@ -224,9 +224,6 @@ import { AdherentListComponent } from './module/contrat/police/adherent-list/adh
 import { AvenantSuspensionComponent } from './module/contrat/avenant/avenant-suspension/avenant-suspension.component';
 import { AvenantResiliationComponent } from './module/contrat/avenant/avenant-resiliation/avenant-resiliation.component';
 import {BeginLowerCasePipe} from './module/pipes/begin-lower-case.pipe';
-import { PlafondFamilleActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-famille-acte.component';
-import { PlafondActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-acte.component';
-import { PlafondSousActeComponent } from './module/contrat/avenant/avenant-modification.component/plafond-famille-acte/plafond-acte/plafond-sous-acte/plafond-sous-acte.component';
 import { PrefinancementValideComponent } from './module/prestation/sinistre/prefinancement-valide/prefinancement-valide.component';
 import { OrdreReglementEditionComponent } from './module/prestation/ordre-reglement/ordre-reglement-edition/ordre-reglement-edition.component';
 import { OrdreReglementValideComponent } from './module/prestation/ordre-reglement/ordre-reglement-valide/ordre-reglement-valide.component';
@@ -430,9 +427,6 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
         AvenantSuspensionComponent,
         AvenantResiliationComponent,
         BeginLowerCasePipe,
-        PlafondFamilleActeComponent,
-        PlafondActeComponent,
-        PlafondSousActeComponent,
         PrefinancementValideComponent,
         OrdreReglementEditionComponent,
         OrdreReglementValideComponent,

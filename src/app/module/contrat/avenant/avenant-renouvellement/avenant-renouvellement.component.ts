@@ -18,6 +18,7 @@ import {
     Avenant,
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
+    HistoriqueGroupe,
     TypeDemandeur,
     TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
@@ -193,6 +194,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     adherentList$: Observable<Array<Adherent>>;
     adherentList: Array<Adherent>;
     displayDialogFormAdherent = false;
+    historiqueGroupes: HistoriqueGroupe[] = [];
+    numero: number;
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -226,12 +229,16 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
 
         this.exerciceForm = this.formBuilder.group({
-            debut: new FormControl(''),
+            id: new FormControl(null),
+            debut: new FormControl('', [Validators.required]),
             fin: new FormControl('', [Validators.required]),
             actived: new FormControl('', [Validators.required]),
+            typeDuree: new FormControl('', [Validators.required]),
+            duree: new FormControl('', [Validators.required]),
         });
 
         this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
             prime: new FormControl('', [Validators.required]),
             primeEmploye: new FormControl(''),
             primeConjoint: new FormControl(''),
@@ -242,7 +249,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             primeAnnuelle: new FormControl('')
         });
         this.policeForm = this.formBuilder.group({
-            id: new FormControl(''),
+            id: new FormControl(null),
             garant: new FormControl('', [Validators.required]),
             intermediaire: new FormControl('', [Validators.required]),
             // numero: new FormControl('',[Validators.required]),
@@ -274,6 +281,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
 
         this.myForm = this.formBuilder.group({
+            id: new FormControl(null),
             numero: new FormControl(null),
             dateAvenant: new FormControl(null, [Validators.required]),
             dateEffet: new FormControl(null, ),
@@ -737,13 +745,6 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.setGroupeAndPrime(this.groupeSelected);
     }
 
-    changeTypeDureeGroupe(event){
-        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
-        console.log(this.typeDureeSelected);
-        if (this.dateEcheance && this.groupeForm.get('duree')){
-            // this.onRefreshDateEcheanceForGroupe(this.groupeForm.get('duree').value);
-        }
-    }
     loadGroupe(police: Police): void {
         this.groupeList$ = this.store.pipe(select(groupeList));
         this.store.dispatch(loadGroupe({policeId: this.police.id}));
@@ -820,18 +821,6 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log('++++---------  this.groupeForm.value ------++++');
         console.log(this.groupeForm.value);
         // this.selectedTypePrime = group.prime.typePrime;
-    }
-
-    onRefreshDateEcheanceForGroupe() {
-        if (this.groupeForm.get('duree').value !== null && this.groupeForm.get('typeDuree').value !== null
-            && this.groupeForm.get('duree').value !== null) {
-            this.historiqueAvenantService.getDateFin(this.groupeForm.get('dateEffet').value,
-                this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value)
-                .subscribe((res) => {
-                    this.groupeForm.patchValue({dateEcheance: res.body});
-                    console.log('date fin = ' + this.groupeForm.get('dateEcheance').value);
-                });
-        }
     }
 
     getNewDateForGroupe(value: number): Date {
@@ -1024,6 +1013,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
         this.objet.familles = this.adherentFamilleListe;
         this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
+        //this.historiqueAvenant.id = this.numero;
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
         this.historiqueAvenant.exercice = this.exerciceForm.value;
@@ -1048,7 +1038,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
         this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
         this.objet.groupes = this.groupeListes;
-        this.objet.groupe = this.groupeForm.value;
+        /* this.objet.groupe = this.groupeForm.value;
         this.objet.groupe.prime = this.primeForm.value;
         this.objet.groupe.typePrime = this.primeForm.get('prime').value;
         this.objet.groupe.police = this.police;
@@ -1069,11 +1059,11 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
         if (this.objet.groupe.prime.primeFamille) {
             this.objet.groupe.prime.primeFamille = removeBlanks(this.objet.groupe.prime.primeFamille + '');
-        }
+        } */
         console.log('*********************aveanant*********************************');
         console.log(this.objet);
         console.log('*********************avenant.groupe.prime*********************************');
-        console.log(this.objet.groupe);
+    
         this.eventEmitterM.emit(this.objet);
     }
 
@@ -1163,12 +1153,17 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
     }
     changeTypeDuree(){
-        this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
-        console.log('value === ' + this.typeDureeSelected);
-        if (this.groupeForm.get('duree')) {
-            this.onRefreshDateEcheance(this.groupeForm.get('duree').value);
+        console.log(this.exerciceForm.get('typeDuree').value);
+        if (this.exerciceForm.get('debut').value && this.exerciceForm.get('typeDuree').value && this.exerciceForm.get('duree').value) {
+            this.historiqueAvenantService.getDateFin(this.exerciceForm.get('debut').value, 
+            this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value ).subscribe(
+              (res) => {
+                this.exerciceForm.patchValue({
+                  fin: new Date(res.body)
+                });
+              }
+            );
         }
-        this.onRefreshDateEcheanceForGroupe();
     }
 
     private loadActivedExercice(police: Police): void {
@@ -1359,40 +1354,119 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     updateAvenant(avenantId: string): void {
-        if (avenantId) {
+        console.log(' avenantId ===== ' + avenantId);
+        if (avenantId && avenantId !== undefined) {
             this.historiqueAvenantService.getsHistoriqueAvenantModifReview(avenantId).subscribe(
                 (res: Avenant) => {
                   console.log('res ============ ');
                   console.log(res);
+                  this.objet.groupes = res.groupes;
                   this.police = res.police;
-                    // this.historiqueAvenant1 = res;
+                    this.historiqueGroupes = res.historiqueGroupes;
                     this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-                    this.myForm.setValue({
+                    this.numero = res.historiqueAvenant.numeroGarant;
+                    this.myForm.patchValue({
                         id: res.historiqueAvenant.id,
                         numero: res.historiqueAvenant.numero,
-                        dateEffet: res.historiqueAvenant.dateAvenant,
-                        dateAvenant: res.historiqueAvenant.dateAvenant,
+                        dateEffet: new Date(res.historiqueAvenant.dateAvenant),
+                        dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
                         observation: res.historiqueAvenant.observation,
                         demandeur: res.historiqueAvenant.typeDemandeur,
                         fraisBadges: res.historiqueAvenant.fraisBadges,
-                        fraisAccessoires: res.historiqueAvenant.fraisAccessoires
+                        fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
+                      
                     });
+                    this.objet.historiqueAvenant = res.historiqueAvenant;
                     this.exercice = res.historiqueAvenant.exercice;
                     this.exerciceForm.setValue({
                         id: res.historiqueAvenant.exercice.id,
                         debut: res.historiqueAvenant.exercice.debut,
                         fin: res.historiqueAvenant.exercice.fin,
-                        actived: res.historiqueAvenant.exercice.actived
+                        actived: res.historiqueAvenant.exercice.actived,
+                        typeDuree: res.historiqueAvenant.exercice.typeDuree,
+                        duree: res.historiqueAvenant.exercice.duree,
                     });
-    
+                    this.exerciceForm.disable();
                     if (this.etat === 'VIEW') {
                       this.myForm.disable();
-                      this.exerciceForm.disable();
+                      this.groupeForm.disable();
+                      this.primeForm.disable();
                       this.groupeForm.disable();
                     }
                 }
             );
-            // this.viewListeEdit = true;
+            console.clear();
+            console.log('OBJET ======== ', this.objet);
+        }
+    }
+
+    getDateEcheance(): void {
+        console.log('+++++++++++durée+++++++++++' + this.exerciceForm.get('duree').value);
+        if (this.exerciceForm.get('debut').value !== null && this.exerciceForm.get('typeDuree').value !== null
+            && this.exerciceForm.get('duree').value !== null && this.exerciceForm.get('duree').value !== '') {
+          this.historiqueAvenantService.getDateFin(this.policeForm.get('debut').value,
+              this.exerciceForm.get('typeDuree').value, this.exerciceForm.get('duree').value)
+              .subscribe((res) => {
+                this.exerciceForm.patchValue({dateEcheance: new Date(res.body)});
+                console.log('date fin = ' + this.exerciceForm.get('fin').value);
+              });
         }
       }
+
+      changeTypeDureeGroupe(){
+        // this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+        console.log(this.typeDureeSelected);
+        if (this.exerciceForm.get('typeDuree').value) {
+          this.historiqueAvenantService.getDateFin(this.exerciceForm.get('debut').value, 
+          this.exerciceForm.get('typeDuree').value, this.exerciceForm.get('duree').value ).subscribe(
+            (res) => {
+              this.exerciceForm.patchValue({
+                fin: new Date(res.body)
+              });
+            }
+          );
+        }
+        /* onRefreshDateEcheance(value: number) {
+          this.policeForm
+            .get("dateEcheance")
+            .setValue(
+              this.getNewDate(value)
+            );
+        } */
+    }
+  
+    onRefreshDateEcheanceForGroupe() {
+      // this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
+      console.log(this.exerciceForm.get('duree').value);
+      if (this.exerciceForm.get('duree').value) {
+        this.historiqueAvenantService.getDateFin(this.exerciceForm.get('debut').value, 
+        this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value ).subscribe(
+          (res) => {
+            this.exerciceForm.patchValue({
+              fin: new Date(res.body)
+            });
+          }
+        );
+      }
+    }
+
+    changeFamilleActeDate(plafondFamilleActe: PlafondFamilleActe): void {
+        console.log('famille acte date effe change ==== ' + plafondFamilleActe.dateEffet);
+        plafondFamilleActe.listeActe.forEach(plafondActe => {
+            plafondActe.dateEffet = plafondFamilleActe.dateEffet;
+            plafondActe.listeSousActe.forEach(sousActe => {
+                sousActe.dateEffet = plafondFamilleActe.dateEffet;
+            });
+        });
+    }
+
+    changeFamilleActeTaux(plafondFamilleActe: PlafondFamilleActe): void {
+        console.log('famille acte date effe change ==== ' + plafondFamilleActe.taux.taux);
+        plafondFamilleActe.listeActe.forEach(plafondActe => {
+            plafondActe.taux = plafondFamilleActe.taux;
+            plafondActe.listeSousActe.forEach(sousActe => {
+                sousActe.taux = plafondFamilleActe.taux;
+            });
+        });
+    }
 }
