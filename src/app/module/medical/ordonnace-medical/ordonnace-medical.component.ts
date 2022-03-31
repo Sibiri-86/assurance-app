@@ -116,7 +116,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     pathologieList$: Observable<Array<Pathologie>>;
     produitPharmaceutiqueList$: Observable<Array<ProduitPharmaceutique>>;
     produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
-    TierPayantSelected: SinistreTierPayant[];
+    ordonnanceSelected: OrdonnanceMedical[];
     familleActeEnCours$: Observable<PlafondFamilleActe[]>;
     familleActeEnCours: Array<PlafondFamilleActe>;
     familleActeEnCour: PlafondFamilleActe;
@@ -151,12 +151,22 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService) {
-        this.breadcrumbService.setItems([{ label: 'Ordonnance Médical' }]);
+        this.breadcrumbService.setItems([{ label: 'Ordonnance Médicale' }]);
     }
 
     onCreate() {
-        /** fonction pour enregistrer la prestation */
-        console.log('creation tierPayant');
+        /** fonction pour enregistrer l'ordonnance médicale*/
+        console.log('creation ordonnance médicale');
+        if(this.prestationForm.get('id').value) {
+        this.prestationForm.value.ordonnanceMedicalProduitPharmaceutiques.forEach(element => { const el: any = element.typeQuantite;
+            element.typeQuantite = el.value;
+            console.log('******************element.typeQuantite********************', element.typeQuantite);
+        });
+        this.ordonnance = this.prestationForm.value;
+        this.store.dispatch(featureActionOrdonnanceMedical.updateOrdonnance(this.ordonnance));
+        console.log('******this.ordonnance.iddddddddd****', this.prestationForm.get('id').value);
+        console.log('******this.ordonnance****', this.prestationForm.value);
+        } else {
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = new Date();
         this.ordonnance.adherent = this.adherentSelected;
@@ -166,9 +176,13 @@ export class OrdonnaceMedicalComponent implements OnInit {
             element.typeQuantite = el.value;
             console.log('******************element.typeQuantite********************', element.typeQuantite);
         });
-        this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
-        console.log('******************this.ordonnance********************', this.ordonnance);
-        this.prestationForm.reset();
+        console.log('******this.ordonnance.objettttttt****', this.ordonnance);
+        console.log('******this.ordonnance.iddddddddd****', this.prestationForm.value.id);
+            this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
+            console.log('******************this.ordonnance********************', this.ordonnance);
+        }
+        // this.prestationForm.reset();
+        // this.displayFormPrefinancement = false;
     }
 
     selectActe(){
@@ -188,7 +202,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
 
     ngOnInit(): void {
         this.prestationForm = this.formBuilder.group({
-            id: new FormControl(),
+            id: new FormControl(''),
             dateSaisie: new FormControl({value: '', disabled: true}),
             nomAdherent: new FormControl({value: '', disabled: true}),
             prenomAdherent: new FormControl({value: '', disabled: true}),
@@ -200,8 +214,9 @@ export class OrdonnaceMedicalComponent implements OnInit {
             nomGroupeAdherent: new FormControl({value: '', disabled: true}),
             nomPoliceAdherent: new FormControl({value: '', disabled: true}),
             prestataire: new FormControl('', Validators.required),
-            prescripteur: new FormControl('', Validators.required),
+            prescripteur: new FormControl(''),
             matriculeAdherent: new FormControl('', Validators.required),
+            adherent: new FormControl(''),
             ordonnanceMedicalProduitPharmaceutiques: this.formBuilder.array([], Validators.required),
         });
 
@@ -286,30 +301,6 @@ export class OrdonnaceMedicalComponent implements OnInit {
       });
     }
 
-    editerPrestation(pref: SinistreTierPayant) {
-        this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
-        this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
-        this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
-        this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
-        this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
-        this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
-        this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
-        this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
-        this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
-        this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
-        this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
-        this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
-        // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
-        this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
-        for (const pr of pref.prestation) {
-            const formPrestation: FormGroup = this.createItem();
-            formPrestation.patchValue(pr);
-            this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
-        }
-        console.log('****************pref.prestation****************', pref.prestation);
-        this.displayFormPrefinancement = true;
-    }
-
     voirPrestation1(pref: OrdonnanceMedical){
         console.log('///////////////////pref////////////////////////',pref);
         this.displayPrestation = true;
@@ -317,50 +308,43 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
       }
 
-    voirPrestation(pref?: SinistreTierPayant, isDetail?: boolean) {
+    editerPrestation(pref?: OrdonnanceMedical) {
         console.log('****************pref****************', pref);
-        console.log('****************isDetail****************', isDetail);
-        if (this.displayFormPrefinancement) {
-            this.displayFormPrefinancement = false;
-            this.isDetail = false;
-            this.prestationForm.reset();
-            this.prestationForm.enable({onlySelf: false, emitEvent: true});
-            
-        } else {
             if (pref) {
-                this.isDetail = isDetail;
-                this.prestationForm.get('dateFacture').enable();
-                this.prestationForm.get('numeroFacture').enable();
+                this.prestationForm.get('id').setValue(pref.id);
+                this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
                 this.prestationForm.get('matriculeAdherent').enable();
-                this.prestationForm.get('dateDeclaration').enable();
+                this.prestationForm.get('adherent').patchValue(pref.adherent);
                 this.prestationForm.get('prestataire').enable();
+                this.prestationForm.get('prescripteur').setValue(pref.prescripteur);
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
-                this.prestationForm.get('nomAssurePrin').setValue(pref.adherent.adherentPrincipal.nom);
-                this.prestationForm.get('prenomAssurePrin').setValue(pref.adherent.adherentPrincipal.prenom);
+                this.prestationForm.get('nomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.nom);
+                this.prestationForm.get('prenomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.prenom);
                 this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
                 this.prestationForm.get('prestataire').setValue(this.prestataireList.find(p => p.id === pref.prestataire.id));
                 console.log('***************pref.prestataire.libelle******************', pref.prestataire);
-                this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
-                this.prestationForm.get('dateFacture').setValue(new Date(pref.dateFacture));
-                this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
-                for (const pr of pref.prestation) {
+
+                for (const pr of pref.ordonnanceMedicalProduitPharmaceutiques) {
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
+                    console.log('*****pr.typeQuantite*******', pr.typeQuantite); 
+                    formPrestation.get('typeQuantite').setValue(pr.typeQuantite);
+                    console.log('*****formPrestation.get*******', formPrestation.get('typeQuantite'));
                     this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
+                    console.log('*****this.ordonnanceMedicalProduitPharmaceutiques*******', this.ordonnanceMedicalProduitPharmaceutiques); 
                 }
                 if (this.isDetail) {
                     this.prestationForm.disable({onlySelf: false, emitEvent: true});
                 }
             }
             this.displayFormPrefinancement = true;
-        }
 
 
     }
@@ -457,30 +441,30 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.displayFormPrefinancement = false;
     }
 
-   /*  supprimerPrestation(prestation: Prestation) {
+    supprimerOrdonnanceProduit(prestation: OrdonnanceMedicalProduitPharmaceutique) {
         this.confirmationService.confirm({
-            message: 'voulez-vous supprimer la prestation',
+            message: 'voulez-vous supprimer ce produit',
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.store.dispatch(featureActionTierPayant.deletePrestationTierPayant(prestation));
-                this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
+                this.store.dispatch(featureActionOrdonnanceMedical.deleteOrdonnanceMedicalProduit(prestation));
+                // this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
             },
         });
-    } */
+    }
 
-    supprimerPrefinancement() {
-        console.log(this.TierPayantSelected);
-        if (!this.TierPayantSelected) {
-            this.showToast('error', 'INFORMATION', 'aucun tiers-payant selectionné');
+    supprimerOrdonnance() {
+        console.log(this.ordonnanceSelected);
+        if (!this.ordonnanceSelected) {
+            this.showToast('error', 'INFORMATION', 'aucune ordonnance médicale selectionnée');
         } else {
             this.confirmationService.confirm({
-                message: 'voulez-vous supprimer le sinistre',
+                message: 'voulez-vous supprimer cette selection ???',
                 header: 'Confirmation',
                 icon: 'pi pi-exclamation-triangle',
                 accept: () => {
-                    this.store.dispatch(featureActionTierPayant.deleteTierPayant({tierPayant: this.TierPayantSelected}));
-                    this.TierPayantSelected = [];
+                    this.store.dispatch(featureActionOrdonnanceMedical.deleteOrdonnanceMedical({ordonnance: this.ordonnanceSelected}));
+                    this.ordonnanceSelected = [];
                 }
             });
         }

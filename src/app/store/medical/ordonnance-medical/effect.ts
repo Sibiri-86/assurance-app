@@ -60,60 +60,49 @@ export class OrdonnanceMedicaleEffects {
                                     ))
                                 ));
 
-    /*  updateBon$ = createEffect(() =>
+      updateOrdonnance$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(featureActions.updateBon),
-            mergeMap((bon: BonPriseEnCharge) =>
-                this.bonPriseEnChargeService.updateBons(bon).pipe(
+            ofType(featureActions.updateOrdonnance),
+            mergeMap((ordonnace: OrdonnanceMedical) =>
+                this.ordonnanceMedicaleService.updateOrdonnanceMedicale(ordonnace).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadBon()
+                        featureActions.loadOrdonnance()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             ));
 
-            deleteActe$ = createEffect(() =>
-            this.actions$.pipe(
-                ofType(featureActions.deleteBon),
-                mergeMap((bon: BonPriseEnCharge) =>
-                    this.bonPriseEnChargeService.deleteBons(bon).pipe(
-                        switchMap(value => [
-                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.loadBon()
-                        ]),
-                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                    ))
-                ));
-
-    fetchReportBon$ = createEffect(() =>
-                            this.actions$.pipe(
-                                ofType(featureActions.FetchReportBon),
-                                mergeMap((report: Report) =>
-                                    this.bonPriseEnChargeService.$getReport(report).pipe(
-                                        switchMap(value => [
-                                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                                            featureActions.setReportBon({reportFile: value})
-                                        ]),
-                                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                                    ))
-                                ));
-
-    fetchBon$ = createEffect(() =>
+            /** delete Ordonnance */
+    deleteOrdonnanceMedicale$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadBon),
-        mergeMap(() =>
-            this.bonPriseEnChargeService.$getBons().pipe(
+        ofType(featureActions.deleteOrdonnanceMedical),
+        mergeMap(({ordonnance}) =>
+            this.ordonnanceMedicaleService.deleteOrdonnanceMedicale(ordonnance).pipe(
                 switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.setBon(value)
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadOrdonnance()
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-            )
-        )
-    )
-    );
- */}
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+    ));
+
+    /** delete Ordonnance Medicale Produit Pharmaceutique */
+    deleteOrdonnanceMedicaleProduitPharmaceutique$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.deleteOrdonnanceMedicalProduit),
+        mergeMap((ordonnance: OrdonnanceMedicalProduitPharmaceutique) =>
+            this.ordonnanceMedicaleService.deleteOrdonnanceMedicaleProduit(ordonnance).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadOrdonnance()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+    ));
+
+
+}

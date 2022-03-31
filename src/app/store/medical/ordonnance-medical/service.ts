@@ -31,6 +31,22 @@ postOrdonnanceMedicale(ordonnace: OrdonnanceMedical): Observable<any> {
      report, {responseType: 'arraybuffer'});
 }
 
+updateOrdonnanceMedicale(ordonnance: OrdonnanceMedical): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_UPDATE)}`, ordonnance);
+}
+
+deleteOrdonnanceMedicale(ordonnace: Array<OrdonnanceMedical>): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_DELETE)}`, ordonnace);
+}
+
+deleteOrdonnanceMedicaleProduit(ordonnace: OrdonnanceMedical): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_DELETE_ORDONNANCE_PRODUIT)}`, ordonnace);
+}
+
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

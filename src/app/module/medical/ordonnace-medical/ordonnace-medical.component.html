@@ -6,7 +6,7 @@
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
 					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addTierPayant()"></button>
-					<button pButton pRipple label="Supprimer" [disabled]="TierPayantSelected?.length<1" icon="pi pi-trash" (click)="supprimerPrefinancement()" class="p-button-danger p-mb-2"></button>
+					<button pButton pRipple label="Supprimer" [disabled]="ordonnanceSelected?.length<1" icon="pi pi-trash" (click)="supprimerOrdonnance()" class="p-button-danger p-mb-2"></button>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -20,7 +20,7 @@
             <p-table #dt [value]="ordonnaceMedicalProduitPharmaceutiqueDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
-                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="TierPayantSelected">
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="ordonnanceSelected">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
@@ -35,11 +35,12 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="dateSaisie" style="min-width:100px">Date de Saisie<p-sortIcon field="dateSaisie"></p-sortIcon></th>
-                        <th pSortableColumn="adherent" style="min-width:200px">Assuré<p-sortIcon field="adherent"></p-sortIcon></th>
+                        <th pSortableColumn="adherent" style="min-width:50px">Matricule<p-sortIcon field="adherent"></p-sortIcon></th>
+                        <th pSortableColumn="adherent" style="min-width:200px">Bénéficiaire<p-sortIcon field="adherent"></p-sortIcon></th>
                         <th pSortableColumn="prestataire" style="min-width:100px">Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
                         <th pSortableColumn="prescripteur" style="min-width:100px">Prescripteur<p-sortIcon field="prescripteur"></p-sortIcon></th>
+                        <th pSortableColumn="dateSaisie" style="min-width:100px">Date de Saisie<p-sortIcon field="dateSaisie"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -48,19 +49,25 @@
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="min-width:100px">{{tierPayant.dateSaisie | formatTableValue : 'date'}}</span>
+                        <td>
+                            <span class="p-column-title" style="min-width:50px">{{tierPayant.adherent.numero}}</span>
                         </td>
-                     <td><span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.nom}} {{tierPayant.adherent.prenom}}</span>
+                        <td>
+                            <span class="p-column-title" style="min-width:200px">{{tierPayant.adherent.nom}} {{tierPayant.adherent.prenom}}</span>
                         </td>
-                       <td><span class="p-column-title" style="min-width:100px">{{tierPayant.prestataire.libelle}}</span>
+                       <td>
+                           <span class="p-column-title" style="min-width:100px">{{tierPayant.prestataire.libelle}}</span>
                         </td> 
                          <td>
-                            <span class="p-column-title" style="min-width:100px">{{tierPayant.prestataire.libelle}}</span>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant.prescripteur}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant.dateSaisie | formatTableValue : 'date'}}</span>
                         </td>
 
                         <td style="min-width:150px">
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation1(tierPayant)"></button>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="voirPrestation(tierPayant, false)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="editerPrestation(tierPayant)"></button>
 <!--                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
  -->                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>
@@ -87,7 +94,7 @@
         </div>
 
 
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Produit(s) pharmaceutique(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Produit(s) pharmaceutique(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1100px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
@@ -96,10 +103,10 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="pharmaceutique" style="width: 200px">Produit pharmaceutique<p-sortIcon field="pharmaceutique"></p-sortIcon></th>
+                        <th pSortableColumn="pharmaceutique" style="width: 250px">Produit pharmaceutique<p-sortIcon field="pharmaceutique"></p-sortIcon></th>
                         <th pSortableColumn="typeQuantite" style="width: 200px">Nature du produit<p-sortIcon field="typeQuantite"></p-sortIcon></th>
                         <th pSortableColumn="quantite" style="width: 200px">quantite<p-sortIcon field="quantite"></p-sortIcon></th>
-                        <th pSortableColumn="observation" style="width: 250px">observation<p-sortIcon field="observation"></p-sortIcon></th>
+                        <th pSortableColumn="observation" style="width: 250px">observation / Posologie<p-sortIcon field="observation"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -114,7 +121,7 @@
                         <td><span class="p-column-title">{{prestation.observation}}</span>
                         </td>
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerPrestation(prestation)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerOrdonnanceProduit(prestation)"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -148,11 +155,11 @@
                                 </div>
 
                                 <div class="p-field p-col-3">
-                                    <label for="prescripteur" id="prescripteur">Prescripteur<span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                                    <p-dropdown inputId="prescripteur" dataKey="id" [filter]="true"
-                                                showClear="true" [options]="prestataireList"
-                                                formControlName="prescripteur" placeholder="Selectionner centre prescripteur"
-                                                optionLabel="libelle"></p-dropdown>
+                                    <label for="prescripteur">Prescripteur<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <input id="prescripteur" class="champ" type="text" formControlName="prescripteur" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="prestationForm" [entityField]="'prescripteur'">
+                                    </app-entity-validation>
                                 </div>
 
                                 <div class="p-field p-col-3">
@@ -260,7 +267,7 @@
 
                                     <div class="p-fluid p-formgrid p-grid">
                                         <div class="p-field p-col">
-                                            <label for="observation" id="observation">Observation<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <label for="observation" id="observation">Observation / Posologie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                             <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
                                         </div>
                                         </div>
