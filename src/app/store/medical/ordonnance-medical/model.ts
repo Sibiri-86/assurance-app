@@ -18,7 +18,8 @@ export interface OrdonnanceMedical{
     dateSaisie?: Date;
     adherent?: Adherent;
     prestataire?:Prestataire;
-    prescripteur?: Prestataire;
+    prescripteur?: string;
+    numeroOrdonnance?: string;
     ordonnanceMedicalProduitPharmaceutiques?: Array<OrdonnanceMedicalProduitPharmaceutique>;
 }
 

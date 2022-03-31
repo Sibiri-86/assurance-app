@@ -399,8 +399,8 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
-                this.prestationForm.get('nomAssurePrin').setValue(pref.adherent.adherentPrincipal.nom);
-                this.prestationForm.get('prenomAssurePrin').setValue(pref.adherent.adherentPrincipal.prenom);
+                this.prestationForm.get('nomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.nom);
+                this.prestationForm.get('prenomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.prenom);
                 this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
                 this.prestationForm.get('prestataire').setValue(this.prestataireList.find(p => p.id === pref.prestataire.id));
@@ -411,7 +411,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
-                this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+                this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));""
                 for (const pr of pref.prestation) {
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
