@@ -11,6 +11,7 @@ import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrag
 import {Acte} from '../../parametrage/acte/model';
 import {Sort} from '../../../module/common/models/sort.enum';
 import {TypeEtatSinistre} from '../../../module/common/models/enum.etat.sinistre';
+import { HistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -78,6 +79,7 @@ export interface CheckTierPayantResult {
     message?: string;
     montantRestant?: number;
     sort?: Sort;
+    historiqueAvenant?: HistoriqueAvenant;
 }
 
 export interface CheckTierPayantReponse {

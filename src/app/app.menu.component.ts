@@ -72,8 +72,8 @@ export class AppMenuComponent implements OnInit {
                  visible: true,
                 items: [
                     {label: 'convention', icon: 'pi pi-pencil', routerLink: ['/medical/convention'], visible: true},
-                    {label: 'bon-de-prise-en-charge', icon: 'pi pi-pencil', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
-                    {label: 'ordonnance médicale', icon: 'pi pi-pencil', routerLink: ['/medical/ordonnace-medical'], visible: true},
+                    {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
+                    {label: 'ordonnance médicale', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
                 ]
             },
             /*

@@ -63,8 +63,11 @@ import * as featureActionPrefinancement from '../../../../store/prestation/prefi
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
 import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
-import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
+import {BonPriseEnCharge, CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
+import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
+import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
+import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 
 
 @Component({
@@ -126,6 +129,8 @@ export class TierPayantEditionComponent implements OnInit {
     isDetail: boolean;
     editForm: FormGroup;
     typeAction: MenuItem[] = [];
+    bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
+    bonPriseEnChargeList: Array<BonPriseEnCharge>;
 
 
 
@@ -218,6 +223,8 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+                this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+                    e.typeBon === TypeBon.PRISEENCHARGE);
             }
         });
 
@@ -311,6 +318,16 @@ export class TierPayantEditionComponent implements OnInit {
                 this.produitPharmaceutiqueList = value.slice();
             }
         });
+
+        // chargement des bons de prise en charge
+        this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+        this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+        this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          console.log(value);
+          if (value) {
+            this.bonPriseEnChargeList = value.slice();
+          }
+    });
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
@@ -562,7 +579,7 @@ export class TierPayantEditionComponent implements OnInit {
                     myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
                     myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
                         sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
-                        observation: this.checkTierPayantResult[j].message
+                        observation: this.checkTierPayantResult[j].message, historiqueAvenant: this.checkTierPayantResult[j].historiqueAvenant
                     });
                 }
             }
