@@ -248,6 +248,7 @@ import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/ef
 import { ConventionComponent } from './module/medical/convention/convention.component';
 import { ConventionEffects } from './store/medical/convention/effect';
 import { MedicalPipe } from './module/medical/pipes/medical.pipe';
+import { AssureComponent } from './module/contrat/assure/assure.component';
 
 @NgModule({
     imports: [
@@ -448,7 +449,8 @@ import { MedicalPipe } from './module/medical/pipes/medical.pipe';
         OrdonnaceMedicalComponent,
         AdherentListEditComponent,
         ConventionComponent,
-        MedicalPipe
+        MedicalPipe,
+        AssureComponent
     ],
     providers: [
         {

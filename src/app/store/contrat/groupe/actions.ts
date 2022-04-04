@@ -1,4 +1,5 @@
 import {props, createAction} from '@ngrx/store';
+import { Rapport } from '../police/model';
 import { Groupe, GroupeList } from './model';
 export const createGroupe = createAction('[App Init] Create Groupe', props<Groupe>());
 export const updateGroupe = createAction('[App Init] update Groupe', props<Groupe>());
@@ -7,3 +8,5 @@ export const deleteGroupes = createAction('[App Init] delete Groupes', props<{gr
 export const loadGroupe = createAction('[App Init] load Groupe', props<{policeId: string}>());
 export const setGroupe = createAction('[App Init] set Groupe',  props<GroupeList>());
 export const importGroupe = createAction('[App Init] import Groupe',  props<{file: File}>());
+export const loadRapport = createAction('[App Init] load Rapport groupe', props<Groupe>());
+export const setRapport = createAction('[App Init] set Rapport Statistique groupe', props<Rapport>());

@@ -19,11 +19,12 @@ export class AppMenuComponent implements OnInit {
                 label: 'Production', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
                  visible: this.keycloak.isUserInRole(Function.sm_production),
                 items: [
-                    {label: 'garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
-                    {label: 'intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
+                    {label: 'Garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
+                    {label: 'Intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
                     visible: this.keycloak.isUserInRole(Function.sm_intermediaire)},
                     {label: 'Barème', icon: '', routerLink: ['/contrat/bareme'], visible: this.keycloak.isUserInRole(Function.sm_bareme)},
-                    {label: 'police', icon: '', routerLink: ['/contrat/police'], visible: this.keycloak.isUserInRole(Function.sm_police)},
+                    {label: 'Police', icon: '', routerLink: ['/contrat/police'], visible: this.keycloak.isUserInRole(Function.sm_police)},
+                    {label: 'Assuré', icon: '', routerLink: ['/contrat/assure'], visible: this.keycloak.isUserInRole(Function.sm_police)},
                     {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant'],
                     visible: this.keycloak.isUserInRole(Function.sm_avenant)}
                 ]

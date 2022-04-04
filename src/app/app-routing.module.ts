@@ -61,6 +61,7 @@ import { OrdreReglementRechercheComponent } from './module/prestation/ordre-regl
 import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
 import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 import { ConventionComponent } from './module/medical/convention/convention.component';
+import { AssureComponent } from './module/contrat/assure/assure.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -78,6 +79,7 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
                     {path: 'contrat/garant', component: GarantComponent},
                     {path: 'contrat/intermediaire', component: IntermediaireComponent},
                     {path: 'contrat/police', component: PoliceComponent},
+                    {path: 'contrat/assure', component: AssureComponent},
                     {path: 'contrat/bareme', component: BaremeComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
                     {path: 'prestation/prefinancement', component: PrefinancementEditionComponent},

@@ -6,6 +6,7 @@ import {Groupe} from "../../../store/contrat/groupe/model";
 import * as featureAction from "../../../store/contrat/police/actions";
 import {policeList, selectByteFile} from "../../../store/contrat/police/selector";
 import {groupeList} from "../../../store/contrat/groupe/selector";
+import * as groupeSelector from '../../../store/contrat/groupe/selector';
 import {Adherent, AdherentFamille} from "../../../store/contrat/adherent/model";
 import {Pays} from "../../../store/parametrage/pays/model";
 import {Taux} from "../../../store/parametrage/taux/model";
@@ -219,6 +220,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   groupe: Groupe = {};
   rapport: Rapport = {};
   rapport$: Observable<Rapport>;
+  rapportGroupe: Rapport = {};
+  rapportGroupe$: Observable<Rapport>;
   plafondGroupe: Plafond = {};
   plafondGroupe$: Observable<Plafond>;
   items: MenuItem[];
@@ -1322,6 +1325,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentList = value.slice();
+      }
+    });
+
+    this.rapportGroupe$ = this.store.pipe(select(groupeSelector.rapport));
+    this.store.dispatch(featureActionGroupe.loadRapport(groupe));
+    this.rapportGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.rapportGroupe = value;
+        console.log(this.rapportGroupe);
       }
     });
   }

@@ -45,6 +45,20 @@ export class GroupeEffects {
                 ))
             ));
 
+            loadRapportGroupe$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadRapport),
+                mergeMap((groupe: Groupe) =>
+                    this.GroupeService.rapportGroupe(groupe).pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setRapport(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    ))
+                ));
+
         deleteGroupe$ = createEffect(() =>
         this.actions$.pipe(
                 ofType(featureActions.deleteGroupe),

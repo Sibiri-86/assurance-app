@@ -75,7 +75,21 @@ export class AdherentEffects {
                     ))
                 ));
 
-    
+    fetchAdherentAll$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.loadAdherentAll),
+                    mergeMap(() =>
+                        this.AdherentService.$getAdherentsAll().pipe(
+                            switchMap(value => [
+                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setAdherent(value)
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        )
+                    )
+                )
+                );
+
     fetchAdherent$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherent),

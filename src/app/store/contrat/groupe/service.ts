@@ -44,6 +44,10 @@ deleteGroupes(groupe: Array<Groupe>): Observable<any> {
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/deletes`, groupe);
 }
 
+rapportGroupe(groupe: Groupe): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/rapport`, groupe);
+}
 
 
 pushFileToStorage(file: File): Observable<any> {

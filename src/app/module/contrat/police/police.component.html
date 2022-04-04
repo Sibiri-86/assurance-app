@@ -2247,12 +2247,8 @@
                         <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
                     </ng-template>
-                    <!--
-                    <ng-template pTemplate="right">
-                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-                        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
-                    </ng-template>
-                    -->
+                    
+                    
                 </p-toolbar>
                 <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                          [rowHover]="true" dataKey="id"
@@ -2838,11 +2834,10 @@
                     </ng-template>
                     
                     <ng-template pTemplate="right">
-                        <p-dropdown inputId="garant" dataKey="id" [filter]="true"
-                                        showClear="true" [options]="garantList"
-                                        [autoDisplayFirst]="false"
-                                        placeholder="Selectionnez le garant"
-                                        optionLabel="nom"></p-dropdown>
+                            <span><span class="indicateur">{{rapportGroupe?.nombreAdherent}}</span> Adhérents-</span>
+                            <span><span class="indicateur">{{rapportGroupe?.nombreConjoint}}</span> Conjoint(e)-</span>
+                            <span><span class="indicateur">{{rapportGroupe?.nombreEnfant}}</span> Enfant(s)-</span>
+                            <span><span class="indicateur">{{rapportGroupe?.total}}</span> Effectif total</span>
                     </ng-template>
                     
                 </p-toolbar>

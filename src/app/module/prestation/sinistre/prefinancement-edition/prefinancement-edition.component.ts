@@ -167,7 +167,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       pathologie: new FormControl(),
       dateSoins: new FormControl('', [Validators.required]),
       acte: new FormControl(),
-      medecin: new FormControl()
+      medecin: new FormControl(),
+      historiqueAvenant: new FormControl()
     });
   }
 
@@ -437,7 +438,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
           myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
           myForm.patchValue({montantRembourse: this.checkPrefinancementResult[j].montantRembourse,
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
-            observation: this.checkPrefinancementResult[j].message
+            observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
           });
         }
         }
