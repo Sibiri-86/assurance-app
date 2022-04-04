@@ -42,8 +42,8 @@
                <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                <th pSortableColumn="territorialite" style="min-width:300px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-               <th pSortableColumn="etat" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
                <th pSortableColumn="date" style="min-width:200px">Date<p-sortIcon field="date"></p-sortIcon></th>
+               <th pSortableColumn="etat" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
                <th style="min-width:150px"></th>
            </tr>
        </ng-template>
@@ -61,15 +61,14 @@
                </td>
                <td><span class="p-column-title" style="min-width:300px">{{ordre.police.nom}}</span>
                </td>
+               <td><span class="p-column-title" style="min-width:200px">{{ordre.date | formatTableValue : 'date'}}</span>
+               </td>
                <td>
                 <!-- <span class="p-column-title" style="min-width:200px">{{ordre.etat}}</span> -->
                 <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre.etat}}</span>
                 <span *ngIf="ordre?.etat ==='INVALIDE'" class="p-badge p-badge-warning">EN ATTENTE</span>
-                <span *ngIf="ordre?.etat === null " class="p-badge p-badge-warning">EN ATTENTE..</span>
-                <span *ngIf="ordre?.etat === 'INITIAL'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                <span *ngIf="ordre?.etat === 'ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
                 <span *ngIf="ordre?.etat ==='ANNULE'" class="p-badge p-badge-danger">{{ordre.etat}}</span>
-               </td>
-               <td><span class="p-column-title" style="min-width:200px">{{ordre.date | formatTableValue : 'date'}}</span>
                </td>
                <td style="min-width:150px">
                <button pButton  pRipple icon="pi pi-eye" pTooltip="consulter" class="p-button-rounded p-button-help p-mr-2" (click)="consulter(ordre)"></button>
