@@ -61,7 +61,7 @@ export class AppMenuComponent implements OnInit {
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_edition)},
                                     {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_valide)},
-                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
+                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)}
                                 ]
                             }

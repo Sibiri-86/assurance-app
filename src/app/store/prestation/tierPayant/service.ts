@@ -106,6 +106,12 @@ posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
                 this.createRequestOption({matricule, dateDeclaration})});
     }
 
+    searchTierPayantOrdreReglement(numero: string, date: string): Observable<any> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/tierPayantOrdreReglement/consulter`, {params :
+          this.createRequestOption({numero, date})});
+      }
+
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();
         if (req) {
