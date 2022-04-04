@@ -2027,6 +2027,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
     let historiqueAvenant: HistoriqueAvenant = {};
     historiqueAvenant = event.historiqueAvenant;
     avenant.historiqueAvenant = historiqueAvenant;
+    if( this.etat === 'CREATE') {
+      avenant.creation = 'CREATION';
+    } else {
+      avenant.creation = 'MODIFICATION';
+    }
     console.log('********************Avenant renouvellement************************');
     console.log(event);
     this.historiqueAvenantService.postAvenant(event).subscribe(

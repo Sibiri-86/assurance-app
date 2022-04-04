@@ -384,15 +384,17 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     compareDate(): void {
-        this.historiqueAvenantService.compareDate(this.myForm.get('dateIncorparation').value, this.police.dateEffet).subscribe(
-            (res) => {
-                if (res) {
-                    this.addMessage('error', 'Date d\'effet invalide',
-                        'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
-                    this.myForm.patchValue({dateIncorparation: null});
+        if (this.exerciceForm.get('debut').value) {
+            this.historiqueAvenantService.compareDate(this.myForm.get('dateIncorparation').value, this.exerciceForm.get('debut').value).subscribe(
+                (res) => {
+                    if (res) {
+                        this.addMessage('error', 'Date d\'effet invalide',
+                            'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                        this.myForm.patchValue({dateIncorparation: null});
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     addMessage(severite: string, resume: string, detaile: string): void {

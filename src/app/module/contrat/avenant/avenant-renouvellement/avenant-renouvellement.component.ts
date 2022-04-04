@@ -196,6 +196,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     displayDialogFormAdherent = false;
     historiqueGroupes: HistoriqueGroupe[] = [];
     numero: number;
+    historiqueAveantAdherantList: HistoriqueAvenantAdherant[];
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -723,6 +724,12 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.loadAdherantByPolice();
         this.addFamilleActe(this.police);
         this.updateAvenant(this.avenantId);
+        this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentByPoliceAndUnsuspend(this.police.id).subscribe(
+            (res) => {
+                console.log('..............RES..............   ', res);
+                this.historiqueAveantAdherantList = res;
+            }
+        )
     }
 
     addSousActe() {
@@ -778,9 +785,9 @@ export class AvenantRenouvellementComponent implements OnInit {
             taux: group?.taux,
             territorialite: group.territorialite || [],
             duree: group.duree,
-            dateEffet: new Date(group.dateEffet),
+            dateEffet: new Date(this.exercice.debut),
             typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
-            dateEcheance: new Date(group.dateEcheance),
+            dateEcheance: new Date(this.exercice.fin),
             numeroGroupe: group.numeroGroupe,
             typePrime: group?.typePrime,
             adresse: group?.adresse,
@@ -1013,7 +1020,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
         this.objet.familles = this.adherentFamilleListe;
         this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
-        //this.historiqueAvenant.id = this.numero;
+        //this.historiqueAvenant.id = this.numero; this.adherantPoliceListActualisee
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
         this.historiqueAvenant.exercice = this.exerciceForm.value;
@@ -1021,8 +1028,9 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
         this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
-        this.objet.historiqueAvenantAdherants.forEach(haa => haa.id = null);
-        this.objet.historiqueAvenantAdherantDels.forEach(haa => haa.id = null);
+        this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantList;
+        this.objet.historiqueAvenantAdherants.forEach(haa => haa.id === null);
+        this.objet.historiqueAvenantAdherantDels.forEach(haa => haa.id === null);
         this.objet.historiqueAvenant = this.historiqueAvenant;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
@@ -1350,6 +1358,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log(this.groupeForm);
             }
         });
+        this.groupeForm.reset({});
 
     }
 
