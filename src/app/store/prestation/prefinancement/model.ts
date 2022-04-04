@@ -1,5 +1,6 @@
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Sort } from 'src/app/module/common/models/sort.enum';
+import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
 import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
@@ -54,6 +55,7 @@ export interface BonPriseEnCharge {
     souscripteur?: string;
     prestataire?: Prestataire;
     prestation?: Array<Prestation>;
+    typeBon?: TypeBon;
 }
 
 export interface Prestation {

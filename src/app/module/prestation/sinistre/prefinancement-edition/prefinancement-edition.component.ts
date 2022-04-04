@@ -64,6 +64,7 @@ import { Dialog } from 'primeng/dialog/dialog';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
+import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 
 
 @Component({
@@ -188,6 +189,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
       numeroPolice: new FormControl({value: '', disabled: true}),
+      bonPriseEnCharge: new FormControl(''),
       prestation: this.formBuilder.array([])
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -216,10 +218,14 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     if (value) {
         console.log(value);
         this.adherentSelected = value;
+        console.log(this.adherentSelected);
         this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
         this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        console.log(this.bonPriseEnChargeList);
+        this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+          e.typeBon === TypeBon.ENTENTEPREALABLE);
         //this.taux = this.adherentSelected.groupe.taux;
       }
     });
