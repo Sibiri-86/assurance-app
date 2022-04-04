@@ -118,6 +118,12 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    getHistoriqueAvenantAdherentByPoliceAndUnsuspend(policeId: string): Observable<any> {
+        return this.http.get<any>( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/unsuspend`,
+            {params: createRequestOption({policeId})}
+        );
+    }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

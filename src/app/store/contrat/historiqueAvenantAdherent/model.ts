@@ -36,6 +36,7 @@ export interface HistoriqueAvenantAdherant {
     historiqueAvenant?: HistoriqueAvenant;
     adherent?: Adherent;
     deleted: boolean;
+    signe?: string;
 }
 
 export interface HistoriqueAvenantList {
