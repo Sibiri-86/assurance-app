@@ -66,7 +66,7 @@ export class TierPayantEffects {
             mergeMap(({tierPayant, etat}) =>
                 this.tierPayantService.putUpdateTierPayant(tierPayant, etat).pipe(
                     switchMap(value => [
-                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.loadTierPayant()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -110,7 +110,7 @@ export class TierPayantEffects {
             mergeMap(({tierPayant, etat}) =>
                 this.tierPayantService.putUpdateTierPayant(tierPayant, etat).pipe(
                     switchMap(value => [
-                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.loadTierPayantValide()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -266,4 +266,19 @@ export class TierPayantEffects {
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));
+
+        searchTierPayantOrdreReglement$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.searchTierPayantOrdreReglement),
+            mergeMap(({numero, date}) =>
+                this.tierPayantService.searchTierPayantOrdreReglement(numero, date).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
 }

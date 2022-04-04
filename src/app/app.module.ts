@@ -248,6 +248,7 @@ import { OrdonnanceMedicaleEffects } from './store/medical/ordonnance-medical/ef
 import { ConventionComponent } from './module/medical/convention/convention.component';
 import { ConventionEffects } from './store/medical/convention/effect';
 import { MedicalPipe } from './module/medical/pipes/medical.pipe';
+import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
 
 @NgModule({
     imports: [
@@ -448,7 +449,8 @@ import { MedicalPipe } from './module/medical/pipes/medical.pipe';
         OrdonnaceMedicalComponent,
         AdherentListEditComponent,
         ConventionComponent,
-        MedicalPipe
+        MedicalPipe,
+        TierPayantOrdreReglementSearchComponent
     ],
     providers: [
         {

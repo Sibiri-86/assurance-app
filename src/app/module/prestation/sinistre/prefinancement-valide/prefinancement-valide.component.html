@@ -60,7 +60,10 @@
                             <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span>
+                            <!-- <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span> -->
+                            <span *ngIf="prefinancement?.etat ==='VALIDE'" class="p-badge p-badge-success">{{prefinancement?.etat}}</span>
+                            <span *ngIf="prefinancement?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                            <span *ngIf="prefinancement?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{prefinancement?.etat}}</span>
                         </td>
                         <td style="min-width:150px">
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(prefinancement)"></button> 

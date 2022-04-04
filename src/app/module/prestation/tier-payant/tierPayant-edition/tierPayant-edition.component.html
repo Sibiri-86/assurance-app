@@ -35,16 +35,17 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="min-width:100px">Numéro sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="min-width:150px">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:100px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width:100px">N° sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width:100px">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width:100px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
-                        <th pSortableColumn="duree" style="min-width:50px">Numéro d'assuré <p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="duree" >Numéro de facture<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="duree">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:150px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:150px">Prénom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
-                        <th style="min-width:150px"></th>
+                        <th pSortableColumn="duree" style="width:50px">N° Assuré <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width:50px" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width:50px">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="width:150px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="width:150px">Prénom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
+                        <th pSortableColumn="etat" style="width:50px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+                        <th style="width:175px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tierPayant>
@@ -52,35 +53,44 @@
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="min-width:100px">{{tierPayant.numeroSinistre}}</span>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.numeroSinistre}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:150px">{{tierPayant.prestataire.libelle}}</span>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.prestataire.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:100px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
 
                         <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
                         </td>-->
                         <td>
-                            <span class="p-column-title" style="min-width:50px">{{tierPayant.adherent.numero}}</span>
+                            <span class="p-column-title" style="width:50px">{{tierPayant.adherent.numero}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" >{{tierPayant.numeroFacture}}</span>
+                            <span class="p-column-title" style="width:50px" >{{tierPayant.numeroFacture}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                            <span class="p-column-title" style="width:50px" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:150px">{{tierPayant.adherent.nom}}</span>
+                            <span class="p-column-title" style="width:150px">{{tierPayant.adherent.nom}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="min-width:150px">{{tierPayant.adherent.prenom}}</span>
+                            <span class="p-column-title" style="width:150px">{{tierPayant.adherent.prenom}}</span>
+                        </td>
+                        <td>
+                            <!-- <span class="p-column-title" style="width:50px">{{tierPayant?.etat}}</span> -->
+                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success">{{tierPayant?.etat}}</span>
+                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{tierPayant?.etat}}</span>
                         </td>
 
-                        <td style="min-width:150px">
-                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant, true)"></button>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="voirPrestation(tierPayant, false)"></button>
-                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
+                        <td style="width:175px">
+                            <!-- <p-splitButton label="Actions" styleClass="p-button-help" icon="pi pi-slack" [model]="typeAction"
+                                                           (onDropdownClick)="onTypeActionChoose(tierPayant, boolean)">
+                            </p-splitButton> -->
+                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-1" (click)="voirPrestation(tierPayant, true)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-1" (click)="voirPrestation(tierPayant, false)"></button>
+                            <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-1" (click)="validerPrestation(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>
 

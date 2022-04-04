@@ -237,7 +237,7 @@ export class TierPayantValideComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionTierPayant.updateEtatAnnulerTierPayant({tierPayant: pref,
-          etat: TypeEtatSinistre.ANNULE}));
+          etat: TypeEtatSinistre.DEVALIDE}));
       },
     });
   }

@@ -61,6 +61,7 @@ import { OrdreReglementRechercheComponent } from './module/prestation/ordre-regl
 import { BonPriseEnChargeComponent } from './module/medical/bon-prise-en-charge/bon-prise-en-charge.component';
 import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/ordonnace-medical.component';
 import { ConventionComponent } from './module/medical/convention/convention.component';
+import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -126,6 +127,7 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
                     {path: 'prestation/tierPayant/ordre-reglement/valide', component: TierPayantOrdreReglementValideComponent},
                     {path: 'prestation/tierPayant/ORD', component: TierPayantConsultationComponent},
                     {path: 'prestation/tierPayant/consultation', component: SinistreTiersPayantConsultationComponent},
+                    {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent}
                 ]
             },

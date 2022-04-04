@@ -33,6 +33,7 @@
                         <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:50px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -49,6 +50,11 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                        </td>
+                        <td>
+                            <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
+                            <span *ngIf="ordre?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                            <span *ngIf="ordre?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{ordre?.etat}}</span>
                         </td>
 
                         <td style="min-width:150px">

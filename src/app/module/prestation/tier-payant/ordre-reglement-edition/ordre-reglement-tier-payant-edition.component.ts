@@ -54,7 +54,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
     this.ordreReglementList$ = this.store.pipe(select(tierPayantSelector.ordreReglementTierPayantList));
     this.store.dispatch(featureActionTierPayant.loadOrdreReglementTierPayant());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log(value);
+      console.log('*********************ordreReglementList**********************',value);
       if (value) {
         this.ordreReglementList = value.slice();
       }

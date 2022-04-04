@@ -39,7 +39,7 @@ import {Garantie} from 'src/app/store/parametrage/garantie/model';
 import {element} from 'protractor';
 import {Prestataire} from 'src/app/store/parametrage/prestataire/model';
 import {Medecin} from 'src/app/store/parametrage/medecin/model';
-import {ConfirmationService, MessageService, SelectItem} from 'primeng/api';
+import {ConfirmationService, MenuItem, MessageService, SelectItem} from 'primeng/api';
 import {Adherent} from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
@@ -125,6 +125,7 @@ export class TierPayantEditionComponent implements OnInit {
     checkTierPayantResult: Array<CheckTierPayantResult>;
     isDetail: boolean;
     editForm: FormGroup;
+    typeAction: MenuItem[] = [];
 
 
 
@@ -642,6 +643,22 @@ export class TierPayantEditionComponent implements OnInit {
                 }
             });
         }
+    }
+    onTypeActionChoose(tierPayant: SinistreTierPayant, boolean: Boolean) {
+        this.typeAction = [
+            {label: 'Voir Prestation', icon: 'pi pi-search', command: ($event) => {
+                this.voirPrestation(tierPayant, true)
+              }},
+              {label: 'Editer Prestation', icon: 'pi pi-pencil', command: ($event) => {
+                this.voirPrestation(tierPayant, false)
+              }},
+              {label: 'Valider Prestation', icon: 'pi pi-check', command: ($event) => {
+                this.validerPrestation(tierPayant)
+              }},
+              {label: 'Imprimer Prestation', icon: 'pi pi-print', command: ($event) => {
+                this.imprimer(tierPayant)
+              }}
+        ]
     }
 
 }
