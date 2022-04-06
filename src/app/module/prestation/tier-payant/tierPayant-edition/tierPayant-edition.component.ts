@@ -479,6 +479,24 @@ export class TierPayantEditionComponent implements OnInit {
         }); */
     }
 
+    onRowSelectBon($event){
+        
+        this.prestation.clear();
+        console.log($event.value);
+        for (const pr of $event.value.prestation) {
+          const formPrestation: FormGroup = this.createItem();
+          pr.id = null;
+          formPrestation.patchValue(pr);
+          formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+          formPrestation.get('debours').setValue(pr.debours);
+          formPrestation.get('taux').setValue(pr.taux);
+          formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+          formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+          this.prestation.push(formPrestation);
+          }
+        this.displayFormPrefinancement = true;
+      }
+
     // valider TierPayant
     validerTierPayant() {
         console.log('********************this.tierPayantList**************************', this.tierPayantList);
@@ -622,6 +640,7 @@ export class TierPayantEditionComponent implements OnInit {
             acte: new FormControl(null, Validators.required),
             familleActe: new FormControl(null, Validators.required),
             centreExecutant: new FormControl(null),
+            historiqueAvenant: new FormControl()
         });
     }
 
