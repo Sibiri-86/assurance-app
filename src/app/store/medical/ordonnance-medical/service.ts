@@ -33,7 +33,7 @@ postOrdonnanceMedicale(ordonnace: OrdonnanceMedical): Observable<any> {
 
 updateOrdonnanceMedicale(ordonnance: OrdonnanceMedical): Observable<any> {
   // @FIXME: post request
-  return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_UPDATE)}`, ordonnance);
+  return this.http.put(`${GlobalConfig.getEndpoint(EndpointsMedical.ORDONNANCE_MEDICALE_UPDATE)}`, ordonnance);
 }
 
 deleteOrdonnanceMedicale(ordonnace: Array<OrdonnanceMedical>): Observable<any> {

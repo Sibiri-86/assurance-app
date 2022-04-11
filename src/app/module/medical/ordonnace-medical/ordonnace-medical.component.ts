@@ -136,13 +136,13 @@ export class OrdonnaceMedicalComponent implements OnInit {
     prestationListPrefinancement: Array<OrdonnanceMedical>;
     prestationListPrefinancementFilter: Array<OrdonnanceMedical>;
 
-    typeQuantiteList: any = [
-        {libelle: 'BOÎTE', value: TypeQuantite.BOITE},
-        {libelle: 'PAQUET', value: TypeQuantite.PAQUET},
-        {libelle: 'PLAQUETTE', value: TypeQuantite.PLAQUETTE},
-        {libelle: 'FLACON', value: TypeQuantite.FLACON},
-        {libelle: 'TUBE', value: TypeQuantite.TUBE},
-        {libelle: 'UNITAIRE', value: TypeQuantite.UNITAIRE}
+    typeQuantiteList: Array<SelectItem> = [
+        {label: 'BOÎTE', value: TypeQuantite.BOITE},
+        {label: 'PAQUET', value: TypeQuantite.PAQUET},
+        {label: 'PLAQUETTE', value: TypeQuantite.PLAQUETTE},
+        {label: 'FLACON', value: TypeQuantite.FLACON},
+        {label: 'TUBE', value: TypeQuantite.TUBE},
+        {label: 'UNITAIRE', value: TypeQuantite.UNITAIRE}
         ];
 
 
@@ -158,31 +158,21 @@ export class OrdonnaceMedicalComponent implements OnInit {
         /** fonction pour enregistrer l'ordonnance médicale*/
         console.log('creation ordonnance médicale');
         if(this.prestationForm.get('id').value) {
-        this.prestationForm.value.ordonnanceMedicalProduitPharmaceutiques.forEach(element => { const el: any = element.typeQuantite;
-            element.typeQuantite = el.value;
-            console.log('******************element.typeQuantite********************', element.typeQuantite);
-        });
         this.ordonnance = this.prestationForm.value;
+        this.ordonnance.dateSaisie = this.prestationForm.get('dateSaisie').value;
         this.store.dispatch(featureActionOrdonnanceMedical.updateOrdonnance(this.ordonnance));
-        console.log('******this.ordonnance.iddddddddd****', this.prestationForm.get('id').value);
-        console.log('******this.ordonnance****', this.prestationForm.value);
+        
         } else {
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = new Date();
         this.ordonnance.adherent = this.adherentSelected;
         this.ordonnance.prescripteur = this.prestationForm.get('prescripteur').value;
         this.ordonnance.prestataire= this.prestationForm.get('prestataire').value;
-        this.ordonnance.ordonnanceMedicalProduitPharmaceutiques.forEach(element => { const el: any = element.typeQuantite;
-            element.typeQuantite = el.value;
-            console.log('******************element.typeQuantite********************', element.typeQuantite);
-        });
-        console.log('******this.ordonnance.objettttttt****', this.ordonnance);
-        console.log('******this.ordonnance.iddddddddd****', this.prestationForm.value.id);
-            this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
-            console.log('******************this.ordonnance********************', this.ordonnance);
+        this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
+            
         }
-        // this.prestationForm.reset();
-        // this.displayFormPrefinancement = false;
+        this.prestationForm.reset();
+        this.displayFormPrefinancement = false;
     }
 
     selectActe(){
@@ -334,11 +324,10 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 for (const pr of pref.ordonnanceMedicalProduitPharmaceutiques) {
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
-                    console.log('*****pr.typeQuantite*******', pr.typeQuantite); 
                     formPrestation.get('typeQuantite').setValue(pr.typeQuantite);
-                    console.log('*****formPrestation.get*******', formPrestation.get('typeQuantite'));
                     this.ordonnanceMedicalProduitPharmaceutiques.push(formPrestation);
                     console.log('*****this.ordonnanceMedicalProduitPharmaceutiques*******', this.ordonnanceMedicalProduitPharmaceutiques); 
+                    console.log('prestation', this.prestationForm);
                 }
                 if (this.isDetail) {
                     this.prestationForm.disable({onlySelf: false, emitEvent: true});
