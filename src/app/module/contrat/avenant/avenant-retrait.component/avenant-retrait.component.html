@@ -128,7 +128,7 @@
                         <th>Status</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-historiqueAveantAdherant>
+                <ng-template pTemplate="body" let-historiqueAveantAdherant >
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td>
                             <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
@@ -152,7 +152,7 @@
                                        (change)="compareDateRetrait(historiqueAveantAdherant)"
                                        [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
                             <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
-                                        dateFormat="dd/mm/yy" inputId="calendar" disabled="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"
+                                        dateFormat="dd/mm/yy" inputId="calendar" [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"
                                         appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"
                                         [disabled]="etat === 'VIEW'"></p-calendar>
                             </span>

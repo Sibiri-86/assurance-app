@@ -74,44 +74,51 @@
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-3">
                     <label for="nom">Nom <sup style="color: red !important; font-size: 1.4em">*</sup></label>
-                    <input id="nom" type="text" required formControlName="nom" pInputText>
+                    <input id="nom" type="text" required formControlName="nom" pInputText 
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="prenom">Prénom (s) <sup style="color: red !important; font-size: 1.4em">*</sup></label>
-                    <input id="prenom" type="text" formControlName="prenom" pInputText>
+                    <input id="prenom" type="text" formControlName="prenom" pInputText
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="tel">Téléphone <sup style="color: red !important; font-size: 1.4em">*</sup></label>
-                    <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                    <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} "></p-inputMask>
                     <!--<input id="tel" type="number" formControlName="numeroTelephone" pInputText>-->
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="matriculeGarant">Matricule chez le garant <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                    <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText>
+                    <input id="matriculeGarant" type="text" formControlName="matriculeGarant" pInputText
+                    [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="matriculeSouscripteur">Matricule chez le souscripteur <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                    <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText>
+                    <input id="matriculeSouscripteur" type="text" formControlName="matriculeSouscripteur" pInputText
+                    [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="mail">Adresse Email <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                     <input id="mail" type="email" formControlName="adresseEmail"
-                           pInputText>
+                           pInputText [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="adresse">Adresse <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                    <input id="adresse" type="text" formControlName="adresse" pInputText>
+                    <input id="adresse" type="text" formControlName="adresse" pInputText 
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
                     <label for="ref">Réference bancaire <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                    <input id="ref" type="text" formControlName="referenceBancaire" pInputText>
+                    <input id="ref" type="text" formControlName="referenceBancaire" pInputText
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} ">
                 </div>
 
                 <div class="p-field p-col-3">
@@ -141,8 +148,8 @@
 
                 <div class="p-field p-col-3">
                     <label for="genre">Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                    <p-dropdown inputId="genre" dataKey="id" [filter]="true" showClear="true"
-                                [options]="genreList" formControlName="genre"
+                    <p-dropdown inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre"
+                        [ngClass]="{'color-green': statut === 'VIEW', 'color-black': statut === 'UPDATE'} "
                                 placeholder="Select" optionLabel="libelle"></p-dropdown>
                 </div>
 
