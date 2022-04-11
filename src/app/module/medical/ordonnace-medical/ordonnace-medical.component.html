@@ -68,7 +68,7 @@
                         <td style="min-width:150px">
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation1(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-2" (click)="editerPrestation(tierPayant)"></button>
-<!--                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
+<!--                        <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerPrestation(tierPayant)"></button>
  -->                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                     </td>
 
@@ -258,8 +258,8 @@
 
                                         <div class="p-field p-col-4">
                                             <label for="typeQuantite">Nature du produit<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-dropdown dataKey="id" inputId="typeQuantite" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
-                                                        [options]="typeQuantiteList" formControlName="typeQuantite" optionLabel="libelle" (onChange)="selectActe()"></p-dropdown>
+                                            <p-dropdown inputId="typeQuantite" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
+                                                        [options]="typeQuantiteList" formControlName="typeQuantite" (onChange)="selectActe()"></p-dropdown>
                                         </div>
 
 
@@ -274,10 +274,15 @@
 
 
                                     <div class="p-fluid p-formgrid p-grid">
-                                        <div class="p-field p-col-2">
-                                            <button pButton pRipple icon="pi pi-plus" *ngIf="!isDetail && isModif" pTooltip="Supprimer produit" label="Supprimer produit"
-                                                    class="p-button-success" type="button" (click)="deleteItemPrestation(i)">
+                                        <div class="p-field p-col- p-mr-2">
+                                            <button pButton pRipple icon="pi pi-trash" *ngIf="!isDetail && isModif" pTooltip="Supprimer produit" label="Supprimer produit"
+                                                    class="p-button-danger" type="button" (click)="deleteItemPrestation(i)">
                                             </button>
+                                        </div>
+                                        <div class="p-field p-col-">
+                                            <button pButton [disabled]="!adherentSelected || !prestationForm.get('prestataire').value"
+                                                    pRipple icon="pi pi-plus" pTooltip="Ajouter produit" label="Ajouter produit"
+                                                    class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                                         </div>
                                     </div>
 
