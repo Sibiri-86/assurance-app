@@ -84,6 +84,25 @@ export class AssureComponent implements OnInit, OnDestroy {
     }
   }
 
+  clearSouscripteur(){
+    console.log('souscripteur');
+    if (this.garant){
+      this.adherentListFilter = this.adherentList.filter(element2 => element2.groupe.police.garant.id === this.garant.id);
+    } else{
+      this.adherentListFilter = this.adherentList;
+    }
+  }
+
+  clearGarant(){
+    console.log('garant');
+    if (this.police){
+      this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
+    } else{
+      this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
+    }
+
+  }
+
   ngOnDestroy(): void{
 
   }
