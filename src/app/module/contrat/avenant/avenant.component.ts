@@ -2375,6 +2375,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   onUpdateAvenant(rowdata: HistoriqueAvenant): void {
     console.log('modification en cours ..........');
+    this.policeItem = rowdata.police;
     this.historiqueAvenant = rowdata;
     switch (rowdata.typeHistoriqueAvenant) {
       case TypeHistoriqueAvenant.INCORPORATION:

@@ -91,6 +91,7 @@ export class AvenantIncorporationComponent implements OnInit{
     exerciceList: Array<Exercice>;
     viewListeEdit = false;
     @Input() groupesInput: Array<Groupe>;
+    selectedGroup: Groupe = {};
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -226,6 +227,9 @@ export class AvenantIncorporationComponent implements OnInit{
         if (this.groupesInput) {
             console.log('-------------groupesInput--------------------' + this.groupesInput.length);
             this.groupePolicy = this.groupesInput;
+        } else {
+            console.log('---------------avenantId------------------' + this.avenantId);
+            this.loadGoupeByPolice();
         }
     }
 
@@ -233,6 +237,7 @@ export class AvenantIncorporationComponent implements OnInit{
         // this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
         this.adherentFamilleListe.forEach(af => {
+            // af.adherent.groupe = this.curentGroupe;
             af.famille.forEach(f => {
                 f.adherentPrincipal = null;
             });
@@ -268,12 +273,21 @@ export class AvenantIncorporationComponent implements OnInit{
     ajouter(): void {
         console.log('----------------------------------');
         console.log(this.familys);
+        console.log(this.customForm.controls.groupe.value);
         const formAdherent: FormGroup = this.createForm();
-        formAdherent.patchValue({dateIncorporation: this.adherentForm.get('dateIncorporation').value});
+        formAdherent.patchValue({
+            dateIncorporation: this.adherentForm.get('dateIncorporation').value,
+        });
+        
         // formAdherent.controls.f
         this.familys.push(formAdherent);
         this.familles.forEach(family => {
             family.adherentPrincipal = null;
+            family.groupe = this.customForm.controls.groupe.value;
+        });
+        this.familys.value.forEach(family => {
+            family.adherentPrincipal = null;
+            family.groupe = this.customForm.controls.groupe.value;
         });
     }
     delete(ri: number): void {
@@ -308,14 +322,18 @@ export class AvenantIncorporationComponent implements OnInit{
     createHistoriqueAvenant(): void {
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
+        adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
         adherantFamille.famille = this.familys.value;
         adherantFamille.famille.forEach(f => {
             f.adherentPrincipal = null;
+            f.groupe = this.customForm.controls.groupe.value;
         });
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
         this.adherentSelected = {};
+        console.log('***************-------------------------');
+        console.log(adherantFamille);
     }
 
     loadAdherentPrincipalInfo() {
@@ -426,7 +444,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     onDemandeurChange(): void { }
 
-    private loadActivedExercice(police: Police): void {
+    loadActivedExercice(police: Police): void {
         if (police) {
             this.exercice$ = this.store.pipe(select(exerciceSelector.selectActiveExercice));
             this.store.dispatch(featureExerciceAction.loadExerciceActif({policeId: police.id}));
@@ -464,7 +482,7 @@ export class AvenantIncorporationComponent implements OnInit{
             this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
                 if (value) {
                     this.groupePolicy = value.slice();
-                    console.log(this.groupePolicy);
+                    console.log('.........GRP..........', this.groupePolicy);
                 }
             });
         }
@@ -500,6 +518,7 @@ export class AvenantIncorporationComponent implements OnInit{
                         fin: res.exercice.fin,
                         actived: res.exercice.actived
                     });
+                    // this.viewListeEdit = true;
                 }
             );
             this.viewListeEdit = true;
@@ -510,7 +529,7 @@ export class AvenantIncorporationComponent implements OnInit{
         // this.historiqueAvenant1.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
         this.historiqueAvenant1.numeroGarant = this.myForm.get('numero').value || 0;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateIncorparation').value;
-        this.historiqueAvenant1.dateEffet = this.myForm.get('dateEffet').value;
+        this.historiqueAvenant1.dateEffet = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:

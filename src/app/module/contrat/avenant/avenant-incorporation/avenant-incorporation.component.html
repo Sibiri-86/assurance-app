@@ -1,7 +1,7 @@
 <div class="p-card">
     <div class="p-fluid p-grid">
 
-        <div class="p-field p-col-4" *ngIf="!isNewGroupe">
+        <div class="p-field p-col-4" *ngIf="etat === 'CREATE'">
             <form [formGroup]="customForm">
                 <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
                             name="selectedGroup"
@@ -11,7 +11,17 @@
                 </p-dropdown>
             </form>
         </div>
-
+        <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
+            <form [formGroup]="customForm">
+                <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
+                            name="selectedGroup" [filter]="true" filterBy="libelle" [showClear]="true"
+                            placeholder="Choisir un groupe">
+                </p-dropdown>
+            </form>
+        </div>
+        <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
+            <span style="color: red; font-weight: bold;">Veuillez choisir le groupe de l'assuré</span>
+        </div>
         <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
             <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
         </div>
@@ -302,7 +312,7 @@
                         </button>
                     </div>
                     <div class="p-field p-col-2 p-ac-center">
-                        <button pButton pRipple icon="pi pi-save" pTooltip="Valider la viste des incorporés" label="Enregistrer"
+                        <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
                                 [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
                         </button>

@@ -1750,7 +1750,7 @@
             <div class="card">
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
                     <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe" [etat]="etat" [avenantId]="historiqueAvenant.id"
-                                               (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem"></app-avenant-incorporation>
+                                               (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem" [groupesInput]="historiqueAvenant.id"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
                     <app-avenant-retrait [police]="policeItem" [isRenouv]="false" [avenantDate]="" [etat]="etat" [avenantId]="historiqueAvenant.id"
