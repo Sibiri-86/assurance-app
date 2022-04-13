@@ -413,7 +413,7 @@ export class TierPayantEditionComponent implements OnInit {
                 // tslint:disable-next-line:jsdoc-format
                 /** Recuperer les infos de tous les champs*/
                 // tslint:disable-next-line:no-unused-expression
-                // this.isModif === true;
+                this.isModif === true;
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
@@ -625,11 +625,11 @@ export class TierPayantEditionComponent implements OnInit {
             id: new FormControl(),
             nombreActe: new FormControl(null, Validators.required),
             coutUnitaire: new FormControl(null, Validators.required),
-            debours: new FormControl({disabled: true}),
+            debours: new FormControl({value: '', disabled: true}),
             sousActe: new FormControl(null, Validators.required),
-            baseRemboursement: new FormControl({disabled: true}),
-            taux: new FormControl({disabled: true}, Validators.required),
-            montantRembourse: new FormControl({disabled: true}, Validators.required),
+            baseRemboursement: new FormControl({value: '', disabled: true}),
+            taux: new FormControl({value: '', disabled: true}, Validators.required),
+            montantRembourse: new FormControl({value: '', disabled: true}, Validators.required),
             sort: new FormControl(),
             observation: new FormControl(),
             prestataire: new FormControl(),

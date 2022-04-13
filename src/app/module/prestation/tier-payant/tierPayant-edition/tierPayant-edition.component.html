@@ -79,9 +79,9 @@
                         </td>
                         <td>
                             <!-- <span class="p-column-title" style="width:50px">{{tierPayant?.etat}}</span> -->
-                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success">{{tierPayant?.etat}}</span>
-                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
-                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{tierPayant?.etat}}</span>
+                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success" style="width:90px">{{tierPayant?.etat}}</span>
+                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning" style="width:90px">EN ATTENTE..</span>
+                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger" style="width:90px">{{tierPayant?.etat}}</span>
                         </td>
 
                         <td style="width:175px">
@@ -450,6 +450,12 @@
                                             <button pButton pRipple icon="pi pi-plus" *ngIf="!isDetail && isModif" pTooltip="Supprimer prestation" label="Supprimer prestation"
                                                     class="p-button-success" type="button" (click)="deleteItemPrestation(i)">
                                             </button>
+                                        </div>
+                                        <div class="p-field p-col-2">
+                                            <button pButton [disabled]="!adherentSelected || !prestationForm.get('dateDeclaration').value
+                                            || !prestationForm.get('numeroFacture').value"
+                                                    pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                                                    class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                                         </div>
                                     </div>
 

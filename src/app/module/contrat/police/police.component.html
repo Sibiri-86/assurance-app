@@ -3205,7 +3205,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">IFU souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <label for="lastname2">IFU souscripteur <span style="color: red !important; font-size: 1.4em"></span></label>
                             <input id="ifu" type="text" formControlName="numeroIfu" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'numeroIfu'">
@@ -3236,7 +3236,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="refPolice">Reference police du garant <span style="color: red !important; font-size: 1.4em"></span></label>
+                            <label for="refPolice">Reference police chez le garant <span style="color: red !important; font-size: 1.4em"></span></label>
                             <input id="referencePolice" type="text" formControlName="referencePolice" pInputText>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'referencePolice'">
@@ -3256,7 +3256,7 @@
                 <p-fieldset legend="Localisation" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="pays">Pays</label>
+                            <label for="pays">Pays<span style="color: red !important; font-size: 1.4em"></span></label>
                             <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" (onChange)="changeCountry($event)" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'pays'">
@@ -3264,7 +3264,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Région</label>
+                            <label for="lastname2">Région<span style="color: red !important; font-size: 1.4em"></span></label>
                             <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'region'">
@@ -3272,7 +3272,7 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Province</label>
+                            <label for="lastname2">Province<span style="color: red !important; font-size: 1.4em"></span></label>
                             <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList"  (onChange)="changeDepartement($event)" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'departement'">
@@ -3284,7 +3284,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Commune <span class="required">*</span></label>
+                            <label for="lastname2">Commune <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" dataKey="id" placeholder="Select" (onChange)="changeCommune($event)" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'commune'">
@@ -3300,7 +3300,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="secteur">Secteur <span class="required">*</span></label>
+                            <label for="secteur">Secteur <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown inputId="secteur" [filter]="true" showClear="true" [options]="secteurList" dataKey="id" formControlName="secteur" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'secteur'">

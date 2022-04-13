@@ -609,7 +609,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
           },
         ],
       },
-      {
+      /* {
         field: "numeroIfu",
         validations: [
           { validName: "required", validMessage: "Ce champs est obligatoire" },
@@ -618,7 +618,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
             validMessage: "Ce champs requiert au plus 5 caractères",
           },
         ],
-      },
+      }, */
       {
         field: "numeroPattente",
         validations: [
