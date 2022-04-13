@@ -73,6 +73,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
+  sousActeListFilter: Array<SousActe>;
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   prestataireList$: Observable<Array<Prestataire>>;
@@ -96,6 +97,8 @@ export class ConventionComponent implements OnInit, OnDestroy {
   displayFormConvention = false;
   convention: Convention = {};
   statusObject$: Observable<Status>;
+  displayActe = false;
+  displaySousActe = false;
 
   constructor( private store: Store<AppState>,
                private confirmation: ConfirmationService,
@@ -110,7 +113,10 @@ export class ConventionComponent implements OnInit, OnDestroy {
       id: new FormControl(),
       montant: new FormControl(),
       sousActe: new FormControl(),
-      prestataire: new FormControl()
+      acte: new FormControl(),
+      garantie: new FormControl(),
+      prestataire: new FormControl(),
+      dateEffet: new FormControl()
     });
 
     this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
@@ -136,6 +142,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
+        this.sousActeListFilter = this.sousActeList;
         //this.sousActeListFilter = this.sousActeList;
       }
     });
@@ -168,11 +175,15 @@ export class ConventionComponent implements OnInit, OnDestroy {
 
   annulerSaisie() {
     this.closeDialog();
+    this.displaySousActe = false;
+    this.displayActe = false;
   }
 
   closeDialog(){
     this.conventionForm.reset();
     this.displayFormConvention = false;
+    this.displaySousActe = false;
+    this.displayActe = false;
   }
 
   onCreate(){
@@ -183,18 +194,39 @@ export class ConventionComponent implements OnInit, OnDestroy {
     this.store.dispatch(conventionAction.createConvention(this.convention));
     }
     this.conventionForm.reset();
+    this.displayActe = false;
+    this.displaySousActe = false;
     this.convention = {};
   }
+  changeGarantie($event) {
+    this.acteListFilter = this.acteList.filter(ele => ele.idTypeGarantie === $event.value.id);
+    this.displayActe = true;
+  }
 
+  selectActe($event) {
+    this.sousActeListFilter = this.sousActeList.filter(el => el.idTypeActe === $event.value.id);
+    this.displaySousActe = true;
+  }
 
   selectPrestataire($event) {
     console.log($event.value);
     this.conventionListFilter = this.conventionList.filter(element1 => element1.prestataire.id === $event.value.id);
   }
 
-  editer(convention: Convention){
-  this.conventionForm.patchValue(convention);
+  editer(convention: Convention) {
+  console.log(convention);
+  //this.conventionForm.patchValue(convention);
+  const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
+  const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
+  this.conventionForm.get('acte').setValue(acte);
+  this.conventionForm.get('garantie').setValue(garantie);
+  //this.conventionForm.get('dateEffet').setValue(new Date(convention.dateEffet));
+  this.conventionForm.patchValue({montant: convention.montant,
+    prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
+  dateEffet: new Date(convention.dateEffet)});
   this.displayFormConvention = true;
+  this.displaySousActe = true;
+  this.displayActe = true;
   }
 
   supprimer(convention: Convention){

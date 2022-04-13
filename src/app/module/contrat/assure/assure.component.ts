@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {takeUntil} from "rxjs/operators";
+import {takeUntil} from 'rxjs/operators';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
@@ -15,7 +15,7 @@ import { Garant } from 'src/app/store/parametrage/garant/model';
 import { loadGarant } from 'src/app/store/contrat/garant/actions';
 import { Police } from 'src/app/store/contrat/police/model';
 import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
-import {loadPolice} from 'src/app/store/contrat/police/actions';
+import {loadPolice, loadPoliceAll} from 'src/app/store/contrat/police/actions';
 import { element } from 'protractor';
 @Component({
   selector: 'app-assure',
@@ -55,7 +55,7 @@ export class AssureComponent implements OnInit, OnDestroy {
     });
 
     this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPolice());
+    this.store.dispatch(loadPoliceAll());
     this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.policeList = value.slice();
@@ -76,31 +76,13 @@ export class AssureComponent implements OnInit, OnDestroy {
   }
 
   filtrer(){
+    this.adherentListFilter = this.adherentList;
     if (this.police){
       this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
     }
     if (this.garant){
-      this.adherentListFilter = this.adherentList.filter(element2 => element2.groupe.police.garant.id === this.garant.id);
+      this.adherentListFilter = this.adherentListFilter.filter(element2 => element2.groupe.police.garant.id === this.garant.id);
     }
-  }
-
-  clearSouscripteur(){
-    console.log('souscripteur');
-    if (this.garant){
-      this.adherentListFilter = this.adherentList.filter(element2 => element2.groupe.police.garant.id === this.garant.id);
-    } else{
-      this.adherentListFilter = this.adherentList;
-    }
-  }
-
-  clearGarant(){
-    console.log('garant');
-    if (this.police){
-      this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
-    } else{
-      this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
-    }
-
   }
 
   ngOnDestroy(): void{

@@ -13,13 +13,13 @@
                                         showClear="true" [options]="policeList"
                                         [autoDisplayFirst]="false"
                                         placeholder="Selectionnez le souscripteur"
-                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="police" (onClear)="clearSouscripteur()"></p-dropdown>
+                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="police"></p-dropdown>
                                         
                     <p-dropdown inputId="garant" dataKey="id" [filter]="true"
                                         showClear="true" [options]="garantList"
                                         [autoDisplayFirst]="false"
                                         placeholder="Selectionnez le garant"
-                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="garant" (onClear)="clearGarant()"></p-dropdown>
+                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="garant"></p-dropdown>
                     
                     <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
                     </div>
@@ -82,7 +82,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{adherentList ? adherentList.length : 0 }} assuré(s) au total.
+                        {{adherentListFilter ? adherentListFilter.length : 0 }} assuré(s) au total.
                     </div>
                 </ng-template>
             </p-table>

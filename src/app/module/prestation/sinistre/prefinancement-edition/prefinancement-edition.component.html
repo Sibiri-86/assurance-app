@@ -357,8 +357,13 @@
                            <div class="p-fluid p-formgrid p-grid">
                                
                             <div class="p-field p-col-4">
-                                <label for="nombreActe">Montant remboursé restant<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Montant non remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
                                 <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
+                            </div>
+                            
+                            <div class="p-field p-col-4">
+                                <label for="nombreActe">Montant supporté<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <p-inputNumber formControlName="montantSupporte" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
                             </div>
                             
                             <div class="p-field p-col-4">
@@ -401,10 +406,10 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!adherentSelected || !prestationForm.get('prestation')['controls'].length" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected || !prestationForm.valid" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
-               </form> 
+               </form>
                </div>    
                </ng-template>      
             </p-dialog>
