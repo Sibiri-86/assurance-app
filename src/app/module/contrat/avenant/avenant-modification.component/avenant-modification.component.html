@@ -1092,8 +1092,9 @@
                 </div>
             </div>
         </p-tabPanel>
-        <!--<p-tabPanel header="BAREME" leftIcon="pi pi-cog" tooltip="BAREME">
-        </p-tabPanel>-->
+        <p-tabPanel header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+          <app-plafond-famille-acte [etat]="'VIEW'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
+        </p-tabPanel>
     </p-tabView>
     <hr>
 

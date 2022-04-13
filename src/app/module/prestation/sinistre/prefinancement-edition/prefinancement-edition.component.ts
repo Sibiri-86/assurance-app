@@ -155,18 +155,19 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       nombreActe: new FormControl('', [Validators.required]),
       coutUnitaire: new FormControl('', [Validators.required]),
       debours: new FormControl(),
-      sousActe: new FormControl([Validators.required]),
+      sousActe: new FormControl(Validators.required),
       baseRemboursement: new FormControl(),
       taux: new FormControl(),
       montantRembourse: new FormControl(),
       sort: new FormControl(),
       montantRestant: new FormControl(),
+      montantSupporte: new FormControl(),
       observation: new FormControl(),
       prestataire: new FormControl(),
       centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
-      dateSoins: new FormControl('', [Validators.required]),
+      dateSoins: new FormControl(null, Validators.required),
       acte: new FormControl(),
       medecin: new FormControl(),
       historiqueAvenant: new FormControl()
@@ -183,13 +184,13 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       referenceSinistreGarant: new FormControl(''),
       referenceBordereau: new FormControl(''),
       dateSaisie: new FormControl({value: '', disabled: true}),
-      dateDeclaration: new FormControl(''),
+      dateDeclaration: new FormControl(),
       matriculeAdherent: new FormControl(''),
       nomAdherent: new FormControl({value: '', disabled: true}),
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
       numeroPolice: new FormControl({value: '', disabled: true}),
-      bonPriseEnCharge: new FormControl(''),
+      bonPriseEnCharge: new FormControl(),
       prestation: this.formBuilder.array([])
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -423,9 +424,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
       this.prestationForm.get('prestation').value[i].nombreActe *
-      this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
-      (this.prestationForm.get('prestation').value[i].nombreActe *
-      this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
+      this.prestationForm.get('prestation').value[i].coutUnitaire});
     }
     this.prefinancementModel = this.prestationForm.value;
     this.prefinancementModel.dateSaisie = new Date();
@@ -443,6 +442,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         for (let j = 0; j < this.checkPrefinancementResult.length; j++){
           myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
           myForm.patchValue({montantRembourse: this.checkPrefinancementResult[j].montantRembourse,
+            montantSupporte: (this.prestationForm.get('prestation').value[i].nombreActe *
+            this.prestationForm.get('prestation').value[i].coutUnitaire) - this.checkPrefinancementResult[j].montantRembourse,
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
             observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
           });

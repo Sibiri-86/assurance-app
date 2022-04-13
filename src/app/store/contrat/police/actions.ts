@@ -8,6 +8,7 @@ export const cloturePolice = createAction('[App Init] cloture Police', props<Pol
 export const deletePolice = createAction('[App Init] delete Police', props<Police>());
 export const deletePolices = createAction('[App Init] delete Polices', props<{PoliceList:Array<Police>}>());
 export const loadPolice = createAction('[App Init] load Police');
+export const loadPoliceAll = createAction('[App Init] load Police all');
 export const loadStatistique = createAction('[App Init] load Statistique');
 export const loadRapport = createAction('[App Init] load Rapport', props<Police>());
 export const setStatistique = createAction('[App Init] set Statistique', props<Statistique>());

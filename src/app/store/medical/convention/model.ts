@@ -6,6 +6,7 @@ export interface Convention {
     montant?: number;
     prestataire?: Prestataire;
     sousActe?: SousActe;
+    dateEffet?: Date;
 }
 
 export interface ConventionList {

@@ -192,6 +192,7 @@ export class AvenantModificationComponent implements OnInit {
   adherentList: Array<Adherent>;
   historiqueGroupes: HistoriqueGroupe[] = [];
   numero: number;
+  historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -742,6 +743,7 @@ export class AvenantModificationComponent implements OnInit {
     this.addFamilleActe(this.police);
     this.loadActivedExercice(this.police);
     this.updateAvenant(this.avenantId);
+    this.getHistoriquePlafondGroupeFamilleActeByPolice();
   }
 
   addSousActe() {
@@ -1489,5 +1491,14 @@ export class AvenantModificationComponent implements OnInit {
               sousActe.taux = plafondFamilleActe.taux;
           });
       });
+  }
+
+  getHistoriquePlafondGroupeFamilleActeByPolice(): void {
+    this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.police.id).subscribe(
+      (res) => {
+        this.historiquePlafondFamilleActePlafongConfig = res;
+        console.log('result ==============  ', res);
+      }
+    );
   }
 }

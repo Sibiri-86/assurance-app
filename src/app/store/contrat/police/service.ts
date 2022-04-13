@@ -20,6 +20,14 @@ export class PoliceService {
         );
     }
 
+    $getPolicesAll(): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/all`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
+
     $getStatistiquePolice(): Observable<Statistique> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/statistique`).pipe(

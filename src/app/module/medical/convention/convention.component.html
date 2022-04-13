@@ -33,6 +33,7 @@
                         <th pSortableColumn="duree" style="min-width:100px">prestataire<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:200px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Montant en FCFA<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Date Effet<p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -45,6 +46,8 @@
                         <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.libelle}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{convention.montant | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.dateEffet | formatTableValue : 'date'}}</span>
                         </td>
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editer(convention)"></button>
@@ -67,38 +70,40 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="lastname2">Famille acte</label>
-                        <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)" appendTo="body"></p-dropdown>
+                        <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" formControlName="garantie" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)" appendTo="body"></p-dropdown>
+                        <div class="p-field p-col">
+                            <p-dropdown *ngIf="displayActe" dataKey="id" inputId="acte" formControlName="acte"   [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" optionLabel="libelle" (onChange)="selectActe($event)" appendTo="body"></p-dropdown>
+                            <div class="p-field p-col">
+                                <p-dropdown *ngIf="displaySousActe" inputId="sousActe" dataKey="id" [filter]="true"
+                                            showClear="true" [options]="sousActeListFilter"
+                                            formControlName="sousActe"  [autoDisplayFirst]="false"
+                                            optionLabel="libelle" appendTo="body"></p-dropdown>  
+                            </div>
+                        </div> 
                     </div>
                     
-                    <div class="p-field p-col">
-                        <label for="lastname2">Acte</label>
-                        <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" optionLabel="libelle" (onChange)="selectActe($event)" appendTo="body"></p-dropdown>
-                    </div> 
-                    
-                    <div class="p-field p-col">
-                        <label for="sousActe">Sous-acte</label>
-                        <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
-                                    showClear="true" [options]="sousActeList"
-                                    formControlName="sousActe"  [autoDisplayFirst]="false"
-                                    optionLabel="libelle" appendTo="body"></p-dropdown>    
-                    </div>
-                </div>
-                
-                <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-4">
                         <label for="lastname2">Prestataire</label>
                         <p-dropdown dataKey="id" inputId="prestataire"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="prestataireList" formControlName="prestataire" optionLabel="libelle" appendTo="body"></p-dropdown>
                     </div> 
                     <div class="p-field p-col-4">
                         <label for="montant">Montant</label>
-                        <input id="montant" type="number"  formControlName="montant" pInputText>
+                        <p-inputNumber mode="decimal" locale="fr-FR" id="montant" formControlName="montant" ></p-inputNumber>
                     </div> 
+                </div>
+                
+                <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4">
+                    <label for="dateEffet">Date effet <span style="color: red !important;">*</span></label>
+                    <p-calendar id="dateEffet" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
+                </div>
                 </div>
                 
                 <br/>
                 <div class="p-grid p-justify-between">
+                    
                     <div>
-                    <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
+                    <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="closeDialog()"></button>
                     </div>
                     <div>
                     <button  pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
