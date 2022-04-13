@@ -279,7 +279,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                             <div class="p-field p-col">
-                            <label for="lastname2">Numero compte bancaire 1</label>
+                            <label for="lastname2">Numero compte bancaire 1 <span class="required"></span></label>
                             <input id="lastname2" type="text"  formControlName="numeroCompteBancaire1" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire1'">
@@ -295,7 +295,7 @@
                             </div>
 
                             <div class="p-field p-col">
-                            <label for="lastname2">Numero compte bancaire 2</label>
+                            <label for="lastname2">Numero compte bancaire 2 <span class="required"></span></label>
                             <input id="lastname2" type="text"  formControlName="numeroCompteBancaire2" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                               [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire2'">
@@ -317,7 +317,7 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Nom banque 2 </label>
+                            <label for="lastname2">Nom banque 2 <span class="required"></span></label>
                             <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque1" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="intermediaireForm" [entityField]="'banque1'">
@@ -325,7 +325,7 @@
                         </div>
 
                           <div class="p-field p-col">
-                            <label for="lastname2">IFU</label>
+                            <label for="lastname2">IFU <span class="required"></span></label>
                             <input id="lastname2" type="text"  formControlName="numeroIfu" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="intermediaireForm" [entityField]="'numeroIfu'">
@@ -333,7 +333,7 @@
                             </div>
 
                             <div class="p-field p-col-4">
-                                <label for="lastname2">RCCM</label>
+                                <label for="lastname2">RCCM <span class="required"></span></label>
                                 <input id="lastname2" type="text"   formControlName="rccm" pInputText>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="intermediaireForm" [entityField]="'rccm'">
@@ -347,17 +347,17 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Pays</label>
+                            <label for="lastname2">Pays <span class="required"></span></label>
                             <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Region</label>
+                            <label for="lastname2">Region <span class="required"></span></label>
                             <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList"  placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Province</label>
+                            <label for="lastname2">Province <span class="required"></span></label>
                             <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                     </div>
@@ -369,7 +369,7 @@
                          </div>
 
                          <div class="p-field p-col-4">
-                            <label for="arrondissement">Arrondissement</label>
+                            <label for="arrondissement">Arrondissement <span class="required"></span></label>
                             <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
                          </div>
 

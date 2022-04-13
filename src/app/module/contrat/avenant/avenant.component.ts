@@ -1829,6 +1829,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste de retrait', icon: 'pi pi-print', command: () => {
+          /* this.report.typeReporting = TypeReport.LISTE_RETRAIT;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report)); */
           this.report.typeReporting = TypeReport.LISTE_RETRAIT;
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
