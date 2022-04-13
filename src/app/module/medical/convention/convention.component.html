@@ -103,10 +103,10 @@
                 <div class="p-grid p-justify-between">
                     
                     <div>
-                    <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="closeDialog()"></button>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times" (click)="closeDialog()"></button>
                     </div>
                     <div>
-                    <button  pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button [disabled]="conventionForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
                     </div>
                 </div>
                 </form>  

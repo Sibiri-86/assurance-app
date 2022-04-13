@@ -111,12 +111,12 @@ export class ConventionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.conventionForm = this.formBuilder.group({
       id: new FormControl(),
-      montant: new FormControl(),
-      sousActe: new FormControl(),
+      montant: new FormControl('', Validators.required),
+      sousActe: new FormControl(null, Validators.required),
       acte: new FormControl(),
       garantie: new FormControl(),
-      prestataire: new FormControl(),
-      dateEffet: new FormControl()
+      prestataire: new FormControl(null, Validators.required),
+      dateEffet: new FormControl(null, Validators.required)
     });
 
     this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
@@ -171,6 +171,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
 
   addConvention() {
     this.displayFormConvention = true;
+    this.conventionForm.reset();
   }
 
   annulerSaisie() {
@@ -218,12 +219,9 @@ export class ConventionComponent implements OnInit, OnDestroy {
   //this.conventionForm.patchValue(convention);
   const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
   const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
-  this.conventionForm.get('acte').setValue(acte);
-  this.conventionForm.get('garantie').setValue(garantie);
-  //this.conventionForm.get('dateEffet').setValue(new Date(convention.dateEffet));
   this.conventionForm.patchValue({montant: convention.montant,
     prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
-  dateEffet: new Date(convention.dateEffet)});
+  dateEffet: new Date(convention.dateEffet), acte, garantie});
   this.displayFormConvention = true;
   this.displaySousActe = true;
   this.displayActe = true;
