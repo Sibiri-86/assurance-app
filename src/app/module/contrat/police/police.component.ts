@@ -323,8 +323,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.policeForm = this.formBuilder.group({
       id: new FormControl(''),
       numero: new FormControl(''),
-      garant: new FormControl(''),
-      intermediaire: new FormControl('', [Validators.required]),
+      garant: new FormControl(null, [Validators.required]),
+      intermediaire: new FormControl(null, [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
       taux: new FormControl(null, [Validators.required]),
       territorialite: new FormControl('', [Validators.required]),
@@ -333,7 +333,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       dateEffet: new FormControl('', [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
       adressePostale: new FormControl('', [Validators.required]),
-      tauxCommissionIntermediaire: new FormControl('', [Validators.required]),
+      tauxCommissionIntermediaire: new FormControl(null),
       // dateSaisie: new FormControl('',[Validators.required]),
       // dateValidation: new FormControl('',[Validators.required]),
       nom: new FormControl('', [Validators.required]),
@@ -348,7 +348,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       rccm: new FormControl(''),
       secteur: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
-      referencePolice: new FormControl('', [Validators.required]),
+      referencePolice: new FormControl(''),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl('', [Validators.required])
     });

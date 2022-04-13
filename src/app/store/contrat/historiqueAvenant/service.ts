@@ -272,4 +272,10 @@ private handleError<T>() {
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-by-id`,
             {params: createRequestOption({avenantId})});
     }
+
+    getsHistoriquePlafondGroupeFamilleActe(policeId: string): Observable<HistoriquePlafondFamilleActe[]> {
+        // @FIXME: post request
+        return this.http.get<HistoriquePlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historique-modification-police`,
+            {params: createRequestOption({policeId})});
+    }
 }

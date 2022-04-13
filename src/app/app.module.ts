@@ -250,6 +250,9 @@ import { ConventionEffects } from './store/medical/convention/effect';
 import { MedicalPipe } from './module/medical/pipes/medical.pipe';
 import { AssureComponent } from './module/contrat/assure/assure.component';
 import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
+import { PlafondFamilleActeComponent } from './module/contrat/avenant/plafond-famille-acte/plafond-famille-acte.component';
+import { PlafondActeComponent } from './module/contrat/avenant/plafond-acte/plafond-acte.component';
+import { PlafondSousActeComponent } from './module/contrat/avenant/plafond-sous-acte/plafond-sous-acte.component';
 
 @NgModule({
     imports: [
@@ -452,7 +455,10 @@ import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tie
         ConventionComponent,
         MedicalPipe,
         AssureComponent,
-        TierPayantOrdreReglementSearchComponent
+        TierPayantOrdreReglementSearchComponent,
+        PlafondFamilleActeComponent,
+        PlafondActeComponent,
+        PlafondSousActeComponent
     ],
     providers: [
         {
