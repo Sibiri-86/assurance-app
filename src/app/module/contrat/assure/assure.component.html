@@ -38,38 +38,36 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="nom">Matricule <p-sortIcon field="matricule"></p-sortIcon></th>
-                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 200px">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
                         <th pSortableColumn="qualiteAssure" style="width: 12rem">Qualité assuré<p-sortIcon field="qualiteAssure"></p-sortIcon></th>
                         <th pSortableColumn="souscripteur" style="width: 12rem">Souscripteur<p-sortIcon field="souscripteur"></p-sortIcon></th>
                         <th pSortableColumn="garant" style="width: 12rem">Garant<p-sortIcon field="qualiteAssure"></p-sortIcon></th>
+                        <th pSortableColumn="telephone">Téléphone<p-sortIcon field="telephone"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-adherent>
 
-                    <tr>
-                        <td>
+                    <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
+                        <!-- <td>
                             <p-tableCheckbox [value]="adherent"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                         <td><span class="p-column-title">{{adherent.numero}}</span>
                         </td>
-                        <td><span class="p-column-title">{{adherent.nom}}</span>
+                        <td><span class="p-column-title" style="width: 200px">{{adherent.nom}}</span>
 
                         </td>
                         <td><span class="p-column-title">{{adherent.prenom}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent.email}}</span>
-
-                        </td>
+                        
                         <td><span class="p-column-title">{{adherent.genre.libelle}}</span></td>
                         <td><span class="p-column-title">{{adherent.qualiteAssure.libelle}}</span></td>
                         <td>
@@ -77,6 +75,13 @@
                         </td>
                         <td>
                             <span class="p-column-title">{{adherent.groupe.police.garant.nom}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{adherent.numeroTelephone}}</span>
+                        </td>
+                        <td>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="détail assuré"
+                             class="p-button-rounded p-button-help" (click)="voirAssure(adherent)">
+                            </button>
                         </td>
                     </tr>
                 </ng-template>
@@ -88,4 +93,144 @@
             </p-table>
         </div>
     </div>
+    <p-dialog [maximizable]="true" [(visible)]="infosAdherent" header="Détail de l'assuré" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+        <ng-template pTemplate="content">
+            <div class="card">
+                
+            <h5></h5>
+            
+            <div class="p-grid">
+                
+            <div class="p-col-4">
+                    <div class="p-field p-col-4">
+                        <div *ngIf="adherent.urlPhoto" class="">
+                            <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="200" height="200" class="p-shadow-4" /> 
+                        </div>
+                    </div>
+            </div>
+                
+                
+            <div class="p-col-8">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="lastname2">Matricule</label>
+                    <div>
+                        <span>{{adherent.numero}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Matricule Garant</label>
+                    <div>
+                        <span>{{adherent.matriculeGarant}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Téléphone</label>
+                    <div>
+                        <span>{{adherent.numeroTelephone}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="lastname2">Nom</label>
+                    <div>
+                        <span>{{adherent.nom}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Prenom</label>
+                    <div>
+                        <span>{{adherent.prenom}}</span>
+                    </div>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="lastname2">Lieu de naissance</label>
+                    <div>
+                        <span>{{adherent.lieuNaissance}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="lastname2">Date naissance</label>
+                    <div>
+                        <span>{{adherent.dateNaissance | formatTableValue: 'date'}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Adresse</label>
+                    <div>
+                        <span>{{adherent.adresse}}</span>
+                    </div>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="lastname2">Adresse-email </label>
+                    <div>
+                        <span>{{adherent.adresseEmail}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="lastname2">Genre</label>
+                    <div>
+                        <span>{{adherent?.genre?.libelle}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Qualite-Assuré</label>
+                    <div>
+                        <span>{{adherent?.qualiteAssure?.libelle}}</span>
+                    </div>
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="lastname2">Profession</label>
+                    <div>
+                        <span>{{adherent?.profession?.libelle}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="lastname2">Matricule Souscripteur</label>
+                    <div>
+                        <span>{{adherent?.matriculeSouscripteur}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Souscripteur</label>
+                    <div>
+                        <span>{{adherent.groupe.police.nom}}</span>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Garant</label>
+                    <div>
+                        <span>{{adherent.groupe.police.garant.nom}}</span>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="p-grid p-justify-center">
+            <div *ngIf="adherent.urlPhoto" class="">
+                <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="200" height="200" class="p-shadow-4" /> 
+            </div>
+           </div>
+            -->
+        </div>
+        </div> 
+        </div>
+        </ng-template>
+    </p-dialog>
+
+
 </div>

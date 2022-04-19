@@ -68,6 +68,7 @@ import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 
 
 @Component({
@@ -137,7 +138,7 @@ export class TierPayantEditionComponent implements OnInit {
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
-                private breadcrumbService: BreadcrumbService) {
+                private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
 
@@ -696,6 +697,24 @@ export class TierPayantEditionComponent implements OnInit {
               }}
         ]
     }
+
+    compareDateDeclarationAndDateFacture(): void {
+        console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
+        console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value);
+        this.historiqueAvenantService.compareDate(this.prestationForm.get('dateFacture').value, this.prestationForm.get('dateDeclaration').value, ).subscribe(
+            (res) => {
+              if (res) {
+                this.addMessage('error', 'Date de déclaration invalide',
+                    'La date de déclaration du sinistre ne peut pas être superieure à celle de la facture');
+                    this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+              }
+            }
+        );
+      }
+
+      addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+      }
 
 }
 
