@@ -272,20 +272,26 @@
                                     <input id="nomPoliceAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" pInputText>
                                 </div>
                                 <div class="p-field p-col-3">
-                                    <label for="medecin">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                     <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                                                 showClear="true" [options]="bonPriseEnChargeList"
                                                 formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
-                                                optionLabel="numeros" (onChange)="onRowSelectBon($event)" style="font-weight: bold;
-                                                color: green !important;">
+                                                optionLabel="numeros" (onChange)="onRowSelectBon($event)">
                                             </p-dropdown>
+                                </div>
+                                
+                                <div class="p-field p-col-3">
+                                    <label for="montantReclame" >Montant reclamé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <p-inputNumber formControlName="montantReclame" mode="decimal" locale="fr-FR" 
+                                    placeholder="Saisir le montant reclamé par le prestataire"></p-inputNumber>
+
                                 </div>
                             </div>
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
                                 <button pButton [disabled]="!adherentSelected || !prestationForm.get('dateDeclaration').value
-                                || !prestationForm.get('numeroFacture').value"
+                                || !prestationForm.get('numeroFacture').value || !prestationForm.get('montantReclame').value"
                                         pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
@@ -425,8 +431,8 @@
                                                         formControlName="sort"></p-dropdown>
                                         </div>-->
                                         <div class="p-field p-col-3">
-                                            <label for="nombreActe">Montant remboursé restant<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>
+                                            <label for="nombreActe">Montant non remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR"></p-inputNumber>
                                         </div>
 
                                         <div class="p-field p-col-3">
@@ -434,11 +440,19 @@
                                             <p-dropdown inputId="decision" [filter]="true"
                                                         showClear="true" [options]="typeSort"
                                                         formControlName="sort"
-                                                        [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                                                        [autoDisplayFirst]="false"></p-dropdown>
                                         </div>
 
                                     </div>
                                     <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-3">
+                                        <label for="montantReclame">Montant reclamé par le prestataire<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                        <p-inputNumber formControlName="montantReclame" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    </div>
+                                    <div class="p-field p-col-3">
+                                        <label for="montantPaye">Montant payé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                        <p-inputNumber formControlName="montantPaye" class="champ" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                    </div>
                                     <div class="p-field p-col">
                                         <label for="observation" id="observation">Observation</label>
                                         <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
