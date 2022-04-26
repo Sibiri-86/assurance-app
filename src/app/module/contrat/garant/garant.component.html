@@ -467,7 +467,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Pays <span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle" (onChange)="changeCountry($event)"></p-dropdown>
+                            <p-dropdown inputId="pays" formControlName="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle" (onChange)="changeCountry($event)"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="garantForm" [entityField]="'pays'">
                             </app-entity-validation>
@@ -502,15 +502,15 @@
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Region<span style="color: red !important; font-size: 1.4em"></span></label>
-                                <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
+                                <p-dropdown inputId="region" formControlName="region" form [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'region'">
                                 </app-entity-validation>
-                                </div>
+                            </div>
      
                             <div class="p-field p-col">
                                 <label for="lastname2">Province<span style="color: red !important; font-size: 1.4em"></span></label>
-                                <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" (onChange)="changeDepartement($event)" optionLabel="libelle"></p-dropdown>
+                                <p-dropdown inputId="departement" formControlName="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" (onChange)="changeDepartement($event)" optionLabel="libelle"></p-dropdown>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                 [formGroup]="garantForm" [entityField]="'departement'">
                                 </app-entity-validation>
@@ -529,7 +529,7 @@
 
                          <div class="p-field p-col-4">
                             <label for="arrondissement">Arrondissement<span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
+                            <p-dropdown inputId="arrondissement" formControlName="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                             [formGroup]="garantForm" [entityField]="'arrondissement'">
                             </app-entity-validation>

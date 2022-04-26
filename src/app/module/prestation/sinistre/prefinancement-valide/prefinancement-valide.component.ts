@@ -244,7 +244,7 @@ export class PrefinancementValideComponent implements OnInit {
         this.prestataireList = value.slice();
       }
     });
-    
+
     this.medecinList$ = this.store.pipe(select(medecinSelector.medecinList));
     this.store.dispatch(loadMedecin());
     this.medecinList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -252,7 +252,7 @@ export class PrefinancementValideComponent implements OnInit {
         this.medecinList = value.slice();
       }
     });
-    
+
     this.acteList$ = this.store.pipe(select(acteSelector.acteList));
     this.store.dispatch(loadActe());
     this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -261,14 +261,14 @@ export class PrefinancementValideComponent implements OnInit {
         this.acteListFilter = this.acteList;
       }
     });
-    
+
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
 
   annulerPrestation(pref: Prefinancement) {
     this.confirmationService.confirm({
-      message: 'voulez-vous annuler le sinistre',
+      message: 'voulez-vous annuler le sinistre?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -277,7 +277,7 @@ export class PrefinancementValideComponent implements OnInit {
       },
     });
   }
-  
+
   creerOrdreRglement() {
     if (!this.selectPrefinancement || !this.selectPrefinancement.length) {
       this.showToast('error', 'INFORMATION', 'Veuillez selectionner au moins un sinistre');
@@ -292,17 +292,16 @@ export class PrefinancementValideComponent implements OnInit {
       });
     }
   }
-  
+
   validerPrestation(pref: Prefinancement){
-    
+
   }
-  
-  
+
   voirPrestation(pref: Prefinancement){
     this.displayPrestation = true;
     this.prestationListPrefinancement = pref.prestation;
   }
-  
+
   calculCoutDebours(data: FraisReels, ri: number){
     console.log(this.prestationList);
     console.log(data);
@@ -319,21 +318,21 @@ export class PrefinancementValideComponent implements OnInit {
     this.adherentSelected = null;
     this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
   }
-  
+
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
   }
-  
+
   // permet d'enregistrer une prestation par famille
 
-  
+
   changeGarantie(garantie) {
     console.log(garantie);
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
   }
-  
+
   newRowPrestation() {
     return {taux: this.taux};
   }
@@ -341,11 +340,11 @@ export class PrefinancementValideComponent implements OnInit {
   addPrefinancement(){
     this.displayFormPrefinancement = true;
   }
-  
+
   showToast(severity: string, summary: string, detail: string) {
     this.messageService.add({ severity, summary, detail });
   }
-  
+
   checkStatus() {
     this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
       if (statusObj) {
@@ -361,19 +360,18 @@ export class PrefinancementValideComponent implements OnInit {
       }
     });
   }
-  
 }
 
 
 export interface FraisReels {
-  nombreActe?: string,
-  coutUnitaire?: number,
-  debours?: number,
-  sousActe?: SousActe,
-  cle?: number,
-  baseRemboursement?: number,
-  taux?: Taux,
-  montantRembourse?: number,
-  sort?: Sort,
-  observation?: string
+  nombreActe?: string;
+  coutUnitaire?: number;
+  debours?: number;
+  sousActe?: SousActe;
+  cle?: number;
+  baseRemboursement?: number;
+  taux?: Taux;
+  montantRembourse?: number;
+  sort?: Sort;
+  observation?: string;
 }

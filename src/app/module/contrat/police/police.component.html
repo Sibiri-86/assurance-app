@@ -1326,7 +1326,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="rowData.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
-                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData?.dimensionPeriode?.libelle}}
@@ -1348,7 +1348,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="tauxList" [(ngModel)]="rowData.taux" optionLabel="taux" placeholder="Select taux"
-                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData?.taux?.taux}}
@@ -1371,7 +1371,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="typeEtat" [(ngModel)]="rowData.etat" placeholder="Select status"
-                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData?.etat}}
@@ -1493,7 +1493,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="typeEtat" [(ngModel)]="rowData2.etat" placeholder="Select status"
-                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                [style]="{'width':'100%'}" appendTo="body"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2?.etat}}

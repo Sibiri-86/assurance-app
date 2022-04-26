@@ -176,7 +176,6 @@
                         </p-fieldset>
                     </div>
                     </form>
-
                     <br/>
                     <p-fieldset legend="Bareme   " toggleable="true">
                     <p-toolbar>
@@ -190,11 +189,14 @@
                                 <button pButton pRipple label="Récapitulatif" [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length" icon="pi pi-eye" class="p-button-success p-mr-2 p-mb-2" (click)="voirParametrage()" ></button> 
                             </div>
                     </p-toolbar>
+                    
+                    
+                    
                     <p-table #dt [value]="plafondFamilleActe"  dataKey="" editMode="row">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Famille acte</th>
-                                <th style="width:12em">Montant plafonné/acte</th>
+                                <th>Montant plafonné/acte</th>
                                 <th>Montant plafonné/periode</th> 
                                 <th>Periode</th>
                                 <th>Nombre acte</th>
@@ -202,12 +204,12 @@
                                 <th>Domaine</th>
                                 <th>Date effet</th>
                                 <th>Status</th>
-                                <th style="width:8em"></th>
+                                <th></th>
                             </tr>
                         </ng-template>
         
                         <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-                            <tr [pEditableRow]="rowData" class="colorZone"> 
+                            <tr [pEditableRow]="rowData" class="colorZone">
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
@@ -320,10 +322,11 @@
                         </ng-template>
                     </p-table>
                 <br/>
-        <p-table #dtActe [value]="plafondActe" dataKey="id" editMode="row" *ngIf="displayActe" [scrollable]="true" scrollHeight="400px">
+                <br/>
+                <br/>
+            <p-table #dtActe [value]="plafondActe" dataKey="id" editMode="row"  [scrollable]="true" scrollHeight="400px" *ngIf="displayActe">
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width:3em"></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -333,7 +336,8 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th style="width:8em"></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
@@ -341,7 +345,7 @@
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
-                    <td >
+                    <td>
                         {{rowData.acte.libelle}}
                     </td>
 
@@ -351,7 +355,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                            <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafonné/periode"></p-inputNumber>
+                            <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.montantPlafond | formatTableValue: 'number':true}}
@@ -418,9 +422,9 @@
                         </p-cellEditor>
                     </td>
 
-                    <td style="text-align:center">
+                    <td>
                         <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInitPlafondActe(rowData)"></button>
-                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSavePlafondActe(rowData)"></button>
+                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" (click)="onRowEditSavePlafondActe(rowData)"></button>
                         <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancelPlafondActe(rowData, ri)"></button>
                     </td>
                 </tr>
@@ -429,11 +433,10 @@
             <ng-template pTemplate="rowexpansion" let-rowData>
                 <tr [pEditableRow]="rowData2">
                 <td colspan="11">
-                <div class="">
+                <div class="p-0">
                 <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="400px">
                 <ng-template pTemplate="header">
                 <tr>
-                    <th style="width:3em"></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -443,9 +446,10 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th style="width:8em"></th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </ng-template>
+                </ng-template>
 
             <ng-template pTemplate="body" let-rowData2 let-editing="editing" let-ri="rowIndex">
                 <tr [pEditableRow]="rowData2" class="colorZoneSousActe">
@@ -536,16 +540,16 @@
                         </p-cellEditor>
                     </td>
 
-                    <td style="text-align:center">
-                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondSousActe(rowData2)"></button>
-                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondSousActe(rowData2)"></button>
-                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondSousActe(rowData2, ri)"></button>
+                    <td>
+                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInitPlafondSousActe(rowData2)"></button>
+                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" (click)="onRowEditSavePlafondSousActe(rowData2)"></button>
+                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancelPlafondSousActe(rowData2, ri)"></button>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="9">Aucun sous-acte disponible</td>
+                    <td colspan="11">Aucun sous-acte disponible</td>
                 </tr>
             </ng-template>
         </p-table>
@@ -554,7 +558,7 @@
    </tr>
    </ng-template>
    </p-table>
-   </p-fieldset>
+</p-fieldset>
    <br/>
     <div class="p-grid p-justify-between">
         <div>
@@ -566,16 +570,6 @@
     </div>
    </div>    
 </p-dialog>
-
-
-
-
-
-
-
-
-
-
 
 <p-dialog [maximizable]="true" [(visible)]="displayVoirBareme" header="Barème" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}">
     <ng-template pTemplate="content">
@@ -1363,8 +1357,6 @@
 
 <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrageEdition" header="Modifier configuration" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}">
     <ng-template pTemplate="content">
-        
-        
         <p-table #dtConfigurationPlafond2 [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true" scrollHeight="500px">
             <ng-template pTemplate="header">
                 <tr>
