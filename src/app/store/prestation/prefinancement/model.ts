@@ -58,6 +58,16 @@ export interface BonPriseEnCharge {
     typeBon?: TypeBon;
 }
 
+export interface CheckPlafond {
+    sousActe?: SousActe;
+    adherent?: Adherent;
+    date?: Date;
+}
+
+export interface CheckPlafondResponse {
+    montant?: number;
+}
+
 export interface Prestation {
     id?: string;
     coutUnitaire?: number;

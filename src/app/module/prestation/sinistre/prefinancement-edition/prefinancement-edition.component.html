@@ -167,7 +167,7 @@
                     </div>
                     
                     <div class="p-field p-col">
-                        <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                        <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important;">*</span></label>
                         <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                     </div>
                     
@@ -204,6 +204,23 @@
                                         formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
                                         optionLabel="numeros" (onChange)="onRowSelectBon($event)"></p-dropdown>
                         </div>
+                        
+                        <div class="p-field p-col-4">
+                            <label for="nombreActe">Montant à reclamé</label>
+                            <p-inputNumber formControlName="montantReclame" mode="decimal" locale="fr-FR"></p-inputNumber>   
+                        </div>
+                    </div>
+                    
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="nombreActe">Montant reclamé</label>
+                            <p-inputNumber formControlName="montantSaisie" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
+                        </div>
+                        
+                        <div class="p-field p-col-4">
+                            <label for="nombreActe">Montant restant</label>
+                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
+                        </div> 
                     </div>
                     
                     
@@ -212,7 +229,7 @@
                         <div class="p-field p-col-2">
                             <button pButton [disabled]="!adherentSelected" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                     class="p-button-success" type="button" (click)="addItemPrestation()"></button>
-                        </div>
+                    </div>
                  
                 </p-fieldset>
                 
@@ -240,7 +257,7 @@
                                 <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
                                             showClear="true" [options]="sousActeListFilter"
                                             formControlName="sousActe"  [autoDisplayFirst]="false"
-                                            optionLabel="libelle"></p-dropdown>      
+                                            optionLabel="libelle" (onChange)="selectDateSoins(i)"></p-dropdown>      
                             </div>
                         </div>
                             
@@ -264,7 +281,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
-                                <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                                <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body" (onSelect)="selectDateSoins(i)"></p-calendar>
                             </div>
                             
                            </div>
@@ -378,6 +395,10 @@
                            
                            <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
+                                <label for="nombreActe">Montant plafond</label>
+                                <p-inputNumber formControlName="montantPlafond" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
+                            </div>
+                            <div class="p-field p-col-4">
                             <label for="observation">Observation</label>
                             <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
                             </div>
@@ -398,15 +419,13 @@
                             
                         </div>
                         </div>
-                        
                         <br/>
-                        
                         <div class="p-grid p-justify-between">
                             <div>
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!adherentSelected || !prestationForm.valid" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!adherentSelected || !prestationForm.valid || !prestationForm.controls.prestation.length" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                </form>

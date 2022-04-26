@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { Report } from '../../contrat/police/model';
-import { CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
+import { CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
 export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
 export const setPrefinancement = createAction('[App Init] set Prefinancement',  props<PrefinancementList>());
 export const loadPrefinancement = createAction('[App Init] load prefinancement');
@@ -35,3 +35,6 @@ export const searchPrefinancement = createAction('[App Init] search prefinanceme
      dateDeclaration: string}>() );
 export const searchOrdreReglement = createAction('[App Init] search ordre reglement', props<{numero: string,
         date: string}>() );
+/**check plafond des sous actes */
+export const checkPlafond = createAction('[App Init] Check plafond sous acte', props<CheckPlafond>());
+export const setPlafondSousActe = createAction('[set Plafond] set plafond', props<CheckPlafondResponse>());

@@ -103,6 +103,11 @@ export class GarantComponent implements OnInit, OnDestroy {
   infosGarant = false;
   tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
+  arrondissement: Arrondissement;
+  commune: Commune;
+  province: Departement;
+  region: Region;
+  pays: Pays;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -127,7 +132,10 @@ export class GarantComponent implements OnInit, OnDestroy {
         numeroIfu: new FormControl('', [Validators.required]),
         periodiciteAppelFond: new FormControl('', [Validators.required]),
         rccm: new FormControl('', [Validators.required]),
-        region: new FormControl(''),
+        pays: new FormControl(null),
+        region: new FormControl(null),
+        departement: new FormControl(null),
+        arrondissement: new FormControl(null),
         typeGarant: new FormControl('', [Validators.required]),
         commune: new FormControl('', [Validators.required]),
         banque1: new FormControl('', [Validators.required]),
@@ -553,7 +561,6 @@ editGarant(garant: Garant) {
 this.garant = {...garant};
 this.garantForm.patchValue(this.garant);
 this.displayDialogFormGarant = true;
-
 }
 
 deleteGarant(garant: Garant) {

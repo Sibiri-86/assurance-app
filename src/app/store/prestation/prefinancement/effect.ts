@@ -6,7 +6,7 @@ import { PrefinancementService } from './service';
 import * as featureActions from './action';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import { Prefinancement } from './model';
+import { CheckPlafond, Prefinancement } from './model';
 import { Report } from '../../contrat/police/model';
 
 @Injectable()
@@ -264,6 +264,20 @@ export class PrefinancementEffects {
                                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                 ))
                             ));
+                            /**verifier le plafond du sous-acte */
+                        checkPlafondSousActe$ = createEffect(() =>
+                            this.actions$.pipe(
+                                    ofType(featureActions.checkPlafond),
+                                    mergeMap((plafond: CheckPlafond) =>
+                                        this.prefinancementService.checkPlafondSousActe(plafond).pipe(
+                                            switchMap(value => [
+                                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                featureActions.setPlafondSousActe(value)
+                                            ]),
+                                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                        ))
+                                    ));
 
                         fetchReportPrestation$ = createEffect(() =>
                             this.actions$.pipe(
