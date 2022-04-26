@@ -18,7 +18,7 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-historiquePlafondFamilleActePlafong let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+    <ng-template pTemplate="body" let-historiquePlafondFamilleActePlafong let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
         <tr [pEditableRow]="plafond" class="colorZone">
             <td>
                 <button type="button" pButton pRipple [pRowToggler]="historiquePlafondFamilleActePlafong" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -26,7 +26,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-dropdown [options]="garanties" optionLabel="libelle" placeholder="Select periode" [disabled]="etat === 'VIEW'"
+                        <p-dropdown [options]="garanties" optionLabel="libelle" placeholder="Select periode"
                                     [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -43,7 +43,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-inputNumber [disabled]="etat === 'VIEW'" id="fraisBadgetAccessoirs" inputId="integeronly" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                        <p-inputNumber id="fraisBadgetAccessoirs" inputId="integeronly" [style]="{'width': '100%'}" placeholder="plafond/periode" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         <!--<input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -56,7 +56,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [options]="dimensionPeriodeList"  optionLabel="libelle" placeholder="Select periode"
-                                    [style]="{'width':'100%'}" [disabled]="etat === 'VIEW'"></p-dropdown>
+                                    [style]="{'width':'100%'}" [disabled]="true"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe?.dimensionPeriode?.libelle}}
@@ -67,7 +67,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-inputNumber id="fraisBadgetAccessoirs1" inputId="integeronly"  [style]="{'width': '100%'}" placeholder="plafond/periode" [disabled]="etat === 'VIEW'"></p-inputNumber>
+                        <p-inputNumber id="fraisBadgetAccessoirs1" inputId="integeronly"  [style]="{'width': '100%'}" placeholder="plafond/periode" [disabled]="true"></p-inputNumber>
                         <!--<input pInputText type="text" [(ngModel)]="plafond.nombre">-->
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -105,8 +105,9 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-calendar  [showIcon]="true" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet"  dateFormat="dd/mm/yy" 
-                        inputId="calendar" appendTo="body" [disabled]="etat === 'VIEW'"></p-calendar>
+                        <input type="date" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet" [disabled]="etat === 'VIEW'" style="width: 100%; height: 100%;">
+                        <!-- <p-calendar  [showIcon]="true" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet"  dateFormat="dd/mm/yy" 
+                        inputId="calendar" appendTo="body" [disabled]="etat === 'VIEW'"></p-calendar> -->
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet | formatTableValue : 'date'}}
@@ -133,13 +134,16 @@
             </td>
 
             <td style="text-align:center">
-                <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
-                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
-                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button> -->
+                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" 
+                (click)="onRowEditInitPlafondConfiguration(historiquePlafondFamilleActePlafong)" [disabled]="etat === 'VIEW'"></button>
+                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" 
+                style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(historiquePlafondFamilleActePlafong)"></button>
+                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" 
+                (click)="onRowEditCancelPlafondConfiguration(historiquePlafondFamilleActePlafong, ri)"></button>
             </td>
         </tr>
     </ng-template>
-    <ng-template pTemplate="rowexpansion" let-historiquePlafondFamilleActePlafong let-ri1>
+    <ng-template pTemplate="rowexpansion" let-historiquePlafondFamilleActePlafong let-ri>
         <tr >
             <td colspan="12">
                 <div class="">

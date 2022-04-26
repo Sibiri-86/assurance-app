@@ -559,7 +559,7 @@ export class AvenantModificationComponent implements OnInit {
   }
   historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
   historiquePlafondFamilleActeList: Array<HistoriquePlafondFamilleActe> = [];
-  historiquePlafondActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondActeList$: Observable<Array<HistoriquePlafondActe>>;
   historiquePlafondActeList: Array<HistoriquePlafondActe> = [];
   historiquePlafondSousActeList$: Observable<Array<HistoriquePlafondSousActe>>;
   historiquePlafondSousActeList: Array<Territorialite> = [];

@@ -164,8 +164,8 @@ export class AvenantSuspensionComponent implements OnInit {
   }
 
   onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
-    const value: boolean = !historiqueAvenantAdherant.selected;
-    console.log(historiqueAvenantAdherant);
+    const value: boolean = historiqueAvenantAdherant.selected;
+    console.log(historiqueAvenantAdherant.selected);
     historiqueAvenantAdherant.selected = value;
   }
 

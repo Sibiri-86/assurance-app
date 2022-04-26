@@ -82,7 +82,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-calendar  [showIcon]="true" [(ngModel)]="historiquePlafondActe?.plafondGroupeActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                        <input type="date" [(ngModel)]="historiquePlafondActe?.plafondGroupeActe.dateEffet" [disabled]="etat === 'VIEW'" style="width: 100%; height: 100%;">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{historiquePlafondActe?.plafondGroupeActe.dateEffet | formatTableValue : 'date'}}
@@ -121,7 +121,7 @@
         <tr >
             <td colspan="12">
                 <div class="">
-                    <app-plafond-sous-acte [historiquePlafondSousActes]="historiquePlafondActe?.listeSousActe"></app-plafond-sous-acte>
+                    <app-plafond-sous-acte [etat]="etat" [historiquePlafondSousActes]="historiquePlafondActe?.listeSousActe"></app-plafond-sous-acte>
                 </div>
             </td>
         </tr>
