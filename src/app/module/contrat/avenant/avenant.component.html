@@ -1751,10 +1751,29 @@
                   [style]="{width: '1400px'}" (onHide)="delAvenenant()" [maximizable]="true">
             <div class="card">
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
+                    <!-- 
+                        pour appeler l'avenant d'incorporation 
+                        isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        adherentPrincipauxTMP: liste des assurés principaux
+                        etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
+                        police: pour la police
+                        avenantId: id de l'avenant à charcher
+
+                    -->
                     <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                                (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem" [groupesInput]="historiqueAvenant.id"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
+                    <!-- 
+                        pour appeler l'avenant d'incorporation 
+                        -isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        -adherentPrincipauxTMP: liste des assurés principaux
+                        -etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
+                        -police: pour la police
+                        -avenantId: id de l'avenant à charcher
+                        -avenantDate : date de l'avenant
+                        -adherentFamilleEvent: liste des adhérents que le composant doit retourner
+                    -->
                     <app-avenant-retrait [police]="policeItem" [isRenouv]="false" [avenantDate]="" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>

@@ -120,6 +120,12 @@ import * as exerciceSelector from '../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
 // import * from 
 
+
+/*
+  la partie avenant utilise des composants réutilisables.
+  chaque type d'avenant est un composant réutilisable avec des entrée et des sorties.
+  exemple: <app-avenant-incorporation> <app-avenant-incorporation> pour avenant d'incorporation
+*/
 @Component({
   selector: 'app-avenant',
   templateUrl: './avenant.component.html',
