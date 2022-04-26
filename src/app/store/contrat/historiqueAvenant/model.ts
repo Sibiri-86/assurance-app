@@ -130,6 +130,7 @@ export class HistoriqueGroupe {
 }
 
 export class HistoriquePlafondFamilleActe {
+    id?: number;
     garantie?: Garantie;
     montantPlafond?: number;
     dimensionPeriode?: DimensionPeriode;

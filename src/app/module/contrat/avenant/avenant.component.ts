@@ -274,7 +274,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   avenantModification: AvenantModification = {};
   historiquePlafondFamilleActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
   historiquePlafondFamilleActeList: Array<HistoriquePlafondFamilleActe> = [];
-  historiquePlafondActeList$: Observable<Array<HistoriquePlafondFamilleActe>>;
+  historiquePlafondActeList$: Observable<Array<HistoriquePlafondActe>>;
   historiquePlafondActeList: Array<HistoriquePlafondActe> = [];
   historiquePlafondSousActeList$: Observable<Array<HistoriquePlafondSousActe>>;
   historiquePlafondSousActeList: Array<Territorialite> = [];
@@ -296,6 +296,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenat: HistoriqueAvenant = {};
   statList$: Observable<any>;
   statList: Subscription;
+  viewPolice: Police;
+  displayViewContrat = false;
+  // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
@@ -2487,6 +2490,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   hideStat(): void {
     this.viewStat = false;
+  }
+
+  voirContrat(police: Police): void {
+    this.viewPolice = police;
+    this.displayViewContrat = true;
   }
 
 }

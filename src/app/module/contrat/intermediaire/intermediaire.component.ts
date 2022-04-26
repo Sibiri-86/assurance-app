@@ -535,7 +535,7 @@ this.displayDialogFormIntermediaire = true;
 
 deleteIntermediaire(intermediaire: Intermediaire) {
   this.confirmationService.confirm({
-    message: 'Etes vous sur de vouloir supprimer?',
+    message: 'Etes vous sûr de vouloir supprimer l\'intermédiaire ?',
     header: 'Confirmation',
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
