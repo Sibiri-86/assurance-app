@@ -40,7 +40,8 @@
                         <th pSortableColumn="prestataire" style="min-width:100px">Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
                         <th pSortableColumn="prescripteur" style="min-width:100px">Prescripteur<p-sortIcon field="prescripteur"></p-sortIcon></th>
-                        <th pSortableColumn="dateSaisie" style="min-width:100px">Date de Saisie<p-sortIcon field="dateSaisie"></p-sortIcon></th>
+                        <th pSortableColumn="Pathologie" style="min-width:100px">Pathologie<p-sortIcon field="prescripteur"></p-sortIcon></th>
+                        <th pSortableColumn="dateSaisie" style="min-width:50px">Date de Saisie<p-sortIcon field="dateSaisie"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -60,6 +61,9 @@
                         </td> 
                          <td>
                             <span class="p-column-title" style="min-width:100px">{{tierPayant.prescripteur}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="min-width:100px">{{tierPayant?.pathologie?.libelle}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{tierPayant.dateSaisie | formatTableValue : 'date'}}</span>
@@ -94,7 +98,7 @@
         </div>
 
 
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Produit(s) pharmaceutique(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1100px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Produit(s) pharmaceutique(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1400px'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
@@ -103,10 +107,13 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="pharmaceutique" style="width: 250px">Produit pharmaceutique<p-sortIcon field="pharmaceutique"></p-sortIcon></th>
-                        <th pSortableColumn="typeQuantite" style="width: 200px">Nature du produit<p-sortIcon field="typeQuantite"></p-sortIcon></th>
-                        <th pSortableColumn="quantite" style="width: 200px">quantite<p-sortIcon field="quantite"></p-sortIcon></th>
-                        <th pSortableColumn="observation" style="width: 250px">observation / Posologie<p-sortIcon field="observation"></p-sortIcon></th>
+                        <th pSortableColumn="pharmaceutique" style="width: 350px">Produit pharmaceutique<p-sortIcon field="pharmaceutique"></p-sortIcon></th>
+                        <th pSortableColumn="typeQuantite" style="width: 100px">Nature du produit<p-sortIcon field="typeQuantite"></p-sortIcon></th>
+                        <th pSortableColumn="quantite" style="width: 100px">Quantite<p-sortIcon field="quantite"></p-sortIcon></th>
+                        <th pSortableColumn="declaration" style="width: 100px">Déclaration<p-sortIcon field="declaration"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 100px">Taux<p-sortIcon field="taux"></p-sortIcon></th>
+                        <th pSortableColumn="montantRembourse" style="width: 150px">Montant Remboursé<p-sortIcon field="montantRembourse"></p-sortIcon></th>
+                        <th pSortableColumn="observation" style="width: 350px">Observation / Posologie<p-sortIcon field="observation"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -117,6 +124,12 @@
                         <td><span class="p-column-title">{{prestation.typeQuantite}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.quantite}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.declaration | formatTableValue: 'number':true}} FCFA</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation?.taux?.taux}} %</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse | formatTableValue: 'number':true}} FCFA</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.observation}}</span>
                         </td>
@@ -161,21 +174,31 @@
                                                            [formGroup]="prestationForm" [entityField]="'prescripteur'">
                                     </app-entity-validation>
                                 </div>
+                                
+                                <div class="p-field p-col-3">
+                                    <label for="pathologie" id="pathologie">Pathologie<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
+                                                showClear="true" [options]="pathologieList"
+                                                formControlName="pathologie" placeholder="Select pathologie "
+                                                optionLabel="code"></p-dropdown>
+                                </div>
 
                                 <div class="p-field p-col-3">
                                     <label for="matriculeAdherent">Matricule assuré<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                                 </div>
 
-                                <div class="p-field p-col-3">
-                                    <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
-                                </div>
+                                
 
                             </div>
 
 
                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
+                                </div>
+
                                 <div class="p-field p-col-3">
                                     <label for="nomAdherent">Prénom<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
@@ -192,13 +215,15 @@
                                 </div>
 
 
+                                
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-3">
                                     <label for="groupeAdherent">Numéro du groupe<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
                                 </div>
-                            </div>
 
-                            <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-3">
                                     <label for="nomGroupeAdherent">Nom du groupe<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="nomGroupeAdherent" class="champ" type="text" formControlName="nomGroupeAdherent" pInputText>
@@ -214,6 +239,10 @@
                                     <input id="nomPoliceAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" pInputText>
                                 </div>
 
+                                
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-3">
                                     <label for="dateEffet">Date de saisie <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
@@ -239,10 +268,11 @@
 
                                 <p-fieldset [legend]="'Produit '+(i+1)" toggleable="true">
 
+
                                     <div class="p-fluid p-formgrid p-grid">
 
 
-                                        <div class="p-field p-col">
+                                        <div class="p-field p-col-4">
                                             <label for="pharmaceutique">Produit pharmaceutique<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                             <p-dropdown inputId="pharmaceutique" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="produitPharmaceutiqueList"
@@ -257,20 +287,45 @@
                                         </div>
 
                                         <div class="p-field p-col-4">
-                                            <label for="typeQuantite">Nature du produit<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <label for="typeQuantite">Nature Quantité<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                             <p-dropdown inputId="typeQuantite" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
                                                         [options]="typeQuantiteList" formControlName="typeQuantite" (onChange)="selectActe()"></p-dropdown>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+
+                                        
+
+                                        <div class="p-field p-col-4">
+                                            <label for="declaration">Déclaration <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-inputNumber formControlName="declaration" mode="decimal" locale="fr-FR" (onBlur)="calculMontant(i)" placeholder="Montant déclaré"></p-inputNumber>
+                                        </div>
+
+                                        <div class="p-field p-col-4">
+                                            <label for="taux">Taux <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-dropdown inputId="taux" dataKey="id" [filter]="true"
+                                                        showClear="true" [options]="tauxList"
+                                                        formControlName="taux"
+                                                        optionLabel="taux" [autoDisplayFirst]="false"></p-dropdown>
+                                        </div>
+
+                                        <div class="p-field p-col-4">
+                                            <label for="montantRembourse">Montant remboursé <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" placeholder="Montant remboursé"></p-inputNumber>
                                         </div>
 
 
                                     </div>
 
                                     <div class="p-fluid p-formgrid p-grid">
-                                        <div class="p-field p-col">
+                                    
+                                        <div class="p-field p-col-12">
                                             <label for="observation" id="observation">Observation / Posologie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                             <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
                                         </div>
-                                        </div>
+                                    </div>
 
 
                                     <div class="p-fluid p-formgrid p-grid">

@@ -345,10 +345,10 @@
 
                                         <div class="p-field p-col-3">
                                             <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
+                                            <p-dropdown inputId="sousActe" [filter]="true"
                                                         showClear="true" [options]="sousActeListFilter"
                                                         formControlName="sousActe" placeholder="Select sous-acte"
-                                                        optionLabel="libelle"></p-dropdown>
+                                                        optionLabel="libelle" (onChange)="selectDateSoins(i)"></p-dropdown>
                                         </div>
 
 

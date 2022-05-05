@@ -981,7 +981,7 @@
 
 
         </p-tabPanel>
-        <p-tabPanel header="ADHERANT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
+        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT">
             <div class="p-grid">
                 <div class="p-col-4">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -992,7 +992,10 @@
                 </div>
 
                 <div class="p-col-12">
-                    <p-table [value]="historiqueAveantAdherants" dataKey="id" editMode="row">
+                    <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+                    [rowHover]="true" styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+                    [showCurrentPageReport]="true">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Matricule</th>
