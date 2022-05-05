@@ -118,8 +118,15 @@ import {printPdfFile, removeBlanks} from '../../util/common-util';
 import {AdherentService} from '../../../store/contrat/adherent/service';
 import * as exerciceSelector from '../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
+import { PlafondService } from 'src/app/store/contrat/plafond/service';
 // import * from 
 
+
+/*
+  la partie avenant utilise des composants réutilisables.
+  chaque type d'avenant est un composant réutilisable avec des entrée et des sorties.
+  exemple: <app-avenant-incorporation> <app-avenant-incorporation> pour avenant d'incorporation
+*/
 @Component({
   selector: 'app-avenant',
   templateUrl: './avenant.component.html',
@@ -240,6 +247,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   typeAvenants: MenuItem[] = [];
   selectedGroup: Groupe;
   groupePolicy: Array<Groupe>;
+  groupeView: Array<Groupe>;
   policeItem: Police;
   adherentList$: Observable<Array<Adherent>>;
   adherant: AdherentFamille;
@@ -298,6 +306,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   statList: Subscription;
   viewPolice: Police;
   displayViewContrat = false;
+  groupePlafongConfig: Groupe = {};
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -308,7 +317,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private policeService: PoliceService,
       private historiqueAvenantService: HistoriqueAvenantService,
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
-      private adherentService: AdherentService
+      private adherentService: AdherentService,
+      private plafondService: PlafondService
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -2424,7 +2434,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.entete = 'Avenant de rnouvellement'.toUpperCase();
         this.policeItem = rowdata.police;
         break;
-      default: break;
+      default: break;/*  */
     }
     this.etat = 'UPDATE';
     // this.initDisplayAvenant();
@@ -2493,8 +2503,48 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   voirContrat(police: Police): void {
+
     this.viewPolice = police;
     this.displayViewContrat = true;
   }
 
+  loadGoupeByPolice1(police: Police): void {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: police.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupeView = value.slice();
+      }
+    });
+  }
+
+  loadPlafondByGroupe(groupe: Groupe): void {
+      this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
+              (res) => {
+                this.avenantModif1.plafondFamilleActes = res.body;
+        
+              }
+      );
+      this.plafondService.getPlafondGroupeActeByGroupe(groupe.id).subscribe(
+        (rest) => {
+          this.avenantModif.plafondGroupeActes = rest.body;
+        
+    
+        }
+    );
+    
+  }
+
+
+  loadActualListByContrat(police: Police): void {
+    this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          this.avenantModif1.adhrents = res;
+          console.log("=============================res=============");
+          console.log(res);
+          console.log("=============================res=============");
+        
+        }
+    );
+  }
 }
