@@ -86,6 +86,7 @@ import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {TypeDuree} from '../../../../store/contrat/enum/model';
+import { removeBlanks } from 'src/app/module/util/common-util';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -1020,7 +1021,7 @@ export class AvenantModificationComponent implements OnInit {
       this.plafondFamilleActe = this.plafondFamilleActePlafongConfig;
       this.plafondFamilleActe.forEach(pfa => {
         if (pfa.montantPlafond) {
-          pfa.montantPlafond = parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+          pfa.montantPlafond = removeBlanks(pfa.montantPlafond + '');
         }
         if (pfa.nombre) {
           pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
@@ -1031,7 +1032,7 @@ export class AvenantModificationComponent implements OnInit {
               pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
             }
             if (pa.montantPlafond) {
-              pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+              pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
             }
             if (pa.listeSousActe) {
               pa.listeSousActe.forEach(psa => {
@@ -1039,7 +1040,7 @@ export class AvenantModificationComponent implements OnInit {
                   psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
                 }
                 if (psa.montantPlafond) {
-                  psa.montantPlafond = parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                  psa.montantPlafond = removeBlanks(psa.montantPlafond + '');
                 }
               });
             }
@@ -1068,8 +1069,8 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
-    this.objet.historiqueAvenant.exercice = this.exercice;
-    // this.objet.groupe = this.groupeForm.value;
+    this.objet.historiqueAvenant.exercice = this.exercice; 
+    this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
     this.groupeListes.forEach(gp => {
       console.log(' groupe infos === ', this.typeDuree.find(e => e.value === gp.typeDuree));
@@ -1090,7 +1091,7 @@ export class AvenantModificationComponent implements OnInit {
       default: break;
     }
     this.objet.historiqueGroupes = this.historiqueGroupes;
-    console.log(this.objet);
+    console.log("objet envoyé**************", this.objet);
     this.eventEmitterM.emit(this.objet);
   }
 
@@ -1200,11 +1201,12 @@ export class AvenantModificationComponent implements OnInit {
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
             (res) => {
               this.plafondFamilleActePlafongConfig = res.body;
-              console.log(res);
+              console.log("*************getPlafondGroupeFamilleActeByGroupe***************", res);
             }
     );
     this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig?.id).subscribe(
         (res) => {
+          console.log("*************getPlafondGroupeActeByGroupe***************", res);
           this.plafondActePlafongConfig = res.body;
           this.plafondFamilleActePlafongConfig.forEach(pfapc => {
             // pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.)

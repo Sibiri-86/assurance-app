@@ -105,6 +105,7 @@ export class Avenant {
     plafondGroupe?: any;
     historiqueGroupes?: HistoriqueGroupe[];
     creation?: string;
+    groupe?: Groupe;
 }
 
 export class HistoriqueGroupe {

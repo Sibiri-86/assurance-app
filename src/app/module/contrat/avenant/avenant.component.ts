@@ -2023,6 +2023,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     // historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
     // avenant.historiqueAvenant = historiqueAvenant;
     avenant.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
+    console.log("envoyé 2", avenant);
     this.historiqueAvenantService.postAvenant(avenant).subscribe(
         (res) => {
           console.log('***************RETOUR********************');
@@ -2034,7 +2035,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }
         }
-    );
+   );
     console.log('********************Avenant modification************************');
     console.log(avenant);
   }
