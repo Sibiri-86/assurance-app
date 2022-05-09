@@ -357,10 +357,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   selectDateSoins(i: number){
     console.log('************************ selection de la date de soins' + i);
     this.plafondSousActe = {};
-    this.plafondSousActe.date = this.prestationForm.get('prestation').value[i].dateSoins;
+    this.plafondSousActe.dateSoins = this.prestationForm.get('prestation').value[i].dateSoins;
+    console.log('************************ date de soins' + this.plafondSousActe.dateSoins);
     this.plafondSousActe.adherent = this.adherentSelected;
     this.plafondSousActe.sousActe = this.prestationForm.get('prestation').value[i].sousActe;
-    if (this.plafondSousActe.sousActe && this.plafondSousActe.date && this.plafondSousActe.adherent){
+    if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
