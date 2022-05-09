@@ -1200,7 +1200,11 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRefreshDateEcheance() {
     if (this.policeForm.get('typeDuree')) {
-      this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
+      if(this.policeForm.get('duree').value <= 0) {
+        this.policeForm.get('duree').setValue(null);
+        this.policeForm.get('dateEcheance').setValue(null);
+      } else {
+        this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
         this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value ).subscribe(
           (res) => {
             this.policeForm.patchValue({
@@ -1208,6 +1212,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
             });
           }
         );
+      }
+    
     }
      // this.getNewDate(value)
   }
