@@ -5,7 +5,7 @@ import * as featureActionAdherent from '../../../store/contrat/adherent/actions'
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
 import * as adherantSelector from '../../../store/contrat/adherent/selector';
 import {Observable, Subject} from 'rxjs';
-import {FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators, } from '@angular/forms';
 import {select, Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/app.state';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
@@ -33,8 +33,8 @@ export class AssureComponent implements OnInit, OnDestroy {
   garantList: Array<Garant>;
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
-  police: Police;
-  garant: Garant;
+  police: Police = null;
+  garant: Garant = null;
 
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
@@ -43,9 +43,8 @@ export class AssureComponent implements OnInit, OnDestroy {
               }
 
   ngOnInit(): void {
-
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherentAll());
+    this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: '', idPolice: ''}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentList = value.slice();
@@ -76,13 +75,16 @@ export class AssureComponent implements OnInit, OnDestroy {
   }
 
   filtrer(){
-    this.adherentListFilter = this.adherentList;
-    if (this.police){
-      this.adherentListFilter = this.adherentList.filter(element1 => element1.groupe.police.id === this.police.id);
-    }
+    let idGarantie = '';
+    let idPolice = '';
     if (this.garant){
-      this.adherentListFilter = this.adherentListFilter.filter(element2 => element2.groupe.police.garant.id === this.garant.id);
+      idGarantie = this.garant.id;
     }
+    if (this.police){
+      idPolice = '';
+    }
+    this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie,
+      idPolice}));
   }
 
   ngOnDestroy(): void{
