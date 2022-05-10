@@ -232,7 +232,7 @@ export class TierPayantValideComponent implements OnInit {
 
   annulerPrestation(pref: SinistreTierPayant) {
     this.confirmationService.confirm({
-      message: 'voulez-vous annuler le sinistre',
+      message: 'voulez-vous dé-valider le sinistre',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

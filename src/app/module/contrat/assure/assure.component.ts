@@ -33,8 +33,9 @@ export class AssureComponent implements OnInit, OnDestroy {
   garantList: Array<Garant>;
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
-  police: Police = null;
-  garant: Garant = null;
+  police: Police;
+  garant: Garant;
+  infosAdherent: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
@@ -89,6 +90,11 @@ export class AssureComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void{
 
+  }
+
+  voirAssure(adherent: Adherent){
+    this.adherent = {...adherent};
+    this.infosAdherent = true;
   }
 
 }

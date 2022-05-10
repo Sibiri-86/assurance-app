@@ -670,7 +670,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                        <p-multiSelect [options]="qualiteAssureList1"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
                                                        [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -797,7 +797,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine"
+                                            <p-multiSelect [options]="qualiteAssureList1"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine"
                                                            [style]="{'width':'100%'}"></p-multiSelect>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -922,7 +922,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                                <p-multiSelect [options]="qualiteAssureList1"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
                                                                [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                             </ng-template>
                                             <ng-template pTemplate="output">
@@ -981,7 +981,7 @@
 
 
         </p-tabPanel>
-        <p-tabPanel header="ADHERANT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
+        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT">
             <div class="p-grid">
                 <div class="p-col-4">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -992,7 +992,10 @@
                 </div>
 
                 <div class="p-col-12">
-                    <p-table [value]="historiqueAveantAdherants" dataKey="id" editMode="row">
+                    <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+                    [rowHover]="true" styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+                    [showCurrentPageReport]="true">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Matricule</th>
@@ -1093,7 +1096,7 @@
             </div>
         </p-tabPanel>
         <p-tabPanel header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
-          <app-plafond-famille-acte [etat]="'VIEW'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
+          <app-plafond-famille-acte [etat]="'UPDATE'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
     </p-tabView>
     <hr>

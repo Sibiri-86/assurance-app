@@ -188,15 +188,15 @@
                                 </div>
 
                                 <div class="p-field p-col-3">
-                                    <label for="dateEffet">Date de declaration <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
-                                                formControlName="dateDeclaration" appendTo="body"></p-calendar>
-                                </div>
-
-                                <div class="p-field p-col-3">
                                     <label for="dateFacture">Date de Facture<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <p-calendar id="dateFacture"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
                                                 formControlName="dateFacture" appendTo="body"></p-calendar>
+                                </div>
+
+                                <div class="p-field p-col-3">
+                                    <label for="dateEffet">Date de declaration <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"
+                                                formControlName="dateDeclaration" (onSelect)="compareDateDeclarationAndDateFacture()" appendTo="body"></p-calendar>
                                 </div>
 
                                 <div class="p-field p-col-3">
@@ -272,20 +272,40 @@
                                     <input id="nomPoliceAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" pInputText>
                                 </div>
                                 <div class="p-field p-col-3">
-                                    <label for="medecin">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                     <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                                                 showClear="true" [options]="bonPriseEnChargeList"
                                                 formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
-                                                optionLabel="numeros" (onChange)="onRowSelectBon($event)" style="font-weight: bold;
-                                                color: green !important;">
+                                                optionLabel="numeros" (onChange)="onRowSelectBon($event)">
                                             </p-dropdown>
+                                </div>
+                                
+                                <div class="p-field p-col-3">
+                                    <label for="montantReclame" >Montant reclamé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <p-inputNumber formControlName="montantReclame" mode="decimal" locale="fr-FR" 
+                                    placeholder="Saisir le montant reclamé par le prestataire"></p-inputNumber>
+
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="montantPaye" >Montant Saisie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <p-inputNumber formControlName="montantPaye" mode="decimal" locale="fr-FR" 
+                                    placeholder="montant(s) saisi(s)"></p-inputNumber>
+
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label for="montantRestant" >Montant restant<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" 
+                                    placeholder="montant restant"></p-inputNumber>
+
                                 </div>
                             </div>
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
                                 <button pButton [disabled]="!adherentSelected || !prestationForm.get('dateDeclaration').value
-                                || !prestationForm.get('numeroFacture').value"
+                                || !prestationForm.get('numeroFacture').value || !prestationForm.get('montantReclame').value"
                                         pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
@@ -325,10 +345,10 @@
 
                                         <div class="p-field p-col-3">
                                             <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
+                                            <p-dropdown inputId="sousActe" [filter]="true"
                                                         showClear="true" [options]="sousActeListFilter"
                                                         formControlName="sousActe" placeholder="Select sous-acte"
-                                                        optionLabel="libelle"></p-dropdown>
+                                                        optionLabel="libelle" (onChange)="selectDateSoins(i)"></p-dropdown>
                                         </div>
 
 
@@ -395,12 +415,12 @@
                                             <p-inputNumber formControlName="coutUnitaire" mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours(i)"></p-inputNumber>
                                         </div>
                                         <div class="p-field p-col-3">
-                                            <label for="debours" id="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="debours" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                            <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-inputNumber formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
                                         </div>
                                         <div class="p-field p-col-3">
                                             <label for="baseRemboursement" id="baseRemboursement">Base remboursement<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="baseRemboursement" mode="decimal" locale="fr-FR" placeholder="base de remboursement"></p-inputNumber>
+                                            <p-inputNumber formControlName="baseRemboursement" [disabled]="true" mode="decimal" locale="fr-FR" placeholder="base de remboursement"></p-inputNumber>
                                         </div>
 
                                     </div>
@@ -412,11 +432,11 @@
                                             <p-dropdown inputId="taux" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="tauxList"
                                                         formControlName="taux" placeholder="Select taux"
-                                                        optionLabel="taux"></p-dropdown>
+                                                        optionLabel="taux" [disabled]="true"></p-dropdown>
                                         </div>
                                         <div class="p-field p-col-3">
                                             <label for="montantRembourse" id="montantRembourse">Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                            <p-inputNumber formControlName="montantRembourse" [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
                                         </div>
                                         <!--<div class="p-field p-col-3">
                                             <label for="sort" id="sort">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -425,8 +445,8 @@
                                                         formControlName="sort"></p-dropdown>
                                         </div>-->
                                         <div class="p-field p-col-3">
-                                            <label for="nombreActe">Montant remboursé restant<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>
+                                            <label for="nombreActe">Montant non remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                            <p-inputNumber formControlName="montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
                                         </div>
 
                                         <div class="p-field p-col-3">
@@ -434,13 +454,21 @@
                                             <p-dropdown inputId="decision" [filter]="true"
                                                         showClear="true" [options]="typeSort"
                                                         formControlName="sort"
-                                                        [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                                                        [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
                                         </div>
 
                                     </div>
                                     <div class="p-fluid p-formgrid p-grid">
+                                    <!-- <div class="p-field p-col-3">
+                                        <label for="montantReclame">Montant reclamé par le prestataire<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                        <p-inputNumber formControlName="montantReclame" [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                    </div>
+                                    <div class="p-field p-col-3">
+                                        <label for="montantPaye">Montant payé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                        <p-inputNumber formControlName="montantPaye" [disabled]="true" class="champ" mode="decimal" locale="fr-FR"></p-inputNumber>
+                                    </div> -->
                                     <div class="p-field p-col">
-                                        <label for="observation" id="observation">Observation</label>
+                                        <label for="observation">Observation</label>
                                         <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
                                     </div>
                                     </div>

@@ -118,9 +118,11 @@
                                     class="p-button-rounded p-button-warning p-ml-2 p-mr-2"
                                     (click)="deValiderPolice(police)"></button>
                             <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée"
-                                    class="p-button-rounded p-button-info" (click)="loadActualList(police)"></button>
+                                    class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button>
                                     <button pButton pRipple icon="pi pi-eye" pTooltip="voir statistique"
-                                    class="p-button-rounded p-button-info" (click)="getStatistique(police)"></button>
+                                    class="p-button-rounded p-button-info p-mr-2" (click)="getStatistique(police)"></button>
+                            <button pButton pRipple icon="pi pi-search p-mr-2" pTooltip="voir contrat"
+                            class="p-button-rounded p-button-info" (click)="voirContrat(police); loadGoupeByPolice1(police); loadActualListByContrat(police)"></button>
                             <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
                                            (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton>
 
@@ -1749,10 +1751,29 @@
                   [style]="{width: '1400px'}" (onHide)="delAvenenant()" [maximizable]="true">
             <div class="card">
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
+                    <!-- 
+                        pour appeler l'avenant d'incorporation 
+                        isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        adherentPrincipauxTMP: liste des assurés principaux
+                        etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
+                        police: pour la police
+                        avenantId: id de l'avenant à charcher
+
+                    -->
                     <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                                (adherentFamilleEvent)="addAdherentFamille($event)" [police]="policeItem" [groupesInput]="historiqueAvenant.id"></app-avenant-incorporation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
+                    <!-- 
+                        pour appeler l'avenant d'incorporation 
+                        -isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        -adherentPrincipauxTMP: liste des assurés principaux
+                        -etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
+                        -police: pour la police
+                        -avenantId: id de l'avenant à charcher
+                        -avenantDate : date de l'avenant
+                        -adherentFamilleEvent: liste des adhérents que le composant doit retourner
+                    -->
                     <app-avenant-retrait [police]="policeItem" [isRenouv]="false" [avenantDate]="" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
@@ -3771,6 +3792,470 @@
         </div>
     </p-dialog>
 
+    <p-dialog [maximizable]="true" [(visible)]="displayViewContrat"
+              header="Détails du contrat" [modal]="true" styleClass="p-fluid"
+              [style]="{'width':'1400px'}">
+        <p-tabView>
+            <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
+                <div>
+                    <span style="color: green !important"> <h4> Informations sur la police numéro1 <mark>{{viewPolice?.numero}}</mark>  de la société <mark>{{viewPolice?.nom}}</mark> </h4></span>
+                    <br>
+                    <p-fieldset legend="Police" toggleable="true">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="lastname2">Garant</label>
+                                <div>
+                                    <span>{{viewPolice?.garant?.nom}}</span>
+                                </div>
+                            </div>
 
+                            <div class="p-field p-col">
+                                <label for="lastname2">Intermediaire</label>
+                                <div>
+                                    <span>{{viewPolice?.intermediaire?.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Taux de couverture</label>
+                                <div>
+                                    <span>{{viewPolice?.taux?.taux}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Territorialité</label>
+                                <div>
+                                    <span *ngFor="let t of viewPolice?.territorialite">{{t.libelle}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="dateEffet">Date effet</label>
+                                <div>
+                                    <span>{{viewPolice?.dateEffet}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <label for="lastname2">Date echeance</label>
+                                <div>
+                                    <span>{{viewPolice?.dateEcheance}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="firstname2">Nom du souscripteur</label>
+                                <div>
+                                    <span>{{viewPolice?.nom}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact</label>
+                                <div>
+                                    <span>{{viewPolice?.contact}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Adresse email</label>
+                                <div>
+                                    <span>{{viewPolice?.adresseEmail}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="adressePostale">Adresse postale</label>
+                                <div>
+                                    <span>{{viewPolice?.adressePostale}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur activite</label>
+                                <div>
+                                    <span>{{viewPolice?.secteurActivite?.libelle}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero IFU</label>
+                                <div>
+                                    <span>{{viewPolice?.numeroIfu}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Personne ressource</label>
+                                <div>
+                                    <span>{{viewPolice?.personneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Contact personne ressource</label>
+                                <div>
+                                    <span>{{viewPolice?.contactPersonneRessource}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="refPolice">Reference police</label>
+                                <div>
+                                    <span>{{viewPolice?.referencePolice}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Rccm</label>
+                                <div>
+                                    <span>{{viewPolice?.rccm}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Numero police</label>
+                                <div>
+                                    <span>{{viewPolice?.numero}}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="lastname2">Secteur</label>
+                                <div>
+                                    <span>{{viewPolice?.secteur?.libelle}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col-4">
+                                <label for="fraisAccessoire">Frais accessoire</label>
+                                <div>
+                                    <span>{{viewPolice?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label for="fraisBadge">Frais badge</label>
+                                <div>
+                                    <span>{{viewPolice?.fraisBadge | formatTableValue: 'number':true}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
+                <span style="color: green !important"> <h4> Informations sur le(s) groupe(s) de l'avenant </h4></span>
+                <ng-template pTemplate="content">
+                    <p-table #dtConfigurationPlafond [value]="groupeView" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Numéro de groupe</th>
+                                <th>Description</th>
+                                <th>Libelle</th>
+                            
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-groupe let-editing="editing" >
+                            <tr>
+                                <td>{{groupe.libelle}}</td>
+                                <td>{{groupe.numeroGroupe}}</td>
+                                <td>{{groupe.description}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="PLAFOND" leftIcon="pi pi-user-edit" tooltip="PLAFOND">
+                <span style="color: green !important"> <h4> Informations sur les plafonds de l'avenant</h4></span>
+                <ng-template pTemplate="content">
+                    <div class="p-grid">
+                        <div class="p-col-4">
+                            <label class="p-fieldset-content">Choisir le Groupe</label>
+                            <p-dropdown [options]="groupeView" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
+                                        [filter]="true" filterBy="libelle" [showClear]="true"
+                                        placeholder="Choisir un groupe"
+                                        (onChange)="loadPlafondByGroupe(groupePlafongConfig)" [style]="{'width': '100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <p-table #dtConfigurationPlafond [value]="avenantModif1.plafondFamilleActes" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th></th>
+                                <th>Famille acte</th>
+                                <th>Montant plafonné / acte</th>
+                                <th>Montant plafonné / periode</th>
+                                <th>Periode</th>
+                                <th>Nombre acte</th>
+                                <th>Taux de couverture</th>
+                                <th>Domaine</th>
+                                <th>Date effet</th>
+                                <th>Status</th>
+                               <!--  <th>Famille acte</th>
+                                <th>Prime</th>
+                                <th>Taux</th>
+                                <th>Date effet</th> -->
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
+                            <tr  class="colorZone">
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td>{{plafond.garantie?.libelle}}</td>
+                                <!--
+                                <td>{{plafond.montantPlafond}}</td>
+                                -->
+                                <td>
+                                </td>
+    
+                                <td>{{plafond.montantPlafond | formatTableValue: 'number':true}}</td>
+    
+                                <td>{{plafond?.dimensionPeriode?.libelle}}</td>
+    
+                                <td>{{plafond.nombre | formatTableValue: 'number':true}}</td>
+    
+                                <td>{{plafond?.taux?.taux}} </td>
+    
+                                <td><span *ngFor="let d of plafond.domaine">
+                                    {{d.libelle}}
+                                </span></td>
+    
+                                <td>{{plafond.dateEffet | formatTableValue : 'date'}}</td>
+    
+                                <td>{{plafond?.etat}} </td>
+    
+                            
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-plafond>
+                             <tr >
+                                <td colspan="10">
+                                    <div class="">
+                                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row">
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                            </tr>
+                                            <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                                <tr  class="colorZoneActe">
+                    
+                                                    <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                                    <td>{{acte?.acte?.libelle}}</td>
+                                                    
+                                                    <td></td>
+                                        
+                                                    <td> {{acte.montantPlafond | formatTableValue: 'number':true}}</td>
+                                                    
+                                                    <td>{{acte?.dimensionPeriode?.libelle}}</td>
+                                                    
+                                                    <td>{{acte.nombre | formatTableValue: 'number':true}}</td>
+                                                    
+                                                    
+                    
+                                                    <td>{{acte?.taux?.taux}} </td>
+                    
+                                                    <td><span *ngFor="let d of acte.domaine"> {{d.libelle}} </span></td>
+                    
+                                                    <td>{{acte.dateEffet | formatTableValue : 'date'}} </td>
+                    
+                                                    <td>{{acte?.etat}}</td>
+                                                    
+                    
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="rowexpansion" let-acte>
+                                                <tr>
+                                                    <td colspan="10">
+                                                        <div class="">
+                                                            <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    
+                                                    
+                                                </tr>
+                                                <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                                    <tr  class="colorZoneSousActe">
+                                                        
+                                                        <td></td>
+                                                        <td>{{sousActe?.sousActe?.libelle}}</td>
+                                                        <td> {{sousActe.montantPlafond | formatTableValue: 'number':true}}</td>
+                                                        <td>{{sousActe?.montantPlafond | formatTableValue: 'number':true}}</td>
+                                                        <td>{{sousActe?.dimensionPeriode?.libelle}} </td>
+                                                        <td>{{sousActe.nombre | formatTableValue: 'number':true}}</td>
+                                                        <td>{{sousActe?.taux?.taux}} </td>
+                                                        <td><span *ngFor="let d of sousActe.domaine"> {{d.libelle}} </span> </td>
+                                                        <td>{{sousActe.dateEffet | formatTableValue : 'date'}} </td>
+                                                        <td>{{sousActe?.etat}} </td>
+                    
+                                    
+                                                    </tr>
+                                                </ng-template>
+                    
+                    
+                                        </p-table>
+                                    </div>
+                                </td>
+                            </tr>
+                       </ng-template>
+                    </p-table>
+                                        
+                        </div>
+                      </td>
+                     </tr>
+                    
+                    </ng-template>
+                    </p-table>
+                </ng-template>
+            </p-tabPanel>
+
+            <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
+                <span style="color: green !important"> <h4> Informations portant sur liste actualisée des adherents de l'avenant</h4></span>
+                
+                <div class="card">
+                    <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
+                             [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                             [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header">
+                                <h5 class="p-m-0"></h5>
+                                <div class="p-grid">
+                                    <div class="p-col-8">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder="Search..." [style]="{width: '20%'}"/>
+                                </span>
+
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help"
+                                                    (click)="dtAD.exportCSV()"></button>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <button pButton pRipple label="Imprimer" icon="pi pi-print" class="p-button-info">
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
+                                    <p-sortIcon field="numero"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
+                                    <p-sortIcon field="numeroGarant"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nom">Nom
+                                    <p-sortIcon field="nom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="prenom" style="width: 12rem">Prenom
+                                    <p-sortIcon field="prenom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="adresseEmail">Date de naissance
+                                    <p-sortIcon field="dateNaissance"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="adresseEmail">Email
+                                    <p-sortIcon field="adresseEmail"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroTelephone">Téléphone
+                                    <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre" style="width: 12rem">Genre
+                                    <p-sortIcon field="genre.libelle"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-adherent>
+                            <tr [ngClass]="{'colorZone': !adherent?.adherentPrincipal}">
+                                <td><span class="p-column-title">{{adherent.numero}}</span></td>
+                                <td><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
+                                <td><span class="p-column-title">{{adherent?.nom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.prenom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.dateNaissance}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{avenantModif1.adhrents ? avenantModif1.adhrents.length : 0 }} adherent(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+
+                <div class="p-col-12">
+
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </p-dialog>
 
 </div>

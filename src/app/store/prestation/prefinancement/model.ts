@@ -61,7 +61,7 @@ export interface BonPriseEnCharge {
 export interface CheckPlafond {
     sousActe?: SousActe;
     adherent?: Adherent;
-    date?: Date;
+    dateSoins?: Date;
 }
 
 export interface CheckPlafondResponse {

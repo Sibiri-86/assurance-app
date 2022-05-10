@@ -3107,7 +3107,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="lastname2">Durée <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <input id="lastname2" type="number" (input)="onRefreshDateEcheance()"  formControlName="duree" pInputText>
+                            <input id="lastname2" type="number" (input)="onRefreshDateEcheance()" formControlName="duree" [min]="1" [step]="1" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'duree'">
                             </app-entity-validation>
@@ -3115,7 +3115,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="lastname2">Date échéance <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                            <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance"  appendTo="body"></p-calendar>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'dateEcheance'">
                             </app-entity-validation>

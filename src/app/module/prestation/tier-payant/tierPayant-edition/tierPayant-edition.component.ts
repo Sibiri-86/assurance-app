@@ -59,15 +59,15 @@ import {loadPathologie} from '../../../../store/parametrage/pathologie/actions';
 import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/model';
 import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
 import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
-import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
-import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
-import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
-import {BonPriseEnCharge, CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
+import {BonPriseEnCharge, CheckPlafond} from '../../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
+import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
+import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
 
 
 @Component({
@@ -131,13 +131,14 @@ export class TierPayantEditionComponent implements OnInit {
     typeAction: MenuItem[] = [];
     bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
     bonPriseEnChargeList: Array<BonPriseEnCharge>;
+    plafondSousActe: CheckPlafond;
 
 
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
-                private breadcrumbService: BreadcrumbService) {
+                private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
 
@@ -148,9 +149,10 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementModel.dateSaisie = new Date();
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
+        console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
         // tslint:disable-next-line:max-line-length
-        console.log('*********************************this.prefinancementModel***********************************', this.prefinancementModel);
+        // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
         console.log(this.prefinancementModel);
         this.tierPayantList = [];
@@ -192,6 +194,10 @@ export class TierPayantEditionComponent implements OnInit {
             numeroFacture: new FormControl('', Validators.required),
             matriculeAdherent: new FormControl('', Validators.required),
             dateDeclaration: new FormControl('', Validators.required),
+            montantReclame: new FormControl('', Validators.required),
+            bonPriseEnCharge: new FormControl(),
+            montantPaye: new FormControl({value: '', disabled: true}),
+            montantRestant: new FormControl({value: '', disabled: true})
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -566,24 +572,29 @@ export class TierPayantEditionComponent implements OnInit {
             }
         });
     }
+    
 
     calculDebours(i: number) {
         let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
         myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
         if (this.prestationForm.get('prestation').value[i].nombreActe &&
             this.prestationForm.get('prestation').value[i].coutUnitaire) {
-            myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
-                    this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
-                    this.prestationForm.get('prestation').value[i].nombreActe *
-                    this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
-                    (this.prestationForm.get('prestation').value[i].nombreActe *
-                        this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
+            myForm.patchValue({
+            debours: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
+            baseRemboursement: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
+            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100,
+            //montantPaye: ((this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100) 
+            // montantPaye: (this.prestationForm.get('prestation').value[i].montantPayeTMP) + +this.prestationForm.get('prestation').value[i].montantPaye
+        });
+        console.log('*****this.prefinancementList*******', this.prestationForm.get('prestation').value[i].montantRembourse);
+        console.log('*****this.montantPaye*******', this.prestationForm.get('prestation').value[i].montantPaye);
         }
         this.prefinancementModel = this.prestationForm.value;
         this.prefinancementModel.dateSaisie = new Date();
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
         /* executer le controle de la prestation */
+        console.log('*****this.prefinancementList*******', this.tierPayantList);
         this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
         this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
@@ -594,6 +605,11 @@ export class TierPayantEditionComponent implements OnInit {
                 this.checkTierPayantResult = value.slice();
                 console.log('**********************************', this.checkTierPayantResult);
                 for (let j = 0; j < this.checkTierPayantResult.length; j++){
+
+                    this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.checkTierPayantResult[j].montantRembourse);
+                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantRestant').value);
+                    console.log('*****************this.prestationForm.getMontantPaye*****************', this.prestationForm.get('montantPaye').value);
+                    console.log('*****************this.prestationForm.getMontantRestant*****************', this.prestationForm.get('montantRestant').value);
                     myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
                     myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
                         sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
@@ -604,6 +620,8 @@ export class TierPayantEditionComponent implements OnInit {
         });
         this.tierPayantList = [];
         this.prefinancementModel = {};
+        // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
+        // console.log('**************** this.prestationForm.getTMP******************', this.prestationForm.get('prestation').value[i].montantPayeTMP);
     }
 
 
@@ -613,6 +631,8 @@ export class TierPayantEditionComponent implements OnInit {
 
     addItemPrestation(): void {
         const formPrestation: FormGroup = this.createItem();
+        // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
+        
         this.prestation.push(formPrestation);
     }
 
@@ -625,11 +645,11 @@ export class TierPayantEditionComponent implements OnInit {
             id: new FormControl(),
             nombreActe: new FormControl(null, Validators.required),
             coutUnitaire: new FormControl(null, Validators.required),
-            debours: new FormControl({value: '', disabled: true}),
+            debours: new FormControl(),
             sousActe: new FormControl(null, Validators.required),
-            baseRemboursement: new FormControl({value: '', disabled: true}),
-            taux: new FormControl({value: '', disabled: true}, Validators.required),
-            montantRembourse: new FormControl({value: '', disabled: true}, Validators.required),
+            baseRemboursement: new FormControl(),
+            taux: new FormControl( Validators.required),
+            montantRembourse: new FormControl(Validators.required),
             sort: new FormControl(),
             observation: new FormControl(),
             prestataire: new FormControl(),
@@ -640,7 +660,10 @@ export class TierPayantEditionComponent implements OnInit {
             acte: new FormControl(null, Validators.required),
             familleActe: new FormControl(null, Validators.required),
             centreExecutant: new FormControl(null),
-            historiqueAvenant: new FormControl()
+            historiqueAvenant: new FormControl(),
+            montantPaye: new FormControl( ),
+            /* montantReclame: new FormControl( ),
+            montantRestant: new FormControl() */
         });
     }
 
@@ -696,6 +719,51 @@ export class TierPayantEditionComponent implements OnInit {
               }}
         ]
     }
+
+    compareDateDeclarationAndDateFacture(): void {
+        /* console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
+        console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value); */
+        this.historiqueAvenantService.compareDate(this.prestationForm.get('dateFacture').value, this.prestationForm.get('dateDeclaration').value, ).subscribe(
+            (res) => {
+              if (res) {
+                this.addMessage('error', 'Date de déclaration invalide',
+                    'La date de déclaration du sinistre ne peut pas être superieure à celle de la facture');
+                    this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+              }
+            }
+        );
+      }
+
+      addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+      }
+
+      reportSomme(){
+        const formPrestation: FormGroup = this.createItem();
+        formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value) 
+        this.prestation.push(formPrestation);
+      }
+
+      selectDateSoins(i: number){
+        console.log('************************ selection de la date de soins' + i);
+        this.plafondSousActe = {};
+        this.plafondSousActe.dateSoins = this.prestationForm.get('prestation').value[i].dateSoins;
+        this.plafondSousActe.adherent = this.adherentSelected;
+        this.plafondSousActe.sousActe = this.prestationForm.get('prestation').value[i].sousActe;
+        if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+        this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+        this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          console.log(value);
+          const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+          if (value) {
+            myForm.patchValue({montantPlafond: value});
+          } else {
+            myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
+          }
+        });
+        }
+        console.log(this.plafondSousActe);
+      }
 
 }
 

@@ -186,6 +186,7 @@ export class AvenantRetraitComponent implements OnInit {
     const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
     historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
     historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherants;
+    console.log("*****historiqueAdherent.historiqueAvenantAdherentList****", historiqueAdherent.historiqueAvenantAdherentList);
     this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
         (res) => {
           this.historiqueAveantAdherants = res;

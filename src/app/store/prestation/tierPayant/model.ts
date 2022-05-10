@@ -63,6 +63,11 @@ export interface Prestation {
     produitPharmaceutique: Array<ProduitPharmaceutique>;
     familleActe?: PlafondFamilleActe;
     acte?: PlafondActe;
+    centreExecutant?: Prestataire;
+    historiqueAvenant?: HistoriqueAvenant;
+    montantPaye?: number;
+    montantReclame?: number;
+    montantRestant?: number;
 }
 
 export interface SinistreTierPayantList {

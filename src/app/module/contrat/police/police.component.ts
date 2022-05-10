@@ -1200,7 +1200,11 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onRefreshDateEcheance() {
     if (this.policeForm.get('typeDuree')) {
-      this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
+      if(this.policeForm.get('duree').value <= 0) {
+        this.policeForm.get('duree').setValue(null);
+        this.policeForm.get('dateEcheance').setValue(null);
+      } else {
+        this.historiqueAvenantService.getDateFin(this.policeForm.get('dateEffet').value, 
         this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value ).subscribe(
           (res) => {
             this.policeForm.patchValue({
@@ -1208,6 +1212,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
             });
           }
         );
+      }
+    
     }
      // this.getNewDate(value)
   }
@@ -2181,6 +2187,7 @@ changeGarantie(garantie, indexLigne: number) {
     );
   }
 
+  // methode pour exportr un model pour l'import des adhérents
   exportModel(): void {
     // this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
     this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
@@ -2213,6 +2220,7 @@ changeGarantie(garantie, indexLigne: number) {
     });
   }
 
+  // calcule des dates d'échéance pour la police
   getDateEcheance(): void {
     console.log('+++++++++++durée+++++++++++' + this.policeForm.get('duree').value);
     if (this.policeForm.get('dateEffet').value !== null && this.policeForm.get('typeDuree').value !== null
@@ -2226,6 +2234,7 @@ changeGarantie(garantie, indexLigne: number) {
     }
   }
 
+  // calcule des dates d'échéance pour la police
   getDateEcheanceGroupe(): void {
     console.log('+++++++++++durée+++++++++++' + this.groupeForm.get('duree').value);
     if (this.groupeForm.get('dateEffet').value !== null && this.groupeForm.get('typeDuree').value !== null
@@ -2239,6 +2248,7 @@ changeGarantie(garantie, indexLigne: number) {
     }
   }
 
+  // compare la date de naissance de l'enfant à celui du père
   compareEnfantDateNaiss(rowData) {
     this.historiqueAvenantService.compareDate(rowData.dateNaissance, this.adherentForm.get('dateNaissance').value).subscribe(
         (res) => {
@@ -2250,6 +2260,8 @@ changeGarantie(garantie, indexLigne: number) {
         }
     );
   }
+
+  // compare la date de naissance de l'enfant à celui du père
   compareEnfantDateNaissAddAherentToGroupe(rowData) {
     console.log('start .......');
     if (rowData.qualiteAssure.code === 'ENFANT') {
@@ -2264,6 +2276,7 @@ changeGarantie(garantie, indexLigne: number) {
       );
     }
   }
+  // compare la date d'entrée de l'enfant à celle du père ou de la mère
   compareEnfantDateEntreAddAherentToGroupe(rowData) {
     console.log('start ....1...');
     if (rowData.qualiteAssure.code === 'ENFANT') {

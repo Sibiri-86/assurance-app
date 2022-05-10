@@ -155,19 +155,21 @@ export class OrdonnaceMedicalComponent implements OnInit {
     }
 
     onCreate() {
-        /** fonction pour enregistrer l'ordonnance médicale*/
-        console.log('creation ordonnance médicale');
+        /** Methode pour enregistrer l'ordonnance médicale*/
         if(this.prestationForm.get('id').value) {
+            /** partie concernant la mise à jour */
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = this.prestationForm.get('dateSaisie').value;
         this.store.dispatch(featureActionOrdonnanceMedical.updateOrdonnance(this.ordonnance));
         
         } else {
+            /** partie concernant la création d'un nouvel ordonnance */
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = new Date();
         this.ordonnance.adherent = this.adherentSelected;
         this.ordonnance.prescripteur = this.prestationForm.get('prescripteur').value;
         this.ordonnance.prestataire= this.prestationForm.get('prestataire').value;
+        console.log('creation ordonnance médicale', this.ordonnance);
         this.store.dispatch(featureActionOrdonnanceMedical.createOrdonnance(this.ordonnance));
             
         }
@@ -207,6 +209,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
             prescripteur: new FormControl(''),
             matriculeAdherent: new FormControl('', Validators.required),
             adherent: new FormControl(''),
+            pathologie: new FormControl(''),
             ordonnanceMedicalProduitPharmaceutiques: this.formBuilder.array([], Validators.required),
         });
 
@@ -242,6 +245,14 @@ export class OrdonnaceMedicalComponent implements OnInit {
             }
         });
 
+        this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+        this.store.dispatch(loadTaux());
+        this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.tauxList = value.slice();
+          }
+    });
+
         this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
         this.store.dispatch(loadPrestataire());
         this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -252,7 +263,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
        this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
         this.store.dispatch(loadProduitPharmaceutique());
         this.produitPharmaceutiqueList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log(value);
+            console.log('*********produitPharmaceutiqueList***********',value);
             if (value) {
                 this.produitPharmaceutiqueList = value.slice();
             }
@@ -267,6 +278,15 @@ export class OrdonnaceMedicalComponent implements OnInit {
         console.log('***************this.ordonnaceMedicalProduitPharmaceutiqueDTOList*****************', this.ordonnaceMedicalProduitPharmaceutiqueDTOList);
       }
     });
+
+    this.pathologieList$ = this.store.pipe(select(pathologieSelector.pathologieList));
+        this.store.dispatch(loadPathologie());
+        this.pathologieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.pathologieList = value.slice();
+            }
+        });
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
@@ -315,6 +335,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
                 this.prestationForm.get('prestataire').setValue(this.prestataireList.find(p => p.id === pref.prestataire.id));
+                this.prestationForm.get('pathologie').setValue(this.pathologieList.find(p => p.id === pref.pathologie.id))
                 console.log('***************pref.prestataire.libelle******************', pref.prestataire);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
@@ -414,11 +435,12 @@ export class OrdonnaceMedicalComponent implements OnInit {
             id: new FormControl(),
             quantite: new FormControl(null, Validators.required),
             observation: new FormControl(null, Validators.required),
-            /* prestataire: new FormControl(),
-            centreExecutant: new FormControl(null), */
             pharmaceutique: new FormControl(),
             dateSaisie: new FormControl(null),
             typeQuantite: new FormControl(null, [Validators.required]),
+            declaration: new FormControl(null, [Validators.required]),
+            taux: new FormControl({disabled: true}, [Validators.required]),
+            montantRembourse: new FormControl({disabled: true}, [Validators.required]),
         });
     }
 
@@ -458,6 +480,19 @@ export class OrdonnaceMedicalComponent implements OnInit {
             });
         }
     }
+
+    calculMontant(i:number) {
+        let myForm = (this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques') as FormArray).at(i);
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+        if(this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration) {
+            myForm.patchValue({
+                montantRembourse: ((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.adherentSelected.groupe.taux.taux) / 100)
+                // * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite
+        })
+        
+    }
+
+}
 
 }
 
