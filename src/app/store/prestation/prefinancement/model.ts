@@ -4,6 +4,7 @@ import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
 import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
+import { Garantie } from '../../parametrage/garantie/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
@@ -84,6 +85,9 @@ export interface Prestation {
     medecin?: Medecin;
     /*ajout des autres informations*/
     dateSoins?: Date;
+    montantSupporte?: number;
+    familleActe?: Garantie;
+    montantPlafond?: number;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
     /*ajout information pour bon de prise en charge*/
 }
