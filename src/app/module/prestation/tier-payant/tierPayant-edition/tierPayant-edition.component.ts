@@ -723,16 +723,37 @@ export class TierPayantEditionComponent implements OnInit {
     compareDateDeclarationAndDateFacture(): void {
         /* console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
         console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value); */
-        this.historiqueAvenantService.compareDate(this.prestationForm.get('dateFacture').value, this.prestationForm.get('dateDeclaration').value, ).subscribe(
-            (res) => {
-              if (res) {
-                this.addMessage('error', 'Date de déclaration invalide',
-                    'La date de déclaration du sinistre ne peut pas être superieure à celle de la facture');
-                    this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
-              }
-            }
-        );
+        if(this.prestationForm.get('dateDeclaration').value && this.prestationForm.get('dateFacture').value) {
+            this.historiqueAvenantService.compareDate(this.prestationForm.get('dateDeclaration').value, this.prestationForm.get('dateFacture').value ).subscribe(
+                (res) => {
+                  if (res) {
+                    this.addMessage('error', 'Date de déclaration invalide',
+                        'La date de déclaration du sinistre ne peut pas être antérieure à celle de la facture');
+                        this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+                  }
+                }
+            );
+        }
       }
+
+      compareDateDeclarationAndToday(): void {
+        /* console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
+        console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value); */
+        const maDate = new Date();
+        if(this.prestationForm.get('dateDeclaration').value && maDate) {
+            this.historiqueAvenantService.compareDate( maDate, this.prestationForm.get('dateDeclaration').value).subscribe(
+                (res) => {
+                  if (res) {
+                    this.addMessage('error', 'Date de déclaration invalide',
+                        'La date de déclaration du sinistre ne peut pas être postérieure à celle du jour');
+                        this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+                  }
+                }
+            );
+        }
+      }
+
+      
 
       addMessage(severite: string, resume: string, detaile: string): void {
         this.messageService.add({severity: severite, summary: resume, detail: detaile});

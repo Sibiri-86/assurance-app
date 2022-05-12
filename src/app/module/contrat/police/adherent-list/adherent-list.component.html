@@ -22,6 +22,7 @@
                 <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                 <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                 <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                <th pSortableColumn="numeroTelephone" style="width: 10rem" >Date d'incorporation <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
                 <!--<th pSortableColumn="numeroTelephone" style="width: 10rem" >Date d'incorporation <p-sortIcon field="numeroTelephone"></p-sortIcon></th>-->
             </tr>
         </ng-template>
@@ -35,7 +36,7 @@
                 <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
                 <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
                 <td><span class="p-column-title">{{adherent.numeroTelephone | formatTableValue : 'number'}}</span></td>
-                <!--<td><span class="p-column-title">{{adherent.dateIncorparation | formatTableValue : 'date'}}</span></td>-->
+                <td><span class="p-column-title">{{adherent.dateIncorporation | formatTableValue : 'date'}}</span></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="loadingbody" let-columns="columns">
