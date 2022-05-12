@@ -389,7 +389,7 @@
                                     class="p-button-success" type="button" (click)="deleteItemPrestation(i)"></button>
                            </div>
                            <div class="p-field p-col-2">
-                            <button pButton [disabled]="!adherentSelected" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                            <button pButton [disabled]="(!adherentSelected) || (prestation && prestation.length >=1 && !prestationForm.valid)" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                     class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                         </div>
                         </div>         
