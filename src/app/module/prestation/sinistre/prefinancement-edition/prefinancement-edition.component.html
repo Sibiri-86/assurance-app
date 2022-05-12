@@ -163,7 +163,7 @@
                     
                     <div class="p-field p-col">
                         <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                        <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                        <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body" (onSelect)="checkDateCondition()"></p-calendar>
                     </div>
                     
                     <div class="p-field p-col">
@@ -205,22 +205,6 @@
                                         optionLabel="numeros" (onChange)="onRowSelectBon($event)"></p-dropdown>
                         </div>
                         
-                        <div class="p-field p-col-4">
-                            <label for="nombreActe">Montant à reclamé</label>
-                            <p-inputNumber formControlName="montantReclame" mode="decimal" locale="fr-FR"></p-inputNumber>   
-                        </div>
-                    </div>
-                    
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label for="nombreActe">Montant reclamé</label>
-                            <p-inputNumber formControlName="montantSaisie" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
-                        </div>
-                        
-                        <div class="p-field p-col-4">
-                            <label for="nombreActe">Montant restant</label>
-                            <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
-                        </div> 
                     </div>
                     
                     
@@ -244,7 +228,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="lastname2">Famille acte</label>
-                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
                             </div>
                             
                             <div class="p-field p-col">
@@ -254,7 +238,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="sousActe">SousActe <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                <p-dropdown inputId="sousActe" dataKey="id" [filter]="true"
+                                <p-dropdown  [filter]="true"
                                             showClear="true" [options]="sousActeListFilter"
                                             formControlName="sousActe"  [autoDisplayFirst]="false"
                                             optionLabel="libelle" (onChange)="selectDateSoins(i)"></p-dropdown>      
@@ -281,7 +265,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
-                                <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body" (onSelect)="selectDateSoins(i)"></p-calendar>
+                                <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" formControlName="dateSoins" appendTo="body" (onSelect)="selectDateSoins(i)"></p-calendar>
                             </div>
                             
                            </div>
@@ -372,11 +356,6 @@
                            </div>
                            
                            <div class="p-fluid p-formgrid p-grid">
-                               
-                            <div class="p-field p-col-4">
-                                <label for="nombreActe">Montant non remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
-                                <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
-                            </div>
                             
                             <div class="p-field p-col-4">
                                 <label for="nombreActe">Montant supporté<sup style="color: red !important; size: 1.4em;">*</sup></label>
@@ -395,7 +374,7 @@
                            
                            <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
-                                <label for="nombreActe">Montant plafond</label>
+                                <label>Montant plafond sous-acte</label>
                                 <p-inputNumber formControlName="montantPlafond" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
                             </div>
                             <div class="p-field p-col-4">

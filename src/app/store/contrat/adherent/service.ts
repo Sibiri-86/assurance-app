@@ -21,9 +21,10 @@ $getAdherents(idPolice: string): Observable<AdherentList> {
     );
 }
 
-$getAdherentsAll(): Observable<AdherentList> {
+$getAdherentsAll(idGarantie: string, idPolice: string): Observable<AdherentList> {
   // @FIXME: get request
-  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`).pipe(
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, {params: createRequestOption({idGarantie,
+     idPolice})}).pipe(
     map((response: AdherentList) => response),
     catchError(this.handleError())
   );
@@ -47,7 +48,7 @@ posAdherent(Adherent: Adherent): Observable<any> {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.set('Accept', 'application/json');
-    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers: headers });
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers });
   }
   
   
@@ -59,7 +60,7 @@ posAdherent(Adherent: Adherent): Observable<any> {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.set('Accept', 'application/json');
-    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/lot`, data, { headers: headers });
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/lot`, data, { headers });
   }
 
   updateAdherent(Adherent: Adherent): Observable<any> {
@@ -69,7 +70,7 @@ posAdherent(Adherent: Adherent): Observable<any> {
 
   searchAdherent(numero: number): Observable<AdherentResearchReponse> {
     // @FIXME: post request
-    if(numero && numero!=0) {
+    if (numero && numero != 0) {
     return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByNumero/${numero}`).pipe(
       map((response: AdherentResearchReponse) => response)
       //catchError(this.handleError())
@@ -118,7 +119,7 @@ pushFileToStorage(file: File): Observable<any> {
   let headers = new HttpHeaders();
   headers.append('Content-Type', 'multipart/form-data');
   headers.set('Accept', 'application/json');
-  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers: headers });
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers });
 }
 
 private handleError<T>() {
