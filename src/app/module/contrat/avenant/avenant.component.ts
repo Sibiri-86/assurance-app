@@ -1539,6 +1539,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   deleteAdherant(historiqueAvenantRetrais: HistoriqueAvenant) {
     console.log('++++++++++++   historiqueAvenantRetrais      ++++++++++++');
     console.log(historiqueAvenantRetrais);
+    this.historiqueAvenant = {};
     this.historiqueAvenant = historiqueAvenantRetrais;
     this.historiqueAvenant.numeroGarant = historiqueAvenantRetrais.numero;
     this.historiqueAvenant.police = this.policeItem;
@@ -2432,7 +2433,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.initDisplayAvenant();
         this.isAvenantRenouvellement = true;
         this.addAvenant();
-        this.entete = 'Avenant de rnouvellement'.toUpperCase();
+        this.entete = 'Avenant de renouvellement'.toUpperCase();
         this.policeItem = rowdata.police;
         break;
       default: break;/*  */
