@@ -1186,13 +1186,13 @@ export class AvenantRenouvellementComponent implements OnInit {
                                     console.log('date de début' + response);
                                     this.exercice = response.body;
                                     // this.exercice.debut = new Date(response.body);
-                                    this.exerciceForm.patchValue({
+                                    /* this.exerciceForm.patchValue({
                                         id: null,
                                         debut: new Date(this.exercice.debut),
                                         fin: new Date(this.exercice.fin),
                                         actived: this.exercice.actived,
                                         police: this.exercice.police
-                                    });
+                                    }); */
                                     this.myForm.patchValue({
                                         dateAvenant: new Date(response.body.debut)
                                     });

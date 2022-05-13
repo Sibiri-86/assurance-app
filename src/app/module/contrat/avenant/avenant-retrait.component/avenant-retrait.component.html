@@ -35,7 +35,7 @@
             <form [formGroup]="newForm" *ngIf="!isRenouv">
                 <div class="p-grid">
                 <div class="p-fluid p-formgrid  p-col-12">
-                    <label class="p-fieldset-content">Choisir le Groupe</label><br>
+                    <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
                     <p-dropdown [options]="groupeList" optionLabel="libelle" formControlName="groupe"
                                 [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
                                 (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
@@ -75,22 +75,23 @@
             <form [formGroup]="myForm">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-6">
-                        <label for="numero">Numéro de l'avenant chez le garant <sup style="color: red; size: 1.7em"></sup></label>
+                        <label for="numero">Numéro de l'avenant chez le garant <span style="color: red !important; size: 2em"></span></label>
                         <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                     </div>
                     <div class="p-field p-col-6">
-                        <label for="dateIncorparation">Date de retrait <sup style="color: red; size: 1.7em">*</sup></label>
-                        <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                        <label for="dateIncorparation">Date de retrait <span style="color: red !important; size: 2em">*</span></label>
+                        <span *ngIf="newForm.invalid" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
+                        <p-calendar [disabled]="newForm.invalid" id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
                                     dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
                     </div>
                     <div class="p-field p-col-6">
-                        <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                        <label for="dateIncorparation">Initiateur <span style="color: red !important; size: 2em">*</span></label>
                         <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                     [options]="demandeursList" formControlName="demandeur"
                                     placeholder="Select" optionLabel="libelle"></p-dropdown>
                     </div>
                     <div class="p-field p-col-6">
-                        <label for="observation">Motif <sup style="color: red; size: 1.7em">*</sup></label>
+                        <label for="observation">Motif <span style="color: red !important; size: 2em">*</span></label>
                         <input id="observation" type="text" formControlName="observation" pInputText>
                     </div>
                 </div>
@@ -100,7 +101,7 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="historiqueAveantAdherants" [rows]="15" [paginator]="true"
+            <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
                      [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers"
@@ -189,9 +190,10 @@
                 </button>
             </div>
             <div class="p-field p-col-2 p-ac-center">
-                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm.invalid && adherantDeleteds?.length < 0 || etat === 'VIEW'">
+                [disabled]="myForm.invalid && newForm.invalid || etat === 'VIEW'">
+                <!-- [disabled]="myForm.invalid && adherantDeleteds?.length < 0 || etat === 'VIEW'"> -->
                 </button>
             </div>
         </div>

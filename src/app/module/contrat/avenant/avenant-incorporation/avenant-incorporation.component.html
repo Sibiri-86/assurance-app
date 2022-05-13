@@ -20,7 +20,7 @@
             </form>
         </div>
         <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
-            <span style="color: red; font-weight: bold;">Veuillez choisir le groupe de l'assuré</span>
+            <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
         </div>
         <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
             <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
