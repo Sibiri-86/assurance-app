@@ -253,6 +253,8 @@ import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tie
 import { PlafondFamilleActeComponent } from './module/contrat/avenant/plafond-famille-acte/plafond-famille-acte.component';
 import { PlafondActeComponent } from './module/contrat/avenant/plafond-acte/plafond-acte.component';
 import { PlafondSousActeComponent } from './module/contrat/avenant/plafond-sous-acte/plafond-sous-acte.component';
+import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
+import { BulletinAdhesionEffects } from './store/contrat/bulletin-adhesion/effect';
 
 @NgModule({
     imports: [
@@ -361,7 +363,7 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/plafond-sous-
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -458,7 +460,8 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/plafond-sous-
         TierPayantOrdreReglementSearchComponent,
         PlafondFamilleActeComponent,
         PlafondActeComponent,
-        PlafondSousActeComponent
+        PlafondSousActeComponent,
+        BulletinAdhesionComponent
     ],
     providers: [
         {

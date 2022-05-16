@@ -135,6 +135,7 @@ import * as tierPayantState from '../prestation/tierPayant/state';
 import * as bonPriseEnChargeReducer from '../medical/bon-prise-en-charge/reducer';
 import * as conventionReducer from '../medical/convention/reducer';
 import * as ordonnanceMedicalReducer from '../medical/ordonnance-medical/reducer';
+import * as bulletinAdhesionReducer from '../contrat/bulletin-adhesion/reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
     garantieState: garantieReducer.reducer,
@@ -185,7 +186,9 @@ export const reducers: ActionReducerMap<AppState> = {
     tierPayantState: tierPayantReducer.reducer,
     bonPriseEnChargeState: bonPriseEnChargeReducer.reducer,
     conventionState: conventionReducer.reducer,
-    ordonnanceMedicaleState: ordonnanceMedicalReducer.reducer
+    ordonnanceMedicaleState: ordonnanceMedicalReducer.reducer,
+    bulletinAdhesionState: bulletinAdhesionReducer.reducer
+
 };
 
   

@@ -40,4 +40,8 @@ export class EndpointsMedical {
         prod: `${SERVICE_PREFIX}/ordonnanceMedical/deleteOrdonnanceProduit`,
         mock: `assets/mock/ordonnanceMedical.mock.json`
     };
+    static readonly BULLETINADHESION = {
+        prod: `${SERVICE_PREFIX}/bulletinAdhesion`,
+        mock: `assets/mock/bulletinAdhesion.mock.json`
+    };
 }

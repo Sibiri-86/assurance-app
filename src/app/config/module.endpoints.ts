@@ -361,4 +361,8 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/exercice`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+    static readonly BULLETINADHESION = {
+        prod: `${SERVICE_PREFIX}/contrat/bulletinAdhesion`,
+        mock: `assets/mock/contrat/bulletinAdhesion.mock.json`
+    };
 }

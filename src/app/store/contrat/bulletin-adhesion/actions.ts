@@ -1,0 +1,11 @@
+import {props, createAction} from '@ngrx/store';
+import { BulletinAdhesion, BulletinAdhesionList } from './model';
+export const createBulletin = createAction('[App Init] Bulletin d\'Adhésion', props<BulletinAdhesion>());
+export const updateBulletin = createAction('[App Init] update Bulletin d\'Adhésion', props<BulletinAdhesion>());
+export const deleteBulletin = createAction('[App Init] delete Bulletin d\'Adhésion', props<BulletinAdhesion>());
+export const deleteBulletins = createAction('[App Init] delete Bulletins d\'Adhésion', props<BulletinAdhesionList>());
+export const loadBulletin = createAction('[App Init] load  Bulletin d\'Adhésion');
+export const setBulletin = createAction('[App Init] set Bulletin d\'Adhésion',  props<BulletinAdhesionList>());
+export const importBulletin = createAction('[App Init] import Bulletin d\'Adhésion',  props<{file: File}>());
+export const valideBulletin = createAction('[App Init] Bulletin d\'Adhésion valide', props<BulletinAdhesion>());
+export const invalideBulletin = createAction('[App Init] Bulletin d\'Adhésion invalide', props<BulletinAdhesion>());

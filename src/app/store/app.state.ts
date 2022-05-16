@@ -49,6 +49,7 @@ import { BonPriseEnChargeState } from './medical/bon-prise-en-charge/state';
 import { ConventionState } from './medical/convention/state';
 import { OrdonnanceMedicalProduitPharmaceutique } from './medical/ordonnance-medical/model';
 import { OrdonnanceMedicaleState } from './medical/ordonnance-medical/state';
+import { BulletinAdhesionState } from './contrat/bulletin-adhesion/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -98,6 +99,7 @@ export interface AppState {
   tierPayantState: SinistreTierPayantState;
   exerciceState: ExerciceState;
   bonPriseEnChargeState: BonPriseEnChargeState;
+  bulletinAdhesionState: BulletinAdhesionState;
   conventionState: ConventionState;
   ordonnanceMedicaleState: OrdonnanceMedicaleState;
 }
