@@ -274,17 +274,18 @@
                                     <div class="p-fluid p-formgrid p-grid">
                         
                                         
-                                        <div>
+                                        <div *ngIf="quuestionAssures.length <= 0">
                                             <label>Repondez au question</label>
                                             <p-button  label="Question" icon="pi pi-plus" (click)="addQuestionAssure()"></p-button>
                                         </div>
                                         <div class="p-fluid p-formgrid p-grid " *ngIf="quuestionAssures.length > 0">
-                                        <p-table [value]="quuestionAssures" dataKey="id" editMode="row" responsiveLayout="scroll">
+                                        <p-table [value]="quuestionAssures" dataKey="">
                                             <ng-template pTemplate="header">
                                                 <tr>
                                                 
                                                     <th>Poids</th>
                                                     <th>Taille</th>
+                                                    <th>Modifiication du questionnaire</th>
                                                    
                                                     
                                                 </tr>
@@ -295,6 +296,11 @@
                                                     </td>
                                                     <td> {{question.taille}}
                                                     </td>
+
+                                                    <td>
+                                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestion(question)"></button>
+                                                    </td>
+                                                    
                                                 </tr>
                                             </ng-template>
                                         </p-table>
@@ -328,29 +334,61 @@
                             </div>
                             <div class="p-field p-col">
                                 <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
-                                <p-calendar id="dateNaissanceEpoux" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="epouse.dateEntreeService" appendTo="body"></p-calendar>
+                                <p-calendar id="dateNaissanceEpoux" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="epouse.dateNaissanceEpoux" appendTo="body"></p-calendar>
                             </div>
                             <div class="p-field p-col" >
                                 <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
                                 <input id="lieuNaissanceEpouse" class="champ" type="text" [(ngModel)]="epouse.lieuNaissanceEpouse" pInputText>
                             </div>
+
+                            <div class="p-field p-col" >
+                                <label for="emploiEpouse">Emploi</label>
+                                <input id="emploiEpouse" class="champ" type="text" [(ngModel)]="epouse.emploiEpouse"  pInputText>
+                            </div>
                      </div>
                      <div class="p-fluid p-formgrid p-grid">
             
-                        <div  class="p-field p-col"> </div>
-                        <div  class="p-field p-col">
+                        
+                        <div  class="p-field p-col" *ngIf="questionEpoux.length <= 0">
                             <label>Repondez au question</label>
                             <p-button  label="Question" icon="pi pi-plus" (click)="addQuestionEpouse()"></p-button>
+                        </div>
+                        <div class="p-fluid p-formgrid p-grid " *ngIf="questionEpoux.length > 0">
+                            <p-table [value]="questionEpoux" dataKey="">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                        <th>Poids</th>
+                                        <th>Taille</th>
+                                        <th>Modifiication du questionnaire</th>
+                                       
+                                        
+                                    </tr>
+                                </ng-template>
+                                <ng-template  pTemplate="body" let-question >
+                                    <tr>
+                                        <td> {{question.poids}}
+                                        </td>
+                                        <td> {{question.taille}}
+                                        </td>
+
+                                        <td>
+                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestionEpoux(question)"></button>
+                                        </td>
+                                        
+                                    </tr>
+                                </ng-template>
+                            </p-table>
                         </div>
                         
                 
                     </div>
                </div>
         </p-fieldset>
-               <div class="p-grid p-justify-between" *ngIf="this.bulletinForm.value.nombreEnfant > 0">
+               <div class="p-grid p-justify-between" *ngIf="this.bulletinForm.value.nombreEnfant > 0 && enfants.length <= this.bulletinForm.value.nombreEnfant -1">
                 <div> </div>
                 <div>
-                    <p-button   label="Ajoute un  enfant" icon="pi pi-plus" (click)="addEnfant()"></p-button>
+                    <p-button   label="Ajoute un  enfant"  icon="pi pi-plus" (click)="addEnfant()"></p-button>
                 </div>
             </div>
                
@@ -418,7 +456,10 @@
                                 <button *ngIf="!editing"  pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="editEnfant(enfant)" class="p-button-rounded p-button-text"></button>
                                 <button *ngIf="editing" id="ri" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSaveEnfant(enfant)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
                                 <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancelEnfant(enfant, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
-    
+                                <button *ngIf="editing"  pButton pRipple type="button"  icon="pi pi-plus" (click)="addQuestionEnfant(ri)" class="p-button-rounded p-button-text"></button>
+                                <button *ngIf="enfant?.question?.isSante !== null"  pButton pRipple type="button"  icon="pi pi-plus" (click)="editQuestionEnfant(enfant.question, ri)" class="p-button-rounded p-button-text"></button>
+
+
                                 </td>
                     
                         </tr>
@@ -510,7 +551,7 @@
                             </div>
 
 
-                            <div class="p-field p-col" *ngIf="questionnaireForm.value.traitementSuivre.value == 'OUI' ">
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.traitementSuivre?.value == 'OUI' ">
                                 <label for="traitement">Lequel</label>
                                 <input id="traitement"  class="champ" type="text" formControlName="traitement" pInputText>
                             </div>
@@ -528,7 +569,7 @@
                                 
                             </div>
 
-                            <div class="p-field p-col" *ngIf="questionnaireForm.value.subiAccident.value == 'OUI'">
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.subiAccident?.value == 'OUI'">
                                 <label for="detailAccident">Donner des détails de l'accident</label>
                                 <input id="detailAccident" class="champ" type="text" formControlName="detailAccident" pInputText>
                             </div>
@@ -548,7 +589,7 @@
                                 
                             </div>
 
-                            <div class="p-field p-col" *ngIf="questionnaireForm.value.avoirHosp.value == 'OUI'">
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.avoirHosp?.value == 'OUI'">
                                 <label for="natureSoins">Nature de soins</label>
                                 <input id="natureSoins"  class="champ" type="text" formControlName="natureSoins" pInputText>
                             </div>
@@ -564,22 +605,24 @@
 
                          <div class="p-fluid p-formgrid p-grid">
                             
-                            <div class="p-field p-col" *ngIf="displayQuestionAssurer">
+                            <div class="p-field p-col" *ngIf="sexe == 'M'">
                                 <label for="serviceMilitair">Service militaire</label>
                                 <input id="serviceMilitair"  class="champ" type="text" formControlName="serviceMilitair" pInputText>
                             </div>
-                            <div class="p-field p-col" >
-                                <label for="exempte" *ngIf="displayQuestionAssurer">Exempte</label>
+                            <div class="p-field p-col"  *ngIf="sexe == 'M'">
+                                <label for="exempte">Exempte</label>
                                 <input id="exempte"  class="champ" type="text" formControlName="exempte" pInputText>
                             </div>
 
-                            <div class="p-field p-col">
-                                <label for="blesse" *ngIf="displayQuestionAssurer">Blesse</label>
-                                <input id="blesse"  class="champ" type="text" formControlName="blesse" pInputText>
+                            <div class="p-field p-col"  *ngIf="sexe == 'M'">
+                                <label for="blesse">Etes-vous blessé de guerre ?</label>
+                                <p-dropdown  inputId="blesse" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="blesse" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
                             </div>
-                            <div class="p-field p-col" *ngIf="displayQuestionAssurer">
+                            <div class="p-field p-col" *ngIf="sexe == 'M'">
                                 <label for="tauxPension">Taux de pension</label>
-                                <input id="tauxPension" class="champ" type="text" formControlName="tauxPension" pInputText>
+                                <input id="tauxPension" class="champ"  type="text" formControlName="tauxPension" pInputText>
                             </div>
                             
                          </div>
@@ -587,13 +630,13 @@
                          <div class="p-fluid p-formgrid p-grid">
                     
 
-                            <div class="p-field p-col" *ngIf="displayQuestionEpoux" >
+                            <div class="p-field p-col" *ngIf="sexe == 'F'" >
                                 <label for="maladieFemme">Maladie Femme</label>
                                 <input id="maladieFemme"  class="champ" type="text" formControlName="maladieFemme" pInputText>
                             </div>
 
-                            <div class="p-field p-col" *ngIf="displayQuestionEpoux">
-                                <label for="normalCouche">Couche</label>
+                            <div class="p-field p-col" *ngIf="sexe == 'F'">
+                                <label for="normalCouche">Vos couches ont-elles été normales ?</label>
                                 <p-dropdown  inputId="normalCouche" dataKey="id" [filter]="true" showClear="true" [options]="choix"
                                 formControlName="normalCouche" placeholder="Select" optionLabel="label"></p-dropdown>
                                               

@@ -62,6 +62,7 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   epouse: Epouse = {};
   label: string;
   quuestionAssures: Questionnaire[] =[];
+  questionEpoux: Questionnaire[] =[];
   situationMarie = SituationFamiliale.MARIE;
   situationFamiliales = [
     {label: 'Marié', value: SituationFamiliale.MARIE},
@@ -98,6 +99,8 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
     ];
     choi: Choix;
 marie = false;
+sexe : string = ""; 
+index = 0;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -309,6 +312,7 @@ marie = false;
             this.bulletinForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
             this.bulletinForm.get('police').setValue(this.adherentSelected.groupe.police);
             this.bulletinForm.get('groupe').setValue(this.adherentSelected.groupe);
+            this.sexe = this.adherentSelected.genre.code;
         }
     });
 
@@ -322,19 +326,39 @@ marie = false;
   addQuestionAssure() {
     this.displayQuestionAssurer = true;
     this.displayQuestion = true;
+    this.sexe = this.adherentSelected.genre.code;
     this.label = "Asuuré";
     
   }
 
   addQuestionEpouse() {
+    if(this.sexe =='M') {
+      this.sexe = 'F';
+    }
+    
+    if(this.sexe =='F') {
+      this.sexe = 'M';
+    }
     this.displayQuestionEpoux = true;
+    this.displayQuestionAssurer = false;
+    this.displayQuestionEnfant = false
     this.displayQuestion = true;
     this.label = "Epouse";
   }
 
+  addQuestionEnfant(index: number) {
+    this.displayQuestionEnfant = true;
+    this.displayQuestionAssurer = false;
+    this.displayQuestionEpoux = false;
+    this.displayQuestionEnfant = false
+    this.displayQuestion = true;
+    this.label = "Enfant";
+    this.index  = index;
+  }
+
   viewSituation() {
-    console.log("Situation" , );
-    if(this.bulletinForm.value.situationFamiliale.value ='MARIE') {
+    
+    if(this.bulletinForm.value.situationFamiliale.value == 'MARIE') {
       this.marie = true;
     }
     else{
@@ -347,14 +371,15 @@ marie = false;
   }
   enregistrer() {
     this.question = this.questionnaireForm.value;
-    this.question.isSante= this.questionnaireForm.value.isSante.value;
-    this.question.defaut= this.questionnaireForm.value.defaut.value;
-    this.question.infection= this.questionnaireForm.value.infection.value;
-    this.question.traitementSuivre= this.questionnaireForm.value.traitementSuivre.value;
-    this.question.subiAccident= this.questionnaireForm.value.subiAccident.value;
-    this.question.avoirHosp= this.questionnaireForm.value.avoirHosp.value;
-    this.question.maladieProche= this.questionnaireForm.value.maladieProche.value;
-    this.question.normalCouche= this.questionnaireForm.value.normalCouche.value;
+    this.question.isSante= this.questionnaireForm.value?.isSante?.value;
+    this.question.defaut= this.questionnaireForm.value?.defaut?.value;
+    this.question.infection= this.questionnaireForm.value?.infection?.value;
+    this.question.traitementSuivre = this.questionnaireForm.value?.traitementSuivre?.value;
+    this.question.subiAccident= this.questionnaireForm.value?.subiAccident?.value;
+    this.question.avoirHosp= this.questionnaireForm.value?.avoirHosp?.value;
+    this.question.maladieProche= this.questionnaireForm.value?.maladieProche?.value;
+    this.question.normalCouche= this.questionnaireForm.value?.normalCouche?.value;
+    this.question.blesse= this.questionnaireForm.value?.blesse?.value;
   console.log(this.question);
    
     if(this.displayQuestionAssurer) {
@@ -366,14 +391,44 @@ marie = false;
      
     }
     if(this.displayQuestionEpoux) {
+      this.questionEpoux = [];
       this.epouse.question  = this.question;
+      this.questionEpoux.push(this.question);
       this.displayQuestionEpoux = false;
     } 
      if(this.displayQuestionEnfant) {
-      this.enfant.question  = this.question;
-      console.log(this.bulletinAdhesion.question);
+      this.enfants[this.index].question  = this.question;
+      console.log(this.enfants[this.index].question);
     }
     this.questionnaireForm.reset();
+  }
+
+  editQuestion(question: Questionnaire) {
+    this.displayQuestionAssurer = true;
+    this.displayQuestion = true;
+    this.question = {...question};
+    this.questionnaireForm.patchValue(this.question);
+  }
+
+  editQuestionEpoux(question: Questionnaire) {
+    console.log(question);
+    this.displayQuestionAssurer = false;
+    this.displayQuestionEnfant = true;
+    this.displayQuestionEpoux = false;
+    this.displayQuestion = true;
+    this.question = {...question};
+    this.questionnaireForm.patchValue(this.question);
+  }
+
+  editQuestionEnfant(question: Questionnaire, index: number) {
+    console.log(question);
+    this.displayQuestionAssurer = false;
+    this.displayQuestionEnfant = true;
+    this.displayQuestionEpoux = false;
+    this.displayQuestion = true;
+    this.question = {...question};
+    this.questionnaireForm.patchValue(this.question);
+    this.index = index;
   }
 
 
@@ -408,10 +463,24 @@ marie = false;
      // this.bulletinAdhesion.dateSaisie = bulletin.dateSaisie;
       this.bulletinAdhesion = {...bulletin};
       this.bulletinForm.patchValue(this.bulletinAdhesion);
+      this.quuestionAssures = [];
+      this.questionEpoux = [];
+      this.quuestionAssures.push(bulletin.question);
+      this.questionEpoux.push(bulletin.epouse.question);
+      this.epouse = bulletin.epouse;
+      this.epouse.dateNaissanceEpoux = bulletin?.epouse?.dateNaissanceEpoux;
       console.log("===========", this.bulletinForm.value);
+      if(bulletin.situationFamiliale == 'MARIE') {
+        this.marie = true;
+      }
       this.displayFormBulletin = true;
       }
 
+      closeDialog() {
+        this.displayFormBulletin = false;
+        this.bulletinForm.reset();
+      }
+     
       onCreate() {
         this.bulletinAdhesion = this.bulletinForm.value;
         this.bulletinAdhesion.enfants = this.enfants;

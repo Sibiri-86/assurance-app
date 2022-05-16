@@ -49,7 +49,7 @@ export interface Questionnaire {
     maladieProche?: MaladieProche;
     serviceMilitair?: string;
     exempte?: string;
-    blesse?: string;
+    blesse?: Choix;
     pension?: string;
     tauxPension?: number;
     maladieFemme?: string;
