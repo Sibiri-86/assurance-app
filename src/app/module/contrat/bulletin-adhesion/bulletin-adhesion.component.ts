@@ -428,6 +428,11 @@ isSaving = false;
     
     this.enfant = {};
     this.questionnaireForm.reset();
+    console.log("valeur",this.bulletinForm.value.nombreEnfant);
+    console.log("valeur1",this.enfants.length);
+    if(this.enfants.length == this.bulletinForm.value.nombreEnfant) {
+      this.displayQuestionEnfant = false ;
+    }
     
    
   }

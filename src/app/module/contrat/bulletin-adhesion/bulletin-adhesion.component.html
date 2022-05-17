@@ -275,8 +275,8 @@
                         
                                         
                                         <div *ngIf="quuestionAssures.length <= 0">
-                                            <label>Repondez au question</label>
-                                            <p-button  label="Question" icon="pi pi-plus" (click)="addQuestionAssure()"></p-button>
+                                            
+                                            <p-button  label="Repondez aux questions" icon="pi pi-plus" (click)="addQuestionAssure()"></p-button>
                                         </div>
                                         <div class="p-fluid p-formgrid p-grid " *ngIf="quuestionAssures.length > 0">
                                         <p-table [value]="quuestionAssures" dataKey="">
@@ -349,12 +349,12 @@
                      <div class="p-fluid p-formgrid p-grid">
             
                         
-                        <div  class="p-field p-col" *ngIf="questionEpoux.length <= 0">
-                            <label>Repondez au question</label>
-                            <p-button  label="Question" icon="pi pi-plus" (click)="addQuestionEpouse()"></p-button>
+                        <div  *ngIf="questionEpoux.length <= 0">
+                           
+                            <p-button  label="Repondez aux questions" icon="pi pi-plus" (click)="addQuestionEpouse()"></p-button>
                         </div>
-                        <div class="p-fluid p-formgrid p-grid " *ngIf="questionEpoux.length > 0">
-                            <p-table [value]="questionEpoux" dataKey="">
+                        
+                            <p-table [value]="questionEpoux" dataKey="" *ngIf="questionEpoux.length > 0">
                                 <ng-template pTemplate="header">
                                     <tr>
                                     
@@ -379,7 +379,7 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
-                        </div>
+                        
                         
                 
                     </div>
@@ -414,9 +414,9 @@
                             
                             <td>{{rowData.nomEnfant}}</td>
                             <td>{{rowData.prenomEnfant}}</td>
-                            <td>{{rowData.dateNaissanceEnfant}}</td>
+                            <td>{{rowData.dateNaissanceEnfant  | formatTableValue : 'date'}}</td>
 
-                            <td > {{rowData.lieuNaisssanceEnfant}}</td>
+                            <td> {{rowData.lieuNaisssance}}</td>
                             
                             <td style="text-align:center">
                                 <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="updateEnfant(rowData,ri)" class="p-button-rounded p-button-text"></button>
@@ -470,7 +470,7 @@
     <ng-template pTemplate="content"> 
         <div class="card">
 
-        <p-fieldset legend="Information de l'enfant(x)" toggleable="true">
+        <p-fieldset legend="Information de l'enfant" toggleable="true">
             <div class="card">
                     
                 <div class="p-fluid p-formgrid p-grid" >
@@ -483,14 +483,15 @@
                             <input id="prenomEnfant" class="champ" type="text" [(ngModel)]="enfant.prenomEnfant" pInputText>
                         </div>
                         <div class="p-field p-col" >
+                            <label for="emploiEpouse">Date de naissance</label>
+                            <p-calendar id="dateNaissanceEnfant" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="enfant.dateNaissanceEnfant" appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col" >
                             <label for="lieuNaisssance">Lieu de Naissance</label>
                             <input id="lieuNaisssance" class="champ" type="text" [(ngModel)]="enfant.lieuNaisssance" pInputText>
                         </div>
 
-                        <div class="p-field p-col" >
-                            <label for="emploiEpouse">Date de naissance</label>
-                            <p-calendar id="dateNaissanceEnfant" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="enfant.dateNaissanceEnfant" appendTo="body"></p-calendar>
-                        </div>
+                        
                         
 
                  </div>
@@ -744,7 +745,7 @@
                             </div>
                             <div class="p-field p-col" *ngIf="sexe == 'M'">
                                 <label for="tauxPension">Taux de pension</label>
-                                <input id="tauxPension" class="champ"  type="text" formControlName="tauxPension" pInputText>
+                                <input id="tauxPension" class="champ"  type="number" formControlName="tauxPension" pInputText>
                             </div>
                             
                          </div>
