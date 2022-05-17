@@ -59,7 +59,7 @@ export interface Questionnaire {
     subiAccident?: Choix;
 }
 export interface Enfant {
-    id?: string;
+    id?: number;
     nomEnfant?: string;
     prenomEnfant?: string;
     dateNassance?: Date;

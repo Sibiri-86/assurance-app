@@ -64,6 +64,7 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   quuestionAssures: Questionnaire[] =[];
   questionEpoux: Questionnaire[] =[];
   situationMarie = SituationFamiliale.MARIE;
+  date: Date = new Date();
   situationFamiliales = [
     {label: 'Marié', value: SituationFamiliale.MARIE},
     {label: 'Célibataire', value: SituationFamiliale.CELIBATAIRE},
@@ -100,7 +101,8 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
     choi: Choix;
 marie = false;
 sexe : string = ""; 
-index = 0;
+index = -1;
+isSaving = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -396,11 +398,46 @@ index = 0;
       this.questionEpoux.push(this.question);
       this.displayQuestionEpoux = false;
     } 
-     if(this.displayQuestionEnfant) {
-      this.enfants[this.index].question  = this.question;
-      console.log(this.enfants[this.index].question);
-    }
+     
     this.questionnaireForm.reset();
+  }
+
+
+  ajouterEnfant() {
+    this.question = this.questionnaireForm.value;
+    this.question.isSante= this.questionnaireForm.value?.isSante?.value;
+    this.question.defaut= this.questionnaireForm.value?.defaut?.value;
+    this.question.infection= this.questionnaireForm.value?.infection?.value;
+    this.question.traitementSuivre = this.questionnaireForm.value?.traitementSuivre?.value;
+    this.question.subiAccident= this.questionnaireForm.value?.subiAccident?.value;
+    this.question.avoirHosp= this.questionnaireForm.value?.avoirHosp?.value;
+    this.question.maladieProche= this.questionnaireForm.value?.maladieProche?.value;
+    this.question.normalCouche= this.questionnaireForm.value?.normalCouche?.value;
+    this.question.blesse= this.questionnaireForm.value?.blesse?.value;
+    this.enfant.question = this.question;
+    
+    console.log(this.index);
+    
+    if(this.index !== - 1) {
+     
+      this.enfants[this.index] = this.enfant;
+    } else{
+      this.enfants.push(this.enfant);
+    }
+   
+    
+    this.enfant = {};
+    this.questionnaireForm.reset();
+    
+   
+  }
+  updateEnfant(enfant: Enfant, index: number) {
+    this.displayQuestionEnfant = true;
+    this.enfant = enfant;
+    this.index = index;
+    console.log(this.index);
+    console.log(index);
+    this.questionnaireForm.patchValue(enfant.question);
   }
 
   editQuestion(question: Questionnaire) {
@@ -461,14 +498,17 @@ index = 0;
     editBulletin(bulletin: BulletinAdhesion) {
       
      // this.bulletinAdhesion.dateSaisie = bulletin.dateSaisie;
+    this.date = bulletin.dateSaisie;
       this.bulletinAdhesion = {...bulletin};
       this.bulletinForm.patchValue(this.bulletinAdhesion);
+      this.bulletinForm.get('dateSaisie').setValue(this.date);
       this.quuestionAssures = [];
       this.questionEpoux = [];
       this.quuestionAssures.push(bulletin.question);
       this.questionEpoux.push(bulletin.epouse.question);
       this.epouse = bulletin.epouse;
       this.epouse.dateNaissanceEpoux = bulletin?.epouse?.dateNaissanceEpoux;
+      this.enfants = bulletin.enfants;
       console.log("===========", this.bulletinForm.value);
       if(bulletin.situationFamiliale == 'MARIE') {
         this.marie = true;
@@ -494,6 +534,7 @@ index = 0;
           accept: () => {
             if (this.bulletinAdhesion.id) {
               console.log(this.bulletinForm.value);
+              this.bulletinAdhesion.question = this.quuestionAssures[0];
               this.store.dispatch(featureActionBulletinAdhesion.updateBulletin(this.bulletinAdhesion));
               console.log(this.bulletinForm.value);
               // this.displayFormBulletin = false;
@@ -535,22 +576,32 @@ index = 0;
       }
 
       addEnfant() {
-        this.enfants.push(this.enfant);
+        // this.enfant.id = this.enfants.length + 1;
+       // this.enfants.push(this.enfant);
+       this.displayQuestionEnfant = true;
       }
 
       editEnfant(enfant: Enfant) {
+        console.log(this.enfants);
+        console.log(enfant);
         this.clonedEnfant[enfant.id] = {...enfant};
         
       }
     
-      onRowEditSaveEnfant(enfant: Enfant,  index: number) {
-        console.log(index)
-       delete this.clonedEnfant[index];
+      onRowEditSaveEnfant(enfant: Enfant, index: number) {
+         // enfant.question = ;
+         if(enfant.id === null) {
+           this.enfants = this.enfants.filter(enf=> enf !== this.enfants[index]);
+         }
+         console.log(this.enfants);
+        this.enfants[index] = enfant;
+      // delete this.clonedEnfant[enfant.id];
        this.messageService.add({severity:'success', summary: 'Success', detail:'enfant ajout'});
        
       }
     
       onRowEditCancelEnfant(enfant: Enfant, index: number) {
+        
         this.enfants[index] = this.clonedEnfant[enfant.id];
         delete this.clonedEnfant[enfant.id];
       }
