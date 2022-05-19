@@ -2873,6 +2873,8 @@
                         <th pSortableColumn="numero" style="min-width:200px" >Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                         <!--<th pSortableColumn="lieuNaissance" style="width: 12rem" >Lieu de naissance <p-sortIcon field="lieuNaissance"></p-sortIcon></th>-->
                         <th pSortableColumn="numeroTelephone" style="min-width:200px"  >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                        <th pSortableColumn="numeroTelephone" style="min-width:200px"  >Date d'incorporation <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+
                         <!--<th pSortableColumn="adresse" style="width: 10rem">Adresse<p-sortIcon field="adresse"></p-sortIcon></th>-->
 						<th style="width:300px"></th>
 					</tr>
@@ -2889,6 +2891,7 @@
                         <td style="min-width:200px"><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
                         <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
                         <td style="min-width:200px"><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
+                        <td style="min-width:200px"><span class="p-column-title">{{adherent.dateIncorporation | formatTableValue : 'date'}}</span></td>
                         <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
 						<td style="width:300px">
 							<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="modifierAdherent(adherent)"></button>

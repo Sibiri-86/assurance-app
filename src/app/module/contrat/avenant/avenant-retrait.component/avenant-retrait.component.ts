@@ -162,7 +162,7 @@ export class AvenantRetraitComponent implements OnInit {
       dateAvenant: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
-      dateEffet: new FormControl(null, [Validators.required]),
+      // dateEffet: new FormControl(null, [Validators.required]),
       fraisBadges: 0,
       fraisAccessoires: 0,
     });

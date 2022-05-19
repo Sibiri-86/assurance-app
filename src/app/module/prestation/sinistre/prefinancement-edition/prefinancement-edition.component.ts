@@ -121,6 +121,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   plafondSousActe: CheckPlafond;
+  numberPrestation = 0;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -138,7 +139,6 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
 
    deleteItemPrestation(i: number) {
-    /**verifier si lelements est dans tab */
     for (const f of this.tab){
       if (f === i) {
         this.tab.splice(i);
@@ -146,15 +146,6 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     }
     if (!this.tab.length) {
       this.checkControl = true;
-    }
-
-    if (this.prestationForm.get('montantReclame').value !== 0){
-      this.prestationForm.get('montantSaisie').setValue(
-        this.prestationForm.get('montantSaisie').value
-        - this.prestationForm.get('montantSaisie').value[i].montantSaisie);
-      this.prestationForm.get('montantRestant').setValue(
-          this.prestationForm.get('montantRestant').value
-          - this.prestationForm.get('montantRestant').value[i].montantRestant);
     }
     this.prestation.removeAt(i);
    }
@@ -180,15 +171,13 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       pathologie: new FormControl(),
       dateSoins: new FormControl(null, Validators.required),
       acte: new FormControl(),
+      familleActe: new FormControl(),
       medecin: new FormControl(),
       historiqueAvenant: new FormControl()
     });
   }
 
   ngOnInit(): void {
-    //this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse));
-
-    //this.prestationList = [];
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
       id: new FormControl(),
@@ -271,11 +260,6 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         this.prefinancementDtoList = value.slice();
       }
     });
-    
-    //this.store.pipe(select(prefinancementSelector.montantSousActe));
-    //this.store.dispatch(featureActionPrefinancement.setPlafondSousActe(null));
-    
-
     this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -354,22 +338,45 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectDateSoins(i: number){
+  checkDateCondition() {
+    if (!this.checkIfDateIsCorrect(this.prestationForm.get('dateDeclaration').value)){
+      this.showToast('error', 'INFORMATION', 'la date de declaration est superieure à la date du jour');
+      this.prestationForm.reset({dateSaisie: new Date()});
+    }
+  }
+
+  checkIfDateIsCorrect(d: Date){
+    const toDay = new Date();
+    console.log(d.getTime);
+    if (toDay.getTime() < d.getTime()){
+      return false;
+    }
+    return true;
+  }
+
+  selectDateSoins(i) {
     console.log('************************ selection de la date de soins' + i);
+    this.numberPrestation = i;
+    const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     this.plafondSousActe = {};
-    this.plafondSousActe.dateSoins = this.prestationForm.get('prestation').value[i].dateSoins;
+    this.plafondSousActe.dateSoins = myForm.get('dateSoins').value;
     console.log('************************ date de soins' + this.plafondSousActe.dateSoins);
+    if (this.plafondSousActe.dateSoins && !this.checkIfDateIsCorrect(this.plafondSousActe.dateSoins)) {
+      this.showToast('error', 'INFORMATION', 'la date de soins est superieure à la date du jour');
+      myForm.reset();
+      return;
+    }
     this.plafondSousActe.adherent = this.adherentSelected;
     this.plafondSousActe.sousActe = this.prestationForm.get('prestation').value[i].sousActe;
     if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
-      const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
       if (value) {
-        myForm.patchValue({montantPlafond: value});
+        console.log('la valeur de i est ********************' + this.numberPrestation);
+        console.log('le montant de i est ********************' + value);
+        this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
       } else {
-        myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
       }
     });
     }
@@ -433,6 +440,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     formPrestation.get('taux').setValue(pr.taux);
     formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
     formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+    formPrestation.get('montantSupporte').setValue(pr.montantSupporte);
+    formPrestation.get('montantPlafond').setValue(pr.montantPlafond);
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
@@ -443,7 +452,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestationListPrefinancement = pref.prestation;
     this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
   }
-  
+
   supprimerPrestation(prestation: Prestation) {
     this.confirmationService.confirm({
       message: 'voulez-vous supprimer la prestation',
@@ -457,15 +466,21 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
 
   calculDebours(i: number) {
-    let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+    const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
     this.prestationForm.get('prestation').value[i].coutUnitaire) {
-      myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
+
+      myForm.patchValue({montantRembourse:
+        (this.prestationForm.get('prestation').value[i].coutUnitaire *
+        this.prestationForm.get('prestation').value[i].taux.taux) / 100,
+        debours: this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
       this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire});
     }
+
     this.prefinancementModel = this.prestationForm.value;
     this.prefinancementModel.dateSaisie = new Date();
     this.prefinancementModel.adherent = this.adherentSelected;
@@ -480,15 +495,19 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         this.checkPrefinancementResult = value.slice();
         console.log(this.checkPrefinancementResult);
         for (let j = 0; j < this.checkPrefinancementResult.length; j++){
+          const myForm1 = (this.prestationForm.get('prestation') as FormArray).at(j);
           /** */
-          this.prestationForm.get('montantSaisie').setValue(
-            this.prestationForm.get('montantSaisie').value + this.checkPrefinancementResult[j].montantRembourse);
-          this.prestationForm.get('montantRestant').setValue(
-              this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantSaisie').value);
-          myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
-          myForm.patchValue({montantRembourse: this.checkPrefinancementResult[j].montantRembourse,
-            montantSupporte: (this.prestationForm.get('prestation').value[i].nombreActe *
-            this.prestationForm.get('prestation').value[i].coutUnitaire) - this.checkPrefinancementResult[j].montantRembourse,
+          const plafond = myForm1.get('montantPlafond').value;
+          const totalPlafond = plafond * this.prestationForm.get('prestation').value[j].nombreActe;
+          let montantRembourse = this.checkPrefinancementResult[j].montantRembourse;
+          let montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+          this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+          if (this.checkPrefinancementResult[j].montantRembourse > totalPlafond) {
+            montantRembourse = totalPlafond;
+            montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+            this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+          }
+          myForm1.patchValue({montantRembourse, montantSupporte,
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
             observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
           });
@@ -497,16 +516,6 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     });
     this.prefinancementList = [];
     this.prefinancementModel = {};
-  }
-
-  calculCoutDebours(data: FraisReels, ri: number) {
-    /*
-    console.log(this.prestationList);
-    console.log(data);
-    this.prestationList[ri].debours = data.coutUnitaire * Number(data.nombreActe);
-    this.prestationList[ri].baseRemboursement =   this.prestationList[ri].debours;
-    this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement*(this.prestationList[ri].taux.taux/100); 
-    */
   }
 
   setNombreActe(data: FraisReels, ri) {

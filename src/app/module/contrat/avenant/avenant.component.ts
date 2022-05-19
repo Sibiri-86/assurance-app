@@ -1539,6 +1539,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   deleteAdherant(historiqueAvenantRetrais: HistoriqueAvenant) {
     console.log('++++++++++++   historiqueAvenantRetrais      ++++++++++++');
     console.log(historiqueAvenantRetrais);
+    this.historiqueAvenant = {};
     this.historiqueAvenant = historiqueAvenantRetrais;
     this.historiqueAvenant.numeroGarant = historiqueAvenantRetrais.numero;
     this.historiqueAvenant.police = this.policeItem;
@@ -2259,7 +2260,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   setPolice(police: Police) {
     this.policeItem = police;
-    /* this.historiqueAvenantListWithoutActiveList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id})));
+    this.historiqueAvenantListWithoutActiveList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id})));
     this.store.dispatch(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id}));
     this.historiqueAvenantListWithoutActiveList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -2268,7 +2269,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         console.log('................historiqueAvenantListWithoutActiveList............................');
         console.log(this.historiqueAvenantList.length);
       }
-    }); */
+    });
   }
 
   onRowEditInitPrime(historiqueAvenantPrime: HistoriqueAvenantPrime) {
@@ -2432,7 +2433,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.initDisplayAvenant();
         this.isAvenantRenouvellement = true;
         this.addAvenant();
-        this.entete = 'Avenant de rnouvellement'.toUpperCase();
+        this.entete = 'Avenant de renouvellement'.toUpperCase();
         this.policeItem = rowdata.police;
         break;
       default: break;/*  */
@@ -2523,7 +2524,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
               (res) => {
                 this.avenantModif1.plafondFamilleActes = res.body;
-        
+                console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes)
               }
       );
       this.plafondService.getPlafondGroupeActeByGroupe(groupe.id).subscribe(

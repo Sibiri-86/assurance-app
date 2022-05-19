@@ -487,7 +487,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
         if(this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration) {
             myForm.patchValue({
                 montantRembourse: ((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.adherentSelected.groupe.taux.taux) / 100)
-                * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite
+                // * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite
         })
         
     }
