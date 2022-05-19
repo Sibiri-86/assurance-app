@@ -34,6 +34,7 @@ export interface PlafondActe {
     etat?: Status;
     sousActeListe?: SousActe[];
     plafondGroupeFamilleActe?: PlafondFamilleActe;
+    garantie?: Garantie;
   }
 
 export interface PlafondSousActe {

@@ -407,7 +407,9 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <p-calendar [showIcon]="true" [(ngModel)]="plafond.dateEffet" (onSelect)="controleDateActe(plafond)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+
+                                
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{plafond.dateEffet | formatTableValue : 'date'}}
@@ -524,7 +526,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet" (onSelect)="controleDateActe1(acte)"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{acte.dateEffet | formatTableValue : 'date'}}
@@ -646,7 +648,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  (onSelect)="controleDateActe2(sousActe)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -3257,7 +3259,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="pays">Pays<span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" (onChange)="changeCountry($event)" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="pays" [filter]="true"  formControlName="pays" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" (onChange)="changeCountry($event)" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'pays'">
                             </app-entity-validation>-->
@@ -3265,7 +3267,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Région<span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="region" [filter]="true" showClear="true "  formControlName="region" dataKey="id" [options]="regionList" placeholder="Select" (onChange)="changeRegion($event)" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'region'">
                             </app-entity-validation>-->
@@ -3273,7 +3275,7 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Province<span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList"  (onChange)="changeDepartement($event)" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="departement" [filter]="true"  formControlName="departement" showClear="true" dataKey="id" [options]="departementList"  (onChange)="changeDepartement($event)" placeholder="Select" optionLabel="libelle"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'departement'">
                             </app-entity-validation>-->
@@ -3293,7 +3295,7 @@
 
                         <div class="p-field p-col-4">
                             <label for="arrondissement">Arrondissement <span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
+                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id"  formControlName="arrondissement" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
                             <!--<app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'arrondissement'">
                             </app-entity-validation>-->

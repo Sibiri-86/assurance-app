@@ -86,6 +86,11 @@ export class BaremeComponent implements OnInit, OnDestroy {
   displayVoirBareme = false;
   statusObject$: Observable<St>;
   displayPrevisualiserParametrageEdition = false;
+  dateEffetFamilleActe: Date = new Date();
+  dateEffetActe: Date = new Date();
+  dateEffetSousActe: Date = new Date();
+  plafondFamilleActeControle: PlafondFamilleActe = {};
+  plafondActeControle: PlafondActe = {};
 
   constructor(private breadcrumbService: BreadcrumbService, private messageService: MessageService,
               private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
@@ -107,6 +112,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
    }
 
+   
   ngOnInit(): void{
     this.listeEtat = [{libelle: 'ACTIVER', identifiant: 1}, {libelle: 'DESACTIVER', identifiant: 2}];
 
@@ -190,7 +196,8 @@ export class BaremeComponent implements OnInit, OnDestroy {
         dimensionPeriode: {},
         nombre: 0,
         dateEffet: new Date(),
-        acte: {}
+        acte: {},
+        garantie : {}
       }
     ];
 
@@ -486,7 +493,7 @@ changeGarantie(garantie, indexLigne: number) {
           this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0})
         }
       }
-      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe});
+      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: garantie.value});
     }
   }
     console.log(this.plafondActe);
@@ -499,6 +506,30 @@ changeGarantie(garantie, indexLigne: number) {
   ajouterBareme(){
     this.dispplayDialogueBareme = true;
   }
+  controleDateFamilleActe(dateEffet: Date) {
+    this.dateEffetFamilleActe = dateEffet;
+  }
+  controleDateActe(rowData: PlafondActe) {
+  
+    this.plafondFamilleActeControle = this.plafondFamilleActe.find(plafon => plafon.garantie ===  rowData.garantie);
+
+    if(rowData.dateEffet.getTime() > this.plafondFamilleActeControle.dateEffet.getTime()) {
+
+      this.messageService.add({severity:'success', summary: 'Success', detail:'La date d\'effet de l\'acte est supérieure à celle du groupe !!! '});
+      rowData.dateEffet = null;
+    }
+    
+
+  }
+
+  controleDateSousActe(rowData: PlafondSousActe) {
+    this.plafondActeControle = this.plafondActe.find(plafon => plafon.listeSousActe.find(sous=>sous.sousActe.id === rowData.id));
+    if(rowData.dateEffet.getTime() > this.plafondActeControle.dateEffet.getTime()) {
+
+      this.messageService.add({severity:'success', summary: 'Success', detail:'La date d\'effet du sous acte est supérieure à celle de l\'acte !!! '});
+      rowData.dateEffet = null;
+    }
+  } 
 
   ngOnDestroy() {
 

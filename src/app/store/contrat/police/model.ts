@@ -11,6 +11,9 @@ import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/
 import {OrdreReglementTierPayant, SinistreTierPayant} from '../../prestation/tierPayant/model';
 import {Groupe} from '../groupe/model';
 import { OrdonnanceMedical } from '../../medical/ordonnance-medical/model';
+import { Pays } from '../../parametrage/pays/model';
+import { Region } from '../../parametrage/region/model';
+import { Arrondissement } from '../../parametrage/arrondissement/model';
 
 export interface Police{
     id?: string;
@@ -36,6 +39,9 @@ export interface Police{
     secteurActivite?: SecteurActivite;
     numeroIfu?: string;
     secteur?: Secteur;
+    pays?: Pays;
+    region?: Region;
+    arrondissement?: Arrondissement;
     rccm?: string;
     fraisAccessoire?: number;
     fraisBadge?: number;

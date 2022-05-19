@@ -203,6 +203,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionAdherent.selectedAdherentForSearch(null));
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
+
     if (value) {
         console.log(value);
         this.adherentSelected = value;
