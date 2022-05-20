@@ -148,8 +148,19 @@
                 <div class="card">
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">
                 <p-fieldset legend="Information" toggleable="true">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="medecin">Type bon</label>
+                            <p-dropdown inputId="bon"  [filter]="true"
+                                        showClear="true" [options]="typeBon"
+                                        formControlName="typeBon"  [autoDisplayFirst]="false"
+                                        ></p-dropdown>
+                        </div>
+                        
+                    </div>
                         
                 <div class="p-fluid p-formgrid p-grid">
+                    
 
                     <div class="p-field p-col">
                         <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
@@ -203,7 +214,7 @@
                         </div>
                     </div>
                     
-                    <div class="p-fluid p-formgrid p-grid">
+                  <!--   <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="medecin">Type bon</label>
                             <p-dropdown inputId="bon"  [filter]="true"
@@ -212,7 +223,7 @@
                                         ></p-dropdown>
                         </div>
                         
-                    </div>
+                    </div> -->
                     
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">

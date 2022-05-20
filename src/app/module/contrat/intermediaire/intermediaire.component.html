@@ -348,17 +348,17 @@
 
                         <div class="p-field p-col">
                             <label for="lastname2">Pays <span class="required"></span></label>
-                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" [options]="paysList" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="pays" [filter]="true" dataKey="id" showClear="true" formControlName="pays" [options]="paysList" placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col">
                             <label for="lastname2">Region <span class="required"></span></label>
-                            <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" [options]="regionList"  placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="region" [filter]="true" showClear="true" dataKey="id" formControlName="region" [options]="regionList"  placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
                         <div class="p-field p-col-4">
                             <label for="lastname2">Province <span class="required"></span></label>
-                            <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" [options]="departementList" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                            <p-dropdown inputId="departement" [filter]="true" showClear="true" dataKey="id" formControlName="departement" [options]="departementList" placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
                     </div>
 
@@ -370,7 +370,7 @@
 
                          <div class="p-field p-col-4">
                             <label for="arrondissement">Arrondissement <span class="required"></span></label>
-                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
+                            <p-dropdown inputId="arrondissement" [filter]="true" showClear="true" [options]="arrondissementList" formControlName="arrondissement" dataKey="id" placeholder="Select" optionLabel="libelle" (onChange)="changeArrondissement($event)"></p-dropdown>
                          </div>
 
                          <div class="p-field p-col-4">

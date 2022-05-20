@@ -59,6 +59,7 @@ import { BonPriseEnCharge } from 'src/app/store/medical/bon-prise-en-charge/mode
 import * as featureActionBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/selector';
 import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -115,9 +116,11 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   typeBon: Array<SelectItem>;
+ // userCurent: Us
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
+               private keycloak: KeycloakService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -314,6 +317,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   }
 
   imprimer(bon: BonPriseEnCharge) {
+    bon.userCurent = this.keycloak.getUsername();
     this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
     this.report.bonPriseEnChargeDto = bon;
     this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));

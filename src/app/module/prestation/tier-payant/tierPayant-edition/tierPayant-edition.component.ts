@@ -434,6 +434,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
+                this.prestationForm.get('bonPriseEnCharge').setValue(pref.bonPriseEnCharge);
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));""
                 for (const pr of pref.prestation) {

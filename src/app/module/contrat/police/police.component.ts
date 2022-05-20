@@ -313,8 +313,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       numero: new FormControl(null, ),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
-      adresse: new FormControl('', [Validators.required]),
-      adresseEmail: new FormControl('', [Validators.required]),
+      adresse: new FormControl(''),
+      adresseEmail: new FormControl(''),
       profession: new FormControl(''),
       referenceBancaire: new FormControl(''),
       qualiteAssure: new FormControl('', [Validators.required]),
@@ -1394,15 +1394,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.police = { ...police };
     this.policeForm.get('arrondissement').setValue(this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement));
-    const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement).idCommune;
-    const departement = this.communeList.find(commun=> commun.id === id).idDepartement;
+    const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement)?.idCommune;
+    const departement = this.communeList.find(commun=> commun.id === id)?.idDepartement;
     console.log(departement);
     console.log();
     this.policeForm.get('commune').setValue(this.communeList.find(commun=> commun.id === id));
     this.policeForm.get('departement').setValue(this.departementList.find(depart=> depart.id === departement));
-    this.policeForm.get('region').setValue(this.regionList.find(regio=> regio.id === this.departementList.find(depart=> depart.id === departement).idRegion));
+    this.policeForm.get('region').setValue(this.regionList.find(regio=> regio.id === this.departementList.find(depart=> depart.id === departement)?.idRegion));
     this.policeForm.get('pays').setValue(this.paysList.
-      find(pay=> pay.id === this.policeForm.get('region').value.idTypePays));
+      find(pay=> pay.id === this.policeForm.get('region').value?.idTypePays));
 
 
     
@@ -1529,6 +1529,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.displayDialogFormAddGroupe = true;
     this.displayGroupForm = true;
     this.displayAdherentForm = false;
+    this.isgroupEditing = false;
     this.groupeForm.reset();
     this.primeForm.reset();
   }

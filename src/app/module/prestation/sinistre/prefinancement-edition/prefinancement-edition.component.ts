@@ -421,6 +421,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
 
   editerPrestation(pref: Prefinancement) {
+    console.log("=====================");
     console.log(pref);
     this.adherentSelected = pref.adherent;
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
