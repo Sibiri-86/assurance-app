@@ -2845,7 +2845,8 @@
                     </ng-template>
                     
                 </p-toolbar>
-                <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','matriculeGarant','matriculeSouscripteur',
+                'nom','prenom','numeroTelephone','dateNaissance','dateIncorporation']"
                          [rowHover]="true" dataKey="id"
                          styleClass="p-datatable-customers"
                          currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
@@ -2961,7 +2962,7 @@
                 <div class="p-field p-col">
                     <label for="dateEffet">Date effet</label>
                     <div>
-                        <span>{{police.dateEffet}}</span>
+                        <span>{{police.dateEffet  | formatTableValue : 'date'}}</span>
                     </div>
                 </div>
 
@@ -2971,7 +2972,7 @@
                 <div class="p-field p-col">
                     <label for="lastname2">Date echeance</label>
                     <div>
-                        <span>{{police.dateEcheance}}</span>
+                        <span>{{police.dateEcheance  | formatTableValue : 'date'}}</span>
                     </div>
                 </div>
 
