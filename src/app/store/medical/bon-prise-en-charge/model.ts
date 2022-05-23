@@ -13,6 +13,7 @@ export interface BonPriseEnCharge {
     numeros?: string;
     date?: Date;
     status?: string;
+    userCurent?: string;
     prestation?: Array<Prestation>;
 }
 
