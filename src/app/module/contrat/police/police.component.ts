@@ -784,6 +784,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
               if (value) {
                 this.loading = false;
                 this.arrondissementList = value.slice();
+                console.log("===============arrondissementList=============");
+                console.log(this.arrondissementList);
+                console.log("===============arrondissementList=============");
               }
   });
 
@@ -943,6 +946,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.communeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.communeList = value.slice();
+        console.log("===============commune=============");
+        console.log(this.communeList);
+        console.log("===============commune=============");
       }
     });
 

@@ -20,6 +20,14 @@ $getBons(): Observable<BonPriseEnChargeList> {
     );
   }
 
+  $getBonsSansPrestation(): Observable<BonPriseEnChargeList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/no-prestation`).pipe(
+      map((response: BonPriseEnChargeList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 posBons(bon: BonPriseEnCharge): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}`, bon);

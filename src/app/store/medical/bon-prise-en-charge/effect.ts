@@ -113,4 +113,19 @@ export class BonPriseEnChargeEffects {
         )
     )
     );
+
+    fetchBons$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadBons),
+        mergeMap(() =>
+            this.bonPriseEnChargeService.$getBonsSansPrestation().pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setBon(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
 }

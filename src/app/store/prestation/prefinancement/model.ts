@@ -43,6 +43,7 @@ export interface Prefinancement {
     ordreReglement?: OrdreReglement;
     prestation?: Array<Prestation>;
     prestataire?: Prestataire;
+    bonPriseEnCharge?: BonPriseEnCharge;
 }
 
 export interface BonPriseEnCharge {

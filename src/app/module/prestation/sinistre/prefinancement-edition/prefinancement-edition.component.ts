@@ -207,11 +207,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
     // chargement des bons de prise en charge
     this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
-    this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
     this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
-        this.bonPriseEnChargeList = value.slice();
+        this.bonPriseEnChargeList = value;
       }
     });
 
