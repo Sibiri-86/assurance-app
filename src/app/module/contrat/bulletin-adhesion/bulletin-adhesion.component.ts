@@ -49,20 +49,28 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   bulletinAdhesion: BulletinAdhesion = {};
   selectedBulletin: BulletinAdhesion[];
   listeBulletin: BulletinAdhesionList = {};
+  BulletinDetail: BulletinAdhesion = {};
   items: MenuItem[];
   enfants: Enfant[] = [];
   enfant: Enfant = {};
+  enfantDetail: Enfant = {};
   clonedEnfant: { [s: string]: Enfant; } = {};
   displayReCTO = false;
   displayQuestionAssurer = false;
   displayQuestion = false;
   displayQuestionEpoux = false;
   displayQuestionEnfant = false;
+  displayDetailBulletin = false;
+  displayDetailQuestion = false;
+  displayQuestionDetailEnfant = false;
   question: Questionnaire = {};
   epouse: Epouse = {};
   label: string;
   quuestionAssures: Questionnaire[] =[];
   questionEpoux: Questionnaire[] =[];
+  questionsEpoux: Questionnaire[] =[];
+  quuestionsAssures: Questionnaire[] =[];
+  questionnaireDetail: Questionnaire = {};
   situationMarie = SituationFamiliale.MARIE;
   date: Date = new Date();
   situationFamiliales = [
@@ -227,9 +235,9 @@ isSaving = false;
     dateSaisie:  new FormControl(''),
     matriculeAdherent:  new FormControl('', Validators.required),
     adherent:  new FormControl(''), 
-    nomAdherent:  new FormControl(''),
-    prenomAdherent:  new FormControl(''),
-    nomAssurePrin:  new FormControl(''),
+    nomAdherent:  new FormControl(),
+    prenomAdherent:  new FormControl(),
+    nomAssurePrin:  new FormControl(),
     prenomAssurePrin:  new FormControl(''),
     numeroGroupe:  new FormControl(''),
     numeroPolice:  new FormControl(''),
@@ -452,6 +460,18 @@ isSaving = false;
     this.questionnaireForm.patchValue(this.question);
   }
 
+  retireQuestion(question: Questionnaire) {
+   
+      console.log("===================");
+    console.log(question);
+    console.log("===================");
+    this.quuestionAssures =[];
+    console.log("===================");
+    console.log(this.quuestionAssures);
+    console.log("===================");
+    
+  }
+
   editQuestionEpoux(question: Questionnaire) {
     console.log(question);
     this.displayQuestionAssurer = false;
@@ -503,18 +523,22 @@ isSaving = false;
     editBulletin(bulletin: BulletinAdhesion) {
       
      // this.bulletinAdhesion.dateSaisie = bulletin.dateSaisie;
-    this.date = bulletin.dateSaisie;
+     console.log("===========", bulletin);
+  
       this.bulletinAdhesion = {...bulletin};
       this.bulletinForm.patchValue(this.bulletinAdhesion);
-      this.bulletinForm.get('dateSaisie').setValue(this.date);
+      this.bulletinForm.get('dateSaisie').setValue(new Date(bulletin.dateSaisie));
+      this.bulletinForm.get('dateEntreeService').setValue(new Date(bulletin.dateEntreeService));
+      this.bulletinForm.get('situationFamiliale').setValue(bulletin.situationFamiliale);
       this.quuestionAssures = [];
       this.questionEpoux = [];
       this.quuestionAssures.push(bulletin.question);
       this.questionEpoux.push(bulletin.epouse.question);
       this.epouse = bulletin.epouse;
-      this.epouse.dateNaissanceEpoux = bulletin?.epouse?.dateNaissanceEpoux;
+      this.epouse.dateNaissanceEpoux = new Date(bulletin.epouse.dateNaissanceEpoux);
+ 
       this.enfants = bulletin.enfants;
-      console.log("===========", this.bulletinForm.value);
+      
       if(bulletin.situationFamiliale == 'MARIE') {
         this.marie = true;
       }
@@ -524,6 +548,8 @@ isSaving = false;
       closeDialog() {
         this.displayFormBulletin = false;
         this.bulletinForm.reset();
+        this.epouse = {};
+
       }
      
       onCreate() {
@@ -532,6 +558,7 @@ isSaving = false;
         this.bulletinAdhesion.epouse = this.epouse;
         this.bulletinAdhesion.situationFamiliale= this.bulletinForm.value.situationFamiliale.value;
         console.log(this.bulletinAdhesion);
+        console.log(this.bulletinForm.value);
           this.confirmationService.confirm({
           message: 'Etes vous sur de vouloir ajouter ce bulletin?',
           header: 'Confirmation',
@@ -546,9 +573,14 @@ isSaving = false;
             }else{
 
             this.store.dispatch(featureActionBulletinAdhesion.createBulletin(this.bulletinAdhesion));
-            console.log(this.bulletinAdhesion);
+           
             }
             this.bulletinForm.reset();
+            this.quuestionAssures = [];
+            this.questionEpoux = [];
+           this.enfants = [];
+           this.epouse = {};
+           this.enfants = [];
           } 
         }); 
         }
@@ -562,6 +594,19 @@ isSaving = false;
                 this.store.dispatch(featureActionBulletinAdhesion.deleteBulletin(bulletin));
             }
         });
+        }
+
+        voirBulletin(bulletin: BulletinAdhesion) {
+          this.questionsEpoux = [];
+          this.quuestionsAssures = [];
+          console.log(bulletin);
+          this.BulletinDetail = bulletin;
+          this.questionsEpoux.push(bulletin.epouse.question);
+          this.quuestionsAssures.push(bulletin.question);
+
+          // this.enfants = this.BulletinDetail.enfants;
+          
+          this.displayDetailBulletin = true;
         }
 
 
@@ -609,6 +654,21 @@ isSaving = false;
         
         this.enfants[index] = this.clonedEnfant[enfant.id];
         delete this.clonedEnfant[enfant.id];
+      }
+      voirQuestionEpoux(question: Questionnaire) {
+        this.questionnaireDetail = question;
+        this.displayDetailQuestion = true;
+      }
+
+      voirQuestion(question: Questionnaire) {
+        this.questionnaireDetail = question;
+        this.displayDetailQuestion = true;
+      }
+
+      VoirEnfant(enfant: Enfant) {
+        this.enfantDetail = enfant;
+        this.enfantDetail.dateNassance = new Date(enfant.dateNassance);
+        this.displayQuestionDetailEnfant = true;
       }
       
   ngOnDestroy() {

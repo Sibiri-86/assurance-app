@@ -165,7 +165,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       montantRestant: new FormControl(),
       montantSupporte: new FormControl(),
       observation: new FormControl(),
-      prestataire: new FormControl(null, Validators.required),
+      prestataire: new FormControl(),
       centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),

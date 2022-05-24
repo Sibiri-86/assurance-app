@@ -508,6 +508,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     */
     console.log(this.bonPriseEnCharge);
     this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
+    this.displayPrestation = false;
    }
 
    valider(bon: BonPriseEnCharge){
