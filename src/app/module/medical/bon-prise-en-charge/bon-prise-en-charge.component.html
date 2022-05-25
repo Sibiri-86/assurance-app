@@ -40,7 +40,7 @@
                         <th pSortableColumn="nom" style="min-width:200px">Numéro police<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Prestataire<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th style="min-width:150px"></th>
+                        <th style="min-width:200px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-bon>
@@ -62,11 +62,14 @@
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{bon.prestataire.libelle}}</span>
                         </td>
-                        <td style="min-width:150px">
+                        <td style="min-width:200px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editer(bon)"></button>
                             <button *ngIf="bon.status==='VALIDE'" pButton icon="pi pi-times" pTooltip="invalider" class="p-button-rounded p-button-info p-mr-2" (click)="inValider(bon)"></button>
                             <button *ngIf="bon.status!=='VALIDE'" pButton icon="pi pi-check" pTooltip="valider" class="p-button-rounded p-button-info p-mr-2" (click)="valider(bon)"></button>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir" class="p-button-rounded p-button-success p-mr-2" (click)="voir(bon)"></button>
+
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(bon)"></button>
+
                         </td>
                     </tr>
                 </ng-template>
@@ -148,8 +151,19 @@
                 <div class="card">
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">
                 <p-fieldset legend="Information" toggleable="true">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="medecin">Type bon</label>
+                            <p-dropdown inputId="bon"  [filter]="true"
+                                        showClear="true" [options]="typeBon"
+                                        formControlName="typeBon"  [autoDisplayFirst]="false"
+                                        ></p-dropdown>
+                        </div>
+                        
+                    </div>
                         
                 <div class="p-fluid p-formgrid p-grid">
+                    
 
                     <div class="p-field p-col">
                         <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
@@ -203,7 +217,7 @@
                         </div>
                     </div>
                     
-                    <div class="p-fluid p-formgrid p-grid">
+                  <!--   <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="medecin">Type bon</label>
                             <p-dropdown inputId="bon"  [filter]="true"
@@ -212,7 +226,7 @@
                                         ></p-dropdown>
                         </div>
                         
-                    </div>
+                    </div> -->
                     
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">
@@ -419,3 +433,131 @@
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
 </div>
+
+<p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayDetail" header="Bon prise en charge" [modal]="true" styleClass="p-fluid" >
+    <ng-template pTemplate="content">
+        <div class="card">
+
+            <p-fieldset legend="Information" toggleable="true">
+    
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="medecin">Type bon</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.typeBon}}
+                </div>
+                
+                <div class="p-field p-col">
+                    <label for="dateEffet">Date de saisie </label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateSaisie}}
+                </div>
+                
+                <div class="p-field p-col">
+                    <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateDeclaration}}
+                </div>
+                
+                
+                
+            </div>
+                
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.matriculeAdherent}}
+                </div>
+
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Nom</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.nomAdherent}}
+                    </div>
+                    
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Prenom</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.prenomAdherent}}
+                    </div>
+                    
+                    
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="groupeAdherent">Numero groupe</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.numeroGroupe}}
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="policeAdherent">Numero police</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.numeroPolice}}                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="medecin">Prestataire</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail?.prestataire?.libelle}}
+                        
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="souscripteur">Souscripteur</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.souscripteur}}
+                    </div>
+                </div>
+                
+              
+                
+        
+             
+            </p-fieldset>
+            
+            <hr/> 
+            <p-fieldset legend="Prestaions" toggleable="true">
+
+            <p-table #dt [value]="bonPriseEnChargeDetail.prestation" [columns]="cols" [rows]="10" [paginator]="true"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        
+                        <th pSortableColumn="numero" style="width: 150px">Date soins<p-sortIcon field="dateSoins"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">montant remboursé <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">Decision<p-sortIcon field="decision"></p-sortIcon></th>
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+                       
+                        <td><span class="p-column-title">{{prestation.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.nombreActe}}</span>
+                        </td>
+                        
+                        <td><span class="p-column-title">{{prestation.coutUnitaire| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.debours| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.baseRemboursement| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.taux.taux}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sort}}</span>
+                        </td>
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{bonPriseEnChargeDetail.prestation ? bonPriseEnChargeDetail?.prestation?.length : 0 }} prestation(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </p-fieldset>
+
+        </div>
+    </ng-template>
+</p-dialog>

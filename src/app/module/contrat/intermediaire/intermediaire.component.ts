@@ -129,6 +129,10 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
         rccm: new FormControl(''),
         secteur: new FormControl('', [Validators.required]),
         commune: new FormControl('', [Validators.required]),
+        pays: new FormControl(''),
+        region: new FormControl(''),
+        departement: new FormControl(''),
+        arrondissement: new FormControl(''),
         contactPersonneRessource: new FormControl('', [Validators.required]),
         emailPersonneRessource: new FormControl('', [Validators.required, Validators.email]),
       });
@@ -137,7 +141,12 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
     ]);
 
     }
-
+  
+    
+    
+  
+    
+   
 ngOnInit(): void {
     this.intermediaireList = [];
     this.entityValidations = [
@@ -316,6 +325,7 @@ ngOnInit(): void {
     }
   ];
 
+ 
     this.banqueList$=this.store.pipe(select(banqueSelector.banqueList));
     this.store.dispatch(banqueAction.loadBanque());
     this.banqueList$.pipe(takeUntil(this.destroy$))
@@ -527,9 +537,25 @@ annulerSaisie() {
 }
 
 editIntermediaire(intermediaire: Intermediaire) {
+
+
+
+
 this.intermediaire = {...intermediaire};
 console.log(this.intermediaire);
+this.intermediaireForm.get('arrondissement').setValue(this.arrondissementList.find(arrondi=> arrondi.id === intermediaire?.secteur?.idArrondissement));
+console.log(this.arrondissementList);    
+const id = this.arrondissementList.find(arrondi=> arrondi.id === intermediaire?.secteur?.idArrondissement)?.idCommune;
+    const departement = this.communeList.find(commun=> commun.id === id)?.idDepartement;
+    console.log(departement);
+    console.log();
+    this.intermediaireForm.get('commune').setValue(this.communeList.find(commun=> commun.id === id));
+    this.intermediaireForm.get('departement').setValue(this.departementList.find(depart=> depart.id === departement));
+    this.intermediaireForm.get('region').setValue(this.regionList.find(regio=> regio.id === this.departementList.find(depart=> depart.id === departement)?.idRegion));
+    this.intermediaireForm.get('pays').setValue(this.paysList.
+      find(pay=> pay.id === this.intermediaireForm.get('region').value?.idTypePays));
 this.intermediaireForm.patchValue(this.intermediaire);
+
 this.displayDialogFormIntermediaire = true;
 }
 

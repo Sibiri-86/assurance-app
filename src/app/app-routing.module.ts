@@ -63,6 +63,7 @@ import { OrdonnaceMedicalComponent } from './module/medical/ordonnace-medical/or
 import { ConventionComponent } from './module/medical/convention/convention.component';
 import { AssureComponent } from './module/contrat/assure/assure.component';
 import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
+import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -130,7 +131,8 @@ import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tie
                     {path: 'prestation/tierPayant/ORD', component: TierPayantConsultationComponent},
                     {path: 'prestation/tierPayant/consultation', component: SinistreTiersPayantConsultationComponent},
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
-                    {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent}
+                    {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent},
+                    {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent}
                 ]
             },
             {path: 'error', component: AppErrorComponent},

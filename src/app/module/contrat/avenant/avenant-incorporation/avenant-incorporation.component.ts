@@ -32,6 +32,7 @@ import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
     selector: 'app-avenant-incorporation',
@@ -193,6 +194,7 @@ export class AvenantIncorporationComponent implements OnInit{
             numero: new FormControl(null, ),
             familys: this.formBuilder.array([]),
             manageIncorporation: new FormControl(1),
+           
         });
 
         this.newForm = this.formBuilder.group({
@@ -262,6 +264,7 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     addAdherentFamilleToList(): void {
+       
         // this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
         this.adherentFamilleListe.forEach(af => {
@@ -348,7 +351,10 @@ export class AvenantIncorporationComponent implements OnInit{
         });
     }
 
+   
+
     createHistoriqueAvenant(): void {
+        console.log("============================", this.adherentForm.value);
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
         adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
@@ -582,6 +588,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
     }
 
+<<<<<<< HEAD
     loadExerciceByPolice(police: Police): void {
         console.log('policeId === ' + police.id);
         this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
@@ -613,4 +620,15 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('curent exo === ');
         console.log(this.curentExercice);
      }
+=======
+     /* onBasicUpload(event, form) {
+    
+  
+        this.adherentForm.value.demo.append('fileArray', event.files[0], event.files[0].name);
+        console.log("============================", this.adherentForm.value.demo?.name);
+        form.clear();
+       
+
+      } */
+>>>>>>> feature_button_policy_validation
 }

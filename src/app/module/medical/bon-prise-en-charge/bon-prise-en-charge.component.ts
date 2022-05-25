@@ -59,6 +59,7 @@ import { BonPriseEnCharge } from 'src/app/store/medical/bon-prise-en-charge/mode
 import * as featureActionBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/selector';
 import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -104,6 +105,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   tab: number[] = [];
   taux: Taux;
   displayPrestation = false;
+  displayDetail = false;
   prestationListPrefinancement: Array<Prestation>;
   prestationListPrefinancementFilter: Array<Prestation>;
   report: Report = {};
@@ -112,12 +114,15 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   checkPrefinancementResult: Array<CheckPrefinancementResult>;
   test: Array<SelectItem>;
   bonPriseEnCharge: BonPriseEnCharge = {};
+  bonPriseEnChargeDetail: BonPriseEnCharge = {};
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   typeBon: Array<SelectItem>;
+ // userCurent: Us
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
+               private keycloak: KeycloakService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -203,6 +208,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionAdherent.selectedAdherentForSearch(null));
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
+
     if (value) {
         console.log(value);
         this.adherentSelected = value;
@@ -313,6 +319,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   }
 
   imprimer(bon: BonPriseEnCharge) {
+    bon.userCurent = this.keycloak.getUsername();
     this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
     this.report.bonPriseEnChargeDto = bon;
     this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
@@ -374,6 +381,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
+  }
+
+  voir(bon: BonPriseEnCharge) {
+    this.displayDetail = true;
+    this.bonPriseEnChargeDetail = bon;
+    console.log(bon);
   }
 
   voirPrestation(pref: Prefinancement){
@@ -503,6 +516,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     */
     console.log(this.bonPriseEnCharge);
     this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
+    this.displayPrestation = false;
    }
 
    valider(bon: BonPriseEnCharge){

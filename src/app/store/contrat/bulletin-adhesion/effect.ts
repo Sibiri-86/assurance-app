@@ -2,90 +2,105 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
-import { BonPriseEnChargeService } from './service';
+import { BulletinAdhesionService } from './service';
 import * as featureActions from './actions';
-import {BonPriseEnCharge, Report} from './model';
-import {GlobalConfig} from '../../../../app/config/global.config';
+import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BulletinAdhesion, BulletinAdhesionList } from './model';
 
 @Injectable()
-export class BonPriseEnChargeEffects {
+export class BulletinAdhesionEffects {
     private successMsg = 'Opération reussie !';
     constructor(
         private actions$: Actions,
-        private bonPriseEnChargeService: BonPriseEnChargeService
+        private bulletinAdhesionService: BulletinAdhesionService
     ) {
     }
 
-    createBons$ = createEffect(() =>
+    createBulletin$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.createBon),
-        mergeMap((bon: BonPriseEnCharge) =>
-            this.bonPriseEnChargeService.posBons(bon).pipe(
+        ofType(featureActions.createBulletin),
+        mergeMap((bulletinn: BulletinAdhesion) =>
+            this.bulletinAdhesionService.posBulletin(bulletinn).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadBon()
+                    featureActions.loadBulletin()
                 ]),
                 catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
 
-    valideBons$ = createEffect(() =>
+    valideBulletin$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.valideBon),
-        mergeMap((bon: BonPriseEnCharge) =>
-            this.bonPriseEnChargeService.posvalideBons(bon).pipe(
+        ofType(featureActions.valideBulletin),
+        mergeMap((bulletin: BulletinAdhesion) =>
+            this.bulletinAdhesionService.posInvalideBulletin(bulletin).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadBon()
+                    featureActions.loadBulletin()
                 ]),
                 catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
 
-    invalideBons$ = createEffect(() =>
+    invalideBulletin$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(featureActions.invalideBon),
-            mergeMap((bon: BonPriseEnCharge) =>
-                this.bonPriseEnChargeService.posInvalideBons(bon).pipe(
+            ofType(featureActions.invalideBulletin),
+            mergeMap((bulletin: BulletinAdhesion) =>
+                this.bulletinAdhesionService.posInvalideBulletin(bulletin).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadBon()
+                        featureActions.loadBulletin()
                     ]),
                     catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             ));
 
-     updateBon$ = createEffect(() =>
+     updateBulletin$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(featureActions.updateBon),
-            mergeMap((bon: BonPriseEnCharge) =>
-                this.bonPriseEnChargeService.updateBons(bon).pipe(
+            ofType(featureActions.updateBulletin),
+            mergeMap((bulletin: BulletinAdhesion) =>
+                this.bulletinAdhesionService.updateBulletin(bulletin).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadBon()
+                        featureActions.loadBulletin()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             ));
 
-            deleteActe$ = createEffect(() =>
+            deleteBulletin$ = createEffect(() =>
             this.actions$.pipe(
-                ofType(featureActions.deleteBon),
-                mergeMap((bon: BonPriseEnCharge) =>
-                    this.bonPriseEnChargeService.deleteBons(bon).pipe(
+                ofType(featureActions.deleteBulletin),
+                mergeMap((bulletin: BulletinAdhesion) =>
+                    this.bulletinAdhesionService.deleteBulletin(bulletin).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.loadBon()
+                            featureActions.loadBulletin()
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
                 ));
 
-    fetchReportBon$ = createEffect(() =>
+                
+                deleteBulletins$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.deleteBulletins),
+                    mergeMap((bulletin: BulletinAdhesionList) =>
+                        this.bulletinAdhesionService.deleteBulletins(bulletin).pipe(
+                            switchMap(value => [
+                                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.loadBulletin()
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                    ));
+
+   /*  fetchReportBon$ = createEffect(() =>
                             this.actions$.pipe(
                                 ofType(featureActions.FetchReportBon),
                                 mergeMap((report: Report) =>
@@ -97,31 +112,16 @@ export class BonPriseEnChargeEffects {
                                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                     ))
-                                ));
+                                )); */
 
-    fetchBon$ = createEffect(() =>
+    fetchBulletin$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadBon),
+        ofType(featureActions.loadBulletin),
         mergeMap(() =>
-            this.bonPriseEnChargeService.$getBons().pipe(
+            this.bulletinAdhesionService.$getBulletin().pipe(
                 switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.setBon(value)
-                ]),
-                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-            )
-        )
-    )
-    );
-
-    fetchBons$ = createEffect(() =>
-    this.actions$.pipe(
-        ofType(featureActions.loadBons),
-        mergeMap(() =>
-            this.bonPriseEnChargeService.$getBonsSansPrestation().pipe(
-                switchMap(value => [
-                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.setBon(value)
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setBulletin(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             )

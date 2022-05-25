@@ -31,3 +31,37 @@ export enum TypeDuree {
     ANNEE = 'ANNEE'
 }
 
+export enum SituationFamiliale {
+    MARIE = 'MARIE',
+    CELIBATAIRE = 'CELIBATAIRE',
+    VEUF ='VEUF',
+    DIVORCE = 'DIVORCE',
+    SEPARE = 'SEPARE'
+}
+ 
+export enum Defaut {
+    NON ='NON',
+    DEFAUT_CONSTITUTION = 'DEFAUT_CONSTITUTION',
+    INFIRMITE ='INFIRMITE',
+    MALADIE_CHRONIQUE ='MALADIE_CHRONIQUE'
+
+}
+
+export enum Choix {
+    OUI = 'OUI',
+    NON = 'NON'
+}
+export  enum AffectionPasse {
+NON ='NON',
+AFFECTION_PULMONAIRE ='AFFECTION_PULMONAIRE',
+AFFECTION_NERVEUSE = 'AFFECTION_NERVEUSE',
+AFFECTION_CARDIAQUE = 'AFFECTION_CARDIAQUE',
+RENALE_DIABETE = 'RENALE_DIABETE',
+MALADIE_FOI = 'MALADIE_FOI',
+CANCER = 'CANCER'
+}
+export enum MaladieProche {
+    NON = 'NON',
+    TUBERCULOSE ='TUBERCULOSE',
+    ALIENAtion_MENTALE   ='ALIENAtion_MENTALE'
+}

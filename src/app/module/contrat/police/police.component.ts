@@ -278,6 +278,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   isEnreg: boolean;
   groupeListPolice$: Observable<Array<Groupe>>;
   groupeListPolice: Array<Groupe>;
+  plafondFamilleActeControle: PlafondFamilleActe = {};
+  groupeControle: Groupe = {};
+  isPresting =false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -310,8 +313,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       numero: new FormControl(null, ),
       lieuNaissance: new FormControl('', [Validators.required]),
       numeroTelephone: new FormControl('', [Validators.required]),
-      adresse: new FormControl('', [Validators.required]),
-      adresseEmail: new FormControl('', [Validators.required]),
+      adresse: new FormControl(''),
+      adresseEmail: new FormControl(''),
       profession: new FormControl(''),
       referenceBancaire: new FormControl(''),
       qualiteAssure: new FormControl('', [Validators.required]),
@@ -348,6 +351,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       rccm: new FormControl(''),
       secteur: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
+      pays: new FormControl(''),
+      region: new FormControl(''),
+      departement: new FormControl(''),
+      arrondissement: new FormControl(''),
       referencePolice: new FormControl(''),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl('', [Validators.required])
@@ -401,7 +408,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupe = {...groupe};
     console.log('id du groupe est' + groupe.id);
     //this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
-    this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
+   // this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(this.groupe));
    // this.plafondGroupe$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     //if (value) {
       //this.plafondGroupe = value;
@@ -410,14 +417,52 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     //}
     //});
-    console.log(this.plafondActuelleConfiguration);
+    console.log("================",this.plafondActuelleConfiguration);
+    this.plafondActuelleConfiguration.forEach(plafon=>{
+      plafon.dateEffet = groupe.dateEffet;
+    });
     console.log(groupe);
+    this.groupe = groupe;
     console.log(this.ifExistTerritorialiteInternational(groupe));
     if (this.ifExistTerritorialiteInternational(groupe)){
     this.isInternationalGroupe = true;
     }
     this.displayParametragePlafond = true;
     //console.log(this.plafondGroupe);
+  }
+
+
+  controleDateActe(rowData: PlafondFamilleActe) {
+  
+   // this.plafondFamilleActeControle = this.plafondActuelleConfiguration.find(plafon => plafon.id ===  rowData.id);
+
+   
+   if (new Date(rowData.dateEffet).getTime()  >  new Date(this.groupe.dateEffet).getTime()) {
+      
+    this.messageService.add({severity:'success', summary: 'Success', detail:'la date effet ne doit pas etre inferieur à celle du groupe'});
+    rowData.dateEffet =  new Date(this.groupe.dateEffet);
+  }
+
+
+  }
+
+  controleDateActe1(rowData: PlafondActe) {
+    
+      if (new Date(rowData.dateEffet).getTime() > new Date(this.groupe.dateEffet).getTime()) {
+       
+        this.messageService.add({severity:'success', summary: 'Success', detail:'la date effet ne doit pas etre inferieur à celle du groupe'});
+        rowData.dateEffet =  new Date(this.groupe.dateEffet);
+      }
+    
+  
+}
+
+  controleDateActe2(rowData: PlafondSousActe) {
+    if (new Date(rowData.dateEffet).getTime() >  new Date(this.groupe.dateEffet).getTime()) {
+       
+      this.messageService.add({severity:'success', summary: 'Success', detail:'la date effet ne doit pas etre inferieur à celle du groupe'});
+      rowData.dateEffet =  new Date(this.groupe.dateEffet);
+    }
   }
 
   voirDetailAdherent(adherent: Adherent){
@@ -739,6 +784,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
               if (value) {
                 this.loading = false;
                 this.arrondissementList = value.slice();
+                console.log("===============arrondissementList=============");
+                console.log(this.arrondissementList);
+                console.log("===============arrondissementList=============");
               }
   });
 
@@ -898,6 +946,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.communeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.communeList = value.slice();
+        console.log("===============commune=============");
+        console.log(this.communeList);
+        console.log("===============commune=============");
       }
     });
 
@@ -1345,7 +1396,26 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   editPolice(police: Police) {
+    
+
     this.police = { ...police };
+    console.log(this.arrondissementList);
+    console.log(police?.secteur?.idArrondissement);
+    this.policeForm.get('arrondissement').setValue(this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement));
+    console.log(this.policeForm.value.arrondissement);
+    const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement)?.idCommune;
+    const departement = this.communeList.find(commun=> commun.id === id)?.idDepartement;
+    console.log(departement);
+   
+    this.policeForm.get('commune').setValue(this.communeList.find(commun=> commun.id === id));
+    this.policeForm.get('departement').setValue(this.departementList.find(depart=> depart.id === departement));
+    this.policeForm.get('region').setValue(this.regionList.find(regio=> regio.id === this.departementList.find(depart=> depart.id === departement)?.idRegion));
+    this.policeForm.get('pays').setValue(this.paysList.
+      find(pay=> pay.id === this.policeForm.get('region').value?.idTypePays));
+
+
+    
+
     if (this.police.dateEffet) {
       this.police.dateEffet = new Date(this.police.dateEffet);
     }
@@ -1468,6 +1538,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.displayDialogFormAddGroupe = true;
     this.displayGroupForm = true;
     this.displayAdherentForm = false;
+    this.isgroupEditing = false;
     this.groupeForm.reset();
     this.primeForm.reset();
   }
@@ -1559,7 +1630,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
-    delete this.clonedPlafondConfiguration[plafond.garantie.id];
+    if (new Date(plafond.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+      // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+       this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+       plafond.dateEffet =   new Date(this.groupe.dateEffet);
+       delete this.clonedPlafondConfiguration[plafond.garantie.id];
+     }
+    
+   
   }
 
   onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
@@ -1573,7 +1651,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRowEditSavePlafondConfigurationActe(plafond: PlafondActe) {
-    delete this.clonedPlafondConfiguration[plafond.acte.id];
+    if (new Date(plafond.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+      // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+       this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+       plafond.dateEffet =   new Date(this.groupe.dateEffet);
+       delete this.clonedPlafondConfiguration[plafond.acte.id];
+     }
+    
   }
 
   onRowEditCancelPlafondConfigurationActe(plafond: PlafondActe, index: number, indexGarantie: any) {
@@ -1588,6 +1672,12 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRowEditSavePlafondConfigurationSousActe(plafond: PlafondSousActe) {
+
+    if (new Date(plafond.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+     // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+      this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+      plafond.dateEffet =   new Date(this.groupe.dateEffet);
+    }
     delete this.clonedPlafondSousActe[plafond.sousActe.id];
   }
 
@@ -1707,6 +1797,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
+        this.plafondActuelleConfiguration.forEach(plafond=>{
+          plafond.dateEffet = this.groupe.dateEffet;
+          plafond.listeActe.forEach(act=>{
+            act.dateEffet = this.groupe.dateEffet;
+            act.listeSousActe.forEach(souAct=>{
+              souAct.dateEffet = this.groupe.dateEffet;
+            })
+          });
+        });
         this.plafondFamilleActeConstruct = this.plafondActuelleConfiguration;
         this.displayConfigurationPlafond = false;
       }

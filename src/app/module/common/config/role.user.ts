@@ -20,12 +20,13 @@ export const Function = {
     sm_tiers_payant_consultation: 'sm_tiers_payant_consultation',
     sm_tiers_payant_ordre_reglement_edition: 'sm_tiers_payant_ordre_reglement_edition',
     sm_tiers_payant_ordre_reglement_valide: 'sm_tiers_payant_ordre_reglement_valide',
-    sm_tiers_payant_ordre_reglement_consultation: 'sm_tiers_payant_ordre_reglement_consultation'
+    sm_tiers_payant_ordre_reglement_consultation: 'sm_tiers_payant_ordre_reglement_consultation',
+    sm_bulletin_adhesion: 'sm_bulletin_adhesion',
 };
 
 export const UsersRoles = {
     producteur: [Function.sm_parametrage, Function.sm_production, Function.sm_garant, Function.sm_intermediaire, Function.sm_bareme,
-        Function.sm_police, Function.sm_avenant],
+        Function.sm_police, Function.sm_avenant, Function.sm_bulletin_adhesion],
     prestataire: [Function.sm_prestation, Function.sm_prefinancement, Function.sm_sinistre_edition,
         Function.sm_sinistre_valide, Function.sm_sinistre_consultation, Function.sm_ordre_reglement_edition,
     Function.sm_ordre_reglement_valide, Function.sm_ordre_reglement_consultation,

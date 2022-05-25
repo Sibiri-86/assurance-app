@@ -289,7 +289,7 @@
                                 <td >
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet" (onSelect)="controleDateFamilleActe(rowData.dateEffet)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                         </ng-template>
                                         <ng-template  pTemplate="output">
                                             <span *ngIf="rowData.garantie.libelle">
@@ -402,7 +402,7 @@
                     <td >
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"   dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.dateEffet | formatTableValue : 'date'}}
@@ -520,7 +520,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" (onSelect)="controleDateSousActe(rowData2)" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData2.dateEffet | formatTableValue : 'date'}}

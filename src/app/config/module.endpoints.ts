@@ -362,6 +362,7 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/exercice`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
+<<<<<<< HEAD
 
     static readonly CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST = {
         prod: `${SERVICE_PREFIX}/contrat/adherent/exercice-actuall`,
@@ -381,5 +382,10 @@ export class Endpoints {
     static readonly HISTORIQUE_AVENANT_GET_DATE_IS_OVERLAP = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/get-date-isOverlap`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
+=======
+    static readonly BULLETINADHESION = {
+        prod: `${SERVICE_PREFIX}/contrat/bulletinAdhesion`,
+        mock: `assets/mock/contrat/bulletinAdhesion.mock.json`
+>>>>>>> feature_button_policy_validation
     };
 }

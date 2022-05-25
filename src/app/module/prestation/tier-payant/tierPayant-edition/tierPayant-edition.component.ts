@@ -327,7 +327,7 @@ export class TierPayantEditionComponent implements OnInit {
 
         // chargement des bons de prise en charge
         this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
-        this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+        this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
           console.log(value);
           if (value) {
@@ -384,6 +384,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
         this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
         this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
+        this.prestationForm.get('bonPriseEnCharge').setValue(pref.bonPriseEnCharge);
         // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
         this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
         for (const pr of pref.prestation) {
@@ -434,6 +435,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroFacture').setValue(pref.numeroFacture);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
+                this.prestationForm.get('bonPriseEnCharge').setValue(pref.bonPriseEnCharge);
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));""
                 for (const pr of pref.prestation) {

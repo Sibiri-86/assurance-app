@@ -165,7 +165,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       montantRestant: new FormControl(),
       montantSupporte: new FormControl(),
       observation: new FormControl(),
-      prestataire: new FormControl(null, Validators.required),
+      prestataire: new FormControl(),
       centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
@@ -207,11 +207,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
     // chargement des bons de prise en charge
     this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
-    this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
     this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
-        this.bonPriseEnChargeList = value.slice();
+        this.bonPriseEnChargeList = value;
       }
     });
 
@@ -421,6 +421,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
 
   editerPrestation(pref: Prefinancement) {
+    console.log("=====================");
     console.log(pref);
     this.adherentSelected = pref.adherent;
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);

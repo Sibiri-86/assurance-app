@@ -30,8 +30,12 @@ export interface Adherent{
     fullName?: string;
     urlPhoto?: string;
     manageIncorporation?: number;
+<<<<<<< HEAD
     signeAdherent?: string;
     dateSortie?:Date;
+=======
+    
+>>>>>>> feature_button_policy_validation
 }
 
 export interface AdherentResearchReponse {
