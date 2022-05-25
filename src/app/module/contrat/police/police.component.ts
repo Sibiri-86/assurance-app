@@ -1399,11 +1399,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     
 
     this.police = { ...police };
+    console.log(this.arrondissementList);
+    console.log(police?.secteur?.idArrondissement);
     this.policeForm.get('arrondissement').setValue(this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement));
+    console.log(this.policeForm.value.arrondissement);
     const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement)?.idCommune;
     const departement = this.communeList.find(commun=> commun.id === id)?.idDepartement;
     console.log(departement);
-    console.log();
+   
     this.policeForm.get('commune').setValue(this.communeList.find(commun=> commun.id === id));
     this.policeForm.get('departement').setValue(this.departementList.find(depart=> depart.id === departement));
     this.policeForm.get('region').setValue(this.regionList.find(regio=> regio.id === this.departementList.find(depart=> depart.id === departement)?.idRegion));

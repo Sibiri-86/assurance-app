@@ -14,6 +14,7 @@ import { OrdonnanceMedical } from '../../medical/ordonnance-medical/model';
 import { Pays } from '../../parametrage/pays/model';
 import { Region } from '../../parametrage/region/model';
 import { Arrondissement } from '../../parametrage/arrondissement/model';
+import { Departement } from '../../parametrage/departement/model';
 
 export interface Police{
     id?: string;
@@ -42,6 +43,7 @@ export interface Police{
     pays?: Pays;
     region?: Region;
     arrondissement?: Arrondissement;
+    departement?: Departement;
     rccm?: string;
     fraisAccessoire?: number;
     fraisBadge?: number;

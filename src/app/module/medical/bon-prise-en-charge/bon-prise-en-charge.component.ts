@@ -105,6 +105,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   tab: number[] = [];
   taux: Taux;
   displayPrestation = false;
+  displayDetail = false;
   prestationListPrefinancement: Array<Prestation>;
   prestationListPrefinancementFilter: Array<Prestation>;
   report: Report = {};
@@ -113,6 +114,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   checkPrefinancementResult: Array<CheckPrefinancementResult>;
   test: Array<SelectItem>;
   bonPriseEnCharge: BonPriseEnCharge = {};
+  bonPriseEnChargeDetail: BonPriseEnCharge = {};
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   typeBon: Array<SelectItem>;
@@ -379,6 +381,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
+  }
+
+  voir(bon: BonPriseEnCharge) {
+    this.displayDetail = true;
+    this.bonPriseEnChargeDetail = bon;
+    console.log(bon);
   }
 
   voirPrestation(pref: Prefinancement){

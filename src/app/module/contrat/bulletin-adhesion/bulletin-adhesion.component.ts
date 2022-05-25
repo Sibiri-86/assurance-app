@@ -194,6 +194,7 @@ isSaving = false;
     situationFamiliale:  new FormControl(),
     enfants:  new FormControl(),
     epouse:  new FormControl(),
+    sexe: new FormControl(),
     
     });
   }
@@ -255,6 +256,7 @@ isSaving = false;
     nombreEnfant:  new FormControl(''),
     enfants:  new FormControl(''),
     epouse:  new FormControl(''),
+    sexe: new FormControl(''),
    
   
     });
@@ -322,6 +324,7 @@ isSaving = false;
             this.bulletinForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
             this.bulletinForm.get('police').setValue(this.adherentSelected.groupe.police);
             this.bulletinForm.get('groupe').setValue(this.adherentSelected.groupe);
+            this.bulletinForm.get('sexe').setValue(this.adherentSelected.genre.code);
             this.sexe = this.adherentSelected.genre.code;
         }
     });
@@ -408,6 +411,9 @@ isSaving = false;
     } 
      
     this.questionnaireForm.reset();
+    this.displayQuestionEpoux = false;
+    this.displayQuestionAssurer = false;
+    this.displayQuestion = false;
   }
 
 
@@ -559,6 +565,12 @@ isSaving = false;
         this.bulletinAdhesion.situationFamiliale= this.bulletinForm.value.situationFamiliale.value;
         console.log(this.bulletinAdhesion);
         console.log(this.bulletinForm.value);
+        if(this.bulletinAdhesion.sexe ==='M' ) {
+          this.bulletinAdhesion.epouse.sexe = 'F';
+        }
+        if(this.bulletinAdhesion.sexe ==='F' ) {
+          this.bulletinAdhesion.epouse.sexe = 'M';
+        }
           this.confirmationService.confirm({
           message: 'Etes vous sur de vouloir ajouter ce bulletin?',
           header: 'Confirmation',
@@ -655,13 +667,15 @@ isSaving = false;
         this.enfants[index] = this.clonedEnfant[enfant.id];
         delete this.clonedEnfant[enfant.id];
       }
-      voirQuestionEpoux(question: Questionnaire) {
+      voirQuestionEpoux(question: Questionnaire , sexe: string) {
         this.questionnaireDetail = question;
+        this.sexe = sexe;
         this.displayDetailQuestion = true;
       }
 
-      voirQuestion(question: Questionnaire) {
+      voirQuestion(question: Questionnaire, sexe: string) {
         this.questionnaireDetail = question;
+        this.sexe = sexe;
         this.displayDetailQuestion = true;
       }
 

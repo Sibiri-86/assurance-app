@@ -31,6 +31,7 @@ export interface BulletinAdhesion {
     epouse?: Epouse;
     enfants?: Enfant[];
     question?: Questionnaire;
+    sexe?: string;
     
     
 }
@@ -73,6 +74,7 @@ export interface Epouse {
     dateNaissanceEpoux?: Date;
     emploiEpouse?: string;
     lieuNaissanceEpouse?: string;
+    sexe?: string;
    question?: Questionnaire;
     
 }

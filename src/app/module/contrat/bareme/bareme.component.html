@@ -402,7 +402,7 @@
                     <td >
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet" (onSelect)="controleDateActe(rowData)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"   dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.dateEffet | formatTableValue : 'date'}}

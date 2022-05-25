@@ -606,7 +606,7 @@
                                             </td>
 
                                             <td>
-                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestion(question)"></button>
+                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestion(question,BulletinDetail.sexe)"></button>
 
                                         </td>
                                             
@@ -679,7 +679,7 @@
                                 </td>
 
                                 <td>
-                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question)"></button>
+                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question, BulletinDetail.epouse?.sexe)"></button>
                                 </td>
                                 
                             </tr>
@@ -1063,7 +1063,7 @@
         
     </p-dialog>
 
-    <p-dialog [(visible)]="displayDetailQuestion"  header="Les réponses aux questions" [modal]="true" styleClass="p-fluid">
+    <p-dialog [(visible)]="displayDetailQuestion"  [style]="{width: '80vw'}"  breakpoints="{'960px': '75vw', '640px': '100vw'}" header="Les réponses aux questions" [modal]="true" styleClass="p-fluid">
     
         <ng-template pTemplate="content"> 
          
@@ -1168,12 +1168,12 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.maladieProche}}
                                     
                                 </div>
-                                 <div class="p-field p-col">
+                                 <div class="p-field p-col" *ngIf="sexe == 'M'">
                                      <label for="serviceMilitair">Service militaire</label>
                                      &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.serviceMilitair}}
 
                                  </div>
-                                 <div class="p-field p-col" >
+                                 <div class="p-field p-col" *ngIf="sexe == 'M'">
                                      <label for="exempte">Avez-vous été exempté, réformé ? Cause ?</label>
                                      &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.exempte}}
                                  </div>
@@ -1184,7 +1184,7 @@
      
                               <div class="p-fluid p-formgrid p-grid">
                          
-                                <div class="p-field p-col">
+                                <div class="p-field p-col" *ngIf="sexe == 'M'">
                                     <label for="blesse">Etes-vous blessé de guerre ?</label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.blesse}}
                                     
@@ -1194,12 +1194,12 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.tauxPension}}
                                 </div>
      
-                                 <div class="p-field p-col" >
+                                 <div class="p-field p-col" *ngIf="sexe == 'F'">
                                      <label for="maladieFemme">Maladie Femme</label>
                                      &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.maladieFemme}}
                                  </div>
      
-                                 <div class="p-field p-col">
+                                 <div class="p-field p-col" *ngIf="sexe == 'F'">
                                     <label for="normalCouche">Vos couches ont-elles été normales ?</label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.normalCouche}}
                                                   
