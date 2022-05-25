@@ -124,6 +124,14 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    getListActualiseeByExerciceId(exerciceId: string): Observable<any[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_ACTUALL_LIST_BY_EXERCICE_ID)}/${exerciceId}`).pipe(
+            map((response: Adherent[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

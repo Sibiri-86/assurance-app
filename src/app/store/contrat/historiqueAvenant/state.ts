@@ -3,7 +3,8 @@ import {
     HistoriquePlafond,
     HistoriquePlafondActe,
     HistoriquePlafondFamilleActe,
-    HistoriquePlafondSousActe
+    HistoriquePlafondSousActe,
+    VerifyRenouvellementIsOverlapReponse
 } from './model';
 
 export interface HistoriqueAvenantState {
@@ -14,4 +15,5 @@ export interface HistoriqueAvenantState {
     historiquePlafondGroupeSousActe: Array<HistoriquePlafondSousActe>;
     historiqueAvenantListWithoutActive: Array<HistoriqueAvenant>;
     historiqueAvenantListByExercie: Array<HistoriqueAvenant>;
+    verifyIsOverlap: VerifyRenouvellementIsOverlapReponse;
 }

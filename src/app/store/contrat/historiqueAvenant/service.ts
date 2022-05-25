@@ -278,4 +278,19 @@ private handleError<T>() {
         return this.http.get<HistoriquePlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historique-modification-police`,
             {params: createRequestOption({policeId})});
     }
+
+    getPrimeTotalByPoliceId(policeId: string): Observable<any> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_PRIME_GET_BY_POLICE_ID)}/${policeId}`).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getVerifyIsOverlap(debut: Date, typeDuree: string, duree: number, policeId: string): Observable<any> {
+        const historiqueAvenant: HistoriqueAvenant = {};
+        historiqueAvenant.dateEffet = debut;
+        return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_GET_DATE_IS_OVERLAP)}`, historiqueAvenant,
+                {params: createRequestOption({typeDuree, duree, policeId}), observe: 'response'});
+        }
 }

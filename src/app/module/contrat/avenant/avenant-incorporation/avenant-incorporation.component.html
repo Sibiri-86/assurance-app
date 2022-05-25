@@ -2,6 +2,7 @@
     <div class="p-fluid p-grid">
 
         <div class="p-field p-col-4" *ngIf="etat === 'CREATE'">
+            <label for="fraisBadge">Groupe<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
             <form [formGroup]="customForm">
                 <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
                             name="selectedGroup"
@@ -9,9 +10,11 @@
                             placeholder="Choisir un groupe"
                             (onChange)="onGroupeChange()">
                 </p-dropdown>
+                <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
             </form>
         </div>
         <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
+            <label for="fraisBadge">Groupe</label>
             <form [formGroup]="customForm">
                 <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
                             name="selectedGroup" [filter]="true" filterBy="libelle" [showClear]="true"
@@ -22,6 +25,14 @@
         <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
             <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
         </div>
+
+            <div class="p-col-4" *ngIf="etat === 'CREATE'">
+                <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                            [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                            
+                </p-dropdown>
+            </div>
         <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
             <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
         </div>
@@ -57,16 +68,16 @@
             <div class="p-field p-col-8" *ngIf="isImport === 'OUI'"><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
         </div>
         <div class="p-field p-col-12">
-            <p-fieldset legend="Exercice" toggleable="true" *ngIf="!isRenouv">
-                <form [formGroup]="exerciceForm">
+            <p-fieldset legend="Dernier Exercice de la police" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="lastExerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
-                            <label for="debit">Date d'effet de l'exercice</label>
-                            <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                            <label for="debit">Date d'effet du dernier exercice de la police</label>
+                            <input id="debit" type="date" class="exo" formControlName="debut" pInputText disabled="true">
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="fin">Date d'échéance de l'exercice</label>
-                            <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                            <label for="fin">Date d'échéance du dernier exercice de la police</label>
+                            <input id="fin" type="date" class="exo" formControlName="fin" pInputText disabled="true">
                         </div>
                     </div>
                 </form>
@@ -74,38 +85,44 @@
             <p-fieldset legend="Information de l'Avenant" toggleable="true" *ngIf="!isRenouv">
                 <form [formGroup]="myForm">
                     <div class="p-fluid p-formgrid p-grid">
+                        <!-- <div class="p-field p-col-4">
+                            <label for="fraisBadge">Exercice<sup style="color: red; font-weight: bold;">*</sup></label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                            </p-dropdown>
+                        </div> -->
                         <div class="p-field p-col-4">
                             <label for="nom">Numéro de l'avenant chez le garant<sup style="color: red; font-weight: bold;"></sup></label>
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Date d'Avenant<sup style="color: red; font-weight: bold;">*</sup></label>
+                            <label for="nom">Date d'Avenant<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
-                                    dateFormat="dd/mm/yy" inputId="calendar" [disabled]="etat === 'VIEW'"
+                                    dateFormat="dd/mm/yy" inputId="calendar" [disabled]="etat === 'VIEW' && !curentExercice"
                                     appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Date d'Incorporation<sup style="color: red; font-weight: bold;">*</sup></label>
+                            <label for="nom">Date d'Incorporation<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
                                     dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()" [disabled]="etat === 'VIEW'"
                                     appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="dateIncorparation">Initiateur <sup style="color: red;">*</sup></label>
+                            <label for="dateIncorparation">Initiateur <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle" [disabled]="etat === 'VIEW'"></p-dropdown>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red; font-weight: bold;"></sup></label>
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="fraisBadges">Total Frais Badges <sup style="color: red; font-weight: bold;"></sup></label>
+                            <label for="fraisBadges">Total Frais Badges<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Motif <sup style="color: red; font-weight: bold;"></sup></label>
+                            <label for="nom">Motif <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                     </div>
@@ -174,7 +191,7 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="entre">Date entrée <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="entre">Date entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <p-calendar [showIcon]="true" formControlName="dateEntree"
                                         dateFormat="dd/mm/yy" inputId="calendar"
                                         appendTo="body"></p-calendar>
@@ -216,13 +233,13 @@
                         <div class="p-field p-col-4"></div>
                         <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter membre de famille" label="Famille"
-                                    class="p-button-success" type="button" (click)="ajouter()"></button>
+                                    class="p-button-success" type="button" [disabled]="adherentForm.invalid" (click)="ajouter()"></button>
                         </div>
-                        <div class="p-field p-col-2">
+                        <!-- <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
                                     class="p-button p-button-success" type="button" (click)="voirLaliste()" [disabled]="adherentFamilleListe.length === 0">
                             </button>
-                        </div>
+                        </div> -->
 
                         <div class="p-fluid formgrig p-col-12" formArrayName="familys">
 
@@ -257,7 +274,7 @@
                                                    formControlName="dateNaissance" pInputText/>
                                         </div>
                                         <div class="p-col-3">
-                                            <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                            <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                             <input [id]="'dateEntree' + ri" type="date" [name]="'dateEntree' + ri"
                                                    formControlName="dateEntree" pInputText/>
                                         </div>
@@ -307,7 +324,7 @@
                     </div>
                     <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
                         <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
-                                class="p-button p-button-icon" label="Ajouter à la liste" (click)="createHistoriqueAvenant()"
+                                class="p-button p-button-icon" label="Ajouter à la liste" [disabled]="!this.customForm.get('groupe').value|| adherentForm.invalid" (click)="createHistoriqueAvenant()"
                                 >
                         </button>
                     </div>

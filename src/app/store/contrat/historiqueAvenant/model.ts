@@ -93,6 +93,7 @@ export class Avenant {
     historiqueAvenantAdherantDels?: HistoriqueAvenantAdherant[];
     groupes?: Groupe[];
     historiqueAvenant?: HistoriqueAvenant;
+    exercice?: Exercice;
     historiquePlafondGroupe?: HistoriquePlafond;
     historiquePlafondGroupeActes?: HistoriquePlafondActe[];
     historiquePlafondGroupeSousActes?: HistoriquePlafondSousActe[];
@@ -203,4 +204,8 @@ export enum TypeDemandeur {
     VIMSO = 'VIMSO',
     SOUSCRIPTEUR = 'SOUSCRIPTEUR',
     GARANT = 'GARANT',
+}
+
+export class VerifyRenouvellementIsOverlapReponse {
+    isOverlap: boolean;
 }

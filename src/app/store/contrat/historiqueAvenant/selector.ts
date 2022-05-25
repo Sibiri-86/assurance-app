@@ -6,3 +6,4 @@ export const historiquePlafondGroupeActe = (state: AppState) => state.historique
 export const historiquePlafondGroupeSousActe = (state: AppState) => state.historiqueAvenantState.historiquePlafondGroupeSousActe;
 export const historiqueAvenantListWithoutActive = (state: any) => state.historiqueAvenantState.historiqueAvenantListWithoutActive;
 export const historiqueAvenantListByExercice = (state: any) => state.historiqueAvenantState.historiqueAvenantListByExercie;
+export const isOverlap = (state: any) => state.historiqueAvenantState.isOverlap;

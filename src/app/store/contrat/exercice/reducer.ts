@@ -4,7 +4,8 @@ import * as featureActions from '../exercice/actions';
 
 const initialState: ExerciceState = {
   exerciceList: [],
-  exerciceActive: {}
+  exerciceActive: {},
+  lastExercice: {},
 };
 
 const featureReducer = createReducer(
@@ -15,6 +16,9 @@ const featureReducer = createReducer(
   on(featureActions.setExerciceActif, (state, payload) => ({
 	...state, exerciceActive: payload.exerciceActif
   })),
+  on(featureActions.setLastExercice, (state, payload) => ({
+    ...state, lastExercice: payload.lastExercice
+    })),
 );
 
 export function reducer(state: ExerciceState | undefined, action: Action) {

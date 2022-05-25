@@ -20,7 +20,8 @@ import {
     HistoriqueAvenantAdherant,
     HistoriqueGroupe,
     TypeDemandeur,
-    TypeHistoriqueAvenant
+    TypeHistoriqueAvenant,
+    VerifyRenouvellementIsOverlapReponse
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import * as genreSelector from '../../../../store/parametrage/genre/selector';
@@ -82,6 +83,11 @@ import {PoliceService} from '../../../../store/contrat/police/service';
 import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import {removeBlanks} from '../../../util/common-util';
 import {TypeDuree} from '../../../../store/contrat/enum/model';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
+import * as historiqueAvenantSelector from '../../../../store/contrat/historiqueAvenant/selector';
+import * as historiqueAvenantAction from '../../../../store/contrat/historiqueAvenant/actions';
 
 @Component({
     selector: 'app-avenant-renouvellement',
@@ -190,6 +196,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     ];
     curentPolice: Police;
     exerciceForm: FormGroup;
+    lastExerciceForm: FormGroup;
     private exercice: Exercice;
     adherentList$: Observable<Array<Adherent>>;
     adherentList: Array<Adherent>;
@@ -197,6 +204,16 @@ export class AvenantRenouvellementComponent implements OnInit {
     historiqueGroupes: HistoriqueGroupe[] = [];
     numero: number;
     historiqueAveantAdherantList: HistoriqueAvenantAdherant[];
+    exerciceList$: Observable<Array<Exercice>>;
+    exerciceList: Array<Exercice>;
+    curentExercice: Exercice = {};
+    historiqueAvenants1: Array<HistoriqueAvenant>;
+    historiqueAvenants1$: Observable<any>;
+    historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
+    historiqueAvenantList: Array<HistoriqueAvenant>;
+    exercice$: Observable<Exercice>;
+    overlapVariable: boolean;
+
     constructor(
         private store: Store<AppState>,
         private messageService: MessageService,
@@ -230,6 +247,15 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
 
         this.exerciceForm = this.formBuilder.group({
+            id: new FormControl(null),
+            debut: new FormControl('', [Validators.required]),
+            fin: new FormControl({value: '', disabled: true}, [Validators.required]),
+            actived: new FormControl('', [Validators.required]),
+            typeDuree: new FormControl('', [Validators.required]),
+            duree: new FormControl('', [Validators.required]),
+        });
+
+        this.lastExerciceForm = this.formBuilder.group({
             id: new FormControl(null),
             debut: new FormControl('', [Validators.required]),
             fin: new FormControl('', [Validators.required]),
@@ -554,7 +580,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.loadActivedExercice(this.police);
+        // this.loadActivedExercice(this.police);
+        // this.loadLastExercice(this.police);
         this.curentPolice = this.police;
         this.historiqueAveantAdherants = [];
         this.adherantListTmp = [];
@@ -720,6 +747,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             });
 
+            // this.loadExerciceByPolice(this.police);
+
         // this.loadListeActualisee();
         this.loadAdherantByPolice();
         this.addFamilleActe(this.police);
@@ -729,7 +758,23 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log('..............RES..............   ', res);
                 this.historiqueAveantAdherantList = res;
             }
-        )
+        );
+
+        this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    console.log('******this.exercice*******', this.exercice);
+                    if (this.exercice) {
+                        this.lastExerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin
+                            // actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
     }
 
     addSousActe() {
@@ -965,17 +1010,21 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     createAvenantModif(): void {
         this.plafondActe.forEach(pa => {
-            pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
         });
         this.plafondFamilleActe.forEach(pa => {
-            pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
         });
         this.plafondSousActe.forEach(pa => {
-            pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
         });
         this.plafondFamilleActePlafongConfig.forEach(pfa => {
             if (pfa.montantPlafond) {
-                pfa.montantPlafond = parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+                pfa.montantPlafond = removeBlanks(pfa.montantPlafond + '');
+                // parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
             }
             if (pfa.nombre) {
                 pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
@@ -986,7 +1035,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                         pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
                     }
                     if (pa.montantPlafond) {
-                        pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+                        pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+                        // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
                     }
                     if (pa.listeSousActe) {
                         pa.listeSousActe.forEach(psa => {
@@ -994,7 +1044,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                                 psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
                             }
                             if (psa.montantPlafond) {
-                                psa.montantPlafond = parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                                psa.montantPlafond = removeBlanks(psa.montantPlafond + '');
+                                // parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
                             }
                         });
                     }
@@ -1024,6 +1075,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
         this.historiqueAvenant.exercice = this.exerciceForm.value;
+        this.objet.exercice = this.exerciceForm.value;
         this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
@@ -1092,6 +1144,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             haa => !haa.selected);
         this.objet.historiqueAvenantAdherantDels = historiqueAvenant.historiqueAvenantAdherants.filter(
             haa => haa.selected);
+            console.log('********haa.selected***********', this.objet.historiqueAvenantAdherantDels);
     }
 
     getNewDate(value: number): Date {
@@ -1242,6 +1295,70 @@ export class AvenantRenouvellementComponent implements OnInit {
             plafond.listeActe.push(pa);
         });
     }
+
+
+    loadExerciceByPolice(police: Police): void {
+        console.log('policeId === ' + police.id);
+        this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+        this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+        this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+            (value => {
+              this.exerciceList = value;
+              console.log('liste === ');
+              console.log(this.exerciceList);
+            })
+        );
+        // this.exerciceList = [];
+      }
+
+      /* loadLastExercice(police: Police): void {
+        if (police) {
+            this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    console.log('******this.exercice*******', this.exercice);
+                    if (this.exercice) {
+                        this.exerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin,
+                            // actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
+        }
+    } */
+    
+      onExerciceChange(): void {
+        console.log('curent exo === ');
+        console.log(this.curentExercice);
+        //this.exercice = {...exercice}
+        if (this.curentExercice && this.curentExercice.id !== '') {
+          this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+          this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenantByExercice({exerciceId: this.curentExercice.id}));
+          this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+              // this.loading = false;
+              this.historiqueAvenants1 = value.slice();
+              console.log('................historiqueAvenantListWithoutActiveList............................');
+              console.log(this.historiqueAvenantList.length);
+            }
+          });
+        } else {
+        this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+        this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: this.police.id}));
+        this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            // this.loading = false;
+            this.historiqueAvenants1 = value.slice();
+            console.log('................historiqueAvenantListWithoutActiveList............................');
+            console.log(this.historiqueAvenantList.length);
+          }
+        });
+         }
+      }
 
     onPlafondActeChange(plafondActe: PlafondActe) {
         console.log('*****plafondActe*******');
@@ -1447,6 +1564,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     onRefreshDateEcheanceForGroupe() {
       // this.typeDureeSelected = this.groupeForm.get('typeDuree').value;
       console.log(this.exerciceForm.get('duree').value);
+      this.verifyIsOverlap();
       if (this.exerciceForm.get('duree').value) {
         this.historiqueAvenantService.getDateFin(this.exerciceForm.get('debut').value, 
         this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value ).subscribe(
@@ -1477,5 +1595,36 @@ export class AvenantRenouvellementComponent implements OnInit {
                 sousActe.taux = plafondFamilleActe.taux;
             });
         });
+    }
+
+    verifyIsOverlap(){
+         /* this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.isOverlap));
+          this.store.dispatch(featureActionHistoriqueAdherant.verifierRenouvellementNonChevauche({debut: this.exerciceForm.get('debut').value, 
+          typeDuree: this.exerciceForm.get('typeDuree').value.value, duree: this.exerciceForm.get('duree').value, policeId: this.police.id}));
+          this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log('................StatusEnum............................', value);
+            if (value) {
+              // this.loading = false;
+              this.overlapVariable = value;
+              console.log('................overlapVariable............................');
+              console.log(this.overlapVariable);
+            }
+          });
+ */
+          this.historiqueAvenantService.getVerifyIsOverlap(this.exerciceForm.get('debut').value, 
+            this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value, this.police.id ).subscribe(
+          (res) => {
+              const dataDuJour = new Date();
+            this.overlapVariable = res.body;
+            if(!this.overlapVariable) {
+                    this.addMessage('error', 'Erreur sur la date de l\'exercice',
+                        'Veuillez choisir une bonne date d\'effet de l\'exercice !!!');
+                            this.exerciceForm.patchValue({debut: null});
+                            this.exerciceForm.patchValue({typeDuree: null});
+                            this.exerciceForm.patchValue({duree: null});
+                            this.exerciceForm.patchValue({fin: null});
+            }
+          }
+        );
     }
 }

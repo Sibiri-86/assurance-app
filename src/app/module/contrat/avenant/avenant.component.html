@@ -117,8 +117,8 @@
                             <button pButton pRipple icon="pi pi-reply" pTooltip="Rétrograder"
                                     class="p-button-rounded p-button-warning p-ml-2 p-mr-2"
                                     (click)="deValiderPolice(police)"></button>
-                            <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée"
-                                    class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button>
+                            <!-- <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée" 
+                                    class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button> -->
                                     <button pButton pRipple icon="pi pi-eye" pTooltip="voir statistique"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="getStatistique(police)"></button>
                             <button pButton pRipple icon="pi pi-search p-mr-2" pTooltip="voir contrat"
@@ -1753,11 +1753,11 @@
                 <div class="p-fluid p-grid" *ngIf="isAvenantIncorporation">
                     <!-- 
                         pour appeler l'avenant d'incorporation 
-                        isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        isRenouv : pour savoir si c'est un avenant d'incorporation qui l'appel ou pas
                         adherentPrincipauxTMP: liste des assurés principaux
                         etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
                         police: pour la police
-                        avenantId: id de l'avenant à charcher
+                        avenantId: id de l'avenant à charger
 
                     -->
                     <app-avenant-incorporation [isRenouv]="false" [adherentPrincipauxTMP]="adherentListGroupe" [etat]="etat" [avenantId]="historiqueAvenant.id"
@@ -1765,12 +1765,12 @@
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRetrait">
                     <!-- 
-                        pour appeler l'avenant d'incorporation 
-                        -isRenouv : pour savaoir si c'est un avenant d'incorporation qui l'appel ou pas
+                        pour appeler l'avenant d'incorporation
+                        -isRenouv : pour savoir si c'est un avenant d'incorporation qui l'appel ou pas
                         -adherentPrincipauxTMP: liste des assurés principaux
                         -etat: VIEW pour visualiser | UPDATE pour la mise à jour | CREATE pour la création
                         -police: pour la police
-                        -avenantId: id de l'avenant à charcher
+                        -avenantId: id de l'avenant à charger
                         -avenantDate : date de l'avenant
                         -adherentFamilleEvent: liste des adhérents que le composant doit retourner
                     -->
@@ -1978,9 +1978,19 @@
                     <div class="p-grid">
                         <div class="p-col-4">
                             <label for="fraisBadge">Exercice</label>
-                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="numero" placeholder="Selectionner un exercice" [filter]="true"
-                                        [style]="{'width':'100%'}" [dataKey]="id" filterBy="numero" [showClear]="true" (onChange)="onExerciceChange()">
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" [dataKey]="id" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
                             </p-dropdown>
+                        </div>
+                        <div class="p-col-4">
+                            <button pButton pRipple icon="pi pi-dollar" style="margin-top: 17px !important;" pTooltip="Prime Totale de la Police"
+                                    class="p-button-raised p-button-help p-mr-2" label="Prime Totale de la Police" (click)="getPolicePrimeTotale(police)">
+                            </button>
+                        </div>
+                        <div class="p-col-4">
+                            <button pButton pRipple icon="pi pi-list" style="margin-top: 17px !important;" pTooltip="Liste actualisée de la police"
+                                    class="p-button-raised p-button-secondary p-mr-2" label="Liste actualisée" (click)="loadActualList(police)">
+                            </button>
                         </div>
                     </div>
                     <p-table #dt [value]="historiqueAvenants1" [columns]="cols" [rows]="10" [paginator]="true"
@@ -2031,10 +2041,10 @@
                                 <td><span class="p-column-title">{{rowdata.police.duree}}</span>
                                 </td>
                                 <td><span
-                                        class="p-column-title">{{rowdata.dateAvenant | formatTableValue : 'date'}}</span>
+                                        class="p-column-title">{{rowdata.dateEffet | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
-                                    <span class="p-column-title">{{rowdata.dateEcheance | formatTableValue : 'date'}}</span>
+                                    <span class="p-column-title">{{rowdata?.exercice?.fin | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
                                     <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDÉ</span>
@@ -2303,10 +2313,21 @@
 
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
-    <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid"
+
+   <!--  affichage de la liste actualisée -->
+    <p-dialog [(visible)]="displayALA" header="LISTE ACTUALISEE" [modal]="true" styleClass="p-fluid" (onHide)="fermerListe()"
               [style]="{width: '1400px'}">
+
+              <div class="p-grid">
+                <div class="p-col-4">
+                    <label for="fraisBadge">Exercice</label>
+                    <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findAdherentListByExerciceId(curentExercice)">
+                    </p-dropdown>
+                </div>
+            </div>
         <div class="card">
-            <p-table #dtAL [value]="adherentsListeActuelle" [columns]="colsAL" [rows]="10" [paginator]="true"
+            <p-table #dtAL [value]="adherentsListeActuelleByExercice" [columns]="colsAL" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
                      [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
                      styleClass="p-datatable-customers"
@@ -2343,31 +2364,43 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
+                        <th pSortableColumn="signeAdherent" style="font-size: 12px !important; font-weight: bold; width: 5rem">Signe
+                            <p-sortIcon field="signeAdherent"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; width: 5rem">Matricule
                             <p-sortIcon field="numero"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
+                        <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold; width: 5rem">Matricule Garant
                             <p-sortIcon field="numeroGarant"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nom">Nom
+                        <th pSortableColumn="nom" style="width: 12rem">Nom
                             <p-sortIcon field="nom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="prenom" style="width: 12rem">Prenom
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom
                             <p-sortIcon field="prenom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="adresseEmail">Email
+                        <th pSortableColumn="adresseEmail" style="width: 5rem">Groupe
                             <p-sortIcon field="adresseEmail"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="numeroTelephone">Telephone
+                        <th pSortableColumn="adresseEmail" style="width: 12rem">Email
+                            <p-sortIcon field="adresseEmail"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numeroTelephone" style="width: 8rem">Téléphone
                             <p-sortIcon field="numeroTelephone"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="genre" style="width: 12rem">Genre
+                        <th pSortableColumn="genre" style="width: 3rem">Genre
                             <p-sortIcon field="genre.libelle"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dateSortie" style="width: 6rem">Date de sortie
+                            <p-sortIcon field="dateSortie"></p-sortIcon>
                         </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-adherent>
                     <tr [ngClass]="{'colorZone': !adherent?.adherentPrincipal}">
+                        <td *ngIf="adherent?.signeAdherent ==='*'"><span style="color: blue; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent ==='-'"><span style="color: red; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent === null"><span style="color: blue; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
                         <td><span class="p-column-title">{{adherent?.numero}}</span></td>
                         <td><span class="p-column-title">{{adherent?.matriculeGarant}}</span></td>
                         <td><span class="p-column-title">{{adherent?.nom}}</span>
@@ -2376,23 +2409,90 @@
                         <td><span class="p-column-title">{{adherent?.prenom}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent?.email}}</span>
+                        <td><span class="p-column-title">{{adherent?.groupe?.libelle}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{adherent?.adresseEmail}}</span>
 
                         </td>
                         <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                        <td *ngIf="adherent?.genre?.libelle === 'Feminin'"><span class="p-column-title">F</span></td>
+                        <td *ngIf="adherent?.genre?.libelle === 'Masculin'"><span class="p-column-title">M</span></td>
+                        <td *ngIf="adherent?.dateSortie"><span style="color: red; font-size: 1em;" class="p-column-title">{{adherent?.dateSortie | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="!adherent?.dateSortie"><span style="color: blue; font-size: 0.8em;">Pris(e) en compte</span></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{adherentsListeActuelle ? adherentsListeActuelle.length : 0 }} adherents au total.
+                        {{adherentsListeActuelleByExercice ? adherentsListeActuelleByExercice.length : 0 }} assuré(s) |       {{adherentsListeActuelleByExerciceRetirer ? adherentsListeActuelleByExerciceRetirer.length : 0 }} assuré(s) non pris en compte.
                     </div>
                 </ng-template>
+                <!-- <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        <button pButton pRipple label="Fermer" style="margin-top: 10px !important; text-align: center !important;" 
+                        icon="pi pi-times" class="p-button p-button-danger" type="button"
+                                (click)="annulerPrimeTotalePolice()">
+                        </button>
+                    </div>
+                </ng-template> -->
             </p-table>
         </div>
+        <div class="p-grid">
+            <div p-col-sm-2>
+                <button pButton pRipple label="Fermer" style="margin-top: 10px !important; text-align: center !important;" 
+                        icon="pi pi-times" class="p-button p-button-danger" type="button"
+                        (click)="fermerListe()">
+                </button>
+            </div>
+        </div>
     </p-dialog>
+
+    <!-- affichage de la prime totale de la police-->
+    <p-dialog [(visible)]="displayPrimeTotalePolice" header="Prime totale de la police" [modal]="true" styleClass="p-fluid"
+              [style]="{width: '1000px'}">
+
+              <!-- <div class="p-grid">
+                <div class="p-col-4">
+                    <label for="fraisBadge">Exercice</label>
+                    <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findAdherentListByExerciceId(curentExercice)">
+                    </p-dropdown>
+                </div>
+            </div> -->
+            <ng-template pTemplate="content">
+                <div class="">
+                    <div class="card">
+                        
+                        <div class="p-grid mt-3">
+                            
+                                <span *ngIf="historiqueAvenantPrime?.primeTotal" class="prime"> {{historiqueAvenantPrime?.primeTotal | formatTableValue: 'number':true}} FCFA </span>
+                                <span *ngIf="!historiqueAvenantPrime?.primeTotal === null" class="primeNull"> Aucun avenant validé a cet instant FCFA </span>
+        
+                            <!-- <div class="p-col-2">
+                                <button type="button" pButton pRipple label="Valider Prime" icon="pi pi-save" class="p-button p-button-success"
+                                    (click)="validerPrime( historiqueAvenantPrimes[0].historiqueAvenant)" [disabled]="historiqueAvenantPrimes[0].status">
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="footer">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <button pButton pRipple label="Fermer" style="margin-top: 10px !important; text-align: center !important;" 
+                    icon="pi pi-times" class="p-button p-button-danger" type="button"
+                            (click)="annulerPrimeTotalePolice()">
+                    </button>
+                </div>
+            </ng-template>
+              <div class="p-col-2">
+                
+            </div>
+    </p-dialog>
+
+
 
     <!--Affichage des details des avenants affaire nouvelle -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentAffaireNouvelle"

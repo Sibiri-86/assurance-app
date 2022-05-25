@@ -3102,7 +3102,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="firstname2">Type durée <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClearwwwwwwwwwwwwwwwwwwwwwwwwwwwwww="true" (ngModelChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                            <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'typeDuree'">
                             </app-entity-validation>

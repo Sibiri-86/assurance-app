@@ -149,6 +149,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   paysList$: Observable<Array<Pays>>;
   police: Police;
   historiqueAvenant: HistoriqueAvenant;
+  exercice: Exercice;
   selectedPolices: Police[];
   displayDialogFormPolice = false;
   displayDialogFormAddAdherent = false;
@@ -254,7 +255,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adherantGroupeListe: Array<AdherentFamille> = [];
   historiqueAvenants: Array<HistoriqueAvenant>;
   adherentsListeActuelle: Array<Adherent> = [];
+  adherentsListeActuelleByExercice:  Array<Adherent> = [];
+  adherentsListeActuelleByExerciceRetirer: Array<Adherent> = [];
+  adherentsListeActuelleRetirer: Array<Adherent> = [];
   displayALA = false;
+  displayPrimeTotalePolice = false;
   curentGroupe: Groupe;
   historiqueAhenantAdherants: Array<HistoriqueAvenantAdherant>;
   isAvenantIncorporation = false;
@@ -290,6 +295,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
   avenantModif: Avenant = {};
   historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
+  historiqueAvenantPrime: HistoriqueAvenantPrime = {};
   displayDialogPrime = false;
   avenantModif1: Avenant = {};
   private primetotal = 0;
@@ -440,6 +446,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.policeList = [];
     this.loading = true;
     this.historiqueAvenant = {};
+    this.exercice = {};
 
     this.items = [
       {label: 'Home', icon: 'pi pi-fw pi-home'},
@@ -926,6 +933,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
             this.secteurActiviteList = value.slice();
           }
         });
+
+        
 
     this.dimensionPeriodeList$ = this.store.pipe(
         select(dimensionPeriodeSelector.dimensionPeriodeList)
@@ -1462,9 +1471,31 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('---------- Actual Liste ----------');
           console.log(res);
           this.adherentsListeActuelle = res;
+          this.adherentsListeActuelleRetirer = res.filter(e => e.signeAdherent === "-");
           this.displayALA = true;
         }
     );
+  }
+
+  /* methode pour calculer la prime totale par police */
+ getPolicePrimeTotale(police: Police): void {
+    this.displayPrimeTotalePolice = true;
+    this.getPrimeTotalByPoliceId();
+  }
+
+  
+
+  findAdherentListByExerciceId(currentExercice: Exercice) {
+    console.log('---------- currentExercice ----------', currentExercice);
+    this.adherentService.findAdherantActuallListByExerciceId(currentExercice.id).subscribe(
+      (res) => {
+        console.log('---------- Actual Liste by Exrcice Id ----------');
+        console.log(res);
+        this.adherentsListeActuelleByExercice = res;
+        this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
+        this.displayALA = true;
+      }
+  );
   }
 
   addNewGroupe(): void {
@@ -1591,6 +1622,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   /** afficher les details de la police */
   onRowSelectPolice(police: Police) {
     this.police = {...police};
+    this.loadExerciceByPolice(police);
     this.infosPolice = true;
     this.policeForm.patchValue(this.police);
     this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
@@ -1614,7 +1646,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('==================================', this.historiqueAvenants1);
         }
     ); */
-    this.loadExerciceByPolice(police);
   }
 
   /** afficher les details de l'avenant' */
@@ -1628,6 +1659,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantIncorporation = true;
         this.addAvenant();
         this.entete = 'Avenant d\'incorporation'.toUpperCase();
+        // this.loadExerciceByPolice(avenant.police);
+        console.log('===================avenant.police====================', avenant.police);
         break;
         // this.viewAvenantIncorp(avenant, avenant.typeHistoriqueAvenant);
         // break;
@@ -2044,6 +2077,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;
     let historiqueAvenant: HistoriqueAvenant = {};
+    let exercice: Exercice = {};
+    exercice = event.exercice;
+    avenant.exercice = exercice;
     historiqueAvenant = event.historiqueAvenant;
     avenant.historiqueAvenant = historiqueAvenant;
     if( this.etat === 'CREATE') {
@@ -2053,7 +2089,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }
     console.log('********************Avenant renouvellement************************');
     console.log(event);
-    this.historiqueAvenantService.postAvenant(event).subscribe(
+     this.historiqueAvenantService.postAvenant(event).subscribe(
         (res) => {
           console.log('***************RETOUR RENOUV********************');
           if (res) {
@@ -2064,7 +2100,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }
         }
-    );
+    ); 
   }
 
   loadHistoriquePlafondGroupe(): void {
@@ -2234,13 +2270,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
       hap.historiqueAvenant = {};
     });
     historiqueAvenant.historiqueAvenantPrimes = this.historiqueAvenantPrimes;
-    this.historiqueAvenantService.misAJoursHistoriqueAvenant(historiqueAvenant).subscribe(
+     this.historiqueAvenantService.misAJoursHistoriqueAvenant(historiqueAvenant).subscribe(
         (res) => {
           historiqueAvenant = res;
           this.displayDialogPrime = false;
-          this.onExerciceChange();
+          this.onExerciceChange2();
         }
-    );
+    ); 
     /* this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
@@ -2254,6 +2290,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
       this.displayDialogPrime = false;
       this.primetotal = 0;
   }
+
+  annulerPrimeTotalePolice(): void {
+    this.historiqueAvenantPrime = {};
+    this.displayPrimeTotalePolice = false;
+    // this.primetotal = 0;
+}
+  
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
@@ -2303,7 +2346,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   onExerciceChange(): void {
     console.log('curent exo === ');
     console.log(this.curentExercice);
-    /* if (this.curentExercice && this.curentExercice.id !== '') {
+    // this.exercice = {...exercice}
+    if (this.curentExercice && this.curentExercice.id !== '') {
       this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
       this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenantByExercice({exerciceId: this.curentExercice.id}));
       this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -2314,7 +2358,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log(this.historiqueAvenantList.length);
         }
       });
-    } else { */
+    } else {
     this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
     this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: this.police.id}));
     this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -2325,7 +2369,20 @@ export class AvenantComponent implements OnInit, OnDestroy {
         console.log(this.historiqueAvenantList.length);
       }
     });
-    // }
+       }
+  }
+
+  onExerciceChange2() {
+    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: this.police.id}));
+    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        // this.loading = false;
+        this.historiqueAvenants1 = value.slice();
+        console.log('................historiqueAvenantListWithoutActiveList............................');
+        console.log(this.historiqueAvenantList.length);
+      }
+    });
   }
 
   private loadPoliceListe() {
@@ -2548,5 +2605,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
         
         }
     );
+  }
+
+  getPrimeTotalByPoliceId() {
+    if (this.police.id) {
+      this.historiqueAvenantService.getPrimeTotalByPoliceId(this.police.id).subscribe(
+          (res) => {
+            this.historiqueAvenantPrime = res;
+            console.log("=============================this.historiqueAvenantPrime =============");
+            console.log(this.historiqueAvenantPrime );
+            // this.historiqueAveantAdherantsByExerciceTMP = res;
+          }
+      );
+    }
+  }
+
+  fermerListe(){
+    this.displayALA = false;
+    this.curentExercice = {};
+    this.adherentsListeActuelleByExercice = [];
+    this.adherentsListeActuelleByExerciceRetirer = [];
   }
 }
