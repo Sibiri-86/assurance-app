@@ -588,7 +588,6 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
     }
 
-<<<<<<< HEAD
     loadExerciceByPolice(police: Police): void {
         console.log('policeId === ' + police.id);
         this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
@@ -620,7 +619,7 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('curent exo === ');
         console.log(this.curentExercice);
      }
-=======
+
      /* onBasicUpload(event, form) {
     
   
@@ -630,5 +629,5 @@ export class AvenantIncorporationComponent implements OnInit{
        
 
       } */
->>>>>>> feature_button_policy_validation
+
 }
