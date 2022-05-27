@@ -2406,12 +2406,24 @@
                              [globalFilterFields]="['adherent.nom','adherent.prenom','adherent.telephone','adherent.lieuNaissance','adherent.qualiteAssure.libelle']"
                              [rowHover]="true" dataKey="id"
                              styleClass="p-datatable-customers"
+                        
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                             (onRowSelect)="onRowSelect($event)" 
                              [showCurrentPageReport]="true">
+                             
                         <ng-template pTemplate="caption">
                             <div class="p-d-flex p-flex-column table-header">
                                 <div class="p-grid">
-                                    <div class="p-col-9">
+                                    <div class="p-mr-2 p-mb-2">
+                                        <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]"  [minFileSize]="1024"  accept=".png,.jpg,.jpeg" maxFileSize="512000"   (uploadHandler)="onBasicUpload($event, form)" >
+                                            
+                                        </p-fileUpload>
+                                        
+                                    </div>
+                                    <div class="p-mr-2 p-mb-2">
+                                        <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="image" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+                                    </div>
+                                    <div class="p-col">
                                             <span class="p-input-icon-left">
                                                 <i class="pi pi-search"></i>
                                                 <input pInputText type="text"
