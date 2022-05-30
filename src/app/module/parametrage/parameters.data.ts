@@ -1175,6 +1175,15 @@ export const DATA_DEFINITION = [
         validators: [Validators.required, Validators.maxLength(50)]
       },
       {
+        field: 'telephone', header: 'Téléphone', type: 'string', width: 1, text_center: false,
+        
+      },
+     
+
+      {
+        field: 'localite', header: 'Localité', type: 'string', width: 1, text_center: false,
+      },
+      {
         field: 'idTypePrestataire', header: 'Type prestataire', width: 1, label: 'libelleTypePrestataire', text_center: false,
         validators: [Validators.required], type: 'dropdown', dropObj: {
           action: typePrestataireActions.loadTypePrestataire(),

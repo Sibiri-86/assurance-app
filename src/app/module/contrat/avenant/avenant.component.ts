@@ -313,6 +313,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   viewPolice: Police;
   displayViewContrat = false;
   groupePlafongConfig: Groupe = {};
+  adherentHisChecked : HistoriqueAvenantAdherant;
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2607,6 +2608,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
+<<<<<<< HEAD
   getPrimeTotalByPoliceId() {
     if (this.police.id) {
       this.historiqueAvenantService.getPrimeTotalByPoliceId(this.police.id).subscribe(
@@ -2626,4 +2628,46 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.adherentsListeActuelleByExercice = [];
     this.adherentsListeActuelleByExerciceRetirer = [];
   }
+=======
+  onRowSelect(event) {
+    this.adherentHisChecked = event.data;
+   
+  }
+
+  onBasicUpload(event, form) {
+    console.log("=============================res=============");
+    console.log(this.adherentHisChecked);
+    console.log("=============================res=============");
+    if(!this.adherentHisChecked){
+      this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
+   } else {
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la photos de l\'adherent',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files[0]);
+        this.store.dispatch(featureActionAdherent.importPhotosAdherent({file:event.files[0], idAdherent:this.adherentHisChecked.adherent?.id, idGroupe: this.groupe.id}));
+        form.clear();
+      },
+    });
+   }
+  }
+
+  onBasicUploadLot(event, form) {
+    console.log(event.files);
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la photos des adherents par lot',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files);
+        this.store.dispatch(featureActionAdherent.importPhotosAdherentLot({file:event.files, idGroupe: this.groupe.id}));
+        form.clear();
+      },
+    });
+
+  }
+
+>>>>>>> feature_button_policy_validation
 }
