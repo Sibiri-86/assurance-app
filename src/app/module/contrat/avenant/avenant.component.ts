@@ -720,24 +720,28 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log($event);
           this.isAvenantIncorporation = true;
           this.entete = 'Avenant d\'Incorporation';
+          this.etat = 'CREATE';
       }},
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
           this.addAvenantRetrait();
           this.isAvenantRetrait = true;
           this.entete = 'Avenant de Retrait';
+          this.etat = 'CREATE';
       }},
       {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
           this.initDisplayAvenant();
           this.isAvenantModification = true;
           this.entete = 'Avenant de Modification';
           this.addAvenantModification();
+          this.etat = 'CREATE';
       }},
       {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
           this.initDisplayAvenant();
           this.isAvenantRenouvellement = true;
           this.entete = 'Avenant de Renouvellement';
           this.addAvenantRenouvellement();
+          this.etat = 'CREATE';
       }},
       /* {label: 'Facturation', icon: 'pi pi-euro', command: () => {
           this.initDisplayAvenant();
@@ -750,12 +754,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.isAvenantSuspension = true;
           this.entete = 'Avenant de Suspension';
           this.addAvenantRenouvellement();
+          this.etat = 'CREATE';
       }},
       {label: 'Résiliation', icon: 'pi pi-sign-out', command: () => {
           this.initDisplayAvenant();
           this.isAvenantResiliation = true;
           this.entete = 'Avenant de Résiliation';
           this.addAvenantModification();
+          this.etat = 'CREATE';
       }},
     ];
 

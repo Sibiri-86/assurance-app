@@ -49,6 +49,7 @@ export class AvenantRetraitComponent implements OnInit {
   adherantGroupeListe: Array<HistoriqueAvenantAdherant> = [];
   familleAdherants: Array<AdherentFamille>;
   @Output() adherentFamilleEvent = new EventEmitter();
+  @Output() returnEvent = new EventEmitter();
   adherantDeleteds: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant> = [];
@@ -81,6 +82,7 @@ export class AvenantRetraitComponent implements OnInit {
   @Input() avenantDate: Date;
   @Input() avenantId: string;
   @Input() etat: string;
+  isAvenantRetrait = false;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -123,8 +125,14 @@ export class AvenantRetraitComponent implements OnInit {
         }
     ); */
     // this.loadActivedExercice(this.police);
+    if(this.etat==='CREATE') {
+      this.loadExerciceByPolice(this.police);
+      this.loadLastExercice();
+    }
     this.findListeActualisee(this.police);
-    this.updateAvenant(this.avenantId);
+    if(this.etat != 'CREATE') {
+      this.updateAvenant(this.avenantId);
+    }
   }
 
 
@@ -165,9 +173,9 @@ export class AvenantRetraitComponent implements OnInit {
     this.myForm = this.formBuilder.group({
       id: new FormControl(null),
       numero: new FormControl(null),
-      dateAvenant: new FormControl(null, [Validators.required]),
-      observation: new FormControl(null, [Validators.required]),
-      demandeur: new FormControl(null, [Validators.required]),
+      dateAvenant: new FormControl('', [Validators.required]),
+      observation: new FormControl('', [Validators.required]),
+      demandeur: new FormControl('', [Validators.required]),
       // dateEffet: new FormControl(null, [Validators.required]),
       fraisBadges: 0,
       fraisAccessoires: 0,
@@ -191,8 +199,14 @@ export class AvenantRetraitComponent implements OnInit {
       actived: new FormControl('', [Validators.required]),
       typeDuree: new FormControl('', [Validators.required]),
       duree: new FormControl('', [Validators.required]),
-  });
+  });    
+    // this.etat = null;
+    //this.isAvenantRetrait = false;
+    this.returnEvent.emit('Sortie');
+    }
 
+
+  loadLastExercice() {
     this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
             this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
             this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
@@ -208,8 +222,6 @@ export class AvenantRetraitComponent implements OnInit {
                     }
                 }
             );
-    
-    this.loadExerciceByPolice(this.police);
   }
 
   loadExerciceByPolice(police: Police): void {
@@ -423,13 +435,16 @@ export class AvenantRetraitComponent implements OnInit {
       this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
           (res: HistoriqueAvenant) => {
               this.historiqueAvenant = res;
+              console.log('*********this.historiqueAvenant*********', this.historiqueAvenant);
               this.police = res.police;
-              this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-              this.historiqueAveantAdherants.forEach(haa => {
+              console.log('*********this.police*********', this.police);
+              this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
+              console.log('*********this.historiqueAveantAdherantsByExercice*********', this.historiqueAveantAdherantsByExercice);
+              this.historiqueAveantAdherantsByExercice.forEach(haa => {
                 if(haa.id) {
                   haa.dateRetrait = new Date(haa.dateRetrait);
                 } else{
-                  haa.dateRetrait = null;
+                  haa.dateRetrait = new Date();
                 } 
               });
               this.myForm.setValue({
@@ -440,18 +455,20 @@ export class AvenantRetraitComponent implements OnInit {
                   demandeur: res.typeDemandeur,
                   fraisBadges: 0,
                   fraisAccessoires: 0,
-                  dateEffet: new Date(res.dateAvenant),
+                  // dateEffet: new Date(res.dateAvenant),
               });
               if(this.etat === 'VIEW') {
                 this.myForm.disable();
               }
               this.exercice = res.exercice;
-              this.exerciceForm.patchValue({
+              console.log('*********this.exercice*********', this.exercice);
+              this.lastExerciceForm.patchValue({
                   id: res.exercice.id,
                   debut: res.exercice.debut,
                   fin: res.exercice.fin,
-                  actived: res.exercice.actived
+                  // actived: res.exercice.actived
               });
+              this.loadExerciceByPolice(this.police);
               console.log('avenant de retrait ==== ', this.historiqueAvenant);
           }
       );
