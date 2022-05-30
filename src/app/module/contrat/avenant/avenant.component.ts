@@ -2608,7 +2608,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
-<<<<<<< HEAD
   getPrimeTotalByPoliceId() {
     if (this.police.id) {
       this.historiqueAvenantService.getPrimeTotalByPoliceId(this.police.id).subscribe(
@@ -2628,7 +2627,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.adherentsListeActuelleByExercice = [];
     this.adherentsListeActuelleByExerciceRetirer = [];
   }
-=======
+
   onRowSelect(event) {
     this.adherentHisChecked = event.data;
    
@@ -2668,6 +2667,4 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
 
   }
-
->>>>>>> feature_button_policy_validation
 }
