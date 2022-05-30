@@ -32,6 +32,8 @@ export interface Adherent{
     manageIncorporation?: number;
     signeAdherent?: string;
     dateSortie?:Date;
+    deleted?: boolean;
+    actif?: boolean;
 }
 
 export interface AdherentResearchReponse {

@@ -222,11 +222,16 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     if (value) {
         console.log(value);
         this.adherentSelected = value;
+        console.log('***********this.adherentSelected***********', this.adherentSelected);
         console.log(this.adherentSelected);
         this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
         this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        if(this.adherentSelected.signeAdherent !=='*') {
+          this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+        }
         console.log(this.bonPriseEnChargeList);
         this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
           e.typeBon === TypeBon.ENTENTEPREALABLE);
@@ -336,6 +341,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
           etat: TypeEtatSinistre.VALIDE}));
       },
     });
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   checkDateCondition() {
