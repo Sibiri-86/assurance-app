@@ -176,17 +176,24 @@
                 <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
                             <label for="nomAdherent">Nom <span class="required">*</span></label>
-                            <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" formControlName="nomAdherent" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherent" class="champRouge" type="text" formControlName="nomAdherent" pInputText>
                         </div>
+                        <!-- <div  class="p-field p-col">
+                            <label for="nomAdherent">Nom <span class="required">*</span></label>
+                            <input id="nomAdherent" class="champRouge" type="text" formControlName="nomAdherent" pInputText>
+                        </div> -->
                         
                         <div class="p-field p-col">
                             <label for="nomAdherent">Prenom<span class="required">*</span></label>
-                            <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" type="text" formControlName="prenomAdherent" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" type="text" formControlName="prenomAdherent" pInputText>
                         </div>
                         
                         <div class="p-field p-col-4">
                             <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
-                            <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" class="champRouge" type="text" formControlName="numeroGroupe" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="groupeAdherent" class="champVert" type="text" formControlName="numeroGroupe" pInputText>
                         </div>
                         
                     </div>
@@ -194,7 +201,8 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="policeAdherent">Numero police</label>
-                            <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" formControlName="numeroPolice" pInputText>
+                            <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" formControlName="numeroPolice" pInputText>
                         </div>
                         
                         <div class="p-field p-col-4">

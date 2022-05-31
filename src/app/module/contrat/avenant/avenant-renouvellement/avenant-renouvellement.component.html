@@ -1,7 +1,31 @@
 <div class="p-fluid">
     <p-tabView>
         <p-tabPanel header="INFOS" leftIcon="pi pi-info" tooltip="Information sur la police" [style]="{'width': '100%'}">
-            <p-fieldset legend="Exercice" [transitionOptions]="'400ms'">
+            <!-- <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-4">
+                    <label for="fraisBadge">Exercice</label>
+                    <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                    </p-dropdown>
+                </div>
+            </div> -->
+
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" [transitionOptions]="'400ms'">
+                <form [formGroup]="lastExerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet de l'exercice</label>
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance de l'exercice</label>
+                            <input class="exo" id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+
+            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'">
                 <form [formGroup]="exerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
@@ -18,7 +42,7 @@
                         </div>
                         <div class="p-field p-col-3">
                             <label for="nom">Durée <sup style="color: red; size: 1.7em"></sup></label>
-                            <input id="durée" type="text" required formControlName="duree" pInputText (change)="onRefreshDateEcheanceForGroupe()"/>
+                            <input id="durée" type="text" required formControlName="duree" pInputText (blur)="onRefreshDateEcheanceForGroupe()"/>
                         </div>
                         <div class="p-field p-col-3">
                             <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
@@ -853,7 +877,7 @@
                                                 <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe.montantPlafond | formatTableValue: 'number':true}}
+                                                {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -970,7 +994,7 @@
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
-            [message]="'Veuillier selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
+            [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
             </app-avenant-retrait>
         </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">

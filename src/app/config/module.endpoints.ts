@@ -233,6 +233,7 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+
     static readonly HISTORIQUE_AVENANT_ADHERENT = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent`,
         mock: `assets/mock/contrat/historique-avenant-adherent.mock.json`
@@ -361,8 +362,29 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/exercice`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
-    static readonly BULLETINADHESION = {
-        prod: `${SERVICE_PREFIX}/contrat/bulletinAdhesion`,
-        mock: `assets/mock/contrat/bulletinAdhesion.mock.json`
+
+    static readonly CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/exercice-actuall`,
+        mock: `assets/mock/contrat/adherent.mock.json`
     };
+
+    static readonly CONTRAT_ADHERENT_ACTUALL_LIST_BY_EXERCICE_ID = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/liste-actualisee-by-exercice`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT_PRIME_GET_BY_POLICE_ID = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/calcule-prime-by-police-id`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly HISTORIQUE_AVENANT_GET_DATE_IS_OVERLAP = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/get-date-isOverlap`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+
+        static readonly BULLETINADHESION = {
+            prod: `${SERVICE_PREFIX}/contrat/bulletinAdhesion`,
+            mock: `assets/mock/contrat/bulletinAdhesion.mock.json`
+        };
 }

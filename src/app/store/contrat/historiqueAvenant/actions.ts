@@ -1,5 +1,5 @@
 import {props, createAction} from '@ngrx/store';
-import {HistoriqueAvenant, HistoriqueAvenantList} from './model';
+import {HistoriqueAvenant, HistoriqueAvenantList, VerifyRenouvellementIsOverlapReponse} from './model';
 import {Police} from '../police/model';
 export const createHistoriqueAvenant = createAction('[App Init] Create HistoriqueAvenant', props<HistoriqueAvenant>());
 export const updateHistoriqueAvenant = createAction('[App Init] update HistoriqueAvenant', props<HistoriqueAvenant>());
@@ -24,6 +24,10 @@ export const loadHistoriqueAvenantByExercice = createAction('[App Init] load His
 	props<{exerciceId: string}>());
 export const setHistoriqueAvenantByExercice = createAction('[App Init] set HistoriqueAvenant by exercice',
 	props<{historiqueAvenantListByExercie: HistoriqueAvenant[]}>());
+export const verifierRenouvellementNonChevauche = createAction('[App Init] verifier si renouvellement ne chevauche pas',
+  props<{debut: Date, typeDuree: string, duree: number, policeId: string}>());
+export const verifyRenouvellementIsOverlap = createAction('[App Init] selected for verify if renouvellement is overlap',
+	props<VerifyRenouvellementIsOverlapReponse>());
 /*
 export const misAJours = createAction('[App Init] mis a jours HistoriqueAvenant', props<HistoriqueAvenant>());
 */

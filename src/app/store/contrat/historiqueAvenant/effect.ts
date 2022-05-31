@@ -172,4 +172,20 @@ export class HistoriqueAvenantEffects {
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));*/
+
+
+        getVerify$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.verifierRenouvellementNonChevauche),
+            mergeMap(({debut, typeDuree, duree, policeId}) =>
+                this.historiqueAvenantService.getVerifyIsOverlap(debut, typeDuree, duree, policeId).pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.verifyRenouvellementIsOverlap(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+        );
 }

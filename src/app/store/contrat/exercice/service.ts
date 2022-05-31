@@ -20,6 +20,12 @@ export class ExerciceService {
 	);
   }
 
+  getLastExercice(policeId: string): Observable<any> {
+	console.log('police ID === ' + policeId);
+	return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/last-element`,
+	{params: createRequestOption({policeId})});
+}
+
   getActiveExerciceByPolice(policeId: string): Observable<any> {
 	return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_ACTIVE_EXERCICE)}`,
 		{params: createRequestOption({policeId})});
@@ -31,3 +37,5 @@ export class ExerciceService {
 	};
   }
 }
+
+

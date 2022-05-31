@@ -46,6 +46,7 @@ export class AvenantIncorporationComponent implements OnInit{
     @Output() adherentFamilleEvent = new EventEmitter();
     @Input() police: Police;
     //  newgroupe: Groupe;
+    lastExerciceForm: FormGroup;
     adherentForm: FormGroup;
     myForm: FormGroup;
     adherentListGroupe: Array<Adherent> = [];
@@ -87,12 +88,13 @@ export class AvenantIncorporationComponent implements OnInit{
     groupeList$: Observable<Array<Groupe>>;
     groupeList: Array<Groupe>;
     isNewGroupe = false;
-    exercice$: Observable<Exercice>;
-    exerciceList$: Observable<Array<Exercice>>;
+    exercice$: Observable<Exercice>;exerciceList$
+    : Observable<Array<Exercice>>;
     exerciceList: Array<Exercice>;
     viewListeEdit = false;
     @Input() groupesInput: Array<Groupe>;
     selectedGroup: Groupe = {};
+    curentExercice: Exercice = {};
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -142,6 +144,22 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
         this.loadGoupeByPolice();
+        this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    console.log('******this.exercice*******', this.exercice);
+                    if (this.exercice) {
+                        this.lastExerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin
+                            // actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
+            this.loadExerciceByPolice(this.police);
     }
     constructor(
         private formBuilder: FormBuilder,
@@ -169,7 +187,7 @@ export class AvenantIncorporationComponent implements OnInit{
             qualiteAssure: new FormControl(null, [Validators.required]),
             genre: new FormControl(null, [Validators.required]),
             dateIncorporation: new FormControl(null, [Validators.required]),
-            dateEntree: new FormControl(null, [Validators.required]),
+            dateEntree: new FormControl(null),
             // dateIncor: new FormControl(new Date(), [Validators.required]),
             matriculeGarant: new FormControl(null, ),
             matriculeSouscripteur: new FormControl(null, ),
@@ -194,7 +212,7 @@ export class AvenantIncorporationComponent implements OnInit{
             qualiteAssure: new FormControl(null, [Validators.required]),
             genre: new FormControl(null, [Validators.required]),
             dateIncorporation: new FormControl(new Date(), [Validators.required]),
-            dateEntree: new FormControl(new Date(), [Validators.required]),
+            dateEntree: new FormControl(new Date()),
         });
         this.adherentFamilleForm = this.formBuilder.group({
             adherent: new FormControl(null),
@@ -215,6 +233,16 @@ export class AvenantIncorporationComponent implements OnInit{
             demandeur: new FormControl(null, [Validators.required]),
             fraisBadges: new FormControl(null, [Validators.required]),
             fraisAccessoires: new FormControl(null, [Validators.required]),
+            // curentExercice: new FormControl(null, [Validators.required])
+        });
+
+        this.lastExerciceForm = this.formBuilder.group({
+            id: new FormControl(null),
+            debut: new FormControl('', [Validators.required]),
+            fin: new FormControl('', [Validators.required]),
+            actived: new FormControl('', [Validators.required]),
+            typeDuree: new FormControl('', [Validators.required]),
+            duree: new FormControl('', [Validators.required]),
         });
     }
 
@@ -263,7 +291,8 @@ export class AvenantIncorporationComponent implements OnInit{
                 break;
             default: break;
         }
-        this.historiqueAvenant1.exercice = this.exercice;
+        this.historiqueAvenant1.exercice = this.curentExercice;
+        console.log('-----------------this.curentExercice-----------------', this.curentExercice);
         this.historiqueAvenant1.fraisBadges = this.myForm.get('fraisBadges').value;
         this.historiqueAvenant1.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
         this.historiqueAvenant1.groupe = this.curentGroupe;
@@ -318,7 +347,7 @@ export class AvenantIncorporationComponent implements OnInit{
             qualiteAssure: new FormControl(null, [Validators.required]),
             genre: new FormControl(null, [Validators.required]),
             dateIncorporation: new FormControl(null, [Validators.required]),
-            dateEntree: new FormControl(null, [Validators.required]),
+            dateEntree: new FormControl(null),
         });
     }
 
@@ -559,6 +588,38 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
     }
 
+    loadExerciceByPolice(police: Police): void {
+        console.log('policeId === ' + police.id);
+        this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+        this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+        this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+            (value => {
+              this.exerciceList = value;
+              console.log('liste === ');
+              console.log(this.exerciceList);
+            })
+        );
+        // this.exerciceList = [];
+      }
+
+      findAdherentListByExerciceId(curentExercice: Exercice) {
+        console.log('currentExercice === ', curentExercice);
+        /* this.adherentService.findAdherantActuallListByExerciceId(currentExercice.id).subscribe(
+          (res) => {
+            console.log('---------- Actual Liste by Exrcice Id ----------');
+            console.log(res);
+            this.adherentsListeActuelleByExercice = res;
+            this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
+            this.displayALA = true;
+          }
+      ); */
+      }
+
+      onExerciceChange(): void {
+        console.log('curent exo === ');
+        console.log(this.curentExercice);
+     }
+
      /* onBasicUpload(event, form) {
     
   
@@ -568,4 +629,5 @@ export class AvenantIncorporationComponent implements OnInit{
        
 
       } */
+
 }

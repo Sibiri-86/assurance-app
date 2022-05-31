@@ -103,6 +103,14 @@ deleteAdherents(adherent: Array<Adherent>): Observable<any> {
         );
     }
 
+    findAdherantActuallListByExerciceId(idExercice: string): Observable<Adherent[]> {
+      // @FIXME: get request
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST)}/${idExercice}`).pipe(
+          map((response: Adherent[]) => response),
+          catchError(this.handleError())
+      );
+  }
+
     loadAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(

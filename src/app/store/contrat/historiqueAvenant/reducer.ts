@@ -15,7 +15,8 @@ const initialState: HistoriqueAvenantState = {
     historiquePlafondGroupeActe: [],
     historiquePlafondGroupeSousActe: [],
     historiqueAvenantListWithoutActive: [],
-    historiqueAvenantListByExercie: []
+    historiqueAvenantListByExercie: [],
+    verifyIsOverlap: null
 };
 
 const featureReducer = createReducer(
@@ -28,7 +29,10 @@ const featureReducer = createReducer(
       })),
     on(featureActions.setHistoriqueAvenantByExercice, (state, payload: any) => ({
         ...state, historiqueAvenantListByExercie: payload.historiqueAvenantListByExercie
-      }))
+      })),
+      on(featureActions.verifyRenouvellementIsOverlap, (state, payload: any) => ({
+          ...state, verifyIsOverlap: payload.verifyIsOverlap
+        }))
 );
 
 export function reducer(state: HistoriqueAvenantState | undefined, action: Action) {

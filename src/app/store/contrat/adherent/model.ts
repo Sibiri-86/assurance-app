@@ -30,7 +30,10 @@ export interface Adherent{
     fullName?: string;
     urlPhoto?: string;
     manageIncorporation?: number;
-    
+    signeAdherent?: string;
+    dateSortie?:Date;
+    deleted?: boolean;
+    actif?: boolean;
 }
 
 export interface AdherentResearchReponse {
