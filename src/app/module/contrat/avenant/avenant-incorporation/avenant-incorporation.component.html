@@ -330,7 +330,9 @@
                     </div>
                     <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
                         <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
-                                class="p-button p-button-icon" label="Ajouter à la liste" [disabled]="!this.customForm.get('groupe').value|| adherentForm.invalid" (click)="createHistoriqueAvenant()"
+                                class="p-button p-button-icon" label="Ajouter à la liste" [disabled]="!this.customForm.get('groupe').value 
+                                && !this.adherentForm.get('nom').value && !this.adherentForm.get('prenom').value && !this.adherentForm.get('dateNaissance').value
+                                && !this.adherentForm.get('dateIncorporation').value  && !this.adherentForm.get('qualiteAssure').value" (click)="createHistoriqueAvenant()"
                                 >
                         </button>
                     </div>
@@ -346,7 +348,7 @@
     </div>
     <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérents à incorporer"
               [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}" (onHide)="hideListe()">
-            <app-adherent-list [adherentFamilleList]="adherentFamilleListe" *ngIf="adherentFamilleListe?.length > 0"></app-adherent-list>
+            <app-adherent-list [adherentFamilleList]="adherentFamilleListe" [statut]="etat" *ngIf="adherentFamilleListe?.length > 0"></app-adherent-list>
     </p-dialog>
     <div class="p-fluid p-formgrid p-grid" *ngIf="viewListeEdit">
         <div class="p-field p-col-12">

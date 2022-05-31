@@ -214,7 +214,7 @@
                     class="p-button-danger" type="button" (click)="annuler()"></button>
         </div>
         <div class="p-field p-col-2">
-            <button pButton pRipple icon="pi pi-check" pTooltip="Valider" label="Enregistrer"
+            <button [disabled]="statut ==='VIEW'" pButton pRipple icon="pi pi-check" pTooltip="Valider" label="Enregistrer"
                     class="p-button p-button-success" type="button" (click)="valider()">
             </button>
         </div>

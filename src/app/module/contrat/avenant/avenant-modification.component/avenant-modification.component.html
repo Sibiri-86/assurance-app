@@ -4,29 +4,38 @@
                     [style]="{'width': '100%'}">
             <div class="p-grid">
                 <div class="p-col-12">
-                    <p-fieldset legend="Exercice" toggleable="true">
-                        <form [formGroup]="exerciceForm" *ngIf="!isRenouv">
+                    <p-fieldset legend="Dernier Exercice de la police" toggleable="true" *ngIf="!isRenouv">
+                        <form [formGroup]="lastExerciceForm">
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-6">
-                                    <label for="debit">Date d'effet</label>
-                                    <input id="debit" type="date" formControlName="debut" pInputText disabled="true" style="font-weight: bolder; color: green" />
+                                    <label for="debit">Date d'effet du dernier exercice de la police</label>
+                                    <input id="debit" type="date" class="exo" formControlName="debut" pInputText disabled="true">
                                 </div>
                                 <div class="p-field p-col-6">
-                                    <label for="fin">Date d'échéance</label>
-                                    <input style="font-weight: bolder; color: green" id="fin" type="date" formControlName="fin" pInputText disabled="true" />
+                                    <label for="fin">Date d'échéance du dernier exercice de la police</label>
+                                    <input id="fin" type="date" class="exo" formControlName="fin" pInputText disabled="true">
                                 </div>
                             </div>
                         </form>
                     </p-fieldset>
+                    <div class="p-fluid p-formgrid p-grid p-mb-3">
+                        <div class="p-col-4" *ngIf="etat === 'CREATE'">
+                            <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" selectedItem="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                                        
+                            </p-dropdown>
+                        </div>
+                    </div>
+
                     <form [formGroup]="myForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-6">
-                                <label for="numero">Numéro de l'avenant chez le garant</label>
+                                <label for="numero">Numéro de l'avenant chez le garant<sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                 <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateAvenant">Date de l'avenant <sup
-                                        style="color:#ff0539; size: 1.2em">*</sup></label>
+                                <label for="dateAvenant">Date de l'avenant <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                 <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
                                             dateFormat="dd/mm/yy" inputId="calendar"
                                             appendTo="body"></p-calendar>
@@ -35,8 +44,7 @@
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateEffetA">Date d'éffet de la modification <sup
-                                        style="color:#ff0539; size: 1.2em">*</sup></label>
+                                <label for="dateEffetA">Date d'éffet de la modification <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                 <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
                                             dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
                                             appendTo="body"></p-calendar>
@@ -45,13 +53,13 @@
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                                <label for="dateIncorparation">Initiateur <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                 <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
                                             [options]="demandeursList" formControlName="demandeur"
                                             placeholder="Select" optionLabel="libelle"></p-dropdown>
                             </div>
                             <div class="p-field p-col-12">
-                                <label for="nom">Motif <sup style="color: red; size: 1.7em">*</sup></label>
+                                <label for="nom">Motif <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                 <input id="Observation" type="text" formControlName="observation" pInputText/>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                                        [formGroup]="groupeForm" [entityField]="'dateEffetA'">
@@ -1108,8 +1116,8 @@
                     (click)="annuler()"></button>
         </div>
         <div class="p-col-2">
-            <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="createAvenantModif()" [disabled]="myForm.invalid"></button>
+            <button type="button" tooltip="Valider la modification"  pButton pRipple label="Enregistrer" class="p-button-success" icon="pi pi-check"
+                    (click)="createAvenantModif()" [disabled]="myForm.invalid || etat === 'VIEW'"></button>
         </div>
     </div>
 </div>

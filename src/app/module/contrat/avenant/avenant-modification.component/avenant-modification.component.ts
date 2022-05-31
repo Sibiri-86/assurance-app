@@ -87,6 +87,8 @@ import {ExerciceService} from '../../../../store/contrat/exercice/service';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {TypeDuree} from '../../../../store/contrat/enum/model';
 import { removeBlanks } from 'src/app/module/util/common-util';
+import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -170,6 +172,7 @@ export class AvenantModificationComponent implements OnInit {
   typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
     {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
   myForm: FormGroup;
+  lastExerciceForm: FormGroup;
   typeDureeSelected: string;
   historiqueAvenant: HistoriqueAvenant = {};
   qualiteAssureList1: Array<QualiteAssure>;
@@ -193,6 +196,9 @@ export class AvenantModificationComponent implements OnInit {
   adherentList: Array<Adherent>;
   historiqueGroupes: HistoriqueGroupe[] = [];
   numero: number;
+  exerciceList: Array<Exercice>;
+  exercice$: Observable<Exercice>;exerciceList$
+  curentExercice: Exercice = {};
   historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
   constructor(
       private store: Store<AppState>,
@@ -277,6 +283,15 @@ export class AvenantModificationComponent implements OnInit {
       fraisAccessoires: new FormControl(null),
     
     });
+
+    this.lastExerciceForm = this.formBuilder.group({
+      id: new FormControl(null),
+      debut: new FormControl('', [Validators.required]),
+      fin: new FormControl('', [Validators.required]),
+      actived: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl('', [Validators.required]),
+      duree: new FormControl('', [Validators.required]),
+  });
 
     this.entityValidations = [
       {
@@ -742,9 +757,12 @@ export class AvenantModificationComponent implements OnInit {
 
     this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
-    this.loadActivedExercice(this.police);
+    // this.loadActivedExercice(this.police);
     this.updateAvenant(this.avenantId);
     this.getHistoriquePlafondGroupeFamilleActeByPolice();
+    this.loadExerciceByPolice(this.police);
+    this.loadLastExerciceOfpolice();
+
   }
 
   addSousActe() {
@@ -1069,7 +1087,8 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
-    this.objet.historiqueAvenant.exercice = this.exercice; 
+    this.objet.historiqueAvenant.exercice = this.curentExercice;
+    console.log("this.curentExercice**************", this.curentExercice);
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
     this.groupeListes.forEach(gp => {
@@ -1503,4 +1522,43 @@ export class AvenantModificationComponent implements OnInit {
       }
     );
   }
+
+  loadExerciceByPolice(police: Police): void {
+    console.log('policeId === ' + police.id);
+    this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+    this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+    this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+        (value => {
+          this.exerciceList = value;
+          console.log('liste === ');
+          console.log(this.exerciceList);
+        })
+    );
+    // this.exerciceList = [];
+  }
+
+  loadLastExerciceOfpolice() {
+    this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    console.log('******this.exercice*******', this.exercice);
+                    if (this.exercice) {
+                        this.lastExerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin
+                            // actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
+  }
+
+  onExerciceChange(): void {
+    console.log('curent exo === ');
+    console.log(this.curentExercice);
+ }
+
+
 }
