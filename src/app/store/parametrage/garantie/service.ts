@@ -19,6 +19,14 @@ $getGaranties(): Observable<GarantieList> {
     );
   }
 
+  $findFamilleActeSousActe(): Observable<GarantieList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_GARANTIE)}/familleActe-sousActe`).pipe(
+      map((response: GarantieList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 posGarantie(garantie: Garantie): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_GARANTIE)}`, garantie);
