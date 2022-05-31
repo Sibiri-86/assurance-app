@@ -5,6 +5,7 @@ export interface SousActe {
     description?: string;
     libelleTypeActe?: string;
     idTypeActe?: string;
+    montantConvantion?: number;
 }
 export interface SousActeList {
     typeSousActeDtoList?: Array<SousActe>;

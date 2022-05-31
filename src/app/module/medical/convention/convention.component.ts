@@ -18,7 +18,7 @@ import { Taux } from '../../../store/parametrage/taux/model';
 import { loadTaux } from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
 import { Sort } from '../../common/models/sort.enum';
-import { loadGarantie } from '../../../store/parametrage/garantie/actions';
+import { loadGarantie, loadGaranties } from '../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../store/parametrage/garantie/selector';
 import { loadPrestataire} from '../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
@@ -99,6 +99,12 @@ export class ConventionComponent implements OnInit, OnDestroy {
   statusObject$: Observable<Status>;
   displayActe = false;
   displaySousActe = false;
+  displayFormConventionUpdate = false;
+  private clonedSousActe: { [s: string]: SousActe; } = {};
+  sousActes: Array<SousActe>;
+  sousActeListFinal: SousActe[] = [];
+  sousA: SousActe = {};
+
 
   constructor( private store: Store<AppState>,
                private confirmation: ConfirmationService,
@@ -111,12 +117,13 @@ export class ConventionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.conventionForm = this.formBuilder.group({
       id: new FormControl(),
-      montant: new FormControl('', Validators.required),
-      sousActe: new FormControl(null, Validators.required),
+      montant: new FormControl(''),
+      sousActe: new FormControl(),
       acte: new FormControl(),
       garantie: new FormControl(),
-      prestataire: new FormControl(null, Validators.required),
-      dateEffet: new FormControl(null, Validators.required)
+      prestataire: new FormControl(),
+      dateEffet: new FormControl(null, Validators.required),
+      delai: new FormControl('', Validators.required),
     });
 
     this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
@@ -140,7 +147,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        console.log(this.sousActeList);
+        console.log("===sous======",this.sousActeList);
         this.sousActeList = value.slice();
         this.sousActeListFilter = this.sousActeList;
         //this.sousActeListFilter = this.sousActeList;
@@ -148,10 +155,12 @@ export class ConventionComponent implements OnInit, OnDestroy {
     });
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
-    this.store.dispatch(loadGarantie());
+    this.store.dispatch(loadGaranties());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.garanties = value.slice();
+        console.log('=====garanties===============', this.garanties);
+        
       }
     });
 
@@ -161,6 +170,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
       if (value) {
         this.acteList = value.slice();
         this.acteListFilter = this.acteList;
+        console.log('=======acteList=============', this.acteList);
       }
     });
     this.statusObject$ = this.store.pipe(select(status));
@@ -189,7 +199,9 @@ export class ConventionComponent implements OnInit, OnDestroy {
 
   onCreate(){
     this.convention = this.conventionForm.value;
+    this.convention.sousActes = this.sousActeListFinal;
     if (this.convention.id){
+      console.log('=========================',this.convention);
       this.store.dispatch(conventionAction.updateConvention(this.convention));
     }else{
     this.store.dispatch(conventionAction.createConvention(this.convention));
@@ -198,6 +210,9 @@ export class ConventionComponent implements OnInit, OnDestroy {
     this.displayActe = false;
     this.displaySousActe = false;
     this.convention = {};
+    this.sousActeListFinal = [];
+    this.displayFormConvention = false;
+    this.displayFormConventionUpdate = false;
   }
   changeGarantie($event) {
     this.acteListFilter = this.acteList.filter(ele => ele.idTypeGarantie === $event.value.id);
@@ -215,14 +230,15 @@ export class ConventionComponent implements OnInit, OnDestroy {
   }
 
   editer(convention: Convention) {
-  console.log(convention);
+  
+  this.displayFormConventionUpdate = true;
   //this.conventionForm.patchValue(convention);
   const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
   const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
-  this.conventionForm.patchValue({montant: convention.montant,
+  this.conventionForm.patchValue({delai: convention.delai, montant: convention.montant,
     prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
   dateEffet: new Date(convention.dateEffet), acte, garantie});
-  this.displayFormConvention = true;
+ // this.displayFormConvention = true;
   this.displaySousActe = true;
   this.displayActe = true;
   }
@@ -270,6 +286,38 @@ export class ConventionComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  onRowEditInitPrime(sousActe: SousActe) {
+    this.clonedSousActe[sousActe.id] = {...sousActe};
+  }
+
+  onRowEditSavePrime(sousActe: SousActe) {
+    console.log(sousActe);
+    delete this.clonedSousActe[sousActe.id];
+    
+    this.sousA = this.sousActeListFinal.find(sous=>sous.id === sousActe.id);
+    console.log(this.sousA);
+    if(this.sousA?.id) {
+      this.sousActeListFinal.forEach(sous=>{
+        if(sous.id == sousActe.id) {
+          sous = sousActe;
+        }
+      });
+    } else {
+      this.sousActeListFinal.push(sousActe);
+    }
+      
+    
+    
+}
+
+ onRowEditCancelSousActe(sousActe: SousActe, index: number) {
+  this.sousActes[index] =
+      this.clonedSousActe[sousActe.id];
+  delete this.clonedSousActe[sousActe.id];
+  this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== sousActe.id);
+} 
+
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
