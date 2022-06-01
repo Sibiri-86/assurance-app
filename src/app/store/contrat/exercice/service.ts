@@ -20,6 +20,15 @@ export class ExerciceService {
 	);
   }
 
+  $getAllExercices(): Observable<Array<Exercice>> {
+	  // @FIXME: post request
+     
+	  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/findall`).pipe(
+		map((response: Array<Exercice>) => response)
+		// catchError(this.handleError())
+	);
+}
+
   getLastExercice(policeId: string): Observable<any> {
 	console.log('police ID === ' + policeId);
 	return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/last-element`,

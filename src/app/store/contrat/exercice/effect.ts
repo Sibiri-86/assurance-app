@@ -30,6 +30,20 @@ export class ExerciceEffects {
 			)
 		));
 
+		findExercices$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(featureActions.loadExercices),
+			mergeMap(() =>
+				this.exerciceService.$getAllExercices().pipe(
+					switchMap(value => [
+						// GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+						featureActions.setExerciceList({exerciceList: value})
+					]),
+					catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+				)
+			)
+		));
+
 
 		findLastExerciceByPolice$ = createEffect(() =>
 		this.actions$.pipe(

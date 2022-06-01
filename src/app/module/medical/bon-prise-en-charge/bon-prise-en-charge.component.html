@@ -152,54 +152,53 @@
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">
                 <p-fieldset legend="Information" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
+                        <div class="p-field p-col">
                             <label for="medecin">Type bon</label>
                             <p-dropdown inputId="bon"  [filter]="true"
                                         showClear="true" [options]="typeBon"
                                         formControlName="typeBon"  [autoDisplayFirst]="false"
                                         ></p-dropdown>
                         </div>
+
+                        <div class="p-field p-col">
+                            <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
+                            <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
+                            <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                        </div>
                         
                     </div>
                         
                 <div class="p-fluid p-formgrid p-grid">
                     
-
-                    <div class="p-field p-col">
-                        <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
-                        <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
-                    </div>
-                    
-                    <div class="p-field p-col">
-                        <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                        <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
-                    </div>
                     
                     <div class="p-field p-col">
                         <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
                         <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                     </div>
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Nom</label>
+                        <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Prenom</label>
+                        <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
+                    </div>
                     
                 </div>
                     
                 <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col">
-                            <label for="nomAdherent">Nom</label>
-                            <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
-                        </div>
-                        
-                        <div class="p-field p-col">
-                            <label for="nomAdherent">Prenom</label>
-                            <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
-                        </div>
+                       
                         
                         <div class="p-field p-col-4">
                             <label for="groupeAdherent">Numero groupe</label>
                             <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
                         </div>
-                    </div>
-                    <div class="p-fluid p-formgrid p-grid">
-                        
+
                         <div class="p-field p-col-4">
                             <label for="policeAdherent">Numero police</label>
                             <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" pInputText>
@@ -211,6 +210,10 @@
                                         formControlName="prestataire"  [autoDisplayFirst]="false"
                                         optionLabel="libelle"></p-dropdown>
                         </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        
+                        
                         <div class="p-field p-col-4">
                             <label for="souscripteur">Souscripteur</label>
                             <input id="souscripteurAdherent" class="champ" type="text" formControlName="souscripteur" pInputText>

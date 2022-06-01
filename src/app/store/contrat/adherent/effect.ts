@@ -178,6 +178,21 @@ this.actions$.pipe(
 )
 );
 
+findAdherents$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.findAdherents),
+    mergeMap(({exercice}) =>
+        this.AdherentService.findAll(exercice).pipe(
+            switchMap(value => [
+                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                featureActions.setAdherent(value)
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
 /**import photo par lot */
 importPhotosAdherentLot$ = createEffect(() =>
 this.actions$.pipe(
