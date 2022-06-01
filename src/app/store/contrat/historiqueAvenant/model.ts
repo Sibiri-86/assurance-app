@@ -81,6 +81,8 @@ export interface HistoriqueAvenantList {
     historiqueAvenantListWithoutActive?: Array<HistoriqueAvenant>;
 }
 
+
+
 export class AvenantModification {
     adherants?: Array<Adherent>;
     groupes?: Array<Groupe>;

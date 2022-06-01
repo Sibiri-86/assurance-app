@@ -26,7 +26,7 @@
             <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
         </div>
 
-            <div class="p-col-4" *ngIf="etat === 'CREATE'">
+            <div class="p-col-4 p-mb-3" *ngIf="etat === 'CREATE'">
                 <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                 <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                             [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
@@ -92,7 +92,7 @@
                             </p-dropdown>
                         </div> -->
                         <div class="p-field p-col-4">
-                            <label for="nom">Numéro de l'avenant chez le garant<sup style="color: red; font-weight: bold;"></sup></label>
+                            <label for="nom">Numéro de l'avenant chez le garant<sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <input id="numero" type="number" min="0" formControlName="numero" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">

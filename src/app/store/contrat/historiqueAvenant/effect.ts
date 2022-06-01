@@ -123,7 +123,7 @@ export class HistoriqueAvenantEffects {
 
     getHistoriqueAvenantWithoutActive$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(featureActions.loadHistoriquePlafondActeWithoutActive),
+            ofType(featureActions.loadHistoriqueAvenant),
             mergeMap(({policeId}) =>
                 this.historiqueAvenantService.getHistoriqueAvenantWithoutActive(policeId).pipe(
                     switchMap(value => [

@@ -144,6 +144,12 @@ export class AvenantIncorporationComponent implements OnInit{
             }
         });
         this.loadGoupeByPolice();
+            if(this.etat === 'CREATE') {
+                this.loadExerciceByPolice(this.police);
+            }
+    }
+
+    loadLastExerciceOfPolice() {
         this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
             this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
             this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
@@ -159,7 +165,6 @@ export class AvenantIncorporationComponent implements OnInit{
                     }
                 }
             );
-            this.loadExerciceByPolice(this.police);
     }
     constructor(
         private formBuilder: FormBuilder,
@@ -241,8 +246,8 @@ export class AvenantIncorporationComponent implements OnInit{
             debut: new FormControl('', [Validators.required]),
             fin: new FormControl('', [Validators.required]),
             actived: new FormControl('', [Validators.required]),
-            typeDuree: new FormControl('', [Validators.required]),
-            duree: new FormControl('', [Validators.required]),
+            // typeDuree: new FormControl('', [Validators.required]),
+            // duree: new FormControl('', [Validators.required]),
         });
     }
 
@@ -261,6 +266,11 @@ export class AvenantIncorporationComponent implements OnInit{
             console.log('---------------avenantId------------------' + this.avenantId);
             this.loadGoupeByPolice();
         }
+
+        if(this.etat === 'CREATE') {
+            this.loadLastExerciceOfPolice();
+        }
+        
     }
 
     addAdherentFamilleToList(): void {
@@ -535,6 +545,7 @@ export class AvenantIncorporationComponent implements OnInit{
             this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
                 (res: HistoriqueAvenant) => {
                     this.historiqueAvenant1 = res;
+                    console.log('this avenant arrived', this.historiqueAvenant1);
                     this.historiqueAvenantAdherants = res.historiqueAvenantAdherants;
                     this.myForm.setValue({
                         id: res.id,
@@ -547,12 +558,16 @@ export class AvenantIncorporationComponent implements OnInit{
                         fraisAccessoires: res.fraisAccessoires
                     });
                     this.exercice = res.exercice;
-                    this.exerciceForm.setValue({
+                    console.log('this update exercice', this.exercice);
+                    this.lastExerciceForm.setValue({
                         id: res.exercice.id,
                         debut: res.exercice.debut,
                         fin: res.exercice.fin,
                         actived: res.exercice.actived
                     });
+                    /* this.customForm.setValue({
+                        groupe: res.groupe.libelle
+                    }); */
                     // this.viewListeEdit = true;
                 }
             );

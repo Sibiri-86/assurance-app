@@ -2310,6 +2310,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   setPolice(police: Police) {
     this.policeItem = police;
+    console.log('................police............................', police);
     this.historiqueAvenantListWithoutActiveList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id})));
     this.store.dispatch(historiqueAvenantSelector.historiqueAvenantListWithoutActive({policeId: this.policeItem.id}));
     this.historiqueAvenantListWithoutActiveList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

@@ -48,7 +48,7 @@
                             <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
                             <p-calendar id="fin" [showIcon]="true" formControlName="fin"
                                         dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar>
+                                        appendTo="body" [disabled]="true"></p-calendar>
                         </div>
                     </div>
                 </form>
@@ -1016,13 +1016,13 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <!--<th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>-->
-                        <th style="width: 7rem">Matricule</th>
-                        <th pSortableColumn="groupe" style="width: 12rem">Groupe<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="prenom" >Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="prenom" style="width: 9rem" >Genre<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="width: 12rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="width: 12rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th style="width: 5rem">Matricule</th>
+                        <th pSortableColumn="groupe" style="width: 7rem">Groupe<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 15rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 15rem">Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 5rem" >Genre<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 7rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 5rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
                         <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
                     </tr>
                 </ng-template>

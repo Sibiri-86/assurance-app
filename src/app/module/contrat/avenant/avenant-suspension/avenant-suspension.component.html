@@ -1,22 +1,29 @@
 <div class="card">
     <div class="p-grid">
         <div class="p-col-12">
-            <p-fieldset legend="Exercice" toggleable="true" *ngIf="!isRenouv">
-                <form [formGroup]="exerciceForm">
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="lastExerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
                             <label for="debit">Date d'effet</label>
-                            <input id="debit" type="date" formControlName="debut" pInputText disabled="true">
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
                         </div>
                         <div class="p-field p-col-6">
                             <label for="fin">Date d'échéance</label>
-                            <input id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                            <input id="fin" class="exo" type="date" formControlName="fin" pInputText disabled="true">
                         </div>
                     </div>
                 </form>
             </p-fieldset>
             <p-fieldset legend="Avenant" toggleable="true">
                 <form [formGroup]="myForm" *ngIf="!isRenouv">
+                    <div class="p-col-6" *ngIf="etat === 'CREATE'">
+                        <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+                        <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                    [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)"
+                                    [ngModelOptions]="{standalone: true}">
+                        </p-dropdown>
+                    </div>
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
                             <label for="numero">Numéro de l'avenant chez le garant <sup style="color: red; size: 1.7em">*</sup></label>
@@ -29,7 +36,7 @@
                                         appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-6">
-                            <label for="observation">Motif</label>
+                            <label for="observation">Motif<sup style="color: red; size: 1.7em">*</sup></label>
                             <input id="observation" type="text" required formControlName="observation" pInputText>
                         </div>
                         <div class="p-field p-col-6">
@@ -46,9 +53,9 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="historiqueAveantAdherants" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="historiqueAveantAdherantsByExercice" [rows]="10" [paginator]="true"
                      [globalFilterFields]="['adherent.numero','adherent.nom','adherent.prenom','territorialite.libelle']"
-                     [rowHover]="true" dataKey="adherent.numero" [(selection)]="adherantSuspendds"
+                     [rowHover]="true" dataKey="adherent?.numero" selectionMode="single" (onRowUnselect)="onRowUnselect()" [(selection)]="adherantSuspendds"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
@@ -77,19 +84,19 @@
                         <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Groupe<p-sortIcon field="adresseEmail"></p-sortIcon></th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
                         <th>Date de suspension</th>
                         <th>Status</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-historiqueAveantAdherant>
+                <ng-template pTemplate="body" let-historiqueAveantAdherant let-rowIndex="rowIndex">
                     <tr>
                         <td>
-                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)"
-                            ></p-checkbox>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant, rowIndex)"
+                            [disabled]="etat === 'VIEW'"></p-checkbox>
                         </td>
-                        <td>{{historiqueAveantAdherant.adherent.numero}}</td>
+                        <td >{{historiqueAveantAdherant.adherent.numero}}</td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom | upercase}}</span>
 
                         </td>
@@ -122,7 +129,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{historiqueAveantAdherants ? historiqueAveantAdherants.length : 0 }} adherents au total.
+                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} adherents au total.
                     </div>
                 </ng-template>
             </p-table>
@@ -142,7 +149,7 @@
             </div>
             <div class="p-field p-col-2 p-ac-center">
                 <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
-                        class="p-button p-button-success" type="button" (click)="createAvenantSuspension()">
+                        class="p-button p-button-success" [disabled]="myForm.invalid || adherantSuspendds.length <= 0" type="button" (click)="createAvenantSuspension()">
                 </button>
             </div>
         </div>

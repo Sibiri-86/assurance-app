@@ -210,7 +210,7 @@
             <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="!historiqueAveantAdherant?.selected || etat === 'VIEW'">
+                [disabled]="etat === 'VIEW'">
                 </button>
             </div>
         </div>

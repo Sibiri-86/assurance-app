@@ -2075,7 +2075,7 @@
                                         </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-dollar" pTooltip="Calculer prime" (click)="calculerPrime(rowdata)"
-                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowData?.historiqueAvenantPrimes?.length > 1">
+                                                    class="p-button-rounded p-button-help p-mr-2" [disabled]="rowdata.valide">
                                             </button>
                                         </div>
                                         <div class="p-col-">
@@ -2320,7 +2320,7 @@
 
               <div class="p-grid">
                 <div class="p-col-4">
-                    <label for="fraisBadge">Exercice</label>
+                    <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
                     <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                                 [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findAdherentListByExerciceId(curentExercice)">
                     </p-dropdown>
@@ -2391,7 +2391,7 @@
                         <th pSortableColumn="genre" style="width: 3rem">Genre
                             <p-sortIcon field="genre.libelle"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="dateSortie" style="width: 6rem">Date de sortie
+                        <th pSortableColumn="dateSortie" style="width: 6rem">Date de l'action
                             <p-sortIcon field="dateSortie"></p-sortIcon>
                         </th>
                     </tr>
@@ -2400,6 +2400,7 @@
                     <tr [ngClass]="{'colorZone': !adherent?.adherentPrincipal}">
                         <td *ngIf="adherent?.signeAdherent ==='*'"><span style="color: blue; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
                         <td *ngIf="adherent?.signeAdherent ==='-'"><span style="color: red; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent ==='+'"><span style="color: yellowgreen; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
                         <td *ngIf="adherent?.signeAdherent === null"><span style="color: blue; font-size: 1.3em; font-weight: bold;" class="p-column-title">{{adherent?.signeAdherent}}</span></td>
                         <td><span class="p-column-title">{{adherent?.numero}}</span></td>
                         <td><span class="p-column-title">{{adherent?.matriculeGarant}}</span></td>
@@ -2420,8 +2421,11 @@
                         </td>
                         <td *ngIf="adherent?.genre?.libelle === 'Feminin'"><span class="p-column-title">F</span></td>
                         <td *ngIf="adherent?.genre?.libelle === 'Masculin'"><span class="p-column-title">M</span></td>
-                        <td *ngIf="adherent?.dateSortie"><span style="color: red; font-size: 1em;" class="p-column-title">{{adherent?.dateSortie | formatTableValue : 'date'}}</span></td>
-                        <td *ngIf="!adherent?.dateSortie"><span style="color: blue; font-size: 0.8em;">Pris(e) en compte</span></td>
+                        <td *ngIf="adherent?.signeAdherent ==='-'"><span style="color: red; font-size: 1em;" class="p-column-title">{{adherent?.dateSortie | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent ==='+'"><span style="color: yellowgreen; font-size: 1em;" class="p-column-title">{{adherent?.dateIncorporation | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent ==='*'"><span style="color: blue; font-size: 1em;">{{adherent?.exercice?.debut | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="adherent?.signeAdherent === null"><span style="color: blue; font-size: 1em;">{{adherent?.exercice?.debut | formatTableValue : 'date'}}</span></td>
+
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">

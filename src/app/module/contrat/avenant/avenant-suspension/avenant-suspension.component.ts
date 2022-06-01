@@ -47,6 +47,7 @@ export class AvenantSuspensionComponent implements OnInit {
   retirer = 'SUSPENDU';
   myForm: FormGroup;
   newForm: FormGroup;
+  lastExerciceForm: FormGroup;
   historiqueAvenant: HistoriqueAvenant = {};
   @Input() isRenouv: boolean;
   private selectedFile: File;
@@ -61,6 +62,12 @@ export class AvenantSuspensionComponent implements OnInit {
   private exerciceForm: FormGroup;
   @Input() avenantId: string;
   @Input() etat: string;
+  exerciceList$: Observable<Array<Exercice>>;
+  exerciceList: Array<Exercice>;
+  historiqueAveantAdherantsByExercice: Array<HistoriqueAvenantAdherant> = [];
+  historiqueAveantAdherantsByExerciceTMP: Array<HistoriqueAvenantAdherant> = [];
+  curentExercice: Exercice = {};
+
 
   constructor(
       private store: Store<AppState>,
@@ -97,7 +104,10 @@ export class AvenantSuspensionComponent implements OnInit {
       }
     });
     this.groupe = {};
-    this.findListeActualisee(this.police);
+    if(this.etat === 'CREATE') {
+      this.findListeActualisee(this.police);
+    }
+    
 
     /* this.historiqueAvenantService.getHistoriqueAvenantAdherantsByPoliceAndUnsuspend(this.police.id).subscribe(
         (res) => {
@@ -109,6 +119,16 @@ export class AvenantSuspensionComponent implements OnInit {
 
     this.loadActivedExercice(this.police);
     this.updateAvenant(this.avenantId);
+    this.lastExerciceForm = this.formBuilder.group({
+      id: new FormControl(null),
+      debut: new FormControl('', [Validators.required]),
+      fin: new FormControl('', [Validators.required]),
+      actived: new FormControl('', [Validators.required]),
+  }); 
+  if(this.etat === 'CREATE') {
+    this.loadExerciceByPolice(this.police);
+    this.loadLastExercice();
+  }
   }
 
 
@@ -147,14 +167,14 @@ export class AvenantSuspensionComponent implements OnInit {
   init() {
     this.myForm = this.formBuilder.group({
       id: new FormControl(null),
-      numero: new FormControl(null, [Validators.required]),
+      numero: new FormControl(null),
       dateAvenant: new FormControl(null, [Validators.required]),
-      dateEffet: new FormControl(null, [Validators.required]),
-      observation: new FormControl(null),
-      typeDemandeur: new FormControl(null, [Validators.required]),
+      // dateEffet: new FormControl(null, [Validators.required]),
+      observation: new FormControl(null, [Validators.required]),
+      // typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
-      fraisBadges: new FormControl(0, [Validators.required]),
-      fraisAccessoires: new FormControl(0, [Validators.required]),
+      /* fraisBadges: new FormControl(0, [Validators.required]),
+      fraisAccessoires: new FormControl(0, [Validators.required]), */
     });
     this.newForm = this.formBuilder.group({
       groupe: new FormControl(null, [Validators.required]),
@@ -163,10 +183,27 @@ export class AvenantSuspensionComponent implements OnInit {
     // this.adherantList = [];
   }
 
-  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant, rowIndex: number): void {
     const value: boolean = historiqueAvenantAdherant.selected;
     console.log(historiqueAvenantAdherant.selected);
     historiqueAvenantAdherant.selected = value;
+    if(historiqueAvenantAdherant.selected) {
+      this.adherantSuspendds.push(historiqueAvenantAdherant);
+      console.log(this.adherantSuspendds);
+      /* this.myForm.patchValue({
+        
+    }); */
+    } else {
+      this.adherantSuspendds = this.adherantSuspendds.filter(ad=>ad.id !== historiqueAvenantAdherant.id);
+    //  this.onRowUnselect(rowIndex);
+    }
+    
+  }
+
+  onRowUnselect(rowIndex: number){
+    this.adherantSuspendds.splice(rowIndex);
+    console.log(this.adherantSuspendds);
+
   }
 
   createAvenantSuspension(): void {
@@ -175,11 +212,13 @@ export class AvenantSuspensionComponent implements OnInit {
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.SUSPENSION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
-    this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
-    this.historiqueAvenant.exercice = this.exercice;
+    // this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
+    this.historiqueAvenant.exercice = this.curentExercice;
+    console.log('****this.historiqueAvenant.exercice****', this.historiqueAvenant.exercice);
     this.historiqueAvenant.police = this.police;
     this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
     this.historiqueAvenant.historiqueAvenantAdherants = this.adherantSuspendds;
+    console.log('****this.historiqueAvenant.historiqueAvenantAdherants****', this.adherantSuspendds);
     this.eventEmitterSuspension.emit(this.historiqueAvenant);
     this.init();
   }
@@ -205,7 +244,7 @@ export class AvenantSuspensionComponent implements OnInit {
     this.myForm.patchValue({
       typeDemandeur: this.myForm.get('demandeur').value.value
     });
-    console.log(this.myForm.get('typeDemandeur').value);
+    // console.log(this.myForm.get('typeDemandeur').value);
   }
 
   compareDate(): void {
@@ -257,8 +296,8 @@ export class AvenantSuspensionComponent implements OnInit {
         (res: HistoriqueAvenant) => {
             this.historiqueAvenant = res;
             this.police = res.police;
-            this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-            this.historiqueAveantAdherants.forEach(haa => {
+            this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
+            this.historiqueAveantAdherantsByExercice.forEach(haa => {
               if(haa.id) {
                 haa.dateRetrait = new Date(haa.dateRetrait);
               } else{
@@ -271,24 +310,71 @@ export class AvenantSuspensionComponent implements OnInit {
                 dateAvenant: new Date(res.dateAvenant),
                 observation: res.observation,
                 demandeur: res.typeDemandeur,
-                typeDemandeur: res.typeDemandeur,
+                /* typeDemandeur: res.typeDemandeur,
                 fraisBadges: 0,
                 fraisAccessoires: 0,
-                dateEffet: new Date(res.dateAvenant),
+                dateEffet: new Date(res.dateAvenant), */
             });
             if(this.etat === 'VIEW') {
               this.myForm.disable();
             }
             this.exercice = res.exercice;
-            this.exerciceForm.patchValue({
+            this.lastExerciceForm.patchValue({
                 id: res.exercice.id,
-                debut: new Date(res.exercice.debut),
-                fin: new Date(res.exercice.fin),
+                debut: res.exercice.debut,
+                fin: res.exercice.fin,
                 actived: res.exercice.actived
             });
             console.log('avenant de retrait ==== ', this.historiqueAvenant);
         }
     );
     // this.viewListeEdit = true;
+}
+
+loadExerciceByPolice(police: Police): void {
+  console.log('policeId === ' + police.id);
+  this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+  this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+  this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+      (value => {
+        this.exerciceList = value;
+        console.log('liste === ');
+        console.log(this.exerciceList);
+      })
+  );
+  // this.exerciceList = [];
+}
+
+loadLastExercice() {
+  this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+          this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+          this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+              (res) => {
+                  this.exercice = res;
+                  console.log('******this.exercice*******', this.exercice);
+                  if (this.exercice) {
+                      this.lastExerciceForm.patchValue({
+                          debut: this.exercice.debut,
+                          fin: this.exercice.fin
+                          // actived: this.exercice.actived,
+                      });
+                  }
+              }
+          );
+}
+
+findListeActualiseeByExerciceId(currentExercice: Exercice) {
+  console.log('curentExercice id 2=== ' + currentExercice.id);
+  if (currentExercice) {
+    console.log('curentExercice id 1=== ' + currentExercice.id);
+    this.historiqueAvenantAdherantService.getListActualiseeByExerciceId(currentExercice.id).subscribe(
+        (res) => {
+          this.historiqueAveantAdherantsByExercice = res;
+          this.historiqueAveantAdherantsByExerciceTMP = res;
+        }
+    );
+  } else {
+    this.findListeActualisee(this.police);
+  }
 }
 }

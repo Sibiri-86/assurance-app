@@ -249,7 +249,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.exerciceForm = this.formBuilder.group({
             id: new FormControl(null),
             debut: new FormControl('', [Validators.required]),
-            fin: new FormControl({value: '', disabled: true}, [Validators.required]),
+            fin: new FormControl('', [Validators.required]),
             actived: new FormControl('', [Validators.required]),
             typeDuree: new FormControl('', [Validators.required]),
             duree: new FormControl('', [Validators.required]),
@@ -1509,8 +1509,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                         debut: res.historiqueAvenant.exercice.debut,
                         fin: res.historiqueAvenant.exercice.fin,
                         actived: res.historiqueAvenant.exercice.actived,
-                        typeDuree: res.historiqueAvenant.exercice.typeDuree,
-                        duree: res.historiqueAvenant.exercice.duree,
+                        // typeDuree: res.historiqueAvenant.exercice.typeDuree,
+                        // duree: res.historiqueAvenant.exercice.duree,
                     });
                     this.exerciceForm.disable();
                     if (this.etat === 'VIEW') {
