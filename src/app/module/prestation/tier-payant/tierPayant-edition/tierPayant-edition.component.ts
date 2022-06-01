@@ -392,7 +392,7 @@ export class TierPayantEditionComponent implements OnInit {
         console.log("==================",event);
           this.adherentSelected = event.value;
           console.log("==================",this.adherentSelected);
-          console.log("==================",this.bonPriseEnChargeList);
+          console.log("====bonPriseEnChargeList==============",this.bonPriseEnChargeList);
           console.log("==================",this.prestataireSelected);
 
           this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
@@ -467,6 +467,10 @@ export class TierPayantEditionComponent implements OnInit {
     voirPrestation(pref?: SinistreTierPayant, isDetail?: boolean) {
         console.log('****************pref****************', pref);
         console.log('****************isDetail****************', isDetail);
+        pref.prestation?.forEach(presta => {
+            this.bonPriseEnChargeList.push(presta.bonPriseEnCharge);
+        })
+        
         if (this.displayFormPrefinancement) {
             this.displayFormPrefinancement = false;
             this.isDetail = false;
@@ -507,16 +511,17 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));""
                 for (const pr of pref.prestation) {
                    
-                    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+                  this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
                    this.store.dispatch(featureActionAdherent.findAdherents({exercice: pr.exercice.id}));
                    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) =>{
                        if(value) {
-                           console.log('=============adh======',value.slice());
+                         //  console.log('=============adh======',value.slice());
                            this.adherentList = value.slice();
                           
                        }
            
                    }); 
+                
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
                     this.prestation.push(formPrestation);
