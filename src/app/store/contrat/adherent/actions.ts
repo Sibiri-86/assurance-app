@@ -11,6 +11,7 @@ export const loadAdherentAll = createAction('[App Init] load Adherent all', prop
 export const setAdherent = createAction('[App Init] set Adherent',  props<AdherentList>());
 export const importAdherent = createAction('[App Init] import Adherent',  props<{file: File}>());
 export const searchAdherent = createAction('[App Init] search Adherent',  props<{numero: number}>());
+export const findAdherents =  createAction('[App Init] find all Adherent',  props<{exercice: string}>());
 export const selectedAdherentForSearch = createAction('[App Init] selected for search Adherent',  props<AdherentResearchReponse>());
 export const createAdherentwithFamille = createAction('[App Init] Create Adherent with famille', props<AdherentFamille>());
 export const importPhotosAdherent = createAction('[App Init] import photos adherent',

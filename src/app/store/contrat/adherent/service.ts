@@ -164,6 +164,18 @@ private handleError<T>() {
         }
     }
 
+
+    findAll(exercice: string): Observable<AdherentList> {
+      console.log(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/findAll/${exercice}`);
+      // @FIXME: post request
+     
+          return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/findAll/${exercice}`).pipe(
+              map((response: AdherentList) => response)
+              // catchError(this.handleError())
+          );
+    
+  }
+
     getAdherentPrincipalByPolice(policeId: string): Observable<Array<Adherent>> {
         // @FIXME: get request
         // adherent/liste-actualisee

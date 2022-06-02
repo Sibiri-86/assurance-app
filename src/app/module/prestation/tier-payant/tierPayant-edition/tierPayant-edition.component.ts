@@ -25,6 +25,7 @@ import {loadPrestataire} from '../../../../store/parametrage/prestataire/actions
 import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
 
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
+
 import * as tierPayantActions from '../../../../store/prestation/tierPayant/action';
 
 import {loadMedecin} from '../../../../store/parametrage/medecin/actions';
@@ -68,6 +69,10 @@ import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
+import { Exercice } from 'src/app/store/contrat/exercice/model';
+import * as exerciceSelector from 'src/app/store/contrat/exercice/selector';
+import * as featureExerciceAction from 'src/app/store/contrat/exercice/actions';
+
 
 
 @Component({
@@ -97,6 +102,7 @@ export class TierPayantEditionComponent implements OnInit {
     garanties: Array<Garantie>;
     garantieList$: Observable<Array<Garantie>>;
     adherentSelected: Adherent;
+    prestataireSelected: Prestataire = {};
     adherentSelected$: Observable<Adherent>;
     medecinListFilter: Array<SelectItem>;
     tierPayantList: Array<SinistreTierPayant> = [];
@@ -129,9 +135,14 @@ export class TierPayantEditionComponent implements OnInit {
     isDetail: boolean;
     editForm: FormGroup;
     typeAction: MenuItem[] = [];
+    adherentList: Array<Adherent>;
+    adherentList$: Observable<Array<Adherent>>;
     bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
     bonPriseEnChargeList: Array<BonPriseEnCharge>;
+    exerciceList$: Observable<Array<Exercice>>;
+    exerciceList: Array<Exercice>;
     plafondSousActe: CheckPlafond;
+    exerciceSelected: Exercice = {};
 
 
 
@@ -150,7 +161,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
         console.log('*******this.prefinancementModel*******', this.prefinancementModel);
-        this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
         // tslint:disable-next-line:max-line-length
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
@@ -168,6 +179,18 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantList.push(this.prefinancementModel);
         this.prestationList = [];
         this.prestationForm.reset();
+    }
+
+    loadAllAherents(exercice: string) {
+        this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.findAdherents({exercice}));
+        this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if(value) {
+                this.adherentList = value.slice();
+            }
+
+        })
+
     }
 
     ngOnInit(): void {
@@ -192,12 +215,12 @@ export class TierPayantEditionComponent implements OnInit {
             dateFacture: new FormControl('', Validators.required),
             prestataire: new FormControl('', Validators.required),
             numeroFacture: new FormControl('', Validators.required),
-            matriculeAdherent: new FormControl('', Validators.required),
+            matriculeAdherent: new FormControl(),
             dateDeclaration: new FormControl('', Validators.required),
             montantReclame: new FormControl('', Validators.required),
             bonPriseEnCharge: new FormControl(),
-            montantPaye: new FormControl({value: '', disabled: true}),
-            montantRestant: new FormControl({value: '', disabled: true})
+            montantPaye: new FormControl(),
+            montantRestant: new FormControl()
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -209,12 +232,13 @@ export class TierPayantEditionComponent implements OnInit {
                 }
             });
 
+
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
         this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
         this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
-                console.log(value);
+                console.log('=========value=============',value);
                 this.adherentSelected = value;
                 this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
                 this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
@@ -231,6 +255,13 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
                 this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
                     e.typeBon === TypeBon.PRISEENCHARGE);
+            }
+        });
+        this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+        this.store.dispatch(featureExerciceAction.loadExercices());
+        this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if(value) {
+                this.exerciceList = value.slice();
             }
         });
 
@@ -339,6 +370,37 @@ export class TierPayantEditionComponent implements OnInit {
         this.checkStatus();
     }
 
+    onRowSelectAdherent(event) {
+        this.exerciceSelected = event.value;
+        this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.findAdherents({exercice: event.value.id}));
+        this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) =>{
+            if(value) {
+                console.log('=============adh======',value.slice());
+                this.adherentList = value.slice();
+               
+            }
+
+        });
+    }
+    onRowSelectPrestataire(event)  {
+       
+          this.prestataireSelected = event.value;
+    }
+
+    onRowSelectBonAdherent(event) {
+        console.log("==================",event);
+          this.adherentSelected = event.value;
+          console.log("==================",this.adherentSelected);
+          console.log("====bonPriseEnChargeList==============",this.bonPriseEnChargeList);
+          console.log("==================",this.prestataireSelected);
+
+          this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
+            && bon.prestataire?.id === this.prestataireSelected.id);
+        
+    }
+
+
     selectActe(event){
         this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
         /* this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
@@ -371,7 +433,10 @@ export class TierPayantEditionComponent implements OnInit {
       });
     }
 
+   
+
     editerPrestation(pref: SinistreTierPayant) {
+        console.log(pref);
         this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
         this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
         this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
@@ -390,6 +455,8 @@ export class TierPayantEditionComponent implements OnInit {
         for (const pr of pref.prestation) {
             const formPrestation: FormGroup = this.createItem();
             formPrestation.patchValue(pr);
+            
+       
             this.prestation.push(formPrestation);
         }
         // this.prestationList = pref.prestation;
@@ -400,6 +467,10 @@ export class TierPayantEditionComponent implements OnInit {
     voirPrestation(pref?: SinistreTierPayant, isDetail?: boolean) {
         console.log('****************pref****************', pref);
         console.log('****************isDetail****************', isDetail);
+        pref.prestation?.forEach(presta => {
+            this.bonPriseEnChargeList.push(presta.bonPriseEnCharge);
+        })
+        
         if (this.displayFormPrefinancement) {
             this.displayFormPrefinancement = false;
             this.isDetail = false;
@@ -439,6 +510,18 @@ export class TierPayantEditionComponent implements OnInit {
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));""
                 for (const pr of pref.prestation) {
+                   
+                  this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+                   this.store.dispatch(featureActionAdherent.findAdherents({exercice: pr.exercice.id}));
+                   this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) =>{
+                       if(value) {
+                         //  console.log('=============adh======',value.slice());
+                           this.adherentList = value.slice();
+                          
+                       }
+           
+                   }); 
+                
                     const formPrestation: FormGroup = this.createItem();
                     formPrestation.patchValue(pr);
                     this.prestation.push(formPrestation);
@@ -487,10 +570,13 @@ export class TierPayantEditionComponent implements OnInit {
         }); */
     }
 
-    onRowSelectBon($event){
+    onRowSelectBon($event, index: number){
+       
         
-        this.prestation.clear();
+        
+           
         console.log($event.value);
+       
         for (const pr of $event.value.prestation) {
           const formPrestation: FormGroup = this.createItem();
           pr.id = null;
@@ -500,9 +586,47 @@ export class TierPayantEditionComponent implements OnInit {
           formPrestation.get('taux').setValue(pr.taux);
           formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
           formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
-          this.prestation.push(formPrestation);
+          
+          formPrestation.get('bonPriseEnCharge').setValue($event.value);
+          formPrestation.get('exercice').setValue(this.exerciceSelected);
+          formPrestation.get('adherent').setValue(this.adherentSelected);
+          
+          if(this.prestation.controls.length === 1){
+            
+            this.prestation.clear();
+            this.prestation.push(formPrestation);
+           
+          }
+          else {
+            
+            console.log("===============prestationindex2===========", this.prestation);
+            console.log("===============prestation1===========", this.prestation.controls.length);
+            console.log("===============prestation1===========", index);
+            
+           /*  for(const control of  this.prestation.controls) {
+                if(control?.value?. bonPriseEnCharge === $event.value) {
+                    console.log("Nulll");
+                    control.patchValue(formPrestation);
+                    console.log("===============control===========", control);
+                    console.log("===============formPrestation===========", formPrestation);
+                }
+            } */
+            this.prestation.controls[index] = formPrestation;
+            console.log("===============formPrestation===========", formPrestation);
+            console.log("===============prestationindex1===========", this.prestation);
+            
+           //  this.prestation.push(formPrestation);
+            
+          }
+          
           }
         this.displayFormPrefinancement = true;
+      }
+
+      voirAdherent(event){
+
+        console.log("==================",event);
+          this.adherentSelected = event.value;
       }
 
     // valider TierPayant
@@ -577,27 +701,37 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours(i: number) {
+        console.log("==================p", i);
         let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+    
+        myForm.patchValue({taux: myForm.value.adherent?.groupe.taux, sort: Sort.ACCORDE});
         if (this.prestationForm.get('prestation').value[i].nombreActe &&
             this.prestationForm.get('prestation').value[i].coutUnitaire) {
+
+
             myForm.patchValue({
             debours: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
             baseRemboursement: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
-            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100,
+            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100,
             //montantPaye: ((this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100) 
             // montantPaye: (this.prestationForm.get('prestation').value[i].montantPayeTMP) + +this.prestationForm.get('prestation').value[i].montantPaye
         });
         console.log('*****this.prefinancementList*******', this.prestationForm.get('prestation').value[i].montantRembourse);
+        console.log('*****this.count*******', this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire);
+        console.log('*****this.taux*******', (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100);
+
         console.log('*****this.montantPaye*******', this.prestationForm.get('prestation').value[i].montantPaye);
         }
         this.prefinancementModel = this.prestationForm.value;
         this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = this.adherentSelected;
+        this.prefinancementModel.adherent = myForm.value.adherent;
         this.tierPayantList.push(this.prefinancementModel);
         /* executer le controle de la prestation */
         console.log('*****this.prefinancementList*******', this.tierPayantList);
-        this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
+        this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.tierPayantList[0].prestation[i].montantRembourse);
+        this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
+       
+       /* this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
         this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (!value) {
@@ -609,7 +743,7 @@ export class TierPayantEditionComponent implements OnInit {
                 for (let j = 0; j < this.checkTierPayantResult.length; j++){
 
                     this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.checkTierPayantResult[j].montantRembourse);
-                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantRestant').value);
+                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
                     console.log('*****************this.prestationForm.getMontantPaye*****************', this.prestationForm.get('montantPaye').value);
                     console.log('*****************this.prestationForm.getMontantRestant*****************', this.prestationForm.get('montantRestant').value);
                     myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
@@ -619,7 +753,7 @@ export class TierPayantEditionComponent implements OnInit {
                     });
                 }
             }
-        });
+        });*/
         this.tierPayantList = [];
         this.prefinancementModel = {};
         // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
@@ -664,6 +798,10 @@ export class TierPayantEditionComponent implements OnInit {
             centreExecutant: new FormControl(null),
             historiqueAvenant: new FormControl(),
             montantPaye: new FormControl( ),
+            adherent: new FormControl( ),
+            exercice: new FormControl( ),
+            bonPriseEnCharge: new FormControl( ),
+
             /* montantReclame: new FormControl( ),
             montantRestant: new FormControl() */
         });

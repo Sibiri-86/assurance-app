@@ -364,6 +364,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     //this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
+    this.prestationForm.get('typeBon').setValue(pref.typeBon);
     this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);

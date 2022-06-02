@@ -1,3 +1,4 @@
+import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
 import { TypeReport } from '../../contrat/enum/model';
 import { Police } from '../../contrat/police/model';
@@ -15,6 +16,7 @@ export interface BonPriseEnCharge {
     status?: string;
     userCurent?: string;
     prestation?: Array<Prestation>;
+   typeBon?: TypeBon;
 }
 
 export interface ReportFile {

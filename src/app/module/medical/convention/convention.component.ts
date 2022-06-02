@@ -312,8 +312,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
 }
 
  onRowEditCancelSousActe(sousActe: SousActe, index: number) {
-  this.sousActes[index] =
-      this.clonedSousActe[sousActe.id];
+  this.sousActes[index] = this.clonedSousActe[sousActe.id];
   delete this.clonedSousActe[sousActe.id];
   this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== sousActe.id);
 } 
