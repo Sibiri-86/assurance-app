@@ -302,13 +302,13 @@
                                 
                                 <div class="p-field p-col-4">
                                     <label for="montantPaye" >Montant Saisie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber formControlName="montantPaye" mode="decimal" locale="fr-FR" 
+                                    <p-inputNumber formControlName="montantPaye" mode="decimal" locale="fr-FR"  [disabled]="true"
                                     placeholder="montant(s) saisi(s)"></p-inputNumber>
 
                                 </div>
                                 <div class="p-field p-col-4">
                                     <label for="montantRestant" >Montant restant<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR" 
+                                    <p-inputNumber formControlName="montantRestant" mode="decimal" locale="fr-FR"  [disabled]="true"
                                     placeholder="montant restant"></p-inputNumber>
 
                                 </div>

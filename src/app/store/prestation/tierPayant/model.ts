@@ -48,6 +48,9 @@ export interface SinistreTierPayant {
     prestataire?: Prestataire;
     etat?: TypeEtatSinistre;
     bonPriseEnCharge?: BonPriseEnCharge;
+    montantReclame?:number;
+    montantPaye?:number;
+    montantRestant?:number;
 }
 
 export interface Prestation {

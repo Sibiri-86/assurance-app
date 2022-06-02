@@ -161,7 +161,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementModel.adherent = this.adherentSelected;
         this.tierPayantList.push(this.prefinancementModel);
         console.log('*******this.prefinancementModel*******', this.prefinancementModel);
-        this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
         // tslint:disable-next-line:max-line-length
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
@@ -219,8 +219,8 @@ export class TierPayantEditionComponent implements OnInit {
             dateDeclaration: new FormControl('', Validators.required),
             montantReclame: new FormControl('', Validators.required),
             bonPriseEnCharge: new FormControl(),
-            montantPaye: new FormControl({value: '', disabled: true}),
-            montantRestant: new FormControl({value: '', disabled: true})
+            montantPaye: new FormControl(),
+            montantRestant: new FormControl()
         });
 
         this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -703,26 +703,35 @@ export class TierPayantEditionComponent implements OnInit {
     calculDebours(i: number) {
         console.log("==================p", i);
         let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+    
+        myForm.patchValue({taux: myForm.value.adherent?.groupe.taux, sort: Sort.ACCORDE});
         if (this.prestationForm.get('prestation').value[i].nombreActe &&
             this.prestationForm.get('prestation').value[i].coutUnitaire) {
+
+
             myForm.patchValue({
             debours: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
             baseRemboursement: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
-            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100,
+            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100,
             //montantPaye: ((this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100) 
             // montantPaye: (this.prestationForm.get('prestation').value[i].montantPayeTMP) + +this.prestationForm.get('prestation').value[i].montantPaye
         });
         console.log('*****this.prefinancementList*******', this.prestationForm.get('prestation').value[i].montantRembourse);
+        console.log('*****this.count*******', this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire);
+        console.log('*****this.taux*******', (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100);
+
         console.log('*****this.montantPaye*******', this.prestationForm.get('prestation').value[i].montantPaye);
         }
         this.prefinancementModel = this.prestationForm.value;
         this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = this.adherentSelected;
+        this.prefinancementModel.adherent = myForm.value.adherent;
         this.tierPayantList.push(this.prefinancementModel);
         /* executer le controle de la prestation */
         console.log('*****this.prefinancementList*******', this.tierPayantList);
-        this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
+        this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.tierPayantList[0].prestation[i].montantRembourse);
+        this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
+       
+       /* this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
         this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (!value) {
@@ -734,7 +743,7 @@ export class TierPayantEditionComponent implements OnInit {
                 for (let j = 0; j < this.checkTierPayantResult.length; j++){
 
                     this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.checkTierPayantResult[j].montantRembourse);
-                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantRestant').value);
+                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
                     console.log('*****************this.prestationForm.getMontantPaye*****************', this.prestationForm.get('montantPaye').value);
                     console.log('*****************this.prestationForm.getMontantRestant*****************', this.prestationForm.get('montantRestant').value);
                     myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
@@ -744,7 +753,7 @@ export class TierPayantEditionComponent implements OnInit {
                     });
                 }
             }
-        });
+        });*/
         this.tierPayantList = [];
         this.prefinancementModel = {};
         // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
