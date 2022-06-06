@@ -147,9 +147,33 @@
                 <p-fieldset legend="Information du prestataire" toggleable="true">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="matriculeAdherent">Prestataire</label>
+                            <label for="matriculeAdherent">Libélle</label>
                             &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.libelle}}
                              </div>
+                             <div class="p-field p-col">
+                             <label for="matriculeAdherent">Code</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.code}}
+                             </div>
+                             <div class="p-field p-col">
+                             <label for="matriculeAdherent">Description</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.description}}
+                             </div>
+                         </div>
+                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Tel</label>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.tel}}
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="matriculeAdherent">Localite</label>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.locale}}
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <label for="matriculeAdherent">Responsable</label>
+                                           &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.responsable}}
+                                            </div>
+                                 </div>
+                                 <div class="p-fluid p-formgrid p-grid">
                              <div class="p-field p-col">
                                 <label for="matriculeAdherent">Date Effet</label>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail.dateEffet  | formatTableValue : 'date'}}
