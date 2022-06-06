@@ -18,7 +18,7 @@ import { Taux } from '../../../store/parametrage/taux/model';
 import { loadTaux } from '../../../store/parametrage/taux/actions';
 import * as tauxSelector from '../../../store/parametrage/taux/selector';
 import { Sort } from '../../common/models/sort.enum';
-import { loadGarantie, loadGaranties } from '../../../store/parametrage/garantie/actions';
+import { loadGarantie, loadGaranties, loadGarantiesMontant, loadGarantiesMontantDetail } from '../../../store/parametrage/garantie/actions';
 import * as garantieSelector from '../../../store/parametrage/garantie/selector';
 import { loadPrestataire} from '../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
@@ -62,6 +62,7 @@ import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge
 import { Convention } from 'src/app/store/medical/convention/model';
 import * as conventionSelector from 'src/app/store/medical/convention/selector';
 import * as conventionAction from 'src/app/store/medical/convention/actions';
+import { GarantieService } from 'src/app/store/parametrage/garantie/service';
 
 
 @Component({
@@ -88,7 +89,9 @@ export class ConventionComponent implements OnInit, OnDestroy {
   produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
   acteListFilter: Array<Acte>;
   garanties: Array<Garantie>;
+  garantieListDetail: Array<Garantie>;
   garantieList$: Observable<Array<Garantie>>;
+  garantieList1$: Observable<Array<Garantie>>;
   conventionForm: FormGroup;
   cols: any[];
   conventionList$: Observable<Array<Convention>>;
@@ -99,17 +102,21 @@ export class ConventionComponent implements OnInit, OnDestroy {
   statusObject$: Observable<Status>;
   displayActe = false;
   displaySousActe = false;
+  displayEdit = false;
   displayFormConventionUpdate = false;
   private clonedSousActe: { [s: string]: SousActe; } = {};
   sousActes: Array<SousActe>;
   sousActeListFinal: SousActe[] = [];
   sousA: SousActe = {};
+  conventionDetail: Convention = {};
+  displayFDetailConvention = false;
 
 
   constructor( private store: Store<AppState>,
                private confirmation: ConfirmationService,
                private formBuilder: FormBuilder,
                private messageService: MessageService,
+               private garantieService: GarantieService,
                private breadcrumbService: BreadcrumbService) {
      this.breadcrumbService.setItems([{ label: 'Convention' }]);
 }
@@ -181,6 +188,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
 
   addConvention() {
     this.displayFormConvention = true;
+    this.displayEdit = false;
     this.conventionForm.reset();
   }
 
@@ -195,6 +203,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
     this.displayFormConvention = false;
     this.displaySousActe = false;
     this.displayActe = false;
+    this.displayEdit = false;
   }
 
   onCreate(){
@@ -228,19 +237,50 @@ export class ConventionComponent implements OnInit, OnDestroy {
     console.log($event.value);
     this.conventionListFilter = this.conventionList.filter(element1 => element1.prestataire.id === $event.value.id);
   }
+  detail(convention: Convention) {
+    this.conventionDetail = convention;
+    this.sousActeListFilter = convention.sousActes;
+    console.log("=========convention==========", convention);
+    this.displayFDetailConvention = true;
+    this.garantieService.$findFamilleActeSousActeMontantDetail(this.sousActeListFilter).subscribe((value) => {
+      if (value) {
+        this.garantieListDetail = value.typeGarantieDtoList;
+        console.log("=========value==========", value);
+        
+        
+      }
+    });
+
+   
+  }
 
   editer(convention: Convention) {
+  this.displayEdit = true;
+    this.sousActeListFilter = convention.sousActes;
+   // this.sousActeListFinal = convention.sousActes;
+    console.log("=========convention==========", convention);
   
-  this.displayFormConventionUpdate = true;
+  
+    this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
+    this.store.dispatch(loadGarantiesMontant({sousActes:this.sousActeListFilter}));
+    this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.garanties = value.slice();
+        console.log('=====garanties===============', this.garanties);
+        
+      }
+    });
+  // this.displayFormConventionUpdate = true;
   //this.conventionForm.patchValue(convention);
-  const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
+   const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
   const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
   this.conventionForm.patchValue({delai: convention.delai, montant: convention.montant,
     prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
-  dateEffet: new Date(convention.dateEffet), acte, garantie});
+  dateEffet: new Date(convention.dateEffet), acte, garantie}); 
  // this.displayFormConvention = true;
   this.displaySousActe = true;
   this.displayActe = true;
+  this.displayFormConvention = true;
   }
 
   supprimer(convention: Convention){
@@ -289,6 +329,8 @@ export class ConventionComponent implements OnInit, OnDestroy {
 
   onRowEditInitPrime(sousActe: SousActe) {
     this.clonedSousActe[sousActe.id] = {...sousActe};
+
+   
   }
 
   onRowEditSavePrime(sousActe: SousActe) {
@@ -312,7 +354,11 @@ export class ConventionComponent implements OnInit, OnDestroy {
 }
 
  onRowEditCancelSousActe(sousActe: SousActe, index: number) {
-  this.sousActes[index] = this.clonedSousActe[sousActe.id];
+  sousActe.montantConvantion = null;
+  sousActe.dateEffet = null;
+  // this.clonedSousActe[sousActe.id].dateEffet = new Date();
+  // this.clonedSousActe[sousActe.id].montantConvantion = null;
+  // this.sousActes[index] = this.clonedSousActe[sousActe.id];
   delete this.clonedSousActe[sousActe.id];
   this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== sousActe.id);
 } 

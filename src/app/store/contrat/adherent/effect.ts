@@ -200,7 +200,7 @@ this.actions$.pipe(
     mergeMap(({file, idGroupe}) =>
         this.AdherentService.pushPhotosAdherentLot(file).pipe(
             switchMap(value => [
-                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+              //  GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.loadAdherent({idGroupe: idGroupe})
             ]),
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

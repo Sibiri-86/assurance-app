@@ -12,6 +12,7 @@ export interface Convention {
     nomResponsablePrestation?: string;
     dateEffet?: Date;
     delai?: number;
+    convenstionList?: Convention[];
 }
 
 export interface ConventionList {

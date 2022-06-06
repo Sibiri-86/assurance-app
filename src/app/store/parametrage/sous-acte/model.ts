@@ -6,6 +6,7 @@ export interface SousActe {
     libelleTypeActe?: string;
     idTypeActe?: string;
     montantConvantion?: number;
+    dateEffet?: Date;
 }
 export interface SousActeList {
     typeSousActeDtoList?: Array<SousActe>;
