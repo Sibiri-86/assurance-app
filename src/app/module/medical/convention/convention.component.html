@@ -322,7 +322,7 @@
 
                     <div class="p-field p-col-4">
                         <label for="delai">Délai de paiement</label>
-                        <p-inputNumber mode="decimal" locale="fr-FR" id="delai" formControlName="delai" ></p-inputNumber>
+                        <p-inputNumber mode="decimal" locale="fr-FR" id="delai" formControlName="delai"  ></p-inputNumber>
                     </div> 
                 </div>
                 
@@ -438,7 +438,7 @@
                                                                               <td *ngIf="displayEdit">
                                                                                 <p-cellEditor>
                                                                                     <ng-template pTemplate="input">
-                                                                                        <p-calendar id="dateEffet" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="sousActe.dateEffet" appendTo="body"></p-calendar>
+                                                                                        <input id="dateEffet"  type="date" name="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
 
                                                                                        
                                                                                         

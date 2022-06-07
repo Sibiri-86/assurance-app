@@ -6,6 +6,7 @@ import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiq
 import { Police } from '../../contrat/police/model';
 import { Garantie } from '../../parametrage/garantie/model';
 import { Medecin } from '../../parametrage/medecin/model';
+import { PlafondSousActe } from '../../parametrage/plafond/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';

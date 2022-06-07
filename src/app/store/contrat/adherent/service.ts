@@ -8,6 +8,7 @@ import {GlobalConfig} from '../../../config/global.config';
 import { AdherentFamille } from './model';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
+import { Exercice } from '../exercice/model';
 
 @Injectable({providedIn: 'root'})
 export class AdherentService {
@@ -165,11 +166,12 @@ private handleError<T>() {
     }
 
 
-    findAll(exercice: string): Observable<AdherentList> {
-      console.log(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/findAll/${exercice}`);
+    findAll(exercice: Date): Observable<AdherentList> {
+      const exerce: Exercice = {};
+      exerce.debut = exercice;
       // @FIXME: post request
-     
-          return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/findAll/${exercice}`).pipe(
+
+          return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/findAll`, exerce).pipe(
               map((response: AdherentList) => response)
               // catchError(this.handleError())
           );

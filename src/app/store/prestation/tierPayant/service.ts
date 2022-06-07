@@ -22,9 +22,14 @@ constructor(private http: HttpClient) {
 
 }
 
-posTierPayant(tierPayant1: Array<SinistreTierPayant>): Observable<any> {
+posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     // @FIXME: post request
-    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/enregistrer`, tierPayant1);
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/enregistrer`, tierPayant);
+  }
+
+  posTierPayant1(tierPayant: SinistreTierPayant): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/enregistrer-noList`, tierPayant);
   }
 
     $getTierPayant(): Observable<SinistreTierPayantList> {

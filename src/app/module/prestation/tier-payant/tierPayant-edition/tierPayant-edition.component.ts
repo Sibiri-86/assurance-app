@@ -137,12 +137,18 @@ export class TierPayantEditionComponent implements OnInit {
     typeAction: MenuItem[] = [];
     adherentList: Array<Adherent>;
     adherentList$: Observable<Array<Adherent>>;
+    tierPaysList$: Observable<SinistreTierPayant>;
     bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
     bonPriseEnChargeList: Array<BonPriseEnCharge>;
     exerciceList$: Observable<Array<Exercice>>;
     exerciceList: Array<Exercice>;
     plafondSousActe: CheckPlafond;
     exerciceSelected: Exercice = {};
+    prestationsList: Prestation[]= [];
+    prestationAdd: Prestation = {};
+    displayPrestationpop = false;
+    compteur: number = null;
+    prefinancement: SinistreTierPayant = {};
 
 
 
@@ -154,24 +160,26 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     onCreate() {
-        /** fonction pour enregistrer la prestation */
-        console.log('creation tierPayant');
-        this.prefinancementModel = this.prestationForm.value;
-        this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = this.adherentSelected;
-        this.tierPayantList.push(this.prefinancementModel);
-        console.log('*******this.prefinancementModel*******', this.prefinancementModel);
-         this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
-        // tslint:disable-next-line:max-line-length
+        
+        
+        
+    
+        this.prefinancement.dateSaisie = new Date();
+      this.prefinancement.prestation = this.prestationsList;
+            this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
+        
+        // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
         console.log(this.prefinancementModel);
         this.tierPayantList = [];
+        this.prestationsList = [];
         this.prestationForm.reset();
+        this.prefinancement = {};
     }
 
     addPrestation1() {
-        this.prefinancementModel.prestation = this.prestationList;
+        this.prefinancementModel.prestation = this.prestationsList;
         this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
         this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
         this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
@@ -181,7 +189,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
     }
 
-    loadAllAherents(exercice: string) {
+   /* loadAllAherents(exercice: string) {
         this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
         this.store.dispatch(featureActionAdherent.findAdherents({exercice}));
         this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -191,9 +199,10 @@ export class TierPayantEditionComponent implements OnInit {
 
         })
 
-    }
+    }*/
 
     ngOnInit(): void {
+
         // this.prestationList = [];
         this.prestationForm = this.formBuilder.group({
             // domaine: new FormControl({}),
@@ -231,6 +240,7 @@ export class TierPayantEditionComponent implements OnInit {
                     printPdfFile(bytes);
                 }
             });
+            
 
 
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
@@ -370,10 +380,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.checkStatus();
     }
 
-    onRowSelectAdherent(event) {
-        this.exerciceSelected = event.value;
+    onRowSelectAdherent() {
         this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-        this.store.dispatch(featureActionAdherent.findAdherents({exercice: event.value.id}));
+        this.store.dispatch(featureActionAdherent.findAdherents({exercice: this.prestationAdd.dateSoins}));
         this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) =>{
             if(value) {
                 console.log('=============adh======',value.slice());
@@ -512,7 +521,7 @@ export class TierPayantEditionComponent implements OnInit {
                 for (const pr of pref.prestation) {
                    
                   this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-                   this.store.dispatch(featureActionAdherent.findAdherents({exercice: pr.exercice.id}));
+                   this.store.dispatch(featureActionAdherent.findAdherents({exercice: pr.dateSoins}));
                    this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) =>{
                        if(value) {
                          //  console.log('=============adh======',value.slice());
@@ -632,7 +641,7 @@ export class TierPayantEditionComponent implements OnInit {
     // valider TierPayant
     validerTierPayant() {
         console.log('********************this.tierPayantList**************************', this.tierPayantList);
-        this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
+       // this.store.dispatch(featureActionTierPayant.createTierPayant({tierPayant: this.tierPayantList}));
         this.tierPayantList = [];
         this.prestationList = [];
         this.prestationForm.reset();
@@ -700,36 +709,43 @@ export class TierPayantEditionComponent implements OnInit {
     }
     
 
-    calculDebours(i: number) {
-        console.log("==================p", i);
-        let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-    
-        myForm.patchValue({taux: myForm.value.adherent?.groupe.taux, sort: Sort.ACCORDE});
-        if (this.prestationForm.get('prestation').value[i].nombreActe &&
-            this.prestationForm.get('prestation').value[i].coutUnitaire) {
-
-
-            myForm.patchValue({
-            debours: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
-            baseRemboursement: this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire, 
-            montantRembourse : (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100,
-            //montantPaye: ((this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100) 
-            // montantPaye: (this.prestationForm.get('prestation').value[i].montantPayeTMP) + +this.prestationForm.get('prestation').value[i].montantPaye
-        });
-        console.log('*****this.prefinancementList*******', this.prestationForm.get('prestation').value[i].montantRembourse);
-        console.log('*****this.count*******', this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire);
-        console.log('*****this.taux*******', (this.prestationForm.get('prestation').value[i].nombreActe * this.prestationForm.get('prestation').value[i].coutUnitaire *  myForm.value.adherent?.groupe.taux.taux)  / 100);
-
-        console.log('*****this.montantPaye*******', this.prestationForm.get('prestation').value[i].montantPaye);
+    calculDebours() {
+        this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
+        this.prestationAdd.sort = Sort.ACCORDE;
+        if (this.prestationAdd.nombreActe &&
+        this.prestationAdd.coutUnitaire) {
+            this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
         }
-        this.prefinancementModel = this.prestationForm.value;
-        this.prefinancementModel.dateSaisie = new Date();
-        this.prefinancementModel.adherent = myForm.value.adherent;
-        this.tierPayantList.push(this.prefinancementModel);
-        /* executer le controle de la prestation */
-        console.log('*****this.prefinancementList*******', this.tierPayantList);
-        this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.tierPayantList[0].prestation[i].montantRembourse);
-        this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
+        
+        if(this.prefinancement.montantRestant == null ) {
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
+        }
+        if(this.prefinancement.montantPaye == null ) {
+            this.prefinancement.montantPaye = 0;
+        }
+        if(this.prestationList?.length === undefined ) {
+            this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+            this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
+        } else {
+            this.prestationList.forEach(prest=> {
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + prest.baseRemboursement;
+                this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
+            });
+        }
+
+        if(this.prefinancement.montantRestant < 0){
+            this.prestationAdd.sort = Sort.REJETE;
+            this.prestationAdd.observation = "le plafond famille-acte sur la periode est atteint";
+        } else{
+            this.prestationAdd.observation= "remboursement favorable";
+        }
+        
+       
+
+
+
        
        /* this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
         this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -766,6 +782,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     addItemPrestation(): void {
+        this.displayPrestationpop = true;
         const formPrestation: FormGroup = this.createItem();
         // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
         
@@ -863,13 +880,14 @@ export class TierPayantEditionComponent implements OnInit {
     compareDateDeclarationAndDateFacture(): void {
         /* console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
         console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value); */
-        if(this.prestationForm.get('dateDeclaration').value && this.prestationForm.get('dateFacture').value) {
-            this.historiqueAvenantService.compareDate(this.prestationForm.get('dateDeclaration').value, this.prestationForm.get('dateFacture').value ).subscribe(
+        if(this.prefinancement.dateDeclaration && this.prefinancement.dateFacture) {
+            this.historiqueAvenantService.compareDate(this.prefinancement.dateDeclaration, this.prefinancement.dateFacture ).subscribe(
                 (res) => {
                   if (res) {
                     this.addMessage('error', 'Date de déclaration invalide',
                         'La date de déclaration du sinistre ne peut pas être antérieure à celle de la facture');
-                        this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+                        this.prefinancement.dateDeclaration = null;
+                        this.prefinancement.dateFacture = null;
                   }
                 }
             );
@@ -879,21 +897,40 @@ export class TierPayantEditionComponent implements OnInit {
       compareDateDeclarationAndToday(): void {
         /* console.log('this.prestationForm.getDateFacture', this.prestationForm.get('dateFacture').value);
         console.log('this.prestationForm.getdateDeclaration', this.prestationForm.get('dateDeclaration').value); */
+        console.log("=============");
         const maDate = new Date();
-        if(this.prestationForm.get('dateDeclaration').value && maDate) {
-            this.historiqueAvenantService.compareDate( maDate, this.prestationForm.get('dateDeclaration').value).subscribe(
+        if(this.prefinancement.dateDeclaration && maDate) {
+            this.historiqueAvenantService.compareDate( maDate,this.prefinancement.dateDeclaration).subscribe(
                 (res) => {
                   if (res) {
                     this.addMessage('error', 'Date de déclaration invalide',
                         'La date de déclaration du sinistre ne peut pas être postérieure à celle du jour');
-                        this.prestationForm.patchValue({dateFacture: null, dateDeclaration: null});
+                        this.prefinancement.dateFacture = null;
+                        this.prefinancement.dateDeclaration = null;
                   }
                 }
             );
         }
       }
 
-      
+      addPrestation() {
+          console.log(this.prestationAdd);
+          if(this.compteur !=null) {
+            this.prestationsList[this.compteur] = this.prestationAdd;
+          } else {
+            this.prestationsList.push(this.prestationAdd);
+          }
+          console.log(this.prestationsList);
+          
+          this.prestationAdd = {};
+          this.compteur = null;
+      }
+
+      editerPrestation1(prestation: Prestation, rowIndex: number) {
+        this.compteur = rowIndex;
+          this.prestationAdd = prestation;
+          this.displayPrestationpop = true;
+      }
 
       addMessage(severite: string, resume: string, detaile: string): void {
         this.messageService.add({severity: severite, summary: resume, detail: detaile});
@@ -905,25 +942,40 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestation.push(formPrestation);
       }
 
-      selectDateSoins(i: number){
-        console.log('************************ selection de la date de soins' + i);
+      selectDateSoins(){
         this.plafondSousActe = {};
-        this.plafondSousActe.dateSoins = this.prestationForm.get('prestation').value[i].dateSoins;
-        this.plafondSousActe.adherent = this.adherentSelected;
-        this.plafondSousActe.sousActe = this.prestationForm.get('prestation').value[i].sousActe;
-        if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+        this.plafondSousActe.sousActe =  this.prestationAdd.sousActe; 
+        this.plafondSousActe.dateSoins = this.prestationAdd.dateSoins;
+        this.plafondSousActe.adherent = this.prestationAdd.adherent;
+       
+        if (this.prestationAdd.sousActe && this.prestationAdd.dateSoins && this.prestationAdd.adherent){
         this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
-        this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.store.pipe(takeUntil(this.destroy$)).subscribe((value) => {
           console.log(value);
-          const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+          if (value) {
+              this.prestationAdd.montantPlafond = value.prefinancementState.montantPlafondSousActe; 
+          } else {
+            this.prestationAdd.sort = Sort.REJETE;
+           // myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
+          } 
+         /*  const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
           if (value) {
             myForm.patchValue({montantPlafond: value});
           } else {
             myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
-          }
+          } */
         });
         }
-        console.log(this.plafondSousActe);
+      //  console.log(this.plafondSousActe);
+      }
+
+      editerTierPayant(tierPayant: SinistreTierPayant) {
+
+          this.prefinancement = tierPayant;
+         
+          this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
+          this.prestationsList = tierPayant.prestation;
+          this.displayFormPrefinancement = true;
       }
 
 }
