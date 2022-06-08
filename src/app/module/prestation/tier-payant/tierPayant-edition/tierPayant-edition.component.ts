@@ -72,6 +72,7 @@ import * as prefinancementSelector from '../../../../store/prestation/prefinance
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import * as exerciceSelector from 'src/app/store/contrat/exercice/selector';
 import * as featureExerciceAction from 'src/app/store/contrat/exercice/actions';
+import { Event } from '@angular/router';
 
 
 
@@ -106,6 +107,7 @@ export class TierPayantEditionComponent implements OnInit {
     adherentSelected$: Observable<Adherent>;
     medecinListFilter: Array<SelectItem>;
     tierPayantList: Array<SinistreTierPayant> = [];
+    prefinancementDetail: SinistreTierPayant = {};
     prefinancementModel: SinistreTierPayant = {};
     statusObject$: Observable<Status>;
     sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
@@ -145,10 +147,14 @@ export class TierPayantEditionComponent implements OnInit {
     plafondSousActe: CheckPlafond;
     exerciceSelected: Exercice = {};
     prestationsList: Prestation[]= [];
+    prestationDetail:Prestation = {};
     prestationAdd: Prestation = {};
     displayPrestationpop = false;
     compteur: number = null;
+    baseAnterieur: number = null;
     prefinancement: SinistreTierPayant = {};
+    i: number = 0;
+    displayFormPrefinancementDetail = false;
 
 
 
@@ -579,56 +585,81 @@ export class TierPayantEditionComponent implements OnInit {
         }); */
     }
 
-    onRowSelectBon($event, index: number){
-       
+    onRowSelectBon($event){
+      const  index = 0;
+        const prestaList: Prestation[] =$event.value.prestation; 
         
-        
-           
-        console.log($event.value);
-       
-        for (const pr of $event.value.prestation) {
-          const formPrestation: FormGroup = this.createItem();
-          pr.id = null;
-          formPrestation.patchValue(pr);
-          formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
-          formPrestation.get('debours').setValue(pr.debours);
-          formPrestation.get('taux').setValue(pr.taux);
-          formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
-          formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
-          
-          formPrestation.get('bonPriseEnCharge').setValue($event.value);
-          formPrestation.get('exercice').setValue(this.exerciceSelected);
-          formPrestation.get('adherent').setValue(this.adherentSelected);
-          
-          if(this.prestation.controls.length === 1){
-            
-            this.prestation.clear();
-            this.prestation.push(formPrestation);
-           
-          }
-          else {
-            
-            console.log("===============prestationindex2===========", this.prestation);
-            console.log("===============prestation1===========", this.prestation.controls.length);
-            console.log("===============prestation1===========", index);
-            
-           /*  for(const control of  this.prestation.controls) {
-                if(control?.value?. bonPriseEnCharge === $event.value) {
-                    console.log("Nulll");
-                    control.patchValue(formPrestation);
-                    console.log("===============control===========", control);
-                    console.log("===============formPrestation===========", formPrestation);
+         if(prestaList.length == 1) {
+             
+             this.prestationAdd.familleActe = prestaList[0].familleActe;
+             this.prestationAdd.acte = prestaList[0].acte;
+             this.prestationAdd.sousActe = prestaList[0].sousActe;
+             this.prestationAdd.pathologie = prestaList[0].pathologie;
+             this.prestationAdd.prestataire = prestaList[0].prestataire;
+             this.prestationAdd.produitPharmaceutique = prestaList[0].produitPharmaceutique;
+             this.prestationAdd.medecin = prestaList[0].medecin;
+             this.prestationAdd.nombreActe = prestaList[0].nombreActe;
+             this.prestationAdd.coutUnitaire = prestaList[0].coutUnitaire;
+             this.prestationAdd.debours = prestaList[0].debours;
+             this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
+             this.prestationAdd.taux = prestaList[0].taux;
+             this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+             this.prestationAdd.sort = prestaList[0].sort;
+             this.prestationAdd.sort = prestaList[0].sort;
+             this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
+         }
+         if(prestaList.length > 1) {
+             if(this.prestationsList?.length === 0 || this.prestationsList?.length === undefined) {
+                this.prestationAdd.familleActe = prestaList[0].familleActe;
+                this.prestationAdd.acte = prestaList[0].acte;
+                this.prestationAdd.sousActe = prestaList[0].sousActe;
+                this.prestationAdd.pathologie = prestaList[0].pathologie;
+                this.prestationAdd.prestataire = prestaList[0].prestataire;
+                this.prestationAdd.produitPharmaceutique = prestaList[0].produitPharmaceutique;
+                this.prestationAdd.medecin = prestaList[0].medecin;
+                this.prestationAdd.nombreActe = prestaList[0].nombreActe;
+                this.prestationAdd.coutUnitaire = prestaList[0].coutUnitaire;
+                this.prestationAdd.debours = prestaList[0].debours;
+                this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
+                this.prestationAdd.taux = prestaList[0].taux;
+                this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+                this.prestationAdd.sort = prestaList[0].sort;
+                this.prestationAdd.sort = prestaList[0].sort;
+                this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
+             } else {
+                const prestaList1: Prestation[] = [];
+                prestaList.forEach(prest=>{
+                    this.i = 0;
+                    this.prestationsList.forEach(prestation=>{
+                        if(prest.sousActe == prestation.sousActe) {
+                            this.i = 1;
+                        }
+                    });
+                    if(this.i === 0) {
+                        prestaList1.push(prest);
+                    }
+                });
+                if(prestaList1?.length > 0) {
+                    this.prestationAdd.familleActe = prestaList1[0].familleActe;
+                    this.prestationAdd.acte = prestaList1[0].acte;
+                    this.prestationAdd.sousActe = prestaList1[0].sousActe;
+                    this.prestationAdd.pathologie = prestaList1[0].pathologie;
+                    this.prestationAdd.prestataire = prestaList1[0].prestataire;
+                    this.prestationAdd.produitPharmaceutique = prestaList1[0].produitPharmaceutique;
+                    this.prestationAdd.medecin = prestaList1[0].medecin;
+                    this.prestationAdd.nombreActe = prestaList1[0].nombreActe;
+                    this.prestationAdd.coutUnitaire = prestaList1[0].coutUnitaire;
+                    this.prestationAdd.debours = prestaList1[0].debours;
+                    this.prestationAdd.baseRemboursement = prestaList1[0].baseRemboursement;
+                    this.prestationAdd.taux = prestaList1[0].taux;
+                    this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
+                    this.prestationAdd.sort = prestaList1[0].sort;
+                    this.prestationAdd.sort = prestaList1[0].sort;
+                    this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
                 }
-            } */
-            this.prestation.controls[index] = formPrestation;
-            console.log("===============formPrestation===========", formPrestation);
-            console.log("===============prestationindex1===========", this.prestation);
-            
-           //  this.prestation.push(formPrestation);
-            
-          }
-          
-          }
+                                
+             }
+         }  
         this.displayFormPrefinancement = true;
       }
 
@@ -725,14 +756,47 @@ export class TierPayantEditionComponent implements OnInit {
         if(this.prefinancement.montantPaye == null ) {
             this.prefinancement.montantPaye = 0;
         }
-        if(this.prestationList?.length === undefined ) {
+        if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
             this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
             this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
         } else {
-            this.prestationList.forEach(prest=> {
-                this.prefinancement.montantPaye = this.prefinancement.montantPaye + prest.baseRemboursement;
-                this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
-            });
+            if(this.compteur === null){
+                if(this.prefinancement === undefined) {
+                    this.prestationsList.forEach(prest=> {
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + prest.baseRemboursement;
+                    });
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+        
+                   } else {
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+
+                      // const valeurprecedent = this.prefinancement.montantPaye;
+        
+                   }
+            }else {
+                if(this.prefinancement === undefined) {
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+        
+                   } else {
+                    console.log("base========",this.baseAnterieur);
+
+
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
+                    console.log("base========",this.prefinancement.montantPaye);
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+
+                      // const valeurprecedent = this.prefinancement.montantPaye;
+        
+                   }
+            }
+          
+
+            
+            
         }
 
         if(this.prefinancement.montantRestant < 0){
@@ -928,8 +992,15 @@ export class TierPayantEditionComponent implements OnInit {
 
       editerPrestation1(prestation: Prestation, rowIndex: number) {
         this.compteur = rowIndex;
+       
+        
           this.prestationAdd = prestation;
+          this.onRowSelectAdherent();
+          this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === prestation?.adherent?.id 
+            && bon.prestataire?.id === this.prefinancement.id);
+         
           this.displayPrestationpop = true;
+          this.baseAnterieur = prestation.baseRemboursement;
       }
 
       addMessage(severite: string, resume: string, detaile: string): void {
@@ -976,6 +1047,14 @@ export class TierPayantEditionComponent implements OnInit {
           this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
           this.prestationsList = tierPayant.prestation;
           this.displayFormPrefinancement = true;
+      }
+
+      voirTierPyant(tierPayant: SinistreTierPayant){
+        this.prefinancementDetail = tierPayant;
+        this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
+        this.prestationDetail = tierPayant.prestation[0];
+        console.log(tierPayant.prestation[0]?.sousActe);
+          this.displayFormPrefinancementDetail = true;
       }
 
 }
