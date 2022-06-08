@@ -73,6 +73,7 @@ import { Exercice } from 'src/app/store/contrat/exercice/model';
 import * as exerciceSelector from 'src/app/store/contrat/exercice/selector';
 import * as featureExerciceAction from 'src/app/store/contrat/exercice/actions';
 import { Event } from '@angular/router';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 
 
@@ -160,6 +161,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
+                private tierPayantService: TierPayantService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
@@ -978,16 +980,26 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       addPrestation() {
-          console.log(this.prestationAdd);
+          // console.log(this.prestationAdd);
           if(this.compteur !=null) {
             this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
             this.prestationsList.push(this.prestationAdd);
           }
-          console.log(this.prestationsList);
+         
           
           this.prestationAdd = {};
           this.compteur = null;
+          if(this.prestationsList?.length%5 == 0){
+
+            this.prefinancement.prestation = this.prestationsList;
+            this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((rest=>{
+
+                this.prefinancement = rest;
+                this.prestationsList = this.prefinancement.prestation;
+
+            }));
+          }
       }
 
       editerPrestation1(prestation: Prestation, rowIndex: number) {
