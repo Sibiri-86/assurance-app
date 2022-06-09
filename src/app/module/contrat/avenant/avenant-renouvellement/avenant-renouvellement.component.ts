@@ -175,7 +175,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         plafondGroupeSousActes: []
     };
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
-    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
+    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
     adherentFamilleListe: AdherentFamille[] = [];
     myForm: FormGroup;
     typeDureeSelected = '';

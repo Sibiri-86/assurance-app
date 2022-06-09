@@ -350,11 +350,11 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="firstname2">Type durée</label>
-                                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true"
-                                                showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree"
+                                    <p-dropdown dataKey="id" id="firstname2" [filter]="true"
+                                                showClear="true" (onChange)="changeTypeDuree()" [options]="typeDureeList"
                                                 formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
-                                                           [formGroup]="policeForm" [entityField]="'typeDuree'">
+                                                           [formGroup]="groupeForm" [entityField]="'typeDuree'">
                                     </app-entity-validation>
                                 </div>
 
@@ -614,7 +614,7 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
-                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                                    (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{plafond.garantie?.libelle}}
@@ -875,7 +875,7 @@
                                                 <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe.montantPlafond | formatTableValue: 'number':true}}
+                                                {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -944,8 +944,8 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
-                                                <!-- <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
+                                                <!-- <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText>-->
+                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> 
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -1103,7 +1103,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+        <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
           <app-plafond-famille-acte [etat]="'UPDATE'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
     </p-tabView>

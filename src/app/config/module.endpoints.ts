@@ -387,4 +387,9 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/contrat/bulletinAdhesion`,
             mock: `assets/mock/contrat/bulletinAdhesion.mock.json`
         };
+
+        static readonly CONTRAT_GROUPE_WITH_SAME_ID_IN_POLICE_AND_HISTO_AVE = {
+            prod: `${SERVICE_PREFIX}/contrat/groupe/police_id_same_in_groupe_and_histo_ave`,
+            mock: `assets/mock/contrat/groupe.mock.json`
+        };
 }

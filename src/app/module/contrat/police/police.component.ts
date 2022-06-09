@@ -115,8 +115,10 @@ import * as tauxCommissionIntermediaireSelector
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import {PoliceService} from '../../../store/contrat/police/service';
 import {TypeBareme} from "../../common/models/bareme.enum";
-import {TypeHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/model';
+import {Avenant, TypeHistoriqueAvenant} from '../../../store/contrat/historiqueAvenant/model';
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
+import * as groupeSlector from '../../../store/contrat/groupe/selector';
+import { PlafondService } from "src/app/store/contrat/plafond/service";
 
 @Component({
   selector: "app-police",
@@ -235,7 +237,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   domaineSelected: QualiteAssure;
   isInternationalGroupe: boolean;
   typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
-  {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
+  {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
   secteurList: Array<Secteur>;
   secteurList$: Observable<Array<Secteur>>;
   arrondissementList$: Observable<Array<Arrondissement>>;
@@ -281,6 +283,12 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   plafondFamilleActeControle: PlafondFamilleActe = {};
   groupeControle: Groupe = {};
   isPresting =false;
+  groupeListes: Array<Groupe>;
+  avenantModif1: Avenant = {};
+  displayBareme: boolean = false;
+  stat: Rapport;
+
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -290,7 +298,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     private breadcrumbService: BreadcrumbService,
     private adherentService: AdherentService,
     private policeService: PoliceService,
-    private historiqueAvenantService: HistoriqueAvenantService
+    private historiqueAvenantService: HistoriqueAvenantService,
+    private plafondService: PlafondService,
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -399,6 +408,12 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   this.displayConfigurationPlafond = true;
   }
 
+  voirBareme() {
+    /**recuperer le plafond du groupe */
+    this.loadPlafondByGroupe(this.groupe);
+    this.displayBareme = true;
+    }
+
   fermerConfigurationPlafond() {
     this.displayConfigurationPlafond = false;
   }
@@ -428,6 +443,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isInternationalGroupe = true;
     }
     this.displayParametragePlafond = true;
+    this.loadPlafondByGroupe(groupe);
     //console.log(this.plafondGroupe);
   }
 
@@ -1173,6 +1189,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
           if (res) {
             this.groupeListPolice = res;
             this.police.listGroupe = res;
+            this.getStatistique(this.police);
           }
         }
     );
@@ -1181,6 +1198,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupe = {};
     this.afficheDetail = false;
     this.displayDialogFormAddGroupe = false;
+    // this.getGroupeByPolice2();
   }
 
   validerForm() {
@@ -1529,6 +1547,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     ];
     this.displayDialogFormGroupe = true;
+    this.getStatistique(police);
   }
 
 
@@ -2390,4 +2409,45 @@ changeGarantie(garantie, indexLigne: number) {
       );
     }
   }
+
+  getGroupeByPolice2 (){
+    this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
+        this.store.dispatch(loadGroupe({policeId: this.police.id}));
+        this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.groupeListes = value.slice();
+                console.log("=============================this.groupeListes =============", this.groupeListes);
+                // console.log(this.groupeListes);
+            }
+        });
+  }
+
+
+  loadPlafondByGroupe(groupe: Groupe): void {
+    this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
+            (res) => {
+              this.avenantModif1.plafondFamilleActes = res.body;
+              console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes)
+            }
+    );
+    /* this.plafondService.getPlafondGroupeActeByGroupe(groupe.id).subscribe(
+      (rest) => {
+        this.avenantModif.plafondGroupeActes = rest.body;
+      
+  
+      }
+  ); */
+  
+}
+
+getStatistique(police: Police): void {
+  console.log('get statistique police ....start...');
+  this.policeService.rapportPolice(police).subscribe(
+    (res) => {
+      this.stat = res;
+      // this.viewStat = true;
+      console.log('get statistique police ....end...', res);
+    }
+  );
+}
 }

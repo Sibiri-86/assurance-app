@@ -25,7 +25,7 @@
                 </form>
             </p-fieldset>
 
-            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'">
+            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
                 <form [formGroup]="exerciceForm">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">

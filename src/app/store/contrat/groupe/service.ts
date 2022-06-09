@@ -19,6 +19,15 @@ $getGroupes(idPolice: string): Observable<GroupeList> {
     );
 }
 
+
+getGroupewithSameId(idPolice: string): Observable<Array<Groupe>> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE_WITH_SAME_ID_IN_POLICE_AND_HISTO_AVE)}`).pipe(
+    map((response: Array<Groupe>) => response),
+    catchError(this.handleError())
+  );
+}
+
 posGroupe(Groupe: Groupe): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}`, Groupe);

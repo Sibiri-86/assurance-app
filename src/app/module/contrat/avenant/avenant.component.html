@@ -2060,7 +2060,7 @@
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="onRowSelectAvenant(rowdata)">
+                                                    (click)="onRowSelectAvenant(rowdata); getGroupeByPolice(rowdata)">
                                             </button>
                                             <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier"
                                                     class="p-button-rounded p-button-warning p-mr-2 p-mr-2"
@@ -2496,6 +2496,54 @@
             </div>
     </p-dialog>
 
+    <!--Affichage desla fenetre de choix de groupe pour l'impression -->
+    <p-dialog [(visible)]="displayImpGroupe" header="impression de la liste des assurés par groupe" [modal]="true" styleClass="p-fluid"
+              [style]="{width: '1000px'}">
+
+            <div class="p-grid mt-3">
+                <div class="p-col-12 mt-3">
+                    <div class="p-grid">
+                        <!-- <div class="p-col-4">
+                            <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findAdherentListByExerciceId(curentExercice)">
+                            </p-dropdown>
+                        </div> -->
+                        <div class="p-col-4">
+                            <!-- <label for="fraisBadge">Groupe<span style="color: red !important; size: 2em">*</span></label>
+                            <p-dropdown [options]="listGroupe" optionLabel="libelle" placeholder="Selectionner un groupe" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="libelle" [showClear]="true" (onChange)="onAdherentPrintAffaireNouvelle(historiqueAvenant)">
+                            </p-dropdown> -->
+                            
+                            <label class="p-fieldset-content">Choisir le Groupe</label>
+                        <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelect"
+                                    [filter]="true" filterBy="libelle" [showClear]="true"
+                                    placeholder="Choisir un groupe" (onChange)="onAdherentPrintAffaireNouvelle(historiqueAvenant, groupeSelect)"
+                                    [style]="{'width': '100%'}">
+                        </p-dropdown>
+
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+              <div class="p-col-12 mb-3">
+                <div class="p-col-4"> 
+                    
+                        <button pButton pRipple label="Fermer" style="margin-top: 10px !important; text-align: center !important;" 
+                        icon="pi pi-times" class="p-button p-button-danger" type="button"
+                                (click)="annulerPrimeTotalePolice()">
+                        </button>
+                   
+                </div>
+                
+            </div>
+              <div class="p-col-2">
+                
+            </div>
+    </p-dialog>
+
 
 
     <!--Affichage des details des avenants affaire nouvelle -->
@@ -2515,7 +2563,7 @@
                         <ng-template pTemplate="caption">
                             <div class="p-d-flex p-flex-column table-header">
                                 <div class="p-grid">
-                                    <div class="p-col-9">
+                                    <div class="p-col-8">
                                             <span class="p-input-icon-left">
                                                 <i class="pi pi-search"></i>
                                                 <input pInputText type="text"
@@ -2525,12 +2573,22 @@
                                     </div>
                                     <div class="p-col-2">
                                             <span class="p-input-icon-right">
-                                                <button pButton pRipple icon="pi pi-print" label="Imprimer"
+                                                <button [disabled]="!historiqueAvenantAdherent1s" pButton pRipple icon="pi pi-print" label="Imprimer"
                                                         pTooltip="Imprimer la liste"
                                                         class="p-button-info"
-                                                        (click)="onAdherentPrintAffaireNouvelle(historiqueAvenant)"></button>
+                                                        (click)="onAdherentPrintAffaireNouvelle(historiqueAvenant)">
+                                                </button>
                                             </span>
                                     </div>
+                                    <div class="p-col-2">
+                                        <span class="p-input-icon-right">
+                                            <button [disabled]="!historiqueAvenantAdherent1s" pButton pRipple icon="pi pi-print" label="Par groupe"
+                                                    pTooltip="Appuyer pour choisir le groupe"
+                                                    class="p-button-info"
+                                                    (click)="impAssureGroupe()">
+                                            </button>
+                                        </span>
+                                </div>
                                 </div>
 
                             </div>
@@ -2541,28 +2599,28 @@
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
-                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; width: 5rem">Matricule
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold; width: 5rem">Matricule Garant
                                     <p-sortIcon field="numeroGarant"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="nom" style="width: 7rem">Nom
+                                <th pSortableColumn="nom" style="width: 12rem">Nom
                                     <p-sortIcon field="nom"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="prenom" style="width: 9rem">Prenom
+                                <th pSortableColumn="prenom" style="width: 12rem">Prenom
                                     <p-sortIcon field="prenom"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="numero" style="width: 12rem">Date de Naissance
+                                <th pSortableColumn="numero" style="width: 8rem">Date de Naissance
                                     <p-sortIcon field="dateNaissance"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="lieuNaissance" style="width: 12rem">Lieu de naissance
+                                <th pSortableColumn="lieuNaissance" style="width: 8rem">Lieu de naissance
                                     <p-sortIcon field="lieuNaissance"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="numeroTelephone" style="width: 10rem">Telephone
                                     <p-sortIcon field="numeroTelephone"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="dateIncorporation" style="width: 10rem">Incorporation
+                                <th pSortableColumn="dateIncorporation" style="width: 10rem">Groupe
                                     <p-sortIcon field="numeroTelephone"></p-sortIcon>
                                 </th>
 <!--                                &lt;!&ndash;<th pSortableColumn="adresse" style="width: 10rem">Date Avenant
@@ -2589,7 +2647,7 @@
                                 <td><span class="p-column-title">{{adherentHis?.adherent?.lieuNaissance}}</span></td>
                                 <td><span class="p-column-title">{{adherentHis?.adherent?.numeroTelephone}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{adherentHis?.historiqueAvenant?.dateIncorparation | formatTableValue : 'date'}}</span>
+                                <td><span class="p-column-title">{{adherentHis?.adherent?.groupe?.libelle}}</span>
                                 </td>
                                 <td><span
                                         class="p-column-title">{{adherentHis?.adherent?.qualiteAssure?.libelle}}</span>

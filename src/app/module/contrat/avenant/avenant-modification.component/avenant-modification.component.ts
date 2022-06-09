@@ -169,8 +169,8 @@ export class AvenantModificationComponent implements OnInit {
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
   objet: Avenant = {};
-  typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
-    {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
+  typeDureeList: any = [{label: 'Jour', value: TypeDuree.JOUR},
+    {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
   myForm: FormGroup;
   lastExerciceForm: FormGroup;
   typeDureeSelected: string;
@@ -200,6 +200,8 @@ export class AvenantModificationComponent implements OnInit {
   exercice$: Observable<Exercice>;exerciceList$
   curentExercice: Exercice = {};
   historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
+  sousActeToSave:SousActe = {};
+  sousActeListFinal: SousActe[] = [];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -219,7 +221,7 @@ export class AvenantModificationComponent implements OnInit {
       territorialite: new FormControl(null, [Validators.required]),
       duree: new FormControl('', [Validators.required]),
       dateEffet: new FormControl('', [Validators.required]),
-      typeDuree: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl(null, [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
       commune: new FormControl('', [Validators.required]),
       numeroGroupe: new FormControl('', [Validators.required]),
@@ -775,10 +777,10 @@ export class AvenantModificationComponent implements OnInit {
     this.obj.group = this.groupeSelected;
     this.historiqueAveantAdherants = this.historiqueAveantAdherantsTMP.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
     this.setGroupeAndPrime(this.groupeSelected);
-    this.loadHistoriquePlafondGroupe();
-    this.loadHistoriquePlafondGroupeFamilleActe();
-    this.loadHistoriquePlafondGroupeActe();
-    this.loadHistoriquePlafondGroupeSousActe();
+    //this.loadHistoriquePlafondGroupe();
+    //this.loadHistoriquePlafondGroupeFamilleActe();
+    //this.loadHistoriquePlafondGroupeActe();
+    //this.loadHistoriquePlafondGroupeSousActe();
   }
 
   addAvenantModification(): void{
@@ -818,6 +820,11 @@ export class AvenantModificationComponent implements OnInit {
   setGroupeAndPrime(group: Groupe): void {
     console.log('***********group************');
     console.log(group);
+    this.typeDureeList.find(t => {
+      t.value === group?.typeDuree;
+      console.log('***********typeDuree************', group?.typeDuree);
+    });
+    
     this.groupeForm.setValue({
       id: group?.id || null,
       libelle: group?.libelle,
@@ -825,7 +832,7 @@ export class AvenantModificationComponent implements OnInit {
       territorialite: group.territorialite || [],
       duree: group?.duree,
       dateEffet: new Date(group.dateEffet),
-      typeDuree: {},
+      typeDuree: this.typeDureeList.find(t => t.value === group?.typeDuree),
       dateEcheance: new Date(group.dateEcheance),
       commune: group.commune,
       numeroGroupe: group.numeroGroupe,
@@ -876,9 +883,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onRowEditInitPlafondSousActe(plafondSousActe: PlafondSousActe) {
-    this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {
-      ...plafondSousActe,
-    };
+    this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {...plafondSousActe};
   }
 
   onRowEditSavePlafondSousActe(plafondSousActe: PlafondSousActe) {
@@ -1035,6 +1040,7 @@ export class AvenantModificationComponent implements OnInit {
         pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
       });
     } */
+    // this.sousActeListFinal = [];
     if (this.plafondActe) {
       this.plafondFamilleActe = this.plafondFamilleActePlafongConfig;
       this.plafondFamilleActe.forEach(pfa => {
@@ -1075,7 +1081,7 @@ export class AvenantModificationComponent implements OnInit {
     // this.objet.groupe.police = this.police;
     this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
     this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-    this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
+    this.objet.plafondGroupeSousActes = this.sousActeListFinal;
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
     if (this.plafondForm.value) {
@@ -1092,8 +1098,8 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
     this.groupeListes.forEach(gp => {
-      console.log(' groupe infos === ', this.typeDuree.find(e => e.value === gp.typeDuree));
-      gp.typeDuree = this.typeDuree.find(e => e.value === gp.typeDuree).value;
+      console.log(' groupe infos === ', this.typeDureeList.find(e => e.value === gp.typeDuree));
+      gp.typeDuree = this.typeDureeList.find(e => e.value === gp.typeDuree).value;
     });
     this.objet.groupes = this.groupeListes;
     
@@ -1244,7 +1250,10 @@ export class AvenantModificationComponent implements OnInit {
         }
     );
   }
-  onTabChange(event): void {}
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+  }
 
   compareDate(): void {
     this.historiqueAvenantService.compareDate(this.myForm.get('dateEffet').value, this.police.dateEffet).subscribe(
@@ -1310,43 +1319,35 @@ export class AvenantModificationComponent implements OnInit {
     this.clonedPlafondSousActe[plafondSousActe.sousActe?.id] = {
       ...plafondSousActe,
     };
+    console.log('*****this.clonedPlafondSousActe*****', this.clonedPlafondSousActe[plafondSousActe.sousActe?.id]);
+    
   }
 
   onRowEditSavePlafondConfigurationSousActe(plafondSousActe: PlafondSousActe) {
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
+    this.sousActeToSave = this.sousActeListFinal.find(sousActe => sousActe.id === plafondSousActe.id);
+    console.log('***this.sousActeToSave****', this.sousActeToSave);
+    if(this.sousActeToSave?.id) {
+      this.sousActeListFinal.forEach(sous => {
+        if(sous.id === plafondSousActe.id){
+          sous = plafondSousActe;
+          // sous.id = '';
+        }
+      })
+    } else {
+      // plafondSousActe.id = '';
+      this.sousActeListFinal.push(plafondSousActe);
+    }
+    console.log('***this.sousActeListFinal****', this.sousActeListFinal);
   }
 
   onRowEditCancelPlafondConfigurationSousActe(plafondSousActe: PlafondSousActe, index: number) {
     this.plafondSousActe[index] =
         this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
+    this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== plafondSousActe.id);
+    console.log('***this.sousActeListFinal****', this.sousActeListFinal);
   }
-
-  /* loadPlafondConfigBygroupe() {
-    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondFamilleActePlafongConfig = res.body;
-          console.log(res);
-        }
-    );
-    this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondActePlafongConfig = res.body;
-        }
-    );
-    this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondSousActePlafongConfig = res.body;
-          this.plafondFamilleActePlafongConfig.forEach(pfapc => {
-            this.plafondActePlafongConfig.forEach(papc => {
-              papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
-            });
-            pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.acte.libelleTypeGarantie === pfapc.garantie.libelle);
-          });
-        }
-    );
-  } */
-
   addFA(): void {
     const plafondFamilleActe: PlafondFamilleActe = {};
     this.plafondFamilleActePlafongConfig.push(plafondFamilleActe);
@@ -1378,11 +1379,12 @@ export class AvenantModificationComponent implements OnInit {
     this.plafondService.getPlafondGroupeByGroupe(this.groupePlafongConfig.id).subscribe(
         (res) => {
           if (res) {
+            console.log('*****res*******', res);
             this.plafondForm.patchValue({
               domaine: res.body.domaine,
               plafondAnnuelleFamille: res.body.plafondAnnuelleFamille,
               plafondAnnuellePersonne: res.body.plafondAnnuellePersonne,
-              plafondGlobalInternationnal: res.body.plafondGlobalInternationnal
+              plafondGlobalInternationnal: res.body.plafondGlobalEvacuationSanitaire
             });
           }
         }
@@ -1429,6 +1431,16 @@ export class AvenantModificationComponent implements OnInit {
             this.primeForm.patchValue({
               primeFamille: null,
               primeAdulte: null
+            });
+            break;
+            case 'PP':
+            this.primeForm.patchValue({
+              primePersonne: null
+            });
+            break;
+            case 'PF':
+            this.primeForm.patchValue({
+              primeFamille: null,
             });
             break;
           default:
@@ -1493,7 +1505,8 @@ export class AvenantModificationComponent implements OnInit {
         // this.viewListeEdit = true;
     }
   }
-
+  /**Mettre la même date d'effet dans les familles d'actes, actes et sous actes 
+   * || fonction a appélé derriere le input date des sous actes */
   changeFamilleActeDate(plafondFamilleActe: PlafondFamilleActe): void {
     console.log('famille acte date effe change ==== ' + plafondFamilleActe.dateEffet);
     plafondFamilleActe.listeActe.forEach(plafondActe => {
