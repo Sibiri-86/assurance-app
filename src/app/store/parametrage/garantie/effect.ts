@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, map, mergeAll, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { GarantieService } from './service';
 import * as featureActions from './actions';
 import {Garantie, GarantieList} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
+import { SousActe } from '../sous-acte/model';
 
 @Injectable()
 export class GarantieEffects {
@@ -45,6 +46,8 @@ export class GarantieEffects {
                 ))
             ));
 
+         
+
             deleteGarantie$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.deleteGarantie),
@@ -73,6 +76,7 @@ export class GarantieEffects {
         )
     )
     );
+    
 
     fetchGaranties$ = createEffect(() =>
     this.actions$.pipe(
@@ -88,6 +92,22 @@ export class GarantieEffects {
         )
     )
     );
+
+    fetchGarantiesMonatnt$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadGarantiesMontant),
+        mergeMap(({sousActes}) =>
+            this.garantieService.$findFamilleActeSousActeMontant(sousActes).pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setGarantie(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+    
 
 importGarantie$ = createEffect(() =>
 this.actions$.pipe(

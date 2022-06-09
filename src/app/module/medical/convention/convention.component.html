@@ -30,10 +30,15 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="duree" style="min-width:100px">prestataire<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="min-width:200px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Montant en FCFA<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="dateEffet" style="min-width:200px">Date Effet<p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="min-width:100px">Libelle<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:200px">Code<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Description<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Tel<p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Responsable<p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Localité<p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Type de prestataire<p-sortIcon field="dateEffet"></p-sortIcon></th>
+                        <th pSortableColumn="dateEffet" style="min-width:200px">Nature de prestataire<p-sortIcon field="dateEffet"></p-sortIcon></th>
+
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -42,15 +47,24 @@
                         <td>
                             <p-tableCheckbox [value]="convention"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.libelle}}</span>
-                        <td><span class="p-column-title" style="min-width:200px">{{convention.sousActe.libelle}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.libelle}}</span></td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.code}}</span></td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire.description}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{convention.montant | formatTableValue: 'number':true}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire?.tel}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{convention.dateEffet | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire?.responsable}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire?.localite}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire?.libelleTypePrestataire}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{convention.prestataire?.libelleNaturePrestataire}}</span>
                         </td>
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editer(convention)"></button>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="détail" class="p-button-rounded p-button-success p-mr-2" (click)="detail(convention)"></button>
+
                             <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-info" (click)="supprimer(convention)"></button>
                         </td>
                     </tr>
@@ -127,7 +141,155 @@
         </p-dialog>
                 
 
+        <p-dialog [maximizable]="true"   [(visible)]="displayFDetailConvention" header="Detail convention" [modal]="true" styleClass="p-fluid" >
+            <ng-template pTemplate="content">
+                <div class="card">
+                <p-fieldset legend="Information du prestataire" toggleable="true">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="matriculeAdherent">Libélle</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.libelle}}
+                             </div>
+                             <div class="p-field p-col">
+                             <label for="matriculeAdherent">Code</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.code}}
+                             </div>
+                             <div class="p-field p-col">
+                             <label for="matriculeAdherent">Description</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.description}}
+                             </div>
+                         </div>
+                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Tel</label>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.tel}}
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="matriculeAdherent">Localite</label>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.locale}}
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <label for="matriculeAdherent">Responsable</label>
+                                           &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail?.prestataire?.responsable}}
+                                            </div>
+                                 </div>
+                                 <div class="p-fluid p-formgrid p-grid">
+                             <div class="p-field p-col">
+                                <label for="matriculeAdherent">Date Effet</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail.dateEffet  | formatTableValue : 'date'}}
+                                 </div>
 
+                                 <div class="p-field p-col">
+                                    <label for="matriculeAdherent">Delai</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{conventionDetail.delai | formatTableValue: 'number':true}}
+                                     </div>
+                    </div>
+                </p-fieldset>
+                <p-fieldset legend="Historique des conventions avec les sous actes" toggleable="true">
+                <p-table #dtConfigurationPlafond [value]="garantieListDetail" dataKey="id" [rowHover]="true" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th>Famille acte</th>
+                            <th>Code</th>
+                            <th>Decription</th>
+                            <th>Montant</th>
+                            <th >Date d'effet</th>
+                           
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-garantie let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
+                        <tr>
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="garantie" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+
+                            <td>{{garantie.libelle}}</td>
+
+
+                            <td>  {{garantie.code}} </td>
+
+                            <td>{{garantie.description}}</td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center">
+                               </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-garantie>
+                        <tr >
+                            <td colspan="7">
+                                <div class="">
+                                    <p-table [value]="garantie.actes" dataKey="id">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <ng-template pTemplate="body" let-acte let-expanded="expanded">
+                                            <tr>
+                                                <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                                <td>{{acte.libelle}}</td>
+                                                <td>{{acte.code}}</td>
+                                                <td>{{acte.description}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </ng-template>
+
+                                        <ng-template pTemplate="rowexpansion" let-acte>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <div class="">
+                                                        <p-table [value]="acte.sousActes" editMode="row" [rowHover]="true" dataKey="id">
+
+                                                            <tr >
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+
+                                                            </tr>
+                                                            <ng-template pTemplate="body" let-sousActe let-expanded="expanded" let-ri="rowIndex" let-editing="editing">
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td>{{sousActe.libelle}}</td>
+                                                                    <td>{{sousActe.code}}</td>
+                                                                    <td>{{sousActe.description}}</td>
+                                                                    <td>{{sousActe?.montantConvantion | formatTableValue: 'number':true}}</td>
+                                                                      <td>{{sousActe?.dateEffet | formatTableValue: 'date'}}</td>
+                                                                    <td>
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        </p-table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </td>
+                        </tr>
+                       
+                        
+                    </ng-template>
+                </p-table>
+            </p-fieldset>
+                </div>
+            </ng-template>
+        </p-dialog>
 
         <p-dialog [maximizable]="true"   [(visible)]="displayFormConvention" header="Ajouter convention" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()" >
             <ng-template pTemplate="content">
@@ -160,7 +322,7 @@
 
                     <div class="p-field p-col-4">
                         <label for="delai">Délai de paiement</label>
-                        <p-inputNumber mode="decimal" locale="fr-FR" id="delai" formControlName="delai" ></p-inputNumber>
+                        <p-inputNumber mode="decimal" locale="fr-FR" id="delai" formControlName="delai"  ></p-inputNumber>
                     </div> 
                 </div>
                 
@@ -189,6 +351,8 @@
                                     <th>Code</th>
                                     <th>Decription</th>
                                     <th>Montant</th>
+                                    <th  *ngIf="displayEdit">Date d'effet</th>
+                                    <th  *ngIf="!displayEdit"></th>
                                     <th></th>
                                 </tr>
                             </ng-template>
@@ -205,16 +369,18 @@
     
                                     <td>{{garantie.description}}</td>
                                     <td></td>
+                                    <td></td>
                                     <td style="text-align:center">
                                        </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="rowexpansion" let-garantie>
                                 <tr >
-                                    <td colspan="6">
+                                    <td colspan="7">
                                         <div class="">
                                             <p-table [value]="garantie.actes" dataKey="id">
                                                 <tr>
+                                                    <th></th>
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
@@ -230,12 +396,13 @@
                                                         <td>{{acte.description}}</td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
                                                     </tr>
                                                 </ng-template>
 
                                                 <ng-template pTemplate="rowexpansion" let-acte>
                                                     <tr>
-                                                        <td colspan="6">
+                                                        <td colspan="7">
                                                             <div class="">
                                                                 <p-table [value]="acte.sousActes" editMode="row" [rowHover]="true" dataKey="id">
 
@@ -246,6 +413,8 @@
                                                                         <th></th>
                                                                         <th></th>
                                                                         <th></th>
+                                                                        <th></th>
+
                                                                     </tr>
                                                                     <ng-template pTemplate="body" let-sousActe let-expanded="expanded" let-ri="rowIndex" let-editing="editing">
                                                                         <tr [pEditableRow]="sousActe">
@@ -263,6 +432,19 @@
                                                                                     </ng-template>
                                                                                     <ng-template pTemplate="output">
                                                                                         <span style="font-weight: bold">{{sousActe?.montantConvantion | formatTableValue: 'number':true}}</span>
+                                                                                    </ng-template>
+                                                                                </p-cellEditor>
+                                                                              </td>
+                                                                              <td *ngIf="displayEdit">
+                                                                                <p-cellEditor>
+                                                                                    <ng-template pTemplate="input">
+                                                                                        <input id="dateEffet"  type="date" name="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
+
+                                                                                       
+                                                                                        
+                                                                                    </ng-template>
+                                                                                    <ng-template pTemplate="output">
+                                                                                        <span style="font-weight: bold">{{sousActe?.dateEffet | formatTableValue: 'date'}}</span>
                                                                                     </ng-template>
                                                                                 </p-cellEditor>
                                                                               </td>

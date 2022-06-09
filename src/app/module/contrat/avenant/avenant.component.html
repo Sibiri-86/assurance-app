@@ -2559,11 +2559,27 @@
                              [rowHover]="true" dataKey="id"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
-                             [showCurrentPageReport]="true">
+                             [showCurrentPageReport]="true" (onRowSelect)="onRowSelect($event)">
                         <ng-template pTemplate="caption">
                             <div class="p-d-flex p-flex-column table-header">
                                 <div class="p-grid">
+<<<<<<< HEAD
                                     <div class="p-col-8">
+=======
+                                    
+                                        <div class="p-mr-2 p-mb-2">
+                                            <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" invalidFileSizeMessageDetail="Taille de l'image" accept=".png, .jpg, .jpeg" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
+                                        </div>
+                                        <div class="p-mr-2 p-mb-2">
+                                            <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="image" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept=".png, .jpg, .jpeg" maxFileSize="100000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+                                        
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    
+                                    <div class="p-col-9">
+                                        
+>>>>>>> feature_button_policy_validation
                                             <span class="p-input-icon-left">
                                                 <i class="pi pi-search"></i>
                                                 <input pInputText type="text"

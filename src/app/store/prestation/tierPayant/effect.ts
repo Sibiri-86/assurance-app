@@ -31,6 +31,20 @@ export class TierPayantEffects {
             ))
         ));
 
+        createTierPayantNoList$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createTierPayantNoList),
+        mergeMap(({tierPayant}) =>
+            this.tierPayantService.posTierPayant1(tierPayant).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadTierPayant()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
     loadTierPayant$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.loadTierPayant),

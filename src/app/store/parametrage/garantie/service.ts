@@ -6,6 +6,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import { SousActe } from "../sous-acte/model";
 
 @Injectable({providedIn: 'root'})
 export class GarantieService {
@@ -22,6 +23,23 @@ $getGaranties(): Observable<GarantieList> {
   $findFamilleActeSousActe(): Observable<GarantieList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_GARANTIE)}/familleActe-sousActe`).pipe(
+      map((response: GarantieList) => response),
+      catchError(this.handleError())
+    );
+  }
+  
+  $findFamilleActeSousActeMontantDetail(sousActes: SousActe[]): Observable<GarantieList> {
+    
+    // @FIXME: get request
+    return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_GARANTIE)}/familleActe-sousActe-montant-detail`, sousActes).pipe(
+      map((response: GarantieList) => response),
+      catchError(this.handleError())
+    );
+  }
+  $findFamilleActeSousActeMontant(sousActes: SousActe[]): Observable<GarantieList> {
+  
+    // @FIXME: get request
+    return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_GARANTIE)}/familleActe-sousActe-montant`, sousActes).pipe(
       map((response: GarantieList) => response),
       catchError(this.handleError())
     );

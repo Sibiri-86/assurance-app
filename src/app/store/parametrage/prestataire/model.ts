@@ -7,7 +7,11 @@ export interface Prestataire {
     idTypePrestataire?: string,
     idNaturePrestataire?: string,
     libelleTypePrestataire?: string,
-    libelleNaturePrestataire?: string
+    libelleNaturePrestataire?: string;
+    responsable?: string;
+    telephone?: string;
+    localite?: string;
+
 }
 export interface PrestataireList {
     prestataireDtoList?: Array<Prestataire>

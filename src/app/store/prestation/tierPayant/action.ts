@@ -11,7 +11,8 @@ import {
 import {OrdreReglementTierPayant} from './model';
 
 
-export const createTierPayant = createAction('[App Init] Create TierPayant', props<{tierPayant: Array<SinistreTierPayant>}>());
+export const createTierPayant = createAction('[App Init] Create TierPayant', props<{tierPayant:Array<SinistreTierPayant>}>());
+export const createTierPayantNoList = createAction('[App Init] Create TierPayant no list', props<{tierPayant:SinistreTierPayant}>());
 export const setTierPayant = createAction('[App Init] set TierPayant',  props<SinistreTierPayantList>());
 export const loadTierPayant = createAction('[App Init] load tierPayant');
 export const FetchReportTierPayant = createAction('[Report] Fetch Report tierPayant', props<Report>());

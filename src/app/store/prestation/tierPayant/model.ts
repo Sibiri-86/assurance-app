@@ -51,6 +51,7 @@ export interface SinistreTierPayant {
     montantReclame?:number;
     montantPaye?:number;
     montantRestant?:number;
+    
 }
 
 export interface Prestation {
@@ -65,7 +66,7 @@ export interface Prestation {
     prestataire?: Prestataire;
     medecin?: Medecin;
     dateSoins?: Date;
-    produitPharmaceutique: Array<ProduitPharmaceutique>;
+    produitPharmaceutique?: Array<ProduitPharmaceutique>;
     familleActe?: PlafondFamilleActe;
     acte?: PlafondActe;
     centreExecutant?: Prestataire;
@@ -76,6 +77,9 @@ export interface Prestation {
     adherent?: Adherent,
     exercice?:Exercice,
     bonPriseEnCharge?: BonPriseEnCharge;
+    montantPlafond?: number;
+    sort?: Sort;
+    nombreActe?: number; 
 }
 
 export interface SinistreTierPayantList {
