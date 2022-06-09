@@ -189,13 +189,13 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="dateDeclaration">Date de déclaration <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="dateDeclaration"  type="date" name="dateDeclaration" pInputText [(ngModel)]="prefinancement.dateDeclaration" (change)="compareDateDeclarationAndToday()">
+                                    <input id="dateDeclaration"  [disabled]="!prefinancement.dateSaisie" type="date" name="dateDeclaration" pInputText [(ngModel)]="prefinancement.dateDeclaration" (change)="compareDateDeclarationAndToday()">
 
                                 </div>
 
                                 <div class="p-field p-col-4">
                                     <label for="dateFacture">Date de Facture<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="dateFacture"  type="date" name="dateFacture" pInputText [(ngModel)]="prefinancement.dateFacture" (change)="compareDateDeclarationAndDateFacture()">
+                                    <input id="dateFacture"  type="date" [disabled]="!prefinancement.dateDeclaration" name="dateFacture" pInputText [(ngModel)]="prefinancement.dateFacture" (change)="compareDateDeclarationAndDateFacture()">
                                    
                                 </div>
 
@@ -208,20 +208,20 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="numeroFacture" >Numéro Facture<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="numeroFacture" type="text" name="numeroFacture" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prefinancement.numeroFacture" placeholder="numero de facture" pInputText>
+                                    <input id="numeroFacture" type="text" [disabled]="!prefinancement.dateFacture"  name="numeroFacture" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prefinancement.numeroFacture" placeholder="numero de facture" pInputText>
 
                                 </div>
                                 <div class="p-field p-col-4">
                                     <label for="prestataire" id="prestataire">Prestataire<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
-                                                showClear="true" [options]="prestataireList"
+                                                showClear="true" [options]="prestataireList" [disabled]="!prefinancement.numeroFacture"
                                                 name="prestataire" [(ngModel)]="prefinancement.prestataire" placeholder="Select centre prescripteur"
                                                 optionLabel="libelle" (onChange)="onRowSelectPrestataire($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4">
                                     <label for="montantReclame" >Montant reclamé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber   [(ngModel)]="prefinancement.montantReclame" name="montantReclame" mode="decimal" locale="fr-FR"   [inputStyle]="{'font-weight': 'bold'}"
+                                    <p-inputNumber  [disabled]="!prefinancement.prestataire"   [(ngModel)]="prefinancement.montantReclame" name="montantReclame" mode="decimal" locale="fr-FR"   [inputStyle]="{'font-weight': 'bold'}"
                                     placeholder="Saisir le montant reclamé par le prestataire"></p-inputNumber>
 
                                 </div>
@@ -316,7 +316,7 @@
 
                             <div class="p-field p-col-2"></div>
                             <div class="p-field p-col-2">
-                                <button pButton 
+                                <button pButton  [disabled]="!prefinancement.montantReclame"
                                         pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
@@ -376,7 +376,7 @@
                                 <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple  (click)="onCreate()"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!prefinancement.prestationsList"   (click)="onCreate()"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>
@@ -397,13 +397,13 @@
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-3">
                     <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                    <input id="dateSoins"  type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins"  (change)="onRowSelectAdherent()">
+                    <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins"  (change)="onRowSelectAdherent()">
                 </div>
                
 
               <div class="p-field p-col-3">
                <label for="exercice">Assuré<span style="color: red !important; size: 1.4em;" class="required"></span></label>
-               <p-dropdown inputId="adherent" dataKey="id" [filter]="true"
+               <p-dropdown inputId="adherent" dataKey="id" [filter]="true" [disabled]="!prestationAdd.dateSoins"
                            showClear="true" [options]="adherentList"
                            [(ngModel)]="prestationAdd.adherent"   name="adherent" [autoDisplayFirst]="false"  (onChange)="onRowSelectBonAdherent($event)"
                    optionLabel="nom">
@@ -413,7 +413,7 @@
           <div class="p-field p-col-3">
            <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
            <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
-                       showClear="true" [options]="bonPriseEnChargeList"
+                       showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.adherent"
                        [(ngModel)]="prestationAdd.bonPriseEnCharge"
                         [autoDisplayFirst]="false"  name="bonPriseEnCharge"
                        optionLabel="numeros" (onChange)="onRowSelectBon($event)">
@@ -423,7 +423,7 @@
        <div class="p-field p-col-3">
         <label for="familleActe">Famille acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
         <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" placeholder="Select famille-acte"
-                    [options]="garanties" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
+                    [options]="garanties" [disabled]="!prestationAdd.adherent" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
                     optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
     </div>
       
@@ -441,13 +441,13 @@
 
                <div class="p-field p-col-3">
                    <label for="acte">Acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown dataKey="id" inputId="acte" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
+                   <p-dropdown dataKey="id" inputId="acte" [disabled]="!prestationAdd.familleActe" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
                                [options]="acteListFilter"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                </div>
 
                <div class="p-field p-col-3">
                    <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown inputId="sousActe" [filter]="true"
+                   <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
                                showClear="true" [options]="sousActeListFilter" name="sousActe"
                                [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
                                optionLabel="libelle" (onChange)="selectDateSoins()"></p-dropdown>
@@ -498,11 +498,11 @@
                </div>
                <div class="p-field p-col-3">
                    <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-inputNumber name="nombreActe" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
+                   <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.sousActe" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
                </div>
                <div class="p-field p-col-3">
                 <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="coutUnitaire" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
+                <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
             </div>
 
            </div>
@@ -571,7 +571,7 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" ></button>
                 </div>
                 <div>
-                    <button  pButton pRipple label="Enregistrer" (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
+                    <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
             </div>

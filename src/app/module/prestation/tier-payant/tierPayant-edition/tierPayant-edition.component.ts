@@ -156,6 +156,7 @@ export class TierPayantEditionComponent implements OnInit {
     prefinancement: SinistreTierPayant = {};
     i: number = 0;
     displayFormPrefinancementDetail = false;
+    montantPlafond: number = null; 
 
 
 
@@ -591,6 +592,7 @@ export class TierPayantEditionComponent implements OnInit {
       const  index = 0;
         const prestaList: Prestation[] =$event.value.prestation; 
         
+        
          if(prestaList.length == 1) {
              
              this.prestationAdd.familleActe = prestaList[0].familleActe;
@@ -659,6 +661,8 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.sort = prestaList1[0].sort;
                     this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
                 }
+
+                
                                 
              }
          }  
@@ -745,6 +749,8 @@ export class TierPayantEditionComponent implements OnInit {
     calculDebours() {
         this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
         this.prestationAdd.sort = Sort.ACCORDE;
+       
+       
         if (this.prestationAdd.nombreActe &&
         this.prestationAdd.coutUnitaire) {
             this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
@@ -797,10 +803,17 @@ export class TierPayantEditionComponent implements OnInit {
             }
           
 
-            
+           
             
         }
 
+        if(this.montantPlafond !== null) {
+            if(this.montantPlafond < this.prestationAdd.montantRembourse) {
+                this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
+                this.prestationAdd.montantRembourse = this.montantPlafond;
+            }
+            this.prestationAdd.montantPlafond = this.montantPlafond;
+        }
         if(this.prefinancement.montantRestant < 0){
             this.prestationAdd.sort = Sort.REJETE;
             this.prestationAdd.observation = "le plafond famille-acte sur la periode est atteint";
@@ -1037,6 +1050,7 @@ export class TierPayantEditionComponent implements OnInit {
           console.log(value);
           if (value) {
               this.prestationAdd.montantPlafond = value.prefinancementState.montantPlafondSousActe; 
+              this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
           } else {
             this.prestationAdd.sort = Sort.REJETE;
            // myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});

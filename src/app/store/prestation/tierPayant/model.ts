@@ -13,6 +13,7 @@ import {Sort} from '../../../module/common/models/sort.enum';
 import {TypeEtatSinistre} from '../../../module/common/models/enum.etat.sinistre';
 import { HistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Exercice } from '../../contrat/exercice/model';
+import { Pathologie } from '../../parametrage/pathologie/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -68,6 +69,7 @@ export interface Prestation {
     dateSoins?: Date;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
     familleActe?: PlafondFamilleActe;
+    pathologie?: Pathologie;
     acte?: PlafondActe;
     centreExecutant?: Prestataire;
     historiqueAvenant?: HistoriqueAvenant;
