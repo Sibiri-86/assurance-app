@@ -104,6 +104,7 @@ export class TierPayantEditionComponent implements OnInit {
     garanties: Array<Garantie>;
     garantieList$: Observable<Array<Garantie>>;
     adherentSelected: Adherent;
+    adherentSelect: Adherent;
     prestataireSelected: Prestataire = {};
     adherentSelected$: Observable<Adherent>;
     medecinListFilter: Array<SelectItem>;
@@ -156,6 +157,7 @@ export class TierPayantEditionComponent implements OnInit {
     prefinancement: SinistreTierPayant = {};
     i: number = 0;
     displayFormPrefinancementDetail = false;
+    displaySinistreDetail = false;
     montantPlafond: number = null; 
 
 
@@ -259,6 +261,13 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
+                this.prestationAdd.nomAdherent = this.adherentSelected.nom;
+                this.prestationAdd.prenomAdherent = this.adherentSelected.prenom;
+                this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe.toString();
+                this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
+                this.prestationAdd.adherent = this.adherentSelected;
+            
                 this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
                 this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
                 if (this.adherentSelected.adherentPrincipal != null) {
@@ -272,8 +281,12 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
-                this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
-                    e.typeBon === TypeBon.PRISEENCHARGE);
+
+              /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+                    e.typeBon === TypeBon.PRISEENCHARGE);*/
+                    this.onRowSelectBonAdherent();
+
+                    
             }
         });
         this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
@@ -406,15 +419,12 @@ export class TierPayantEditionComponent implements OnInit {
           this.prestataireSelected = event.value;
     }
 
-    onRowSelectBonAdherent(event) {
-        console.log("==================",event);
-          this.adherentSelected = event.value;
-          console.log("==================",this.adherentSelected);
-          console.log("====bonPriseEnChargeList==============",this.bonPriseEnChargeList);
-          console.log("==================",this.prestataireSelected);
+    onRowSelectBonAdherent() {
+    
 
           this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
-            && bon.prestataire?.id === this.prestataireSelected.id);
+            && bon.prestataire?.id === this.prestataireSelected.id &&  bon.typeBon === TypeBon.PRISEENCHARGE);
+            console.log('====lidt==========', this.bonPriseEnChargeList);
         
     }
 
@@ -564,6 +574,19 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement * (this.prestationList[ri].taux.taux / 100);
     }
 
+    rechercherAdherent1(event) {
+
+        this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
+        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+        this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.prestationAdd.adherent = value;
+                console.log(this.prestationAdd.adherent);
+            }
+        });
+    }
+
     rechercherAdherent(event) {
         console.log(event.target.value);
         this.prestationForm.get('nomAdherent').setValue('');
@@ -575,6 +598,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('nomGroupeAdherent').setValue('');
         this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
+        
         this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
 
         /* this.familleActeEnCours$ = this.store.pipe(select(plafondSelector.plafondEnCours));
@@ -589,10 +613,21 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     onRowSelectBon($event){
+        console.log($event.value.prestation);
       const  index = 0;
         const prestaList: Prestation[] =$event.value.prestation; 
         
-        
+        if(this.prefinancement.montantRestant == null ) {
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
+        }
+        if(this.prefinancement.montantPaye == null ) {
+            this.prefinancement.montantPaye = 0;
+        }
+        if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
+            this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+            this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
+        }
+
          if(prestaList.length == 1) {
              
              this.prestationAdd.familleActe = prestaList[0].familleActe;
@@ -611,6 +646,14 @@ export class TierPayantEditionComponent implements OnInit {
              this.prestationAdd.sort = prestaList[0].sort;
              this.prestationAdd.sort = prestaList[0].sort;
              this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
+             if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
+                this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
+                
+
+               }
+
+               this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+              this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
          }
          if(prestaList.length > 1) {
              if(this.prestationsList?.length === 0 || this.prestationsList?.length === undefined) {
@@ -630,6 +673,18 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.sort = prestaList[0].sort;
                 this.prestationAdd.sort = prestaList[0].sort;
                 this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
+                if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
+                    this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
+                    
+    
+                   }
+    
+                   this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+                
+
+                
+                
              } else {
                 const prestaList1: Prestation[] = [];
                 prestaList.forEach(prest=>{
@@ -660,6 +715,14 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.sort = prestaList1[0].sort;
                     this.prestationAdd.sort = prestaList1[0].sort;
                     this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
+                    if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
+                        this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
+                        
+        
+                       }
+        
+                       this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                      this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
                 }
 
                 
@@ -722,6 +785,12 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.isDetail = false;
         this.isModif = true;
+        this.prefinancement = {};
+        this.prestationList =[];
+        this.prefinancement.dateSaisie = new Date();
+        console.log("=====================bien==========");
+        console.log(this.prefinancement.dateSaisie);
+        console.log("=====================bien==========");
         this.displayFormPrefinancement = true;
     }
 
@@ -1003,7 +1072,7 @@ export class TierPayantEditionComponent implements OnInit {
           
           this.prestationAdd = {};
           this.compteur = null;
-          if(this.prestationsList?.length%5 == 0){
+          if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
             this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((rest=>{
@@ -1013,6 +1082,12 @@ export class TierPayantEditionComponent implements OnInit {
 
             }));
           }
+
+          this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+      }
+      voirPrestationDetail(prestation: Prestation) {
+          this.prestationDetail = prestation;
+          this.displaySinistreDetail = true;
       }
 
       editerPrestation1(prestation: Prestation, rowIndex: number) {
@@ -1020,9 +1095,19 @@ export class TierPayantEditionComponent implements OnInit {
        
         
           this.prestationAdd = prestation;
-          this.onRowSelectAdherent();
+          this.prestationAdd.matriculeAdherent = this.prestationAdd?.adherent?.numero.toString();
+          this.prestationAdd.nomAdherent = this.prestationAdd?.adherent?.nom;
+          this.prestationAdd.prenomAdherent = this.prestationAdd?.adherent?.prenom;
+          this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe.numeroGroupe.toString();
+          this.prestationAdd.numeroPolice = this.prestationAdd?.adherent?.groupe.police.numero;
+          if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined) {
+            this.bonPriseEnChargeList.push(this.prestationAdd?.bonPriseEnCharge);
+          }
+        
+         // this.onRowSelectAdherent();
+         
           this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === prestation?.adherent?.id 
-            && bon.prestataire?.id === this.prefinancement.id);
+            && bon.prestataire?.id === this.prefinancement?.prestataire?.id);
          
           this.displayPrestationpop = true;
           this.baseAnterieur = prestation.baseRemboursement;
@@ -1067,8 +1152,11 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       editerTierPayant(tierPayant: SinistreTierPayant) {
+          console.log(tierPayant.prestation);
 
+          console.log("===bonPriseEnChargeList===",this.bonPriseEnChargeList);
           this.prefinancement = tierPayant;
+          this.prestataireSelected = tierPayant.prestataire;
          
           this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
           this.prestationsList = tierPayant.prestation;
@@ -1078,8 +1166,8 @@ export class TierPayantEditionComponent implements OnInit {
       voirTierPyant(tierPayant: SinistreTierPayant){
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
-        this.prestationDetail = tierPayant.prestation[0];
-        console.log(tierPayant.prestation[0]?.sousActe);
+        // this.prestationDetail = tierPayant.prestation[0];
+       // console.log(tierPayant.prestation[0]?.sousActe);
           this.displayFormPrefinancementDetail = true;
       }
 

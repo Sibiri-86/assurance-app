@@ -81,7 +81,14 @@ export interface Prestation {
     bonPriseEnCharge?: BonPriseEnCharge;
     montantPlafond?: number;
     sort?: Sort;
-    nombreActe?: number; 
+    nombreActe?: number;
+    sinistreTierPayant?: SinistreTierPayant;
+    numeroGroupe?: string;
+    numeroPolice?: string;
+    prenomAdherent?: string;
+    nomAdherent?: string;
+    matriculeAdherent?: string; 
+    numeroBon?: string;
 }
 
 export interface SinistreTierPayantList {

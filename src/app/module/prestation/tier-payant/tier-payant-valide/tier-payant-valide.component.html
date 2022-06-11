@@ -33,14 +33,15 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="min-width:60px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="matricule" style="min-width:60px" >Matricule assuré<p-sortIcon field="matricule"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:175px">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="prenom" style="min-width:250px">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="dateDeclaration" style="min-width:60px">Date declaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
-                        <th pSortableColumn="referenceBordereau" style="min-width:60px">Etat<p-sortIcon field="taux.taux"></p-sortIcon></th>
-
-                        <th style="min-width:150px"></th>
+                        <th pSortableColumn="duree" style="width:50px" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+                       
+                        <th pSortableColumn="numero" style="width:100px">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width:100px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                     
+                        <th pSortableColumn="duree" style="width:50px">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width:100px">Montant facture<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="etat" style="width:50px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+                        <th style="width:175px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tierPayant>
@@ -48,28 +49,41 @@
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
+                        <td> <span class="p-column-title" style="width:50px; font-weight: bold;" >{{tierPayant.numeroFacture}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.prestataire.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
+                        </td>
 
-                        <td><span class="p-column-title">{{tierPayant.numeroSinistre}}</span>
-                        </td>
-                        <td>
-                            <span class="p-column-title" >{{tierPayant.adherent.numero}}</span>
-                        </td>
-                        <td>
-                            <span class="p-column-title" >{{tierPayant.adherent.nom}}</span>
-                        </td>
-                        <td>
-                            <span class="p-column-title" >{{tierPayant.adherent.prenom}}</span>
-                        </td>
-                        <td><span class="p-column-title" >{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
-                        </td>
-                        <td>
-                            <!-- <span class="p-column-title" style="width:50px">{{tierPayant?.etat}}</span> -->
-                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success">{{tierPayant?.etat}}</span>
-                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
-                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{tierPayant?.etat}}</span>
-                        </td>
+                        <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>-->
+                       <!--  <td>
+                            <span class="p-column-title" style="width:50px">{{tierPayant?.adherent?.numero}}</span>
+                        </td> -->
                         
                         <td>
+                            <span class="p-column-title" style="width:50px;" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="width:50px ;  font-weight: bold;" >{{tierPayant.montantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <!-- <td>
+                            <span class="p-column-title" style="width:150px">{{tierPayant?.adherent?.nom}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="width:150px">{{tierPayant?.adherent?.prenom}}</span>
+                        </td> -->
+                        <td>
+                            <!-- <span class="p-column-title" style="width:50px">{{tierPayant?.etat}}</span> -->
+                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success" style="width:90px">{{tierPayant?.etat}}</span>
+                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning" style="width:90px">EN ATTENTE..</span>
+                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger" style="width:90px">{{tierPayant?.etat}}</span>
+                        </td>
+
+                        
+                        
+                        <td style="width:175px">
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
                             <button pButton icon="pi pi-times" pTooltip="Dé-valider le sinistre" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(tierPayant)"></button>

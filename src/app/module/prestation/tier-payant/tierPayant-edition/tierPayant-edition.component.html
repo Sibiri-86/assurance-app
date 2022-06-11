@@ -35,13 +35,15 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="width:100px">N° sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width:50px" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+                       
                         <th pSortableColumn="numero" style="width:100px">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width:100px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="min-width:200px">Date soins<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>-->
 <!--                         <th pSortableColumn="duree" style="width:50px">N° Assuré <p-sortIcon field="duree"></p-sortIcon></th>
- -->                        <th pSortableColumn="duree" style="width:50px" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+ -->                      
                         <th pSortableColumn="duree" style="width:50px">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width:100px">Montant facture<p-sortIcon field="numero"></p-sortIcon></th>
                         <!-- <th pSortableColumn="dateEffet" style="width:150px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="width:150px">Prénom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
                          --><th pSortableColumn="etat" style="width:50px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
@@ -53,7 +55,7 @@
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" style="width:100px">{{tierPayant.numeroSinistre}}</span>
+                        <td> <span class="p-column-title" style="width:50px; font-weight: bold;" >{{tierPayant.numeroFacture}}</span>
                         </td>
                         <td><span class="p-column-title" style="width:100px">{{tierPayant.prestataire.libelle}}</span>
                         </td>
@@ -65,11 +67,12 @@
                        <!--  <td>
                             <span class="p-column-title" style="width:50px">{{tierPayant?.adherent?.numero}}</span>
                         </td> -->
+                        
                         <td>
-                            <span class="p-column-title" style="width:50px" >{{tierPayant.numeroFacture}}</span>
+                            <span class="p-column-title" style="width:50px;" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
                         </td>
                         <td>
-                            <span class="p-column-title" style="width:50px" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                            <span class="p-column-title" style="width:50px ;  font-weight: bold;" >{{tierPayant.montantReclame | formatTableValue: 'number':true}}</span>
                         </td>
                         <!-- <td>
                             <span class="p-column-title" style="width:150px">{{tierPayant?.adherent?.nom}}</span>
@@ -331,6 +334,7 @@
                                     <tr>
                                     
                                        
+                                        <th style="width:8rem">N° Sinistre</th>
                                         <th>Date de soins</th>
                                         <th>Assuré</th>
                                         <th>Famille acte</th>
@@ -345,7 +349,7 @@
                                 <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
                                     <tr>
                                 
-                                        
+                                        <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                         <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
                                         <td>{{rowData.adherent?.nom}}</td>
                                         <td>{{rowData.familleActe?.libelle}}</td>
@@ -388,32 +392,63 @@
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
 </div>
-<p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestataire" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid">
     
     <ng-template pTemplate="content"> 
         <div class="card">
             <form>
 
-            <div class="p-fluid p-formgrid p-grid">
-                <div class="p-field p-col-3">
-                    <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                    <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins"  (change)="onRowSelectAdherent()">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-3">
+                        <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins">
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important;">*</span></label>
+                        <input id="matriculeAdherent" [disabled]="!prestationAdd.dateSoins" type="text"  [(ngModel)]="prestationAdd.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherent1($event)" pInputText>
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="nomAdherent">Nom <span class="required">*</span></label>
+                        <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent" pInputText>
+                        <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherent" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent"  pInputText>
+                    </div>
+                
+                    
+                    <div class="p-field p-col-3">
+                        <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                        <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent"  pInputText>
+                        <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent" pInputText>
+                    </div>
+                    
+                   
+                    
                 </div>
+            <div class="p-fluid p-formgrid p-grid">
                
+                <div class="p-field p-col-3">
+                    <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.groupeAdherent" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="groupeAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.numeroGroupe" name="numeroGroupe" pInputText>
+                </div>
+                <div class="p-field p-col-3">
+                    <label for="policeAdherent">Numero police</label>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
+                </div>
 
-              <div class="p-field p-col-3">
+              <!-- <div class="p-field p-col-3">
                <label for="exercice">Assuré<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                <p-dropdown inputId="adherent" dataKey="id" [filter]="true" [disabled]="!prestationAdd.dateSoins"
                            showClear="true" [options]="adherentList"
                            [(ngModel)]="prestationAdd.adherent"   name="adherent" [autoDisplayFirst]="false"  (onChange)="onRowSelectBonAdherent($event)"
                    optionLabel="nom">
            </p-dropdown>
-          </div>
+          </div>  -->
 
           <div class="p-field p-col-3">
            <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
            <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
-                       showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.adherent"
+                       showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.matriculeAdherent"
                        [(ngModel)]="prestationAdd.bonPriseEnCharge"
                         [autoDisplayFirst]="false"  name="bonPriseEnCharge"
                        optionLabel="numeros" (onChange)="onRowSelectBon($event)">
@@ -563,6 +598,13 @@
                </div>
 
            </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-3">
+                <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <input id="numeroBon" [disabled]="!prestationAdd.coutUnitaire"  type="text" name="numeroBon" pInputText [(ngModel)]="prestationAdd.numeroBon">
+            </div>
+           </div>
         </form>
            
 
@@ -571,7 +613,7 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" ></button>
                 </div>
                 <div>
-                    <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
+                    <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire && !prestationAdd.numeroBon"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
             </div>
@@ -580,14 +622,14 @@
          
      </p-dialog>
 
-     <p-dialog [maximizable]="true" [style]="{width: '1500px'}" [(visible)]="displayFormPrefinancementDetail" header="Tiers Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+     <p-dialog [maximizable]="true"  [(visible)]="displayFormPrefinancementDetail" header="Tiers Payant" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
         <ng-template pTemplate="content">
             <div class="card">
 
 
              
 
-                    <p-fieldset legend="Sinistre" toggleable="true">
+                    <p-fieldset legend="Facture" toggleable="true">
 
                         <div class="p-fluid p-formgrid p-grid">
 
@@ -669,7 +711,48 @@
                     </p-fieldset>
 
                     <hr/>
-            <p-fieldset legend="Prestation" toggleable="true">
+
+                    <p-fieldset legend="Liste des Sinistres" toggleable="true">
+                        <p-table [value]="prefinancementDetail.prestation" dataKey="id" editMode="row" responsiveLayout="scroll" [rows]="10" [paginator]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                
+                                   
+                                    <th style="width:8rem">N° Sinistre</th>
+                                    <th>Date de soins</th>
+                                    <th>Assuré</th>
+                                    <th>Famille acte</th>
+                                    <th>Acte</th>
+                                    <th>Sous Acte</th>
+                                    <th>Montant remboursé</th>
+                                    <th style="width:8rem"></th>
+                                    
+                                </tr>
+                            </ng-template>
+                
+                            <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                <tr>
+                            
+                                    <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
+                                    <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
+                                    <td>{{rowData.adherent?.nom}}</td>
+                                    <td>{{rowData.familleActe?.libelle}}</td>
+                                    <td>{{rowData.acte?.libelle}}</td>
+                
+                                    <td> {{rowData.sousActe?.libelle}}</td>
+                                    <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
+                                    
+                                    <td style="text-align:center">
+                                        <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="voirPrestationDetail(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                
+                
+                                        </td>
+                            
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-fieldset>
+           <!--  <p-fieldset legend="Prestation" toggleable="true">
 
                     
                     
@@ -804,7 +887,7 @@
             
                        </div>
 
-                    </p-fieldset>
+                    </p-fieldset> -->
                     
                 
 
@@ -814,6 +897,166 @@
                     <br/>
 
                     
+            </div>
+        </ng-template>
+    </p-dialog>
+
+
+    <p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestaion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+        <ng-template pTemplate="content">
+            <div class="card">
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-3">
+                        <label for="dateSoins">Date de soins</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.dateSoins | formatTableValue: 'date'}}
+                    </div>
+                   
+    
+                  <div class="p-field p-col-3">
+                   <label for="exercice">Nom </label> 
+                   &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.nom}}
+                </div>
+                   <div class="p-field p-col-3">
+                    <label for="exercice">Prénom </label> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.prenom}}
+                   
+              </div>
+
+              <div class="p-field p-col-3">
+                <label for="exercice">Numéro groupe</label> 
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.numeroGroupe}}
+               
+          </div>
+         
+               
+    
+                  
+           </div> 
+    
+           
+    
+               <div class="p-fluid p-formgrid p-grid">
+                   
+    
+                <div class="p-field p-col-3">
+                    <label for="exercice">Numéro police</label> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.groupe?.police?.numero}}
+                   
+              </div>
+            
+                      <div class="p-field p-col-3">
+                       <label for="bonPriseEnCharge">Bon de prise en charge</label>
+                       &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.bonPriseEnCharge?.numeros}}
+                       
+                   </div>
+            
+                   <div class="p-field p-col-3">
+                    <label for="familleActe">Famille acte</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.familleActe?.libelle}}
+                    
+                </div>
+                  
+    
+                   <div class="p-field p-col-3">
+                       <label for="acte">Acte</label>
+                       &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.acte?.libelle}}
+                      
+                   </div>
+    
+                   
+    
+               </div>
+    
+               <div class="p-fluid p-formgrid p-grid">
+    
+                <div class="p-field p-col-3">
+                    <label for="sousActe" id="sousActe">SousActe</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.sousActe?.libelle}}
+              
+                </div>
+ 
+                <div class="p-field p-col-3">
+                    <label for="pathologie" id="pathologie">Pathologie</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.pathologie?.code}}
+                    
+                </div>
+                <div class="p-field p-col-3">
+                 <label for="prestataire" id="prestataire">Centre Prescripteur</label>
+                 &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.prestataire?.libelle}}
+                 
+             </div>
+                   <div class="p-field p-col-3">
+                       <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique</label>
+                       <span **ngFor="let item of prestationDetail?.produitPharmaceutique"></span>
+                       &nbsp;&nbsp;&nbsp;&nbsp;{{item?.libelle}}
+                      
+                   </div>
+    
+                   
+    
+               </div>
+    
+               <div class="p-fluid p-formgrid p-grid">
+    
+                <div class="p-field p-col-3">
+                    <label for="medecin" id="medecin">Medecin</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.medecin?.nom}}
+                    
+                </div>
+                <div class="p-field p-col-3">
+                    <label for="nombreActe" id="nombreActe">Nombre Acte</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.nombreActe | formatTableValue: 'number':true}}
+                </div>
+                <div class="p-field p-col-3">
+                 <label for="coutUnitaire" id="coutUnitaire">Cout unitaire </label>
+                 &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.coutUnitaire | formatTableValue: 'number':true}}
+               </div>
+                  
+                   <div class="p-field p-col-3">
+                       <label for="debours">Debours</label>
+                       &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.debours | formatTableValue: 'number':true}}
+                   </div>
+                   
+               </div>
+    
+               <div class="p-fluid p-formgrid p-grid">
+                
+                <div class="p-field p-col-3">
+                    <label for="baseRemboursement" id="baseRemboursement">Base remboursement</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.baseRemboursement | formatTableValue: 'number':true}}
+                </div>
+ 
+ 
+                <div class="p-field p-col-3">
+                    <label for="taux" id="taux">Taux </label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.taux?.taux}}
+                    
+                </div>
+                <div class="p-field p-col-3">
+                 <label for="montantRembourse" id="montantRembourse">Montant remboursé</label>
+                 &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.montantRembourse | formatTableValue: 'number':true}}
+             </div>
+ 
+
+                   <div class="p-field p-col-3">
+                    <label for="nombreActe">Montant Plafond</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.montantPlafond | formatTableValue: 'number':true}}
+                </div>
+
+               
+    
+                   
+    
+               </div>
+               <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-3">
+                    <label for="nombreActe">Numero du Bon</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.numeroBon | formatTableValue: 'number':true}}
+                </div>
+               </div>
+               
+
             </div>
         </ng-template>
     </p-dialog>
