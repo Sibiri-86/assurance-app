@@ -1778,7 +1778,7 @@
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantModification">
-                    <app-avenant-modification [police]="policeItem" (returnEvent)="getSortie($event)" [etat]="etat" [avenantId]="historiqueAvenant.id"
+                    <app-avenant-modification [police]="policeItem" [avenant]="historiqueAvenant" (returnEvent)="getSortie($event)" [etat]="etat" [avenantId]="historiqueAvenant.id"
                                               (eventEmitterM)="getAvenantModification($event)"></app-avenant-modification>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
@@ -2054,13 +2054,13 @@
                                 <td style="width: 30em;">
                                     <div class="p-grid p-mt-1">
                                         <div class="p-col- p-mr-2">
-                                            <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide)" [(ngModel)]="rowdata.valide"
+                                            <p-inputSwitch (onChange)="changeStatus(rowdata, rowdata.valide); onRowSelectPolice(rowdata.police)" [(ngModel)]="rowdata.valide"
                                                            [disabled]="!disableAvenant(rowdata)"></p-inputSwitch>
                                         </div>
                                         <div class="p-col-">
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                                     class="p-button-rounded p-button-info p-mr-2"
-                                                    (click)="onRowSelectAvenant(rowdata); getGroupeByPolice(rowdata)">
+                                                    (click)=" avenantItem = rowdata; onRowSelectAvenant(rowdata); getGroupeByPolice(rowdata)">
                                             </button>
                                             <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier"
                                                     class="p-button-rounded p-button-warning p-mr-2 p-mr-2"

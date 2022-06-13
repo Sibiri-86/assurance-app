@@ -98,6 +98,7 @@ import * as featureExerciceAction from '../../../../store/contrat/exercice/actio
 export class AvenantModificationComponent implements OnInit {
   @Input() historiqueAvenantAdherantList: Array<HistoriqueAvenantAdherant>;
   @Input() police: Police;
+  @Input() avenant: HistoriqueAvenant;
   groupe: Groupe;
   groupePolicy: any;
   adherantListTmp: Array<HistoriqueAvenantAdherant>;
@@ -200,8 +201,15 @@ export class AvenantModificationComponent implements OnInit {
   exercice$: Observable<Exercice>;exerciceList$
   curentExercice: Exercice = {};
   historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
+  historiquePlafondFamilleActePlafongModifier: Array<HistoriquePlafondFamilleActe> = [];
   sousActeToSave:SousActe = {};
-  sousActeListFinal: SousActe[] = [];
+  acteToSave: Acte= {};
+  familleActeToSave: Garantie= {};
+  sousActeListFinal: PlafondSousActe[] = [];
+  acteListFinal: PlafondActe[] = [];
+  familleActeListFinal: PlafondFamilleActe[] = [];
+  historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
+  @Output() currentExercice: Exercice;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -593,6 +601,8 @@ export class AvenantModificationComponent implements OnInit {
   isRenouv = false;
 
   ngOnInit(): void {
+    
+    console.log('avenant ----->  ', this.avenant);
     console.log('police ----->  ', this.police);
     console.log('avenantId ----->  ', this.avenantId);
     console.log('etat ----->  ', this.etat);
@@ -1079,9 +1089,12 @@ export class AvenantModificationComponent implements OnInit {
     } */
     // this.objet.groupe = this.groupeForm.value || this.groupeSelected;
     // this.objet.groupe.police = this.police;
-    this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
-    this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+    this.objet.plafondGroupeActes = this.acteListFinal;
+    console.log("this.objet.plafondGroupeActes**************", this.objet.plafondGroupeActes);
+    this.objet.plafondFamilleActes = this.familleActeListFinal;
+    console.log("this.objet.plafondFamilleActes**************", this.objet.plafondFamilleActes);
     this.objet.plafondGroupeSousActes = this.sousActeListFinal;
+    console.log("this.objet.plafondGroupeSousActes**************", this.objet.plafondGroupeSousActes);
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
     if (this.plafondForm.value) {
@@ -1117,7 +1130,7 @@ export class AvenantModificationComponent implements OnInit {
     }
     this.objet.historiqueGroupes = this.historiqueGroupes;
     console.log("objet envoyé**************", this.objet);
-    this.eventEmitterM.emit(this.objet);
+   this.eventEmitterM.emit(this.objet);
   }
 
   loadHistoriquePlafondGroupe(): void {
@@ -1207,21 +1220,6 @@ export class AvenantModificationComponent implements OnInit {
 
   appliquerConfiguration(): void {}
 
-
-  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
-    this.clonedPlafondConfiguration[plafond.garantie?.id] = {...plafond};
-    console.log(this.clonedPlafondConfiguration);
-  }
-
-  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
-    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
-  }
-
-  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
-    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie?.id];
-    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
-  }
-
   loadPlafondConfigBygroupe() {
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
             (res) => {
@@ -1302,17 +1300,59 @@ export class AvenantModificationComponent implements OnInit {
     );
   }
 
+  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
+    this.clonedPlafondConfiguration[plafond.garantie?.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
+    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
+    this.familleActeToSave = this.familleActeListFinal.find(familleActe => familleActe.id === plafond.id);
+    //if(this.clonedPlafondConfiguration[plafond.garantie?.id] === plafond) 
+    if(this.familleActeToSave?.id) {
+      this.familleActeListFinal.forEach(fa => {
+        if(fa.id === plafond.id) {
+          fa === plafond;
+        }
+      });
+    } else {
+      this.familleActeListFinal?.push(plafond);
+    }
+    console.log('***this.familleActeListFinal****', this.familleActeListFinal);
+  }
+
+  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
+    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie?.id];
+    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
+    this.familleActeListFinal = this.familleActeListFinal.filter(fa => fa.id !== plafond.id);
+    console.log('***this.familleActeListFinal****', this.familleActeListFinal);
+  }
+
+
   onRowEditInitPlafondConfigurationActe(plafondActe: PlafondActe) {
     this.clonedPlafondActe[plafondActe.acte?.id] = { ...plafondActe };
   }
 
   onRowEditSavePlafondConfigurationActe(plafondActe: PlafondActe) {
     delete this.clonedPlafondActe[plafondActe.acte?.id];
+    this.acteToSave = this.acteListFinal.find(acte => acte.id === plafondActe.id);
+    if(this.acteToSave?.id) {
+      this.acteListFinal.forEach(acte => {
+        if(acte.id === plafondActe.id) {
+          acte === plafondActe;
+        }
+      });
+    } else {
+      this.acteListFinal.push(plafondActe);
+    }
+    console.log('***this.acteListFinal****', this.acteListFinal);
   }
 
   onRowEditCancelPlafondConfigurationActe(plafondActe: PlafondActe, index: number) {
     this.plafondActe[index] = this.clonedPlafondActe[plafondActe.acte?.id];
     delete this.clonedPlafondActe[plafondActe.acte?.id];
+    this.acteListFinal = this.acteListFinal.filter(acte => acte.id !== plafondActe.id);
+    console.log('***this.acteListFinal****', this.acteListFinal);
   }
 
   onRowEditInitPlafondConfigurationSousActe(plafondSousActe: PlafondSousActe) {
@@ -1329,13 +1369,11 @@ export class AvenantModificationComponent implements OnInit {
     console.log('***this.sousActeToSave****', this.sousActeToSave);
     if(this.sousActeToSave?.id) {
       this.sousActeListFinal.forEach(sous => {
-        if(sous.id === plafondSousActe.id){
+        if(sous.id === plafondSousActe.id) {
           sous = plafondSousActe;
-          // sous.id = '';
         }
       })
     } else {
-      // plafondSousActe.id = '';
       this.sousActeListFinal.push(plafondSousActe);
     }
     console.log('***this.sousActeListFinal****', this.sousActeListFinal);
@@ -1361,6 +1399,8 @@ export class AvenantModificationComponent implements OnInit {
       this.onPlafondActeChange(pa);
       plafond.listeActe.push(pa);
     });
+    this.getsHistoriquePlafondGroupeActe(plafond);
+    console.log('*****plafond.listeActe*******', plafond.listeActe);
   }
 
   onPlafondActeChange(plafondActe: PlafondActe) {
@@ -1373,6 +1413,7 @@ export class AvenantModificationComponent implements OnInit {
       psa.sousActe = sousActe;
       plafondActe.listeSousActe.push(psa);
     });
+    console.log('*****plafondActe.listeSousActe*******', plafondActe.listeSousActe);
   }
 
   getPlafondGroupeByGroupe(): void {
@@ -1528,12 +1569,34 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   getHistoriquePlafondGroupeFamilleActeByPolice(): void {
-    this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.police.id).subscribe(
-      (res) => {
-        this.historiquePlafondFamilleActePlafongConfig = res;
-        console.log('result ==============  ', res);
-      }
-    );
+    console.log('police de recuperation',this.police.id);
+    if(this.etat === 'CREATE') {
+      this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.curentExercice.id).subscribe(
+        (res) => {
+          this.historiquePlafondFamilleActePlafongConfig = res;
+          console.log('police de recuperation', this.historiquePlafondFamilleActePlafongConfig.length);
+          console.log('result ==============  ', res);
+        }
+      );
+    } else {
+      this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.avenant.exercice.id).subscribe(
+        (res) => {
+          this.historiquePlafondFamilleActePlafongConfig = res;
+          console.log('police de recuperation', this.historiquePlafondFamilleActePlafongConfig.length);
+          console.log('result ==============  ', res);
+        }
+      );
+    }
+    
+  }
+
+  getsHistoriquePlafondGroupeActe(historiqueAvenantFamilleActe: HistoriquePlafondFamilleActe) {
+    console.log('entrée ==============  ');
+    this.historiqueAvenantService.getsHistoriquePlafondGroupeActe(this.curentExercice.id, historiqueAvenantFamilleActe.id)
+    .subscribe( (res) => {
+        this.historiquePlafondActePlafongConfig = res;
+        console.log('historiquePlafondActePlafongConfig ==============  ', this.historiquePlafondActePlafongConfig);
+    });
   }
 
   loadExerciceByPolice(police: Police): void {
@@ -1569,6 +1632,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onExerciceChange(): void {
+    this.getHistoriquePlafondGroupeFamilleActeByPolice();
     console.log('curent exo === ');
     console.log(this.curentExercice);
  }

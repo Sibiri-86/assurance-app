@@ -321,6 +321,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   listGroupe: Array<Groupe> = [];
   groupeListes: Array<Groupe>;
   groupeSelect: Groupe = {};
+  avenantItem: HistoriqueAvenant;
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -1673,6 +1674,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantIncorporation = true;
         this.addAvenant();
         this.entete = 'Avenant d\'incorporation'.toUpperCase();
+        this.etat = 'VIEW';
         // this.loadExerciceByPolice(avenant.police);
         console.log('===================avenant.police====================', avenant.police);
         break;
@@ -1685,6 +1687,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantRetrait = true;
         this.addAvenant();
         this.entete = 'Avenant de retrait'.toUpperCase();
+        this.etat = 'VIEW';
         // this.viewAvenantRetrait(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -1694,11 +1697,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantRenouvellement = true;
         this.addAvenant();
         this.entete = 'Avenant de renouvellement'.toUpperCase();
+        this.etat = 'VIEW';
         // this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
         this.viewAvenantAffaireNouvelle(avenant, avenant.typeHistoriqueAvenant);
+        this.etat = 'VIEW';
         break;
       }
       case TypeHistoriqueAvenant.RESILIATION: {
@@ -1706,6 +1711,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantResiliation = true;
         this.addAvenant();
         this.entete = 'Avenant de résiliation'.toUpperCase();
+        this.etat = 'VIEW';
         // this.viewAvenantResiliation(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -1714,6 +1720,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantSuspension = true;
         this.addAvenant();
         this.entete = 'Avenant de suspension'.toUpperCase();
+        this.etat = 'VIEW';
         // this.viewAvenantSuspension(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -1723,6 +1730,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.isAvenantModification = true;
         this.addAvenant();
         this.entete = 'Avenant de modification'.toUpperCase();
+        this.etat = 'VIEW';
+        this.avenantItem = avenant;
         // this.viewAvenantModification(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -2250,6 +2259,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.historiqueAvenant = res;
           this.onRowSelectPolice(res.police);
           this.loadPoliceListe();
+          historiqueAvenant = {};
+          console.log('historiqueAvenantChangeStatus', historiqueAvenant);
         }
     );
     historiqueAvenant = {};

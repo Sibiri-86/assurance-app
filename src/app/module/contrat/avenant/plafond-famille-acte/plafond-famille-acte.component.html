@@ -21,7 +21,7 @@
     <ng-template pTemplate="body" let-historiquePlafondFamilleActePlafong let-editing="editing" let-ri="rowIndex" let-expanded="expanded" [style]="{'width': '100%'}" >
         <tr [pEditableRow]="plafond" class="colorZone">
             <td>
-                <button type="button" pButton pRipple [pRowToggler]="historiquePlafondFamilleActePlafong" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <button type="button" pButton pRipple [pRowToggler]="historiquePlafondFamilleActePlafong" (click)="getsHistoriquePlafondGroupeActe(historiquePlafondFamilleActePlafong)" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
             </td>
             <td>
                 <p-cellEditor>
@@ -147,7 +147,7 @@
         <tr >
             <td colspan="12">
                 <div class="">
-                    <app-plafond-acte [etat]="etat" [historiquePlafondActes]="historiquePlafondFamilleActePlafong?.historiquePlafondGroupeActes"></app-plafond-acte>
+                    <app-plafond-acte [etat]="etat" [historiquePlafondActes]="historiquePlafondActePlafongConfig"></app-plafond-acte>
                 </div>
             </td>
         </tr>

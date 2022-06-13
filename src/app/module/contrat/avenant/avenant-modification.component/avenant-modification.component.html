@@ -605,9 +605,9 @@
                             </th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+                    <ng-template pTemplate="body" let-plafond let-editing="editing" (onClick)="getsHistoriquePlafondGroupeActe(plafond)" let-ri1="rowIndex" let-expanded="expanded" >
                         <tr [pEditableRow]="plafond" class="colorZone">
-                            <td>
+                            <td >
                                 <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
                             <td>
@@ -1104,7 +1104,7 @@
             </div>
         </p-tabPanel>
         <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
-          <app-plafond-famille-acte [etat]="'UPDATE'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
+          <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
     </p-tabView>
     <hr>
