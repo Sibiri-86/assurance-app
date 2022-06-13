@@ -43,6 +43,9 @@ export const setTierPayantResponse = createAction('[App Init] Check TierPayant r
 export const searchTiersPayant = createAction('[App Init] search TierPayant', props<{matricule: number,
     dateDeclaration: string}>() );
 
+export const searchTiersPayantByFacture = createAction('[App Init] search TierPayant by Facture', props<{numeroFacture: string,
+     dateDeclaration: string}>() );
+
 export const searchTierPayantOrdreReglement = createAction('[App Init] search Tier payantordre reglement', props<{numero: string,
         date: string}>() );
 

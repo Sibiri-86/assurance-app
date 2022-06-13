@@ -4,8 +4,8 @@
 <div class="card">
     <div class="p-formgroup-inline">
         <div class="p-field">
-            <label for="matricule" class="p-sr-only">Matricule</label>
-            <input id="matricule" type="number" pInputText placeholder="Matricule" [(ngModel)]="matricule">
+            <label for="matricule" class="p-sr-only">Numero facture</label>
+            <input id="matricule" type="text" pInputText placeholder="Matricule" [(ngModel)]="matricule">
         </div>
         
         <div class="p-field">
@@ -17,7 +17,7 @@
             <button pButton pRipple type="button" (click)="rechercherSinistre()" label="Rechercher"></button>
         </div>
         
-        
+    </div>
         <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
         [rowHover]="true" dataKey="id"
         styleClass="p-datatable-customers"
@@ -26,46 +26,41 @@
    </ng-template>
    <ng-template pTemplate="header">
        <tr>
-           <!--<th style="width: 3rem">
-               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-           </th>-->
-           <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-           <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-           <th pSortableColumn="nom" style="min-width:200px">Date saisie<p-sortIcon field="nom"></p-sortIcon></th>
-           <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
-           <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-           <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="dateEcheance"></p-sortIcon></th>
-           <th pSortableColumn="status" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
-           <th style="min-width:150px"></th>
+        <th pSortableColumn="duree" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+                       
+        <th pSortableColumn="numero">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
+        <th pSortableColumn="nom" >Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                        
+        <th pSortableColumn="duree" >Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+        <th pSortableColumn="numero">Montant facture<p-sortIcon field="numero"></p-sortIcon></th>
+        <th pSortableColumn="etat" style="width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+        <th style="width:175px"></th>
+
+          
        </tr>
    </ng-template>
    <ng-template pTemplate="body" let-prefinancement>
        <tr>
-           <!--<td>
-               <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
-           </td>-->
-           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+      
+           <td><span class="p-column-title">{{prefinancement.numeroFacture}}</span>
            </td>
-           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
+           <td><span class="p-column-title">{{prefinancement.prestataire?.libelle}}</span>
            </td>
-           <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateSaisie | formatTableValue : 'date'}}</span>
+           <td><span class="p-column-title">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
            </td>
-           <td>
-               <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+           <td><span class="p-column-title">{{prefinancement.dateFacture | formatTableValue : 'date'}}</span>
            </td>
            <td>
-               <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+               <span class="p-column-title">{{prefinancement.montantReclame | formatTableValue: 'number':true}}</span>
            </td>
-           <td>
-               <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
-           </td>
+           
            <td>
                <span *ngIf="prefinancement?.etat ==='VALIDE'" class="p-badge p-badge-success">{{prefinancement.etat}}</span>
                <span *ngIf="prefinancement?.etat ==='INVALIDE'" class="p-badge p-badge-warning">EN ATTENTE</span>
                <span *ngIf="prefinancement?.etat === null " class="p-badge p-badge-warning">EN ATTENTE</span>
                <span *ngIf="prefinancement?.etat ==='ANNULE'" class="p-badge p-badge-danger">{{prefinancement.etat}}</span>
            </td>
-           <td style="min-width:150px">
+           <td style="min-width:175px">
                <!--
                <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
                -->
@@ -86,7 +81,7 @@
 
 
 
-</div> 
+ 
 </div>
 
 
@@ -95,183 +90,290 @@
     <ng-template pTemplate="content">
         <div class="card">
             
-        <p-fieldset legend="Sinistre" toggleable="true">
-                
-           <div class="p-fluid p-formgrid p-grid">
+            <p-fieldset legend="Facture" toggleable="true">
 
-            <div class="p-field p-col">
-                <label for="dateEffet">Date de saisie</label>
-                <span> {{selectPrefinancement.dateSaisie  | formatTableValue : 'date'}}</span>
-            </div>
-            
-            <div class="p-field p-col">
-                <label for="dateEffet">Date de declaration</label>
-                <span> {{selectPrefinancement.dateDeclaration  | formatTableValue : 'date'}}</span>
-            </div>
-            
-            <div class="p-field p-col">
-                <label for="matriculeAdherent">Matricule adhérent</label>
-                <span> {{selectPrefinancement.adherent.numero}}</span>
-            </div>
-            
-           </div>
-            
-            <div class="p-fluid p-formgrid p-grid">
-                <div class="p-field p-col">
-                    <label for="nomAdherent">Nom</label>
-                    <span> {{selectPrefinancement.adherent.nom}}</span>
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="dateEffet">Date de saisie</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.dateSaisie | formatTableValue: 'date'}}
+                       
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="dateDeclaration">Date de déclaration </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.dateDeclaration | formatTableValue: 'date'}}
+
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="dateFacture">Date de Facture</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.dateFacture | formatTableValue: 'date'}}
+                       
+                    </div>
+
+                    
+                    
+
                 </div>
-                
-                <div class="p-field p-col">
-                    <label for="nomAdherent">Prenom</label>
-                    <span> {{selectPrefinancement.adherent.prenom}}</span>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="numeroFacture" >Numéro Facture</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.numeroFacture | formatTableValue: 'number':true}}
+
+                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="prestataire" id="prestataire">Prestataire</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.prestataire?.libelle}}
+                        
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="montantReclame" >Montant reclamé</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.montantReclame | formatTableValue: 'number':true}}
+                        
+                    </div>
+
+
+                    
+
+                    
+
+                 
+
+
+
+
                 </div>
-                
-                <div class="p-field p-col-4">
-                    <label for="groupeAdherent">Numero groupe</label>
-                    <span> {{selectPrefinancement.adherent.groupe.numeroGroupe}}</span>
-                </div> 
-            </div>
-            
-            <div class="p-fluid p-formgrid p-grid">
-                <div class="p-field p-col-4">
-                    <label for="policeAdherent">Numero police</label>
-                    <span> {{selectPrefinancement.adherent.groupe.police.numero}}</span>
-                </div>
-            </div>
-    
-         
-        </p-fieldset>
-        
-        <hr/>  
-                
-        <div *ngFor="let prestation of selectPrefinancement.prestation;let i = index;">
-            <div>
-            <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
+
+              
                 
                 <div class="p-fluid p-formgrid p-grid">
                     
-                    <div class="p-field p-col">
-                        <label for="lastname2">Sous acte</label>
-                        <span> {{prestation?.sousActe?.libelle}}</span>
+                    <div class="p-field p-col-4">
+                        <label for="montantPaye" >Montant Saisie</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.montantPaye | formatTableValue: 'number':true}}
+                       
+
+                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="montantRestant" >Montant restant</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{prefinancementDetail.montantRestant | formatTableValue: 'number':true}}
+                       
+
                     </div>
                 </div>
-                    
-                <div class="p-fluid p-formgrid p-grid">
-                    
-                    <div class="p-field p-col">
-                        <label for="sousActe">Pathologie</label>
-                        <span> {{prestation?.pathologie?.libelle}}</span>  
-                    </div>
-                    
-                    <div class="p-field p-col">
-                        <label for="produit">Produit pharmaceutique</label>
-                        <span *ngFor="let p of prestation.produitPharmaceutique"> {{p?.libelle}}</span> 
-                    </div>
-                    
-                    <div class="p-field p-col">
-                        <label for="dateEffet">Date de soins</label>
-                        <span> {{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
-                    </div>
-                    
-                   </div>
-                   
-                   <div class="p-fluid p-formgrid p-grid">
-                       
-                    <div class="p-field p-col">
-                        <label for="centre">Centre prescripteur</label>
-                        <span> {{prestation?.prestataire?.libelle}}</span>
-                    </div>
-                    
-                    <div class="p-field p-col">
-                        <label for="medecin">Centre executant</label>
-                        <span> {{prestation?.centreExecutant?.libelle}}</span>
-                    </div>
-                       
-                    <div class="p-field p-col">
-                        <label for="medecin">Medecin</label>
-                        <span> {{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
-                    </div>
-                       
-                   </div>
-                   
-                   
-                   <div class="p-fluid p-formgrid p-grid">
-                       
-                    <div class="p-field p-col">
-                        <label for="nombreActe">Nombre Acte</label>
-                        <span> {{prestation.nombreActe}}</span>
-                    </div>
-                       
-                    <div class="p-field p-col">
-                        <label for="nombreActe">Cout unitaire</label>
-                        <span> {{prestation.coutUnitaire}}</span>
-                    </div>
-                       
-                    <div class="p-field p-col">
-                        <label for="nombreActe">Debours</label>
-                        <span> {{prestation.debours}}</span>  
-                    </div>
-                    
-                   </div>
-                   
-                   
-                   <div class="p-fluid p-formgrid p-grid">
-                       
-                    <div class="p-field p-col">
-                        <label for="nombreActe">Base remboursement</label>
-                        <span> {{prestation.baseRemboursement}}</span>
-                    </div>
-                       
-                    <div class="p-field p-col-4">
-                        <label for="sousActe">Taux</label>
-                        <span> {{prestation?.taux?.taux}}</span>
-                    </div>
-                       
-                    <div class="p-field p-col-4">
-                        <label for="nombreActe">Montant remboursé</label>
-                        <span> {{prestation.montantRembourse}}</span>
-                    </div>
-                    
-                    <!--
-                    <div class="p-field p-col-4">
-                        <label for="sousActe">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                        <p-dropdown inputId="sort"  [filter]="true"
-                                    showClear="true" [options]="typeSort"
-                                    formControlName="sort"></p-dropdown>
-                    </div>
-                    -->
-                       
-                   </div>
-                   
-                   <div class="p-fluid p-formgrid p-grid">
-                       
-                    <div class="p-field p-col-4">
-                        <label for="nombreActe">Montant remboursé restant</label>
-                        <span> {{prestation.montantRestant}}</span>
-                    </div>
-                    
-                    <div class="p-field p-col-4">
-                        <label for="sousActe">Decision</label>
-                        <span> {{prestation.sort}}</span>
-                    </div>
-                       
-                   </div>
-                   
-                   <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col-4">
-                    <label for="observation">Observation</label>
-                    <span> {{prestation.observation}}</span>
-                    </div>
-                   </div>       
-                   
+
+                <div class="p-field p-col-2"></div>
+                
+
             </p-fieldset>
+
+            <hr/>
+
+            <p-fieldset legend="Liste des Sinistres" toggleable="true">
+                <p-table [value]="prefinancementDetail.prestation" dataKey="id" editMode="row" responsiveLayout="scroll" [rows]="10" [paginator]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                        
+                           
+                            <th style="width:8rem">N° Sinistre</th>
+                            <th>Date de soins</th>
+                            <th>Assuré</th>
+                            <th>Famille acte</th>
+                            <th>Acte</th>
+                            <th>Sous Acte</th>
+                            <th>Montant remboursé</th>
+                            <th style="width:8rem"></th>
+                            
+                        </tr>
+                    </ng-template>
+        
+                    <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                        <tr>
                     
-                </div>
-                </div>
+                            <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
+                            <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
+                            <td>{{rowData.adherent?.nom}}</td>
+                            <td>{{rowData.familleActe?.libelle}}</td>
+                            <td>{{rowData.acte?.libelle}}</td>
+        
+                            <td> {{rowData.sousActe?.libelle}}</td>
+                            <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
+                            
+                            <td style="text-align:center">
+                                <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="voirPrestationDetail(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+        
+        
+                                </td>
+                    
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-fieldset>
        </div>    
        </ng-template>   
     </p-dialog>
     
 </div> 
 </div>
+<p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestaion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+    <ng-template pTemplate="content">
+        <div class="card">
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-3">
+                    <label for="dateSoins">Date de soins</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.dateSoins | formatTableValue: 'date'}}
+                </div>
+               
+
+              <div class="p-field p-col-3">
+               <label for="exercice">Nom </label> 
+               &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.nom}}
+            </div>
+               <div class="p-field p-col-3">
+                <label for="exercice">Prénom </label> 
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.prenom}}
+               
+          </div>
+
+          <div class="p-field p-col-3">
+            <label for="exercice">Numéro groupe</label> 
+            &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.numeroGroupe}}
+           
+      </div>
+     
+           
+
+              
+       </div> 
+
+       
+
+           <div class="p-fluid p-formgrid p-grid">
+               
+
+            <div class="p-field p-col-3">
+                <label for="exercice">Numéro police</label> 
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.adherent?.groupe?.police?.numero}}
+               
+          </div>
+        
+                  <div class="p-field p-col-3">
+                   <label for="bonPriseEnCharge">Bon de prise en charge</label>
+                   &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.bonPriseEnCharge?.numeros}}
+                   
+               </div>
+        
+               <div class="p-field p-col-3">
+                <label for="familleActe">Famille acte</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.familleActe?.libelle}}
+                
+            </div>
+              
+
+               <div class="p-field p-col-3">
+                   <label for="acte">Acte</label>
+                   &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.acte?.libelle}}
+                  
+               </div>
+
+               
+
+           </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+
+            <div class="p-field p-col-3">
+                <label for="sousActe" id="sousActe">SousActe</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.sousActe?.libelle}}
+          
+            </div>
+
+            <div class="p-field p-col-3">
+                <label for="pathologie" id="pathologie">Pathologie</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.pathologie?.code}}
+                
+            </div>
+            <div class="p-field p-col-3">
+             <label for="prestataire" id="prestataire">Centre Prescripteur</label>
+             &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.prestataire?.libelle}}
+             
+         </div>
+               <div class="p-field p-col-3">
+                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique</label>
+                   <span **ngFor="let item of prestationDetail?.produitPharmaceutique"></span>
+                   &nbsp;&nbsp;&nbsp;&nbsp;{{item?.libelle}}
+                  
+               </div>
+
+               
+
+           </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+
+            <div class="p-field p-col-3">
+                <label for="medecin" id="medecin">Medecin</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.medecin?.nom}}
+                
+            </div>
+            <div class="p-field p-col-3">
+                <label for="nombreActe" id="nombreActe">Nombre Acte</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.nombreActe | formatTableValue: 'number':true}}
+            </div>
+            <div class="p-field p-col-3">
+             <label for="coutUnitaire" id="coutUnitaire">Cout unitaire </label>
+             &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.coutUnitaire | formatTableValue: 'number':true}}
+           </div>
+              
+               <div class="p-field p-col-3">
+                   <label for="debours">Debours</label>
+                   &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.debours | formatTableValue: 'number':true}}
+               </div>
+               
+           </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+            
+            <div class="p-field p-col-3">
+                <label for="baseRemboursement" id="baseRemboursement">Base remboursement</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.baseRemboursement | formatTableValue: 'number':true}}
+            </div>
+
+
+            <div class="p-field p-col-3">
+                <label for="taux" id="taux">Taux </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.taux?.taux}}
+                
+            </div>
+            <div class="p-field p-col-3">
+             <label for="montantRembourse" id="montantRembourse">Montant remboursé</label>
+             &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.montantRembourse | formatTableValue: 'number':true}}
+         </div>
+
+
+               <div class="p-field p-col-3">
+                <label for="nombreActe">Montant Plafond</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.montantPlafond | formatTableValue: 'number':true}}
+            </div>
+
+           
+
+               
+
+           </div>
+           <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-3">
+                <label for="nombreActe">Numero du Bon</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{prestationDetail.numeroBon | formatTableValue: 'number':true}}
+            </div>
+           </div>
+           
+
+        </div>
+    </ng-template>
+</p-dialog>

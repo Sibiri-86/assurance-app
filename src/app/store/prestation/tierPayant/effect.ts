@@ -281,6 +281,20 @@ export class TierPayantEffects {
                 ))
         ));
 
+        searchTiersPayantFacture$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.searchTiersPayantByFacture),
+            mergeMap(({numeroFacture, dateDeclaration}) =>
+                this.tierPayantService.searchTiersPayantByFacture(numeroFacture, dateDeclaration).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
         searchTierPayantOrdreReglement$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.searchTierPayantOrdreReglement),

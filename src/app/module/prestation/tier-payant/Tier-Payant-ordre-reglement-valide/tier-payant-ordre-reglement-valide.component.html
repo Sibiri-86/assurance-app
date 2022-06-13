@@ -29,11 +29,11 @@
                         <!--<th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>-->
-                        <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:50px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -43,13 +43,14 @@
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
                         </td>-->
 
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                        <td><span class="p-column-title" >{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
+                        <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
                         </td>
                         <td>
                             <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
@@ -117,7 +118,7 @@
                         <td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>

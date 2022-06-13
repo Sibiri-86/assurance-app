@@ -11,6 +11,7 @@ import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
+import { SinistreTierPayant } from '../tierPayant/model';
 
 
 export interface Sinistre {
@@ -91,6 +92,7 @@ export interface Prestation {
     familleActe?: Garantie;
     montantPlafond?: number;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
+    sinistreTierPayant?: SinistreTierPayant; 
     /*ajout information pour bon de prise en charge*/
 }
 

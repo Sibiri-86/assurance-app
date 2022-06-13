@@ -111,6 +111,12 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
                 this.createRequestOption({matricule, dateDeclaration})});
     }
 
+    searchTiersPayantByFacture(numeroFacture: string, dateDeclaration: string): Observable<any> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/search-by-Facture`, {params :
+                this.createRequestOption({numeroFacture, dateDeclaration})});
+    }
+
     searchTierPayantOrdreReglement(numero: string, date: string): Observable<any> {
         // @FIXME: post request
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/tierPayantOrdreReglement/consulter`, {params :

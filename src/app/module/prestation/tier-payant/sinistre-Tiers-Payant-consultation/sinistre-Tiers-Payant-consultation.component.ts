@@ -22,6 +22,7 @@ import { Dialog } from 'primeng/dialog/dialog';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { formatDate } from '@angular/common';
 import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
+import { Prestation } from 'src/app/store/prestation/prefinancement/model';
 
 @Component({
   selector: 'app-consultation-sinistre',
@@ -30,7 +31,7 @@ import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model'
 })
 export class SinistreTiersPayantConsultationComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
-  matricule: number;
+  matricule: string;
   dateSoins: Date;
   cols: any;
   sinistreTierPayantDTOList$: Observable<Array<SinistreTierPayant>>;
@@ -40,6 +41,9 @@ export class SinistreTiersPayantConsultationComponent implements OnInit, OnDestr
   displayFormPrefinancement = false;
   adherentSelected: Adherent;
   selectPrefinancement: SinistreTierPayant;
+  prefinancementDetail: SinistreTierPayant;
+  prestationDetail: Prestation;
+  displaySinistreDetail= false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -101,7 +105,7 @@ createItem(): FormGroup {
         });
 
     this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
-    this.store.dispatch(featureActionTierPayant.searchTiersPayant({matricule: null, dateDeclaration: null}));
+    this.store.dispatch(featureActionTierPayant.searchTiersPayantByFacture({numeroFacture: null, dateDeclaration: null}));
     this.sinistreTierPayantDTOList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -144,6 +148,9 @@ createItem(): FormGroup {
     formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
     this.prestation.push(formPrestation);
     }
+    this.prefinancementDetail = pref;
+        this.prefinancementDetail.dateDeclaration = pref.dateDeclaration;
+
     this.displayFormPrefinancement = true;
     this.prestationForm.disable();
   }
@@ -154,6 +161,12 @@ createItem(): FormGroup {
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
   }
 
+  voirPrestationDetail(prestation: Prestation) {
+    this.prestationDetail = prestation;
+    this.displaySinistreDetail = true;
+}
+
+
   rechercherSinistre() {
     console.log('**********************************matricule******************' + this.matricule);
     console.log('**********************************dateSoins******************' + this.dateSoins);
@@ -161,7 +174,7 @@ createItem(): FormGroup {
     if (this.dateSoins){
       dateS =  formatDate(this.dateSoins, 'dd/MM/yyyy', 'en-fr');
     }
-    this.store.dispatch(featureActionTierPayant.searchTiersPayant({matricule: this.matricule,
+    this.store.dispatch(featureActionTierPayant.searchTiersPayantByFacture({numeroFacture: this.matricule,
       dateDeclaration: dateS}));
   }
 

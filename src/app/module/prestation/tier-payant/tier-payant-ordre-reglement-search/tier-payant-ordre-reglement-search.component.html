@@ -18,7 +18,7 @@
             <div class="p-field">
                 <button pButton pRipple type="button" icon="pi pi-refresh" class="p-button-secondary" (click)="ngOnInit()" label="Actualiser"></button>
             </div>
-            
+        </div> 
             
         <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
             [rowHover]="true" dataKey="id"
@@ -38,11 +38,10 @@
                <th style="width: 3rem">
                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                </th>
-               <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-               <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-               <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-               <th pSortableColumn="territorialite" style="min-width:300px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-               <th pSortableColumn="date" style="min-width:200px">Date<p-sortIcon field="date"></p-sortIcon></th>
+               <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+               <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
+               <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+               <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
                <th pSortableColumn="etat" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
                <th style="min-width:150px"></th>
            </tr>
@@ -53,15 +52,14 @@
                    <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
                </td>
 
-               <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+               <td><span class="p-column-title" >{{ordre.numeroBordereau}}</span>
                </td>
-               <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
+               <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
                </td>
-               <td><span class="p-column-title" style="min-width:200px">{{ordre?.police?.numero}}</span>
+
+               <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
                </td>
-               <td><span class="p-column-title" style="min-width:300px">{{ordre.police.nom}}</span>
-               </td>
-               <td><span class="p-column-title" style="min-width:200px">{{ordre.date | formatTableValue : 'date'}}</span>
+               <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
                </td>
                <td>
                 <!-- <span class="p-column-title" style="min-width:200px">{{ordre.etat}}</span> -->
@@ -93,7 +91,7 @@
            </div>
        </ng-template>
    </p-table>
-    </div> 
+    
     </div>  
     
     <!-- <app-ordre-reglement-consultation [ordreReglement]="ordreReglement" [showDialog]="showDetailOrdreReglement" (desactiveDialog)="desactiveDialog($event)" ></app-ordre-reglement-consultation> -->

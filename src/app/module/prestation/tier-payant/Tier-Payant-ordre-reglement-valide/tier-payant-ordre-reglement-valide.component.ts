@@ -9,7 +9,7 @@ import * as featureActionTierPayant from '../../../../store/prestation/tierPayan
 import { OrdreReglement, Prefinancement } from 'src/app/store/prestation/prefinancement/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
-import {OrdreReglementTierPayant, SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
+import {OrdreReglementTierPayant, Prestation, SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
 import {TypeReport} from '../../../../store/contrat/enum/model';
 import {TypeEtatOrdreReglement} from '../../../common/models/emum.etat.ordre-reglement';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
@@ -26,6 +26,7 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
   cols: any[];
   displaySinistre = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
+  prestations: Array<Prestation>;
   report: Report = {};
 
   constructor(private store: Store<AppState>,

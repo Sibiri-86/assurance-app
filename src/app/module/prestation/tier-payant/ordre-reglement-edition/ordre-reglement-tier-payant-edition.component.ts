@@ -16,7 +16,7 @@ import * as tierPayantSelector from '../../../../store/prestation/tierPayant/sel
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
-import {OrdreReglement} from '../../../../store/prestation/prefinancement/model';
+import {OrdreReglement, Prestation} from '../../../../store/prestation/prefinancement/model';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -30,6 +30,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   cols: any[];
   displaySinistre = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
+  prestations: Array<Prestation>;
   report: Report = {};
   selectedOrdreReglement: OrdreReglementTierPayant [];
   ordreReglement: OrdreReglementTierPayant;
@@ -100,7 +101,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   voirSinistre(ordre: OrdreReglementTierPayant) {
     console.log('****************ordre****************', ordre);
     this.displaySinistre = true;
-    this.sinistreTierPayant = ordre.tierPayant;
+    this.prestations = ordre.tierPayant[0].prestation;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
 
