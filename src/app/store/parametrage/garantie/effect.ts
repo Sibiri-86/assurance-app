@@ -93,6 +93,21 @@ export class GarantieEffects {
     )
     );
 
+    fetchGarantiesMonatntDetail$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadGarantiesMontantDetail),
+        mergeMap(({sousActes}) =>
+            this.garantieService.$findFamilleActeSousActeMontantDetail(sousActes).pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setGarantie(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
     fetchGarantiesMonatnt$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadGarantiesMontant),

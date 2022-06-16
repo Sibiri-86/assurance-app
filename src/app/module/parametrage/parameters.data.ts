@@ -1175,6 +1175,10 @@ export const DATA_DEFINITION = [
         validators: [Validators.required, Validators.maxLength(50)]
       },
       {
+        field: 'responsable', header: 'Responsable', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
         field: 'telephone', header: 'Téléphone', type: 'string', width: 1, text_center: false,
         
       },

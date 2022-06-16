@@ -269,6 +269,9 @@ export class TierPayantEditionComponent implements OnInit {
                 if(this.adherentSelected.signeAdherent !=='*') {
                     this.addMessage('error', 'Assuré(e) non pris en compte',
                                   'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e)";
+                    this.prestationAdd.sort = Sort.REJETE;
+                    this.prestationAdd.montantRembourse = 0;
                   }
                 this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
                 this.prestationAdd.nomAdherent = this.adherentSelected.nom;
@@ -839,19 +842,30 @@ export class TierPayantEditionComponent implements OnInit {
             const c =this.montantConvention - this.prestationAdd.coutUnitaire;
             this.prestationAdd.coutUnitaire = this.montantConvention;
             this.prestationAdd.inotPlafond = true;
-            this.prestationAdd.observation = "la differnce entre le coût unitaire et le montant de la convention est " + c;
+            if(!this.prestationAdd.observation) {
+                this.prestationAdd.observation = "la differnce entre le coût unitaire et le montant de la convention est " + c;
+
+            }
         }
 
       
             this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
-            this.prestationAdd.sort = Sort.ACCORDE;
+            if(!this.prestationAdd.sort) {
+                this.prestationAdd.sort = Sort.ACCORDE;
+            }
+            
         
         
             if (this.prestationAdd.nombreActe &&
             this.prestationAdd.coutUnitaire) {
                 this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
-                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                if(this.prestationAdd.montantRembourse !== 0) {
+                    this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+
+                } else {
+                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
+                }
             }
             
             if(this.prefinancement.montantRestant == null ) {
