@@ -1,0 +1,37 @@
+<div class="layout-actionbar">
+    <div class="layout-breadcrumb">
+        <div class="route-bar-breadcrumb">
+            <ng-template ngFor let-item let-last="last" [ngForOf]="items">
+                <span>
+                    <ng-container *ngIf="!item.routerLink" > <span [ngClass]="{'styl':true,'colorPolice': item.label ==='Police', 
+                        'colorGarant':item.label ==='Garant', 'colorIntermediaire':item.label ==='Intermediaire', 'colorBareme':item.label ==='Barème', 'colorAvenant':item.label ==='Avenant'}">{{item.label}}</span></ng-container>
+                    <span *ngIf="!last"> | </span>
+                </span>
+            </ng-template>
+        </div>
+    </div>
+    
+    <!--
+    <div class="layout-actions">
+        <ul>
+            <li>
+                <button><i class="pi pi-compass icon"></i></button>
+            </li>
+            <li>
+                <button><i class="pi pi-inbox icon"></i></button>
+            </li>
+            <li>
+                <button><i class="pi pi-file-o icon"></i></button>
+            </li>
+            <li>
+                <button><i class="pi pi-info-circle icon"></i></button>
+            </li>
+            <li>
+                <button><i class="pi pi-user icon"></i></button>
+            </li>
+
+        </ul>
+    </div>
+    -->
+
+</div>

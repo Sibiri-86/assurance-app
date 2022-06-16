@@ -1,0 +1,69 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "../node_modules/@fullcalendar/core/main.min.css";
+@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+@import "assets/demo/flags/flags.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css"; 
+@import "~@angular/material/prebuilt-themes/purple-green.css";
+
+p-dialog label {
+    font-weight: bold;
+}
+
+form label {
+    font-weight: bold;
+}
+
+.indicateur {
+    font-weight: bold;
+}
+
+.required {
+    color:red;
+    font-size: 1.4em;
+}
+
+.requiredClass::after {
+    color:red;
+    content: "*";
+}
+
+.colorPolice {
+    color: #f4a52f;
+}
+
+.colorGarant {
+    color:#fe5288;
+}
+
+.colorIntermediaire {
+    color:#9346dd;
+}
+
+.styl {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.colorZone {
+    background-color: rgba(0,0,0,.15) !important;
+}
+
+.colorZoneActe {
+background-color: rgba(113, 145, 51, 0.8) !important;
+}
+
+.colorZoneSousActe {
+background-color: rgba(215, 234, 93, 0.8) !important;
+}
+
+.zonePhotos {
+    width: 200px;
+}

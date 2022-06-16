@@ -1,0 +1,172 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<button pButton pRipple label="Ordre de paiement" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+                            (click)="creerOrdreRglement()" [disabled]="!disableButtomOrdreReglement"></button>
+				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            <p-table #dt [value]="sinistreTierPayantDTOList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
+                     (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectTierPayant">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="duree" style="width:50px" >N° facture<p-sortIcon field="duree"></p-sortIcon></th>
+                       
+                        <th pSortableColumn="numero" style="width:100px">Prestataire<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width:100px">Date de déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                     
+                        <th pSortableColumn="duree" style="width:50px">Date de facture<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width:100px">Montant facture<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="etat" style="width:50px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+                        <th style="width:175px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tierPayant>
+                    <tr [pSelectableRow]="tierPayant">
+                        <td>
+                            <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
+                        </td>
+                        <td> <span class="p-column-title" style="width:50px; font-weight: bold;" >{{tierPayant.numeroFacture}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.prestataire.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
+                        </td>
+
+                        <!--<td><span class="p-column-title" style="min-width:200px">{{tierPayant.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>-->
+                       <!--  <td>
+                            <span class="p-column-title" style="width:50px">{{tierPayant?.adherent?.numero}}</span>
+                        </td> -->
+                        
+                        <td>
+                            <span class="p-column-title" style="width:50px;" >{{tierPayant.dateFacture | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="width:50px ;  font-weight: bold;" >{{tierPayant.montantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <!-- <td>
+                            <span class="p-column-title" style="width:150px">{{tierPayant?.adherent?.nom}}</span>
+                        </td>
+                        <td>
+                            <span class="p-column-title" style="width:150px">{{tierPayant?.adherent?.prenom}}</span>
+                        </td> -->
+                        <td>
+                            <!-- <span class="p-column-title" style="width:50px">{{tierPayant?.etat}}</span> -->
+                            <span *ngIf="tierPayant?.etat ==='VALIDE'" class="p-badge p-badge-success" style="width:90px">{{tierPayant?.etat}}</span>
+                            <span *ngIf="tierPayant?.etat ==='ENCOURS'" class="p-badge p-badge-warning" style="width:90px">EN ATTENTE..</span>
+                            <span *ngIf="tierPayant?.etat ==='DEVALIDE'" class="p-badge p-badge-danger" style="width:90px">{{tierPayant?.etat}}</span>
+                        </td>
+
+                        
+                        
+                        <td style="width:175px">
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
+                            <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button> -->
+                            <button pButton icon="pi pi-times" pTooltip="Dé-valider le sinistre" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(tierPayant)"></button>
+                    </td>
+                        
+                        <!--
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+                        </td>
+                        -->
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{sinistreTierPayantDTOList ? sinistreTierPayantDTOList.length : 0 }} sinistre(s) validé(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <p-table #dt [value]="prestationListPrefinancement" [columns]="cols" [rows]="10" [paginator]="true"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="numero" style="width: 150px" >SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" >Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px" >Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" >Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">montant rembourser <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" >Date de soins <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+
+                        <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.nombreActe}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.coutUnitaire}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.debours}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.baseRemboursement}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.taux.taux}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.dateSoins}}</span>
+                        </td>
+                        <td style="text-align:center">
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(prestation)"></button>
+
+    
+                            </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{prestationListPrefinancement ? prestationListPrefinancement.length : 0 }} prestation(s).
+                    </div>
+                </ng-template>
+            </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

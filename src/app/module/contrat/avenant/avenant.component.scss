@@ -1,0 +1,29 @@
+.stat-item{
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: #000;
+}
+
+.stat-count{
+    font-size: large;
+    font-style: italic;
+    font-weight: bold;
+    color: green;
+    background-color: antiquewhite;
+    border-radius: 0.2em;
+}
+
+.prime{
+    font-size: 3.5em !important;
+    // font-style: italic;
+    font-weight: bold;
+    color: green;
+    margin-left: 6.2em !important;
+}
+
+.primeNull{
+    font-size: 1.5em !important;
+    // font-style: italic;
+    font-weight: bold;
+}

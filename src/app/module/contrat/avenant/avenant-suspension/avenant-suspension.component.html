@@ -1,0 +1,164 @@
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="lastExerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet</label>
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance</label>
+                            <input id="fin" class="exo" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+            <p-fieldset legend="Avenant" toggleable="true">
+                <form [formGroup]="myForm" *ngIf="!isRenouv">
+                    <div class="p-col-6" *ngIf="etat === 'CREATE'">
+                        <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+                        <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                    [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)"
+                                    [ngModelOptions]="{standalone: true}">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="numero">Numéro de l'avenant chez le garant <sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="numero" type="number" min="0" required formControlName="numero" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Date de suspension <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="observation">Motif<sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="observation" type="text" required formControlName="observation" pInputText>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateIncorparation">Initiateur<sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+
+                        <div class="p-field p-col-6">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                            <p-calendar class="exo" id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                            dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                            appendTo="body"></p-calendar>  
+                        </div>
+
+                    </div>
+                </form>
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="p-grid" *ngIf="isImport === 'NON'">
+        <div class="p-col-12">
+            <p-table #dt [value]="historiqueAveantAdherantsByExercice" [rows]="10" [paginator]="true"
+                     [globalFilterFields]="['adherent.numero','adherent.nom','adherent.prenom','territorialite.libelle']"
+                     [rowHover]="true" dataKey="adherent?.numero" selectionMode="single" (onRowUnselect)="onRowUnselect()" [(selection)]="adherantSuspendds"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-grid">
+                        <div class="p-col-3">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                       placeholder="Search..." [style]="{width: '80%'}" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-col-3"></div>
+                        <div class="p-col-6">
+                            <span style="color: red; font-weight: bold">NOMBRE D'ADHERENTS A SUSPENDRE : {{adherantSuspendds.length}}</span>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Groupe<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th>Date de suspension</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-historiqueAveantAdherant let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant, rowIndex)"
+                            [disabled]="etat === 'VIEW'"></p-checkbox>
+                        </td>
+                        <td >{{historiqueAveantAdherant.adherent.numero}}</td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom | upercase}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
+                        <td>
+                            <span class="p-column-title">
+                                <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                       [(ngModel)]="historiqueAveantAdherant.dateSuspension" pInputText [disabled]="!historiqueAveantAdherant.selected || etat === 'VIEW'"/>
+                                <!--<p-calendar id="dateRetrait" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation"
+                                            dateFormat="dd/mm/yy" inputId="calendar" [disabled]="!historiqueAveantAdherant.selected"
+                                            appendTo="body"></p-calendar>-->
+                            </span>
+                        </td>
+                        <td>
+                            <!--<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-cog" pTooltip="configurer le plafond" class="p-button-rounded p-button-info p-mr-2" (click)="parametrerPlafond(groupe)"></button>-->
+                            <span style="color: red; font-weight: bold" *ngIf="historiqueAveantAdherant.selected">{{retirer}} </span>
+                            <span style="color: green; font-weight: bold" *ngIf="!historiqueAveantAdherant.selected">{{nonRetirer}}</span>
+                            <!--<button pButton  pRipple icon="pi pi-minus" pTooltip="Retirer" class="p-button-danger p-mr-2" (click)="retirer(historiqueAveantAdherant)"></button>-->
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} adherents au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <hr>
+            </div>
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-save" pTooltip="voir groupe" label="Enregistrer"
+                        class="p-button p-button-success" [disabled]="myForm.invalid || adherantSuspendds.length <= 0" type="button" (click)="createAvenantSuspension()">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

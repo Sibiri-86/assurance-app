@@ -1,0 +1,43 @@
+<div class="layout-wrapper" (click)="onLayoutClick()"
+     [ngClass]="{'layout-menu-overlay': isOverlay(),
+                'layout-menu-overlay-active': overlayMenuActive,
+                'layout-menu-horizontal': isHorizontal(),
+                'layout-mobile-active': overlayMenuMobileActive,
+                'layout-fullwidth': app.wrapperMode, 'p-input-filled': app.inputStyle === 'filled', 'p-ripple-disabled': !app.ripple}" [class]="app.layout">
+
+    <div class="layout-content-wrapper">
+        <app-topbar ></app-topbar>
+
+        <app-menu></app-menu>
+
+        <app-actionbar></app-actionbar>
+
+        <div class="layout-content">
+
+            <p-blockUI [blocked]="loaderService.isLoading | async" id="blockUI">
+                <div class="text-white" style="position:absolute;top:50%;left:45%">
+                  <div class="col-sm-12 text-center">
+                    <p-progressSpinner></p-progressSpinner>
+                  </div>
+                  &nbsp;
+                  <div class="col-sm-12">
+                    <h4>
+                      <span class="font-weight-bold">Merci de patienter</span>
+                      <span class="text-warning pr-sm-1 pl-sm-1"> {{seconds}} s</span>
+                      <span class="font-weight-bold">...</span>
+                    </h4>
+                  </div>
+                </div>
+              </p-blockUI>
+
+            <router-outlet></router-outlet>
+        </div>
+     
+
+        <app-footer></app-footer>
+
+        <app-config></app-config>
+
+        <div class="layout-mask"></div>
+    </div>
+</div>

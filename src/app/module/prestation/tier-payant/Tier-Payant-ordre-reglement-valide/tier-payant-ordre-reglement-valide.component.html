@@ -1,0 +1,145 @@
+
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>-->
+                        <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th style="min-width:150px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ordre>
+                    <tr>
+                        <!--<td>
+                            <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                        </td>-->
+
+                        <td><span class="p-column-title" >{{ordre.numeroBordereau}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
+                        </td>
+
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
+                        </td>
+                        <td>
+                            <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
+                            <span *ngIf="ordre?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                            <span *ngIf="ordre?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{ordre?.etat}}</span>
+                        </td>
+
+                        <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
+                                    class="p-button-rounded p-button-help p-mr-2"
+                                    (click)="voirSinistre(ordre)">
+                            </button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
+                                    class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
+                            </button>
+                            <button pButton icon="pi pi-times" pTooltip="Devalider"
+                                    class="p-button-rounded p-button-danger "
+                                    (click)="deValiderOrdreReglement(ordre)">
+                            </button>
+                        </td>
+                        
+                        <!--
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+                        </td>
+                        -->
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{ordreReglementList ? ordreReglementList.length : 0 }} reglements(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}">
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <p-table #dt [value]="sinistreTierPayant" [columns]="cols" [rows]="10" [paginator]="true"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">Prenom<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prefinance>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prefinance.numeroSinistre}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prefinance.adherent.nom}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prefinance.adherent.prenom}}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{sinistreTierPayant ? sinistreTierPayant.length : 0 }} sinistre(s).
+                    </div>
+                </ng-template>
+            </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog>
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

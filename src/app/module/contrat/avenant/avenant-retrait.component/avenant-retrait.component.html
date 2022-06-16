@@ -1,0 +1,225 @@
+<div class="card">
+    <span style="color: red; font-size: 1.8em; text-align: center">{{message}}</span>
+    <div class="p-grid">
+        <!--<div class="p-fluid p-grid">
+
+            <div class="p-field p-col-4" *ngIf="!isNewGroupe">
+                <form [formGroup]="customForm">
+                    <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
+                                name="selectedGroup"
+                                [filter]="true" filterBy="libelle" [showClear]="true"
+                                placeholder="Choisir un groupe"
+                                (onChange)="onGroupeChange()">
+                    </p-dropdown>
+                </form>
+            </div>
+
+            <div class="p-field p-col-6"></div>
+        </div>-->
+        <div class="p-field p-col-12" *ngIf="!isRenouv">
+            <div class="p-field p-col-7">
+                <div class="p-field-checkbox">
+                    <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel ?</label>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1" id="city1"></p-radioButton>
+                        <label for="city1">OUI</label>
+                    </div>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="NON" [(ngModel)]="isImport" inputId="city2" id="city2"></p-radioButton>
+                        <label for="city2">NON </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-3" *ngIf="etat === 'CREATE'">
+            <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
+            </p-dropdown>
+        </div>
+        <div class="p-col-3">
+            <form [formGroup]="newForm" *ngIf="!isRenouv">
+                <div class="p-grid">
+                <div class="p-fluid p-formgrid  p-col-12">
+                    <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
+                    <p-dropdown [options]="groupeList" [disabled]="curentExercice.invalid" optionLabel="libelle" formControlName="groupe"
+                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
+                    </p-dropdown>
+                </div>
+                </div>
+            </form>
+        </div>
+        <!-- <div class="p-col-3" *ngIf="etat === 'CREATE'">
+            <label for="fraisBadge">Exercice</label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
+            </p-dropdown>
+        </div> -->
+        <div class="p-col-6" *ngIf="!isRenouv && isImport === 'OUI'">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-4"><br>
+                    <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
+                            class="p-button p-button-icon" label="export model" (click)="exportModel()">
+                    </button>
+                </div>
+                <div class="p-field p-col-6" *ngIf="isImport === 'OUI'"><br><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" *ngIf="!isRenouv">
+                <form [formGroup]="lastExerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet</label>
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance</label>
+                            <input id="fin" class="exo" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+        <p-fieldset legend="Avenant" toggleable="true" *ngIf="!isRenouv">
+            <form [formGroup]="myForm">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-6">
+                        <label for="numero">Numéro de l'avenant chez le garant <span style="color: red !important; size: 2em"></span></label>
+                        <input id="numero" type="number" min="0" formControlName="numero" pInputText>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="dateIncorparation">Date de retrait <span style="color: red !important; size: 2em">*</span></label>
+                        <span *ngIf="newForm.invalid" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
+                        <p-calendar [disabled]="newForm.invalid" id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
+                                    dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="dateIncorparation">Initiateur <span style="color: red !important; size: 2em">*</span></label>
+                        <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
+                                    [options]="demandeursList" [disabled]="!this.myForm.get('dateAvenant').value" formControlName="demandeur"
+                                    placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="observation">Motif <span style="color: red !important; size: 2em">*</span></label>
+                        <input id="observation" [disabled]="!this.myForm.get('demandeur').value" type="text" formControlName="observation" pInputText>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <label for="dateSaisie">Date saisie <span style="color: red !important; size: 2em">*</span></label>
+                        <p-calendar [disabled]="true" id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                        dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            </div>
+
+                    
+                </div>
+            </form>
+        </p-fieldset>
+        </div>
+    </div>
+    <div class="p-grid" *ngIf="isImport === 'NON'">
+        <div class="p-col-12">
+            <p-table #dt [value]="historiqueAveantAdherantsByExercice" [rows]="10" [paginator]="true"
+                     [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
+                     [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Numéro, nom, prénom(s)" [style]="{width: '80%'}" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                        </th>
+                        <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th>Date de retrait</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-historiqueAveantAdherant >
+                    <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
+                        <td>
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
+                            [disabled]="etat === 'VIEW'"></p-checkbox>
+                            <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
+                        </td>
+                        <td>{{historiqueAveantAdherant.adherent?.numero}}</td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
+
+                        </td> 
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
+                        <td>
+                            <span class="p-column-title">
+                                <!--<input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                       (change)="compareDateRetrait(historiqueAveantAdherant)"
+                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
+                            <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
+                                        dateFormat="dd/mm/yy" inputId="calendar" [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"
+                                        appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"
+                                        [disabled]="etat === 'VIEW'"></p-calendar>
+                            </span>
+                        </td>
+                        <td>
+                            <!--<button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-cog" pTooltip="configurer le plafond" class="p-button-rounded p-button-info p-mr-2" (click)="parametrerPlafond(groupe)"></button>-->
+                            <span class="texte-danger" *ngIf="historiqueAveantAdherant.selected">{{retirer | upercase}} </span>
+                            <span class="texte-succes" *ngIf="!historiqueAveantAdherant.selected">{{nonRetirer | upercase}}</span>
+                            <!--<button pButton  pRipple icon="pi pi-minus" pTooltip="Retirer" class="p-button-danger p-mr-2" (click)="retirer(historiqueAveantAdherant)"></button>-->
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} adherents au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="p-fluid formgrig p-col-12 p-mt-3">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <hr>
+            </div>
+            <div class="p-field p-col-5"></div>
+            <div class="p-field p-col-2 p-ac-center">
+                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
+                        class="p-button p-button-warning" label="Annuler"
+                        (click)="init()" type="button">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false">
+                <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
+                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                [disabled]="myForm.invalid && this.historiqueAveantAdherantsByExercice.length != null || etat === 'VIEW'">
+                </button>
+            </div>
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true">
+                <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
+                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                [disabled]="etat === 'VIEW'">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

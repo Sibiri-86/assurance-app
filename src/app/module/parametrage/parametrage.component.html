@@ -1,0 +1,185 @@
+<div class="p-col-12">
+    <div class="card">
+        <h5></h5>
+        <div class="p-fluid p-formgrid p-grid p-justify-center">
+            <div class="p-field p-col-12 p-md-3">
+                <p-dropdown (onChange)="onTypeChange($event)" [filter]="true" showClear="true" inputId="state" [options]="dataTypes" placeholder="Veuillez selectionnez le type à parametrer"></p-dropdown>
+            </div>
+        </div>
+        <br>
+        <div  *ngIf="cols">
+            <p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="openNew()"></button>
+				</ng-template>
+                <ng-template pTemplate="right">
+                    <p-fileUpload *ngIf="this.selectedDataDef.store.importAction" name="File[]" url="" customUpload="true" accept=".xlsx, .csv,.xml,.doc,.docx,.pdf" [maxFileSize]="1000000" chooseLabel="Importer" (uploadHandler)="upload($event)" 
+                    class="p-mr-2 p-mb-2 p-d-inline-block" [showUploadButton]="true" [showCancelButton]="true" uploadLabel="valider" cancelLabel="annuler" ></p-fileUpload>
+					<button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+			</p-toolbar>
+                    <p-table #dt  [value]="selectedDataDefList$ | async" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+					  [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" selectionMode="single"  editMode="row">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="recherche par code,libelle" />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header" let-columns>
+					<tr>
+						<th style="width: 3rem">
+						<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+						</th>
+                        <ng-container *ngFor="let col of columns">
+                        <th [pSortableColumn]="col.field">
+							<div class="p-d-flex p-jc-between p-ai-center">
+								{{col.header}}
+								<p-sortIcon [field]="col.field"></p-sortIcon>
+								<p-columnFilter type="text" [field]="col.field" display="menu" class="p-ml-auto"></p-columnFilter>
+							</div>
+						</th>
+                    </ng-container>
+					<th></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-rowData let-columns="columns" let-editing="editing" let-ri="rowIndex">
+					<!--<tr [pSelectableRow]="rowData">-->
+                        <tr [pEditableRow]="rowData">
+						<td>
+							<p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+						</td>
+                        <ng-container *ngFor="let col of cols">
+						<td >
+                            <!-- <span>{{rowData[col.field] | formatTableValue: col.type}}</span> -->
+                            <!--  <ng-template> -->
+                        <p-cellEditor>
+                        <ng-template pTemplate="input">
+                        <input *ngIf="col.type === 'string' || col.type === 'number'" pInputText
+                         [type]="col.type ==='string' ? 'text' : 'number' "
+                         [(ngModel)]="clonedRefObj[rowData[objKey]][col.field]">
+
+                         <p-dropdown *ngIf="col.type === 'dropdown'" [options]="dropdownObservableObj[col.field]"
+                              [autoDisplayFirst]="clonedRefObj[rowData[objKey]][col.field]"
+                              [(ngModel)]="clonedRefObj[rowData[objKey]][col.field]" [required]="col.required"
+                              [filter]="true" [showClear]="true" [virtualScroll]="true">
+                        </p-dropdown>
+                        
+                        <p-multiSelect *ngIf="col.type === 'multiselect'" [options]="dropdownObservableObj[col.field]"
+                              [autoDisplayFirst]="clonedRefObj[rowData[objKey]][col.field]"
+                              [(ngModel)]="clonedRefObj[rowData[objKey]][col.field]" [required]="col.required"
+                              [filter]="true" [showClear]="true" [virtualScroll]="true">
+                        </p-multiSelect>
+                        
+                        </ng-template>
+
+                        <ng-template pTemplate="output">
+                            <span *ngIf="rowData[col.field] === true || rowData[col.field] === false else otherfield">
+                              <span *ngIf="rowData[col.field] === true">OUI</span>
+                              <span *ngIf="rowData[col.field] === false">NON</span>
+                            </span>
+                        </ng-template>
+                        <ng-template #otherfield>
+                            <div *ngIf="col.labelMulti">
+                                <span  *ngFor="let sousActe of rowData[col.labelMulti]">
+                                    {{sousActe}}
+                                  </span> 
+                            </div>
+                            <span *ngIf="col.label">
+                                {{rowData[col.label] }}
+                              </span>
+                              <span *ngIf="!col.label && !col.labelMulti">
+                                {{rowData[col.label] || rowData[col.field] }}
+                              </span>
+                        </ng-template>
+                        
+                        </p-cellEditor>
+                            <!-- </ng-template> -->
+                        </td>
+                        </ng-container>
+						<td style="text-align:center">
+							<button *ngIf="!editing" pButton pRipple type="button"  pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(rowData, columns)" class="p-button-rounded p-button-success p-mr-2" ></button>
+							<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="onDelete(rowData)"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            class="p-button-rounded p-button-success p-mr-2" (click)="onRowEditSave(rowData)"></button>
+                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                            class="p-button-rounded p-button-danger p-mr-2" (click)="onRowEditCancel(rowData, ri)"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						au total il y a {{selectedDataDefList$? (selectedDataDefList$ | async)?.length : 0 }} elements.
+					</div>
+				</ng-template>
+			</p-table>
+            </div>
+    </div>
+    <p-toast></p-toast>
+
+    <p-dialog [(visible)]="displayDialog" [style]="{width: '450px'}" header="{{selectedDataType?.label}}" [modal]="true" styleClass="p-fluid">
+    
+    <ng-template pTemplate="content"> 
+    <form (ngSubmit)="onCreate()" *ngIf="editForm" [formGroup]="editForm">
+                    <div class="card" *ngIf="selectedDataType">
+                        <h5></h5>
+                        <div class="p-fluid">
+                            <ng-container *ngFor="let col of cols">
+                            <div class="p-field" *ngIf="col.type === 'string'">
+                                <label>{{col.header}}</label>
+                                <input  [formControl]="editForm.controls[col.field]" [pTooltip]="col.tooltip || col.header"
+                                maxlength="50" pInputText tooltipPosition="bottom" type="text">
+                            </div>
+
+
+                            <div class="p-field" *ngIf="col.type === 'number'">
+                                <label>{{col.header}}</label>
+                                <input  [formControl]="editForm.controls[col.field]" [pTooltip]="col.tooltip || col.header"
+                                maxlength="50" pKeyFilter="pint" pInputText tooltipPosition="bottom" type="number">
+                            </div>
+
+                            <div class="p-field" *ngIf="col.type === 'dropdown'">
+                                <label>{{col.header}}</label>
+                                <p-dropdown [autoDisplayFirst]="false" [filter]="true"
+                                    [formControl]="editForm.controls[col.field]" [options]="dropdownObservableObj[col.field]"
+                                    [pTooltip]="col.tooltip || col.header" [showClear]="true" [style]="{'minWidth':'100%'}"
+                                    tooltipPosition="bottom">
+                                </p-dropdown>
+                            </div>
+                            
+                            <div class="p-field" *ngIf="col.type === 'multiselect'">
+                                <label>{{col.header}}</label>
+                                <p-multiSelect [autoDisplayFirst]="false" [filter]="true"
+                                    [formControl]="editForm.controls[col.field]" [options]="dropdownObservableObj[col.field]"
+                                    [pTooltip]="col.tooltip || col.header" [showClear]="true" [style]="{'minWidth':'100%'}"
+                                    tooltipPosition="bottom">
+                                </p-multiSelect>
+                            </div>
+
+                        <!--
+                            <app-entity-validations [entityField]="col.field" [entityValidations]="entityValidations"
+                            [formGroup]="editForm">
+                            </app-entity-validations>
+                            -->
+                        </ng-container>
+                        </div> 
+                    </div>
+                    <div class="p-grid p-justify-between">
+                        <div>
+                        <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                        </div>
+                        <div>
+                        <button  [disabled]="editForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" type="submit"></button>
+                        </div>
+                    </div>
+            </form>
+           </ng-template>
+
+        
+    </p-dialog>
+</div>

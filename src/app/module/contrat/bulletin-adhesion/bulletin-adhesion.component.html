@@ -1,0 +1,1376 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addBulletin()"></button>
+					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedBulletin()"></button>
+				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            
+            <p-table #dt [value]="bulletinAdhesionList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['bulletin.nom','bulletin.nom','numero','bulletin.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectedBulletin">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="duree" style="min-width:100px">Matricule<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:200px">Nom adhérent<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Prenom adhérent<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Asuuré principal<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Numéro police<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:200px">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th style="min-width:150px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-bulletin>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="bulletin"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.matriculeAdherent}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.nomAdherent}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.prenomAdherent}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.nomAssurePrin}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.police.numero}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{bulletin.police.nom}}</span>
+                        </td>
+                        
+                        <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editBulletin(bulletin)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteBulletin(bulletin)"></button>
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirBulletin(bulletin)"></button>
+    
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{bulletinAdhesionList ? bulletinAdhesionList.length : 0 }} bulletin(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div> 
+        
+        
+        <!-- <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="numero" style="width: 150px">Date soins<p-sortIcon field="dateSoins"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">SousActe<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 150px">Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 150px">Débours<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Base de remboursement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="width: 150px">Taux<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">montant remboursé <p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree" style="width: 150px">Decision<p-sortIcon field="decision"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="prestation"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.nombreActe}}</span>
+                        </td>
+                        
+                        <td><span class="p-column-title">{{prestation.coutUnitaire| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.debours| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.baseRemboursement| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.taux.taux}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.montantRembourse| formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation.sort}}</span>
+                        </td>
+                        <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="supprimerPrestation(prestation)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{prestationListPrefinancement ? prestationListPrefinancement.length : 0 }} prestation(s).
+                    </div>
+                </ng-template>
+            </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog> -->
+        
+        
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayFormBulletin" header="Bulletin d'adhésion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <form   [formGroup]="bulletinForm">
+                    <div class="card">
+                        <p-fieldset legend="Information de l'Assuré" toggleable="true">
+                                
+                        <div class="p-fluid p-formgrid p-grid">
+
+            
+                            
+                        
+                            
+                            <div class="p-field p-col">
+                                <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
+                                <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="nomAdherent">Nom</label>
+                                <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" disabled pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="prenomAdherent">Prenom</label>
+                                <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" disabled pInputText>
+                            </div>
+                            
+                        </div>
+                            
+                        <div class="p-fluid p-formgrid p-grid">
+                            
+                                
+                            
+
+                                <div class="p-field p-col" >
+                                    <label for="nomAssurePrin">Nom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="nomAssurePrin" class="champ" type="text" formControlName="nomAssurePrin" disabled pInputText>
+                                </div>
+            
+                                <div class="p-field p-col">
+                                    <label for="nomAdherent">Prénom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="prenomAssurePrin" class="champ" type="text" formControlName="prenomAssurePrin" disabled pInputText>
+                                </div>
+                                
+                                <div class="p-field p-col">
+                                    <label for="groupeAdherent">Numero groupe</label>
+                                    <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" disabled pInputText>
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                
+                                <div class="p-field p-col">
+                                    <label for="policeAdherent">Numero police</label>
+                                    <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" disabled pInputText>
+                                </div>
+                                
+                                <div class="p-field p-col">
+                                    <label for="souscripteur">Souscripteur</label>
+                                    <input id="souscripteurAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" disabled pInputText>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
+                                    <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy"  inputId="calendar" disabled formControlName="dateSaisie" appendTo="body" disabled></p-calendar>
+                                </div>
+                            </div>
+                            
+                        
+                        <!--  <div class="p-field p-col-2"></div>
+                            <div class="p-field p-col-6">
+                                <input id="file" class="champ" type="file" formControlName="nomPoliceAdherent" pInputText>
+
+                            </div> -->
+                        
+                       
+                     
+
+                        
+                             
+                                    
+                                    <div class="p-fluid p-formgrid p-grid">
+
+                                        <div class="p-field p-col">
+                                            <label for="raisonSociale">Raison sociale </label>
+                                            <input id="raisonSociale" type="text" formControlName="raisonSociale" pInputText>
+                                            
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <label for="dateEntreeService">Entrée au service du contractant le </label>
+                                            <p-calendar id="dateEntreeService" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEntreeService" appendTo="body"></p-calendar>
+                                        </div>
+                
+                                        <div class="p-field p-col">
+                                            <label for="adresse">Adresse<span style="color: red !important; font-size: 1.4em"></span></label>
+                                            <input id="adresse" type="text" formControlName="adresse" pInputText>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+
+                                        <div class="p-field p-col">
+                                            <label for="tel">Tel</label>
+                                            <p-inputMask id="numeroTelephone" formControlName="tel" mask="99 99 99 99"></p-inputMask>
+                                            
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <label for="emploi">Emploi</label>
+                                            <input id="emploi" type="text" formControlName="emploi" pInputText>
+                                        </div>
+                
+                                        <div class="p-field p-col">
+                                            <label for="lieuNaissance">Lieu Naissance</label>
+                                            <input id="lieuNaissance" type="text" formControlName="lieuNaissance" pInputText>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+                        
+                                        <div class="p-field p-col" >
+                                            <label for="situationFamiliale">Situation Familiale</label>
+                                            <p-dropdown  inputId="situationFamiliale" dataKey="id" [filter]="true" showClear="true" [options]="situationFamiliales"
+                                            (onChange)="viewSituation()" formControlName="situationFamiliale" placeholder="Select" optionLabel="label"></p-dropdown>
+                                            
+                                        </div>
+                                        
+                    
+                                        <div class="p-field p-col">
+                                            <label for="nombreEnfant">Nombre d'enfants à charge âgés de moins de 21 ans</label>
+                                            <input id="nombreEnfant" class="champ" type="number" formControlName="nombreEnfant" (Change)="viewnombreEnfant()" pInputText>
+                                        </div>
+                                    </div>
+                                    <div class="p-fluid p-formgrid p-grid">
+                        
+                                        
+                                        <div *ngIf="quuestionAssures.length <= 0">
+                                            
+                                            <p-button  label="Repondez aux questions" icon="pi pi-plus" (click)="addQuestionAssure()"></p-button>
+                                        </div>
+                                        <div class="p-fluid p-formgrid p-grid " *ngIf="quuestionAssures.length > 0">
+                                        <p-table [value]="quuestionAssures" dataKey="">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                
+                                                    <th>Poids</th>
+                                                    <th>Taille</th>
+                                                    <th>Modifiication du questionnaire</th>
+                                                   
+                                                    
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template  pTemplate="body" let-question >
+                                                <tr>
+                                                    <td> {{question.poids}}
+                                                    </td>
+                                                    <td> {{question.taille}}
+                                                    </td>
+
+                                                    <td>
+                                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestion(question)"></button>
+   
+                                                </td>
+                                                    
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                
+                                    </div>
+                                    
+                                
+                                    
+                                    
+                                
+                               
+                            </p-fieldset>
+                        
+            
+                        <hr/>  
+                                
+                        
+                                
+                                <br/>
+                    </div>
+               </form>
+
+               <p-fieldset legend="Information de l'épouse(x)" toggleable="true" *ngIf="marie">
+                <div class="card">
+                        
+                    <div class="p-fluid p-formgrid p-grid" >
+                            <div class="p-field p-col">
+                                <label for="nomEpouse">Nom et prénom épouse(x)</label>
+                                <input id="nomEpouse" class="champ" type="text" [(ngModel)]="epouse.nomEpouse" pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
+                                <p-calendar id="dateNaissanceEpoux" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="epouse.dateNaissanceEpoux" appendTo="body"></p-calendar>
+                            </div>
+                            <div class="p-field p-col" >
+                                <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
+                                <input id="lieuNaissanceEpouse" class="champ" type="text" [(ngModel)]="epouse.lieuNaissanceEpouse" pInputText>
+                            </div>
+
+                            <div class="p-field p-col" >
+                                <label for="emploiEpouse">Emploi</label>
+                                <input id="emploiEpouse" class="champ" type="text" [(ngModel)]="epouse.emploiEpouse"  pInputText>
+                            </div>
+                     </div>
+                     <div class="p-fluid p-formgrid p-grid">
+            
+                        
+                        <div  *ngIf="questionEpoux.length <= 0">
+                           
+                            <p-button  label="Repondez aux questions" icon="pi pi-plus" (click)="addQuestionEpouse()"></p-button>
+                        </div>
+                        
+                            <p-table [value]="questionEpoux" dataKey="" *ngIf="questionEpoux.length > 0">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                        <th>Poids</th>
+                                        <th>Taille</th>
+                                        <th>Modifiication du questionnaire</th>
+                                       
+                                        
+                                    </tr>
+                                </ng-template>
+                                <ng-template  pTemplate="body" let-question >
+                                    <tr>
+                                        <td> {{question.poids}}
+                                        </td>
+                                        <td> {{question.taille}}
+                                        </td>
+
+                                        <td>
+                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestionEpoux(question)"></button>
+                                        </td>
+                                        
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        
+                        
+                
+                    </div>
+               </div>
+        </p-fieldset>
+               <div class="p-grid p-justify-between" *ngIf="this.bulletinForm.value.nombreEnfant > 0 && enfants.length <= this.bulletinForm.value.nombreEnfant -1">
+                <div> </div>
+                <div>
+                    <p-button   label="Ajoute un  enfant"  icon="pi pi-plus" (click)="addEnfant()"></p-button>
+                </div>
+            </div>
+               
+               <div class="p-fluid p-formgrid p-grid"  *ngIf="this.bulletinForm.value.nombreEnfant > 0" >
+                <p-fieldset legend="Liste des enfants" toggleable="true">
+                <p-table [value]="enfants" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                        
+                           
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Date Naissance</th>
+                            <th>Lieu de naissance</th>
+                            <th style="width:8rem"></th>
+                            
+                        </tr>
+                    </ng-template>
+
+                    <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                        <tr >
+                    
+                            
+                            <td>{{rowData.nomEnfant}}</td>
+                            <td>{{rowData.prenomEnfant}}</td>
+                            <td>{{rowData.dateNaissanceEnfant  | formatTableValue : 'date'}}</td>
+
+                            <td> {{rowData.lieuNaisssance}}</td>
+                            
+                            <td style="text-align:center">
+                                <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="updateEnfant(rowData,ri)" class="p-button-rounded p-button-text"></button>
+        
+
+                                </td>
+                    
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-fieldset>
+
+
+                
+            </div>
+                <hr/>  
+                        
+                
+                        
+                        <br/>
+            
+
+            <hr/>  
+                        
+                
+                        
+                        <br/>
+            <div class="p-grid p-justify-between">
+                <div>
+                    <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                </div>
+                <div>
+                    <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreate()" ></button>
+                </div>
+            </div>
+             
+
+         
+               </div>    
+               </ng-template>      
+            </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>
+
+<p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayDetailBulletin" header="Bulletin d'adhésion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+    <ng-template pTemplate="content">
+        <div class="card">
+        
+            <div class="card">
+                <p-fieldset legend="Information de l'Assuré" toggleable="true">
+                        
+                <div class="p-fluid p-formgrid p-grid">
+
+    
+                    
+                
+                    
+                    <div class="p-field p-col">
+                        <label for="matriculeAdherent">Matricule adhérent</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.matriculeAdherent}}
+                         </div>
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Nom</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp; {{BulletinDetail.nomAdherent}}
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="nomAdherent">Prenom</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp; {{BulletinDetail.prenomAdherent}}
+                    </div>
+                    
+                </div>
+                    
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                        
+                    
+
+                        <div class="p-field p-col" >
+                            <label for="nomAdherent">Nom Assuré Principal</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.nomAssurePrin}}
+                        </div>
+    
+                        <div class="p-field p-col">
+                            <label for="nomAdherent">Prénom Assuré Principal</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.prenomAssurePrin}}
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="groupeAdherent">Numero groupe</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.numeroGroupe}}
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        
+                        <div class="p-field p-col">
+                            <label for="policeAdherent">Numero police</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.numeroPolice}}
+                        </div>
+                        
+                        <div class="p-field p-col">
+                            <label for="souscripteur">Souscripteur</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.nomPoliceAdherent}}
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="dateEffet">Date de saisie </label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.dateSaisie | formatTableValue : 'date'}}
+                        </div>
+                    </div>
+                    
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="raisonSociale">Raison sociale </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.raisonSociale}}                                    
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="dateEntreeService">Entrée au service du contractant le </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.dateEntreeService | formatTableValue : 'date'}}
+                                </div>
+        
+                                <div class="p-field p-col">
+                                    <label for="adresse">Adresse</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.adresse}}
+                                    
+                                </div>
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <label for="tel">Tel</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.tel}}
+                                    
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="emploi">Emploi</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.emploi}}
+                                </div>
+        
+                                <div class="p-field p-col">
+                                    <label for="lieuNaissance">Lieu Naissance</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.lieuNaissance}}
+                                    
+                                </div>
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+                
+                                <div class="p-field p-col" >
+                                    <label for="situationFamiliale">Situation Familiale</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.situationFamiliale}} 
+                                </div>
+                                
+            
+                                <div class="p-field p-col">
+                                    <label for="nombreEnfant">Nombre d'enfants à charge âgés de moins de 21 ans</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.nombreEnfant}} 
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid ">
+                                <p-table [value]="quuestionsAssures" dataKey="">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                        
+                                            <th>Poids</th>
+                                            <th>Taille</th>
+                                            <th>Détail du questionnaire</th>
+                                           
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template  pTemplate="body" let-question >
+                                        <tr>
+                                            <td> {{question.poids}}
+                                            </td>
+                                            <td> {{question.taille}}
+                                            </td>
+
+                                            <td>
+                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestion(question,BulletinDetail.sexe)"></button>
+
+                                        </td>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        
+                            </div>
+                            
+                        
+                            
+                            
+                        
+                       
+                    </p-fieldset>
+                
+    
+                <hr/>  
+                        
+                
+                        
+                        <br/>
+            </div>
+       
+
+       <p-fieldset legend="Information de l'épouse(x)" toggleable="true">
+        <div class="card">
+                
+            <div class="p-fluid p-formgrid p-grid" >
+                    <div class="p-field p-col">
+                        <label for="nomEpouse">Nom et prénom épouse(x)</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.nomEpouse}}
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.dateNaissanceEpoux | formatTableValue : 'date'}}
+                    </div>
+                    <div class="p-field p-col" >
+                        <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.lieuNaissanceEpouse}}
+                    </div>
+
+                    <div class="p-field p-col" >
+                        <label for="emploiEpouse">Emploi</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.emploiEpouse}}
+                    </div>
+             </div>
+             <div class="p-fluid p-formgrid p-grid">
+    
+                
+               
+                
+                    <p-table [value]="questionsEpoux" dataKey="">
+                        <ng-template pTemplate="header">
+                            <tr>
+                            
+                                <th>Poids</th>
+                                <th>Taille</th>
+                                <th>Détail du questionnaire</th>
+                               
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template  pTemplate="body" let-question >
+                            <tr>
+                                <td> {{question.poids}}
+                                </td>
+                                <td> {{question.taille}}
+                                </td>
+
+                                <td>
+                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question, BulletinDetail.epouse?.sexe)"></button>
+                                </td>
+                                
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                
+                
+        
+            </div>
+       </div>
+</p-fieldset>
+       
+       
+       <div class="p-fluid p-formgrid p-grid" >
+        <p-fieldset legend="Liste des enfants" toggleable="true">
+        <p-table [value]="BulletinDetail.enfants" dataKey="id" editMode="row" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                
+                   
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Date Naissance</th>
+                    <th>Lieu de naissance</th>
+                    <th style="width:8rem"></th>
+                    
+                </tr>
+            </ng-template>
+
+            <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                <tr >
+            
+                    
+                    <td>{{rowData.nomEnfant}}</td>
+                    <td>{{rowData.prenomEnfant}}</td>
+                    <td>{{rowData.dateNassance  | formatTableValue : 'date'}}</td>
+
+                    <td> {{rowData.lieuNaisssance}}</td>
+                    
+                    <td style="text-align:center">
+                        <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="VoirEnfant(rowData)" class="p-button-rounded p-button-success p-mr-2"></button>
+
+
+                        </td>
+            
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-fieldset>
+
+
+        
+    </div>
+       
+     
+
+ 
+       </div>    
+       </ng-template>      
+    </p-dialog>
+
+
+<p-dialog [(visible)]="displayQuestionEnfant"  header="Veuillez ajouter l'enfant et repondre aux questions" [modal]="true" styleClass="p-fluid">
+    
+    <ng-template pTemplate="content"> 
+        <div class="card">
+
+        <p-fieldset legend="Information de l'enfant" toggleable="true">
+            <div class="card">
+                    
+                <div class="p-fluid p-formgrid p-grid" >
+                        <div class="p-field p-col">
+                            <label for="nomEnfant">Nom </label>
+                            <input id="nomEnfant" class="champ" type="text" [(ngModel)]="enfant.nomEnfant" pInputText>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="prenomEnfant">Prenom </label>
+                            <input id="prenomEnfant" class="champ" type="text" [(ngModel)]="enfant.prenomEnfant" pInputText>
+                        </div>
+                        <div class="p-field p-col" >
+                            <label for="emploiEpouse">Date de naissance</label>
+                            <p-calendar id="dateNassance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="enfant.dateNassance" appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col" >
+                            <label for="lieuNaisssance">Lieu de Naissance</label>
+                            <input id="lieuNaisssance" class="champ" type="text" [(ngModel)]="enfant.lieuNaisssance" pInputText>
+                        </div>
+
+                        
+                        
+
+                 </div>
+                
+           </div>
+    </p-fieldset>
+    <p-fieldset legend="Veuillez repondre aux questions" toggleable="true">
+    <form  [formGroup]="questionnaireForm">
+                     <div class="card">
+                         <div class="p-fluid p-formgrid p-grid">
+                             <div class="p-field p-col">
+                                 <label for="poids">Poids</label>
+                                 <input id="poids" class="champ" type="number" formControlName="poids" pInputText >
+                             </div>
+                             <div class="p-field p-col">
+                                 <label for="taille">Taille</label>
+                                 <input id="taille" class="champ" type="number"  formControlName="taille" pInputText>              
+                             </div>
+ 
+                             <div class="p-field p-col">
+                                 <label for="isSante">Etes-vous actuellement en bonne santé?</label>
+                                 <p-dropdown  inputId="isSante" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                 formControlName="isSante" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+                             <div class="p-field p-col" >
+                                 <label for="defaut">Avez-vous un défaut de constitution, une infirmité ou une maladie chronique?</label>
+                                 <p-dropdown  inputId="defaut" dataKey="id" [filter]="true" showClear="true" [options]="defauts"
+                                 formControlName="defaut" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+                            
+                          </div>
+ 
+                          <div class="p-fluid p-formgrid p-grid">
+                             
+                             <div class="p-field p-col">
+                                 <label for="infection">Avez-vous un dans le passé une infection</label>
+                                 <p-dropdown  inputId="infection" dataKey="id" [filter]="true" showClear="true" [options]="affectionPasses"
+                                 formControlName="infection" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+                             <div class="p-field p-col" >
+                                 <label for="traitementSuivre">Suivez-vous actuellement un traitement?</label>
+                                 <p-dropdown  inputId="traitementSuivre" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                 formControlName="traitementSuivre" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+ 
+                             <div class="p-field p-col" *ngIf="questionnaireForm.value.traitementSuivre?.value == 'OUI' ">
+                                 <label for="traitement">Lequel</label>
+                                 <input id="traitement"  class="champ" type="text" formControlName="traitement" pInputText>
+                             </div>
+ 
+                             
+ 
+                          </div>
+ 
+                          <div class="p-fluid p-formgrid p-grid">
+ 
+                             <div class="p-field p-col" >
+                                 <label for="subiAccident">Avez-vous subi des accidents ou été opéré?</label>
+                                 <p-dropdown  inputId="subiAccident" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                 formControlName="subiAccident" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+                             <div class="p-field p-col" *ngIf="questionnaireForm.value.subiAccident?.value == 'OUI'">
+                                 <label for="detailAccident">Donner des détails de l'accident</label>
+                                 <input id="detailAccident" class="champ" type="text" formControlName="detailAccident" pInputText>
+                             </div>
+                             <div class="p-field p-col">
+                                 <label for="maladieAnterieur">Indiquez vos maladies antérieures et l'époque à laquelle vous les avez contractées?</label>
+                                 <textarea id="maladieAnterieur"  class="champ" type="text"formControlName ="maladieAnterieur" pInputText></textarea>
+                             </div>
+                          </div>
+ 
+                          <div class="p-fluid p-formgrid p-grid">
+                             
+                             <div class="p-field p-col" >
+                                 <label for="avoirHosp">Une hospitalisation est-elle prévue ou conseillée?</label>
+                                 
+                                 <p-dropdown  inputId="avoirHosp" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                 formControlName="avoirHosp" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+                             <div class="p-field p-col" *ngIf="questionnaireForm.value.avoirHosp?.value == 'OUI'">
+                                 <label for="natureSoins">Nature de soins</label>
+                                 <input id="natureSoins"  class="champ" type="text" formControlName="natureSoins" pInputText>
+                             </div>
+                             <div class="p-field p-col">
+                                 <label for="maladieProche">Maladie d'un proche</label>
+                                 <p-dropdown  inputId="maladieProche" dataKey="id" [filter]="true" showClear="true" [options]="maladieProches"
+                                 formControlName="maladieProche" placeholder="Select" optionLabel="label"></p-dropdown>
+                                 
+                             </div>
+ 
+                          </div>
+ 
+ 
+                         
+ 
+                          <div class="p-fluid p-formgrid p-grid">
+                     
+                            <div class="p-field p-col">
+                                <label for="casParticulier">Cas particulier</label>
+                                <input id="casParticulier" formControlName class="champ" type="text" formControlName="casParticulier" pInputText>
+                            </div>
+                            
+ 
+                          </div>
+ 
+                     </div>
+                     
+             </form>
+            </p-fieldset>
+            <div class="p-grid p-justify-between">
+                <div>
+                <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerQuestion()"></button>
+                </div>
+                <div>
+                    <button  pButton pRipple label="Enregistrer" (click)="ajouterEnfant()" icon="pi pi-check" type="submit"></button>
+                </div>
+            </div>
+            </div>
+            </ng-template>
+ 
+         
+     </p-dialog>
+
+<p-dialog [(visible)]="displayQuestion"  header="Veuillez repondre aux questions {{label}}" [modal]="true" styleClass="p-fluid">
+    
+   <ng-template pTemplate="content"> 
+    <form (ngSubmit)="enregistrer()"  [formGroup]="questionnaireForm">
+                    <div class="card">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="poids">Poids</label>
+                                <input id="poids" class="champ" type="number" formControlName="poids" pInputText >
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="taille">Taille</label>
+                                <input id="taille" class="champ" type="number"  formControlName="taille" pInputText>              
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="isSante">Etes-vous actuellement en bonne santé?</label>
+                                <p-dropdown  inputId="isSante" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="isSante" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+                            <div class="p-field p-col" >
+                                <label for="defaut">Avez-vous un défaut de constitution, une infirmité ou une maladie chronique?</label>
+                                <p-dropdown  inputId="defaut" dataKey="id" [filter]="true" showClear="true" [options]="defauts"
+                                formControlName="defaut" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+                           
+                         </div>
+
+                         <div class="p-fluid p-formgrid p-grid">
+                            
+                            <div class="p-field p-col">
+                                <label for="infection">Avez-vous un dans le passé une infection</label>
+                                <p-dropdown  inputId="infection" dataKey="id" [filter]="true" showClear="true" [options]="affectionPasses"
+                                formControlName="infection" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+                            <div class="p-field p-col" >
+                                <label for="traitementSuivre">Suivez-vous actuellement un traitement?</label>
+                                <p-dropdown  inputId="traitementSuivre" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="traitementSuivre" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.traitementSuivre?.value == 'OUI' ">
+                                <label for="traitement">Lequel</label>
+                                <input id="traitement"  class="champ" type="text" formControlName="traitement" pInputText>
+                            </div>
+
+                            
+
+                         </div>
+
+                         <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col" >
+                                <label for="subiAccident">Avez-vous subi des accidents ou été opéré?</label>
+                                <p-dropdown  inputId="subiAccident" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="subiAccident" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.subiAccident?.value == 'OUI'">
+                                <label for="detailAccident">Donner des détails de l'accident</label>
+                                <input id="detailAccident" class="champ" type="text" formControlName="detailAccident" pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="maladieAnterieur">Indiquez vos maladies antérieures et l'époque à laquelle vous les avez contractées?</label>
+                                <textarea id="maladieAnterieur"  class="champ" type="text"formControlName ="maladieAnterieur" pInputText></textarea>
+                            </div>
+                         </div>
+
+                         <div class="p-fluid p-formgrid p-grid">
+                            
+                            <div class="p-field p-col" >
+                                <label for="avoirHosp">Une hospitalisation est-elle prévue ou conseillée?</label>
+                                
+                                <p-dropdown  inputId="avoirHosp" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="avoirHosp" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+                            <div class="p-field p-col" *ngIf="questionnaireForm.value.avoirHosp?.value == 'OUI'">
+                                <label for="natureSoins">Nature de soins</label>
+                                <input id="natureSoins"  class="champ" type="text" formControlName="natureSoins" pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="maladieProche">Maladie d'un proche</label>
+                                <p-dropdown  inputId="maladieProche" dataKey="id" [filter]="true" showClear="true" [options]="maladieProches"
+                                formControlName="maladieProche" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+
+                         </div>
+
+
+                         <div class="p-fluid p-formgrid p-grid">
+                            
+                            <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                <label for="serviceMilitair">Service militaire</label>
+                                <input id="serviceMilitair"  class="champ" type="text" formControlName="serviceMilitair" pInputText>
+                            </div>
+                            <div class="p-field p-col"  *ngIf="sexe == 'M'">
+                                <label for="exempte">Avez-vous été exempté, réformé ? Cause ?</label>
+                                <input id="exempte"  class="champ" type="text" formControlName="exempte" pInputText>
+                            </div>
+
+                            <div class="p-field p-col"  *ngIf="sexe == 'M'">
+                                <label for="blesse">Etes-vous blessé de guerre ?</label>
+                                <p-dropdown  inputId="blesse" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="blesse" placeholder="Select" optionLabel="label"></p-dropdown>
+                                
+                            </div>
+                            <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                <label for="tauxPension">Taux de pension</label>
+                                <input id="tauxPension" class="champ"  type="number" formControlName="tauxPension" pInputText>
+                            </div>
+                            
+                         </div>
+
+                         <div class="p-fluid p-formgrid p-grid">
+                    
+
+                            <div class="p-field p-col" *ngIf="sexe == 'F'" >
+                                <label for="maladieFemme">Maladie Femme</label>
+                                <input id="maladieFemme"  class="champ" type="text" formControlName="maladieFemme" pInputText>
+                            </div>
+
+                            <div class="p-field p-col" *ngIf="sexe == 'F'">
+                                <label for="normalCouche">Vos couches ont-elles été normales ?</label>
+                                <p-dropdown  inputId="normalCouche" dataKey="id" [filter]="true" showClear="true" [options]="choix"
+                                formControlName="normalCouche" placeholder="Select" optionLabel="label"></p-dropdown>
+                                              
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="casParticulier">Cas particulier</label>
+                                <input id="casParticulier" formControlName class="champ" type="text" formControlName="casParticulier" pInputText>
+                            </div>
+
+                         </div>
+
+                    </div>
+                    <div class="p-grid p-justify-between">
+                        <div>
+                        <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerQuestion()"></button>
+                        </div>
+                        <div>
+                            <button  [disabled]="questionnaireForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                        </div>
+                    </div>
+            </form>
+           </ng-template>
+
+        
+    </p-dialog>
+
+    <p-dialog [(visible)]="displayDetailQuestion"  [style]="{width: '80vw'}"  breakpoints="{'960px': '75vw', '640px': '100vw'}" header="Les réponses aux questions" [modal]="true" styleClass="p-fluid">
+    
+        <ng-template pTemplate="content"> 
+         
+                         <div class="card">
+                             <div class="p-fluid p-formgrid p-grid">
+                                 <div class="p-field p-col">
+                                     <label for="poids">Poids</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.poids}}
+                                 </div>
+                                 <div class="p-field p-col">
+                                     <label for="taille">Taille</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp; {{questionnaireDetail.taille}}
+                                 </div>
+     
+                                 <div class="p-field p-col">
+                                     <label for="isSante">Etes-vous actuellement en bonne santé?</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.isSante}}
+                                    
+                                 </div>
+     
+                                 
+                                
+                              </div>
+     
+                              <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col" >
+                                    <label for="defaut">Avez-vous un défaut de constitution, une infirmité ou une maladie chronique?</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.defaut}}
+                                    
+                                </div>
+    
+                                 <div class="p-field p-col">
+                                     <label for="infection">Avez-vous un dans le passé une infection</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.infection}}
+                                     
+                                 </div>
+                                 <div class="p-field p-col" >
+                                     <label for="traitementSuivre">Suivez-vous actuellement un traitement?</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.traitementSuivre}}
+                                     
+                                 </div>
+     
+     
+                                 
+     
+                                 
+     
+                              </div>
+     
+                              <div class="p-fluid p-formgrid p-grid">
+     
+                                <div class="p-field p-col" *ngIf="questionnaireDetail.traitementSuivre === 'OUI'">
+                                    <label for="traitement">Lequel</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.traitement}}
+                                </div>
+                                <div class="p-field p-col" *ngIf="questionnaireDetail.traitementSuivre === 'NON' && questionnaireDetail.traitementSuivre === ''">
+                                    
+                                </div>
+                                 <div class="p-field p-col" >
+                                     <label for="subiAccident">Avez-vous subi des accidents ou été opéré?</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.subiAccident}}
+                         
+                                 </div>
+     
+                                 <div class="p-field p-col" *ngIf="questionnaireDetail.subiAccident ==='OUI'">
+                                     <label for="detailAccident">Donner des détails de l'accident</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.detailAccident}}
+                                 </div>
+                                 <div class="p-field p-col" *ngIf="questionnaireDetail.subiAccident ==='NON' && questionnaireDetail.subiAccident ===''" >
+                                    
+                                </div>
+                                 
+                              </div>
+     
+                              <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <label for="maladieAnterieur">Indiquez vos maladies antérieures et l'époque à laquelle vous les avez contractées?</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.maladieAnterieur}}
+                                </div>
+                                 
+                                 <div class="p-field p-col" >
+                                     <label for="avoirHosp">Une hospitalisation est-elle prévue ou conseillée?</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.avoirHosp}}
+                                      
+                                 </div>
+     
+                                 <div class="p-field p-col" *ngIf="questionnaireDetail.avoirHosp ==='OUI'">
+                                     <label for="natureSoins">Nature de soins</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.natureSoins}}
+                                 </div>
+                                 <div class="p-field p-col" *ngIf="questionnaireDetail.avoirHosp ==='NON' && questionnaireDetail.avoirHosp ===''">
+                                    
+                                </div>
+                                 
+     
+                              </div>
+     
+     
+                              <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <label for="maladieProche">Maladie d'un proche</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.maladieProche}}
+                                    
+                                </div>
+                                 <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                     <label for="serviceMilitair">Service militaire</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.serviceMilitair}}
+
+                                 </div>
+                                 <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                     <label for="exempte">Avez-vous été exempté, réformé ? Cause ?</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.exempte}}
+                                 </div>
+     
+                                 
+                                 
+                              </div>
+     
+                              <div class="p-fluid p-formgrid p-grid">
+                         
+                                <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                    <label for="blesse">Etes-vous blessé de guerre ?</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.blesse}}
+                                    
+                                </div>
+                                <div class="p-field p-col" *ngIf="sexe == 'M'">
+                                    <label for="tauxPension">Taux de pension</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.tauxPension}}
+                                </div>
+     
+                                 <div class="p-field p-col" *ngIf="sexe == 'F'">
+                                     <label for="maladieFemme">Maladie Femme</label>
+                                     &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.maladieFemme}}
+                                 </div>
+     
+                                 <div class="p-field p-col" *ngIf="sexe == 'F'">
+                                    <label for="normalCouche">Vos couches ont-elles été normales ?</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.normalCouche}}
+                                                  
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="casParticulier">Cas particulier</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{questionnaireDetail.casParticulier}}
+                                </div>
+     
+                              </div>
+     
+                         </div>
+                        
+               
+                </ng-template>
+     
+             
+         </p-dialog>
+         <p-dialog [(visible)]="displayQuestionDetailEnfant"  header="detail de l'enfant" [modal]="true" styleClass="p-fluid">
+    
+            <ng-template pTemplate="content"> 
+                <div class="card">
+        
+                <p-fieldset legend="Information de l'enfant" toggleable="true">
+                    <div class="card">
+                            
+                        <div class="p-fluid p-formgrid p-grid" >
+                                <div class="p-field p-col">
+                                    <label for="nomEnfant">Nom </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail.nomEnfant}}
+                                </div>
+                                <div class="p-field p-col">
+                                    <label for="prenomEnfant">Prenom </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail.prenomEnfant}}                                </div>
+                                <div class="p-field p-col" >
+                                    <label for="emploiEpouse">Date de naissance</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail.dateNassance  | formatTableValue : 'date'}}
+                                </div>
+                                <div class="p-field p-col" >
+                                    <label for="lieuNaisssance">Lieu de Naissance</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail.lieuNaisssance}}
+                                </div>
+        
+                                
+                                
+        
+                         </div>
+                        
+                   </div>
+            </p-fieldset>
+            <p-fieldset legend="Les réponses" toggleable="true">
+            
+                             <div class="card">
+                                 <div class="p-fluid p-formgrid p-grid">
+                                     <div class="p-field p-col">
+                                         <label for="poids">Poids</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.poids}}
+                                     </div>
+                                     <div class="p-field p-col">
+                                         <label for="taille">Taille</label>
+
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.taille}} 
+                                      </div>
+         
+                                     <div class="p-field p-col">
+                                         <label for="isSante">Etes-vous actuellement en bonne santé?</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.isSante}}
+                                     </div>
+         
+                                     
+         
+                                    
+                                  </div>
+         
+                                  <div class="p-fluid p-formgrid p-grid">
+
+                                    <div class="p-field p-col" >
+                                        <label for="defaut">Avez-vous un défaut de constitution, une infirmité ou une maladie chronique?</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.defaut}}
+                                    </div>
+                                     
+                                     <div class="p-field p-col">
+                                         <label for="infection">Avez-vous un dans le passé une infection</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.infection}}
+                                     </div>
+                                     <div class="p-field p-col" >
+                                         <label for="traitementSuivre">Suivez-vous actuellement un traitement?</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.traitementSuivre}}
+                                     </div>
+         
+         
+                                     
+         
+                                     
+         
+                                  </div>
+         
+                                  <div class="p-fluid p-formgrid p-grid">
+
+                                    <div class="p-field p-col" *ngIf="enfantDetail?.question?.traitementSuivre === OUI" >
+                                        <label for="traitement">Lequel</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.traitement}}     
+                                   </div>
+                                   <div class="p-field p-col" *ngIf="enfantDetail?.question?.traitementSuivre === NON && enfantDetail?.question?.traitementSuivre ===''" >
+                                    
+                                  </div>
+         
+                                     <div class="p-field p-col" >
+                                         <label for="subiAccident">Avez-vous subi des accidents ou été opéré?</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.subiAccident}}
+                                     </div>
+         
+                                     <div class="p-field p-col" *ngIf="enfantDetail?.question?.subiAccident === OUI">
+                                         <label for="detailAccident">Donner des détails de l'accident</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.detailAccident}}  
+                                         </div>
+                                         <div class="p-field p-col" *ngIf="enfantDetail?.question?.subiAccident === NON">
+                                             
+                                            </div>
+                                  </div>
+                                     
+         
+                                  <div class="p-fluid p-formgrid p-grid">
+
+                                    <div class="p-field p-col">
+                                        <label for="maladieAnterieur">Indiquez vos maladies antérieures et l'époque à laquelle vous les avez contractées?</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.maladieAnterieur}}                           
+                                     </div>
+                                 
+                                     
+                                     <div class="p-field p-col">
+                                         <label for="avoirHosp">Une hospitalisation est-elle prévue ou conseillée?</label>
+                                         
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.avoirHosp}}
+                                         
+                                     </div>
+         
+                                     <div class="p-field p-col" *ngIf="enfantDetail?.question?.avoirHosp === OUI">
+                                         <label for="natureSoins">Nature de soins</label>
+                                         &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.natureSoins}}   
+                                     </div>
+
+                                     <div class="p-field p-col" *ngIf="enfantDetail?.question?.avoirHosp === NON && enfantDetail?.question?.avoirHosp === ''">
+                                        
+                                    </div>
+                                    
+         
+                                  </div>
+         
+         
+                                 
+         
+                                  <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="maladieProche">Maladie d'un proche</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.maladieProche}} 
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="casParticulier">Cas particulier</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{{enfantDetail?.question?.casParticulier}}                                     </div>
+                                    
+         
+                                  </div>
+         
+                             </div>
+                             
+                     
+                    </p-fieldset>
+                    
+                    </div>
+                    </ng-template>
+         
+                 
+             </p-dialog>
