@@ -272,6 +272,10 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e)";
                     this.prestationAdd.sort = Sort.REJETE;
                     this.prestationAdd.montantRembourse = 0;
+                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
+
+    
+                    this.prestationAdd.dateRetrait = this.adherentSelected.dateSortie;
                   }
                 this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
                 this.prestationAdd.nomAdherent = this.adherentSelected.nom;
@@ -644,11 +648,13 @@ export class TierPayantEditionComponent implements OnInit {
             this.prefinancement.montantPaye = 0;
         }
         if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
-            this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+            
+            this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
             this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
         }
 
          if(prestaList.length == 1) {
+            
              
              this.prestationAdd.familleActe = prestaList[0].familleActe;
              this.prestationAdd.acte = prestaList[0].acte;
@@ -662,9 +668,15 @@ export class TierPayantEditionComponent implements OnInit {
              this.prestationAdd.debours = prestaList[0].debours;
              this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
              this.prestationAdd.taux = prestaList[0].taux;
-             this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
-             this.prestationAdd.sort = prestaList[0].sort;
-             this.prestationAdd.sort = prestaList[0].sort;
+             
+             this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+             if(this.prestationAdd.montantRembourse !== 0) {
+
+                this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+                this.prestationAdd.sort = prestaList[0].sort;
+                this.prestationAdd.sort = prestaList[0].sort;
+            }
+             
              this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
              if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
                 this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
@@ -672,7 +684,7 @@ export class TierPayantEditionComponent implements OnInit {
 
                }
 
-               this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+               this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
               this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
          }
          if(prestaList.length > 1) {
@@ -689,9 +701,15 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = prestaList[0].debours;
                 this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
                 this.prestationAdd.taux = prestaList[0].taux;
-                this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
-                this.prestationAdd.sort = prestaList[0].sort;
-                this.prestationAdd.sort = prestaList[0].sort;
+                this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+
+                if(this.prestationAdd.montantRembourse !== 0) {
+
+                    this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+                    this.prestationAdd.sort = prestaList[0].sort;
+                    this.prestationAdd.sort = prestaList[0].sort;
+                }
+               
                 this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
                 if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
                     this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
@@ -699,13 +717,14 @@ export class TierPayantEditionComponent implements OnInit {
     
                    }
     
-                   this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                   this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
                   this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
                 
 
                 
                 
              } else {
+                console.log("========montantRembourse1============", this.prestationAdd.montantRembourse);
                 const prestaList1: Prestation[] = [];
                 prestaList.forEach(prest=>{
                     this.i = 0;
@@ -731,9 +750,14 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.debours = prestaList1[0].debours;
                     this.prestationAdd.baseRemboursement = prestaList1[0].baseRemboursement;
                     this.prestationAdd.taux = prestaList1[0].taux;
-                    this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
-                    this.prestationAdd.sort = prestaList1[0].sort;
-                    this.prestationAdd.sort = prestaList1[0].sort;
+                    this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
+
+                    if(this.prestationAdd.montantRembourse !== 0) {
+                        this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
+                        this.prestationAdd.sort = prestaList1[0].sort;
+                        this.prestationAdd.sort = prestaList1[0].sort;
+                    }
+                    
                     this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
                     if(this.prestationAdd.montantPlafond <  this.prestationAdd.montantRembourse){
                         this.prestationAdd.montantRembourse = this.prestationAdd.montantPlafond;
@@ -741,7 +765,7 @@ export class TierPayantEditionComponent implements OnInit {
         
                        }
         
-                       this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
+                       this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
                       this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
                 }
 
@@ -984,6 +1008,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.displayPrestationpop = true;
         this.prestationAdd = {};
         const formPrestation: FormGroup = this.createItem();
+        this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
         
         this.prestation.push(formPrestation);

@@ -187,7 +187,7 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="dateEffet">Date de saisie <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="dateSaisie"  type="date" name="dateSaisie" pInputText [(ngModel)]="prefinancement.dateSaisie">
+                                    <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="prefinancement.dateSaisie" name="dateSaisie"  appendTo="body"></p-calendar>
                                 </div>
 
                                 <div class="p-field p-col-4">
@@ -463,7 +463,11 @@
                 <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherentPrincipal" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal"  pInputText>
                 <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherentPrincipal" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal" pInputText>
             </div>
-            
+            <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col">
+                <label for="dateEffet">Date de retrait <span style="color: red !important;"></span></label>
+                <p-calendar id="dateRetrait" class="champRouge" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="prestationAdd.dateRetrait" name="dateRetrait"  appendTo="body"></p-calendar>
+            </div>
+
               <div class="p-field p-col-3">
                <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
@@ -473,6 +477,8 @@
                            optionLabel="numeros" (onChange)="onRowSelectBon($event)">
                        </p-dropdown>
            </div>
+
+          
     
            <div class="p-field p-col-3">
             <label for="familleActe">Famille acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
