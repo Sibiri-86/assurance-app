@@ -607,6 +607,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   
   changeGarantie(garantie) {
     console.log(garantie);
+   /*  console.log(garantie);
+    console.log(garantie) */;
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
   }
   
