@@ -46,6 +46,13 @@
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
 
+                        <div class="p-field p-col-6">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                            <p-calendar class="exo" id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                            dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                            appendTo="body"></p-calendar>  
+                        </div>
+
                     </div>
                 </form>
             </p-fieldset>

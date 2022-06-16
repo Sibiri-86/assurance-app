@@ -95,6 +95,12 @@
                             <label for="fraisBadges">Total Frais Badges <sup></sup></label>
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
                         </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                        <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                        dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                        appendTo="body"></p-calendar>  
+                        </div>
                     </div>
                 </form>
                 <p-fieldset legend="RECAPITULATIF" toggleable="true">

@@ -65,7 +65,7 @@
                <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editerPrestation(prefinancement)"></button>
                -->
                <button pButton  pRipple icon="pi pi-eye" pTooltip="voir detail" class="p-button-rounded p-button-help p-mr-2" (click)="editerPrestation(prefinancement)"></button> 
-               <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button>
+               <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(prefinancement)"></button> -->
            </td>
        </tr>
    </ng-template>
@@ -205,6 +205,8 @@
                             
                             <td style="text-align:center">
                                 <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="voirPrestationDetail(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(rowData)"></button>
+
         
         
                                 </td>

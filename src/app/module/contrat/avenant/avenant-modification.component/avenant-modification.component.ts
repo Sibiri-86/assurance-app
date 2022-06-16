@@ -281,6 +281,7 @@ export class AvenantModificationComponent implements OnInit {
       demandeur: new FormControl(null, [Validators.required]),
       fraisBadges:new FormControl(null),
       fraisAccessoires: new FormControl(null),
+      dateSaisie: new FormControl(new Date()),
     
     });
 

@@ -238,6 +238,7 @@ export class AvenantIncorporationComponent implements OnInit{
             demandeur: new FormControl(null, [Validators.required]),
             fraisBadges: new FormControl(null, [Validators.required]),
             fraisAccessoires: new FormControl(null, [Validators.required]),
+            dateSaisie: new FormControl(new Date()),
             // curentExercice: new FormControl(null, [Validators.required])
         });
 

@@ -65,6 +65,7 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
+import { ConventionService } from 'src/app/store/medical/convention/service';
 
 
 @Component({
@@ -122,9 +123,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   plafondSousActe: CheckPlafond;
   numberPrestation = 0;
+  montantConvention: number = 0;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
+               private conventionService: ConventionService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
@@ -173,7 +176,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       acte: new FormControl(),
       familleActe: new FormControl(),
       medecin: new FormControl(),
-      historiqueAvenant: new FormControl()
+      historiqueAvenant: new FormControl(),
+      inotPlafond: new FormControl(),
     });
   }
 
@@ -377,6 +381,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     }
     this.plafondSousActe.adherent = this.adherentSelected;
     this.plafondSousActe.sousActe = this.prestationForm.get('prestation').value[i].sousActe;
+    this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
+      this.montantConvention = rest;
+
+  });
     if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -477,6 +485,14 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   calculDebours(i: number) {
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+    if(this.prestationForm.get('prestation').value[i].coutUnitaire !== this.montantConvention && this.montantConvention !== 0) {
+      this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
+      const c =this.montantConvention - this.prestationForm.get('prestation').value[i].coutUnitaire;
+      myForm.patchValue({inotPlafond: true});
+      myForm.patchValue({coutUnitaire: this.montantConvention})
+      myForm.patchValue({observation: "la differnce entre le coût unitaire et le montant de la convention est " + c});
+    }
+    
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
 
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
@@ -526,6 +542,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     });
     this.prefinancementList = [];
     this.prefinancementModel = {};
+  
   }
 
   setNombreActe(data: FraisReels, ri) {

@@ -29,7 +29,7 @@
             </p-fieldset>
 
             <br/>
-            <div *ngFor="let sinistre of ordreReglement.tierPayant; let i = index;">
+            <div>
 
                 <p-fieldset legend="Facture" toggleable="true">
                     <p-table #dt [value]="ordreReglement.tierPayant" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"

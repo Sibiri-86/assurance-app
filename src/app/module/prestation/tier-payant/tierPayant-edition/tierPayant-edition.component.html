@@ -94,7 +94,7 @@
                              <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-1" (click)="voirTierPyant(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-1" (click)="editerTierPayant(tierPayant)"></button>
                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-1" (click)="validerPrestation(tierPayant)"></button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
+                            <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button> -->
                     </td>
 
                         <!--
@@ -390,6 +390,7 @@
 
 
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+
 </div>
 </div>
 <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid">
@@ -404,8 +405,12 @@
                         <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins">
                     </div>
                     <div class="p-field p-col-3">
+                        <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                        <input id="numeroBon" [disabled]="!prestationAdd.dateSoins"  type="text" name="numeroBon" pInputText [(ngModel)]="prestationAdd.numeroBon">
+                    </div>
+                    <div class="p-field p-col-3">
                         <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important;">*</span></label>
-                        <input id="matriculeAdherent" [disabled]="!prestationAdd.dateSoins" type="text"  [(ngModel)]="prestationAdd.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherent1($event)" pInputText>
+                        <input id="matriculeAdherent" [disabled]="!prestationAdd.numeroBon" type="text"  [(ngModel)]="prestationAdd.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherent1($event)" pInputText>
                     </div>
                     <div class="p-field p-col-3">
                         <label for="nomAdherent">Nom <span class="required">*</span></label>
@@ -414,17 +419,18 @@
                     </div>
                 
                     
-                    <div class="p-field p-col-3">
-                        <label for="nomAdherent">Prenom<span class="required">*</span></label>
-                        <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent"  pInputText>
-                        <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent" pInputText>
-                    </div>
+                   
                     
                    
                     
                 </div>
             <div class="p-fluid p-formgrid p-grid">
                
+                <div class="p-field p-col-3">
+                    <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent"  pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent" pInputText>
+                </div>
                 <div class="p-field p-col-3">
                     <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.groupeAdherent" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
@@ -436,32 +442,12 @@
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
                 </div>
 
-              <!-- <div class="p-field p-col-3">
-               <label for="exercice">Assuré<span style="color: red !important; size: 1.4em;" class="required"></span></label>
-               <p-dropdown inputId="adherent" dataKey="id" [filter]="true" [disabled]="!prestationAdd.dateSoins"
-                           showClear="true" [options]="adherentList"
-                           [(ngModel)]="prestationAdd.adherent"   name="adherent" [autoDisplayFirst]="false"  (onChange)="onRowSelectBonAdherent($event)"
-                   optionLabel="nom">
-           </p-dropdown>
-          </div>  -->
-
-          <div class="p-field p-col-3">
-           <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
-           <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
-                       showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.matriculeAdherent"
-                       [(ngModel)]="prestationAdd.bonPriseEnCharge"
-                        [autoDisplayFirst]="false"  name="bonPriseEnCharge"
-                       optionLabel="numeros" (onChange)="onRowSelectBon($event)">
-                   </p-dropdown>
-       </div>
-
-       <div class="p-field p-col-3">
-        <label for="familleActe">Famille acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-        <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" placeholder="Select famille-acte"
-                    [options]="garanties" [disabled]="!prestationAdd.adherent" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
-                    optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
-    </div>
-      
+                <div class="p-field p-col-3">
+                    <label for="nomAdherent">Nom Assuré Principal <span class="required">*</span></label>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherentPrincipal" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherentPrincipal" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal"  pInputText>
+                </div>
+        
            
 
               
@@ -472,6 +458,28 @@
            <div class="p-fluid p-formgrid p-grid">
                
 
+            <div class="p-field p-col-3">
+                <label for="nomAdherent">Prénom Assuré Principal<span class="required">*</span></label>
+                <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherentPrincipal" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal"  pInputText>
+                <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherentPrincipal" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal" pInputText>
+            </div>
+            
+              <div class="p-field p-col-3">
+               <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+               <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                           showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.matriculeAdherent"
+                           [(ngModel)]="prestationAdd.bonPriseEnCharge"
+                            [autoDisplayFirst]="false"  name="bonPriseEnCharge"
+                           optionLabel="numeros" (onChange)="onRowSelectBon($event)">
+                       </p-dropdown>
+           </div>
+    
+           <div class="p-field p-col-3">
+            <label for="familleActe">Famille acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+            <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" placeholder="Select famille-acte"
+                        [options]="garanties" [disabled]="!prestationAdd.adherent" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
+                        optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+        </div>
                
 
                <div class="p-field p-col-3">
@@ -480,36 +488,35 @@
                                [options]="acteListFilter"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                </div>
 
-               <div class="p-field p-col-3">
-                   <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
-                               showClear="true" [options]="sousActeListFilter" name="sousActe"
-                               [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
-                               optionLabel="libelle" (onChange)="selectDateSoins()"></p-dropdown>
-               </div>
-
-               <div class="p-field p-col-3">
-                   <label for="pathologie" id="pathologie">Pathologie</label>
-                   <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
-                               showClear="true" [options]="pathologieList" name="pathologie"
-                               [(ngModel)]="prestationAdd.pathologie"
-                                placeholder="Select pathologie "
-                               optionLabel="code"></p-dropdown>
-               </div>
-               <div class="p-field p-col-3">
-                <label for="prestataire" id="prestataire">Centre Prescripteur</label>
-                <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
-                            showClear="true" [options]="prestataireList" name="prestataire" [(ngModel)]="prestationAdd.prestataire"
-                             placeholder="Select centre prescripteur"
-                            optionLabel="libelle"></p-dropdown>
-            </div>
+              
 
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
 
-               
+            <div class="p-field p-col-3">
+                <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
+                            showClear="true" [options]="sousActeListFilter" name="sousActe"
+                            [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
+                            optionLabel="libelle" (onChange)="selectDateSoins()"></p-dropdown>
+            </div>
 
+            <div class="p-field p-col-3">
+                <label for="pathologie" id="pathologie">Pathologie</label>
+                <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
+                            showClear="true" [options]="pathologieList" name="pathologie"
+                            [(ngModel)]="prestationAdd.pathologie"
+                             placeholder="Select pathologie "
+                            optionLabel="code"></p-dropdown>
+            </div>
+            <div class="p-field p-col-3">
+             <label for="prestataire" id="prestataire">Centre Prescripteur</label>
+             <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
+                         showClear="true" [options]="prestataireList" name="prestataire" [(ngModel)]="prestationAdd.prestataire"
+                          placeholder="Select centre prescripteur"
+                         optionLabel="libelle"></p-dropdown>
+         </div>
                
 
              
@@ -524,49 +531,33 @@
                    </p-multiSelect>
                </div>
 
-               <div class="p-field p-col-3">
-                   <label for="medecin" id="medecin">Medecin</label>
-                   <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
-                               showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
-                              placeholder="Select medecin"
-                               optionLabel="nom"></p-dropdown>
-               </div>
-               <div class="p-field p-col-3">
-                   <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.sousActe" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
-               </div>
-               <div class="p-field p-col-3">
-                <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
-            </div>
+              
 
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
 
                
-              
+            <div class="p-field p-col-3">
+                <label for="medecin" id="medecin">Medecin</label>
+                <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
+                            showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
+                           placeholder="Select medecin"
+                            optionLabel="nom"></p-dropdown>
+            </div>
+            <div class="p-field p-col-3">
+                <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.sousActe" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
+            </div>
+            <div class="p-field p-col-3">
+             <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+             <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
+           </div>
                <div class="p-field p-col-3">
                    <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                    <p-inputNumber name="debours" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
                </div>
-               <div class="p-field p-col-3">
-                   <label for="baseRemboursement" id="baseRemboursement">Base remboursement<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-inputNumber name="baseRemboursement" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.baseRemboursement"  [disabled]="true" mode="decimal" locale="fr-FR" placeholder="base de remboursement"></p-inputNumber>
-               </div>
-
-
-               <div class="p-field p-col-3">
-                   <label for="taux" id="taux">Taux <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown inputId="taux" dataKey="id" [filter]="true"
-                               showClear="true" [options]="tauxList" name="taux" [(ngModel)]="prestationAdd.taux"
-                                placeholder="Select taux"
-                               optionLabel="taux" [disabled]="true"></p-dropdown>
-               </div>
-               <div class="p-field p-col-3">
-                <label for="montantRembourse" id="montantRembourse">Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="montantRembourse" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRembourse"  [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
-            </div>
+              
 
            </div>
 
@@ -575,34 +566,47 @@
                
               
               
+            <div class="p-field p-col-3">
+                <label for="baseRemboursement" id="baseRemboursement">Base remboursement<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-inputNumber name="baseRemboursement" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.baseRemboursement"  [disabled]="true" mode="decimal" locale="fr-FR" placeholder="base de remboursement"></p-inputNumber>
+            </div>
+
+
+            <div class="p-field p-col-3">
+                <label for="taux" id="taux">Taux <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-dropdown inputId="taux" dataKey="id" [filter]="true"
+                            showClear="true" [options]="tauxList" name="taux" [(ngModel)]="prestationAdd.taux"
+                             placeholder="Select taux"
+                            optionLabel="taux" [disabled]="true"></p-dropdown>
+            </div>
+            <div class="p-field p-col-3">
+             <label for="montantRembourse" id="montantRembourse">Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+             <p-inputNumber name="montantRembourse" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRembourse"  [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
+         </div>
                <div class="p-field p-col-3">
                    <label for="nombreActe">Montant non remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                    <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
                </div>
 
-               <div class="p-field p-col-3">
-                   <label for="sousActe">Decision <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown inputId="decision" [filter]="true"
-                               showClear="true" [options]="typeSort"
-                               name="sort" [(ngModel)]="prestationAdd.sort"
-                               [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
-               </div>
-               <div class="p-field p-col-3">
-                <label for="nombreActe">Montant Plafond<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber  name="montantPlafond" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantPlafond" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
-            </div>
-
-               <div class="p-field p-col">
-                   <label for="observation">Observation</label>
-                   <textarea pInputTextarea name="observation" [(ngModel)]="prestationAdd.observation"  autoResize="autoResize"></textarea>
-               </div>
-
+            
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
             <div class="p-field p-col-3">
-                <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <input id="numeroBon" [disabled]="!prestationAdd.coutUnitaire"  type="text" name="numeroBon" pInputText [(ngModel)]="prestationAdd.numeroBon">
+                <label for="sousActe">Decision <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-dropdown inputId="decision" [filter]="true"
+                            showClear="true" [options]="typeSort"
+                            name="sort" [(ngModel)]="prestationAdd.sort"
+                            [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
+            </div>
+            <div class="p-field p-col-3">
+             <label for="nombreActe">Montant Plafond<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+             <p-inputNumber  name="montantPlafond" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantPlafond" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
+         </div>
+
+            <div class="p-field p-col">
+                <label for="observation">Observation</label>
+                <textarea pInputTextarea name="observation" [(ngModel)]="prestationAdd.observation"  autoResize="autoResize"></textarea>
             </div>
            </div>
         </form>
@@ -613,11 +617,12 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" ></button>
                 </div>
                 <div>
-                    <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire && !prestationAdd.numeroBon"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
+                    <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>
                 </div>
             </div>
             </div>
             </ng-template>
+            
  
          
      </p-dialog>
@@ -744,7 +749,8 @@
                                     
                                     <td style="text-align:center">
                                         <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="voirPrestationDetail(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
-                
+                                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(rowData)"></button>
+
                 
                                         </td>
                             
@@ -902,7 +908,7 @@
     </p-dialog>
 
 
-    <p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestaion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+    <p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestation" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
         <ng-template pTemplate="content">
             <div class="card">
 

@@ -38,6 +38,12 @@
                                         [options]="demandeursList" formControlName="demandeur" (onChange)="onDemandeurChange()"
                                         placeholder="Select" optionLabel="libelle"></p-dropdown>
                         </div>
+                        <div class="p-field p-col-6">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                            <p-calendar class="exo" id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                            dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                            appendTo="body"></p-calendar>  
+                        </div>
                         <div class="p-field p-col-5"></div>
                         <div class="p-field p-col-2 p-ac-center">
                             <button type="button" pButton pRipple icon="pi pi-times" pTooltip="Annuler"

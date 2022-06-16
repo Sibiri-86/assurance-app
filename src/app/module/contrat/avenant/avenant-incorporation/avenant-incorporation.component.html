@@ -125,6 +125,13 @@
                             <label for="nom">Motif <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText [disabled]="etat === 'VIEW'">
                         </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                            <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                            dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                            appendTo="body"></p-calendar>                      
+                          </div>
+
                     </div>
                 </form>
             </p-fieldset>

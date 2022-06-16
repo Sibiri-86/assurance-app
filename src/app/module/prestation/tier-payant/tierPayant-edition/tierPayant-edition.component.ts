@@ -47,7 +47,7 @@ import * as featureActionTierPayant from '../../../../store/prestation/tierPayan
 import * as featureActionPlafond from '../../../../store/contrat/plafond/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
 import {CheckTierPayantResult, Prestation} from 'src/app/store/prestation/tierPayant/model';
-import {Status} from 'src/app/store/global-config/model';
+import {Status, StatusEnum} from 'src/app/store/global-config/model';
 import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
 import {printPdfFile} from 'src/app/module/util/common-util';
@@ -74,6 +74,8 @@ import * as exerciceSelector from 'src/app/store/contrat/exercice/selector';
 import * as featureExerciceAction from 'src/app/store/contrat/exercice/actions';
 import { Event } from '@angular/router';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { GlobalConfig } from 'src/app/config/global.config';
+import { ConventionService } from 'src/app/store/medical/convention/service';
 
 
 
@@ -159,12 +161,15 @@ export class TierPayantEditionComponent implements OnInit {
     displayFormPrefinancementDetail = false;
     displaySinistreDetail = false;
     montantPlafond: number = null; 
+    montantConvention: number = 0;
+    private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
 
 
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private tierPayantService: TierPayantService,
+                private conventionService: ConventionService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
@@ -261,9 +266,15 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                if(this.adherentSelected.signeAdherent !=='*') {
+                    this.addMessage('error', 'Assuré(e) non pris en compte',
+                                  'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+                  }
                 this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
                 this.prestationAdd.nomAdherent = this.adherentSelected.nom;
+                
                 this.prestationAdd.prenomAdherent = this.adherentSelected.prenom;
+                
                 this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe.toString();
                 this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
                 this.prestationAdd.adherent = this.adherentSelected;
@@ -273,15 +284,21 @@ export class TierPayantEditionComponent implements OnInit {
                 if (this.adherentSelected.adherentPrincipal != null) {
                     this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
                     this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+                    this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal.nom;
+                    this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.adherentPrincipal.prenom;
                 } else {
                     this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
                     this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
+                    this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.nom;
+                    this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.prenom;
                 }
                 this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+                
 
+               
               /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
                     e.typeBon === TypeBon.PRISEENCHARGE);*/
                     this.onRowSelectBonAdherent();
@@ -786,7 +803,8 @@ export class TierPayantEditionComponent implements OnInit {
         this.isDetail = false;
         this.isModif = true;
         this.prefinancement = {};
-        this.prestationList =[];
+        this.prestationAdd = {};
+        this.prestationsList =[];
         this.prefinancement.dateSaisie = new Date();
         console.log("=====================bien==========");
         console.log(this.prefinancement.dateSaisie);
@@ -816,112 +834,131 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
-        this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
-        this.prestationAdd.sort = Sort.ACCORDE;
-       
-       
-        if (this.prestationAdd.nombreActe &&
-        this.prestationAdd.coutUnitaire) {
-            this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
-            this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
-            this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+        if(this.montantConvention !== 0 &&  this.montantConvention !== this.prestationAdd.coutUnitaire) {
+            this.showToast('error', 'INFORMATION', 'coût unitaire differnt du montant de la convention');
+            const c =this.montantConvention - this.prestationAdd.coutUnitaire;
+            this.prestationAdd.coutUnitaire = this.montantConvention;
+            this.prestationAdd.inotPlafond = true;
+            this.prestationAdd.observation = "la differnce entre le coût unitaire et le montant de la convention est " + c;
         }
-        
-        if(this.prefinancement.montantRestant == null ) {
-            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
-        }
-        if(this.prefinancement.montantPaye == null ) {
-            this.prefinancement.montantPaye = 0;
-        }
-        if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
-            this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
-            this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
-        } else {
-            if(this.compteur === null){
-                if(this.prefinancement === undefined) {
-                    this.prestationsList.forEach(prest=> {
-                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + prest.baseRemboursement;
-                    });
-                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
-        
-                   } else {
-                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
-                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
 
-                      // const valeurprecedent = this.prefinancement.montantPaye;
+      
+            this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
+            this.prestationAdd.sort = Sort.ACCORDE;
         
-                   }
-            }else {
-                if(this.prefinancement === undefined) {
-                    this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
-                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
-                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
-                   } else {
-                    console.log("base========",this.baseAnterieur);
-
-
-                    this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
-                    console.log("base========",this.prefinancement.montantPaye);
-                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.baseRemboursement;
-                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
-
-                      // const valeurprecedent = this.prefinancement.montantPaye;
-        
-                   }
+            if (this.prestationAdd.nombreActe &&
+            this.prestationAdd.coutUnitaire) {
+                this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+                this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
             }
-          
-
-           
             
-        }
-
-        if(this.montantPlafond !== null) {
-            if(this.montantPlafond < this.prestationAdd.montantRembourse) {
-                this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
-                this.prestationAdd.montantRembourse = this.montantPlafond;
+            if(this.prefinancement.montantRestant == null ) {
+                this.prefinancement.montantRestant = this.prefinancement.montantReclame;
             }
-            this.prestationAdd.montantPlafond = this.montantPlafond;
-        }
-        if(this.prefinancement.montantRestant < 0){
-            this.prestationAdd.sort = Sort.REJETE;
-            this.prestationAdd.observation = "le plafond famille-acte sur la periode est atteint";
-        } else{
-            this.prestationAdd.observation= "remboursement favorable";
-        }
-        
-       
-
-
-
-       
-       /* this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
-        this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log(value);
-            if (!value) {
-                this.tab.push(i);
-                this.checkControl = false;
+            if(this.prefinancement.montantPaye == null ) {
+                this.prefinancement.montantPaye = 0;
+            }
+            if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
             } else {
-                this.checkTierPayantResult = value.slice();
-                console.log('**********************************', this.checkTierPayantResult);
-                for (let j = 0; j < this.checkTierPayantResult.length; j++){
+                if(this.compteur === null){
+                    if(this.prefinancement === undefined) {
+                        this.prestationsList.forEach(prest=> {
+                            this.prefinancement.montantPaye = this.prefinancement.montantPaye + prest.montantRembourse;
+                        });
+                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+            
+                    } else {
+                    // this.prefinancement.montantPaye =this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
+                        console.log("=============montantPaye===============");
+                        console.log(this.prefinancement.montantPaye);
+                        console.log("===============montantPaye=============");
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
 
-                    this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.checkTierPayantResult[j].montantRembourse);
-                    this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
-                    console.log('*****************this.prestationForm.getMontantPaye*****************', this.prestationForm.get('montantPaye').value);
-                    console.log('*****************this.prestationForm.getMontantRestant*****************', this.prestationForm.get('montantRestant').value);
-                    myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
-                    myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
-                        sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
-                        observation: this.checkTierPayantResult[j].message, historiqueAvenant: this.checkTierPayantResult[j].historiqueAvenant
-                    });
+                        // const valeurprecedent = this.prefinancement.montantPaye;
+            
+                    }
+                }else {
+                    if(this.prefinancement === undefined) {
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+            
+                    } else {
+                        console.log("base========",this.baseAnterieur);
+
+
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.baseAnterieur;
+                        console.log("base========",this.prefinancement.montantPaye);
+                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+
+                        // const valeurprecedent = this.prefinancement.montantPaye;
+            
+                    }
                 }
+            
+
+            
+                
             }
-        });*/
-        this.tierPayantList = [];
-        this.prefinancementModel = {};
-        // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
-        // console.log('**************** this.prestationForm.getTMP******************', this.prestationForm.get('prestation').value[i].montantPayeTMP);
+
+            if(this.montantPlafond !== null) {
+                if(this.montantPlafond < this.prestationAdd.montantRembourse) {
+                    this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
+                    this.prestationAdd.montantRembourse = this.montantPlafond;
+                }
+                this.prestationAdd.montantPlafond = this.montantPlafond;
+            }
+            if(this.prefinancement.montantRestant < 0){
+                this.prestationAdd.sort = Sort.REJETE;
+                if(!this.prestationAdd.observation) {
+                    this.prestationAdd.observation = "le plafond famille-acte sur la periode est atteint";
+                }
+            } else{
+                if(!this.prestationAdd.observation) {
+                    this.prestationAdd.observation= "remboursement favorable";
+                }
+               
+            }
+            
+        
+
+
+
+        
+        /* this.store.dispatch(featureActionTierPayant.checkTierPayant({tierPayant: this.tierPayantList}));
+            this.store.pipe(select(tierPayantSelector.selectCheckTierPayantReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+                console.log(value);
+                if (!value) {
+                    this.tab.push(i);
+                    this.checkControl = false;
+                } else {
+                    this.checkTierPayantResult = value.slice();
+                    console.log('**********************************', this.checkTierPayantResult);
+                    for (let j = 0; j < this.checkTierPayantResult.length; j++){
+
+                        this.prestationForm.get('montantPaye').setValue(this.prestationForm.get('montantPaye').value + this.checkTierPayantResult[j].montantRembourse);
+                        this.prestationForm.get('montantRestant').setValue(this.prestationForm.get('montantReclame').value - this.prestationForm.get('montantPaye').value);
+                        console.log('*****************this.prestationForm.getMontantPaye*****************', this.prestationForm.get('montantPaye').value);
+                        console.log('*****************this.prestationForm.getMontantRestant*****************', this.prestationForm.get('montantRestant').value);
+                        myForm = (this.prestationForm.get('prestation') as FormArray).at(j);
+                        myForm.patchValue({montantRembourse: this.checkTierPayantResult[j].montantRembourse,
+                            sort: this.checkTierPayantResult[j].sort, montantRestant: this.checkTierPayantResult[j].montantRestant,
+                            observation: this.checkTierPayantResult[j].message, historiqueAvenant: this.checkTierPayantResult[j].historiqueAvenant
+                        });
+                    }
+                }
+            });*/
+            this.tierPayantList = [];
+            this.prefinancementModel = {};
+            // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
+            // console.log('**************** this.prestationForm.getTMP******************', this.prestationForm.get('prestation').value[i].montantPayeTMP);
+       
     }
 
 
@@ -931,6 +968,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     addItemPrestation(): void {
         this.displayPrestationpop = true;
+        this.prestationAdd = {};
         const formPrestation: FormGroup = this.createItem();
         // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
         
@@ -1079,6 +1117,8 @@ export class TierPayantEditionComponent implements OnInit {
 
                 this.prefinancement = rest;
                 this.prestationsList = this.prefinancement.prestation;
+                this.store.dispatch(featureActionTierPayant.loadTierPayant());
+                this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
 
             }));
           }
@@ -1098,6 +1138,9 @@ export class TierPayantEditionComponent implements OnInit {
           this.prestationAdd.matriculeAdherent = this.prestationAdd?.adherent?.numero.toString();
           this.prestationAdd.nomAdherent = this.prestationAdd?.adherent?.nom;
           this.prestationAdd.prenomAdherent = this.prestationAdd?.adherent?.prenom;
+          this.prestationAdd.prenomAdherentPrincipal = this.prestationAdd?.adherent?.adherentPrincipal?.prenom;
+          this.prestationAdd.nomAdherentPrincipal = this.prestationAdd?.adherent?.adherentPrincipal?.nom;
+
           this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe.numeroGroupe.toString();
           this.prestationAdd.numeroPolice = this.prestationAdd?.adherent?.groupe.police.numero;
           if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined) {
@@ -1110,7 +1153,7 @@ export class TierPayantEditionComponent implements OnInit {
             && bon.prestataire?.id === this.prefinancement?.prestataire?.id);
          
           this.displayPrestationpop = true;
-          this.baseAnterieur = prestation.baseRemboursement;
+          this.baseAnterieur = prestation.montantRembourse;
       }
 
       addMessage(severite: string, resume: string, detaile: string): void {
@@ -1128,6 +1171,10 @@ export class TierPayantEditionComponent implements OnInit {
         this.plafondSousActe.sousActe =  this.prestationAdd.sousActe; 
         this.plafondSousActe.dateSoins = this.prestationAdd.dateSoins;
         this.plafondSousActe.adherent = this.prestationAdd.adherent;
+        this.conventionService.$findMontantConvention(this.prestationAdd.sousActe.id).subscribe((rest)=>{
+            this.montantConvention = rest;
+
+        });
        
         if (this.prestationAdd.sousActe && this.prestationAdd.dateSoins && this.prestationAdd.adherent){
         this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
@@ -1169,6 +1216,14 @@ export class TierPayantEditionComponent implements OnInit {
         // this.prestationDetail = tierPayant.prestation[0];
        // console.log(tierPayant.prestation[0]?.sousActe);
           this.displayFormPrefinancementDetail = true;
+      }
+
+
+      imprimerPrestation(prestation: Prestation) {
+        this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
+        this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+        
+        this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
       }
 
 }

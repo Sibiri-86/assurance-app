@@ -67,6 +67,7 @@ export class AvenantResiliationComponent implements OnInit {
       dateEffet: new FormControl(null, [Validators.required]),
       fraisBadges: 0,
       fraisAccessoires: 0,
+      dateSaisie: new FormControl(new Date()),
     });
     this.exerciceForm = this.formBuilder.group({
       id: new FormControl(null),

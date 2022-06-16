@@ -85,7 +85,7 @@
                         
                         <td style="width:175px">
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-2" (click)="voirPrestation(tierPayant)"></button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button>
+                            <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(tierPayant)"></button> -->
                             <button pButton icon="pi pi-times" pTooltip="Dé-valider le sinistre" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(tierPayant)"></button>
                     </td>
                         
@@ -149,6 +149,11 @@
                         </td>
                         <td><span class="p-column-title">{{prestation.dateSoins}}</span>
                         </td>
+                        <td style="text-align:center">
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(prestation)"></button>
+
+    
+                            </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">

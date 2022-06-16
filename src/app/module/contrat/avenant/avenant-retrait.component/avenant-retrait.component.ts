@@ -179,6 +179,7 @@ export class AvenantRetraitComponent implements OnInit {
       // dateEffet: new FormControl(null, [Validators.required]),
       fraisBadges: 0,
       fraisAccessoires: 0,
+      dateSaisie: new FormControl(new Date()),
     });
     this.newForm = this.formBuilder.group({
       groupe: new FormControl(null, [Validators.required]),

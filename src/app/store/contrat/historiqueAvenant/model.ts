@@ -41,6 +41,7 @@ export interface HistoriqueAvenant {
     dateSuspension?: Date;
     dateResiliation?: Date;
     isPossible?: boolean;
+    dateSaisie?: Date;
 }
 
 export enum TypeEtat {

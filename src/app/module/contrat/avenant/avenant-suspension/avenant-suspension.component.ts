@@ -173,6 +173,7 @@ export class AvenantSuspensionComponent implements OnInit {
       observation: new FormControl(null, [Validators.required]),
       // typeDemandeur: new FormControl(null, [Validators.required]),
       demandeur: new FormControl(null, [Validators.required]),
+      dateSaisie: new FormControl(new Date()),
       /* fraisBadges: new FormControl(0, [Validators.required]),
       fraisAccessoires: new FormControl(0, [Validators.required]), */
     });

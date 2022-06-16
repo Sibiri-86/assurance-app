@@ -71,7 +71,7 @@ this.breadcrumbService.setItems([{ label: 'TIERS-PAYANT | ORDRE DE REGLEMENT CON
 consulter(ordre: OrdreReglementTierPayant) {
   this.ordreReglement = ordre;
   this.showDetailOrdreReglement = true;
-  console.log('*************************yes********************'+ this.showDetailOrdreReglement);
+  console.log('*************************yesvien********************'+ this.showDetailOrdreReglement);
 }
 
 rechercherOrdreReglement() {

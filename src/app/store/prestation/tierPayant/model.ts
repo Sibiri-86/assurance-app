@@ -14,6 +14,7 @@ import {TypeEtatSinistre} from '../../../module/common/models/enum.etat.sinistre
 import { HistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Exercice } from '../../contrat/exercice/model';
 import { Pathologie } from '../../parametrage/pathologie/model';
+import { BoundElementProperty } from '@angular/compiler';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -89,6 +90,9 @@ export interface Prestation {
     nomAdherent?: string;
     matriculeAdherent?: string; 
     numeroBon?: string;
+    prenomAdherentPrincipal?: string;
+    nomAdherentPrincipal?: string;
+    inotPlafond?: Boolean;
 }
 
 export interface SinistreTierPayantList {

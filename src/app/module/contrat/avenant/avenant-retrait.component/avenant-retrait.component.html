@@ -106,6 +106,13 @@
                         <label for="observation">Motif <span style="color: red !important; size: 2em">*</span></label>
                         <input id="observation" [disabled]="!this.myForm.get('demandeur').value" type="text" formControlName="observation" pInputText>
                     </div>
+                    <div class="p-field p-col-6">
+                        <label for="dateSaisie">Date saisie <span style="color: red !important; size: 2em">*</span></label>
+                        <p-calendar [disabled]="true" id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                        dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            </div>
+
+                    
                 </div>
             </form>
         </p-fieldset>

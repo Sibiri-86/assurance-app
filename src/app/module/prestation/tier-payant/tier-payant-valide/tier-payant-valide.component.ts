@@ -263,6 +263,13 @@ export class TierPayantValideComponent implements OnInit {
     this.prestationListPrefinancement = pref.prestation;
   }
 
+  imprimerPrestation(prestation: Prestation) {
+    this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
+    this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+    
+    this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+  }
+
   calculCoutDebours(data: FraisReels, ri: number){
     console.log(this.prestationList);
     console.log(data);

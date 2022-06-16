@@ -112,8 +112,10 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   consulter(ordre: OrdreReglementTierPayant){
     this.ordreReglement = ordre;
+  
     this.showDetailOrdreReglement = true;
-    console.log('*************************yes********************' + this.showDetailOrdreReglement);
+    console.log('*************************yes1********************' + this.showDetailOrdreReglement);
+    console.log('*************************prestation********************' + this.ordreReglement .tierPayant[0].prestation);
 
   }
 

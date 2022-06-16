@@ -44,6 +44,7 @@ export class SinistreTiersPayantConsultationComponent implements OnInit, OnDestr
   prefinancementDetail: SinistreTierPayant;
   prestationDetail: Prestation;
   displaySinistreDetail= false;
+  sinistreTierPayantDTO : SinistreTierPayant = {};
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -158,6 +159,13 @@ createItem(): FormGroup {
   imprimer(pref: SinistreTierPayant) {
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
     this.report.sinistreTierPayantDTO = pref;
+    this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+  }
+
+  imprimerPrestation(prestation: Prestation) {
+    this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
+    this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+    
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
   }
 

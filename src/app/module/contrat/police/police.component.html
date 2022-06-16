@@ -2795,6 +2795,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="lastname2">Télephone</label>
+                            <div>
+                                <span>{{adherent.numeroTelephone}}</span>
+                            </div>
+                        </div>
+                    </div>
                     <!--
                     <div class="p-grid p-justify-center">
                     <div *ngIf="adherent.urlPhoto" class="">
@@ -2861,7 +2870,7 @@
 						<th style="width: 3rem">
 							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
 						</th>
-                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule 21<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule<p-sortIcon field="numero"></p-sortIcon></th>
                         <!--<th pSortableColumn="matricule" >Mle.<p-sortIcon field="matricule"></p-sortIcon></th>-->
                         <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
                         <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th>
@@ -3101,7 +3110,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="firstname2">Type durée <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                            <p-dropdown dataKey="id" inputId="typeDuree" [filter]="true" showClearwwwwwwwwwwwwwwwwwwwwwwwwwwwwww="true" (ngModelChange)="changeTypeDuree()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'typeDuree'">
                             </app-entity-validation>
