@@ -778,7 +778,6 @@ export class TierPayantEditionComponent implements OnInit {
 
       voirAdherent(event){
 
-        console.log("==================",event);
           this.adherentSelected = event.value;
       }
 
