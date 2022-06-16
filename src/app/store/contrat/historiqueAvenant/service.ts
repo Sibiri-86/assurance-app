@@ -5,6 +5,7 @@ import {
     HistoriqueAvenantList,
     HistoriqueAvenantPrime,
     HistoriqueGroupe,
+    HistoriquePlafondActe,
     HistoriquePlafondFamilleActe,
     HistoriquePlafondSousActe,
     TypeHistoriqueAvenant
@@ -273,10 +274,10 @@ private handleError<T>() {
             {params: createRequestOption({avenantId})});
     }
 
-    getsHistoriquePlafondGroupeFamilleActe(policeId: string): Observable<HistoriquePlafondFamilleActe[]> {
+    getsHistoriquePlafondGroupeFamilleActe(exerciceId: string): Observable<HistoriquePlafondFamilleActe[]> {
         // @FIXME: post request
         return this.http.get<HistoriquePlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historique-modification-police`,
-            {params: createRequestOption({policeId})});
+            {params: createRequestOption({exerciceId})});
     }
 
     getPrimeTotalByPoliceId(policeId: string): Observable<any> {
@@ -293,4 +294,16 @@ private handleError<T>() {
         return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_GET_DATE_IS_OVERLAP)}`, historiqueAvenant,
                 {params: createRequestOption({typeDuree, duree, policeId}), observe: 'response'});
         }
+
+    getsHistoriquePlafondGroupeActe(exerciceId: string, hpgfaId: string): Observable<HistoriquePlafondActe[]> {
+        // @FIXME: post request
+        return this.http.get<HistoriquePlafondActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historiquePlafondGroupeActe-modification-exercice`,
+            {params: createRequestOption({exerciceId, hpgfaId})});
+    }
+
+    getsHistoriquePlafondGroupeSousActe(exerciceId: string, hpgaId: string): Observable<HistoriquePlafondSousActe[]> {
+        // @FIXME: post request
+        return this.http.get<HistoriquePlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historiquePlafondGroupeSousActe-modification-exercice`,
+            {params: createRequestOption({exerciceId, hpgaId})});
+    }
 }

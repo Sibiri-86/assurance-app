@@ -175,7 +175,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         plafondGroupeSousActes: []
     };
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
-    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
+    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
     adherentFamilleListe: AdherentFamille[] = [];
     myForm: FormGroup;
     typeDureeSelected = '';
@@ -753,7 +753,9 @@ export class AvenantRenouvellementComponent implements OnInit {
         // this.loadListeActualisee();
         this.loadAdherantByPolice();
         this.addFamilleActe(this.police);
-        this.updateAvenant(this.avenantId);
+        if(this.etat !== 'CREATE') {
+            this.updateAvenant(this.avenantId);
+          }
         this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentByPoliceAndUnsuspend(this.police.id).subscribe(
             (res) => {
                 console.log('..............RES..............   ', res);
@@ -832,7 +834,8 @@ export class AvenantRenouvellementComponent implements OnInit {
             territorialite: group.territorialite || [],
             duree: group.duree,
             dateEffet: new Date(this.exercice.debut),
-            typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
+            // typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
+            typeDuree: group?.typeDuree,
             dateEcheance: new Date(this.exercice.fin),
             numeroGroupe: group.numeroGroupe,
             typePrime: group?.typePrime,
@@ -867,7 +870,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             primeEnfant: group.prime?.primeEnfant,
             primeFamille: group.prime?.primeFamille,
             primeAdulte: group.prime?.primeAdulte,
-            // primePersonne: group.prime.primeEmploye,
+            primePersonne: group.prime.primeEmploye,
             primeAnnuelle: group.prime?.primeAnnuelle,
         });
         this.selectedTypePrime = group.typePrime;
@@ -1125,7 +1128,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log(this.objet);
         console.log('*********************avenant.groupe.prime*********************************');
     
-        this.eventEmitterM.emit(this.objet);
+        // this.eventEmitterM.emit(this.objet);
     }
 
     addAvenantAdherant(event: HistoriqueAvenant): void {
@@ -1169,6 +1172,9 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     changePrime(event) {
         this.selectedTypePrime = event.value;
+        this.primeForm.get('prime').setValue(this.selectedTypePrime);
+        this.primeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+        this.primeForm.reset({});
     }
 
     compareDate(): void {
@@ -1433,7 +1439,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     validerGroupe(): void {
-        this.groupeListes.forEach(grp =>  {
+        /* this.groupeListes.forEach(grp =>  {
             if (grp.id === this.groupeForm.get('id').value) {
                 grp = this.groupeForm.value;
                 switch (this.primeForm.get('prime').value) {
@@ -1476,7 +1482,38 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log(this.groupeForm);
             }
         });
-        this.groupeForm.reset({});
+        this.groupeForm.reset({}); */
+
+        this.groupe = this.groupeForm.value;
+    this.groupe.prime = this.primeForm.value;
+    if (this.groupe?.prime?.primeAdulte){
+      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte + '');
+    }
+    if (this.groupe?.prime?.primeConjoint){
+      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint + '');
+    }
+    if (this.groupe?.prime?.primeEmploye){
+      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye + '');
+    }
+    if (this.groupe?.prime?.primeEnfant){
+      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant + '');
+    }
+    if ( this.groupe?.prime?.primeFamille){
+      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille + '');
+    }
+    if ( this.groupe?.prime?.primePersonne){
+      this.groupe.prime.primePersonne = removeBlanks(this.groupe.prime.primePersonne + '');
+    }
+    console.log('groupe array is ====  ', this.groupe);
+    console.log('prime array is ====  ', this.groupe.prime);
+    this.groupe.typePrime = this.selectedTypePrime;
+    console.log('typePrime array is ====  ', this.groupe.typePrime);
+    /* this.groupeListeFinale = this.groupeListeFinale.filter(g=> g.id !== this.groupe.id);
+    this.groupeListeFinale.push(this.groupe);
+    console.log('groupeListeFinal array is ====  ', this.groupeListeFinale); */
+    // this.groupeForm.reset({});
+    this.primeForm.reset({});
+
 
     }
 

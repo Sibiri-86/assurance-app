@@ -348,11 +348,11 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="firstname2">Type durée</label>
-                                    <p-dropdown dataKey="id" id="firstname2" inputId="typeDuree" [filter]="true"
-                                                showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree"
+                                    <p-dropdown [filter]="true"
+                                                showClear="true" (onChange)="changeTypeDuree()" [options]="typeDureeList"
                                                 formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
-                                                           [formGroup]="policeForm" [entityField]="'typeDuree'">
+                                                           [formGroup]="groupeForm" [entityField]="'typeDuree'">
                                     </app-entity-validation>
                                 </div>
 
@@ -402,7 +402,7 @@
                                     <label for="typePrime">Type de prime /AN</label>
                                     <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
                                                 showClear="true" [options]="typePrimeList" formControlName="prime"
-                                                optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
+                                                [autoDisplayFirst]="false" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PF'">
@@ -540,7 +540,7 @@
                     <button pButton pRipple label="Annuler la modification" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
                 </div>
                 <div class="p-col-2">
-                    <button type="button" [disabled]="groupeForm.invalid || primeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
+                    <button type="button" [disabled]="groupeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
                 </div>
             </div>
         </p-tabPanel>
@@ -603,16 +603,16 @@
                             </th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+                    <ng-template pTemplate="body" let-plafond let-editing="editing" (onClick)="getsHistoriquePlafondGroupeActe(plafond)" let-ri1="rowIndex" let-expanded="expanded" >
                         <tr [pEditableRow]="plafond" class="colorZone">
-                            <td>
+                            <td >
                                 <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
-                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                                    (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{plafond.garantie?.libelle}}
@@ -873,7 +873,7 @@
                                                 <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe.montantPlafond | formatTableValue: 'number':true}}
+                                                {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -942,8 +942,8 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
-                                                <!-- <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
+                                                <!-- <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText>-->
+                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> 
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -1101,8 +1101,8 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
-          <app-plafond-famille-acte [etat]="'UPDATE'" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
+        <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+          <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
     </p-tabView>
     <hr>

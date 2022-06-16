@@ -89,6 +89,7 @@ import {TypeDuree} from '../../../../store/contrat/enum/model';
 import { removeBlanks } from 'src/app/module/util/common-util';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import { onInitEffects } from '@ngrx/effects/src/lifecycle_hooks';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -98,6 +99,7 @@ import * as featureExerciceAction from '../../../../store/contrat/exercice/actio
 export class AvenantModificationComponent implements OnInit {
   @Input() historiqueAvenantAdherantList: Array<HistoriqueAvenantAdherant>;
   @Input() police: Police;
+  @Input() avenant: HistoriqueAvenant;
   groupe: Groupe;
   groupePolicy: any;
   adherantListTmp: Array<HistoriqueAvenantAdherant>;
@@ -169,8 +171,8 @@ export class AvenantModificationComponent implements OnInit {
   territorialiteList$: Observable<Array<Territorialite>>;
   territorialiteList: Array<Territorialite>;
   objet: Avenant = {};
-  typeDuree: any = [{label: 'Jour', value: TypeDuree.JOUR},
-    {label: 'Mois', value: TypeDuree.MOI}, {label: 'Année', value: TypeDuree.ANNEE}];
+  typeDureeList: any = [{label: 'Jour', value: TypeDuree.JOUR},
+    {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
   myForm: FormGroup;
   lastExerciceForm: FormGroup;
   typeDureeSelected: string;
@@ -200,6 +202,16 @@ export class AvenantModificationComponent implements OnInit {
   exercice$: Observable<Exercice>;exerciceList$
   curentExercice: Exercice = {};
   historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
+  historiquePlafondFamilleActePlafongModifier: Array<HistoriquePlafondFamilleActe> = [];
+  sousActeToSave:SousActe = {};
+  acteToSave: Acte= {};
+  familleActeToSave: Garantie= {};
+  sousActeListFinal: PlafondSousActe[] = [];
+  acteListFinal: PlafondActe[] = [];
+  familleActeListFinal: PlafondFamilleActe[] = [];
+  historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
+  @Output() currentExercice: Exercice;
+  groupeListeFinale: Groupe []= [];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -212,6 +224,7 @@ export class AvenantModificationComponent implements OnInit {
       private policeService: PoliceService,
       private exerciceService: ExerciceService,
   ) {
+    
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
       libelle: new FormControl('', [Validators.required]),
@@ -219,14 +232,14 @@ export class AvenantModificationComponent implements OnInit {
       territorialite: new FormControl(null, [Validators.required]),
       duree: new FormControl('', [Validators.required]),
       dateEffet: new FormControl('', [Validators.required]),
-      typeDuree: new FormControl('', [Validators.required]),
+      typeDuree: new FormControl(null, [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
       commune: new FormControl('', [Validators.required]),
-      numeroGroupe: new FormControl('', [Validators.required]),
-      typePrime: new FormControl('', [Validators.required]),
-      adresse: new FormControl('', [Validators.required]),
-      prime: new FormControl('', [Validators.required]),
-      police: new FormControl('', [Validators.required]),
+      numeroGroupe: new FormControl(''),
+      typePrime: new FormControl(''),
+      adresse: new FormControl(''),
+      prime: new FormControl(''),
+      police: new FormControl(''),
       description: new FormControl('', [Validators.required]),
     });
 
@@ -592,6 +605,8 @@ export class AvenantModificationComponent implements OnInit {
   isRenouv = false;
 
   ngOnInit(): void {
+    
+    console.log('avenant ----->  ', this.avenant);
     console.log('police ----->  ', this.police);
     console.log('avenantId ----->  ', this.avenantId);
     console.log('etat ----->  ', this.etat);
@@ -615,7 +630,7 @@ export class AvenantModificationComponent implements OnInit {
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeListes = value.slice();
-        console.log(this.groupeListes);
+        console.log('==========groupes===========',this.groupeListes);
       }
     });
     this.acteList$ = this.store.pipe(select(acteSelector.acteList));
@@ -759,7 +774,10 @@ export class AvenantModificationComponent implements OnInit {
     this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
     // this.loadActivedExercice(this.police);
-    this.updateAvenant(this.avenantId);
+    if(this.etat !== 'CREATE') {
+      this.updateAvenant(this.avenantId);
+    }
+    
     this.getHistoriquePlafondGroupeFamilleActeByPolice();
     this.loadExerciceByPolice(this.police);
     this.loadLastExerciceOfpolice();
@@ -776,10 +794,10 @@ export class AvenantModificationComponent implements OnInit {
     this.obj.group = this.groupeSelected;
     this.historiqueAveantAdherants = this.historiqueAveantAdherantsTMP.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
     this.setGroupeAndPrime(this.groupeSelected);
-    this.loadHistoriquePlafondGroupe();
-    this.loadHistoriquePlafondGroupeFamilleActe();
-    this.loadHistoriquePlafondGroupeActe();
-    this.loadHistoriquePlafondGroupeSousActe();
+    //this.loadHistoriquePlafondGroupe();
+    //this.loadHistoriquePlafondGroupeFamilleActe();
+    //this.loadHistoriquePlafondGroupeActe();
+    //this.loadHistoriquePlafondGroupeSousActe();
   }
 
   addAvenantModification(): void{
@@ -819,6 +837,11 @@ export class AvenantModificationComponent implements OnInit {
   setGroupeAndPrime(group: Groupe): void {
     console.log('***********group************');
     console.log(group);
+    this.typeDureeList.find(t => {
+      t.value === group?.typeDuree;
+      console.log('***********typeDuree************', group?.typeDuree);
+    });
+    
     this.groupeForm.setValue({
       id: group?.id || null,
       libelle: group?.libelle,
@@ -826,7 +849,8 @@ export class AvenantModificationComponent implements OnInit {
       territorialite: group.territorialite || [],
       duree: group?.duree,
       dateEffet: new Date(group.dateEffet),
-      typeDuree: {},
+      // typeDuree: this.typeDureeList.find(t => t.value === group?.typeDuree),
+      typeDuree: group?.typeDuree,
       dateEcheance: new Date(group.dateEcheance),
       commune: group.commune,
       numeroGroupe: group.numeroGroupe,
@@ -836,15 +860,16 @@ export class AvenantModificationComponent implements OnInit {
       police: group.police,
       description: group.description
     });
-
+    console.log('***********group************', this.groupeForm);
+  
     this.primeForm.patchValue({
-      prime: group.typePrime,
+      // prime: group.typePrime,
       primeEmploye: group.prime?.primeEmploye,
       primeConjoint: group.prime?.primeConjoint,
       primeEnfant: group.prime?.primeEnfant,
       primeFamille: group.prime?.primeFamille,
       primeAdulte: group.prime?.primeAdulte,
-      primePersonne: group.prime?.primeAdulte,
+      primePersonne: group.prime?.primePersonne,
       primeAnnuelle: group.prime?.primeAnnuelle
     });
     this.selectedTypePrime = group.typePrime;
@@ -877,9 +902,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onRowEditInitPlafondSousActe(plafondSousActe: PlafondSousActe) {
-    this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {
-      ...plafondSousActe,
-    };
+    this.clonedPlafondSousActe[plafondSousActe.sousActe.id] = {...plafondSousActe};
   }
 
   onRowEditSavePlafondSousActe(plafondSousActe: PlafondSousActe) {
@@ -1036,6 +1059,7 @@ export class AvenantModificationComponent implements OnInit {
         pa.montantPlafond = parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
       });
     } */
+    // this.sousActeListFinal = [];
     if (this.plafondActe) {
       this.plafondFamilleActe = this.plafondFamilleActePlafongConfig;
       this.plafondFamilleActe.forEach(pfa => {
@@ -1074,9 +1098,12 @@ export class AvenantModificationComponent implements OnInit {
     } */
     // this.objet.groupe = this.groupeForm.value || this.groupeSelected;
     // this.objet.groupe.police = this.police;
-    this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
-    this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-    this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
+    this.objet.plafondGroupeActes = this.acteListFinal;
+    console.log("this.objet.plafondGroupeActes**************", this.objet.plafondGroupeActes);
+    this.objet.plafondFamilleActes = this.familleActeListFinal;
+    console.log("this.objet.plafondFamilleActes**************", this.objet.plafondFamilleActes);
+    this.objet.plafondGroupeSousActes = this.sousActeListFinal;
+    console.log("this.objet.plafondGroupeSousActes**************", this.objet.plafondGroupeSousActes);
     this.objet.police = this.police;
     this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantEdited;
     if (this.plafondForm.value) {
@@ -1092,11 +1119,11 @@ export class AvenantModificationComponent implements OnInit {
     console.log("this.curentExercice**************", this.curentExercice);
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
-    this.groupeListes.forEach(gp => {
-      console.log(' groupe infos === ', this.typeDuree.find(e => e.value === gp.typeDuree));
-      gp.typeDuree = this.typeDuree.find(e => e.value === gp.typeDuree).value;
-    });
-    this.objet.groupes = this.groupeListes;
+    /* this.groupeListes.forEach(gp => {
+      console.log(' groupe infos === ', this.typeDureeList.find(e => e.value === gp.typeDuree));
+      gp.typeDuree = this.typeDureeList.find(e => e.value === gp.typeDuree).value;
+    }); */
+    this.objet.groupes = this.groupeListeFinale;
     
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
@@ -1112,7 +1139,7 @@ export class AvenantModificationComponent implements OnInit {
     }
     this.objet.historiqueGroupes = this.historiqueGroupes;
     console.log("objet envoyé**************", this.objet);
-    this.eventEmitterM.emit(this.objet);
+   this.eventEmitterM.emit(this.objet);
   }
 
   loadHistoriquePlafondGroupe(): void {
@@ -1165,10 +1192,13 @@ export class AvenantModificationComponent implements OnInit {
 
   changePrime(event) {
     this.selectedTypePrime = event.value;
+    console.log('========',this.selectedTypePrime);
+    this.primeForm.get('prime').setValue(this.selectedTypePrime);
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
     }
+    this.primeForm.reset({});
   }
 
   onRefreshDateEcheance(value: number) {
@@ -1202,21 +1232,6 @@ export class AvenantModificationComponent implements OnInit {
 
   appliquerConfiguration(): void {}
 
-
-  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
-    this.clonedPlafondConfiguration[plafond.garantie?.id] = {...plafond};
-    console.log(this.clonedPlafondConfiguration);
-  }
-
-  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
-    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
-  }
-
-  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
-    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie?.id];
-    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
-  }
-
   loadPlafondConfigBygroupe() {
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
             (res) => {
@@ -1245,7 +1260,10 @@ export class AvenantModificationComponent implements OnInit {
         }
     );
   }
-  onTabChange(event): void {}
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+  }
 
   compareDate(): void {
     this.historiqueAvenantService.compareDate(this.myForm.get('dateEffet').value, this.police.dateEffet).subscribe(
@@ -1294,60 +1312,92 @@ export class AvenantModificationComponent implements OnInit {
     );
   }
 
+  onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
+    this.clonedPlafondConfiguration[plafond.garantie?.id] = {...plafond};
+    console.log(this.clonedPlafondConfiguration);
+  }
+
+  onRowEditSavePlafondConfiguration(plafond: PlafondFamilleActe) {
+    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
+    this.familleActeToSave = this.familleActeListFinal.find(familleActe => familleActe.id === plafond.id);
+    //if(this.clonedPlafondConfiguration[plafond.garantie?.id] === plafond) 
+    if(this.familleActeToSave?.id) {
+      this.familleActeListFinal.forEach(fa => {
+        if(fa.id === plafond.id) {
+          fa === plafond;
+        }
+      });
+    } else {
+      this.familleActeListFinal?.push(plafond);
+    }
+    console.log('***this.familleActeListFinal****', this.familleActeListFinal);
+  }
+
+  onRowEditCancelPlafondConfiguration(plafond: PlafondFamilleActe, index: number) {
+    this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond.garantie?.id];
+    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
+    this.familleActeListFinal = this.familleActeListFinal.filter(fa => fa.id !== plafond.id);
+    console.log('***this.familleActeListFinal****', this.familleActeListFinal);
+  }
+
+
   onRowEditInitPlafondConfigurationActe(plafondActe: PlafondActe) {
     this.clonedPlafondActe[plafondActe.acte?.id] = { ...plafondActe };
   }
 
   onRowEditSavePlafondConfigurationActe(plafondActe: PlafondActe) {
     delete this.clonedPlafondActe[plafondActe.acte?.id];
+    this.acteToSave = this.acteListFinal.find(acte => acte.id === plafondActe.id);
+    if(this.acteToSave?.id) {
+      this.acteListFinal.forEach(acte => {
+        if(acte.id === plafondActe.id) {
+          acte === plafondActe;
+        }
+      });
+    } else {
+      this.acteListFinal.push(plafondActe);
+    }
+    console.log('***this.acteListFinal****', this.acteListFinal);
   }
 
   onRowEditCancelPlafondConfigurationActe(plafondActe: PlafondActe, index: number) {
     this.plafondActe[index] = this.clonedPlafondActe[plafondActe.acte?.id];
     delete this.clonedPlafondActe[plafondActe.acte?.id];
+    this.acteListFinal = this.acteListFinal.filter(acte => acte.id !== plafondActe.id);
+    console.log('***this.acteListFinal****', this.acteListFinal);
   }
 
   onRowEditInitPlafondConfigurationSousActe(plafondSousActe: PlafondSousActe) {
     this.clonedPlafondSousActe[plafondSousActe.sousActe?.id] = {
       ...plafondSousActe,
     };
+    console.log('*****this.clonedPlafondSousActe*****', this.clonedPlafondSousActe[plafondSousActe.sousActe?.id]);
+    
   }
 
   onRowEditSavePlafondConfigurationSousActe(plafondSousActe: PlafondSousActe) {
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
+    this.sousActeToSave = this.sousActeListFinal.find(sousActe => sousActe.id === plafondSousActe.id);
+    console.log('***this.sousActeToSave****', this.sousActeToSave);
+    if(this.sousActeToSave?.id) {
+      this.sousActeListFinal.forEach(sous => {
+        if(sous.id === plafondSousActe.id) {
+          sous = plafondSousActe;
+        }
+      })
+    } else {
+      this.sousActeListFinal.push(plafondSousActe);
+    }
+    console.log('***this.sousActeListFinal****', this.sousActeListFinal);
   }
 
   onRowEditCancelPlafondConfigurationSousActe(plafondSousActe: PlafondSousActe, index: number) {
     this.plafondSousActe[index] =
         this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
     delete this.clonedPlafondSousActe[plafondSousActe.sousActe?.id];
+    this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== plafondSousActe.id);
+    console.log('***this.sousActeListFinal****', this.sousActeListFinal);
   }
-
-  /* loadPlafondConfigBygroupe() {
-    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondFamilleActePlafongConfig = res.body;
-          console.log(res);
-        }
-    );
-    this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondActePlafongConfig = res.body;
-        }
-    );
-    this.plafondService.getPlafondGroupeSousActeByGroupe(this.groupePlafongConfig.id).subscribe(
-        (res) => {
-          this.plafondSousActePlafongConfig = res.body;
-          this.plafondFamilleActePlafongConfig.forEach(pfapc => {
-            this.plafondActePlafongConfig.forEach(papc => {
-              papc.listeSousActe = this.plafondSousActePlafongConfig.filter(e => e.sousActe.idTypeActe === papc.acte.id);
-            });
-            pfapc.listeActe = this.plafondActePlafongConfig.filter(a => a.acte.libelleTypeGarantie === pfapc.garantie.libelle);
-          });
-        }
-    );
-  } */
-
   addFA(): void {
     const plafondFamilleActe: PlafondFamilleActe = {};
     this.plafondFamilleActePlafongConfig.push(plafondFamilleActe);
@@ -1361,6 +1411,8 @@ export class AvenantModificationComponent implements OnInit {
       this.onPlafondActeChange(pa);
       plafond.listeActe.push(pa);
     });
+    this.getsHistoriquePlafondGroupeActe(plafond);
+    console.log('*****plafond.listeActe*******', plafond.listeActe);
   }
 
   onPlafondActeChange(plafondActe: PlafondActe) {
@@ -1373,17 +1425,19 @@ export class AvenantModificationComponent implements OnInit {
       psa.sousActe = sousActe;
       plafondActe.listeSousActe.push(psa);
     });
+    console.log('*****plafondActe.listeSousActe*******', plafondActe.listeSousActe);
   }
 
   getPlafondGroupeByGroupe(): void {
     this.plafondService.getPlafondGroupeByGroupe(this.groupePlafongConfig.id).subscribe(
         (res) => {
           if (res) {
+            console.log('*****res*******', res);
             this.plafondForm.patchValue({
               domaine: res.body.domaine,
               plafondAnnuelleFamille: res.body.plafondAnnuelleFamille,
               plafondAnnuellePersonne: res.body.plafondAnnuellePersonne,
-              plafondGlobalInternationnal: res.body.plafondGlobalInternationnal
+              plafondGlobalInternationnal: res.body.plafondGlobalEvacuationSanitaire
             });
           }
         }
@@ -1407,29 +1461,45 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   validerGroupe(): void {
-    this.groupeListes.forEach(grp =>  {
+    /* this.groupeListes.forEach(grp =>  {
       if (grp.id === this.groupeForm.get('id').value) {
         grp = this.groupeForm.value;
+        console.log('==grp====', grp);
         switch (this.primeForm.get('prime').value) {
           case 'PE':
             this.primeForm.patchValue({
               primeFamille: null,
               primeEnfant: null,
               primeConjoint: null,
-              primeAdulte: null
+              primeAdulte: null,
+              primePersonne: null,
+              primeEmploye: this.primeForm.get('primeEmploye').value,
             });
             break;
           case 'PAE':
             this.primeForm.patchValue({
               primeFamille: null,
               primeConjoint: null,
-              primeEmploye: null
+              primeEmploye: null,
+              primePersonne: null,
+              primeAdulte: this.primeForm.get('primeAdulte').value,
+              primeEnfant: this.primeForm.get('primeEnfant').value
             });
             break;
           case 'PECE':
             this.primeForm.patchValue({
               primeFamille: null,
               primeAdulte: null
+            });
+            break;
+            case 'PP':
+            this.primeForm.patchValue({
+              primePersonne: null
+            });
+            break;
+            case 'PF':
+            this.primeForm.patchValue({
+              primeFamille: null,
             });
             break;
           default:
@@ -1442,14 +1512,47 @@ export class AvenantModificationComponent implements OnInit {
             });
             break;
         }
-        grp.typePrime = this.primeForm.get('prime').value;
+        console.log('5555555555', grp.typePrime);
+        console.log('5555555555+653222', this.primeForm.get('prime').value);
+        if(this.primeForm.get('prime').value) {
+          grp.typePrime = this.primeForm.get('prime').value;
+        } 
         grp.prime = this.primeForm.value;
         console.log('actual prime is ====  ');
         console.log(this.primeForm.value);
         console.log('groupe array is ====  ');
         console.log(this.groupeForm);
       }
-    });
+    }); */ 
+    this.groupe = this.groupeForm.value;
+    this.groupe.prime = this.primeForm.value;
+    if (this.groupe?.prime?.primeAdulte){
+      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte + '');
+    }
+    if (this.groupe?.prime?.primeConjoint){
+      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint + '');
+    }
+    if (this.groupe?.prime?.primeEmploye){
+      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye + '');
+    }
+    if (this.groupe?.prime?.primeEnfant){
+      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant + '');
+    }
+    if ( this.groupe?.prime?.primeFamille){
+      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille + '');
+    }
+    if ( this.groupe?.prime?.primePersonne){
+      this.groupe.prime.primePersonne = removeBlanks(this.groupe.prime.primePersonne + '');
+    }
+    console.log('groupe array is ====  ', this.groupe);
+    console.log('prime array is ====  ', this.groupe.prime);
+    this.groupe.typePrime = this.selectedTypePrime;
+    console.log('typePrime array is ====  ', this.groupe.typePrime);
+    this.groupeListeFinale = this.groupeListeFinale.filter(g=> g.id !== this.groupe.id);
+    this.groupeListeFinale.push(this.groupe);
+    console.log('groupeListeFinal array is ====  ', this.groupeListeFinale);
+    // this.groupeForm.reset({});
+    this.primeForm.reset({});
 
   }
 
@@ -1494,7 +1597,8 @@ export class AvenantModificationComponent implements OnInit {
         // this.viewListeEdit = true;
     }
   }
-
+  /**Mettre la même date d'effet dans les familles d'actes, actes et sous actes 
+   * || fonction a appélé derriere le input date des sous actes */
   changeFamilleActeDate(plafondFamilleActe: PlafondFamilleActe): void {
     console.log('famille acte date effe change ==== ' + plafondFamilleActe.dateEffet);
     plafondFamilleActe.listeActe.forEach(plafondActe => {
@@ -1516,12 +1620,34 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   getHistoriquePlafondGroupeFamilleActeByPolice(): void {
-    this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.police.id).subscribe(
-      (res) => {
-        this.historiquePlafondFamilleActePlafongConfig = res;
-        console.log('result ==============  ', res);
-      }
-    );
+    console.log('police de recuperation',this.police.id);
+    if(this.etat === 'CREATE') {
+      this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.curentExercice.id).subscribe(
+        (res) => {
+          this.historiquePlafondFamilleActePlafongConfig = res;
+          console.log('police de recuperation', this.historiquePlafondFamilleActePlafongConfig.length);
+          console.log('result ==============  ', res);
+        }
+      );
+    } else {
+      this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.avenant.exercice.id).subscribe(
+        (res) => {
+          this.historiquePlafondFamilleActePlafongConfig = res;
+          console.log('police de recuperation', this.historiquePlafondFamilleActePlafongConfig.length);
+          console.log('result ==============  ', res);
+        }
+      );
+    }
+    
+  }
+
+  getsHistoriquePlafondGroupeActe(historiqueAvenantFamilleActe: HistoriquePlafondFamilleActe) {
+    console.log('entrée ==============  ');
+    this.historiqueAvenantService.getsHistoriquePlafondGroupeActe(this.curentExercice.id, historiqueAvenantFamilleActe.id)
+    .subscribe( (res) => {
+        this.historiquePlafondActePlafongConfig = res;
+        console.log('historiquePlafondActePlafongConfig ==============  ', this.historiquePlafondActePlafongConfig);
+    });
   }
 
   loadExerciceByPolice(police: Police): void {
@@ -1557,6 +1683,7 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onExerciceChange(): void {
+    this.getHistoriquePlafondGroupeFamilleActeByPolice();
     console.log('curent exo === ');
     console.log(this.curentExercice);
  }

@@ -120,7 +120,7 @@ export class BulletinAdhesionEffects {
         mergeMap(() =>
             this.bulletinAdhesionService.$getBulletin().pipe(
                 switchMap(value => [
-                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setBulletin(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

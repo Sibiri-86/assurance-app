@@ -110,9 +110,6 @@ export class AvenantIncorporationComponent implements OnInit{
         if (this.etat !== 'CREATE') {
             this.updateAvenant(this.avenantId);
         }
-        if (this.etat !== 'VIEW') {
-            this.updateAvenant(this.avenantId);
-        }
 
         this.qualiteAssureList$ = this.store.pipe(
             select(qualiteAssureSelector.qualiteAssureList)

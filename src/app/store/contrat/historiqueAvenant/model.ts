@@ -41,7 +41,12 @@ export interface HistoriqueAvenant {
     dateSuspension?: Date;
     dateResiliation?: Date;
     isPossible?: boolean;
+<<<<<<< HEAD
     dateSaisie?: Date;
+=======
+    exerciceId?: string;
+    groupeId?: string;
+>>>>>>> 13c3ae25cb96fdba7df03ef467d66a2b86e70571
 }
 
 export enum TypeEtat {
@@ -135,7 +140,7 @@ export class HistoriqueGroupe {
 }
 
 export class HistoriquePlafondFamilleActe {
-    id?: number;
+    id?: string;
     garantie?: Garantie;
     montantPlafond?: number;
     dimensionPeriode?: DimensionPeriode;

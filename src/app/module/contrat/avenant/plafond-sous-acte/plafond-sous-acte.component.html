@@ -11,7 +11,7 @@
                         <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{sousActe?.plafondGroupeSousActe.montantPlafond | formatTableValue: 'number':true}}
+                        {{sousActe?.plafondGroupeSousActe.montantPlafondParActe | formatTableValue: 'number':true}}
                     </ng-template>
                 </p-cellEditor>
             </td>

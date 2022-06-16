@@ -27,7 +27,7 @@ export enum TypeReport {
 
 export enum TypeDuree {
     JOUR = 'JOUR',
-    MOI = 'MOIS',
+    MOIS = 'MOIS',
     ANNEE = 'ANNEE'
 }
 

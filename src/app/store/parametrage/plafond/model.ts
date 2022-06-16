@@ -33,6 +33,7 @@ export interface PlafondActe {
     listeSousActe?: Array<PlafondSousActe>;
     etat?: Status;
     sousActeListe?: SousActe[];
+    listeSousActes?:PlafondSousActe[];
     plafondGroupeFamilleActe?: PlafondFamilleActe;
     garantie?: Garantie;
   }
@@ -48,4 +49,5 @@ export interface PlafondSousActe {
     nombre?: number;
     etat?: Status;
     plafondGroupeActe?: PlafondActe;
+    listeSousActes?: PlafondSousActe[];
 }

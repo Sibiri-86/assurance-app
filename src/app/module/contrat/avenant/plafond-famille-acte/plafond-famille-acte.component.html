@@ -1,5 +1,5 @@
 <p-table #dtConfigurationPlafond [value]="historiquePlafondFamilleActePlafongConfig" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" [style]="{'width': '100%'}">
         <tr>
             <th></th>
             <th>Famille acte</th>
@@ -10,18 +10,18 @@
             <th>Taux de couverture</th>
             <th>Domaine</th>
             <th>Date effet</th>
-            <th>Date Modif</th>
+            <!-- <th>Date Modif</th> -->
             <th>Status</th>
             <th>
-                <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
-                        icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                <!-- <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                        icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button> -->
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-historiquePlafondFamilleActePlafong let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
+    <ng-template pTemplate="body" let-historiquePlafondFamilleActePlafong let-editing="editing" let-ri="rowIndex" let-expanded="expanded" [style]="{'width': '100%'}" >
         <tr [pEditableRow]="plafond" class="colorZone">
             <td>
-                <button type="button" pButton pRipple [pRowToggler]="historiquePlafondFamilleActePlafong" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <button type="button" pButton pRipple [pRowToggler]="historiquePlafondFamilleActePlafong" (click)="getsHistoriquePlafondGroupeActe(historiquePlafondFamilleActePlafong)" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
             </td>
             <td>
                 <p-cellEditor>
@@ -102,22 +102,22 @@
                 </p-cellEditor>
             </td>
 
-            <td>
+            <!-- <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input type="date" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet" [disabled]="etat === 'VIEW'" style="width: 100%; height: 100%;">
+                        <input type="date" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet" [disabled]="etat === 'VIEW'" style="width: 100%; height: 100%;"> -->
                         <!-- <p-calendar  [showIcon]="true" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet"  dateFormat="dd/mm/yy" 
                         inputId="calendar" appendTo="body" [disabled]="etat === 'VIEW'"></p-calendar> -->
-                    </ng-template>
+                    <!-- </ng-template>
                     <ng-template pTemplate="output">
                         {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet | formatTableValue : 'date'}}
                     </ng-template>
                 </p-cellEditor>
-            </td>
+            </td> -->
             <td>
                 <p-cellEditor>
-                    <ng-template pTemplate="output">
-                        {{historiquePlafondFamilleActePlafong.dateModif}}
+                    <ng-template pTemplate="output" [style]="{'width':'100%'}">
+                        {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet | formatTableValue : 'date' }}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -127,15 +127,15 @@
                         <p-dropdown [options]="typeEtat" [(ngModel)]="historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.etat" placeholder="Select status"
                                     [style]="{'width':'100%'}" [disabled]="etat === 'VIEW'"></p-dropdown>
                     </ng-template>
-                    <ng-template pTemplate="output">
+                    <ng-template pTemplate="output" [style]="{'width':'100%'}">
                         {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe?.etat}}
                     </ng-template>
                 </p-cellEditor>
             </td>
 
             <td style="text-align:center">
-                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" 
-                (click)="onRowEditInitPlafondConfiguration(historiquePlafondFamilleActePlafong)" [disabled]="etat === 'VIEW'"></button>
+                <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" 
+                (click)="onRowEditInitPlafondConfiguration(historiquePlafondFamilleActePlafong)" [disabled]="etat === 'VIEW'"></button> -->
                 <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" 
                 style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(historiquePlafondFamilleActePlafong)"></button>
                 <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" 
@@ -147,7 +147,7 @@
         <tr >
             <td colspan="12">
                 <div class="">
-                    <app-plafond-acte [etat]="etat" [historiquePlafondActes]="historiquePlafondFamilleActePlafong?.historiquePlafondGroupeActes"></app-plafond-acte>
+                    <app-plafond-acte [etat]="etat" [historiquePlafondActes]="historiquePlafondActePlafongConfig"></app-plafond-acte>
                 </div>
             </td>
         </tr>

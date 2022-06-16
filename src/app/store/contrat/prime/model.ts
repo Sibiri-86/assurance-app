@@ -6,5 +6,6 @@ export interface Prime{
     primeAdulte?: number,
     primeEnfant?: number,
     primeEmploye?: number,
-    primeConjoint?: number
+    primeConjoint?: number,
+    primePersonne?: number
 }

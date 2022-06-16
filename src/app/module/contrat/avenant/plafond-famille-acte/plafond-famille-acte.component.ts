@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
-import { HistoriquePlafondActe, HistoriquePlafondFamilleActe } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriqueAvenant, HistoriquePlafondActe, HistoriquePlafondFamilleActe } from 'src/app/store/contrat/historiqueAvenant/model';
 import { Acte } from 'src/app/store/parametrage/acte/model';
 import { Garant } from 'src/app/store/parametrage/garant/model';
 import { Garantie } from 'src/app/store/parametrage/garantie/model';
@@ -36,6 +36,8 @@ import * as territorialiteSelector from '../../../../store/parametrage/territori
 import {loadTerritorialite} from '../../../../store/parametrage/territorialite/actions';
 import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-assure/selector';
 import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
+import { Exercice } from 'src/app/store/contrat/exercice/model';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 
 @Component({
   selector: 'app-plafond-famille-acte',
@@ -46,6 +48,7 @@ export class PlafondFamilleActeComponent implements OnInit {
 
   @Input() historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe>;
   @Input() etat: string;
+  @Input() avenant1: HistoriqueAvenant;
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -78,11 +81,15 @@ export class PlafondFamilleActeComponent implements OnInit {
   private familleActe$: Observable<any>;
   qualiteAssureList: Array<QualiteAssure>;
   qualiteAssureList$: Observable<Array<QualiteAssure>>;
+  curentExercice: Exercice = {};
+  historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
+  
 
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
+      private historiqueAvenantService: HistoriqueAvenantService
   ) { }
 
   ngOnInit(): void {
@@ -94,14 +101,14 @@ export class PlafondFamilleActeComponent implements OnInit {
         // console.log('**************** ' + value.length);
       }
     });
-    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    /* this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
       }
-    });
+    }); */
 
     this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
@@ -183,6 +190,17 @@ export class PlafondFamilleActeComponent implements OnInit {
   onRowEditCancelPlafondConfiguration(plafond: HistoriquePlafondFamilleActe, index: number) {
     this.plafondActuelleConfiguration[index] = this.clonedPlafondConfiguration[plafond?.id];
     delete this.clonedPlafondConfiguration[plafond?.id];
+  }
+
+  getsHistoriquePlafondGroupeActe(historiqueAvenantFamilleActe: HistoriquePlafondFamilleActe) {
+    console.log('entrée ==============  ');
+    console.log('historiqueAvenantFamilleActe ==============  ', historiqueAvenantFamilleActe);
+    console.log('this.avenant1 ==============  ', this.avenant1);
+    this.historiqueAvenantService.getsHistoriquePlafondGroupeActe(historiqueAvenantFamilleActe.historiqueAvenant.exercice.id, historiqueAvenantFamilleActe.id)
+    .subscribe( (res) => {
+        this.historiquePlafondActePlafongConfig = res;
+        console.log('historiquePlafondActePlafongConfig ==============  ', this.historiquePlafondActePlafongConfig);
+    });
   }
 
 }

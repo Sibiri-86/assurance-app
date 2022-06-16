@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HistoriquePlafondActe } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriquePlafondActe, HistoriquePlafondSousActe } from 'src/app/store/contrat/historiqueAvenant/model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
@@ -25,6 +25,7 @@ import * as genreSelector from '../../../../store/parametrage/genre/selector';
 import { Genre } from 'src/app/store/parametrage/genre/model';
 import * as acteSelector from '../../../../store/parametrage/acte/selector';
 import { select, Store } from '@ngrx/store';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 
 
 @Component({
@@ -55,11 +56,14 @@ export class PlafondActeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   genreList: Array<Genre>;
   genreList$: Observable<Array<Genre>>;
+  historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
+  historiquePlafondSousActePlafongConfig: Array<HistoriquePlafondSousActe> = [];
 
   constructor(
     private store: Store<AppState>,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private historiqueAvenantService: HistoriqueAvenantService
   ) { }
 
   ngOnInit(): void {
@@ -73,14 +77,14 @@ export class PlafondActeComponent implements OnInit {
         // console.log('**************** ' + value.length);
       }
     });
-    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    /* this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
       }
-    });
+    }); */
 
     this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
@@ -104,6 +108,14 @@ export class PlafondActeComponent implements OnInit {
       if (value) {
         this.genreList = value.slice();
       }
+    });
+  }
+
+  getsHistoriquePlafondGroupeSousActe(historiqueAvenantActe: HistoriquePlafondActe) {
+    this.historiqueAvenantService.getsHistoriquePlafondGroupeSousActe(historiqueAvenantActe.historiqueAvenant.exercice.id, historiqueAvenantActe.id)
+    .subscribe( (res) => {
+        this.historiquePlafondSousActePlafongConfig = res;
+        console.log('historiquePlafondSousActePlafongConfig ==============  ', this.historiquePlafondSousActePlafongConfig);
     });
   }
 

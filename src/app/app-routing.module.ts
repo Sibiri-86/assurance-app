@@ -64,6 +64,7 @@ import { ConventionComponent } from './module/medical/convention/convention.comp
 import { AssureComponent } from './module/contrat/assure/assure.component';
 import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
 import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
+import { PrestataireCartographieComponent } from './module/prestataire-cartographie/prestataire-cartographie.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -71,6 +72,7 @@ import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bu
                 path: '', component: AppMainComponent,
                 children: [
                     {path: '', component: DashboardDemoComponent},
+                    {path: 'prestataire-cartographie', component: PrestataireCartographieComponent},
                     {path: 'parametrage', component: ParametrageComponent},
                     {path: 'contrat/affaire-nouvelle', component: AffaireNouvelleComponent,
                      children: [

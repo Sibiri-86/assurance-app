@@ -118,7 +118,9 @@ export class AvenantSuspensionComponent implements OnInit {
     ); */
 
     this.loadActivedExercice(this.police);
-    this.updateAvenant(this.avenantId);
+    if(this.etat !== 'CREATE') {
+      this.updateAvenant(this.avenantId);
+    }
     this.lastExerciceForm = this.formBuilder.group({
       id: new FormControl(null),
       debut: new FormControl('', [Validators.required]),

@@ -3,7 +3,7 @@
     <ng-template pTemplate="body" let-historiquePlafondActe let-editing="editing"  let-ri1="rowIndex" let-expanded="expanded" >
         <tr  [pEditableRow]="acte" class="colorZoneActe">
 
-            <td> <button type="button" pButton pRipple [pRowToggler]="historiquePlafondActe" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+            <td> <button type="button" pButton pRipple [pRowToggler]="historiquePlafondActe" (click)="getsHistoriquePlafondGroupeSousActe(historiquePlafondActe)" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -89,13 +89,13 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <!-- <td>
                 <p-cellEditor>
                     <ng-template pTemplate="output">
                         {{historiquePlafondActe.dateModif | formatTableValue : 'date'}}
                     </ng-template>
                 </p-cellEditor>
-            </td>
+            </td> -->
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -121,7 +121,7 @@
         <tr >
             <td colspan="12">
                 <div class="">
-                    <app-plafond-sous-acte [etat]="etat" [historiquePlafondSousActes]="historiquePlafondActe?.listeSousActe"></app-plafond-sous-acte>
+                    <app-plafond-sous-acte [etat]="etat" [historiquePlafondSousActes]="historiquePlafondSousActePlafongConfig"></app-plafond-sous-acte>
                 </div>
             </td>
         </tr>
