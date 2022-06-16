@@ -89,6 +89,7 @@ import {TypeDuree} from '../../../../store/contrat/enum/model';
 import { removeBlanks } from 'src/app/module/util/common-util';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
+import { onInitEffects } from '@ngrx/effects/src/lifecycle_hooks';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -210,6 +211,7 @@ export class AvenantModificationComponent implements OnInit {
   familleActeListFinal: PlafondFamilleActe[] = [];
   historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
   @Output() currentExercice: Exercice;
+  groupeListeFinale: Groupe []= [];
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -222,6 +224,7 @@ export class AvenantModificationComponent implements OnInit {
       private policeService: PoliceService,
       private exerciceService: ExerciceService,
   ) {
+    
     this.groupeForm = this.formBuilder.group({
       id: new FormControl(null),
       libelle: new FormControl('', [Validators.required]),
@@ -232,11 +235,11 @@ export class AvenantModificationComponent implements OnInit {
       typeDuree: new FormControl(null, [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
       commune: new FormControl('', [Validators.required]),
-      numeroGroupe: new FormControl('', [Validators.required]),
-      typePrime: new FormControl('', [Validators.required]),
-      adresse: new FormControl('', [Validators.required]),
-      prime: new FormControl('', [Validators.required]),
-      police: new FormControl('', [Validators.required]),
+      numeroGroupe: new FormControl(''),
+      typePrime: new FormControl(''),
+      adresse: new FormControl(''),
+      prime: new FormControl(''),
+      police: new FormControl(''),
       description: new FormControl('', [Validators.required]),
     });
 
@@ -626,7 +629,7 @@ export class AvenantModificationComponent implements OnInit {
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeListes = value.slice();
-        console.log(this.groupeListes);
+        console.log('==========groupes===========',this.groupeListes);
       }
     });
     this.acteList$ = this.store.pipe(select(acteSelector.acteList));
@@ -770,7 +773,10 @@ export class AvenantModificationComponent implements OnInit {
     this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
     // this.loadActivedExercice(this.police);
-    this.updateAvenant(this.avenantId);
+    if(this.etat !== 'CREATE') {
+      this.updateAvenant(this.avenantId);
+    }
+    
     this.getHistoriquePlafondGroupeFamilleActeByPolice();
     this.loadExerciceByPolice(this.police);
     this.loadLastExerciceOfpolice();
@@ -842,7 +848,8 @@ export class AvenantModificationComponent implements OnInit {
       territorialite: group.territorialite || [],
       duree: group?.duree,
       dateEffet: new Date(group.dateEffet),
-      typeDuree: this.typeDureeList.find(t => t.value === group?.typeDuree),
+      // typeDuree: this.typeDureeList.find(t => t.value === group?.typeDuree),
+      typeDuree: group?.typeDuree,
       dateEcheance: new Date(group.dateEcheance),
       commune: group.commune,
       numeroGroupe: group.numeroGroupe,
@@ -852,15 +859,16 @@ export class AvenantModificationComponent implements OnInit {
       police: group.police,
       description: group.description
     });
-
+    console.log('***********group************', this.groupeForm);
+  
     this.primeForm.patchValue({
-      prime: group.typePrime,
+      // prime: group.typePrime,
       primeEmploye: group.prime?.primeEmploye,
       primeConjoint: group.prime?.primeConjoint,
       primeEnfant: group.prime?.primeEnfant,
       primeFamille: group.prime?.primeFamille,
       primeAdulte: group.prime?.primeAdulte,
-      primePersonne: group.prime?.primeAdulte,
+      primePersonne: group.prime?.primePersonne,
       primeAnnuelle: group.prime?.primeAnnuelle
     });
     this.selectedTypePrime = group.typePrime;
@@ -1110,11 +1118,11 @@ export class AvenantModificationComponent implements OnInit {
     console.log("this.curentExercice**************", this.curentExercice);
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
-    this.groupeListes.forEach(gp => {
+    /* this.groupeListes.forEach(gp => {
       console.log(' groupe infos === ', this.typeDureeList.find(e => e.value === gp.typeDuree));
       gp.typeDuree = this.typeDureeList.find(e => e.value === gp.typeDuree).value;
-    });
-    this.objet.groupes = this.groupeListes;
+    }); */
+    this.objet.groupes = this.groupeListeFinale;
     
     switch (this.myForm.get('demandeur').value.value) {
       case TypeDemandeur.GARANT:
@@ -1183,10 +1191,13 @@ export class AvenantModificationComponent implements OnInit {
 
   changePrime(event) {
     this.selectedTypePrime = event.value;
+    console.log('========',this.selectedTypePrime);
+    this.primeForm.get('prime').setValue(this.selectedTypePrime);
     this.typeDureeSelected = this.policeForm.get('typeDuree').value;
     if (this.policeForm.get('duree')) {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
     }
+    this.primeForm.reset({});
   }
 
   onRefreshDateEcheance(value: number) {
@@ -1449,23 +1460,29 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   validerGroupe(): void {
-    this.groupeListes.forEach(grp =>  {
+    /* this.groupeListes.forEach(grp =>  {
       if (grp.id === this.groupeForm.get('id').value) {
         grp = this.groupeForm.value;
+        console.log('==grp====', grp);
         switch (this.primeForm.get('prime').value) {
           case 'PE':
             this.primeForm.patchValue({
               primeFamille: null,
               primeEnfant: null,
               primeConjoint: null,
-              primeAdulte: null
+              primeAdulte: null,
+              primePersonne: null,
+              primeEmploye: this.primeForm.get('primeEmploye').value,
             });
             break;
           case 'PAE':
             this.primeForm.patchValue({
               primeFamille: null,
               primeConjoint: null,
-              primeEmploye: null
+              primeEmploye: null,
+              primePersonne: null,
+              primeAdulte: this.primeForm.get('primeAdulte').value,
+              primeEnfant: this.primeForm.get('primeEnfant').value
             });
             break;
           case 'PECE':
@@ -1494,14 +1511,47 @@ export class AvenantModificationComponent implements OnInit {
             });
             break;
         }
-        grp.typePrime = this.primeForm.get('prime').value;
+        console.log('5555555555', grp.typePrime);
+        console.log('5555555555+653222', this.primeForm.get('prime').value);
+        if(this.primeForm.get('prime').value) {
+          grp.typePrime = this.primeForm.get('prime').value;
+        } 
         grp.prime = this.primeForm.value;
         console.log('actual prime is ====  ');
         console.log(this.primeForm.value);
         console.log('groupe array is ====  ');
         console.log(this.groupeForm);
       }
-    });
+    }); */ 
+    this.groupe = this.groupeForm.value;
+    this.groupe.prime = this.primeForm.value;
+    if (this.groupe?.prime?.primeAdulte){
+      this.groupe.prime.primeAdulte = removeBlanks(this.groupe.prime.primeAdulte + '');
+    }
+    if (this.groupe?.prime?.primeConjoint){
+      this.groupe.prime.primeConjoint = removeBlanks(this.groupe.prime.primeConjoint + '');
+    }
+    if (this.groupe?.prime?.primeEmploye){
+      this.groupe.prime.primeEmploye = removeBlanks(this.groupe.prime.primeEmploye + '');
+    }
+    if (this.groupe?.prime?.primeEnfant){
+      this.groupe.prime.primeEnfant = removeBlanks(this.groupe.prime.primeEnfant + '');
+    }
+    if ( this.groupe?.prime?.primeFamille){
+      this.groupe.prime.primeFamille = removeBlanks(this.groupe.prime.primeFamille + '');
+    }
+    if ( this.groupe?.prime?.primePersonne){
+      this.groupe.prime.primePersonne = removeBlanks(this.groupe.prime.primePersonne + '');
+    }
+    console.log('groupe array is ====  ', this.groupe);
+    console.log('prime array is ====  ', this.groupe.prime);
+    this.groupe.typePrime = this.selectedTypePrime;
+    console.log('typePrime array is ====  ', this.groupe.typePrime);
+    this.groupeListeFinale = this.groupeListeFinale.filter(g=> g.id !== this.groupe.id);
+    this.groupeListeFinale.push(this.groupe);
+    console.log('groupeListeFinal array is ====  ', this.groupeListeFinale);
+    // this.groupeForm.reset({});
+    this.primeForm.reset({});
 
   }
 

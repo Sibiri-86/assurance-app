@@ -117,7 +117,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="output" [style]="{'width':'100%'}">
-                        {{historiquePlafondFamilleActePlafong.dateModif}}
+                        {{historiquePlafondFamilleActePlafong.plafondGroupeFamilleActe.dateEffet | formatTableValue : 'date' }}
                     </ng-template>
                 </p-cellEditor>
             </td>

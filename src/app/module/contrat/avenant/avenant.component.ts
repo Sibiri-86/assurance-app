@@ -738,7 +738,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.entete = 'Avenant de Retrait';
           this.etat = 'CREATE';
       }},
-      {label: 'Moditication', icon: 'pi pi-pencil', command: () => {
+      {label: 'Modification', icon: 'pi pi-pencil', command: () => {
           this.initDisplayAvenant();
           this.isAvenantModification = true;
           this.entete = 'Avenant de Modification';

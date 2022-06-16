@@ -69,7 +69,6 @@ export interface Prestation {
     dateSoins?: Date;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
     familleActe?: PlafondFamilleActe;
-    pathologie?: Pathologie;
     acte?: PlafondActe;
     centreExecutant?: Prestataire;
     historiqueAvenant?: HistoriqueAvenant;

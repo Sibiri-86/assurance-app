@@ -101,14 +101,14 @@ export class PlafondFamilleActeComponent implements OnInit {
         // console.log('**************** ' + value.length);
       }
     });
-    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    /* this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadSousActe());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
       }
-    });
+    }); */
 
     this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());

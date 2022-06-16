@@ -129,8 +129,8 @@ export class AvenantRetraitComponent implements OnInit {
       this.loadExerciceByPolice(this.police);
       this.loadLastExercice();
     }
-    this.findListeActualisee(this.police);
-    if(this.etat != 'CREATE') {
+    // this.findListeActualisee(this.police);
+    if(this.etat !== 'CREATE') {
       this.updateAvenant(this.avenantId);
     }
   }

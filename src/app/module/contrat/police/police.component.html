@@ -66,7 +66,7 @@
                             <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
                             <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
-                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe || !police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
                             <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
                         </td>
                     </tr>

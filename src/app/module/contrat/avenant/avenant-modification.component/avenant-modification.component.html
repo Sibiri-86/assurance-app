@@ -350,7 +350,7 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="firstname2">Type durée</label>
-                                    <p-dropdown dataKey="id" id="firstname2" [filter]="true"
+                                    <p-dropdown [filter]="true"
                                                 showClear="true" (onChange)="changeTypeDuree()" [options]="typeDureeList"
                                                 formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
@@ -404,7 +404,7 @@
                                     <label for="typePrime">Type de prime /AN</label>
                                     <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
                                                 showClear="true" [options]="typePrimeList" formControlName="prime"
-                                                optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
+                                                [autoDisplayFirst]="false" optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PF'">
@@ -542,7 +542,7 @@
                     <button pButton pRipple label="Annuler la modification" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
                 </div>
                 <div class="p-col-2">
-                    <button type="button" [disabled]="groupeForm.invalid || primeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
+                    <button type="button" [disabled]="groupeForm.invalid" pButton pRipple label="Valider la modification" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
                 </div>
             </div>
         </p-tabPanel>

@@ -54,7 +54,9 @@ export class AvenantResiliationComponent implements OnInit {
   ngOnInit(): void {
     this.init();
     this.loadActivedExercice(this.police);
-    this.updateAvenant(this.avenantId);
+    if(this.etat !== 'CREATE') {
+      this.updateAvenant(this.avenantId);
+    }
   }
   init() {
     this.myForm = this.formBuilder.group({

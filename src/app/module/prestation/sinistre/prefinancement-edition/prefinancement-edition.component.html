@@ -204,6 +204,11 @@
                             <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" formControlName="numeroPolice" pInputText>
                             <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" formControlName="numeroPolice" pInputText>
                         </div>
+
+                        <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col">
+                            <label for="dateEffet">Date de retrait <span style="color: red !important;"></span></label>
+                            <p-calendar id="dateSaisie" class="champRouge" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateRetrait" appendTo="body"></p-calendar>
+                        </div>
                         
                         <div class="p-field p-col-4">
                             <label for="medecin">Entente préalable</label>

@@ -194,7 +194,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       montantReclame: new FormControl(0),
       montantRestant: new FormControl(0),
       bonPriseEnCharge: new FormControl(),
-      prestation: this.formBuilder.array([])
+      prestation: this.formBuilder.array([]),
+      dateRetrait: new FormControl()
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -228,9 +229,13 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
-        if(this.adherentSelected.signeAdherent !=='*') {
+        if(this.adherentSelected.signeAdherent ==='-') {
           this.addMessage('error', 'Assuré(e) non pris en compte',
-                        'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+                        'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
+          this.prestationForm.patchValue({
+            dateRetrait: new Date(this.adherentSelected.dateSortie),
+            // sort: Sort.ACCORDE
+            });
         }
         console.log(this.bonPriseEnChargeList);
         this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
@@ -522,8 +527,22 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
             observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
           });
         }
+      /* Gestion des personnes rétirées au front */
+      if (this.adherentSelected.signeAdherent ==='-') {
+        if(this.prestationForm.get('dateSaisie').value >= this.prestationForm.get('dateRetrait').value) {
+          myForm.patchValue({
+            sort: Sort.REJETE,
+            observation: "Assuré(e) rétiré(e)",
+            montantRembourse: 0,
+            montantSupporte: this.prestationForm.get('prestation').value[i].nombreActe *
+            this.prestationForm.get('prestation').value[i].coutUnitaire
+          });
+        }
+      }
+
         }
     });
+    
     this.prefinancementList = [];
     this.prefinancementModel = {};
   }
@@ -574,6 +593,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
    this.prefinancementList = [];
    this.prestationForm.reset();
    //this.prestationForm.get('dateSaisie').setValue(new Date());
+   this.displayFormPrefinancement = false;
    }
 
   // permet d'enregistrer une prestation par famille
