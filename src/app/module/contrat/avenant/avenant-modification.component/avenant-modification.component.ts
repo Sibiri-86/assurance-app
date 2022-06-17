@@ -1630,6 +1630,7 @@ export class AvenantModificationComponent implements OnInit {
         }
       );
     } else {
+      console.log('result ==============  ', this.avenant.exercice.id);
       this.historiqueAvenantService.getsHistoriquePlafondGroupeFamilleActe(this.avenant.exercice.id).subscribe(
         (res) => {
           this.historiquePlafondFamilleActePlafongConfig = res;

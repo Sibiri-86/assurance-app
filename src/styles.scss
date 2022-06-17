@@ -12,7 +12,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css"; 
 @import "~@angular/material/prebuilt-themes/purple-green.css";
-// @import '~leaflet/dist/leaflet.css';
+@import "~leaflet/dist/leaflet.css";
 
 
 
@@ -70,5 +70,6 @@ background-color: rgba(215, 234, 93, 0.8) !important;
 .zonePhotos {
     width: 200px;
 }
+
 
 

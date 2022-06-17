@@ -1,0 +1,24 @@
+// @import '~leaflet/dist/leaflet.css';
+// @import "~leaflet/dist/leaflet.css";
+
+.map-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    // margin: 130px;
+    margin-top: 120px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+.map-frame{
+    border:5px solid green;
+    height: 100%;
+}
+
+#frugalmap{
+    height: 100%;
+}

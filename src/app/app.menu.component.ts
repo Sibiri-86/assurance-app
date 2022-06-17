@@ -13,7 +13,7 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: true},
-            /* {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true}, */
+            {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
             {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage'],
             visible: this.keycloak.isUserInRole(Function.sm_parametrage)},
             {

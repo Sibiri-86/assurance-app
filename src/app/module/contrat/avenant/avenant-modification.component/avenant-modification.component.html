@@ -5,19 +5,28 @@
             <div class="p-grid">
                 <div class="p-col-12">
                     <p-fieldset legend="Exercice" toggleable="true">
-                        <form [formGroup]="exerciceForm" *ngIf="!isRenouv">
+                        <form [formGroup]="lastExerciceForm" *ngIf="!isRenouv">
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-6">
                                     <label for="debit">Date d'effet</label>
-                                    <input id="debit" type="date" formControlName="debut" pInputText disabled="true" style="font-weight: bolder; color: green" />
+                                    <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true" />
                                 </div>
                                 <div class="p-field p-col-6">
                                     <label for="fin">Date d'échéance</label>
-                                    <input style="font-weight: bolder; color: green" id="fin" type="date" formControlName="fin" pInputText disabled="true" />
+                                    <input class="exo" id="fin" type="date" formControlName="fin" pInputText disabled="true" />
                                 </div>
                             </div>
                         </form>
                     </p-fieldset>
+
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-4">
+                            <label for="fraisBadge">Exercice</label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                            </p-dropdown>
+                        </div>
+                </div>
                     <form [formGroup]="myForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-6">

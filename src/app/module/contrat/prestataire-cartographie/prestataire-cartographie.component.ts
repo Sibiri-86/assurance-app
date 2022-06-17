@@ -8,8 +8,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import * as L from 'leaflet';
 import { AppState } from 'src/app/store/app.state';
 import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
-import { loadPrestataire} from '../../store/parametrage/prestataire/actions';
-import * as prestataireSelector from '../../store/parametrage/prestataire/selector';
+import { loadPrestataire} from '../../../store/parametrage/prestataire/actions';
+import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
 
 @Component({
     selector: 'app-prestataire-cartographie',
@@ -21,9 +21,9 @@ export class PrestataireCartographieComponent implements AfterViewInit {
     private map;
     private mapCart: any;
     private marker: any;
-    prestataireList$: Observable<Array<Prestataire>>;
+    /* prestataireList$: Observable<Array<Prestataire>>;
     prestataireList: Array<Prestataire>;
-    destroy$ = new Subject<boolean>();
+    destroy$ = new Subject<boolean>(); */
 
 
     constructor(
@@ -110,7 +110,7 @@ export class PrestataireCartographieComponent implements AfterViewInit {
             lng: -1.5596362929761654,
         };
 
-        const zoomLevel = 5;
+        const zoomLevel = 7.4;
 
         this.mapCart = L.map('frugalmap', {
             center: [bf.lat, bf.lng],
@@ -118,12 +118,36 @@ export class PrestataireCartographieComponent implements AfterViewInit {
         });
 
         const mainLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 10,
-            minZoom: 3,
+            maxZoom: 20,
+            minZoom: 5,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">contributors</a>'
         });
 
+
         mainLayer.addTo(this.mapCart);
+
+        const myIcon = L.icon({
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        this.marker = L?.marker([11.1783203, -4.3372768 ], {icon: myIcon}).addTo(this.mapCart);
+        this.marker?.bindTooltip( "Pharmacie hayatt"+ '<br>'+"téléphone: 20 97 00 00 ");
+        this.marker = L?.marker([12.3828613, -1.4925553 ], {icon: myIcon}).addTo(this.mapCart);
+        this.marker?.bindTooltip( "Clinique Frany"+ '<br>'+"téléphone:  25 36 99 32 ");
+        this.marker = L?.marker([12.332294, -1.5633487 ], {icon: myIcon}).addTo(this.mapCart);
+        this.marker?.bindTooltip( "Clinique Source de vie"+'<br>'+"téléphone:  78 56 98 46 ");
+
+        /* vimso
+        12.375100
+        -1.514594 */
+
+       /*  Frany
+       12.3828613,-1.4925553 */
     }
     
    
