@@ -93,6 +93,7 @@ export interface Prestation {
     nomAdherentPrincipal?: string;
     inotPlafond?: Boolean;
     pathologie?: Pathologie;
+    dateRetrait?: Date; 
 }
 
 export interface SinistreTierPayantList {
