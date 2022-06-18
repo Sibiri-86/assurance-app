@@ -668,8 +668,10 @@ export class TierPayantEditionComponent implements OnInit {
              this.prestationAdd.debours = prestaList[0].debours;
              this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
              this.prestationAdd.taux = prestaList[0].taux;
+             this.selectDateSoins();
+             console.log("==========================",this.prestationAdd.montantPlafond);
              
-             this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+           //  this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
              if(this.prestationAdd.montantRembourse !== 0) {
 
                 this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
@@ -701,7 +703,8 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = prestaList[0].debours;
                 this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
                 this.prestationAdd.taux = prestaList[0].taux;
-                this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+                this.selectDateSoins();
+               // this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
 
                 if(this.prestationAdd.montantRembourse !== 0) {
 
@@ -750,7 +753,8 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.debours = prestaList1[0].debours;
                     this.prestationAdd.baseRemboursement = prestaList1[0].baseRemboursement;
                     this.prestationAdd.taux = prestaList1[0].taux;
-                    this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
+                    this.selectDateSoins();
+                   // this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
 
                     if(this.prestationAdd.montantRembourse !== 0) {
                         this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
@@ -778,6 +782,7 @@ export class TierPayantEditionComponent implements OnInit {
 
       voirAdherent(event){
 
+        console.log("==================",event);
           this.adherentSelected = event.value;
       }
 
