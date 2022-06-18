@@ -304,7 +304,7 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 
                                 <div class="p-field p-col-4">
-                                    <label for="montantPaye" >Montant Saisie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <label for="montantPaye" >Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <p-inputNumber [(ngModel)]="prefinancement.montantPaye" name="montantPaye" mode="decimal" locale="fr-FR"  [disabled]="true" [inputStyle]="{'font-weight': 'bold'}"
                                     placeholder="montant(s) saisi(s)"></p-inputNumber>
 
@@ -340,6 +340,7 @@
                                         <th>Famille acte</th>
                                         <th>Acte</th>
                                         <th>Sous Acte</th>
+                                        <th>Base remboursement</th>
                                         <th>Montant remboursé</th>
                                         <th style="width:8rem"></th>
                                         
@@ -356,6 +357,7 @@
                                         <td>{{rowData.acte?.libelle}}</td>
                     
                                         <td> {{rowData.sousActe?.libelle}}</td>
+                                        <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
                                         <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                                         
                                         <td style="text-align:center">
@@ -402,7 +404,7 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-3">
                         <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins">
+                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins" (change)="verifierDateSoin()">
                     </div>
                     <div class="p-field p-col-3">
                         <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>

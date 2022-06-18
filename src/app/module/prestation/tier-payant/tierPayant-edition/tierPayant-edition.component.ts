@@ -269,11 +269,16 @@ export class TierPayantEditionComponent implements OnInit {
                 if(this.adherentSelected.signeAdherent !=='*') {
                     this.addMessage('error', 'Assuré(e) non pris en compte',
                                   'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
-                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e)";
-                    this.prestationAdd.sort = Sort.REJETE;
-                    this.prestationAdd.montantRembourse = 0;
-                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
 
+                                  console.log("========dateSortie============", this.adherentSelect?.dateSortie?.getTime() );
+                                  console.log("========dateSoins============", this.prestationAdd.dateSoins );
+                                  console.log("========Date============", new Date(this.prestationAdd.dateSoins).getTime() );
+                                  if( new Date(this.adherentSelect?.dateSortie).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
+                                    this.prestationAdd.sort = Sort.REJETE;
+                                    this.prestationAdd.montantRembourse = 0;
+                                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
+                                }
     
                     this.prestationAdd.dateRetrait = this.adherentSelected.dateSortie;
                   }
@@ -424,6 +429,13 @@ export class TierPayantEditionComponent implements OnInit {
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
+    }
+
+
+    verifierDateSoin() {
+
+       
+        
     }
 
     onRowSelectAdherent() {
@@ -668,6 +680,8 @@ export class TierPayantEditionComponent implements OnInit {
              this.prestationAdd.debours = prestaList[0].debours;
              this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
              this.prestationAdd.taux = prestaList[0].taux;
+             this.prestationAdd.montantRestant = prestaList[0].montantRestant;
+
              this.selectDateSoins();
              console.log("==========================",this.prestationAdd.montantPlafond);
              
@@ -703,6 +717,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = prestaList[0].debours;
                 this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
                 this.prestationAdd.taux = prestaList[0].taux;
+                this.prestationAdd.montantRestant = prestaList[0].montantRestant;
                 this.selectDateSoins();
                // this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
 
@@ -753,6 +768,7 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.debours = prestaList1[0].debours;
                     this.prestationAdd.baseRemboursement = prestaList1[0].baseRemboursement;
                     this.prestationAdd.taux = prestaList1[0].taux;
+                    this.prestationAdd.montantRestant = prestaList1[0].montantRestant;
                     this.selectDateSoins();
                    // this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
 
@@ -890,6 +906,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
                     this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
 
                 } else {
                     this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
@@ -953,6 +970,7 @@ export class TierPayantEditionComponent implements OnInit {
                 if(this.montantPlafond < this.prestationAdd.montantRembourse) {
                     this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
                     this.prestationAdd.montantRembourse = this.montantPlafond;
+                    this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 }
                 this.prestationAdd.montantPlafond = this.montantPlafond;
             }
