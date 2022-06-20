@@ -60,6 +60,7 @@ import * as featureActionBonPriseEnCharge from '../../../store/medical/bon-prise
 import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-charge/selector';
 import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
 import { KeycloakService } from 'keycloak-angular';
+import { ConventionService } from 'src/app/store/medical/convention/service';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -118,11 +119,13 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   typeBon: Array<SelectItem>;
+  montantConvention :number = 0;
  // userCurent: Us
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private keycloak: KeycloakService,
+               private conventionService: ConventionService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -411,6 +414,16 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   calculDebours(i: number) {
     let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+    this.conventionService.$findMontantConvention(this.prestationForm.get('prestation').value[i]?.sousActe?.id).subscribe((rest)=>{
+      this.montantConvention = rest;
+      console.log( this.montantConvention);
+   if(this.montantConvention !== 0 &&  this.montantConvention < this.prestationForm.get('prestation').value[i].coutUnitaire) {
+      this.showToast('error', 'INFORMATION', 'coût unitaire differnt du montant de la convention');
+      myForm.patchValue({coutUnitaire: this.montantConvention}); 
+   //   this.prestationForm.get('prestation').value[i].coutUnitaire = myForm.patchValue({coutUnitaire: this.montantConvention}); 
+      
+  }
+
     if (this.prestationForm.get('prestation').value[i].nombreActe &&
     this.prestationForm.get('prestation').value[i].coutUnitaire) {
       myForm.patchValue({debours: this.prestationForm.get('prestation').value[i].nombreActe *
@@ -418,13 +431,15 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
       (this.prestationForm.get('prestation').value[i].nombreActe *
-      this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
+      this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100 });
     }
+ 
     this.prefinancementModel = this.prestationForm.value;
     this.prefinancementModel.dateSaisie = new Date();
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
     /* executer le controle de la prestation */
+    
     this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
@@ -439,9 +454,14 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
             observation: this.checkPrefinancementResult[j].message
           });
+          if(!this.checkPrefinancementResult[j].montantRestant) {
+            myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+          }
+          
         }
         }
     });
+  });
     this.prefinancementList = [];
     this.prefinancementModel = {};
   }

@@ -340,7 +340,8 @@
                                         <th>Famille acte</th>
                                         <th>Acte</th>
                                         <th>Sous Acte</th>
-                                        <th>Base remboursement</th>
+                                        <th>Base de  remboursement</th>
+                                        <th>Taux</th>
                                         <th>Montant remboursé</th>
                                         <th style="width:8rem"></th>
                                         
@@ -358,6 +359,7 @@
                     
                                         <td> {{rowData.sousActe?.libelle}}</td>
                                         <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
+                                        <td style="font-weight: bold"> {{rowData.taux?.taux}}</td>
                                         <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                                         
                                         <td style="text-align:center">
@@ -404,7 +406,7 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-3">
                         <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins" (change)="verifierDateSoin()">
+                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins">
                     </div>
                     <div class="p-field p-col-3">
                         <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -592,7 +594,7 @@
              <p-inputNumber name="montantRembourse" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRembourse"  [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
          </div>
                <div class="p-field p-col-3">
-                   <label for="nombreActe">Montant non remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                   <label for="nombreActe">Montant supporté<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                    <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
                </div>
 
@@ -737,6 +739,8 @@
                                     <th>Famille acte</th>
                                     <th>Acte</th>
                                     <th>Sous Acte</th>
+                                    <th>Base de  remboursement</th>
+                                    <th>Taux</th>
                                     <th>Montant remboursé</th>
                                     <th style="width:8rem"></th>
                                     
@@ -753,8 +757,14 @@
                                     <td>{{rowData.acte?.libelle}}</td>
                 
                                     <td> {{rowData.sousActe?.libelle}}</td>
+                                   
+                                    
+                                    <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
+                                    <td style="font-weight: bold"> {{rowData.taux?.taux}}</td>
+                                    
                                     <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                                     
+
                                     <td style="text-align:center">
                                         <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="voirPrestationDetail(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
                                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(rowData)"></button>
