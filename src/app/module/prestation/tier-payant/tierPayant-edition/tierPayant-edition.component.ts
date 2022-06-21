@@ -671,7 +671,8 @@ export class TierPayantEditionComponent implements OnInit {
             this.prefinancement.montantPaye = 0;
         }
         if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
-            
+            this.prefinancement.montantPaye = 0;
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
             this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
             this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
         }
@@ -906,7 +907,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     calculDebours() {
         const prestati: Prestation[] = this.prestationsList.filter(presta=>!presta.id && presta?.sousActe?.id === this.prestationAdd?.sousActe?.id);
-        if(prestati.length > 0) {
+        if(prestati?.length > 0) {
             console.log(this.montantConsomme);
             prestati.forEach(pre=>{
                 if(pre.montantRembourse) {
