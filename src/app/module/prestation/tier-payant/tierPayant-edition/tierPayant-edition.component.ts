@@ -269,11 +269,16 @@ export class TierPayantEditionComponent implements OnInit {
                 if(this.adherentSelected.signeAdherent !=='*') {
                     this.addMessage('error', 'Assuré(e) non pris en compte',
                                   'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
-                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e)";
-                    this.prestationAdd.sort = Sort.REJETE;
-                    this.prestationAdd.montantRembourse = 0;
-                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
 
+                                  console.log("========dateSortie============", this.adherentSelect?.dateSortie?.getTime() );
+                                  console.log("========dateSoins============", this.prestationAdd.dateSoins );
+                                  console.log("========Date============", new Date(this.prestationAdd.dateSoins).getTime() );
+                                  if( new Date(this.adherentSelect?.dateSortie).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
+                                    this.prestationAdd.sort = Sort.REJETE;
+                                    this.prestationAdd.montantRembourse = 0;
+                                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
+                                }
     
                     this.prestationAdd.dateRetrait = this.adherentSelected.dateSortie;
                   }
@@ -424,6 +429,13 @@ export class TierPayantEditionComponent implements OnInit {
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
+    }
+
+
+    verifierDateSoin() {
+
+       
+        
     }
 
     onRowSelectAdherent() {
@@ -654,9 +666,11 @@ export class TierPayantEditionComponent implements OnInit {
         }
 
          if(prestaList.length == 1) {
-            
+            console.log("==============================", this.acteList.find(garan=>garan.id === prestaList[0].acte?.id));
+            console.log("==============================", prestaList[0].acte);
              
-             this.prestationAdd.familleActe = prestaList[0].familleActe;
+             this.prestationAdd.familleActe = this.garanties.find(garan=>garan.id === this.acteList.find(acte=>acte.id === prestaList[0].acte?.id)?.idTypeGarantie);
+
              this.prestationAdd.acte = prestaList[0].acte;
              this.prestationAdd.sousActe = prestaList[0].sousActe;
              this.prestationAdd.pathologie = prestaList[0].pathologie;
@@ -668,13 +682,21 @@ export class TierPayantEditionComponent implements OnInit {
              this.prestationAdd.debours = prestaList[0].debours;
              this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
              this.prestationAdd.taux = prestaList[0].taux;
+             this.prestationAdd.montantRestant = prestaList[0].montantRestant;
              
-             this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+
+             this.selectDateSoins();
+             console.log("==========================",this.prestationAdd.montantPlafond);
+             
+           //  this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
              if(this.prestationAdd.montantRembourse !== 0) {
 
                 this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+                this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+
                 this.prestationAdd.sort = prestaList[0].sort;
                 this.prestationAdd.sort = prestaList[0].sort;
+                this.prestationAdd.observation = prestaList[0].observation;
             }
              
              this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
@@ -689,7 +711,8 @@ export class TierPayantEditionComponent implements OnInit {
          }
          if(prestaList.length > 1) {
              if(this.prestationsList?.length === 0 || this.prestationsList?.length === undefined) {
-                this.prestationAdd.familleActe = prestaList[0].familleActe;
+                // this.prestationAdd.familleActe = prestaList[0].familleActe;
+                this.prestationAdd.familleActe = this.garanties.find(garan=>garan.id === this.acteList.find(acte=>acte.id === prestaList[0].acte?.id)?.idTypeGarantie);
                 this.prestationAdd.acte = prestaList[0].acte;
                 this.prestationAdd.sousActe = prestaList[0].sousActe;
                 this.prestationAdd.pathologie = prestaList[0].pathologie;
@@ -701,13 +724,17 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = prestaList[0].debours;
                 this.prestationAdd.baseRemboursement = prestaList[0].baseRemboursement;
                 this.prestationAdd.taux = prestaList[0].taux;
-                this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
+                
+                this.selectDateSoins();
+               // this.prestationAdd.montantPlafond = prestaList[0]?.sousActe?.montantPlafond;
 
                 if(this.prestationAdd.montantRembourse !== 0) {
 
                     this.prestationAdd.montantRembourse = prestaList[0].montantRembourse;
+                    this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                     this.prestationAdd.sort = prestaList[0].sort;
                     this.prestationAdd.sort = prestaList[0].sort;
+                    this.prestationAdd.observation = prestaList[0].observation;
                 }
                
                 this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
@@ -738,7 +765,8 @@ export class TierPayantEditionComponent implements OnInit {
                     }
                 });
                 if(prestaList1?.length > 0) {
-                    this.prestationAdd.familleActe = prestaList1[0].familleActe;
+                  //  this.prestationAdd.familleActe = prestaList1[0].familleActe;
+                    this.prestationAdd.familleActe = this.garanties.find(garan=>garan.id === this.acteList.find(acte=>acte.id === prestaList[0].acte?.id)?.idTypeGarantie);
                     this.prestationAdd.acte = prestaList1[0].acte;
                     this.prestationAdd.sousActe = prestaList1[0].sousActe;
                     this.prestationAdd.pathologie = prestaList1[0].pathologie;
@@ -750,12 +778,17 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.debours = prestaList1[0].debours;
                     this.prestationAdd.baseRemboursement = prestaList1[0].baseRemboursement;
                     this.prestationAdd.taux = prestaList1[0].taux;
-                    this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
+                   // this.prestationAdd.montantRestant = prestaList1[0].montantRestant;
+                    this.selectDateSoins();
+                   // this.prestationAdd.montantPlafond = prestaList1[0]?.sousActe?.montantPlafond;
 
                     if(this.prestationAdd.montantRembourse !== 0) {
-                        this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
+                       this.prestationAdd.montantRembourse = prestaList1[0].montantRembourse;
+                       this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+
                         this.prestationAdd.sort = prestaList1[0].sort;
                         this.prestationAdd.sort = prestaList1[0].sort;
+                        this.prestationAdd.observation = prestaList1[0].observation;
                     }
                     
                     this.prestationAdd.montantPlafond = this.prestationAdd.sousActe?.montantPlafond;
@@ -778,6 +811,7 @@ export class TierPayantEditionComponent implements OnInit {
 
       voirAdherent(event){
 
+        console.log("==================",event);
           this.adherentSelected = event.value;
       }
 
@@ -860,7 +894,7 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
-        if(this.montantConvention !== 0 &&  this.montantConvention !== this.prestationAdd.coutUnitaire) {
+        if(this.montantConvention !== 0 &&  this.montantConvention < this.prestationAdd.coutUnitaire) {
             this.showToast('error', 'INFORMATION', 'coût unitaire differnt du montant de la convention');
             const c =this.montantConvention - this.prestationAdd.coutUnitaire;
             this.prestationAdd.coutUnitaire = this.montantConvention;
@@ -869,6 +903,11 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.observation = "la differnce entre le coût unitaire et le montant de la convention est " + c;
 
             }
+        }
+        if(this.montantPlafond === 0 ) {
+            this.prestationAdd.sort = Sort.REJETE;
+            this.prestationAdd.observation = "l'assurance ne couvre pas ce produit " ;
+
         }
 
       
@@ -885,6 +924,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
                     this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
 
                 } else {
                     this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
@@ -948,6 +988,7 @@ export class TierPayantEditionComponent implements OnInit {
                 if(this.montantPlafond < this.prestationAdd.montantRembourse) {
                     this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
                     this.prestationAdd.montantRembourse = this.montantPlafond;
+                    this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 }
                 this.prestationAdd.montantPlafond = this.montantPlafond;
             }
@@ -1170,6 +1211,7 @@ export class TierPayantEditionComponent implements OnInit {
 
       editerPrestation1(prestation: Prestation, rowIndex: number) {
         this.compteur = rowIndex;
+        console.log("========prestation==============",prestation);
        
         
           this.prestationAdd = prestation;

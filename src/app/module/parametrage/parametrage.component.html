@@ -122,7 +122,7 @@
     </div>
     <p-toast></p-toast>
 
-    <p-dialog [(visible)]="displayDialog" [style]="{width: '450px'}" header="{{selectedDataType?.label}}" [modal]="true" styleClass="p-fluid">
+    <p-dialog [(visible)]="displayDialog" [style]="{width: '700px'}" header="{{selectedDataType?.label}}" [modal]="true" styleClass="p-fluid">
     
     <ng-template pTemplate="content"> 
     <form (ngSubmit)="onCreate()" *ngIf="editForm" [formGroup]="editForm">

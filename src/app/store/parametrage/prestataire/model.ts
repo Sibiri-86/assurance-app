@@ -11,6 +11,8 @@ export interface Prestataire {
     responsable?: string;
     telephone?: string;
     localite?: string;
+    longitude?: number;
+    latitude?: number;
 
 }
 export interface PrestataireList {

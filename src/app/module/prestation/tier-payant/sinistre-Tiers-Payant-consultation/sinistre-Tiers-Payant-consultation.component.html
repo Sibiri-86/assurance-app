@@ -5,7 +5,7 @@
     <div class="p-formgroup-inline">
         <div class="p-field">
             <label for="matricule" class="p-sr-only">Numero facture</label>
-            <input id="matricule" type="text" pInputText placeholder="Matricule" [(ngModel)]="matricule">
+            <input id="matricule" type="text" pInputText placeholder="numero facture" [(ngModel)]="matricule">
         </div>
         
         <div class="p-field">
@@ -185,6 +185,8 @@
                             <th>Famille acte</th>
                             <th>Acte</th>
                             <th>Sous Acte</th>
+                            <th>Base de  remboursement</th>
+                            <th>Taux</th>
                             <th>Montant remboursé</th>
                             <th style="width:8rem"></th>
                             
@@ -201,6 +203,9 @@
                             <td>{{rowData.acte?.libelle}}</td>
         
                             <td> {{rowData.sousActe?.libelle}}</td>
+                            
+                            <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
+                            <td style="font-weight: bold"> {{rowData.taux?.taux }}</td>
                             <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                             
                             <td style="text-align:center">

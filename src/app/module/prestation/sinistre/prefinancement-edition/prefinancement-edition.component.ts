@@ -499,7 +499,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   calculDebours(i: number) {
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
-    if(this.prestationForm.get('prestation').value[i].coutUnitaire !== this.montantConvention && this.montantConvention !== 0) {
+    if(this.prestationForm.get('prestation').value[i].coutUnitaire > this.montantConvention && this.montantConvention !== 0) {
       this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
       const c =this.montantConvention - this.prestationForm.get('prestation').value[i].coutUnitaire;
       myForm.patchValue({inotPlafond: true});
@@ -551,6 +551,9 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
             observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
           });
+          if(!this.checkPrefinancementResult[j].montantRestant) {
+            myForm1.patchValue({ montantRestant: this.prestationForm.get('prestation').value[j].baseRemboursement -  this.prestationForm.get('prestation').value[j].montantRembourse });
+          }
         }
       /* Gestion des personnes rétirées au front */
       if (this.adherentSelected.signeAdherent ==='-') {

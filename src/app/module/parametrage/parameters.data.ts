@@ -1164,7 +1164,7 @@ export const DATA_DEFINITION = [
     cols: [
       {
         field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
-        validators: [Validators.required, Validators.maxLength(50)]
+        validators: [Validators.required, Validators.maxLength(50)],
       },
       {
         field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
@@ -1182,10 +1182,15 @@ export const DATA_DEFINITION = [
         field: 'telephone', header: 'Téléphone', type: 'string', width: 1, text_center: false,
         
       },
-     
 
       {
         field: 'localite', header: 'Localité', type: 'string', width: 1, text_center: false,
+      },
+      {
+        field: 'longitude', header: 'Longitude', type: 'number', width: 1, text_center: false,
+      },
+      {
+        field: 'latitude', header: 'Latitude', type: 'number', width: 1, text_center: false,
       },
       {
         field: 'idTypePrestataire', header: 'Type prestataire', width: 1, label: 'libelleTypePrestataire', text_center: false,
