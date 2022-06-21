@@ -162,6 +162,7 @@ export class TierPayantEditionComponent implements OnInit {
     displaySinistreDetail = false;
     montantPlafond: number = null; 
     montantConvention: number = 0;
+    montantConsomme: number = 0;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
 
 
@@ -182,7 +183,8 @@ export class TierPayantEditionComponent implements OnInit {
     
         this.prefinancement.dateSaisie = new Date();
       this.prefinancement.prestation = this.prestationsList;
-            this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
+      console.log(this.prefinancement);
+           this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
         // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
@@ -216,6 +218,15 @@ export class TierPayantEditionComponent implements OnInit {
         })
 
     }*/
+
+
+    findMontantConsomme(){
+        this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, this.prestationAdd.sousActe.id).subscribe(rest=>{
+
+            this.montantConsomme = rest;
+           
+        });
+    }
 
     ngOnInit(): void {
 
@@ -660,7 +671,8 @@ export class TierPayantEditionComponent implements OnInit {
             this.prefinancement.montantPaye = 0;
         }
         if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {
-            
+            this.prefinancement.montantPaye = 0;
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
             this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
             this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
         }
@@ -894,6 +906,23 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
+        const prestati: Prestation[] = this.prestationsList.filter(presta=>!presta.id && presta?.sousActe?.id === this.prestationAdd?.sousActe?.id);
+        if(prestati?.length > 0) {
+            console.log(this.montantConsomme);
+            prestati.forEach(pre=>{
+                if(pre.montantRembourse) {
+                    this.montantConsomme = this.montantConsomme + pre.montantRembourse;
+                }
+            });
+        }
+        console.log(this.montantConsomme , this.montantPlafond);
+        if(this.montantConsomme > this.montantPlafond  ) {
+            console.log(this.montantConsomme , this.montantPlafond);
+
+            this.prestationAdd.sort = Sort.REJETE;
+            this.prestationAdd.observation = "Vous avez atteint votre plafond" ;
+            this.prestationAdd.montantRembourse = 0;
+        }
         if(this.montantConvention !== 0 &&  this.montantConvention < this.prestationAdd.coutUnitaire) {
             this.showToast('error', 'INFORMATION', 'coût unitaire differnt du montant de la convention');
             const c =this.montantConvention - this.prestationAdd.coutUnitaire;
@@ -992,7 +1021,11 @@ export class TierPayantEditionComponent implements OnInit {
                 }
                 this.prestationAdd.montantPlafond = this.montantPlafond;
             }
-            if(this.prefinancement.montantRestant < 0){
+
+            if(!this.prestationAdd.observation) {
+                this.prestationAdd.observation= "remboursement favorable";
+            }
+            /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
                 if(!this.prestationAdd.observation) {
                     this.prestationAdd.observation = "le plafond famille-acte sur la periode est atteint";
@@ -1003,7 +1036,7 @@ export class TierPayantEditionComponent implements OnInit {
                 }
                
             }
-            
+            */
         
 
 

@@ -509,7 +509,7 @@
                 <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
                             showClear="true" [options]="sousActeListFilter" name="sousActe"
                             [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
-                            optionLabel="libelle" (onChange)="selectDateSoins()"></p-dropdown>
+                            optionLabel="libelle" (onChange)="selectDateSoins(); findMontantConsomme()"></p-dropdown>
             </div>
 
             <div class="p-field p-col-3">

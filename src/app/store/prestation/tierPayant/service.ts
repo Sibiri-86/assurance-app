@@ -59,6 +59,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    $findMontantConsomme(idAdherent: string, idSousActe: string): Observable<any> {
+        // @FIXME: get request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/find-montant-consomme`, {params :
+          this.createRequestOption({idAdherent,idSousActe})});
+       
+      }
+
     $getTierPayantValide(): Observable<SinistreTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/valide`).pipe(

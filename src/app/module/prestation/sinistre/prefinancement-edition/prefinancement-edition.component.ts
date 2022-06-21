@@ -66,6 +66,7 @@ import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-pr
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { ConventionService } from 'src/app/store/medical/convention/service';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 
 @Component({
@@ -124,10 +125,12 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   plafondSousActe: CheckPlafond;
   numberPrestation = 0;
   montantConvention: number = 0;
+  montantConsomme:number = 0;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private conventionService: ConventionService,
+               private tierPayantService: TierPayantService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
@@ -152,6 +155,16 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     }
     this.prestation.removeAt(i);
    }
+
+   findMontantConsomme(event){
+    console.log(event);
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+
+        this.montantConsomme = rest;
+        console.log(this.montantConsomme);
+       
+    });
+}
 
    createItem(): FormGroup {
     return this.formBuilder.group({
@@ -499,6 +512,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   calculDebours(i: number) {
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+   
     if(this.prestationForm.get('prestation').value[i].coutUnitaire > this.montantConvention && this.montantConvention !== 0) {
       this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
       const c =this.montantConvention - this.prestationForm.get('prestation').value[i].coutUnitaire;
@@ -562,6 +576,19 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
           myForm.patchValue({
             sort: Sort.REJETE,
             observation: "Assuré(e) rétiré(e)",
+            montantRembourse: 0,
+            montantSupporte: this.prestationForm.get('prestation').value[i].nombreActe *
+            this.prestationForm.get('prestation').value[i].coutUnitaire
+          });
+        }
+      } else {
+        console.log(this.prestationForm.get('prestation').value[i].montantPlafond, this.montantConsomme)
+        if(this.montantConsomme >  this.prestationForm.get('prestation').value[i].montantPlafond) {
+
+          myForm.patchValue({observation: "Votre plafond est atteint"});
+          myForm.patchValue({
+            sort: Sort.REJETE,
+            observation: "Votre plafond est atteint",
             montantRembourse: 0,
             montantSupporte: this.prestationForm.get('prestation').value[i].nombreActe *
             this.prestationForm.get('prestation').value[i].coutUnitaire

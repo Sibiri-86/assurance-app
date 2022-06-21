@@ -254,7 +254,7 @@
                                 <p-dropdown  [filter]="true"
                                             showClear="true" [options]="sousActeListFilter"
                                             formControlName="sousActe"  [autoDisplayFirst]="false"
-                                            optionLabel="libelle" (onChange)="selectDateSoins(i)"></p-dropdown>      
+                                            optionLabel="libelle" (onChange)="selectDateSoins(i); findMontantConsomme($event)"></p-dropdown>      
                             </div>
                         </div>
                             
