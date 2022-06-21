@@ -215,6 +215,7 @@ export class AvenantSuspensionComponent implements OnInit {
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.SUSPENSION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
+    this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
     // this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
     this.historiqueAvenant.exercice = this.curentExercice;
     console.log('****this.historiqueAvenant.exercice****', this.historiqueAvenant.exercice);
@@ -313,6 +314,7 @@ export class AvenantSuspensionComponent implements OnInit {
                 dateAvenant: new Date(res.dateAvenant),
                 observation: res.observation,
                 demandeur: res.typeDemandeur,
+                dateSaisie: new Date(res.dateSaisie)
                 /* typeDemandeur: res.typeDemandeur,
                 fraisBadges: 0,
                 fraisAccessoires: 0,

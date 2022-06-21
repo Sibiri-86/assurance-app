@@ -5,7 +5,7 @@
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
 					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addPrefinancement()"></button>
-					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrefinancement()"></button>
+					<button pButton pRipple label="Supprimer" [disabled]="selectedPrefinancement?.length<1" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrefinancement()"></button>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -157,25 +157,25 @@
                 <div class="p-fluid p-formgrid p-grid">
 
                     <div class="p-field p-col">
-                        <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
+                        <label for="dateEffet">Date de saisie <span class="required">*</span></label>
                         <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
                     </div>
                     
                     <div class="p-field p-col">
-                        <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
+                        <label for="dateEffet">Date de declaration <span class="required">*</span></label>
                         <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body" (onSelect)="checkDateCondition()"></p-calendar>
                     </div>
                     
                     <div class="p-field p-col">
-                        <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important;">*</span></label>
-                        <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                        <label for="matriculeAdherent">Matricule bénéficiaire <span class="required">*</span></label>
+                        <input id="matriculeAdherent" [disabled]="!this.prestationForm.get('dateDeclaration').value" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                     </div>
                     
                 </div>
                     
                 <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="nomAdherent">Nom <span class="required">*</span></label>
+                            <label for="nomAdherent">Nom & Prénom(s) bénéficiare <span class="required">*</span></label>
                             <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" formControlName="nomAdherent" pInputText>
                             <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherent" class="champRouge" type="text" formControlName="nomAdherent" pInputText>
                         </div>
@@ -185,7 +185,7 @@
                         </div> -->
                         
                         <div class="p-field p-col">
-                            <label for="nomAdherent">Prenom<span class="required">*</span></label>
+                            <label for="nomAdherent">Nom & Prénom(s) adhérent(e)<span class="required">*</span></label>
                             <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" type="text" formControlName="prenomAdherent" pInputText>
                             <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" type="text" formControlName="prenomAdherent" pInputText>
                         </div>
@@ -200,18 +200,18 @@
                     
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                            <label for="policeAdherent">Numero police</label>
+                            <label for="policeAdherent">Numero police <span class="required">*</span></label>
                             <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" formControlName="numeroPolice" pInputText>
                             <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" formControlName="numeroPolice" pInputText>
                         </div>
 
-                        <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col">
-                            <label for="dateEffet">Date de retrait <span style="color: red !important;"></span></label>
-                            <p-calendar id="dateSaisie" class="champRouge" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateRetrait" appendTo="body"></p-calendar>
+                        <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col" style="margin-top: 7px;">
+                            <label for="dateEffet">Date de retrait </label>
+                            <p-calendar id="dateSaisie" [inputStyle] = "{'color':'red', 'font-weight':'bold'}" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateRetrait" appendTo="body"></p-calendar>
                         </div>
                         
-                        <div class="p-field p-col-4">
-                            <label for="medecin">Entente préalable</label>
+                        <div class="p-field p-col-4" style="margin-top: 7px;">
+                            <label for="medecin">Entente préalable </label>
                             <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                                         showClear="true" [options]="bonPriseEnChargeList"
                                         formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
@@ -224,7 +224,7 @@
                     
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">
-                            <button pButton [disabled]="!adherentSelected" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
+                            <button pButton [disabled]="!adherentSelected || !this.prestationForm.get('dateDeclaration').value" pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                     class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                     </div>
                  
@@ -240,17 +240,17 @@
                         <div class="p-fluid p-formgrid p-grid">
                             
                             <div class="p-field p-col">
-                                <label for="lastname2">Famille acte</label>
+                                <label for="lastname2">Famille acte <span class="required">*</span></label>
                                 <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
                             </div>
                             
                             <div class="p-field p-col">
-                                <label for="lastname2">Acte</label>
+                                <label for="lastname2">Acte <span class="required">*</span></label>
                                 <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                             </div>  
                             
                             <div class="p-field p-col">
-                                <label for="sousActe">SousActe <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="sousActe">SousActe <span class="required">*</span></label>
                                 <p-dropdown  [filter]="true"
                                             showClear="true" [options]="sousActeListFilter"
                                             formControlName="sousActe"  [autoDisplayFirst]="false"
@@ -277,7 +277,7 @@
                             </div>
                             
                             <div class="p-field p-col">
-                                <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
+                                <label for="dateEffet">Date de soins <span class="required">*</span></label>
                                 <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" formControlName="dateSoins" appendTo="body" (onSelect)="selectDateSoins(i)"></p-calendar>
                             </div>
                             
@@ -320,17 +320,17 @@
                            <div class="p-fluid p-formgrid p-grid">
                                
                             <div class="p-field p-col">
-                                <label for="nombreActe">Nombre Acte <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Nombre Acte <span class="required">*</span></label>
                                 <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col">
-                                <label for="nombreActe">Cout unitaire <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Cout unitaire <span class="required">*</span></label>
                                 <p-inputNumber formControlName="coutUnitaire" mode="decimal" locale="fr-FR" (onBlur)="calculDebours(i)"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col">
-                                <label for="nombreActe">Debours <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Debours <span class="required">*</span></label>
                                 <p-inputNumber formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
                             </div>
                             
@@ -340,12 +340,12 @@
                            <div class="p-fluid p-formgrid p-grid">
                                
                             <div class="p-field p-col">
-                                <label for="nombreActe">Base remboursement<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Base remboursement<span class="required">*</span></label>
                                 <p-inputNumber formControlName="baseRemboursement" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col-4">
-                                <label for="sousActe">Taux <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="sousActe">Taux <span class="required">*</span></label>
                                 <p-dropdown inputId="taux" dataKey="id" [filter]="true"
                                             showClear="true" [options]="tauxList"
                                             formControlName="taux"
@@ -353,7 +353,7 @@
                             </div>
                                
                             <div class="p-field p-col-4">
-                                <label for="nombreActe">Montant remboursé<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Montant remboursé<span class="required">*</span></label>
                                 <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" [disabled]="true" class="champ"></p-inputNumber>  
                             </div>
                             
@@ -371,12 +371,12 @@
                            <div class="p-fluid p-formgrid p-grid">
                             
                             <div class="p-field p-col-4">
-                                <label for="nombreActe">Montant supporté<sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="nombreActe">Part de l'assuré(e)<span class="required">*</span></label>
                                 <p-inputNumber formControlName="montantSupporte" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
                             </div>
                             
                             <div class="p-field p-col-4">
-                                <label for="sousActe">Decision <sup style="color: red !important; size: 1.4em;">*</sup></label>
+                                <label for="sousActe">Decision <span class="required">*</span></label>
                                 <p-dropdown inputId="decision" [filter]="true"
                                             showClear="true" [options]="typeSort"
                                             formControlName="sort"
@@ -391,7 +391,7 @@
                                 <p-inputNumber formControlName="montantPlafond" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
                             </div>
                             <div class="p-field p-col-4">
-                            <label for="observation">Observation</label>
+                            <label for="observation">Observation <span class="required">*</span></label>
                             <textarea pInputTextarea formControlName="observation" autoResize="autoResize"></textarea>
                             </div>
                            </div>

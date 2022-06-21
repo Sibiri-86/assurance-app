@@ -287,6 +287,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.dateEffet = this.myForm.get('dateIncorparation').value;
         this.historiqueAvenant1.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant1.observation = this.myForm.get('observation').value;
+        this.historiqueAvenant1.dateSaisie = this.myForm.get('dateSaisie').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
                 this.historiqueAvenant1.typeDemandeur = TypeDemandeur.GARANT;
@@ -553,7 +554,8 @@ export class AvenantIncorporationComponent implements OnInit{
                         observation: res.observation,
                         demandeur: res.typeDemandeur,
                         fraisBadges: res.fraisBadges,
-                        fraisAccessoires: res.fraisAccessoires
+                        fraisAccessoires: res.fraisAccessoires,
+                        dateSaisie: new Date(res.dateSaisie)
                     });
                     this.exercice = res.exercice;
                     console.log('this update exercice', this.exercice);

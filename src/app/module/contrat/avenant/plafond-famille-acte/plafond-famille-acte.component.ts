@@ -193,6 +193,7 @@ export class PlafondFamilleActeComponent implements OnInit {
   }
 
   getsHistoriquePlafondGroupeActe(historiqueAvenantFamilleActe: HistoriquePlafondFamilleActe) {
+    this.historiquePlafondActePlafongConfig = [];
     console.log('entrée ==============  ');
     console.log('historiqueAvenantFamilleActe ==============  ', historiqueAvenantFamilleActe);
     console.log('this.avenant1 ==============  ', this.avenant1);
@@ -200,6 +201,7 @@ export class PlafondFamilleActeComponent implements OnInit {
     .subscribe( (res) => {
         this.historiquePlafondActePlafongConfig = res;
         console.log('historiquePlafondActePlafongConfig ==============  ', this.historiquePlafondActePlafongConfig);
+        historiqueAvenantFamilleActe = {};
     });
   }
 

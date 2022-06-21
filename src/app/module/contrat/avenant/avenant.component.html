@@ -2347,7 +2347,7 @@
                             </div>
                             <div class="p-col-2">
                                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                    <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help"
+                                    <button pButton pRipple label="Exporter" [disabled]="adherentsListeActuelleByExercice.length > 1" icon="pi pi-upload" class="p-button-help"
                                             (click)="dtAL.exportCSV()"></button>
                                 </div>
                             </div>
@@ -2471,8 +2471,9 @@
                         
                         <div class="p-grid mt-3">
                             
-                                <span *ngIf="historiqueAvenantPrime?.primeTotal" class="prime"> {{historiqueAvenantPrime?.primeTotal | formatTableValue: 'number':true}} FCFA </span>
-                                <span *ngIf="!historiqueAvenantPrime?.primeTotal === null" class="primeNull"> Aucun avenant validé a cet instant FCFA </span>
+                                <span *ngIf="historiqueAvenantPrime?.primeTotaleEncaissee" class="primeCaisse">Prime Totale encaissée =>  {{historiqueAvenantPrime?.primeTotaleEncaissee | formatTableValue: 'number':true}} FCFA </span>
+                                <span *ngIf="historiqueAvenantPrime?.primeTotalRestituee" class="primeRendu">Prime Totale restituée =>  {{historiqueAvenantPrime?.primeTotalRestituee | formatTableValue: 'number':true}} FCFA </span>
+                                <span *ngIf="historiqueAvenantPrime?.primeTotalCalcul" class="prime"> Prime Réelle de la police =>  {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue: 'number':true}} FCFA </span>
         
                             <!-- <div class="p-col-2">
                                 <button type="button" pButton pRipple label="Valider Prime" icon="pi pi-save" class="p-button p-button-success"

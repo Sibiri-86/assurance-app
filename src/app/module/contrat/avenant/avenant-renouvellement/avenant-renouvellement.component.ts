@@ -583,6 +583,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     ngOnInit(): void {
         // this.loadActivedExercice(this.police);
         // this.loadLastExercice(this.police);
+        console.log('etat======>', this.etat);
         this.curentPolice = this.police;
         this.historiqueAveantAdherants = [];
         this.adherantListTmp = [];
@@ -748,7 +749,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             });
 
-            // this.loadExerciceByPolice(this.police);
+           //  this.loadExerciceByPolice(this.police);
 
         // this.loadListeActualisee();
         this.loadAdherantByPolice();
@@ -1088,6 +1089,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.objet.historiqueAvenantAdherants.forEach(haa => haa.id === null);
         this.objet.historiqueAvenantAdherantDels.forEach(haa => haa.id === null);
         this.objet.historiqueAvenant = this.historiqueAvenant;
+        this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
         switch (this.myForm.get('demandeur').value.value) {
             case TypeDemandeur.GARANT:
                 this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
@@ -1128,7 +1130,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log(this.objet);
         console.log('*********************avenant.groupe.prime*********************************');
     
-        // this.eventEmitterM.emit(this.objet);
+        this.eventEmitterM.emit(this.objet);
     }
 
     addAvenantAdherant(event: HistoriqueAvenant): void {
@@ -1171,9 +1173,13 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     changePrime(event) {
+        console.log("=====event=====>", event);
         this.selectedTypePrime = event.value;
         this.primeForm.get('prime').setValue(this.selectedTypePrime);
         this.primeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+        this.groupeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+        console.log("=====this.selectedTypePrime.libelle=====>", this.selectedTypePrime.libelle);
+        console.log("=====this.groupeForm.get('prime').=====>", this.groupeForm.get('prime').value);
         this.primeForm.reset({});
     }
 
@@ -1538,6 +1544,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                         demandeur: res.historiqueAvenant.typeDemandeur,
                         fraisBadges: res.historiqueAvenant.fraisBadges,
                         fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
+                        dateSaisie: new Date(res.historiqueAvenant.dateSaisie)
                       
                     });
                     this.objet.historiqueAvenant = res.historiqueAvenant;
