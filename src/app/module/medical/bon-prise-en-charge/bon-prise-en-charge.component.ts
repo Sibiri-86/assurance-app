@@ -43,7 +43,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
-import { CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { CheckPlafond, CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../common/models/enum.etat.sinistre';
@@ -61,6 +61,7 @@ import * as selectorsBonPriseEnCharge from '../../../store/medical/bon-prise-en-
 import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge/state';
 import { KeycloakService } from 'keycloak-angular';
 import { ConventionService } from 'src/app/store/medical/convention/service';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -120,12 +121,16 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   typeBon: Array<SelectItem>;
   montantConvention :number = 0;
+  montantConsomme: number = 0;
+  montantPlafond: number = 0;
+  plafondSousActe: CheckPlafond;
  // userCurent: Us
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private keycloak: KeycloakService,
                private conventionService: ConventionService,
+               private tierPayantService: TierPayantService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -174,6 +179,15 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       medecin: new FormControl()
     });
   }
+
+  findMontantConsomme(event){
+    console.log(event);
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+
+        this.montantConsomme = rest;
+       
+    });
+}
 
   ngOnInit(): void {
     this.typeBon = [{label: 'PRISE-EN-CHARGE', value: 'PRISEENCHARGE'},
@@ -411,8 +425,26 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     });
   }
 
+  selectDateSoins(event){
+    this.plafondSousActe = {};
+    this.plafondSousActe.sousActe =  event.value; 
+    this.plafondSousActe.dateSoins = new Date();
+    this.plafondSousActe.adherent = this.adherentSelected;
+   
+   
+    this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+    this.store.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+          this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
+      } 
+    
+    });
+    }
+  
   calculDebours(i: number) {
     let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+console.log(myForm);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
     this.conventionService.$findMontantConvention(this.prestationForm.get('prestation').value[i]?.sousActe?.id).subscribe((rest)=>{
       this.montantConvention = rest;
@@ -433,6 +465,11 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       (this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100 });
     }
+    console.log(this.montantConsomme, this.montantPlafond);
+   
+
+
+//  if(this.montantConsomme > )
  
     this.prefinancementModel = this.prestationForm.value;
     this.prefinancementModel.dateSaisie = new Date();
@@ -461,6 +498,13 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
         }
         }
     });
+    if(this.montantConsomme > this.montantPlafond) {
+      myForm.patchValue({montantRembourse: 0}); 
+      myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+      myForm.patchValue({observation: "Vous avez atteint le plafond"}); 
+      myForm.patchValue({sort: Sort.REJETE}); 
+
+    }
   });
     this.prefinancementList = [];
     this.prefinancementModel = {};
