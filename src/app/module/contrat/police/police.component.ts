@@ -1609,7 +1609,17 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onRowEditSaveAdherentFamille(adherentFamille: Adherent, index: number) {
+    this.controleDateNaissanceEnfant(adherentFamille);
     delete this.clonedPlafondFamilleActe[index];
+  }
+
+  controleDateNaissanceEnfant(adherentFamille: Adherent) {
+    if(adherentFamille.qualiteAssure?.code === 'ENFANT') {
+      if(this.adherentForm.value.dateNaissance > adherentFamille.dateNaissance){
+        this.showToast("error", "INFORMATION", "la date de naissance de l'enfant ne doit pas etre supérieur à celle du père/mère");
+        adherentFamille.dateNaissance = null;
+      }
+    }
   }
 
   onRowEditCancelAdherentFamille(adherentFamille: Adherent, index: number) {
