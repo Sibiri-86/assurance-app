@@ -109,6 +109,8 @@ export class TierPayantEditionComponent implements OnInit {
     adherentSelect: Adherent;
     prestataireSelected: Prestataire = {};
     adherentSelected$: Observable<Adherent>;
+    adherentNomSelected$: Observable<Array<Adherent>>;
+    adherentNomSelected: Array<Adherent>;
     medecinListFilter: Array<SelectItem>;
     tierPayantList: Array<SinistreTierPayant> = [];
     prefinancementDetail: SinistreTierPayant = {};
@@ -163,6 +165,7 @@ export class TierPayantEditionComponent implements OnInit {
     montantPlafond: number = null; 
     montantConvention: number = 0;
     montantConsomme: number = 0;
+    displayAdherent = false;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
 
 
@@ -630,6 +633,19 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 this.prestationAdd.adherent = value;
                 console.log(this.prestationAdd.adherent);
+            }
+        });
+    }
+
+    rechercherAdherentByNom(event) {
+        this.displayAdherent = true;
+        this.adherentNomSelected$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.searchAdherentByNom({nom: event.target.value}));
+        this.adherentNomSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.adherentNomSelected = value;
+               
             }
         });
     }

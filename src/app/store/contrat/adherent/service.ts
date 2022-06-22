@@ -79,6 +79,16 @@ posAdherent(Adherent: Adherent): Observable<any> {
     }
   }
 
+  searchAdherentByNom(nom: string): Observable<AdherentList> {
+    // @FIXME: post request
+    if (nom) {
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByNom/${nom}`).pipe(
+      map((response: AdherentList) => response)
+      //catchError(this.handleError())
+     );
+    }
+  }
+
 deleteAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${Adherent.id}`, Adherent);

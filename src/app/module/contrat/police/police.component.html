@@ -330,6 +330,7 @@
                         <th>Domaine</th>
                         <th>Date effet</th>
                         <th>Status</th>
+                        <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
@@ -440,7 +441,7 @@
                     <tr >
                     <td colspan="11">
                         <div class="">
-                            <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="400px">
+                            <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" >
                     <tr>
                         <th></th>
                         <th></th>
@@ -557,7 +558,7 @@
                         <tr>
                             <td colspan="11">
                                 <div class="">
-                                    <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="500px">
+                                    <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" >
                         <tr>
                             <th></th>
                             <th></th>
