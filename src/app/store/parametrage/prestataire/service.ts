@@ -45,6 +45,14 @@ pushFileToStorage(file: File): Observable<any> {
   return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_PRESTATAIRE)}/upload`, data, { headers: headers });
 }
 
+getPrestataireByDepartementId(idDep: string): Observable<Prestataire[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_PRESTATAIRE)}/departementList/${idDep}`).pipe(
+      map((response: Prestataire[]) => response),
+      catchError(this.handleError())
+  );
+}
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

@@ -171,10 +171,10 @@
                     </div>
                     <div class="p-grid p-justify-between">
                         <div>
-                        <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" (click)="annulerSaisie()"></button>
+                        <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-danger" (click)="annulerSaisie()"></button>
                         </div>
                         <div>
-                        <button  [disabled]="editForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" type="submit"></button>
+                        <button  [disabled]="editForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-success" type="submit"></button>
                         </div>
                     </div>
             </form>

@@ -1184,7 +1184,14 @@ export const DATA_DEFINITION = [
       },
 
       {
-        field: 'localite', header: 'Localité', type: 'string', width: 1, text_center: false,
+        field: 'idDepartement', header: 'Province', width: 1, label: 'libelleDepartement', text_center: false,
+        validators: [Validators.required], type: 'dropdown', dropObj: {
+          action: departementActions.loadDepartement(),
+          selector: departementList,
+          key: 'id',
+          field: 'idDepartement',
+          optionLabel: 'libelle'
+        }
       },
       {
         field: 'longitude', header: 'Longitude', type: 'number', width: 1, text_center: false,

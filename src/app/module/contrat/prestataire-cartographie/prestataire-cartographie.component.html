@@ -5,12 +5,27 @@
         </div>
     </div>
 </div> -->
-<div class="p-grid">
-    <div class="card">
-        <div class="map-container">
-            <div class="map-frame">
-            <div id="frugalmap"></div>
+
+        <div class="p-grid">
+            <div class="p-field p-col-3 de">
+                <div class="card d" >
+                    <label for="lastname2" style="font-weight: bold;">Département</label><br>
+                    <p-dropdown [style]="{width: '218px'}" inputId="departement" [filter]="true" showClear="true" dataKey="id"
+                                [options]="departementList"  [(ngModel)]="selectedDepartement" 
+                                (onChange)="onDepartementChange(selectedDepartement)"
+                                placeholder="Selectionner un département" optionLabel="libelle">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-field p-col-9">
+                <div class="map-container">
+                    <div class="map-frame">
+                    <div id="frugalmap"></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+
+
+
