@@ -1051,11 +1051,16 @@ export class TierPayantEditionComponent implements OnInit {
             }
 
             if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) > this.montantPlafond  ) {
-           
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationAdd.montantRembourse;
+               
+
 
                 this.prestationAdd.sort = Sort.ACCORDE;
                 this.prestationAdd.observation = "Remborsement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond -(this.montantConsomme +  (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100)) ;
                 this.prestationAdd.montantRembourse = this.montantPlafond - this.montantConsomme;
+                this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+
+                this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
