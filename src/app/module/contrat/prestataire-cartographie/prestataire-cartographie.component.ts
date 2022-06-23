@@ -10,6 +10,10 @@ import { AppState } from 'src/app/store/app.state';
 import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 import { loadPrestataire} from '../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
+import { Departement } from 'src/app/store/parametrage/departement/model';
+import * as departementSelector from "../../../store/parametrage/departement/selector";
+import { loadDepartement } from 'src/app/store/parametrage/departement/actions';
+import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
 
 @Component({
     selector: 'app-prestataire-cartographie',
@@ -17,10 +21,17 @@ import * as prestataireSelector from '../../../store/parametrage/prestataire/sel
     styleUrls: ['./prestataire-cartographie.component.scss']
 })
 
-export class PrestataireCartographieComponent implements AfterViewInit {
+export class PrestataireCartographieComponent implements OnInit, AfterViewInit {
     private map;
     private mapCart: any;
     private marker: any;
+    prestataireList$: Observable<Array<Prestataire>>;
+    prestataireList: Array<Prestataire>;
+    destroy$ = new Subject<boolean>();
+    departementList$: Observable<Array<Departement>>;
+    departementList: Array<Departement>;
+    selectedDepartement: Departement = {};
+    markersClsuters: any[] = [];
     /* prestataireList$: Observable<Array<Prestataire>>;
     prestataireList: Array<Prestataire>;
     destroy$ = new Subject<boolean>(); */
@@ -29,11 +40,93 @@ export class PrestataireCartographieComponent implements AfterViewInit {
     constructor(
                 private store: Store<AppState>,
                 private messageService: MessageService,
+                private prestataireService: PrestataireService,
                 private fb: FormBuilder) {
+    }
 
-                    
+    ngOnInit() {
         
+        this.loadPrestataire();
+        this.loadDepartement();
+    }
 
+    onDepartementChange(selectedDepartement: Departement) {
+        this.prestataireList = [];
+       // this.marker = null;
+        console.log('*******this.markersClsuters********>', this.markersClsuters);
+        if (this.markersClsuters?.length > 0) {
+            this.markersClsuters.forEach(m=> {
+                console.log('*******m********>', m);
+                this.mapCart?.removeLayer(m);
+            });
+            
+        }
+        this.prestataireService.getPrestataireByDepartementId(selectedDepartement.id).subscribe( (res) => {
+            this.prestataireList = res;
+            this.prestataireList.forEach(prest => {
+                const myIcon = L.icon({
+                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [15, 30],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [20, 35]
+                });
+                this.marker = L?.marker([prest.latitude, prest.longitude], {icon: myIcon});
+                this.marker?.addTo(this.mapCart);
+                this.marker?.bindTooltip('<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-home"></i> ' + prest.libelle + '<br>' +
+                    '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-user"></i> ' + prest.responsable  + '<br>' +
+                    '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-phone"></i> ' + prest.telephone);
+
+                // this.markersClsuter.addTo(this.mapCart);
+                this.markersClsuters?.push(this.marker);
+                
+            });
+            
+            console.log('historiquePlafondActePlafongConfig ==============  ', this.prestataireList);
+        });
+    }
+
+    loadPrestataire() {
+        this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
+        this.store.dispatch(loadPrestataire());
+        this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.prestataireList = value.slice();
+                console.log('**************>', this.prestataireList);
+                this.prestataireList.forEach(prest => {
+                    const myIcon = L.icon({
+                        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [15, 30],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [20, 35]
+                    });
+                    this.marker = L?.marker([prest.latitude, prest.longitude], {icon: myIcon});
+                    this.marker?.addTo(this.mapCart);
+                    this.marker?.bindTooltip('<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-home"></i> ' + prest.libelle + '<br>' +
+                        '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-user"></i> ' + prest.responsable  + '<br>' +
+                        '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-phone"></i> ' + prest.telephone);
+
+                    // this.markersClsuter.addTo(this.mapCart);
+                    this.markersClsuters?.push(this.marker);
+                    
+                });
+            }
+        });
+    }
+
+    loadDepartement() {
+        this.departementList$ = this.store.pipe(
+            select(departementSelector.departementList)
+          );
+          this.store.dispatch(loadDepartement());
+          this.departementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+              this.departementList = value.slice();
+            }
+          });
     }
 
    
@@ -101,11 +194,22 @@ export class PrestataireCartographieComponent implements AfterViewInit {
         });
     } */
 
+
     ngAfterViewInit(): void {
-        this.createMap();
+        this.initMap();
+    }
+
+
+    private initMap(): void {
+        this.mapCart = L.map('frugalmap').setView([12.337372161077168, -1.5596362929761654], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            minZoom: 3,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">SidiOpenStreetMap</a>'
+        }).addTo(this.mapCart);
     }
     createMap(){
-        const bf = {
+        /* const bf = {
             lat: 12.337372161077168,
             lng: -1.5596362929761654,
         };
@@ -124,15 +228,15 @@ export class PrestataireCartographieComponent implements AfterViewInit {
         });
 
 
-        mainLayer.addTo(this.mapCart);
+        mainLayer.addTo(this.mapCart); */
 
-        const myIcon = L.icon({
+        /* const myIcon = L.icon({
             iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
+            iconSize: [15, 30],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            shadowSize: [20, 35]
         });
 
         this.marker = L?.marker([11.1783203, -4.3372768 ], {icon: myIcon}).addTo(this.mapCart);
@@ -140,7 +244,7 @@ export class PrestataireCartographieComponent implements AfterViewInit {
         this.marker = L?.marker([12.3828613, -1.4925553 ], {icon: myIcon}).addTo(this.mapCart);
         this.marker?.bindTooltip( "Clinique Frany"+ '<br>'+"téléphone:  25 36 99 32 ");
         this.marker = L?.marker([12.332294, -1.5633487 ], {icon: myIcon}).addTo(this.mapCart);
-        this.marker?.bindTooltip( "Clinique Source de vie"+'<br>'+"téléphone:  78 56 98 46 ");
+        this.marker?.bindTooltip( "Clinique Source de vie"+'<br>'+"téléphone:  78 56 98 46 "); */
 
         /* vimso
         12.375100

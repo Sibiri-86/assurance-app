@@ -203,6 +203,9 @@ export interface HistoriqueAvenantPrime {
     primeTTC?: number;
     taxeTTC?: number;
     status?: boolean;
+    primeTotaleEncaissee?: number;
+    primeTotalRestituee?: number;
+    primeTotalCalcul?: number;
 }
 
 export enum TypeDemandeur {

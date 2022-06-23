@@ -1,3 +1,4 @@
+import { Departement } from "../departement/model";
 
 export interface Prestataire {
     id?: string,
@@ -10,7 +11,9 @@ export interface Prestataire {
     libelleNaturePrestataire?: string;
     responsable?: string;
     telephone?: string;
-    localite?: string;
+    idDepartement?: string;
+    libelleDepartement?: string;
+    codeDepartement?: string;
     longitude?: number;
     latitude?: number;
 

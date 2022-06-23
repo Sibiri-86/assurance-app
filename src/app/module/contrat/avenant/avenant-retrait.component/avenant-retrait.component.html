@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-col-3" *ngIf="etat === 'CREATE'">
+        <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
             <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                         [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
@@ -99,7 +99,7 @@
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Initiateur <span style="color: red !important; size: 2em">*</span></label>
                         <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true"
-                                    [options]="demandeursList" [disabled]="!this.myForm.get('dateAvenant').value" formControlName="demandeur"
+                                    [options]="demandeursList" [disabled]="!this.myForm.get('dateAvenant').value || etat ==='VIEW'" formControlName="demandeur"
                                     placeholder="Select" optionLabel="libelle"></p-dropdown>
                     </div>
                     <div class="p-field p-col-6">

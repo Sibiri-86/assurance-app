@@ -88,6 +88,7 @@ export class AvenantResiliationComponent implements OnInit {
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.historiqueAvenant.typeDemandeur = this.myForm.get('typeDemandeur').value;
     this.historiqueAvenant.exercice = this.exercice;
+    this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
     // this.historiqueAvenant.police = this.police;
 
     this.eventEmitterResiliation.emit(this.historiqueAvenant);
@@ -159,6 +160,7 @@ export class AvenantResiliationComponent implements OnInit {
                 fraisAccessoires: 0,
                 dateEffet: new Date(res.dateAvenant),
                 typeDemandeur: res.typeDemandeur,
+                dateSaisie: new Date(res.dateSaisie)
             });
             if(this.etat === 'VIEW') {
               this.myForm.disable();

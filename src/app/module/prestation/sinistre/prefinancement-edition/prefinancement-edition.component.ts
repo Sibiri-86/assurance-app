@@ -173,21 +173,21 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       coutUnitaire: new FormControl('', [Validators.required]),
       debours: new FormControl(),
       sousActe: new FormControl(Validators.required),
-      baseRemboursement: new FormControl(),
-      taux: new FormControl(),
-      montantRembourse: new FormControl(),
+      baseRemboursement: new FormControl('', [Validators.required]),
+      taux: new FormControl('', [Validators.required]),
+      montantRembourse: new FormControl('', [Validators.required]),
       montantPlafond: new FormControl(),
       sort: new FormControl(),
-      montantRestant: new FormControl(),
-      montantSupporte: new FormControl(),
-      observation: new FormControl(),
+      montantRestant: new FormControl('', [Validators.required]),
+      montantSupporte: new FormControl('', [Validators.required]),
+      observation: new FormControl('', [Validators.required]),
       prestataire: new FormControl(),
       centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(),
       dateSoins: new FormControl(null, Validators.required),
-      acte: new FormControl(),
-      familleActe: new FormControl(),
+      acte: new FormControl(null, [Validators.required]),
+      familleActe: new FormControl(null, [Validators.required]),
       medecin: new FormControl(),
       historiqueAvenant: new FormControl(),
       inotPlafond: new FormControl(),
@@ -212,7 +212,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       montantRestant: new FormControl(0),
       bonPriseEnCharge: new FormControl(),
       prestation: this.formBuilder.array([]),
-      dateRetrait: new FormControl()
+      dateRetrait: new FormControl({value: '', disabled: true})
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -242,10 +242,15 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         this.adherentSelected = value;
         console.log('***********this.adherentSelected***********', this.adherentSelected);
         console.log(this.adherentSelected);
-        this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
-        this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+        this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+        // this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        if (this.adherentSelected.adherentPrincipal != null) {
+          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+      } else {
+          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+      }
         if(this.adherentSelected.signeAdherent ==='-') {
           this.addMessage('error', 'Assuré(e) non pris en compte',
                         'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
@@ -461,8 +466,12 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.adherentSelected = pref.adherent;
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
-    this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
-    this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+    this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    if (this.adherentSelected.adherentPrincipal != null) {
+      this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+  } else {
+      this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+  }
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
@@ -562,7 +571,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         }
       /* Gestion des personnes rétirées au front */
       if (this.adherentSelected.signeAdherent ==='-') {
-        if(this.prestationForm.get('dateSaisie').value >= this.prestationForm.get('dateRetrait').value) {
+        if(this.prestationForm.get('dateSaisie').value >= this.prestationForm.get('dateRetrait').value ||
+        this.prestationForm.get('dateRetrait').value <= myForm.get('dateSoins').value) {
           myForm.patchValue({
             sort: Sort.REJETE,
             observation: "Assuré(e) rétiré(e)",
@@ -698,6 +708,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
   }
+
+  myStyle(): object {
+    return {"background-color":"red"};
+  } 
 
 }
 

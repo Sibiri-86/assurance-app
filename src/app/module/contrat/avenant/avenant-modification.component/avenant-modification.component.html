@@ -1124,7 +1124,7 @@
         </div>
         <div class="p-col-2">
             <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="createAvenantModif()" [disabled]="myForm.invalid"></button>
+                    (click)="createAvenantModif()" [disabled]="myForm.invalid || etat==='VIEW'"></button>
         </div>
     </div>
 </div>

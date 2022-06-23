@@ -1116,6 +1116,7 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.objet.historiqueAvenant.exercice = this.curentExercice;
+    this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
     console.log("this.curentExercice**************", this.curentExercice);
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
@@ -1575,6 +1576,7 @@ export class AvenantModificationComponent implements OnInit {
                     demandeur: res.historiqueAvenant.typeDemandeur,
                     fraisBadges: res.historiqueAvenant.fraisBadges,
                     fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
+                    dateSaisie: new Date(res.historiqueAvenant.dateSaisie)
                   
                 });
                 this.objet.historiqueAvenant.id = res.historiqueAvenant?.id;

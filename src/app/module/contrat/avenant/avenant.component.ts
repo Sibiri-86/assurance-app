@@ -1494,8 +1494,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   /* methode pour calculer la prime totale par police */
  getPolicePrimeTotale(police: Police): void {
-    this.displayPrimeTotalePolice = true;
     this.getPrimeTotalByPoliceId();
+    this.displayPrimeTotalePolice = true;
   }
 
   

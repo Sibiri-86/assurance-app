@@ -125,12 +125,12 @@ export class AvenantRetraitComponent implements OnInit {
         }
     ); */
     // this.loadActivedExercice(this.police);
-    if(this.etat==='CREATE') {
+    if(this.etat==='CREATE' || this.isRenouv) {
       this.loadExerciceByPolice(this.police);
       this.loadLastExercice();
     }
     // this.findListeActualisee(this.police);
-    if(this.etat !== 'CREATE') {
+    if(this.etat !== 'CREATE || isRenouv') {
       this.updateAvenant(this.avenantId);
     }
   }
@@ -267,6 +267,7 @@ export class AvenantRetraitComponent implements OnInit {
       this.historiqueAvenant.numero = this.myForm.get('numero').value;
       this.historiqueAvenant.observation = this.myForm.get('observation').value;
       this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
+      this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
       this.historiqueAvenant.groupe = this.groupe;
       this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
       this.historiqueAvenant.exercice = this.curentExercice;
@@ -451,6 +452,7 @@ export class AvenantRetraitComponent implements OnInit {
               this.myForm.setValue({
                   id: avenantId,
                   numero: res.numero,
+                  dateSaisie: new Date(res.dateSaisie),
                   dateAvenant: new Date(res.dateAvenant),
                   observation: res.observation,
                   demandeur: res.typeDemandeur,

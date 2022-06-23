@@ -392,4 +392,5 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/contrat/groupe/police_id_same_in_groupe_and_histo_ave`,
             mock: `assets/mock/contrat/groupe.mock.json`
         };
+
 }
