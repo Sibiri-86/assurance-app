@@ -443,6 +443,16 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     }
   
   calculDebours(i: number) {
+    if(this.prestationForm.get('prestation')?.value?.length > 1) {
+      this.prestationForm.get('prestation')?.value.forEach(prestation=>{
+        console.log( "+++++++++++.+++", prestation?.montantRembourse);
+
+        if(prestation?.sousActe.id === this.prestationForm.get('prestation').value[i]?.sousActe?.id && !prestation.id) {
+          this.montantConsomme = this.montantConsomme + prestation?.montantRembourse;
+          console.log( "+++++++ this.montantConsomme++",  this.montantConsomme);
+        }
+      });
+    }
     let myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
 console.log(myForm);
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
@@ -463,7 +473,20 @@ console.log(myForm);
       this.prestationForm.get('prestation').value[i].nombreActe *
       this.prestationForm.get('prestation').value[i].coutUnitaire, montantRembourse :
       (this.prestationForm.get('prestation').value[i].nombreActe *
-      this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100 });
+      this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100});
+      if((this.montantConsomme + this.prestationForm.get('prestation').value[i]?.montantRembourse) < this.montantPlafond) {
+        myForm.patchValue({ montantRembourse :
+          (this.prestationForm.get('prestation').value[i].nombreActe *
+          this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100 });
+      }else {
+        console.log("======sousctra=========",this.montantPlafond - this.montantConsomme);
+        if((this.montantPlafond - this.montantConsomme) >= 0) {
+          myForm.patchValue({ montantRembourse : this.montantPlafond - this.montantConsomme });
+
+        } 
+
+      }
+     
     }
     console.log(this.montantConsomme, this.montantPlafond);
    
@@ -477,7 +500,7 @@ console.log(myForm);
     this.prefinancementList.push(this.prefinancementModel);
     /* executer le controle de la prestation */
     
-    this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
+  /*  this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (!value) {
@@ -491,19 +514,24 @@ console.log(myForm);
             sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
             observation: this.checkPrefinancementResult[j].message
           });
+          console.log(this.checkPrefinancementResult[j].montantRestant);
           if(!this.checkPrefinancementResult[j].montantRestant) {
             myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
           }
           
         }
         }
-    });
+    });*/
     if(this.montantConsomme > this.montantPlafond) {
       myForm.patchValue({montantRembourse: 0}); 
       myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
       myForm.patchValue({observation: "Vous avez atteint le plafond"}); 
       myForm.patchValue({sort: Sort.REJETE}); 
 
+    } else {
+      
+        myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+        myForm.patchValue({observation: "Remborsement favorable"}); 
     }
   });
     this.prefinancementList = [];
