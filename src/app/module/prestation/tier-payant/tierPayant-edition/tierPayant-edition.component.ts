@@ -976,9 +976,13 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
-                    this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
-                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ){
 
+                        this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                        this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+    
+                    } 
+                   
                 } else {
                     this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
                 }
@@ -1005,10 +1009,18 @@ export class TierPayantEditionComponent implements OnInit {
                     // this.prefinancement.montantPaye =this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                         console.log("=============montantPaye===============");
                         console.log(this.prefinancement.montantPaye);
+                        console.log("compter============",this.compteur);
                         console.log("===============montantPaye=============");
-                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
-                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
 
+                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ) {
+                           
+                       
+                            this.prefinancement.montantPaye = this.prefinancement.montantPaye +  this.prestationAdd.montantRembourse;
+                            this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+    
+                          //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+                        }
+                       
                         // const valeurprecedent = this.prefinancement.montantPaye;
             
                     }
@@ -1051,14 +1063,16 @@ export class TierPayantEditionComponent implements OnInit {
             }
 
             if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) > this.montantPlafond  ) {
-                this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationAdd.montantRembourse;
-               
 
 
                 this.prestationAdd.sort = Sort.ACCORDE;
                 this.prestationAdd.observation = "Remborsement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond -(this.montantConsomme +  (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100)) ;
                 this.prestationAdd.montantRembourse = this.montantPlafond - this.montantConsomme;
                 this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                console.log("=============montantRembourse=============",this.prestationAdd.montantRembourse);
+                console.log("=============montantRembourse=============",this.prefinancement.montantPaye);
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                console.log("=============montantRembourse2=============",this.prefinancement.montantPaye);
 
                 this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
