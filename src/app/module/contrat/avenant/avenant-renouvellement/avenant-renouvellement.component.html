@@ -1,5 +1,5 @@
 <div class="p-fluid">
-    <p-tabView>
+    <p-tabView (onChange)="onTabChange($event)">
         <p-tabPanel header="INFOS" leftIcon="pi pi-info" tooltip="Information sur la police" [style]="{'width': '100%'}">
             <!-- <div class="p-fluid p-formgrid p-grid">
                 <div class="p-col-4">
@@ -57,7 +57,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
                             <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
-                            <input id="numero" type="number" min="0" formControlName="numero" pInputText>
+                            <input id="numeroGarant" type="number" min="0" formControlName="numeroGarant" pInputText>
                         </div>
                         <div class="p-field p-col-4">
                             <label for="dateAvenant">Date de l'avenant <sup></sup></label>
@@ -262,6 +262,16 @@
                         </div>
                     </div>
                 </div>
+                </p-fieldset>
+
+                <p-fieldset legend="Enregistrement des infos de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                    
+                    
+                        <div class="p-grid p-justify-center">
+                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                            <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantInfo()"></button>
+                        </div>
+
                 </p-fieldset>
 
         </p-tabPanel>
@@ -1074,11 +1084,11 @@
     <hr>
     <div class="p-grid">
         <div class="p-col-4"></div>
-        <div class="p-col-2">
-            <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
-        </div>
-        <div class="p-col-2">
-            <button type="button" [disabled]="myForm.invalid || etat==='VIEW'" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
-        </div>
+            <div class="p-col-2">
+                <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+            </div>
+            <div class="p-col-2">
+                <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+            </div>
     </div>
 </div>

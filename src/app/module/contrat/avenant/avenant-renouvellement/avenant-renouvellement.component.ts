@@ -213,6 +213,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     historiqueAvenantList: Array<HistoriqueAvenant>;
     exercice$: Observable<Exercice>;
     overlapVariable: boolean;
+    isActif: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -250,7 +251,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             id: new FormControl(null),
             debut: new FormControl('', [Validators.required]),
             fin: new FormControl('', [Validators.required]),
-            actived: new FormControl('', [Validators.required]),
+            actived: new FormControl(''),
             typeDuree: new FormControl('', [Validators.required]),
             duree: new FormControl('', [Validators.required]),
         });
@@ -309,7 +310,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
         this.myForm = this.formBuilder.group({
             id: new FormControl(null),
-            numero: new FormControl(null),
+            numeroGarant: new FormControl(null),
             dateAvenant: new FormControl(null, [Validators.required]),
             dateEffet: new FormControl(null, ),
             dateEcheance: new FormControl(null, ),
@@ -583,6 +584,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     ngOnInit(): void {
         // this.loadActivedExercice(this.police);
         // this.loadLastExercice(this.police);
+        this.isActif = false;
         console.log('etat======>', this.etat);
         this.curentPolice = this.police;
         this.historiqueAveantAdherants = [];
@@ -1085,6 +1087,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
         this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
+        this.historiqueAvenant.isTerminer = true;
         this.objet.historiqueAvenantAdherants = this.historiqueAveantAdherantList;
         this.objet.historiqueAvenantAdherants.forEach(haa => haa.id === null);
         this.objet.historiqueAvenantAdherantDels.forEach(haa => haa.id === null);
@@ -1126,6 +1129,40 @@ export class AvenantRenouvellementComponent implements OnInit {
         if (this.objet.groupe.prime.primeFamille) {
             this.objet.groupe.prime.primeFamille = removeBlanks(this.objet.groupe.prime.primeFamille + '');
         } */
+        console.log('*********************aveanant*********************************');
+        console.log(this.objet);
+        console.log('*********************avenant.groupe.prime*********************************');
+    
+        this.eventEmitterM.emit(this.objet);
+    }
+
+    createAvenantInfo(): void {
+        
+        this.objet.police = this.police;
+        this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
+        this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+        this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
+        this.historiqueAvenant.exercice = this.exerciceForm.value;
+        this.objet.exercice = this.exerciceForm.value;
+        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+        this.historiqueAvenant.observation = this.myForm.get('observation').value;
+        this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
+        this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;
+        this.historiqueAvenant.isTerminer = false;
+        this.objet.historiqueAvenant = this.historiqueAvenant;
+        this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
+        switch (this.myForm.get('demandeur').value.value) {
+            case TypeDemandeur.GARANT:
+                this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+                break;
+            case TypeDemandeur.SOUSCRIPTEUR:
+                this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+                break;
+            case TypeDemandeur.VIMSO:
+                this.objet.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
+                break;
+            default: break;
+        }
         console.log('*********************aveanant*********************************');
         console.log(this.objet);
         console.log('*********************avenant.groupe.prime*********************************');
@@ -1537,7 +1574,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                     this.numero = res.historiqueAvenant.numeroGarant;
                     this.myForm.patchValue({
                         id: res.historiqueAvenant.id,
-                        numero: res.historiqueAvenant.numero,
+                        numeroGarant: res.historiqueAvenant.numeroGarant,
                         dateEffet: new Date(res.historiqueAvenant.dateAvenant),
                         dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
                         observation: res.historiqueAvenant.observation,
@@ -1672,4 +1709,9 @@ export class AvenantRenouvellementComponent implements OnInit {
           }
         );
     }
+
+    onTabChange(event): void {
+        var index = event.index;
+        console.log('****index****', index);
+      }
 }

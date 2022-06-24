@@ -44,6 +44,7 @@ export interface HistoriqueAvenant {
     dateSaisie?: Date;
     exerciceId?: string;
     groupeId?: string;
+    isTerminer?: boolean;
 }
 
 export enum TypeEtat {
