@@ -262,6 +262,7 @@ export class TierPayantEditionComponent implements OnInit {
             montantRestant: new FormControl()
         });
 
+       
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
         this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -446,8 +447,10 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
 
-    verifierDateSoin() {
-
+    initilisation() {
+        if(!this.prefinancement.montantPaye) {
+            this.prefinancement.montantPaye = 0;
+        }
        
         
     }
@@ -680,10 +683,10 @@ export class TierPayantEditionComponent implements OnInit {
       const  index = 0;
         const prestaList: Prestation[] =$event.value.prestation; 
         
-        if(this.prefinancement.montantRestant == null ) {
+        if(!this.prefinancement.montantRestant) {
             this.prefinancement.montantRestant = this.prefinancement.montantReclame;
         }
-        if(this.prefinancement.montantPaye == null ) {
+        if(!this.prefinancement.montantPaye ) {
             this.prefinancement.montantPaye = 0;
         }
         if(this.prestationsList.length === undefined  || this.prestationsList.length === 0) {

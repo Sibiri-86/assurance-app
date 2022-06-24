@@ -224,7 +224,7 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="montantReclame" >Montant reclamé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber  [disabled]="!prefinancement.prestataire"   [(ngModel)]="prefinancement.montantReclame" name="montantReclame" mode="decimal" locale="fr-FR"   [inputStyle]="{'font-weight': 'bold'}"
+                                    <p-inputNumber  [disabled]="!prefinancement.prestataire"   [(ngModel)]="prefinancement.montantReclame" name="montantReclame" mode="decimal" locale="fr-FR" (change)="initilisation()"   [inputStyle]="{'font-weight': 'bold'}"
                                     placeholder="Saisir le montant reclamé par le prestataire"></p-inputNumber>
 
                                 </div>
