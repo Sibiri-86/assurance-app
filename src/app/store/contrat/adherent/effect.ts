@@ -178,6 +178,21 @@ this.actions$.pipe(
 )
 );
 
+searchAdherentByNom$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.searchAdherentByNom),
+    mergeMap(({nom}) =>
+        this.AdherentService.searchAdherentByNom(nom).pipe(
+            switchMap(value => [
+                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                featureActions.selectedAdherentByNomForSearch(value)
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
 findAdherents$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.findAdherents),

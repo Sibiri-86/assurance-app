@@ -329,7 +329,18 @@
                         <hr/>
 
                         <p-fieldset legend="Liste des Prestations" toggleable="true">
-                            <p-table [value]="prestationsList" dataKey="id" editMode="row" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+                            <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+                               
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                        </span>
+                                    </div>
+                                </ng-template>
                                 <ng-template pTemplate="header">
                                     <tr>
                                     
@@ -353,7 +364,7 @@
                                 
                                         <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                         <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
-                                        <td>{{rowData.adherent?.nom}}</td>
+                                        <td>{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
                                         <td>{{rowData.familleActe?.libelle}}</td>
                                         <td>{{rowData.acte?.libelle}}</td>
                     
@@ -442,8 +453,8 @@
                 </div>
                 <div class="p-field p-col-3">
                     <label for="policeAdherent">Numero police</label>
-                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
-                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
                 </div>
 
                 <div class="p-field p-col-3">
@@ -728,7 +739,18 @@
                     <hr/>
 
                     <p-fieldset legend="Liste des Sinistres" toggleable="true">
-                        <p-table [value]="prefinancementDetail.prestation" dataKey="id" editMode="row" responsiveLayout="scroll" [rows]="10" [paginator]="true">
+                        <p-table #dt [value]="prefinancementDetail.prestation" dataKey="id" [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
+                        'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']"
+                         editMode="row" responsiveLayout="scroll" [rows]="10" [paginator]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                    <h5 class="p-m-0"></h5>
+                                    <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                    </span>
+                                </div>
+                            </ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
                                 
@@ -752,7 +774,7 @@
                             
                                     <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                     <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
-                                    <td>{{rowData.adherent?.nom}}</td>
+                                    <td>{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
                                     <td>{{rowData.familleActe?.libelle}}</td>
                                     <td>{{rowData.acte?.libelle}}</td>
                 

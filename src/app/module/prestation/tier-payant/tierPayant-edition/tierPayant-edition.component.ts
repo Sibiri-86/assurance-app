@@ -109,6 +109,8 @@ export class TierPayantEditionComponent implements OnInit {
     adherentSelect: Adherent;
     prestataireSelected: Prestataire = {};
     adherentSelected$: Observable<Adherent>;
+    adherentNomSelected$: Observable<Array<Adherent>>;
+    adherentNomSelected: Array<Adherent>;
     medecinListFilter: Array<SelectItem>;
     tierPayantList: Array<SinistreTierPayant> = [];
     prefinancementDetail: SinistreTierPayant = {};
@@ -163,6 +165,7 @@ export class TierPayantEditionComponent implements OnInit {
     montantPlafond: number = null; 
     montantConvention: number = 0;
     montantConsomme: number = 0;
+    displayAdherent = false;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
 
 
@@ -634,6 +637,19 @@ export class TierPayantEditionComponent implements OnInit {
         });
     }
 
+    rechercherAdherentByNom(event) {
+        this.displayAdherent = true;
+        this.adherentNomSelected$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(featureActionAdherent.searchAdherentByNom({nom: event.target.value}));
+        this.adherentNomSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.adherentNomSelected = value;
+               
+            }
+        });
+    }
+
     rechercherAdherent(event) {
         console.log(event.target.value);
         this.prestationForm.get('nomAdherent').setValue('');
@@ -906,9 +922,10 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
+        console.log("======0=======",this.montantConsomme);
         const prestati: Prestation[] = this.prestationsList.filter(presta=>!presta.id && presta?.sousActe?.id === this.prestationAdd?.sousActe?.id);
         if(prestati?.length > 0) {
-            console.log(this.montantConsomme);
+            console.log("======1=======",this.montantConsomme);
             prestati.forEach(pre=>{
                 if(pre.montantRembourse) {
                     this.montantConsomme = this.montantConsomme + pre.montantRembourse;
@@ -917,12 +934,17 @@ export class TierPayantEditionComponent implements OnInit {
         }
         console.log(this.montantConsomme , this.montantPlafond);
         if(this.montantConsomme > this.montantPlafond  ) {
+            this.showToast('error', 'INFORMATION', 'Vous avez atteint votre plafond');
+
             console.log(this.montantConsomme , this.montantPlafond);
 
             this.prestationAdd.sort = Sort.REJETE;
-            this.prestationAdd.observation = "Vous avez atteint votre plafond" ;
+            this.prestationAdd.observation = "Vous avez atteint votre plafond " ;
             this.prestationAdd.montantRembourse = 0;
         }
+       
+
+       
         if(this.montantConvention !== 0 &&  this.montantConvention < this.prestationAdd.coutUnitaire) {
             this.showToast('error', 'INFORMATION', 'coût unitaire differnt du montant de la convention');
             const c =this.montantConvention - this.prestationAdd.coutUnitaire;
@@ -933,7 +955,9 @@ export class TierPayantEditionComponent implements OnInit {
 
             }
         }
-        if(this.montantPlafond === 0 ) {
+        if(this.montantPlafond === 0 || !this.montantPlafond ) {
+            this.showToast('error', 'INFORMATION', 'l\'assurance ne couvre pas ce produit');
+
             this.prestationAdd.sort = Sort.REJETE;
             this.prestationAdd.observation = "l'assurance ne couvre pas ce produit " ;
 
@@ -952,9 +976,13 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
-                    this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
-                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ){
 
+                        this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                        this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+    
+                    } 
+                   
                 } else {
                     this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
                 }
@@ -981,10 +1009,18 @@ export class TierPayantEditionComponent implements OnInit {
                     // this.prefinancement.montantPaye =this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                         console.log("=============montantPaye===============");
                         console.log(this.prefinancement.montantPaye);
+                        console.log("compter============",this.compteur);
                         console.log("===============montantPaye=============");
-                        this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
-                        this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
 
+                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ) {
+                           
+                       
+                            this.prefinancement.montantPaye = this.prefinancement.montantPaye +  this.prestationAdd.montantRembourse;
+                            this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+    
+                          //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+                        }
+                       
                         // const valeurprecedent = this.prefinancement.montantPaye;
             
                     }
@@ -1024,6 +1060,21 @@ export class TierPayantEditionComponent implements OnInit {
 
             if(!this.prestationAdd.observation) {
                 this.prestationAdd.observation= "remboursement favorable";
+            }
+
+            if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) > this.montantPlafond  ) {
+
+
+                this.prestationAdd.sort = Sort.ACCORDE;
+                this.prestationAdd.observation = "Remborsement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond -(this.montantConsomme +  (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100)) ;
+                this.prestationAdd.montantRembourse = this.montantPlafond - this.montantConsomme;
+                this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                console.log("=============montantRembourse=============",this.prestationAdd.montantRembourse);
+                console.log("=============montantRembourse=============",this.prefinancement.montantPaye);
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+                console.log("=============montantRembourse2=============",this.prefinancement.montantPaye);
+
+                this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
