@@ -428,8 +428,8 @@
                         <input id="matriculeAdherent" [disabled]="!prestationAdd.numeroBon" type="text"  [(ngModel)]="prestationAdd.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherent1($event)" pInputText>
                     </div>
                     <div class="p-field p-col-3">
-                        <label for="nomAdherent">Nom <span class="required">*</span></label>
-                        <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent" pInputText>
+                        <label for="nomAdherent">Nom & prenom bénéficiaire <span class="required">*</span></label>
+                        <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" disabled  [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent" pInputText>
                         <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherent" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent"  pInputText>
                     </div>
                 
@@ -441,11 +441,7 @@
                 </div>
             <div class="p-fluid p-formgrid p-grid">
                
-                <div class="p-field p-col-3">
-                    <label for="nomAdherent">Prenom<span class="required">*</span></label>
-                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherent" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent"  pInputText>
-                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherent" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherent" name="prenomAdherent" pInputText>
-                </div>
+                
                 <div class="p-field p-col-3">
                     <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.groupeAdherent" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
@@ -458,7 +454,13 @@
                 </div>
 
                 <div class="p-field p-col-3">
-                    <label for="nomAdherent">Nom Assuré Principal <span class="required">*</span></label>
+                    <label for="nomAdherent">Souscripteur<span class="required">*</span></label>
+                    <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="souscripteur" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.souscripteur" name="souscripteur"  pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="souscripteur" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.souscripteur" name="souscripteur" pInputText>
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label for="nomAdherent">Nom & prenom  Assuré Principal <span class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherentPrincipal" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal" pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherentPrincipal" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal"  pInputText>
                 </div>
@@ -474,9 +476,9 @@
                
 
             <div class="p-field p-col-3">
-                <label for="nomAdherent">Prénom Assuré Principal<span class="required">*</span></label>
-                <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="prenomAdherentPrincipal" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal"  pInputText>
-                <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="prenomAdherentPrincipal" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.prenomAdherentPrincipal" name="prenomAdherentPrincipal" pInputText>
+                <label for="nomAdherent">Nom du groupe<span class="required">*</span></label>
+                <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomGroupe" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.nomGroupe" name="nomGroupe"  pInputText>
+                <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomGroupe" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.nomGroupe" name="nomGroupe" pInputText>
             </div>
             <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col">
                 <label for="dateEffet">Date de retrait <span style="color: red !important;"></span></label>
@@ -635,7 +637,7 @@
 
             <div class="p-grid p-justify-between">
                 <div>
-                <button pButton pRipple label="Quitter" icon="pi pi-times" class="p-button-text" ></button>
+                <button pButton pRipple label="Quitter" icon="pi pi-times"   (click)="fermerPrestation()"></button>
                 </div>
                 <div>
                     <button  pButton pRipple label="Enregistrer" [disabled]="!prestationAdd.coutUnitaire"  (click)="addPrestation()" icon="pi pi-check" type="submit"></button>

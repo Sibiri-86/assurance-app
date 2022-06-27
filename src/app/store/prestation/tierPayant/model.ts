@@ -94,6 +94,8 @@ export interface Prestation {
     inotPlafond?: Boolean;
     pathologie?: Pathologie;
     dateRetrait?: Date; 
+    souscripteur?: string;
+    nomGroupe?: string;
 }
 
 export interface SinistreTierPayantList {

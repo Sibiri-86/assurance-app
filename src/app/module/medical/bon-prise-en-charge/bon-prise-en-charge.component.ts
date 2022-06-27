@@ -176,6 +176,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       pathologie: new FormControl(),
       dateSoins: new FormControl('', [Validators.required]),
       acte: new FormControl(),
+      familleActe: new FormControl(),
       medecin: new FormControl()
     });
   }
@@ -231,8 +232,14 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
         this.adherentSelected = value;
         this.prestationForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
         this.prestationForm.get('souscripteur').disable();
-        this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
-        this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+        this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom.concat(" ").concat(this.adherentSelected.prenom));
+        if(this.adherentSelected.adherentPrincipal) {
+          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom.concat(" ").concat(this.adherentSelected.adherentPrincipal.prenom));
+        }else {
+          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom.concat(" ").concat(this.adherentSelected.prenom));
+
+        }
+        
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
         //this.taux = this.adherentSelected.groupe.taux;
@@ -382,7 +389,13 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
     this.prestationForm.get('typeBon').setValue(pref.typeBon);
-    this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
+    this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom.concat(" ").concat(pref.adherent.prenom));
+        if(pref.adherent.adherentPrincipal) {
+          this.prestationForm.get('prenomAdherent').setValue(pref.adherent.adherentPrincipal.nom.concat(" ").concat(pref.adherent.adherentPrincipal.prenom));
+        }else {
+          this.prestationForm.get('prenomAdherent').setValue(pref?.adherent?.nom.concat(" ").concat(pref?.adherent?.prenom));
+
+        }
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom);
@@ -390,8 +403,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationForm.get('prestataire').setValue(pref.prestataire);
     this.prestationForm.get('prestataire').setValue(pref.prestataire);
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
-    this.prestationForm.get('dateSaisie').setValue(new Date(pref.date));
+    this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
     for (const pr of pref.prestation) {
+      const prest : Prestation = pr;
+     
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
     formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
@@ -399,6 +414,8 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     formPrestation.get('taux').setValue(pr.taux);
     formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
     formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+    // formPrestation.get('familleActe').setValue(this.garanties.find(garan=>garan.actes[0]?.id === prest?.acte.id));
+    console.log("==========================",this.garanties, prest?.acte);
     this.prestation.push(formPrestation);
     }
     this.displayFormPrefinancement = true;
@@ -611,7 +628,7 @@ console.log(myForm);
     }
     */
     console.log(this.bonPriseEnCharge);
-    this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
+     this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
     this.displayPrestation = false;
    }
 

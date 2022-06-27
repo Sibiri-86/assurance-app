@@ -12,7 +12,7 @@ export interface BonPriseEnCharge {
     prestataire?: Prestataire;
     police?: Police;
     numeros?: string;
-    date?: Date;
+    dateSaisie?: Date;
     status?: string;
     userCurent?: string;
     prestation?: Array<Prestation>;

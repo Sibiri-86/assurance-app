@@ -2044,6 +2044,7 @@ changeGarantie(garantie, indexLigne: number) {
 
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
+    console.log(ad.urlPhoto);
     this.pictureUrl =ad.urlPhoto;
     this.displayPhotos = true;
   }

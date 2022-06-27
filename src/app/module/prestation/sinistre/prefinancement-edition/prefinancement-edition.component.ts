@@ -211,6 +211,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       montantReclame: new FormControl(0),
       montantRestant: new FormControl(0),
       bonPriseEnCharge: new FormControl(),
+      souscripteur: new FormControl(),
+      nomGroupeAdherent: new FormControl(),
       prestation: this.formBuilder.array([]),
       dateRetrait: new FormControl({value: '', disabled: true})
     });
@@ -246,6 +248,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         // this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        this.prestationForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+        this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
         if (this.adherentSelected.adherentPrincipal != null) {
           this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
       } else {
@@ -474,6 +478,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
+    this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom);
+    this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
     this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
     this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
