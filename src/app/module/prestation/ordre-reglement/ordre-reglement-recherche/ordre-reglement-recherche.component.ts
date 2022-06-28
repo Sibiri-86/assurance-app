@@ -62,7 +62,7 @@ export class OrdreReglementRechercheComponent implements OnInit {
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-this.breadcrumbService.setItems([{ label: 'Ordre de reglement consultation' }]);
+this.breadcrumbService.setItems([{ label: 'Ordre de paiement consultation' }]);
 }
 
 consulter(ordre: OrdreReglement) {

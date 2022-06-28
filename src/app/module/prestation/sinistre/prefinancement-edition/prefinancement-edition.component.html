@@ -334,17 +334,17 @@
                                
                             <div class="p-field p-col">
                                 <label for="nombreActe">Nombre Acte <span class="required">*</span></label>
-                                <p-inputNumber formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
+                                <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}" formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col">
                                 <label for="nombreActe">Cout unitaire <span class="required">*</span></label>
-                                <p-inputNumber formControlName="coutUnitaire" mode="decimal" locale="fr-FR" (onBlur)="calculDebours(i)"></p-inputNumber>  
+                                <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="coutUnitaire" mode="decimal" locale="fr-FR" (onBlur)="calculDebours(i)"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col">
                                 <label for="nombreActe">Debours <span class="required">*</span></label>
-                                <p-inputNumber formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
+                                <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
                             </div>
                             
                            </div>
@@ -354,7 +354,7 @@
                                
                             <div class="p-field p-col">
                                 <label for="nombreActe">Base remboursement<span class="required">*</span></label>
-                                <p-inputNumber formControlName="baseRemboursement" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
+                                <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="baseRemboursement" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
                             </div>
                                
                             <div class="p-field p-col-4">
@@ -367,7 +367,7 @@
                                
                             <div class="p-field p-col-4">
                                 <label for="nombreActe">Montant remboursé<span class="required">*</span></label>
-                                <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" [disabled]="true" class="champ"></p-inputNumber>  
+                                <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}"formControlName="montantRembourse" mode="decimal" locale="fr-FR" [disabled]="true" class="champ"></p-inputNumber>  
                             </div>
                             
                             <!--

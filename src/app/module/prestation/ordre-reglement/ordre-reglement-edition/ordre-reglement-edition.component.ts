@@ -76,7 +76,7 @@ export class OrdreReglementEditionComponent implements OnInit {
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-     this.breadcrumbService.setItems([{ label: 'Ordre de reglement edition' }]);
+     this.breadcrumbService.setItems([{ label: 'Ordre de paiement edition' }]);
 }
 
   ngOnInit(): void {
