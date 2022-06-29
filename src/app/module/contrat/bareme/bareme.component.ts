@@ -331,6 +331,11 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
   modifierBareme(bareme: Bareme) {
     console.log(bareme);
+    if(!this.typeBareme.find(type=>type.value === bareme.typeBareme )) {
+      this.typeBareme.push({ label: bareme.typeBareme, value: bareme.typeBareme });
+
+    }
+    
     this.baremeForm.patchValue(bareme);
     this.plafondFamilleActeConstruct = bareme.baremeFamilleActe.filter(famille=> famille?.etat === "ACTIF");
     // changer les dates effet à la date du jour
@@ -508,6 +513,17 @@ changeGarantie(garantie, indexLigne: number) {
 
   ajouterBareme(){
     this.dispplayDialogueBareme = true;
+    if(this.baremeList) {
+      
+      this.baremeList.forEach(bareme=>{
+        if(bareme.typeBareme) {
+          
+          this.typeBareme = this.typeBareme.filter(type=>type.value !== bareme.typeBareme);
+          
+        }
+      })
+    }
+    this.typeBareme
   }
   controleDateFamilleActe(dateEffet: Date) {
     this.dateEffetFamilleActe = dateEffet;
