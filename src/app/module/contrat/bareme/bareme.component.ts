@@ -41,6 +41,7 @@ import { Bareme } from 'src/app/store/contrat/plafond/model';
 import { Taux } from 'src/app/store/parametrage/taux/model';
 import { QualiteAssure } from 'src/app/store/parametrage/qualite-assure/model';
 import {status} from '../../../store/global-config/selector';
+import { TypeEtat } from 'src/app/store/contrat/historiqueAvenant/model';
 @Component({
   selector: 'app-bareme',
   templateUrl: './bareme.component.html',
@@ -331,12 +332,14 @@ export class BaremeComponent implements OnInit, OnDestroy {
   modifierBareme(bareme: Bareme) {
     console.log(bareme);
     this.baremeForm.patchValue(bareme);
-    this.plafondFamilleActeConstruct = bareme.baremeFamilleActe;
+    this.plafondFamilleActeConstruct = bareme.baremeFamilleActe.filter(famille=> famille?.etat === "ACTIF");
     // changer les dates effet à la date du jour
     for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++) {
       this.plafondFamilleActeConstruct[i].dateEffet = new Date();
+      this.plafondFamilleActeConstruct[i].listeActe = this.plafondFamilleActeConstruct[i]?.listeActe?.filter(acte=>acte.etat ==="ACTIF");
       for (let j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
         this.plafondFamilleActeConstruct[i].listeActe[j].dateEffet = new Date();
+        this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe = this.plafondFamilleActeConstruct[i]?.listeActe[j]?.listeSousActe.filter(sousActe=>sousActe.etat ==="ACTIF");
         for (let k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++) {
           this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].dateEffet =  new Date();
         }

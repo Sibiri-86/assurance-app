@@ -963,7 +963,7 @@
     <ng-template pTemplate="content">
         
         
-        <p-table #dtConfigurationPlafond [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true" scrollHeight="500px">
+        <p-table #dtConfigurationPlafond [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true">
             <ng-template pTemplate="header">
                 <tr>
                     <th></th>
@@ -1073,20 +1073,20 @@
                         </p-cellEditor>
                     </td>
 
-                    <td style="text-align:center">
-                        <!--
+                   <!-- <td style="text-align:center">
+                        
                         <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
-                        -->
+                       
                         <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
-                    </td>
+                    </td> -->
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
                 <tr >
-                <td colspan="11">
+                <td colspan="10">
                     <div class="">
-                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="500px" expansionMode="single">
+                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true"  expansionMode="single">
                 <tr>
                     <th></th>
                     <th></th>
@@ -1098,7 +1098,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
+                   
                 </tr>
                 <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
                     <tr  [pEditableRow]="acte" class="colorZoneActe" (onRowSelect)="expandActe(ri)" *ngIf="acte.etat==='ACTIF'">
@@ -1191,18 +1191,18 @@
                             </p-cellEditor>
                         </td>
 
-                        <td style="text-align:center">
+                       <!--  <td style="text-align:center">
                             <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationActe(acte)"></button>
                             <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationActe(acte)"></button>
                             <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationActe(acte, ri, ri1)"></button>
-                        </td>
+                        </td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-acte>
                     <tr>
-                        <td colspan="11">
+                        <td colspan="10">
                             <div class="">
-                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="500px">
+                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" >
                     <tr>
                         <th></th>
                         <th></th>
@@ -1214,7 +1214,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
+                      
                     </tr>
                     <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
                         <tr [pEditableRow]="sousActe" class="colorZoneSousActe" *ngIf="sousActe.etat==='ACTIF'">
@@ -1313,11 +1313,11 @@
                                 </p-cellEditor>
                             </td>
 
-                            <td style="text-align:center">
+                           <!--  <td style="text-align:center">
                                 <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(sousActe)"></button>
                                 <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(sousActe)"></button>
                                 <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1)"></button>
-                            </td>
+                            </td> -->
                         </tr>
                     </ng-template>
 
@@ -1357,7 +1357,7 @@
 
 <p-dialog [maximizable]="true" [(visible)]="displayPrevisualiserParametrageEdition" header="Modifier configuration" [modal]="true" styleClass="p-fluid" [style]="{'width':'1500px'}">
     <ng-template pTemplate="content">
-        <p-table #dtConfigurationPlafond2 [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true" scrollHeight="500px">
+        <p-table #dtConfigurationPlafond2 [value]="plafondFamilleActeConstruct" dataKey="garantie.id" editMode="row" responsiveLayout="scroll" [scrollable]="true">
             <ng-template pTemplate="header">
                 <tr>
                     <th></th>
@@ -1370,10 +1370,11 @@
                     <th>Domaine</th>
                     <th>Date effet</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
-                <tr [pEditableRow]="plafond" class="colorZone" *ngIf="plafond.etat==='ACTIF'">
+                <tr [pEditableRow]="plafond" class="colorZone">
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
@@ -1478,7 +1479,7 @@
                 <tr >
                 <td colspan="11">
                     <div class="">
-                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true" scrollHeight="500px" expansionMode="single">
+                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row" [scrollable]="true"  expansionMode="single">
                 <tr>
                     <th></th>
                     <th></th>
@@ -1493,7 +1494,7 @@
                     <th></th>
                 </tr>
                 <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
-                    <tr  [pEditableRow]="acte" class="colorZoneActe" (onRowSelect)="expandActe(ri)" *ngIf="acte.etat==='ACTIF'">
+                    <tr  [pEditableRow]="acte" class="colorZoneActe" (onRowSelect)="expandActe(ri)">
                         <td> <button type="button" pButton  pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
                         <td>{{acte?.acte?.libelle}}</td>
                         <td> 
@@ -1594,7 +1595,7 @@
                     <tr>
                         <td colspan="11">
                             <div class="">
-                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="500px">
+                                <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" >
                     <tr>
                         <th></th>
                         <th></th>
@@ -1609,7 +1610,7 @@
                         <th></th>
                     </tr>
                     <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
-                        <tr [pEditableRow]="sousActe" class="colorZoneSousActe" *ngIf="sousActe.etat==='ACTIF'">
+                        <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
                             <td></td>
                             <td>{{sousActe?.sousActe?.libelle}}</td>
                             <td>

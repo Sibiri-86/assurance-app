@@ -181,6 +181,22 @@ this.actions$.pipe(
             )
             );
 
+            fetchBaremeConfigSansTaux$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadPlafondConfigSansTaux),
+                mergeMap(({typeBareme}) =>
+                    this.PlafondService.$getBaremesConfigSansTaux(typeBareme).pipe(
+                        switchMap(value => [
+                           
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setPlafondConfig(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+            );
+
 
             deleteBareme$ = createEffect(() =>
             this.actions$.pipe(
