@@ -119,6 +119,8 @@ import {Avenant, TypeHistoriqueAvenant} from '../../../store/contrat/historiqueA
 import {HistoriqueAvenantService} from '../../../store/contrat/historiqueAvenant/service';
 import * as groupeSlector from '../../../store/contrat/groupe/selector';
 import { PlafondService } from "src/app/store/contrat/plafond/service";
+import { constrainMarkerToRange } from "@fullcalendar/core/datelib/date-range";
+import { act } from "@ngrx/effects";
 
 @Component({
   selector: "app-police",
@@ -1349,6 +1351,63 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
 
+    modificationPeriodeFamille(famille: PlafondFamilleActe) {
+      
+      if(famille.dimensionPeriode) {
+        
+        famille?.listeActe?.forEach(act=>{
+              act.dimensionPeriode =famille.dimensionPeriode;
+              act?.listeSousActe?.forEach(sous=>{
+                sous.dimensionPeriode =famille.dimensionPeriode;
+              })
+            });
+            
+         
+
+      }
+              
+     
+    }
+
+    modificationPeriode(act: PlafondActe) {
+      
+      if(act.dimensionPeriode) {
+        if(this.plafondActuelleConfiguration
+          .find(plafond=>plafond.garantie.id === act?.acte?.idTypeGarantie).dimensionPeriode.id !== act.dimensionPeriode.id) {
+            this.showToast("error", "INFORMATION", "la periode de la famille est différente de celle de l'acte");
+              act.dimensionPeriode = {};
+              act?.listeSousActe?.forEach(sous=>{
+                sous.dimensionPeriode = {};
+              });
+              
+            
+            
+          } else{
+            act?.listeSousActe?.forEach(sous=>{
+              sous.dimensionPeriode =act.dimensionPeriode;
+            });
+            
+          }
+
+      }
+              
+     
+    }
+
+    modificationPeriodeSous(sous: PlafondSousActe) {
+      if(sous.dimensionPeriode) {
+        if(this.plafondActuelleConfiguration
+          .find(plafond=>plafond.listeActe.find(acte=>acte.acte.id === sous?.sousActe?.idTypeActe && acte.dimensionPeriode.id !== sous.dimensionPeriode.id))) {
+            this.showToast("error", "INFORMATION", "la periode de la famille est différente de celle de l'acte");
+            sous.dimensionPeriode = {};
+          } 
+
+      }
+              
+     
+    }
+
+    
 
 
     modificationEtatSous(act: PlafondActe) {
@@ -1479,7 +1538,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   editPolice(police: Police) {
     
-
+    console.log(police?.secteur?.idArrondissement);
     this.police = { ...police };
     console.log(this.arrondissementList);
     console.log(police?.secteur?.idArrondissement);

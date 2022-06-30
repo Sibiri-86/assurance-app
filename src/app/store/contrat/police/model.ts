@@ -52,6 +52,7 @@ export interface Police{
     historiqueAvenantListWithoutActiveList?: HistoriqueAvenant[];
     listGroupe?: Groupe[];
     typeDuree?: TypeDuree;
+    isPlafond?: boolean;
 }
 
 export interface Statistique {
