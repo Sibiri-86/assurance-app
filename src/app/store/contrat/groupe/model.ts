@@ -6,6 +6,7 @@ import { Prime } from '../prime/model';
 import { AdherentFamille } from '../adherent/model';
 import { Commune } from '../../parametrage/commune/model';
 import {TypeDuree} from '../enum/model';
+import { Exercice } from '../exercice/model';
 
 export interface Groupe {
     id?: string;
@@ -26,6 +27,7 @@ export interface Groupe {
     groupeId?: string;
     listGroupe?: Array<Groupe>;
     typeDuree?: TypeDuree;
+    exercice?: Exercice;
 }
 
 export interface GroupeList{

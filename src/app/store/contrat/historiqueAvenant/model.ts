@@ -113,6 +113,7 @@ export class Avenant {
     historiqueGroupes?: HistoriqueGroupe[];
     creation?: string;
     groupe?: Groupe;
+    historiquePlafondGroupeFamilleActes?: HistoriquePlafondFamilleActe[];
 }
 
 export class HistoriqueGroupe {

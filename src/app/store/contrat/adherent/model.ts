@@ -3,6 +3,7 @@ import {PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/mod
 import {Genre} from '../../parametrage/genre/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 import {Profession} from '../../parametrage/profession/model';
+import { Exercice } from "../exercice/model";
 export interface Adherent{
     id?: string;
     matriculeGarant?: string;
@@ -34,6 +35,7 @@ export interface Adherent{
     dateSortie?:Date;
     deleted?: boolean;
     actif?: boolean;
+    exercice?: Exercice;
 }
 
 export interface AdherentResearchReponse {

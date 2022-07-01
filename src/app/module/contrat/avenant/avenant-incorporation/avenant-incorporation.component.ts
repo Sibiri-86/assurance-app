@@ -71,6 +71,7 @@ export class AvenantIncorporationComponent implements OnInit{
     @Input() adherentPrincipauxTMP: Array<Adherent> = [];
     groupes: Array<Groupe> = [];
     adherentPrincipaux: Array<Adherent> = [];
+    adherentPrincipaux2: Array<Adherent> = [];
     viewListe = false;
     selectedFile: File;
     historiqueAvenant1: HistoriqueAvenant = {};
@@ -82,7 +83,7 @@ export class AvenantIncorporationComponent implements OnInit{
         ];
     private exercice: Exercice;
     private exerciceForm: FormGroup;
-    private curentGroupe: Groupe;
+    curentGroupe: Groupe = {};
     customForm: FormGroup;
     groupePolicy: Array<Groupe> = [];
     groupeList$: Observable<Array<Groupe>>;
@@ -183,8 +184,8 @@ export class AvenantIncorporationComponent implements OnInit{
             lieuNaissance: new FormControl(null, [Validators.required]),
             numeroTelephone: new FormControl(null, [Validators.required]),
             adresse: new FormControl(null),
-            adresseEmail: new FormControl(null, [Validators.email]),
-            profession: new FormControl(null, [Validators.required]),
+            adresseEmail: new FormControl(null),
+            profession: new FormControl(null),
             referenceBancaire: new FormControl(null),
             qualiteAssure: new FormControl(null, [Validators.required]),
             genre: new FormControl(null, [Validators.required]),
@@ -268,12 +269,37 @@ export class AvenantIncorporationComponent implements OnInit{
         if(this.etat === 'CREATE') {
             this.loadLastExerciceOfPolice();
         }
+
+        /* this.adherentService.loadAdherentsByPolice(this.police.id).subscribe(
+            (res) => {
+              res.forEach(a => {
+                a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
+              });
+              this.adherentPrincipaux = res.filter(e => e.adherentPrincipal === null);
+              console.log(':::::::::::::this.adherentListGroupe2222222222:::::::::::::');
+              console.log(this.adherentPrincipaux);
+            }
+        ); */
         
     }
 
+    createItem(): FormGroup {
+        return this.formBuilder.group({
+          id: new FormControl(),
+          nom: new FormControl('', [Validators.required]),
+          prenom: new FormControl('', [Validators.required]),
+          telephone: new FormControl(),
+          dateNaissance: new FormControl(Validators.required),
+          dateEntree: new FormControl('', [Validators.required]),
+          dateIncorporation: new FormControl(''),
+          genre: new FormControl('', [Validators.required]),
+          qualiteAssure: new FormControl('', [Validators.required]),
+        });
+      }
+
     addAdherentFamilleToList(): void {
        
-        // this.createHistoriqueAvenant();
+        this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
         this.adherentFamilleListe.forEach(af => {
             // af.adherent.groupe = this.curentGroupe;
@@ -311,17 +337,14 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleEvent.emit(this.historiqueAvenant1);
         this.init();
     }
+
     ajouter(): void {
-        console.log('----------------------------------');
-        console.log(this.familys);
-        console.log(this.customForm.controls.groupe.value);
         const formAdherent: FormGroup = this.createForm();
         formAdherent.patchValue({
             dateIncorporation: this.adherentForm.get('dateIncorporation').value,
         });
-        
-        // formAdherent.controls.f
         this.familys.push(formAdherent);
+        
         this.familles.forEach(family => {
             family.adherentPrincipal = null;
             family.groupe = this.customForm.controls.groupe.value;
@@ -331,6 +354,7 @@ export class AvenantIncorporationComponent implements OnInit{
             family.groupe = this.customForm.controls.groupe.value;
         });
     }
+    
     delete(ri: number): void {
         console.log(ri);
         this.familys.removeAt(ri);
@@ -375,9 +399,11 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
         this.familys.reset();
+        this.familys.clear();
         this.adherentSelected = {};
-        console.log('***************-------------------------');
+        console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
         console.log(adherantFamille);
+        console.log('***************-------------------------');
     }
 
     loadAdherentPrincipalInfo() {
@@ -507,14 +533,15 @@ export class AvenantIncorporationComponent implements OnInit{
         }
     }
     onGroupeChange() {
-        this.curentGroupe = this.customForm.controls.groupe.value;
-        this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe.id);
-        if (this.groupesInput) {
-            console.log('-------------groupesInput--------------------' + this.groupesInput.length);
-            this.groupePolicy = this.groupesInput;
+        console.log('-------------this.curentGroupe--------------------' + this.curentGroupe.id);
+        this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe?.id);
+        if (this.curentGroupe.id != null) {
+            /* console.log('-------------groupesInput--------------------' + this.groupesInput.length);
+            this.groupePolicy = this.groupesInput; */
             this.adherentService.getAdherentPrincipauxByGroupe(this.curentGroupe.id).subscribe(
                 (res: Adherent[]) => {
                     this.adherentPrincipaux = res;
+                    console.log('-------------this.adherentPrincipaux--------------------' + this.adherentPrincipaux);
                 }
             );
         }
@@ -633,7 +660,10 @@ export class AvenantIncorporationComponent implements OnInit{
       onExerciceChange(): void {
         console.log('curent exo === ');
         console.log(this.curentExercice);
+        this.adherentPrincipaux2 = this.adherentPrincipauxTMP.filter(ad => ad.exercice.id === this.curentExercice.id);
+        console.log('adherentPrincipaux2 === ', this.adherentPrincipaux2);
      }
+     
 
      /* onBasicUpload(event, form) {
     

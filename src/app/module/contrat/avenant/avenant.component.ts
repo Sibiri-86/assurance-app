@@ -321,7 +321,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   listGroupe: Array<Groupe> = [];
   groupeListes: Array<Groupe>;
   groupeSelect: Groupe = {};
-  avenantItem: HistoriqueAvenant;
+  avenantItem: HistoriqueAvenant; 
+  historiqueRev: HistoriqueAvenant;
+  historiqueGroupeRev: Groupe[] = [];
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -1473,9 +1475,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.adherentService.loadAdherentsByPolice(this.policeItem.id).subscribe(
         (res) => {
           res.forEach(a => {
-            a.fullName = a.nom + ' ' + a.prenom;
+            a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
           });
           this.adherentListGroupe = res.filter(e => e.adherentPrincipal === null);
+          console.log(':::::::::::::this.adherentListGroupe:::::::::::::');
+          console.log(this.adherentListGroupe);
         }
     );
   }
@@ -2106,24 +2110,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
     avenant.exercice = exercice;
     historiqueAvenant = event.historiqueAvenant;
     avenant.historiqueAvenant = historiqueAvenant;
-    if( this.etat === 'CREATE') {
-      avenant.creation = 'CREATION';
-    } else {
-      avenant.creation = 'MODIFICATION';
-    }
+    avenant.creation = event.creation;
     console.log('********************Avenant renouvellement************************');
     console.log(event);
      this.historiqueAvenantService.postAvenant(event).subscribe(
         (res) => {
           console.log('***************RETOUR RENOUV********************');
           if (res) {
+            console.log('***************res********************', res);
             this.addMessage('success', 'Opération reussie', 'Avenant créé avec succès');
             if(avenant.historiqueAvenant.isTerminer) {
               this.dissplayavenant = false;
               this.initDisplayAvenant();
             }
 
-            console.log('***************RETOUR AVENANT********************', res);
+            this.historiqueRev = res.historiqueAvenant;
+            this.historiqueGroupeRev = res.groupes;
+            console.log('***************this.historiqueRev********************', this.historiqueRev);
+            console.log('***************this.historiqueGroupeRevPolice********************', this.historiqueGroupeRev);
           } else {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }

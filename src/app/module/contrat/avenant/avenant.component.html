@@ -123,8 +123,12 @@
                                     class="p-button-rounded p-button-info p-mr-2" (click)="getStatistique(police)"></button>
                             <button pButton pRipple icon="pi pi-search p-mr-2" pTooltip="voir contrat"
                             class="p-button-rounded p-button-info" (click)="voirContrat(police); loadGoupeByPolice1(police); loadActualListByContrat(police)"></button>
+                            <!-- <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
+                                           (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
+                            <!-- SPlit sans la fonction setPolice -->
                             <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
-                                           (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton>
+                                (onDropdownClick)="policeItem = police; loadGoupeByPolice() ;setPolice(police)">
+                            </p-splitButton>
 
 
                         </td>
@@ -1782,8 +1786,9 @@
                                               (eventEmitterM)="getAvenantModification($event)"></app-avenant-modification>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
-                    <app-avenant-renouvellement [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id"
-                                                (eventEmitterM)="getAvenantRenouvellement($event)"></app-avenant-renouvellement>
+                    <app-avenant-renouvellement [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id" [groupesRev]="historiqueGroupeRev"
+                    [avenantArrivedId]="historiqueRev?.id" (eventEmitterM)="getAvenantRenouvellement($event)">
+                </app-avenant-renouvellement>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">
                     <app-avenant-resiliation [police]="policeItem"  [etat]="etat" [avenantId]="historiqueAvenant.id"

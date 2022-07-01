@@ -1,49 +1,4 @@
 <div class="p-card">
-    <div class="p-fluid p-grid">
-
-        <div class="p-field p-col-4" *ngIf="etat === 'CREATE'">
-            <label for="fraisBadge">Groupe<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-            <form [formGroup]="customForm">
-                <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
-                            name="selectedGroup"
-                            [filter]="true" filterBy="libelle" [showClear]="true"
-                            placeholder="Choisir un groupe"
-                            (onChange)="onGroupeChange()">
-                </p-dropdown>
-                <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
-            </form>
-        </div>
-        <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
-            <label for="fraisBadge">Groupe</label>
-            <form [formGroup]="customForm">
-                <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
-                            name="selectedGroup" [filter]="true" filterBy="libelle" [showClear]="true"
-                            placeholder="Choisir un groupe">
-                </p-dropdown>
-            </form>
-        </div>
-        <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
-            <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
-        </div>
-
-            <div class="p-col-4 p-mb-3" *ngIf="etat === 'CREATE'">
-                <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
-                            [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
-                            
-                </p-dropdown>
-            </div>
-        <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
-            <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
-        </div>
-        <div class="p-field p-col-2" *ngIf="!isNewGroupe">
-            <button pButton pRipple label="Groupe" icon="pi pi-plus" class="p-button-success"
-                    (click)="addNewGroupe()"
-            >
-            </button>
-        </div>-->
-        <div class="p-field p-col-6"></div>
-    </div>
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12" *ngIf="etat === 'CREATE'">
             <div class="p-field p-col-7">
@@ -81,6 +36,53 @@
                         </div>
                     </div>
                 </form>
+            </p-fieldset>
+            <p-fieldset legend="Selection" toggleable="true">
+                <div class="p-fluid p-grid">
+
+                    <div class="p-field p-col-4" *ngIf="etat === 'CREATE'">
+                        <label for="fraisBadge">Groupe<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                        <!-- <form [formGroup]="customForm"> -->
+                            <p-dropdown [options]="groupePolicy" [(ngModel)]="curentGroupe" optionLabel="libelle"
+                                        name="selectedGroup"
+                                        [filter]="true" filterBy="libelle" [showClear]="true"
+                                        placeholder="Choisir un groupe"
+                                        (onChange)="onGroupeChange()">
+                            </p-dropdown>
+                            <!-- <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span> -->
+                    <!--  </form> -->
+                    </div>
+                    <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
+                        <label for="fraisBadge">Groupe</label>
+                        <!-- <form [formGroup]="customForm"> -->
+                            <p-dropdown [options]="groupePolicy" [(ngModel)]="curentGroupe" optionLabel="libelle"
+                                        name="selectedGroup" [filter]="true" filterBy="libelle" [showClear]="true"
+                                        placeholder="Choisir un groupe">
+                            </p-dropdown>
+                    <!--  </form> -->
+                    </div>
+                    <div class="p-field p-col-4" *ngIf="etat !== 'CREATE'">
+                        <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
+                    </div>
+            
+                        <div class="p-col-4 p-mb-3"  *ngIf="etat === 'CREATE'">
+                            <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <p-dropdown [disabled]="(!curentGroupe.id)" [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                                        
+                            </p-dropdown>
+                        </div>
+                    <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
+                        <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
+                    </div>
+                    <div class="p-field p-col-2" *ngIf="!isNewGroupe">
+                        <button pButton pRipple label="Groupe" icon="pi pi-plus" class="p-button-success"
+                                (click)="addNewGroupe()"
+                        >
+                        </button>
+                    </div>-->
+                    <div class="p-field p-col-6"></div>
+                </div>
             </p-fieldset>
             <p-fieldset legend="Information de l'Avenant" toggleable="true" *ngIf="!isRenouv">
                 <form [formGroup]="myForm">
@@ -138,8 +140,8 @@
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
-                    <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
-                                (onChange)="loadAdherentPrincipalInfo()" placeholder="Recherchez un adhérent principal" optionLabel="fullName"></p-dropdown>
+                    <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux2" [(ngModel)]="adherentSelected"
+                                (onChange)="loadAdherentPrincipalInfo()" placeholder="Rechercher un adhérent principal" optionLabel="fullName"></p-dropdown>
                 </div>
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()" >
                     <div class="p-fluid p-formgrid p-grid">
@@ -170,13 +172,13 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="mail">Adresse Email <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="mail">Adresse Email <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <input id="mail" type="email" formControlName="adresseEmail"
                                    pInputText>
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="adresse">Adresse <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="adresse">Adresse <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <input id="adresse" type="text" formControlName="adresse" pInputText>
                         </div>
 
@@ -218,7 +220,7 @@
                         </div>
 
                         <div class="p-field p-col-3">
-                            <label for="profession">Profession<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="profession">Profession<sup style="color: red !important; font-size: 1.4em;"></sup></label>
                             <p-dropdown inputId="profession" dataKey="id" [filter]="true"
                                         showClear="true" [options]="professionList"
                                         formControlName="profession" placeholder="Select"
@@ -246,7 +248,8 @@
                         <div class="p-field p-col-4"></div>
                         <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter membre de famille" label="Famille"
-                                    class="p-button-success" type="button" [disabled]="adherentForm.invalid" (click)="ajouter()"></button>
+                                    class="p-button-success" type="button" [disabled]="!this.adherentForm.get('nom').value || !this.adherentForm.get('prenom').value || !this.adherentForm.get('dateNaissance').value
+                                    || !this.adherentForm.get('lieuNaissance').value || !this.adherentForm.get('qualiteAssure').value || !this.adherentForm.get('genre').value || !this.adherentForm.get('dateIncorporation').value"  (click)="ajouter()"></button>
                         </div>
                         <!-- <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
@@ -259,7 +262,7 @@
 
                             <p-fieldset class="p-fluid formgrig mb-1" [legend]="'membre famille ' + (ri+1)"
                                         toggleable="true"
-                                        *ngFor="let familyForm of familys.controls; let ri = index"
+                                        *ngFor="let familyForm of adherentForm.get('familys')['controls']; let ri = index"
                                         [style]="{'width': '100%'}">
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" [formGroup]="familyForm">
                                     <div class="p-field p-grid">
@@ -311,7 +314,7 @@
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </div>
                                         <div class="p-col-1">
-                                            <button pButton type="button" (click)="delete(ri)"
+                                            <button style="margin-top: 31px; margin-left: 56px;" pButton type="button" (click)="delete(ri)"
                                                     icon="pi pi-trash" class="ui-button-danger">
                                             </button>
                                         </div>

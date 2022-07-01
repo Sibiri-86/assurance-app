@@ -1560,6 +1560,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isgroupEditing = false;
     this.groupeForm.reset();
     this.primeForm.reset();
+    this.selectedTypePrime = {} ;
   }
 
   /**mode edition de plafondFamilleActe */
