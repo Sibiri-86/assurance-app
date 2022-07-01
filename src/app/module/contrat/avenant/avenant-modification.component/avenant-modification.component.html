@@ -73,8 +73,27 @@
                             appendTo="body"></p-calendar>  
                             </div>
                         </div>
+
+                        <div class="p-col-12">
+                    <p-fieldset legend="PRIME" toggleable="true">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6">
+                                <label for="primenette">Prime nette</label>
+                                <p-inputNumber formControlName="primenette" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                
+                            </div>
+
+                            <div class="p-field p-col-6">
+                                <label for="primettc">Prime ttc</label>
+                                <p-inputNumber formControlName="primettc" mode="decimal" locale="fr-FR" ></p-inputNumber>
+                                
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
                     </form>
                 </div>
+                
                 <div class="p-col-12">
                     <p-fieldset legend="RECAPITULATIF" toggleable="true">
                         <div class="p-fluid p-formgrid p-grid">
@@ -649,7 +668,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="plafond.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="plafond.dimensionPeriode" optionLabel="libelle" placeholder="Select periode" (onChange)="modificationPeriodeFamille(plafond)"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -777,7 +796,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="acte.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="acte.dimensionPeriode" optionLabel="libelle" placeholder="Select periode" (onChange)="modificationPeriode(acte)"
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -901,7 +920,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode" (onChange)="modificationPeriodeSous(sousActe)"
                                                             [style]="{'width':'100%'}"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">

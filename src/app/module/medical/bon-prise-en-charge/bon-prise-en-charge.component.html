@@ -180,12 +180,12 @@
                         <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                     </div>
                     <div class="p-field p-col">
-                        <label for="nomAdherent">Nom</label>
+                        <label for="nomAdherent">Nom & prénom bénéficiaire</label>
                         <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
                     </div>
                     
                     <div class="p-field p-col">
-                        <label for="nomAdherent">Prenom</label>
+                        <label for="nomAdherent">Npm & prénom de l'assuré</label>
                         <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" pInputText>
                     </div>
                     
@@ -250,7 +250,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="lastname2">Famille acte</label>
-                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" formControlName="familleActe" showClear="true" [options]="garanties" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
                             </div>
                             
                             <div class="p-field p-col">

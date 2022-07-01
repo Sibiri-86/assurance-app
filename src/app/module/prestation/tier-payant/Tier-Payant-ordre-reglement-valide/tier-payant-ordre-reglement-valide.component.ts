@@ -32,7 +32,7 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
-  this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE REGLEMENT VALIDE' }]);
+  this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT VALIDE' }]);
 }
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionTierPayant.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.INITIAL}));
+        this.store.dispatch(featureActionTierPayant.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.DEVALIDE}));
       },
     });
   }

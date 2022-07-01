@@ -85,6 +85,16 @@ $getBaremesConfig(typeBareme: string, taux: number): Observable<PlafondConfig> {
   }
 }
 
+$getBaremesConfigSansTaux(typeBareme: string): Observable<PlafondConfig> {
+  // @FIXME: get request
+  if(typeBareme){
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/config/${typeBareme}`).pipe(
+    map((response: PlafondConfig) => response),
+    catchError(this.handleError())
+  );
+  }
+}
+
 pushFileToStorage(file: File): Observable<any> {
   const data: FormData = new FormData();
   data.append('file', file);

@@ -1669,6 +1669,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   /** afficher les details de l'avenant' */
   onRowSelectAvenant(avenant: HistoriqueAvenant) {
+    console.log('===================avenant.avenant====================', avenant);
     this.etat = 'VIEW';
     this.historiqueAvenant = avenant;
     // console.log('=======================================', typeHistoriqueAvenant);

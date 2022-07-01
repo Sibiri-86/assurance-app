@@ -45,6 +45,8 @@ export interface HistoriqueAvenant {
     exerciceId?: string;
     groupeId?: string;
     isTerminer?: boolean;
+    primettc?: number;
+    primenette?: number;
 }
 
 export enum TypeEtat {

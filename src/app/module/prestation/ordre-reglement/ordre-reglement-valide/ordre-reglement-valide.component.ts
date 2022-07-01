@@ -71,7 +71,7 @@ export class OrdreReglementValideComponent implements OnInit {
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-     this.breadcrumbService.setItems([{ label: 'Ordre de reglement valide' }]);
+     this.breadcrumbService.setItems([{ label: 'Ordre de paiement valide' }]);
 }
 
   ngOnInit(): void {
@@ -99,7 +99,7 @@ export class OrdreReglementValideComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.ANNULE}));
+        this.store.dispatch(featureActionPrefinancement.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.DEVALIDE}));
       },
     });
   }

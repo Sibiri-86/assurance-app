@@ -4,6 +4,7 @@ import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
 import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
+import { Acte } from '../../parametrage/acte/model';
 import { Garantie } from '../../parametrage/garantie/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { PlafondSousActe } from '../../parametrage/plafond/model';
@@ -83,6 +84,7 @@ export interface Prestation {
     montantRembourse?: number;
     observation?: string;
     sousActe?: SousActe;
+    acte?: Acte;
     prestataire?: Prestataire;
     centreExecutant?: Prestataire;
     medecin?: Medecin;

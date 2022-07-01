@@ -295,6 +295,8 @@ export class AvenantModificationComponent implements OnInit {
       fraisBadges:new FormControl(null),
       fraisAccessoires: new FormControl(null),
       dateSaisie: new FormControl(new Date()),
+      primenette: new FormControl(''),
+      primettc: new FormControl(''),
     
     });
 
@@ -1117,7 +1119,10 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueAvenant.observation = this.myForm.get('observation').value;
     this.objet.historiqueAvenant.exercice = this.curentExercice;
     this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
+    this.objet.historiqueAvenant.primenette = this.myForm.get('primenette').value;
+    this.objet.historiqueAvenant.primettc = this.myForm.get('primettc').value;
     console.log("this.curentExercice**************", this.curentExercice);
+    console.log("this.curentExercice**************", this.historiqueAvenant);
     this.objet.groupe = this.groupeForm.value;
     // this.objet.groupe.prime = this.primeForm.get(['prime']).value;
     /* this.groupeListes.forEach(gp => {
@@ -1260,6 +1265,69 @@ export class AvenantModificationComponent implements OnInit {
           });
         }
     );
+  }
+
+
+
+  modificationPeriodeFamille(famille: PlafondFamilleActe) {
+      
+    if(famille.dimensionPeriode) {
+      
+      famille?.listeActe?.forEach(act=>{
+            act.dimensionPeriode =famille.dimensionPeriode;
+            act?.listeSousActe?.forEach(sous=>{
+              sous.dimensionPeriode =famille.dimensionPeriode;
+            })
+          });
+          
+       
+
+    }
+            
+   
+  }
+
+
+  modificationPeriode(act: PlafondActe) {
+      
+    if(act.dimensionPeriode) {
+      if(this.plafondFamilleActePlafongConfig
+        .find(plafond=>plafond.garantie.id === act?.acte?.idTypeGarantie).dimensionPeriode.id !== act.dimensionPeriode.id) {
+          this.showToast("error", "INFORMATION", "la periode de la famille est différente de celle de l'acte");
+            act.dimensionPeriode = {};
+            act?.listeSousActe?.forEach(sous=>{
+              sous.dimensionPeriode = {};
+            });
+            
+          
+          
+        } else{
+          act?.listeSousActe?.forEach(sous=>{
+            sous.dimensionPeriode =act.dimensionPeriode;
+          });
+          
+        }
+
+    }
+            
+   
+  }
+
+  modificationPeriodeSous(sous: PlafondSousActe) {
+    if(sous.dimensionPeriode) {
+      if(this.plafondFamilleActePlafongConfig
+        .find(plafond=>plafond.listeActe.find(acte=>acte.acte.id === sous?.sousActe?.idTypeActe && acte.dimensionPeriode.id !== sous.dimensionPeriode.id))) {
+          this.showToast("error", "INFORMATION", "la periode de la famille est différente de celle de l'acte");
+          sous.dimensionPeriode = {};
+        } 
+
+    }
+            
+   
+  }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
   }
   onTabChange(event): void {
     var index = event.index;
@@ -1576,7 +1644,9 @@ export class AvenantModificationComponent implements OnInit {
                     demandeur: res.historiqueAvenant.typeDemandeur,
                     fraisBadges: res.historiqueAvenant.fraisBadges,
                     fraisAccessoires: res.historiqueAvenant.fraisAccessoires,
-                    dateSaisie: new Date(res.historiqueAvenant.dateSaisie)
+                    dateSaisie: new Date(res.historiqueAvenant.dateSaisie),
+                    primenette: res.historiqueAvenant.primenette,
+                    primettc: res.historiqueAvenant.primettc,
                   
                 });
                 this.objet.historiqueAvenant.id = res.historiqueAvenant?.id;
