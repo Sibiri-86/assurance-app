@@ -518,7 +518,36 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   calculDebours(i: number) {
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
+    console.log("===========");
+    console.log(this.adherentSelected.genre.id, this.prestationForm.get('prestation').value[i].sousActe.idGenre);
+    console.log("===========");
+   if((this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.genre.id === this.prestationForm.get('prestation').value[i].sousActe.idGenre) ||
+   (this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+      myForm.patchValue({ montantRembourse : 0});
+      myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse});
+      if(this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+        myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour les enfants filles"}); 
+
+      } else {
+        myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+
+      }
+      myForm.patchValue({sort: Sort.REJETE}); 
+
+      myForm.patchValue({
+        debours: this.prestationForm.get('prestation').value[i].nombreActe *
+      this.prestationForm.get('prestation').value[i].coutUnitaire, baseRemboursement:
+      this.prestationForm.get('prestation').value[i].nombreActe *
+      this.prestationForm.get('prestation').value[i].coutUnitaire, montantSupporte: this.prestationForm.get('prestation').value[i].nombreActe *
+      this.prestationForm.get('prestation').value[i].coutUnitaire});
+      
    
+
+    
+
+  } else {
+
+  
     if(this.prestationForm.get('prestation').value[i].coutUnitaire > this.montantConvention && this.montantConvention !== 0) {
       this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
       const c =this.montantConvention - this.prestationForm.get('prestation').value[i].coutUnitaire;
@@ -604,6 +633,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
         }
     });
+  }
     
     this.prefinancementList = [];
     this.prefinancementModel = {};

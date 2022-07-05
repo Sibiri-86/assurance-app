@@ -50,4 +50,7 @@ export interface PlafondSousActe {
     etat?: Status;
     plafondGroupeActe?: PlafondActe;
     listeSousActes?: PlafondSousActe[];
+    idGenre?: string;
+    libelleGenre?: string; 
+    libelle?: string;
 }

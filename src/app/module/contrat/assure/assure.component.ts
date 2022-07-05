@@ -82,7 +82,7 @@ export class AssureComponent implements OnInit, OnDestroy {
       idGarantie = this.garant.id;
     }
     if (this.police){
-      idPolice = '';
+      idPolice = this.police.id;
     }
     this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie,
       idPolice}));
