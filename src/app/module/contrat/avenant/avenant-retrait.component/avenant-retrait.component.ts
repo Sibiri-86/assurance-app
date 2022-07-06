@@ -102,6 +102,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.groupe = {};
     console.log('..............police.avenant-retrait..............');
     console.log(this.police);
+    console.log("ghjklkhghjklkjhjk",this.isRenouv);
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
     this.store.dispatch(loadGroupe({policeId: this?.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

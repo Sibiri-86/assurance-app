@@ -306,4 +306,25 @@ private handleError<T>() {
         return this.http.get<HistoriquePlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/historiquePlafondGroupeSousActe-modification-exercice`,
             {params: createRequestOption({exerciceId, hpgaId})});
     }
+
+
+    getsHistoriqueAvenantInfoGroupeAndPoliceModifReview(avenantId: string): Observable<Avenant> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-by-info-groupe-and-police`,
+            {params: createRequestOption({avenantId})});
+    }
+
+    getsHistoriqueAvenantPlafondIncorporationAndRetraitModifReview(avenantId: string, groupeId: string): Observable<Avenant> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-by-plafond-incorporation-and-retrait`,
+            {params: createRequestOption({avenantId, groupeId})});
+    }
+
+
+   /*  getHistoriqueAvenantWithoutActive(policeId: string): Observable<HistoriqueAvenant[]> {
+        return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police/${policeId}`).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );;
+    } */
 }

@@ -202,19 +202,19 @@
                 <hr>
             </div>
             <div class="p-field p-col-5"></div>
-            <div class="p-field p-col-2 p-ac-center">
+            <div class="p-field p-col-2 p-ac-center" *ngIf="etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-times" pTooltip="Annuler"
                         class="p-button p-button-warning" label="Annuler"
                         (click)="init()" type="button">
                 </button>
             </div>
-            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false">
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false || etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
                 [disabled]="myForm.invalid && this.historiqueAveantAdherantsByExercice.length != null || etat === 'VIEW'">
                 </button>
             </div>
-            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true">
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true || etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
                 [disabled]="etat === 'VIEW'">

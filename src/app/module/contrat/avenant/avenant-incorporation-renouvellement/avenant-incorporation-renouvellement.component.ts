@@ -35,11 +35,11 @@ import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { HttpHeaders } from '@angular/common/http';
 
 @Component({
-    selector: 'app-avenant-incorporation',
-    templateUrl: 'avenant-incorporation.component.html',
-    styleUrls: ['avenant-incorporation.component.scss']
+    selector: 'app-avenant-incorporation-renouvellement',
+    templateUrl: 'avenant-incorporation-renouvellement.component.html',
+    styleUrls: ['avenant-incorporation-renouvellement.component.scss']
 })
-export class AvenantIncorporationComponent implements OnInit{
+export class AvenantIncorporationRenouvellementComponent implements OnInit{
 
     @Input() avenantId: string;
     @Input() etat: string;
@@ -68,7 +68,7 @@ export class AvenantIncorporationComponent implements OnInit{
     obj: any = {group: {}, prime: {}};
     adherentSelected: Adherent = {};
     adherentPrincipaux1: Adherent[];
-    @Input() adherentPrincipauxTMP: Array<Adherent> = [];
+    adherentPrincipauxTMP: Array<Adherent> = [];
     groupes: Array<Groupe> = [];
     adherentPrincipaux: Array<Adherent> = [];
     adherentPrincipaux2: Array<Adherent> = [];
@@ -141,10 +141,6 @@ export class AvenantIncorporationComponent implements OnInit{
                 this.professionList = value.slice();
             }
         });
-        this.loadGoupeByPolice();
-            if(this.etat === 'CREATE') {
-                this.loadExerciceByPolice(this.police);
-            }
     }
 
     loadLastExerciceOfPolice() {
@@ -251,7 +247,9 @@ export class AvenantIncorporationComponent implements OnInit{
     }
 
     ngOnInit(): void {
+        console.log("ghjklkhghjklkjhjk",this.isRenouv);
         this.init();
+        console.log("ghjklkhghjklkjhjk2",this.isRenouv);
         console.log('---------------------------------');
         console.log(this.adherentPrincipauxTMP);
         console.log(this.police);
@@ -280,6 +278,13 @@ export class AvenantIncorporationComponent implements OnInit{
               console.log(this.adherentPrincipaux);
             }
         ); */
+
+        this.loadGoupeByPolice();
+            if(this.etat === 'CREATE' || this.isRenouv) {
+                this.loadExerciceByPolice(this.police);
+            }
+
+            this.loadAdherent();
         
     }
 
@@ -630,19 +635,19 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
     }
 
-    loadExerciceByPolice(police: Police): void {
-        console.log('policeId === ' + police.id);
-        this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
-        this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
-        this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
-            (value => {
-              this.exerciceList = value;
-              console.log('liste === ');
-              console.log(this.exerciceList);
-            })
-        );
-        // this.exerciceList = [];
-      }
+        loadExerciceByPolice(police: Police): void {
+            console.log('policeId === ' + police.id);
+            this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+            this.store.dispatch(featureExerciceAction.loadExerciceList({policeId: police.id}));
+            this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe(
+                (value => {
+                  this.exerciceList = value;
+                  console.log('liste === ');
+                  console.log(this.exerciceList);
+                })
+            );
+            // this.exerciceList = [];
+          }
 
       findAdherentListByExerciceId(curentExercice: Exercice) {
         console.log('currentExercice === ', curentExercice);
@@ -660,7 +665,10 @@ export class AvenantIncorporationComponent implements OnInit{
       onExerciceChange(): void {
         console.log('curent exo === ');
         console.log(this.curentExercice);
-        this.adherentPrincipaux2 = this.adherentPrincipauxTMP.filter(ad => ad.exercice.id === this.curentExercice.id);
+        console.log(this.adherentPrincipauxTMP);
+        this.adherentPrincipaux2 = this.adherentPrincipauxTMP.filter(ad => {
+            console.log('ad === ', ad);
+            ad.exercice.id === this.curentExercice.id});
         console.log('adherentPrincipaux2 === ', this.adherentPrincipaux2);
      }
      
@@ -674,5 +682,18 @@ export class AvenantIncorporationComponent implements OnInit{
        
 
       } */
+      
+      loadAdherent() {
+        this.adherentService.loadAdherentsByPolice(this.police.id).subscribe(
+            (res) => {
+              res.forEach(a => {
+                a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
+              });
+              this.adherentPrincipauxTMP = res.filter(e => e.adherentPrincipal === null);
+              console.log(':::::::::::::this.adherentListGroupe:::::::::::::');
+              console.log(this.adherentListGroupe);
+            }
+        );
+      }
 
 }
