@@ -108,7 +108,9 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() avenantId: string;
     @Input() avenantArrivedId: string;
     @Input() groupesRev: Array<Groupe>;
+    @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
+    @Input() adherentPrincipauxTMP: Array<Adherent> = [];
     destroy$ = new Subject<boolean>();
     obj: any = {group: {}, prime: {}};
     historiqueAveantAdherants: HistoriqueAvenantAdherant[];
@@ -227,6 +229,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     sousActeToSave:SousActe = {};
     acteToSave: Acte= {};
     familleActeToSave: Garantie= {};
+    adherentPrincipaux: Array<Adherent> = [];
 
     constructor(
         private store: Store<AppState>,
@@ -598,6 +601,11 @@ export class AvenantRenouvellementComponent implements OnInit {
         if(this.etat!=='CREATE') {
             this.charge();
         }
+        this.adherentPrincipaux = this.adherentPrincipauxTMP;
+        console.log('this.adherentPrincipauxTMP======>',this.adherentPrincipauxTMP);
+        /* if(this.etat === 'CREATE') {
+            this.loadExerciceByPolice(this.police);
+        } */
         
         // this.loadActivedExercice(this.police);
         // this.loadLastExercice(this.police);
@@ -1213,6 +1221,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
         this.objet.historiqueAvenant = this.historiqueAvenant;
         this.objet.groupes = this.groupeListeFinale;
+        this.objet.exercice = this.exerciceRevenu;
+        console.log('*********************this.objet.exercice*******', this.objet.exercice);
         console.log('*********************this.objet*******', this.objet);
         this.eventEmitterM.emit(this.objet);
         console.log('*********************this.groupesRev*******', this.groupesRev);
@@ -1228,6 +1238,8 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.historiqueAvenant.id = this.avenantArrivedId;
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
         this.objet.groupes = this.groupesRev;
+        this.objet.exercice = this.exerciceRevenu;
+        console.log('*********************this.objet.exercice*******', this.objet.exercice);
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log('*********************this.objet*******', this.objet);
         this.eventEmitterM.emit(this.objet);
@@ -1359,13 +1371,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                     console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", this.historiquePlafondFamilleActePlafongConfig);        
                 }
             )
-            console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", this.groupePlafongConfig.id);
-            /* this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
-                (res) => {
-                    this.plafondFamilleActePlafongConfig = res.body;
-                    console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
-                }
-            ); */
+            
             /* this.plafondService.getPlafondGroupeActeByGroupe(this.groupePlafongConfig.id).subscribe(
                 (res) => {
                     this.plafondActePlafongConfig = res.body;
@@ -1386,6 +1392,16 @@ export class AvenantRenouvellementComponent implements OnInit {
             ); */
 
         }
+    }
+
+    loadPlafondConfigBygroupe2(){
+        console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", this.groupePlafongConfig.id);
+             this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig.id).subscribe(
+                (res) => {
+                    this.plafondFamilleActePlafongConfig = res.body;
+                    console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
+                }
+            );
     }
     changeTypeDuree(){
         console.log(this.exerciceForm.get('typeDuree').value);
@@ -1730,6 +1746,8 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     updateAvenant(avenantId: string): void {
         console.log(' avenantId ===== ' + avenantId);
+        console.log(' this.etat; ===== ' + this.etat);
+        
         if (avenantId && avenantId !== undefined) {
             this.historiqueAvenantService.getsHistoriqueAvenantModifReview(avenantId).subscribe(
                 (res: Avenant) => {

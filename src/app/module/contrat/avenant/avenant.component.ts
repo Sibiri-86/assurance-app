@@ -324,6 +324,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   avenantItem: HistoriqueAvenant; 
   historiqueRev: HistoriqueAvenant;
   historiqueGroupeRev: Groupe[] = [];
+  exerciceRev: Exercice = {};
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2129,6 +2130,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
             this.historiqueGroupeRev = res.groupes;
             console.log('***************this.historiqueRev********************', this.historiqueRev);
             console.log('***************this.historiqueGroupeRevPolice********************', this.historiqueGroupeRev);
+            this.exerciceRev = res.historiqueAvenant.exercice;
+            console.log('***************this.exerciceRev********************', this.exerciceRev);
           } else {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }

@@ -1787,7 +1787,7 @@
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
                     <app-avenant-renouvellement [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id" [groupesRev]="historiqueGroupeRev"
-                    [avenantArrivedId]="historiqueRev?.id" (eventEmitterM)="getAvenantRenouvellement($event)">
+                    [avenantArrivedId]="historiqueRev?.id" [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)">
                 </app-avenant-renouvellement>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">
@@ -2053,7 +2053,7 @@
                                 </td>
                                 <td>
                                     <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDÉ</span>
-                                    <span *ngIf="!rowdata?.valide" style="color: red; font-weight: bold">EN ATTENTE ...</span>
+                                    <span *ngIf="!rowdata?.valide" style="color: red !important; font-weight: bold">EN ATTENTE ...</span>
 
                                 </td>
                                 <td style="width: 30em;">

@@ -256,6 +256,7 @@ import { PlafondSousActeComponent } from './module/contrat/avenant/plafond-sous-
 import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
 import { BulletinAdhesionEffects } from './store/contrat/bulletin-adhesion/effect';
 import { PrestataireCartographieComponent } from './module/contrat/prestataire-cartographie/prestataire-cartographie.component';
+import { AvenantIncorporationRenouvellementComponent } from './module/contrat/avenant/avenant-incorporation-renouvellement/avenant-incorporation-renouvellement.component';
 
 @NgModule({
     imports: [
@@ -463,7 +464,8 @@ import { PrestataireCartographieComponent } from './module/contrat/prestataire-c
         PlafondActeComponent,
         PlafondSousActeComponent,
         BulletinAdhesionComponent,
-        PrestataireCartographieComponent
+        PrestataireCartographieComponent,
+        AvenantIncorporationRenouvellementComponent
     ],
     providers: [
         {

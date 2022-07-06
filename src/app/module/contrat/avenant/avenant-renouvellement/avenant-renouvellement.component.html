@@ -595,7 +595,7 @@
                 </ng-template>
             </p-dialog>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
+        <p-tabPanel *ngIf="etat ==='CREATE'" [disabled]="myForm.invalid || !avenantArrivedId" [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
 
             <ng-template pTemplate="content">
                 <div class="p-grid">
@@ -604,7 +604,7 @@
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
                                     [filter]="true" filterBy="libelle" selected="selectedGroupeD" [showClear]="true"
                                     placeholder="Choisir un groupe"
-                                    (onChange)="loadPlafondConfigBygroupe()" [style]="{'width': '100%'}">
+                                    (onChange)="loadPlafondConfigBygroupe2()" [style]="{'width': '100%'}">
                         </p-dropdown>
                     </div>
                 </div>
@@ -1465,11 +1465,11 @@
                 </ng-template>
         </p-tabPanel>
 
-        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
-            <app-avenant-incorporation *ngIf="groupeListes?.length > 0" [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)" [groupesInput]="groupeListes"></app-avenant-incorporation>
-            <app-avenant-incorporation *ngIf="groupeListes?.length === 0" [isRenouv]="true" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation>
+        <p-tabPanel  header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
+            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentListGroupe" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
+            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentListGroupe" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement>
         </p-tabPanel>
-        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
+        <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
             [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
             </app-avenant-retrait>
