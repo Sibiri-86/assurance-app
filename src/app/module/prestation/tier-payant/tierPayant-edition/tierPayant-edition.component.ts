@@ -928,7 +928,28 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
-        console.log("======0=======",this.montantConsomme);
+        console.log("======idGenre=======",this.adherentSelected.qualiteAssure.code);
+        if((this.prestationAdd?.sousActe.idGenre && this.adherentSelected.genre.id === this.prestationAdd?.sousActe.idGenre) ||
+         (this.adherentSelected.genre.id !== this.prestationAdd?.sousActe?.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+          
+            this.prestationAdd.montantRembourse = 0;
+            this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.montantRestant = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.sort = Sort.REJETE;
+            if(this.adherentSelected.qualiteAssure.code =="ENFANT") {
+                this.prestationAdd.observation = "Nous ne prenons pas en compte "+ this.prestationAdd.sousActe?.libelle+ " "+"pour les enfants filles "
+            } else {
+                this.prestationAdd.observation = "Nous ne prenons pas en compte "+ this.prestationAdd.sousActe?.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle;
+
+            }
+        
+      
+          
+      
+        } else {
+
+       
         const prestati: Prestation[] = this.prestationsList.filter(presta=>!presta.id && presta?.sousActe?.id === this.prestationAdd?.sousActe?.id);
         if(prestati?.length > 0) {
             console.log("======1=======",this.montantConsomme);
@@ -1082,6 +1103,7 @@ export class TierPayantEditionComponent implements OnInit {
 
                 this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
+        }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
                 if(!this.prestationAdd.observation) {

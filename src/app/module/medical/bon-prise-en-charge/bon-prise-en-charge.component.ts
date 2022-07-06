@@ -498,10 +498,44 @@ console.log(myForm);
         myForm.patchValue({ montantRembourse :
           (this.prestationForm.get('prestation').value[i].nombreActe *
           this.prestationForm.get('prestation').value[i].coutUnitaire * this.adherentSelected.groupe.taux.taux)  / 100 });
+          if(this.prestationForm.get('prestation').value[i].sousActe.idGenre) {
+            if((this.adherentSelected.genre.id === this.prestationForm.get('prestation').value[i].sousActe.idGenre) ||
+            (this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")){
+              myForm.patchValue({ montantRembourse : 0});
+              myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+              if(this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+                myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour les enfants filles"}); 
+        
+              } else {
+                myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+        
+              }              
+              myForm.patchValue({sort: Sort.REJETE}); 
+            }
+    
+          }
       }else {
         console.log("======sousctra=========",this.montantPlafond - this.montantConsomme);
         if((this.montantPlafond - this.montantConsomme) >= 0) {
-          myForm.patchValue({ montantRembourse : this.montantPlafond - this.montantConsomme });
+          if(this.prestationForm.get('prestation').value[i].sousActe.idGenre) {
+            if((this.adherentSelected.genre.id === this.prestationForm.get('prestation').value[i].sousActe.idGenre) ||
+            (this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")){
+              myForm.patchValue({ montantRembourse : 0});
+              myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+              if(this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+                myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour les enfants filles"}); 
+        
+              } else {
+                myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+        
+              }
+              myForm.patchValue({sort: Sort.REJETE}); 
+            }
+    
+          } else {
+            myForm.patchValue({ montantRembourse : this.montantPlafond - this.montantConsomme });
+          }
+         
 
         } 
 
@@ -549,9 +583,27 @@ console.log(myForm);
       myForm.patchValue({sort: Sort.REJETE}); 
 
     } else {
-      
+      if(this.prestationForm.get('prestation').value[i].sousActe.idGenre) {
+        if((this.adherentSelected.genre.id === this.prestationForm.get('prestation').value[i].sousActe.idGenre) ||
+        (this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")){
+          myForm.patchValue({ montantRembourse : 0});
+          myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
+          if(this.adherentSelected.genre.id !== this.prestationForm.get('prestation').value[i].sousActe.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+            myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour les enfants filles"}); 
+    
+          } else {
+            myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationForm.get('prestation').value[i].sousActe.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+    
+          }
+          myForm.patchValue({sort: Sort.REJETE}); 
+        }
+
+      } else {
         myForm.patchValue({ montantRestant:  this.prestationForm.get('prestation').value[i].baseRemboursement - this.prestationForm.get('prestation').value[i].montantRembourse})
         myForm.patchValue({observation: "Remborsement favorable"}); 
+      }
+      
+        
     }
   });
     this.prefinancementList = [];

@@ -11,6 +11,7 @@ import { categorieSocioProfessionnelList } from 'src/app/store/parametrage/categ
 import * as acteActions from '../../store/parametrage/acte/actions';
 import * as sousActeActions from '../../store/parametrage/sous-acte/actions';
 import * as acteSelector from '../../store/parametrage/acte/selector';
+import * as genreSelector from '../../store/parametrage/genre/selector';
 import * as garantieSelector from '../../store/parametrage/garantie/selector';
 import * as tauxActions from '../../store/parametrage/taux/actions';
 import { tauxList } from 'src/app/store/parametrage/taux/selector';
@@ -370,6 +371,7 @@ export const DATA_DEFINITION = [
         field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
         validators: [Validators.required, Validators.maxLength(50)]
       },
+      
       {
         field: 'idTypeActe', header: 'Acte', width: 1, text_center: false,
         validators: [Validators.required], type: 'dropdown', label: 'libelleTypeActe', dropObj: {
@@ -379,7 +381,17 @@ export const DATA_DEFINITION = [
           field: 'idTypeActe',
           optionLabel: 'libelle'
         }
-      }
+      },
+      {
+        field: 'idGenre', header: 'Genre exclu', width: 1, text_center: false,
+        type: 'dropdown', label: 'libelleGenre', dropObj: {
+          action: genreActions.loadGenre(),
+          selector: genreSelector.genreList,
+          key: 'id',
+          field: 'idGenre',
+          optionLabel: 'libelle'
+        }
+      },
     ],
     entityValidations: [
       {

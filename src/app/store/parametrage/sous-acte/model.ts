@@ -5,6 +5,8 @@ export interface SousActe {
     description?: string;
     libelleTypeActe?: string;
     idTypeActe?: string;
+    libelleGenre?: string;
+    idGenre?: string;
     montantConvantion?: number;
     dateEffet?: Date;
 }
