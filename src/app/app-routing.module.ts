@@ -65,6 +65,7 @@ import { AssureComponent } from './module/contrat/assure/assure.component';
 import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tier-payant/tier-payant-ordre-reglement-search/tier-payant-ordre-reglement-search.component';
 import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
 import { PrestataireCartographieComponent } from './module/contrat/prestataire-cartographie/prestataire-cartographie.component';
+import { ExerciceComponent } from './module/contrat/exercice/exercice.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -85,6 +86,7 @@ import { PrestataireCartographieComponent } from './module/contrat/prestataire-c
                     {path: 'contrat/police', component: PoliceComponent},
                     {path: 'contrat/assure', component: AssureComponent},
                     {path: 'contrat/bareme', component: BaremeComponent},
+                    {path: 'contrat/exercice', component: ExerciceComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
                     {path: 'prestation/prefinancement', component: PrefinancementEditionComponent},
                     {path: 'prestation/prefinancement/valide', component: PrefinancementValideComponent},

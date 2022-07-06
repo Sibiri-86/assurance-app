@@ -6,6 +6,7 @@ import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
 import {Injectable} from '@angular/core';
 import {ExerciceService} from './service';
+import { Exercice } from './model';
 
 @Injectable()
 export class ExerciceEffects {
@@ -43,6 +44,33 @@ export class ExerciceEffects {
 				)
 			)
 		));
+
+		findallExercices$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(featureActions.loadAllExercices),
+			mergeMap(() =>
+				this.exerciceService.$findAllExercices().pipe(
+					switchMap(value => [
+						// GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+						featureActions.setExerciceList({exerciceList: value})
+					]),
+					catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+				)
+			)
+		));
+
+		clotureExercice$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(featureActions.cloture),
+			mergeMap((exercice: Exercice) =>
+				this.exerciceService.cloture(exercice).pipe(
+					switchMap(value => [
+						GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+					//	featureActions.loadAllExercices()
+					]),
+					catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+				))
+			));
 
 
 		findLastExerciceByPolice$ = createEffect(() =>
