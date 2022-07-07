@@ -111,6 +111,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
     @Input() adherentPrincipauxTMP: Array<Adherent> = [];
+    adherentPrincipauxTMPRenouv: Array<Adherent> = [];
     destroy$ = new Subject<boolean>();
     obj: any = {group: {}, prime: {}};
     historiqueAveantAdherants: HistoriqueAvenantAdherant[];
@@ -172,6 +173,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     garantieList$: Observable<Array<Garantie>>;
     territorialiteList$: Observable<Array<Territorialite>>;
     territorialiteList: Array<Territorialite>;
+    adherentsListeActuelleByExercice: Adherent[] = [];
     objet: Avenant = {
         historiqueAvenantAdherantDels: [],
         historiqueAvenantAdherants: [],
@@ -230,6 +232,8 @@ export class AvenantRenouvellementComponent implements OnInit {
     acteToSave: Acte= {};
     familleActeToSave: Garantie= {};
     adherentPrincipaux: Array<Adherent> = [];
+    exerciceOfLast: Exercice = {};
+    exerciceOfLast1: Exercice = {};
 
     constructor(
         private store: Store<AppState>,
@@ -273,7 +277,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         });
 
         this.lastExerciceForm = this.formBuilder.group({
-            id: new FormControl(null),
+            id: new FormControl(''),
             debut: new FormControl('', [Validators.required]),
             fin: new FormControl('', [Validators.required]),
             actived: new FormControl('', [Validators.required]),
@@ -603,6 +607,10 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         console.log('this.adherentPrincipauxTMP======>',this.adherentPrincipauxTMP);
+        console.log('this.lastExerciceForm======>',this.lastExerciceForm.get('id').value);
+        this.adherentPrincipauxTMPRenouv = this.adherentPrincipauxTMP.filter(t=> t.exercice.id === this.lastExerciceForm.get('id').value)
+        console.log('this.adherentPrincipauxTMPRenouv======>',this.adherentPrincipauxTMPRenouv);
+        this
         /* if(this.etat === 'CREATE') {
             this.loadExerciceByPolice(this.police);
         } */
@@ -792,15 +800,17 @@ export class AvenantRenouvellementComponent implements OnInit {
         );
 
         this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+        console.log('******this.police.id*******', this.police.id);
             this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
             this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
                 (res) => {
-                    this.exercice = res;
-                    console.log('******this.exercice*******', this.exercice);
-                    if (this.exercice) {
+                    this.exerciceOfLast = res;
+                    console.log('******this.exerciceOfLast*******', this.exerciceOfLast);
+                    if (this.exerciceOfLast) {
                         this.lastExerciceForm.patchValue({
-                            debut: this.exercice.debut,
-                            fin: this.exercice.fin
+                            id: this.exerciceOfLast.id,
+                            debut: this.exerciceOfLast.debut,
+                            fin: this.exerciceOfLast.fin
                             // actived: this.exercice.actived,
                         });
                     }
@@ -1095,13 +1105,13 @@ export class AvenantRenouvellementComponent implements OnInit {
             }
         }); */
         // this.objet.historiqueAvenantAdherants = this.adherantListTmp;
-        this.adherentFamilleListe.forEach(famille => {
+        /* this.adherentFamilleListe.forEach(famille => {
             famille.adherent.groupe = this.groupeSelected;
             famille.famille.forEach(f => {
                 f.groupe = this.groupeSelected;
             });
         });
-        this.objet.familles = this.adherentFamilleListe;
+        this.objet.familles = this.adherentFamilleListe; */
         this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
         //this.historiqueAvenant.id = this.numero; this.adherantPoliceListActualisee
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
@@ -1243,6 +1253,40 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log('*********************this.objet*******', this.objet);
         this.eventEmitterM.emit(this.objet);
+    }
+
+    createAvenantIncorporation(event: HistoriqueAvenant): void {
+        if (event) {
+            console.log('*********************event.groupe*******', event.groupe);
+            event.aderants.forEach(f => {
+                this.adherentFamilleListe.push(f);
+            });
+            console.log('+++++++++++++');
+            console.log(event);
+
+            this.objet.plafondGroupeActes = [];
+            this.objet.plafondFamilleActes = [];
+            this.objet.plafondGroupeSousActes = [];
+    
+            this.objet.plafondFamilleActes = [];
+        
+            this.historiqueAvenant.id = this.avenantArrivedId;
+            this.objet.groupes = [];
+            this.objet.exercice = this.exerciceRevenu;
+            this.objet.historiqueAvenant = this.historiqueAvenant;
+            
+            this.adherentFamilleListe.forEach(famille => {
+                famille.adherent.groupe = event.groupe;
+                famille.famille.forEach(f => {
+                    f.groupe = event.groupe;
+                });
+            });
+            this.objet.familles = this.adherentFamilleListe;
+            console.log('*********************this.objet*******', this.objet);
+            // this.objet.familles= [];
+            this.eventEmitterM.emit(this.objet);
+        }
+        
     }
 
     addAvenantAdherant(event: HistoriqueAvenant): void {
@@ -1915,6 +1959,11 @@ export class AvenantRenouvellementComponent implements OnInit {
                     }
                 );
             }
+        } 
+        if(index === 3) {
+            if(this.etat === 'CREATE') {
+                this.findAdherentListByExerciceId();
+            }
         }
 
         /* if(index === 2 || index === 3 || index === 4) {
@@ -1984,5 +2033,30 @@ export class AvenantRenouvellementComponent implements OnInit {
                 console.log('****resjkjkjklkjkj****', res);
             }
         );
+      }
+
+      findAdherentListByExerciceId() {
+        this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+        console.log('******this.police.id*******', this.police.id);
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exerciceOfLast1 = res;
+                    console.log('******this.exerciceOfLast1*******', this.exerciceOfLast1);
+                }
+            );
+            console.log('cexoooooooooo === ', this.exerciceOfLast1.id);
+                this.adherentService.findAdherantActuallListByExerciceId(this.exerciceOfLast1.id).subscribe(
+                (res) => {
+                res.forEach(a => {
+                    a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
+                    });
+                console.log('---------- Actual Liste by Exrcice Id ----------');
+                console.log(res);
+                this.adherentsListeActuelleByExercice = res.filter(e => e.adherentPrincipal === null);
+                console.log('this.adherentsListeActuelleByExercice === ', this.adherentsListeActuelleByExercice);
+                // this.adherentsListe = res.filter(e => e.adherentPrincipal === null);
+                }
+            );
       }
 }

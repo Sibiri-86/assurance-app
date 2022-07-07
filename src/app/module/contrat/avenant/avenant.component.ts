@@ -2119,6 +2119,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res) => {
           console.log('***************RETOUR RENOUV********************');
           if (res) {
+            event.familles = [];
             console.log('***************res********************', res);
             this.addMessage('success', 'Opération reussie', 'Avenant créé avec succès');
             if(avenant.historiqueAvenant.isTerminer) {

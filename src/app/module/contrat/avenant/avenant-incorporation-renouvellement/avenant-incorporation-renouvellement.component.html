@@ -65,13 +65,13 @@
                         <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span>
                     </div> -->
             
-                        <div class="p-col-4 p-mb-3"  *ngIf="etat === 'CREATE' || isRenouv">
+                        <!-- <div class="p-col-4 p-mb-3"  *ngIf="etat === 'CREATE' || isRenouv">
                             <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-dropdown [disabled]="(!curentGroupe.id)" [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                                         [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
                                         
                             </p-dropdown>
-                        </div>
+                        </div> -->
                     <!--<div class="p-field p-col-12" *ngIf="isNewGroupe">
                         <app-avenant-groupe (groupeEvent)="addGroupeNew($event)"></app-avenant-groupe>
                     </div>
@@ -140,7 +140,7 @@
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
-                    <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux2" [(ngModel)]="adherentSelected"
+                    <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux" [(ngModel)]="adherentSelected"
                                 (onChange)="loadAdherentPrincipalInfo()" placeholder="Rechercher un adhérent principal" optionLabel="fullName"></p-dropdown>
                 </div>
                 <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()" >
@@ -249,7 +249,8 @@
                         <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter membre de famille" label="Famille"
                                     class="p-button-success" type="button" [disabled]="!this.adherentForm.get('nom').value || !this.adherentForm.get('prenom').value || !this.adherentForm.get('dateNaissance').value
-                                    || !this.adherentForm.get('lieuNaissance').value || !this.adherentForm.get('qualiteAssure').value || !this.adherentForm.get('genre').value || !this.adherentForm.get('dateIncorporation').value"  (click)="ajouter()"></button>
+                                    || !this.adherentForm.get('lieuNaissance').value || !this.adherentForm.get('qualiteAssure').value || !this.adherentForm.get('genre').value || !this.adherentForm.get('dateIncorporation').value
+                                    || !this.curentGroupe.id"  (click)="ajouter()"></button>
                         </div>
                         <!-- <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
@@ -328,31 +329,33 @@
                 </form>
             </p-fieldset>
             <div class="p-fluid formgrig p-col-12 p-mt-3" *ngIf="etat !== 'VIEW'">
-                <div class="p-grid">
-                    <div class="p-col-12">
-                        <hr>
-                    </div>
-                    <div class="p-field p-col-3"></div>
-                    <div class="p-field p-col-2 p-ac-center">
-                        <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" type="button"
-                                class="p-button p-button-warning" label="Annuler" (click)="init()">
-                        </button>
-                    </div>
-                    <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
-                        <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
-                                class="p-button p-button-icon" label="Ajouter à la liste" [disabled]="!this.customForm.get('groupe').value 
-                                && !this.adherentForm.get('nom').value && !this.adherentForm.get('prenom').value && !this.adherentForm.get('dateNaissance').value
-                                && !this.adherentForm.get('dateIncorporation').value  && !this.adherentForm.get('qualiteAssure').value" (click)="createHistoriqueAvenant()"
-                                >
-                        </button>
-                    </div>
-                    <div class="p-field p-col-2 p-ac-center">
-                        <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
-                                class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
-                        </button>
-                    </div>
-                </div>
+                <p-fieldset legend="Enregistrement des incorporées" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                        <div class="p-grid">
+                            <div class="p-col-12">
+                            </div>
+                            <div class="p-field p-col-3"></div>
+                            <div class="p-field p-col-2 p-ac-center">
+                                <button pButton pRipple icon="pi pi-times" pTooltip="Annuler" type="button"
+                                        class="p-button p-button-warning" label="Annuler" (click)="init()">
+                                </button>
+                            </div>
+                            <div class="p-field p-col-2 p-ac-center" *ngIf="isImport === 'NON'">
+                                <button pButton pRipple icon="pi pi-times" pTooltip="Ajouter à la liste" type="button"
+                                        class="p-button p-button-icon" label="Ajouter à la liste" [disabled]="!this.customForm.get('groupe').value 
+                                        && !this.adherentForm.get('nom').value && !this.adherentForm.get('prenom').value && !this.adherentForm.get('dateNaissance').value
+                                        && !this.adherentForm.get('dateIncorporation').value  && !this.adherentForm.get('qualiteAssure').value" (click)="createHistoriqueAvenant()"
+                                        >
+                                </button>
+                            </div>
+                            <div class="p-field p-col-2 p-ac-center">
+                                <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
+                                        class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                                        [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
+                                </button>
+                            </div>
+                        </div>
+                        </p-fieldset>
+
             </div>
         </div>
     </div>

@@ -1466,8 +1466,8 @@
         </p-tabPanel>
 
         <p-tabPanel  header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
-            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentListGroupe" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
-            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentListGroupe" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement>
+            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="createAvenantIncorporation($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
+            <!-- <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement> -->
         </p-tabPanel>
         <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
@@ -1549,7 +1549,7 @@
                 <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
             </div>
     </div> -->
-    <p-fieldset legend="Enregistrement des plafond de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+    <p-fieldset legend="Enregistrement global de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
         <!-- <div class="p-grid p-justify-center"> 
             <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
         <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
