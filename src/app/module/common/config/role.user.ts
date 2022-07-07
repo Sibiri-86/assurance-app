@@ -2,6 +2,7 @@ export const Function = {
     sm_parametrage: 'sm_parametrage',
     sm_production: 'sm_production',
     sm_garant: 'sm_garant',
+    sm_exercice: 'sm_exercice',
     sm_intermediaire: 'sm_intermediaire',
     sm_bareme: 'sm_bareme',
     sm_police: 'sm_police',

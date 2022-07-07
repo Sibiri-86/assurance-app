@@ -29,6 +29,19 @@ export class ExerciceService {
 	);
 }
 
+$findAllExercices(): Observable<Array<Exercice>> {
+	// @FIXME: post request
+   
+	return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/All`).pipe(
+	  map((response: Array<Exercice>) => response)
+	  // catchError(this.handleError())
+  );
+}
+
+cloture(exercice: Exercice): Observable<Exercice> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/cloture`, exercice);
+  }
   getLastExercice(policeId: string): Observable<any> {
 	console.log('police ID === ' + policeId);
 	return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/last-element`,

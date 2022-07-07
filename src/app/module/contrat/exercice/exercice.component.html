@@ -1,0 +1,80 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-toast></p-toast>
+        <div class="card">
+            <!-- <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                  
+                    <div>
+                    <p-dropdown inputId="souscripteur" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="policeList"
+                                        [autoDisplayFirst]="false"
+                                        placeholder="Selectionnez le souscripteur"
+                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="police"></p-dropdown>
+                                        
+                    <p-dropdown inputId="garant" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="garantList"
+                                        [autoDisplayFirst]="false"
+                                        placeholder="Selectionnez le garant"
+                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="garant"></p-dropdown>
+                    
+                    <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar> -->
+            <p-table #dt [value]="exerciceList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+               <!--  <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left"></span>
+                    </div>
+                </ng-template> -->
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        
+                        <th pSortableColumn="nom">Date  debut <p-sortIcon field="matricule"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Date fin <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-exercice>
+
+                    <tr>
+                      
+                        <td><span class="p-column-title">{{exercice.debut | formatTableValue : 'date'}}</span>
+                        </td>
+                        
+                        <td><span class="p-column-title">{{exercice.fin | formatTableValue : 'date'}}</span>
+
+                        </td>
+                        <td>
+                            <span *ngIf="exercice.actived === true" style="color: green; font-weight: bold">ACTIVE</span>
+                            <span *ngIf="exercice.actived === false" style="color: red; font-weight: bold">FERMEE</span>
+                        
+                        </td>
+                        
+                        <td>
+                            <div class="p-col- p-mr-2">
+                                <p-inputSwitch (onChange)="changeStatus(exercice)"  [(ngModel)]="exercice.actived"
+                                               ></p-inputSwitch>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{exerciceList ? exerciceList.length : 0 }} exercice(s) au total.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+
+</div>
