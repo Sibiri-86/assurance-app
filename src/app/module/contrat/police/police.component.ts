@@ -435,7 +435,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     //}
     //});
-    console.log("================",this.plafondActuelleConfiguration);
+    console.log("=====groupe.dateEffet;===========",this.groupe.dateEffet);
     this.plafondActuelleConfiguration.forEach(plafon=>{
       plafon.dateEffet = groupe.dateEffet;
     });
@@ -530,6 +530,14 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.plafondForm.patchValue(value);
       /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
+      console.log("=====groupe.dateEffet1===========",this.groupe.dateEffet);
+      if(this.groupe.id) {
+        console.log("=====groupe.dateEffet;===========",this.groupe.dateEffet);
+        this.plafondActuelleConfiguration.forEach(plafon=>{
+          plafon.dateEffet = this.groupe.dateEffet;
+        });
+      }
+      
       //}
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     }

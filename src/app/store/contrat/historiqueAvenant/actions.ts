@@ -1,8 +1,9 @@
 import {props, createAction} from '@ngrx/store';
-import {HistoriqueAvenant, HistoriqueAvenantList, VerifyRenouvellementIsOverlapReponse} from './model';
+import {AdherentPermute, AdherentPermuteList, HistoriqueAvenant, HistoriqueAvenantList, VerifyRenouvellementIsOverlapReponse} from './model';
 import {Police} from '../police/model';
 export const createHistoriqueAvenant = createAction('[App Init] Create HistoriqueAvenant', props<HistoriqueAvenant>());
 export const updateHistoriqueAvenant = createAction('[App Init] update HistoriqueAvenant', props<HistoriqueAvenant>());
+export const permuterAherent = createAction('[App Init] ajouter une permutation', props<AdherentPermuteList>());
 export const deleteHistoriqueAvenant = createAction('[App Init] delete HistoriqueAvenant', props<HistoriqueAvenant>());
 export const loadHistoriqueAvenant = createAction('[App Init] load HistoriqueAvenant', props<{policeId: string}>());
 export const setHistoriqueAvenant = createAction('[App Init] set HistoriqueAvenant',  props<{historiqueAvenantList: HistoriqueAvenantList}>());
