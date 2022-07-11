@@ -1474,6 +1474,15 @@
             [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
             </app-avenant-retrait>
         </p-tabPanel>
+
+        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+            <app-groupe-ajout [police] = "police" [groupeListes]="groupeListes"></app-groupe-ajout>
+          </p-tabPanel>
+        <p-tabPanel header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+
+            <app-adherent-basculer [groupeListes]="groupeListes" [police] = "police"></app-adherent-basculer>
+
+        </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
             <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
             <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
