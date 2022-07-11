@@ -1,4 +1,6 @@
 import {
+    AdherentPermute,
+    AdherentPermuteList,
     Avenant,
     HistoriqueAvenant,
     HistoriqueAvenantAdherant,
@@ -44,6 +46,12 @@ postHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     console.log(historiqueAvenant);
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}`, historiqueAvenant, {headers: headers});
   }
+
+  permuterAherent(adherentPermutList: AdherentPermuteList): Observable<any> {
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/permuter`, adherentPermutList,
+        {observe: 'response'}
+    );
+}
 
 updateHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     // @FIXME: post request
@@ -190,6 +198,8 @@ private handleError<T>() {
             {observe: 'response'}
         );
     }
+
+   
 
     // get-date-fin
     getDateFin(debut: Date, typeDuree: string, duree: number): Observable<any> {

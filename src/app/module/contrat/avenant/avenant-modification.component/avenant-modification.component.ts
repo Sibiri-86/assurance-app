@@ -7,13 +7,15 @@ import {takeUntil} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import {groupeList} from '../../../../store/contrat/groupe/selector';
-import {Groupe} from '../../../../store/contrat/groupe/model';
+import { Groupe} from '../../../../store/contrat/groupe/model';
 import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent} from '../../../../store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import {
+  AdherentPermute,
+  AdherentPermuteList,
   Avenant,
   HistoriqueAvenant,
   HistoriqueAvenantAdherant,
@@ -112,6 +114,8 @@ export class AvenantModificationComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   obj: any = {group: {}, prime: {}};
   historiqueAveantAdherants: HistoriqueAvenantAdherant[] = [];
+  historiqueAveantAdherantsPermute: HistoriqueAvenantAdherant[] = [];
+  historiqueAveantAdherantsPermuteSelected: HistoriqueAvenantAdherant[] = [];
   historiqueAveantAdherantsTMP: HistoriqueAvenantAdherant[] = [];
   historiqueAveantAdherantEdited: HistoriqueAvenantAdherant[] = [];
   private clonedProducts: any = [];
@@ -212,6 +216,11 @@ export class AvenantModificationComponent implements OnInit {
   historiquePlafondActePlafongConfig: Array<HistoriquePlafondActe> = [];
   @Output() currentExercice: Exercice;
   groupeListeFinale: Groupe []= [];
+  groupeSelectedPermuter: Groupe = {};
+  groupeListNouvo: Groupe []= [];
+  groupeSelectedNouvo: Groupe = {};
+  adherentPermutList?: AdherentPermute [] = [];
+  adherentPermutSelect?: AdherentPermute = {};
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -791,6 +800,19 @@ export class AvenantModificationComponent implements OnInit {
     console.log(this.plafondActe);
   }
 
+  loadAherantByGroupe1(): void {
+    if(this.adherentPermutList) {
+      this.adherentPermutList.forEach(adh=>{
+        if(adh.historiqueAvenantAdherents) {
+          adh.historiqueAvenantAdherents.forEach(ht=>{
+            this.historiqueAveantAdherantsTMP.find(h=>h.id === ht.id).adherent.groupe = adh.groupe;
+          });
+        }
+      })
+    }
+    this.historiqueAveantAdherantsPermute = this.historiqueAveantAdherantsTMP.filter(a => a.adherent.groupe.id === this.groupeSelectedPermuter.id);
+    this.groupeListNouvo = this.groupeListes.filter(group=>group.id !== this.groupeSelectedPermuter.id);
+  }
   loadAherantByGroupe(): void {
     console.log(this.groupeSelected);
     this.obj.group = this.groupeSelected;
@@ -1753,6 +1775,47 @@ export class AvenantModificationComponent implements OnInit {
                     }
                 }
             );
+  }
+
+
+  addAherentNewGroupe() {
+    this.adherentPermutSelect.groupe = this.groupeSelectedNouvo;
+    console.log(this.groupeSelectedNouvo);
+    
+    this.adherentPermutSelect.historiqueAvenantAdherents = this.historiqueAveantAdherantsPermuteSelected;
+    this.adherentPermutList.push(this.adherentPermutSelect);
+    if(this.historiqueAveantAdherantsPermuteSelected) {
+      this.historiqueAveantAdherantsPermuteSelected.forEach(hist=> {
+       
+        this.historiqueAveantAdherantsPermute = this.historiqueAveantAdherantsPermute.filter(hist1=> hist1.id !== hist.id);
+        // this.historiqueAveantAdherantsTMP.find(hist2=> hist2.id !== hist.id).adherent.groupe =  this.groupeSelectedNouvo;
+       
+
+
+       
+
+      });
+    }
+    
+    this.adherentPermutSelect = {};
+    this.groupeSelectedNouvo  = {};
+    this.historiqueAveantAdherantsPermuteSelected = [];
+
+   
+  }
+
+  saveAherentNewGroupe() {
+    const adherentPermutList1:  AdherentPermuteList = {};
+    adherentPermutList1.adherentPermuteList = this.adherentPermutList;
+    
+    console.log(adherentPermutList1);
+    this.store.dispatch(featureActionHistoriqueAdherant.permuterAherent(adherentPermutList1));
+    this.historiqueAveantAdherantsTMP.filter
+    this.historiqueAveantAdherantsPermute = [];
+    this.groupeSelectedPermuter = {};
+    this.historiqueAveantAdherantsPermuteSelected = [];
+    this.adherentPermutList = [];
+   // this.loadHistoriqueAvenantAdherantByPolice();
   }
 
   onExerciceChange(): void {

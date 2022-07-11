@@ -66,6 +66,15 @@ export enum TypeHistoriqueAvenant {
     SUSPENSION = 'SUSPENSION',
 }
 
+export interface AdherentPermute {
+    groupe?: Groupe;
+    historiqueAvenantAdherents?: HistoriqueAvenantAdherant[];
+}
+
+export interface AdherentPermuteList {
+    adherentPermuteList?: Array<AdherentPermute>;
+}
+
 export interface HistoriqueAvenantAdherant {
     id?: string;
     avenant?: HistoriqueAvenant;

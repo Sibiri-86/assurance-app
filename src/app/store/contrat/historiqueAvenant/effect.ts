@@ -6,7 +6,7 @@ import { HistoriqueAvenantService} from './service';
 import * as featureActions from './actions';
 import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import {HistoriqueAvenant} from "./model";
+import {AdherentPermute, AdherentPermuteList, HistoriqueAvenant} from "./model";
 
 @Injectable()
 export class HistoriqueAvenantEffects {
@@ -43,6 +43,19 @@ export class HistoriqueAvenantEffects {
                 ))
             ));
 
+    permuterAherent$ = createEffect(() =>
+        this.actions$.pipe(
+                ofType(featureActions.permuterAherent),
+                mergeMap((adherentPermutList: AdherentPermuteList) =>
+                this.historiqueAvenantService.permuterAherent(adherentPermutList).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg)
+                    ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            ));
+
         deleteHistoriqueAvenant$ = createEffect(() =>
         this.actions$.pipe(
                 ofType(featureActions.deleteHistoriqueAvenant),
@@ -68,6 +81,8 @@ export class HistoriqueAvenantEffects {
                 )
             )
         ));
+
+        
 
     fetchHistoriquePlafond$ = createEffect(() =>
         this.actions$.pipe(
