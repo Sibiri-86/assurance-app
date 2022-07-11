@@ -107,6 +107,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() etat: string;
     @Input() avenantId: string;
     @Input() avenantArrivedId: string;
+    @Input() avenantNumero: number;
     @Input() groupesRev: Array<Groupe>;
     @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
@@ -826,6 +827,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     loadAherantByGroupe(): void {
         console.log(this.groupeSelected);
         this.obj.group = this.groupeSelected;
+        console.log('lllllllllll', this.groupeSelected);
         this.historiqueAveantAdherants = this.adherantListTmp.filter(a => a.adherent.groupe.id === this.groupeSelected.id);
         this.setGroupeAndPrime(this.groupeSelected);
     }
@@ -836,6 +838,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     getGroupeSelected(): void {
         this.setGroupeAndPrime(this.groupeSelected);
+        console.log('lllllllllll', this.groupeSelected);
     }
 
     loadGroupe(police: Police): void {
@@ -871,10 +874,10 @@ export class AvenantRenouvellementComponent implements OnInit {
             taux: group?.taux,
             territorialite: group.territorialite || [],
             duree: group.duree,
-            dateEffet: new Date(this.exercice.debut),
+            dateEffet: new Date(this.exerciceForm.get('debut').value),
             // typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
             typeDuree: group?.typeDuree,
-            dateEcheance: new Date(this.exercice.fin),
+            dateEcheance: new Date(this.exerciceForm.get('fin').value),
             numeroGroupe: group.numeroGroupe,
             typePrime: group?.typePrime,
             adresse: group?.adresse,
@@ -1051,7 +1054,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     createAvenantModif(): void {
-        this.plafondActe.forEach(pa => {
+       /* this.plafondActe.forEach(pa => {
             pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
             // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
         });
@@ -1093,11 +1096,11 @@ export class AvenantRenouvellementComponent implements OnInit {
                     }
                 });
             }
-        });
+        });*/
         // this.objet.plafondGroupeActes = this.plafondActePlafongConfig;
         // this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
         // this.objet.plafondGroupeSousActes = this.plafondSousActePlafongConfig;
-        this.objet.police = this.police;
+        // this.objet.police = this.police;
         // this.objet.historiqueAvenantAdherantDels = this.historiqueAvenant.historiqueAvenantAdherants;
         /* this.historiqueAvenant.historiqueAvenantAdherants.forEach(haa => {
             if (this.adherantListTmp.find(e => e.adherent.id === haa.adherent.id) !== null) {
@@ -1112,7 +1115,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             });
         });
         this.objet.familles = this.adherentFamilleListe; */
-        this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
+       /* this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
         //this.historiqueAvenant.id = this.numero; this.adherantPoliceListActualisee
         this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
@@ -1141,7 +1144,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             default: break;
         }
         // this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-        this.objet.groupes = this.groupeListeFinale;
+        this.objet.groupes = this.groupeListeFinale;*/
         /* this.objet.groupe = this.groupeForm.value;
         this.objet.groupe.prime = this.primeForm.value;
         this.objet.groupe.typePrime = this.primeForm.get('prime').value;
@@ -1164,14 +1167,16 @@ export class AvenantRenouvellementComponent implements OnInit {
         if (this.objet.groupe.prime.primeFamille) {
             this.objet.groupe.prime.primeFamille = removeBlanks(this.objet.groupe.prime.primeFamille + '');
         } */
-        console.log('*********************aveanant*********************************');
+       /* console.log('*********************aveanant*********************************');
         console.log(this.objet);
-        console.log('*********************avenant.groupe.prime*********************************');
-    
-        // this.eventEmitterM.emit(this.objet);
+        console.log('*********************avenant.groupe.prime*********************************');*/
+        this.historiqueAvenant.isTerminer = true;
+        this.objet.historiqueAvenant = this.historiqueAvenant;
+        console.log('*this.objet.historiqueAvenant.isTerminer***', this.objet.historiqueAvenant.isTerminer);
+        this.eventEmitterM.emit(this.objet);
     }
 
-    createAvenantInfo(): void {
+     createAvenantInfo(): void {
         
         this.objet.police = this.police;
         this.historiqueAvenant.dateEffet = this.myForm.get('dateEffet').value;
@@ -1229,6 +1234,9 @@ export class AvenantRenouvellementComponent implements OnInit {
         
         this.historiqueAvenant.id = this.avenantArrivedId;
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
+        this.historiqueAvenant.isTerminer = false;
+        this.objet.historiqueAvenant.numero = this.avenantNumero;
+        console.log('*********************this.avenantNumero*******', this.avenantNumero);
         this.objet.historiqueAvenant = this.historiqueAvenant;
         this.objet.groupes = this.groupeListeFinale;
         this.objet.exercice = this.exerciceRevenu;
@@ -1247,9 +1255,12 @@ export class AvenantRenouvellementComponent implements OnInit {
     
         this.historiqueAvenant.id = this.avenantArrivedId;
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
+        this.objet.historiqueAvenant.numero = this.avenantNumero;
+        console.log('*********************this.avenantNumero*******', this.avenantNumero);
         this.objet.groupes = this.groupesRev;
         this.objet.exercice = this.exerciceRevenu;
         console.log('*********************this.objet.exercice*******', this.objet.exercice);
+        this.historiqueAvenant.isTerminer = false;
         this.objet.historiqueAvenant = this.historiqueAvenant;
         console.log('*********************this.objet*******', this.objet);
         this.eventEmitterM.emit(this.objet);
@@ -1273,6 +1284,9 @@ export class AvenantRenouvellementComponent implements OnInit {
             this.historiqueAvenant.id = this.avenantArrivedId;
             this.objet.groupes = [];
             this.objet.exercice = this.exerciceRevenu;
+            this.historiqueAvenant.isTerminer = false;
+            this.objet.historiqueAvenant.numero = this.avenantNumero;
+            console.log('*********************this.avenantNumero*******', this.avenantNumero);
             this.objet.historiqueAvenant = this.historiqueAvenant;
             
             this.adherentFamilleListe.forEach(famille => {
@@ -1998,7 +2012,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                 this.police = res.police;
                 this.historiqueGroupes = res.historiqueGroupes;
                 this.historiqueAveantAdherants = res.historiqueAvenantAdherants;
-                this.numero = res.historiqueAvenant.numeroGarant;
+                this.numero = res.historiqueAvenant.numero;
                 this.avenantArrivedId = res.historiqueAvenant.id;
                 this.myForm.patchValue({
                     id: res.historiqueAvenant.id,

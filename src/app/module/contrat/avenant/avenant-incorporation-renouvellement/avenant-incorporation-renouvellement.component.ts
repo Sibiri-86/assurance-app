@@ -349,7 +349,6 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
         this.historiqueAvenant1.groupe = this.curentGroupe;
         this.historiqueAvenant1.police = this.police;
         this.adherentFamilleEvent.emit(this.historiqueAvenant1);
-        this.adherentFamilleListe = [];
         this.init();
     }
 

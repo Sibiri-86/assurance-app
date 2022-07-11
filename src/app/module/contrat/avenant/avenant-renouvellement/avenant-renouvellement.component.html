@@ -276,7 +276,7 @@
                 </p-fieldset>
 
         </p-tabPanel>
-        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
+        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
             <div class="p-grid">
                 <div class="p-col-12">
                     <p-table #dt [value]="groupeListes" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -1469,7 +1469,7 @@
             <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="createAvenantIncorporation($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
             <!-- <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement> -->
         </p-tabPanel>
-        <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
+        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
             [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
             </app-avenant-retrait>
