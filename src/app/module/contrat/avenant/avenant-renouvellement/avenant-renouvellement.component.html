@@ -1498,7 +1498,7 @@
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
                     </span>
-                    <label class="p-fieldset-content">Groupe</label>
+                    
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedFilter"
                                     [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" (onChange)="loadAdherentFiltertByGroupe()"
                                    >
