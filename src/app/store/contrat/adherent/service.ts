@@ -155,15 +155,25 @@ private handleError<T>() {
         );
     }
 
-    getListeActualisee(policeId: string): Observable<Array<Adherent>> {
+    getAdherentByGroupe(idGroupe: string): Observable<AdherentList> {
         // @FIXME: get request
-        // adherent/liste-actualisee
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/liste-actualisee`
-        , {params: createRequestOption({policeId})}).pipe(
-            map((response: Adherent[]) => response),
-            catchError(this.handleError())
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${idGroupe}`).pipe(
+          map((response: AdherentList) => response),
+          catchError(this.handleError())
         );
+      
     }
+
+
+    getListeActualisee(policeId: string): Observable<Array<Adherent>> {
+      // @FIXME: get request
+      // adherent/liste-actualisee
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/liste-actualisee`
+      , {params: createRequestOption({policeId})}).pipe(
+          map((response: Adherent[]) => response),
+          catchError(this.handleError())
+      );
+  }
 
     searchAssure(numero: number): Observable<AdherentResearchReponse> {
         // @FIXME: post request

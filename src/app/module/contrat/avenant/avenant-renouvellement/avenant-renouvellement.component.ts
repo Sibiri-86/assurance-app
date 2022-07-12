@@ -121,6 +121,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     genreList: Array<Genre>;
     genreList$: Observable<Array<Genre>>;
     groupeSelected: Groupe = {};
+    groupeSelectedFilter: Groupe = {};
     groupeForm: FormGroup;
     primeForm: FormGroup;
     entityValidations: Array<EntityValidations>;
@@ -822,6 +823,20 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.plafondActe[this.indexeActe].listeSousActe = this.plafondSousActe;
         console.log(this.plafondActe);
     }
+    loadAdherentFiltertByGroupe() {
+        
+        this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.adherentList));
+        this.store.dispatch(loadListeActualisee.loadAdherentGroupe({idGroupe: this.groupeSelectedFilter.id}));
+        this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
+            .subscribe((value1) => {
+                if (value1) {
+                    this.adherantPoliceListActualisee = value1.slice();
+                    
+                } else{
+                    this.adherantPoliceListActualisee = [];
+                }
+            });
+    }
 
     loadAherantByGroupe(): void {
         console.log(this.groupeSelected);
@@ -1505,6 +1520,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.plafondFamilleActePlafongConfig.push(plafondFamilleActe);
     }
     onRowEditInitPlafondConfiguration(plafondFamilleActe: PlafondFamilleActe) {
+        plafondFamilleActe.dateEffet = new Date(plafondFamilleActe.dateEffet);
         this.clonedPlafondFamilleActe[plafondFamilleActe.garantie?.id] = {
             ...plafondFamilleActe,
         };
@@ -1521,6 +1537,36 @@ export class AvenantRenouvellementComponent implements OnInit {
         }
       });
     } else {
+        if(plafondFamilleActe.listeActe) {
+            plafondFamilleActe.listeActe.forEach(act=>{
+                this.acteToSave = this.acteListFinal.find(acte => acte.id === act.id);
+                if(this.acteToSave?.id) {
+                  this.acteListFinal.forEach(acte => {
+                    if(acte.id === act.id) {
+                      acte === act;
+                    }
+                  });
+                } else {
+                    if(act?.listeSousActe) {
+                        act.listeSousActe.forEach(sou=>{
+                            this.sousActeToSave = this.sousActeListFinal.find(sousActe => sousActe.id === sou.id);
+                            console.log('***this.sousActeToSave****', this.sousActeToSave);
+                            if(this.sousActeToSave?.id) {
+                              this.sousActeListFinal.forEach(sous => {
+                                if(sous.id === sou.id) {
+                                  sous = sou;
+                                }
+                              })
+                            } else {
+                              this.sousActeListFinal.push(sou);
+                            }
+                        });
+                    }
+                   
+                  this.acteListFinal.push(act);
+                }
+            });
+        }
       this.familleActeListFinal?.push(plafondFamilleActe);
     }
     console.log('***this.familleActeListFinal****', this.familleActeListFinal);
@@ -1619,6 +1665,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     onRowEditInitPlafondConfigurationActe(plafondActe: PlafondActe) {
+        plafondActe.dateEffet = new Date(plafondActe.dateEffet);
         this.clonedPlafondActe[plafondActe.acte?.id] = { ...plafondActe };
     }
 
@@ -1632,6 +1679,22 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
               });
             } else {
+                if(plafondActe?.listeSousActe) {
+                    plafondActe.listeSousActe.forEach(sou=>{
+                        this.sousActeToSave = this.sousActeListFinal.find(sousActe => sousActe.id === sou.id);
+                        console.log('***this.sousActeToSave****', this.sousActeToSave);
+                        if(this.sousActeToSave?.id) {
+                          this.sousActeListFinal.forEach(sous => {
+                            if(sous.id === sou.id) {
+                              sous = sou;
+                            }
+                          })
+                        } else {
+                          this.sousActeListFinal.push(sou);
+                        }
+                    });
+                }
+               
               this.acteListFinal.push(plafondActe);
             }
             console.log('***this.acteListFinal****', this.acteListFinal);
@@ -1643,6 +1706,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     onRowEditInitPlafondConfigurationSousActe(plafondSousActe: PlafondSousActe) {
+        plafondSousActe.dateEffet = new Date(plafondSousActe.dateEffet);
         this.clonedPlafondSousActe[plafondSousActe.sousActe?.id] = {
             ...plafondSousActe,
         };
@@ -2059,4 +2123,16 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             );
       }
+      changeDateSousActe(acte: PlafondActe) {
+
+        console.log("===========acte==============");
+        console.log(acte.dateEffet);
+        console.log("============acte=============");
+       acte.listeSousActe.forEach(sou=>{
+
+        sou.dateEffet = acte.dateEffet;
+       });
+      }
+
+
 }
