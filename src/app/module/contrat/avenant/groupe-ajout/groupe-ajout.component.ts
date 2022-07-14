@@ -1883,6 +1883,37 @@ export class GroupeAjoutComponent implements OnInit{
      this.displayDialogFormUpdateAdherent = true;
      this.adherentForm.patchValue(this.adherent);
    }
+
+   saisiePrimePersonne() {
+    console.log('le montant saisie de la prime par personne est' + this.plafondForm.get('plafondAnnuellePersonne').value);
+    if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
+
+      if (plafondPersonne > plafondFamille){
+        this.valideMontantPlafond = false;
+        this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
+    } else {
+        this.valideMontantPlafond = true;
+    }
+  }
+}
+
+  saisiePrimeFamille() {
+    console.log('le montant saisie de la prime par personne est' + this.plafondForm.get('plafondAnnuellePersonne').value);
+    if (this.plafondForm.get('plafondAnnuellePersonne').value && this.plafondForm.get('plafondAnnuelleFamille').value){
+      const plafondPersonne = removeBlanks(this.plafondForm.get('plafondAnnuellePersonne').value + '');
+      const plafondFamille =  removeBlanks(this.plafondForm.get('plafondAnnuelleFamille').value + '');
+
+      if (plafondPersonne > plafondFamille) {
+        this.valideMontantPlafond = false;
+        this.showToast("error", "INFORMATION", "le montant plafond par personne ne doit pas etre superieur au plafond par famille");
+    } else {
+        this.valideMontantPlafond = true;
+    }
+  }
+  }
+
  
  
  

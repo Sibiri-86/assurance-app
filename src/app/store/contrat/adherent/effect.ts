@@ -118,11 +118,11 @@ export class AdherentEffects {
     )
     );
 
-    /* fetchAdherentGroupe$ = createEffect(() =>
+     fetchAdherentGroupe$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherentGroupe),
         mergeMap(({idGroupe}) =>
-            this.AdherentService.getAdherentsByGroupe(idGroupe).pipe(
+            this.AdherentService.getAdherentByGroupe(idGroupe).pipe(
                 switchMap(value => [
                     featureActions.setAdherent(value)
                 ]),
@@ -130,7 +130,7 @@ export class AdherentEffects {
             )
         )
     )
-    ); */
+    ); 
 
 import$ = createEffect(() =>
 this.actions$.pipe(
