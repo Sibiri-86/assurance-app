@@ -435,23 +435,21 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       //this.plafondActuelleConfiguration[0].montantPlafond = 20000;
     //}
     //});
-    console.log("=====groupe.dateEffet;===========",this.groupe.dateEffet);
-    this.plafondActuelleConfiguration.forEach(plafon=>{
-      plafon.dateEffet = groupe.dateEffet;
-    });
+    console.log("=====groupe.dateEffet; bien===========",this.groupe.dateEffet);
     this.plafondActuelleConfiguration = this.plafondActuelleConfiguration?.filter(famille=> famille?.etat === "ACTIF");
     
     for (let i = 0; i < this.plafondActuelleConfiguration.length; i++) {
-      this.plafondActuelleConfiguration[i].dateEffet = new Date();
+      this.plafondActuelleConfiguration[i].dateEffet = new Date(groupe.dateEffet);
       this.plafondActuelleConfiguration[i].listeActe = this.plafondActuelleConfiguration[i]?.listeActe?.filter(acte=>acte.etat ==="ACTIF");
       for (let j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
-        this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date();
+        this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(groupe.dateEffet);
         this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe = this.plafondActuelleConfiguration[i]?.listeActe[j]?.listeSousActe.filter(sousActe=>sousActe.etat ==="ACTIF");
         for (let k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++) {
-          this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet =  new Date();
+          this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet =  new Date(groupe.dateEffet);
         }
       }
     }
+    console.log("=====groupe.dateEffet; plafondActuelleConfiguration===========",this.plafondActuelleConfiguration);
     console.log(groupe);
     this.groupe = groupe;
     console.log(this.ifExistTerritorialiteInternational(groupe));
@@ -530,9 +528,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.plafondForm.patchValue(value);
       /** renvoyer la configuration actuelle dans l'objet */
       this.plafondActuelleConfiguration = value.plafondFamilleActe.slice();
-      console.log("=====groupe.dateEffet1===========",this.groupe.dateEffet);
+      console.log("=====groupevalue===========",this.groupe.dateEffet);
       if(this.groupe.id) {
-        console.log("=====groupe.dateEffet;===========",this.groupe.dateEffet);
+      //  console.log("=====groupe.dateEffet;===========",this.groupe.dateEffet);
         this.plafondActuelleConfiguration.forEach(plafon=>{
           plafon.dateEffet = this.groupe.dateEffet;
         });
@@ -796,13 +794,13 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         if(this.importer) {
           this.plafondActuelleConfiguration =  this.plafondActuelleConfiguration.filter(plafond=>plafond.etat === Etat.ACTIF);
         for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
-          this.plafondActuelleConfiguration[i].dateEffet = new Date(this.police.dateEffet);
+          this.plafondActuelleConfiguration[i].dateEffet = new Date(this.groupe.dateEffet);
           this.plafondActuelleConfiguration[i].listeActe = this.plafondActuelleConfiguration[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
           for (var j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
-            this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.police.dateEffet);
+            this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
             this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe = this.plafondActuelleConfiguration[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
             for (var k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++){
-              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.police.dateEffet);
+              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
             }
           }
         }
@@ -1131,6 +1129,51 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     
   }
 
+  appliquerTauxFamilleGlobal(plafond: PlafondFamilleActe) {
+    if(plafond.taux) {
+      if(plafond.listeActe) {
+        plafond.listeActe.forEach(act=>{
+          act.taux =plafond.taux;
+          if(act.listeSousActe) {
+            act.listeSousActe.forEach(sous=>{
+
+              sous.taux = act.taux;
+            });
+          }
+        })
+      }
+    }
+  }
+
+  appliquerDomaineFamilleGlobal(plafond: PlafondFamilleActe) {
+    if(plafond.domaine) {
+      if(plafond.listeActe) {
+        plafond.listeActe.forEach(act=>{
+          act.domaine =plafond.domaine;
+          if(act.listeSousActe) {
+            act.listeSousActe.forEach(sous=>{
+              sous.domaine = act.domaine;
+            });
+          }
+        })
+      }
+    }
+  }
+
+  appliquerDomaineActeGlobal(acte: PlafondActe) {
+    if(acte.domaine) {
+      
+          if(acte.listeSousActe) {
+            acte.listeSousActe.forEach(sous=>{
+              sous.domaine = acte.domaine;
+            });
+          }
+      }
+  }
+  
+
+  
+
   // fonction pour creer adherent.
   onCreateAddherent() {
     console.log('àààààààààààààààààààààthis.adherentForm.valueàààààààààààààààààààààààà', this.adherentForm.value);
@@ -1165,7 +1208,20 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   changePrime(event) {
+   
         this.selectedTypePrime = event.value;
+      /*  this.primeForm = this.formBuilder.group({
+          prime: new FormControl(null, [Validators.required]),
+          primeEmploye: new FormControl(""),
+          primeConjoint: new FormControl(""),
+          primeEnfant: new FormControl(""),
+          primeFamille: new FormControl(""),
+          primeAdulte: new FormControl(""),
+          primePersonne: new FormControl(""),
+          primeAnnuelle: new FormControl(null)
+        });
+        console.log(this.selectedTypePrime.code);
+        this.primeForm.get('prime').setValue(event.value);
     /*
     console.log(event.value);
     if (event.value.libelle === "famille") {
@@ -1453,6 +1509,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
      /*  this.plafondService.$getBaremesConfigSansTaux(this.bareme).subscribe((rest)=>{
         console.log(rest)
       }) */
+
+      
       this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTaux({typeBareme: this.bareme}));
     }
 
@@ -2583,6 +2641,22 @@ changeGarantie(garantie, indexLigne: number) {
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
             (res) => {
               this.avenantModif1.plafondFamilleActes = res.body;
+              if(this.avenantModif1.plafondFamilleActes) {
+                this.avenantModif1.plafondFamilleActes.forEach(pla=>{
+                  pla.dateEffet = groupe.dateEffet;
+                  if(pla.listeActe) {
+                    pla.listeActe.forEach(act=>{
+
+                      act.dateEffet = groupe.dateEffet;
+                      if(act.listeSousActe) {
+                        act.listeSousActe.forEach(sou=>{
+                          sou.dateEffet = groupe.dateEffet;
+                        });
+                      }
+                    });
+                  }
+                });
+              }
               console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes)
             }
     );

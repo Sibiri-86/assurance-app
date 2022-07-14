@@ -322,7 +322,7 @@
                         <label for="taux">Sélectionné un taux global</label>
                     </div>
                         <div class="p-field">
-                        <p-dropdown dataKey="id"  inputId="tauxGlobal" [filter]="true" showClear="true" [options]="tauxList" placeholder="Select taux" optionLabel="taux" [(ngModel)]="tauxGlobal"  (onChange)="appliquerTauxGlobal()"
+                        <p-dropdown dataKey="id" [disabled]="!plafondActuelleConfiguration.length" inputId="tauxGlobal" [filter]="true" showClear="true" [options]="tauxList" placeholder="Select taux" optionLabel="taux" [(ngModel)]="tauxGlobal"  (onChange)="appliquerTauxGlobal()"
                         [style]="{'width':'100%'}"></p-dropdown>
                     </div>
                 </div>
@@ -394,7 +394,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
-                                                [style]="{'width':'100%'}"></p-dropdown>
+                                                [style]="{'width':'100%'}" (onChange)="appliquerTauxFamilleGlobal(plafond)"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{plafond?.taux?.taux}}
@@ -405,7 +405,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                    <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle" (onChange)="appliquerDomaineFamilleGlobal(plafond)"
                                                    [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -524,7 +524,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine" appendTo="body"
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine" appendTo="body" (onChange)="appliquerDomaineActeGlobal(plafond)"
                                                        [style]="{'width':'100%'}"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">

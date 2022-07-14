@@ -176,4 +176,13 @@ export class AdherentBasculerComponent implements OnInit {
    // this.loadHistoriqueAvenantAdherantByPolice();
   }
 
+  rowSelected(event) {
+    console.log(event);
+  }
+
+  onRowSelectionChange(event) {
+    if(event) {
+    }
+    console.log(event);
+}
 }

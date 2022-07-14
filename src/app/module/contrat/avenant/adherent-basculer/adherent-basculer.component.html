@@ -32,6 +32,8 @@
         <div class="p-col-12">
             <p-table #dt [value]="historiqueAveantAdherantsPermute" [(selection)]="historiqueAveantAdherantsPermuteSelected" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
             [rowHover]="true" styleClass="p-datatable-customers"
+            (onRowSelect)="onRowSelectionChange($event)"
+           (onRowUnselect)="onRowSelectionChange()"
              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
             [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
