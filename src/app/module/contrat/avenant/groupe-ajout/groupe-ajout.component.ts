@@ -109,6 +109,7 @@ import * as adherantSelector from "../../../../store/contrat/adherent/selector";
 import {groupeList} from "../../../../store/contrat/groupe/selector";
 import * as adherentSelector from "../../../../store/contrat/adherent/selector";
 import * as groupeSelector from '../../../../store/contrat/groupe/selector';
+import {loadPolice} from "src/app/store/contrat/police/actions";
 
 
 
@@ -1923,4 +1924,20 @@ export class GroupeAjoutComponent implements OnInit{
    }
   
 
+   onClickReponse(event){
+    console.log(this.reponse);
+  }
+
+  loadAllPolice(): void {
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPolice());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+        console.log('+++++++++++this.policeList+++++++++++++');
+        console.log(this.policeList);
+      }
+    });
+  }
 }
