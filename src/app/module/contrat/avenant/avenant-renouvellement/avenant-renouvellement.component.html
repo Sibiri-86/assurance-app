@@ -1465,14 +1465,39 @@
                 </ng-template>
         </p-tabPanel>
 
-        <p-tabPanel  header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
-            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="createAvenantIncorporation($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
+        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
+        <div *ngIf="etat !=='VIEW'">
+            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0 || etat ==='VIEW'" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police"
+                 (adherentFamilleEvent)="createAvenantIncorporation($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
+        </div>
+
+                 <!-- Affichage de la liste des personnees incorporées -->
+            <div class="p-fluid p-formgrid p-grid" *ngIf="etat ==='VIEW'">
+                <div class="p-field p-col-12">
+                            <app-renouvellement-adherent-list [historiqueAvenantAdherants]="historiqueAveantAdherantIncorp" *ngIf="historiqueAveantAdherantIncorp?.length > 0"
+                            (historiqueAvenantAdherantList)="listeModifier($event)" [statut]="etat">
+                            </app-renouvellement-adherent-list>
+        
+                </div>
+            </div>
             <!-- <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement> -->
         </p-tabPanel>
-        <p-tabPanel header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
-            <app-avenant-retrait *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="deleteAdherant($event)"
-            [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="exercice?.debut">
-            </app-avenant-retrait>
+        <p-tabPanel  header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
+            <div *ngIf="etat !=='VIEW'">
+                <app-avenant-retrait-renouvellement [exerciceRevenu]="exerciceRev" *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="createAvenantRetrait($event)"
+                [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="avenantD">
+                </app-avenant-retrait-renouvellement>
+            </div>
+
+            <!-- Affichage de la liste des personnees rétirées -->
+            <div class="p-fluid p-formgrid p-grid" *ngIf="etat ==='VIEW'">
+                <div class="p-field p-col-12">
+                            <app-renouvellement-adherent-list [historiqueAvenantAdherants]="historiqueAveantAdherantRetr" *ngIf="historiqueAveantAdherantRetr?.length > 0"
+                            (historiqueAvenantAdherantList)="listeModifier($event)" [statut]="etat">
+                            </app-renouvellement-adherent-list>
+        
+                </div>
+            </div>
         </p-tabPanel>
 
         <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
@@ -1578,7 +1603,7 @@
                     <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
                 </div>
                 <div class="p-col-2">
-                    <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Enregistrer" pTooltip="Enregistrer tout l'avenant" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+                    <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid || !avenantArrivedId" pButton pRipple label="Enregistrer" pTooltip="Enregistrer tout l'avenant" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
                 </div>
         </div>
     </p-fieldset>

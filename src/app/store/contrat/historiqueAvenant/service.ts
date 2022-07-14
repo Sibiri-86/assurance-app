@@ -330,6 +330,12 @@ private handleError<T>() {
             {params: createRequestOption({avenantId, groupeId})});
     }
 
+    getsHistoriqueAvenantIncorpAndRetrait(avenantId: string): Observable<Avenant> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-incorp-retrait`,
+            {params: createRequestOption({avenantId})});
+    }
+
 
    /*  getHistoriqueAvenantWithoutActive(policeId: string): Observable<HistoriqueAvenant[]> {
         return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police/${policeId}`).pipe(

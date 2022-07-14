@@ -1787,7 +1787,7 @@
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
                     <app-avenant-renouvellement [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id" [groupesRev]="historiqueGroupeRev"
-                    [avenantArrivedId]="historiqueRev?.id" [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)">
+                    [avenantArrivedId]="historiqueRev?.id" [avenantNumero]="historiqueRev?.numero"  [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)">
                 </app-avenant-renouvellement>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">

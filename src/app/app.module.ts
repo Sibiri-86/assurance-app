@@ -258,8 +258,10 @@ import { BulletinAdhesionEffects } from './store/contrat/bulletin-adhesion/effec
 import { PrestataireCartographieComponent } from './module/contrat/prestataire-cartographie/prestataire-cartographie.component';
 import { ExerciceComponent } from './module/contrat/exercice/exercice.component';
 import { AvenantIncorporationRenouvellementComponent } from './module/contrat/avenant/avenant-incorporation-renouvellement/avenant-incorporation-renouvellement.component';
-import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
+import { AvenantRetraitRenouvellementComponent } from './module/contrat/avenant/avenant-retrait-renouvellement.component/avenant-retrait-renouvellement.component';
+import { RenouvellementAdherentListComponent } from './module/contrat/avenant/renouvellement-adherent-list/renouvellement-adherent-list.component';
 import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/groupe-ajout.component';
+import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 
 @NgModule({
     imports: [
@@ -469,9 +471,11 @@ import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/grou
         BulletinAdhesionComponent,
         PrestataireCartographieComponent,
         ExerciceComponent,
+        AvenantIncorporationRenouvellementComponent,
+        AvenantRetraitRenouvellementComponent,
+        RenouvellementAdherentListComponent,
         AdherentBasculerComponent,
-        GroupeAjoutComponent,
-        AvenantIncorporationRenouvellementComponent
+        GroupeAjoutComponent
     ],
     providers: [
         {

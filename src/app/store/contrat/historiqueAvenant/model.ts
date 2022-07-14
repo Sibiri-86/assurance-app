@@ -89,6 +89,7 @@ export interface HistoriqueAvenantAdherant {
     deleted?: boolean;
     selected?: boolean;
     dateEcheance?: Date;
+    singe?: string;
 }
 
 export interface HistoriqueAvenantList {

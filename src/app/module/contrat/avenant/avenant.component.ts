@@ -2115,6 +2115,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
     avenant.creation = event.creation;
     console.log('********************Avenant renouvellement************************');
     console.log(event);
+    if(avenant.historiqueAvenant.isTerminer) {
+      this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    }else{
+      console.log('********************Avenant renouvellement************************');
+    console.log(event);
      this.historiqueAvenantService.postAvenant(event).subscribe(
         (res) => {
           console.log('***************RETOUR RENOUV********************');
@@ -2137,7 +2144,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }
         }
-    ); 
+    );
+    } 
   }
 
   loadHistoriquePlafondGroupe(): void {

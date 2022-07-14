@@ -1,5 +1,5 @@
 <div class="card">
-    <span style="color: red; font-size: 1.8em; text-align: center">{{message}}</span>
+    <span *ngIf="currentGroupee?.id === undefined" style="color: red; font-size: 1.8em; text-align: center">{{message}}</span>
     <div class="p-grid">
         <!--<div class="p-fluid p-grid">
 
@@ -34,23 +34,38 @@
         <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
             <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
-                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId()">
             </p-dropdown>
         </div>
         <div class="p-col-3">
-            <form [formGroup]="newForm" *ngIf="!isRenouv">
+            <form [formGroup]="newForm" *ngIf="isRenouv">
                 <div class="p-grid">
                 <div class="p-fluid p-formgrid  p-col-12">
-                    <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
-                    <p-dropdown [options]="groupeList" [disabled]="curentExercice.invalid" optionLabel="libelle" formControlName="groupe"
+                    <!-- <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
+                    <p-dropdown [options]="groupeList" optionLabel="libelle" formControlName="groupe"
                                 [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
                                 (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
-                    </p-dropdown>
+                    </p-dropdown> -->
+
                 </div>
                 </div>
-            </form>
+            </form> 
+            <div style="margin-top: -7px !important;">
+                <label class="p-fieldset-content">Choisir le Groupe<span style="color: red !important; size: 2em">*</span> </label>
+                <p-dropdown [options]="groupeList" optionLabel="libelle" [(ngModel)]="currentGroupee"
+                            [filter]="true" filterBy="libelle" selected="selectedGroupeD" [showClear]="true"
+                            placeholder="Choisir un groupe"
+                            (onChange)="loadAdherentByExoIdAndGroupeId()" [style]="{'width': '100%'}">
+                </p-dropdown>
+            </div>
+            
         </div>
-       
+        <!-- <div class="p-col-3" *ngIf="etat === 'CREATE'">
+            <label for="fraisBadge">Exercice</label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
+            </p-dropdown>
+        </div> -->
         <div class="p-col-6" *ngIf="!isRenouv && isImport === 'OUI'">
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-4"><br>
@@ -185,7 +200,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} adherents au total.
+                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} assuré(s).
                     </div>
                 </ng-template>
             </p-table>
@@ -203,18 +218,18 @@
                         (click)="init()" type="button">
                 </button>
             </div>
-            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false && etat=== 'CREATE'">
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false || etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm.invalid || historiqueAveantAdherantsByExercice.length === null || etat === 'VIEW'">
+                [disabled]="this.historiqueAveantAdherantsByExercice.length != null || etat != 'CREATE'">
                 </button>
             </div>
-            <!-- <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true && etat=== 'CREATE'">
+            <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true || etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
                 [disabled]="etat === 'VIEW'">
                 </button>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>
