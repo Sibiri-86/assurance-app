@@ -235,6 +235,10 @@ export class AvenantRenouvellementComponent implements OnInit {
     adherentPrincipaux: Array<Adherent> = [];
     exerciceOfLast: Exercice = {};
     exerciceOfLast1: Exercice = {};
+    avenantD : Date;
+    exoRevenu: Exercice = {};
+    historiqueAveantAdherantIncorp: HistoriqueAvenantAdherant[];
+    historiqueAveantAdherantRetr: HistoriqueAvenantAdherant[];
 
     constructor(
         private store: Store<AppState>,
@@ -1225,6 +1229,8 @@ export class AvenantRenouvellementComponent implements OnInit {
             this.objet.creation = 'CREATION';
         }
         console.log('*********************this.objet.creation*******', this.objet.creation);
+        this.avenantD = this.objet?.historiqueAvenant?.dateAvenant;
+        this.exoRevenu = this.exerciceRevenu;
         
     }
 
@@ -1301,6 +1307,24 @@ export class AvenantRenouvellementComponent implements OnInit {
             this.eventEmitterM.emit(this.objet);
         }
         
+    }
+    createAvenantRetrait (event: HistoriqueAvenant): void{
+        this.objet.plafondGroupeActes = [];
+            this.objet.plafondFamilleActes = [];
+            this.objet.plafondGroupeSousActes = [];
+    
+            this.objet.plafondFamilleActes = [];
+        
+            this.historiqueAvenant.id = this.avenantArrivedId;
+            this.objet.groupes = [];
+            this.objet.exercice = this.exerciceRevenu;
+            this.historiqueAvenant.isTerminer = false;
+            this.objet.historiqueAvenant.numero = this.avenantNumero;
+            console.log('*********************this.avenantNumero*******', this.avenantNumero);
+            this.objet.historiqueAvenant = this.historiqueAvenant;
+            this.objet.historiqueAvenantAdherantDels = event.historiqueAvenantAdherants;
+            console.log('**this.objet.historiqueAvenantAdherantDels*******', this.objet.historiqueAvenantAdherantDels);
+            this.eventEmitterM.emit(this.objet);
     }
 
     addAvenantAdherant(event: HistoriqueAvenant): void {
@@ -1977,8 +2001,20 @@ export class AvenantRenouvellementComponent implements OnInit {
         if(index === 3) {
             if(this.etat === 'CREATE') {
                 this.findAdherentListByExerciceId();
+            }else {
+                this.loadIncorpAndRetrait();
             }
         }
+
+        if(index === 4) {
+            if(this.etat === 'CREATE') {
+                this.loadExerciceByPolice(this.police);
+            } else {
+                this.loadIncorpAndRetrait();
+            }
+        }
+
+        
 
         /* if(index === 2 || index === 3 || index === 4) {
             // groupePlafongConfig
@@ -2002,6 +2038,17 @@ export class AvenantRenouvellementComponent implements OnInit {
             }
         } */
       }
+
+      loadIncorpAndRetrait() {
+        this.historiqueAvenantService.getsHistoriqueAvenantIncorpAndRetrait(this.avenantId).subscribe(
+            (res: Avenant) => {
+                this.historiqueAveantAdherantIncorp = res.historiqueAvenantAdherants.filter(p => p.singe ==='+');
+                this.historiqueAveantAdherantRetr = res.historiqueAvenantAdherants.filter(p => p.singe ==='-');
+                console.log("jhgjklkhjgfhjklhgfhjklm", this.historiqueAveantAdherantIncorp);
+                console.log("historiqueAveantAdherantRetr", this.historiqueAveantAdherantRetr);
+            }
+        )
+    }
 
 
       charge(){

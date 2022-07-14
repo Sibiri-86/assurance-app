@@ -198,5 +198,13 @@ private handleError<T>() {
         );
     }
 
+    $getAdherentByGroupes(idGroupe: string): Observable<AdherentList> {
+      // @FIXME: get request
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${idGroupe}`).pipe(
+        map((response: AdherentList) => response),
+        catchError(this.handleError())
+      );
+  }
+
 }
 

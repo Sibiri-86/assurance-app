@@ -131,6 +131,17 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             catchError(this.handleError())
         );
     }
+    
+    getlistOfAdherentByExerciceAndGroupe(exoId: string, groupeId: string): Observable<HistoriqueAvenantAdherant[]> {
+        // @FIXME: get request
+        if(exoId && groupeId) {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_ACTUALL_LIST_BY_EXERCICE_ID_AND_GROUPE_ID)}/liste-actualisee-by-exercice-and-groupe`,
+            {params: createRequestOption({exoId, groupeId})}).pipe(
+                map((response: HistoriqueAvenantAdherant[]) => response),
+                catchError(this.handleError())
+            );
+        }
+      }
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {

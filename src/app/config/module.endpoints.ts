@@ -393,4 +393,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/groupe.mock.json`
         };
 
+        static readonly CONTRAT_ADHERENT_ACTUALL_LIST_BY_EXERCICE_ID_AND_GROUPE_ID = {
+            prod: `${SERVICE_PREFIX}/contrat/historique-avenant-adherent`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }
