@@ -34,6 +34,7 @@ export interface PlafondActe {
     etat?: Status;
     sousActeListe?: SousActe[];
     listeSousActes?:PlafondSousActe[];
+    domaine?: Array<QualiteAssure>;
     plafondGroupeFamilleActe?: PlafondFamilleActe;
     garantie?: Garantie;
   }
@@ -46,6 +47,7 @@ export interface PlafondSousActe {
     montantPlafond?: number;
     montantPlafondParActe?: number;
     dimensionPeriode?: DimensionPeriode;
+    domaine?: Array<QualiteAssure>;
     nombre?: number;
     etat?: Status;
     plafondGroupeActe?: PlafondActe;

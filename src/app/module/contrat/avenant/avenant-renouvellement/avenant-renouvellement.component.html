@@ -851,7 +851,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  (onSelect)="changeDateSousActe(acte)"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{acte.dateEffet | formatTableValue : 'date'}}
@@ -1499,6 +1499,15 @@
                 </div>
             </div>
         </p-tabPanel>
+
+        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+            <app-groupe-ajout [police] = "police" [groupeListes]="groupeListes"></app-groupe-ajout>
+          </p-tabPanel>
+        <p-tabPanel header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+
+            <app-adherent-basculer [groupeListes]="groupeListes" [police] = "police"></app-adherent-basculer>
+
+        </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
             <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
             <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
@@ -1506,13 +1515,21 @@
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
+                   
+
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
                     </span>
+                    
+                        <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedFilter"
+                                    [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" (onChange)="loadAdherentFiltertByGroupe()"
+                                   >
+                        </p-dropdown>
                     </div>
+                    
                 </ng-template>
 
                 <ng-template pTemplate="header">
