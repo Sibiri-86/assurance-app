@@ -2022,14 +2022,17 @@
                                 <th pSortableColumn="typeAvenant">Type d'avenant
                                     <p-sortIcon field="typeAvenant"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="duree">Durée Police
+                                <!-- <th pSortableColumn="duree">Durée Police
                                     <p-sortIcon field="duree"></p-sortIcon>
-                                </th>
+                                </th> -->
                                 <th pSortableColumn="dateEffet">Date d'effet
                                     <p-sortIcon field="dateEffet"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="dateEcheance">Date d'échéance
                                     <p-sortIcon field="dateEcheance"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Prime">Prime
+                                    <p-sortIcon field="duree"></p-sortIcon>
                                 </th>
                                 <th>Status</th>
                                 <th style="width: 30em;"></th>
@@ -2043,13 +2046,15 @@
                                     <span *ngIf="rowdata.typeHistoriqueAvenant.toString() === 'AFAIRE_NOUVELLE'" class="p-column-title">AFFAIRE NOUVELLE</span>
                                     <span *ngIf="rowdata.typeHistoriqueAvenant.toString() !== 'AFAIRE_NOUVELLE'" class="p-column-title">{{rowdata.typeHistoriqueAvenant}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{rowdata.police.duree}}</span>
-                                </td>
+                                <!-- <td><span class="p-column-title">{{rowdata.police.duree}}</span>
+                                </td> -->
                                 <td><span
                                         class="p-column-title">{{rowdata.dateEffet | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td>
                                     <span class="p-column-title">{{rowdata?.exercice?.fin | formatTableValue : 'date'}}</span>
+                                </td>
+                                <td><span *ngIf="rowdata?.primeTotal" class="p-column-title">{{rowdata?.primeTotal | formatTableValue : 'number'}}</span>
                                 </td>
                                 <td>
                                     <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDÉ</span>

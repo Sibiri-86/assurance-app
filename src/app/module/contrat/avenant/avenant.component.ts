@@ -1651,6 +1651,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (value) {
         // this.loading = false;
         this.historiqueAvenants1 = value.slice();
+        console.log('..this.historiqueAvenants1....', this.historiqueAvenants1);
         this.historiqueAvenants1.forEach(element => {
           console.log('.........1........', element.validePrime);
           element.isPossible = this.calculePossible(element);
