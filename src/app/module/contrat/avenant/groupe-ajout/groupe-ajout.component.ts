@@ -1940,4 +1940,26 @@ export class GroupeAjoutComponent implements OnInit{
       }
     });
   }
+
+  onRowEditInit(plafondFamilleActe: PlafondFamilleActe) {
+    console.log(plafondFamilleActe);
+    this.clonedPlafondFamilleActe["0"] = {
+      ...plafondFamilleActe
+    };
+
+  }
+
+
+  onRowEditSave(plafondFamilleActe: PlafondFamilleActe, ri) {
+    if(plafondFamilleActe.dateEffet) {
+      if (new Date(plafondFamilleActe.dateEffet).getTime() < new Date(this.groupe.dateEffet).getTime()) {
+        this.plafondFamilleActe[ri].dateEffet = new Date(this.groupe.dateEffet);
+        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre inferieur à celle du groupe");
+        return;
+      }
+    }
+    delete this.clonedPlafondFamilleActe["0"];
+  }
+
+ 
 }

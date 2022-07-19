@@ -289,7 +289,7 @@
                                 <td >
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet" (onSelect)="controleDateFamilleActe(rowData.dateEffet)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <input type="date" name="dateEffet" id="dateEffet" pInputText [(ngModel)]="rowData.dateEffet" (change)="controleDateFamilleActe(rowData.dateEffet)">
                                         </ng-template>
                                         <ng-template  pTemplate="output">
                                             <span *ngIf="rowData.garantie.libelle">
@@ -402,7 +402,7 @@
                     <td >
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"   dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input  type="date" name="dateEffet" id="dateEffet" pInputText [(ngModel)]="rowData.dateEffet" >
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.dateEffet | formatTableValue : 'date'}}
@@ -520,7 +520,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" (onSelect)="controleDateSousActe(rowData2)" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input  type="date" name="dateEffet" id="dateEffet" pInputText [(ngModel)]="rowData2.dateEffet" (change)="controleDateSousActe(rowData2)">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData2.dateEffet | formatTableValue : 'date'}}
@@ -663,7 +663,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input  type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="plafond.dateEffet">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{plafond.dateEffet | formatTableValue : 'date'}}
@@ -780,7 +780,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input  type="date" name="dateEffet" id="dateEffet" pInputText [(ngModel)]="acte.dateEffet" >
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{acte.dateEffet | formatTableValue : 'date'}}
@@ -902,7 +902,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date" name="dateEffet" id="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -1053,7 +1053,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="plafond.dateEffet">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{plafond.dateEffet | formatTableValue : 'date'}}
@@ -1171,7 +1171,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="acte.dateEffet">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{acte.dateEffet | formatTableValue : 'date'}}
@@ -1293,7 +1293,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -1448,7 +1448,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="plafond.dateEffet">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{plafond.dateEffet | formatTableValue : 'date'}}
@@ -1564,7 +1564,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="acte.dateEffet">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{acte.dateEffet | formatTableValue : 'date'}}
@@ -1686,7 +1686,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date" id="dateEffet" name="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{sousActe.dateEffet | formatTableValue : 'date'}}

@@ -44,6 +44,8 @@
                         <th>PRENOM(S)</th>
                         <th>DATE NAISS.</th>
                         <th>MAIL</th>
+                        <th>DATE EFFET</th>
+                        <th></th>
                        
                     </tr>
                 </ng-template>
@@ -51,54 +53,35 @@
                              let-ri="rowIndex">
                     <tr [pEditableRow]="historiqueAveantAdherant" [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td style="width: 3rem">
-                            <p-tableCheckbox [value]="historiqueAveantAdherant"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="cocherCase(historiqueAveantAdherant)"></p-tableCheckbox>
                         </td>
                         <td>{{historiqueAveantAdherant.adherent.numero}}</td>
+                        <td>{{historiqueAveantAdherant?.adherent?.nom | upercase}}
+                        </td>
+                        <td>{{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}
+                        </td>
+                        <td>{{historiqueAveantAdherant?.adherent?.dateNaissance | formatTableValue : 'date'}}
+                        </td>
+                        <td>{{historiqueAveantAdherant.adherent.mail}}
+                        </td>
+
                         <td>
                             <p-cellEditor>
-                                <ng-template pTemplate="input" *ngIf="etat !== 'UPDATE'">
-                                    <input pInputText type="text"
-                                           [(ngModel)]="historiqueAveantAdherant.adherent.nom">
+                                <ng-template pTemplate="input" >
+                                    <input id="dateEffet"
+                                     type="date" name="dateEffet" pInputText  [(ngModel)]="historiqueAveantAdherant.dateEffet">
                                 </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{historiqueAveantAdherant?.adherent?.nom | upercase}}
+                                <ng-template pTemplate="output" >
+                                    {{historiqueAveantAdherant?.dateEffet | formatTableValue : 'date'}}
+                                   
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text"
-                                           [(ngModel)]="historiqueAveantAdherant.adherent.prenom" required>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}
-                                </ng-template>
-                            </p-cellEditor>
+                        <td style="text-align:center">
+                            <button *ngIf="!editing  &&  historiqueAveantAdherant.coser" pButton pRipple  pTooltip="editer" pInitEditableRow icon="pi pi-pencil" class="ui-button-info p-mr-2" (click)="onRowEditInit(historiqueAveantAdherant)"></button>
+                            <button *ngIf="editing" pRipple  pButton  pSaveEditableRow icon="pi pi-check" class="ui-button-success p-mr-2" style="margin-right: .5em" (click)="onRowEditSave(historiqueAveantAdherant, ri)"></button>
+                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger p-mr-2" (click)="onRowEditCancel(historiqueAveantAdherant, ri)"></button>
                         </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text"
-                                           [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{historiqueAveantAdherant?.adherent?.dateNaissance | formatTableValue : 'date'}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text"
-                                           [(ngModel)]="historiqueAveantAdherant.adherent.mail">
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{historiqueAveantAdherant.adherent.mail}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                    
                     </tr>
                 </ng-template>
             </p-table>

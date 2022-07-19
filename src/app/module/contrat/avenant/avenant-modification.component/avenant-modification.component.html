@@ -1133,11 +1133,11 @@
           <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
 
-        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
             <app-groupe-ajout [police] = "police" [groupeListes]="groupeListes"></app-groupe-ajout>
           </p-tabPanel>
 
-        <p-tabPanel header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
 
             <app-adherent-basculer [groupeListes]="groupeListes" [police] = "police"></app-adherent-basculer>
 

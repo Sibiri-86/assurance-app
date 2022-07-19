@@ -37,6 +37,8 @@ export interface HistoriqueAvenantAdherant {
     adherent?: Adherent;
     deleted: boolean;
     signe?: string;
+    coser?:boolean;
+    dateEffet?: Date;
 }
 
 export interface HistoriqueAvenantList {
