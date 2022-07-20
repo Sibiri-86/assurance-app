@@ -1807,7 +1807,7 @@
 
 
         <!--Affichage de la liste des avenants de la police -->
-        <p-dialog [maximizable]="true" [(visible)]="infosPolice" header="Police details" [modal]="true"
+        <p-dialog [maximizable]="true" [(visible)]="infosPolice" header="Police details" [modal]="true" (onHide)="femerAvenant()"
                   styleClass="p-fluid" [style]="{width: '1500px'}">
             <ng-template pTemplate="content">
                 <div class="card">
@@ -1980,17 +1980,29 @@
                 </h4>
                 <div class="card">
                     <div class="p-grid">
-                        <div class="p-col-4">
+                        <div class="p-col-3">
                             <label for="fraisBadge">Exercice</label>
                             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                                         [style]="{'width':'100%'}" [dataKey]="id" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
-                            </p-dropdown>
+                            </p-dropdown> 
+                            <!-- *ngIf="curentExercice?.id != null" -->
                         </div>
-                        <div class="p-col-4 primeeee">
+                        <div class="p-col-5 primeeee">
                             <p-card>
-                                <span class="prime">Prime Police => {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue : 'number'}} FCFA </span><br>
-                                <hr *ngIf="curentExercice?.id != null">
-                                <span *ngIf="curentExercice?.id != null" class="prime"> Prime Exercice {{exoNumber}} => {{primeExercice | formatTableValue : 'number'}} FCFA </span>
+                                <div class="p-grid">
+                                    <div class="p-col-10">
+                                        <span class="prime">Prime Police => {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue : 'number'}} FCFA </span><br>
+                                        <hr *ngIf="curentExercice?.id != null">
+                                        <span *ngIf="curentExercice?.id != null" class="prime"> Prime Exercice {{exoNumber}} => {{primeExercice | formatTableValue : 'number'}} FCFA </span>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <br *ngIf="curentExercice?.id != null">
+                                        <br *ngIf="curentExercice?.id != null">
+                                        <button style="align-self: left;" *ngIf="curentExercice?.id != null" pButton pRipple icon=" pi pi-arrow-left" style="margin-top: 17px !important;" pTooltip="Effacer"
+                                                class="p-button-raised p-button-secondary p-ml-5" label="" (click)="femerAvenantPrime()">
+                                        </button>
+                                    </div>
+                                </div>
                             </p-card>
                         </div>
                         <div class="p-col-2">

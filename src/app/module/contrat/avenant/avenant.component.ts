@@ -2289,6 +2289,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
     );
     historiqueAvenant = {};
+    this.onRowSelectPolice(this.police);
+  }
+
+  femerAvenant() {
+    this.curentExercice = null;
+  }
+
+  femerAvenantPrime() {
+    this.curentExercice = null;
+    this.onRowSelectPolice(this.police);
   }
 
 
@@ -2341,6 +2351,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.onExerciceChange2();
         }
     ); 
+    this.onRowSelectPolice(this.police);
     /* this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
