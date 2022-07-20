@@ -311,7 +311,7 @@ export class AvenantSuspensionComponent implements OnInit {
             this.myForm.setValue({
                 id: avenantId,
                 numero: res.numero,
-                dateAvenant: new Date(res.dateAvenant),
+                dateAvenant: res.dateAvenant,
                 observation: res.observation,
                 demandeur: res.typeDemandeur,
                 dateSaisie: new Date(res.dateSaisie)

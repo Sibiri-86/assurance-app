@@ -47,9 +47,8 @@
                         </div>
                         <div class="p-field p-col-3">
                             <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
-                            <p-calendar id="fin" [showIcon]="true" formControlName="fin"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body" [disabled]="true"></p-calendar>
+                            <input id="fin" type="date" formControlName="fin" pInputText >
+                           
                         </div>
                     </div>
                 </form>
@@ -62,9 +61,8 @@
                         </div>
                         <div class="p-field p-col-4">
                             <label for="dateAvenant">Date de l'avenant <sup></sup></label>
-                            <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar>
+                            <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText >
+                            
                         </div>
                         <!--<div class="p-field p-col-6">
                             <label for="dateEffetA">Date d'effet du renouvellement</label>
@@ -98,7 +96,8 @@
                         </div>
                         <div class="p-field p-col-4">
                             <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                        <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                           
+                            <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
                         dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
                         appendTo="body"></p-calendar>  
                         </div>
@@ -376,9 +375,8 @@
                                 <div class="p-field p-col-4">
                                     <label for="dateEffet">Date effet</label>
                                     <!--<input type="date" class="form-control" formControlName="dateEffet" id="dateEffet" required style="width: 100%">-->
-                                    <p-calendar id="dateEffet" [showIcon]="true" dateFormat="dd/mm/yy"
-                                                inputId="calendar" formControlName="dateEffet"
-                                                appendTo="body"></p-calendar>
+                                    <input id="dateEffet" type="date" formControlName="dateEffet" pInputText >
+                                    
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
                                     </app-entity-validation>
@@ -405,8 +403,7 @@
                                 </div>
                                 <div class="p-field p-col-4">
                                     <label for="lastname2">Date d'écheance</label>
-                                    <p-calendar id="dateEcheance" [showIcon]="true" dateFormat="dd/mm/yy"
-                                                inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                    <input id="dateEcheance" type="date" formControlName="dateEcheance" pInputText >
                                     <!--<input type="date" formControlName="dateEcheance"
                                            style="width: 100%; height: 2.5em">-->
                                     <!--<p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>

@@ -893,10 +893,10 @@ export class AvenantRenouvellementComponent implements OnInit {
             taux: group?.taux,
             territorialite: group.territorialite || [],
             duree: group.duree,
-            dateEffet: new Date(this.exerciceForm.get('debut').value),
+            dateEffet: this.exerciceForm.get('debut').value,
             // typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
             typeDuree: group?.typeDuree,
-            dateEcheance: new Date(this.exerciceForm.get('fin').value),
+            dateEcheance: this.exerciceForm.get('fin').value,
             numeroGroupe: group.numeroGroupe,
             typePrime: group?.typePrime,
             adresse: group?.adresse,
@@ -1908,8 +1908,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                     this.myForm.patchValue({
                         id: res.historiqueAvenant.id,
                         numeroGarant: res.historiqueAvenant.numeroGarant,
-                        dateEffet: new Date(res.historiqueAvenant.dateAvenant),
-                        dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
+                        dateEffet: res.historiqueAvenant.dateAvenant,
+                        dateAvenant: res.historiqueAvenant.dateAvenant,
                         observation: res.historiqueAvenant.observation,
                         demandeur: res.historiqueAvenant.typeDemandeur,
                         fraisBadges: res.historiqueAvenant.fraisBadges,
@@ -1985,7 +1985,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value ).subscribe(
           (res) => {
             this.exerciceForm.patchValue({
-              fin: new Date(res.body)
+              fin: res.body
             });
           }
         );
@@ -2129,7 +2129,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                     id: res.historiqueAvenant.id,
                     numeroGarant: res.historiqueAvenant.numeroGarant,
                     dateEffet: new Date(res.historiqueAvenant.dateAvenant),
-                    dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
+                    dateAvenant: res.historiqueAvenant.dateAvenant,
                     observation: res.historiqueAvenant.observation,
                     demandeur: res.historiqueAvenant.typeDemandeur,
                     fraisBadges: res.historiqueAvenant.fraisBadges,

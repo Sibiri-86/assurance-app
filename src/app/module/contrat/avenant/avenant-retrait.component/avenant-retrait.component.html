@@ -88,8 +88,8 @@
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait <span style="color: red !important; size: 2em">*</span></label>
                         <span *ngIf="newForm.invalid" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
-                        <p-calendar [disabled]="newForm.invalid" id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                    dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="compareDate()"></p-calendar>
+                        <input [disabled]="newForm.invalid" id="dateIncorparation" type="date" formControlName="dateAvenant" pInputText (change)="compareDate()">
+                        
                     </div>
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Initiateur <span style="color: red !important; size: 2em">*</span></label>
@@ -166,10 +166,10 @@
                                 <!--<input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
                                        (change)="compareDateRetrait(historiqueAveantAdherant)"
                                        [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
-                            <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
-                                        dateFormat="dd/mm/yy" inputId="calendar" [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"
-                                        appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"
-                                        [disabled]="etat === 'VIEW'"></p-calendar>
+                                       <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
+                                       [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected" [disabled]="etat === 'VIEW'"  pInputText (change)="compareDateRetrait(historiqueAveantAdherant)">
+
+                                       
                             </span>
                         </td>
                         <td>

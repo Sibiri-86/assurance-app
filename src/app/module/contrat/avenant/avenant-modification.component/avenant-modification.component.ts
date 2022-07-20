@@ -872,10 +872,10 @@ export class AvenantModificationComponent implements OnInit {
       taux: group?.taux,
       territorialite: group.territorialite || [],
       duree: group?.duree,
-      dateEffet: new Date(group.dateEffet),
+      dateEffet: group.dateEffet,
       // typeDuree: this.typeDureeList.find(t => t.value === group?.typeDuree),
       typeDuree: group?.typeDuree,
-      dateEcheance: new Date(group.dateEcheance),
+      dateEcheance: group.dateEcheance,
       commune: group.commune,
       numeroGroupe: group.numeroGroupe,
       typePrime: group.typePrime,
@@ -884,7 +884,7 @@ export class AvenantModificationComponent implements OnInit {
       police: group.police,
       description: group.description
     });
-    console.log('***********group************', this.groupeForm);
+    console.log('***********group************', group.dateEcheance);
   
     this.primeForm.patchValue({
       // prime: group.typePrime,
@@ -1660,8 +1660,8 @@ export class AvenantModificationComponent implements OnInit {
                 this.myForm.patchValue({
                     id: res.historiqueAvenant.id,
                     numero: res.historiqueAvenant.numero,
-                    dateEffet: new Date(res.historiqueAvenant.dateAvenant),
-                    dateAvenant: new Date(res.historiqueAvenant.dateAvenant),
+                    dateEffet: res.historiqueAvenant.dateAvenant,
+                    dateAvenant: res.historiqueAvenant.dateAvenant,
                     observation: res.historiqueAvenant.observation,
                     demandeur: res.historiqueAvenant.typeDemandeur,
                     fraisBadges: res.historiqueAvenant.fraisBadges,

@@ -436,7 +436,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             id: adherent?.id,
             nom: adherent?.nom,
             prenom: adherent?.prenom,
-            dateNaissance: new Date(adherent?.dateNaissance),
+            dateNaissance: adherent?.dateNaissance,
             matriculeGarant: adherent?.matriculeGarant,
             lieuNaissance: adherent?.lieuNaissance,
             numeroTelephone: adherent?.numeroTelephone,
@@ -446,8 +446,8 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             referenceBancaire: adherent?.referenceBancaire,
             qualiteAssure: adherent?.qualiteAssure,
             genre: adherent?.genre,
-            dateEntree: new Date(adherent?.dateEntree),
-            dateIncorporation: new Date(adherent?.dateIncorporation),
+            dateEntree: adherent?.dateEntree,
+            dateIncorporation: adherent?.dateIncorporation,
             numero: adherent.numero
         });
         console.log('+++++ adherent.numero +++ ');
@@ -581,8 +581,8 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
                     this.myForm.setValue({
                         id: res.id,
                         numero: res.numero,
-                        dateIncorparation: new Date(res.dateAvenant),
-                        dateAvenant: new Date(res.dateAvenant),
+                        dateIncorparation: res.dateAvenant,
+                        dateAvenant: res.dateAvenant,
                         observation: res.observation,
                         demandeur: res.typeDemandeur,
                         fraisBadges: res.fraisBadges,

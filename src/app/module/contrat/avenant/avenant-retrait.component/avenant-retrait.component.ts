@@ -446,7 +446,7 @@ export class AvenantRetraitComponent implements OnInit {
               console.log('*********this.historiqueAveantAdherantsByExercice*********', this.historiqueAveantAdherantsByExercice);
               this.historiqueAveantAdherantsByExercice.forEach(haa => {
                 if(haa.id) {
-                  haa.dateRetrait = new Date(haa.dateRetrait);
+                  haa.dateRetrait = haa.dateRetrait;
                 } else{
                   haa.dateRetrait = new Date();
                 } 
@@ -455,7 +455,7 @@ export class AvenantRetraitComponent implements OnInit {
                   id: avenantId,
                   numero: res.numero,
                   dateSaisie: new Date(res.dateSaisie),
-                  dateAvenant: new Date(res.dateAvenant),
+                  dateAvenant: res.dateAvenant,
                   observation: res.observation,
                   demandeur: res.typeDemandeur,
                   fraisBadges: 0,

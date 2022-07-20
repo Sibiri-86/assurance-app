@@ -31,9 +31,8 @@
                         </div>
                         <div class="p-field p-col-6">
                             <label for="dateIncorparation">Date de suspension <sup style="color: red; size: 1.7em">*</sup></label>
-                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateAvenant"
-                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
-                                        appendTo="body"></p-calendar>
+                            <input  id="dateIncorparation" type="date" formControlName="dateAvenant" pInputText (change)="compareDate()">
+
                         </div>
                         <div class="p-field p-col-6">
                             <label for="observation">Motif<sup style="color: red; size: 1.7em">*</sup></label>

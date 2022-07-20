@@ -153,12 +153,12 @@ export class AvenantResiliationComponent implements OnInit {
             this.myForm.setValue({
                 id: avenantId,
                 numero: res.numero,
-                dateAvenant: new Date(res.dateAvenant),
+                dateAvenant: res.dateAvenant,
                 observation: res.observation,
                 demandeur: res.typeDemandeur,
                 fraisBadges: 0,
                 fraisAccessoires: 0,
-                dateEffet: new Date(res.dateAvenant),
+                dateEffet:res.dateAvenant,
                 typeDemandeur: res.typeDemandeur,
                 dateSaisie: new Date(res.dateSaisie)
             });
