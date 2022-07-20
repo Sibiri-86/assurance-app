@@ -167,7 +167,7 @@
                         
                         <div class="p-field p-col">
                             <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                            <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body"></p-calendar>
+                            <input type="date" name="dateDeclaration" id="dateDeclaration" pInputText formControlName="dateDeclaration">
                         </div>
                         
                     </div>
@@ -287,7 +287,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="dateEffet">Date de soins <span style="color: red !important;">*</span></label>
-                                <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSoins" appendTo="body"></p-calendar>
+                                <input type="date" name="dateSoins" id="dateSoins" pInputText formControlName="dateSoins">
                             </div>
                             
                            </div>

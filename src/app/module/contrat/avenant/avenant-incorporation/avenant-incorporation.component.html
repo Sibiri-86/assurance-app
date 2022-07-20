@@ -98,15 +98,16 @@
                             <input id="numero" type="number" min="0" formControlName="numeroGarant" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">
-
                             <label for="nom">Date d'Avenant<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input type="date" name="dateAvenant" id="dateAvenant" pInputText formControlName="dateAvenant"  [disabled]="etat === 'VIEW'">
-
+                            <p-calendar id="dateAvenant" [showIcon]="true" formControlName="dateAvenant"
+                                    dateFormat="dd/mm/yy" inputId="calendar" [disabled]="etat === 'VIEW'"
+                                    appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-4">
                             <label for="nom">Date d'Incorporation<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input type="date" name="dateIncorparation" id="dateIncorparation" pInputText formControlName="dateIncorparation"   (change)="compareDate()" [disabled]="etat === 'VIEW'">
-                            
+                            <p-calendar id="dateIncorparation" [showIcon]="true" formControlName="dateIncorparation"
+                                    dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()" [disabled]="etat === 'VIEW'"
+                                    appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-4">
                             <label for="dateIncorparation">Initiateur <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
@@ -188,8 +189,9 @@
 
                         <div class="p-field p-col-3">
                             <label for="naiss">Date de naissance <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input type="date" name="naiss" id="dateNaissance" pInputText formControlName="dateNaissance">
-                            
+                            <p-calendar [showIcon]="true" formControlName="dateNaissance" id="naiss"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
                         </div>
 
                         <div class="p-field p-col-3">
@@ -199,13 +201,15 @@
 
                         <div class="p-field p-col-3">
                             <label for="entre">Date entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                            <input type="date" name="dateEntree" id="dateEntree" pInputText formControlName="dateEntree">
-                            
+                            <p-calendar [showIcon]="true" formControlName="dateEntree"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
                         </div>
                         <div class="p-field p-col-3">
                             <label for="dateIncor">Date d'incorporation <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input type="date" name="dateIncorporation" id="dateIncorporation" pInputText formControlName="dateEntree" (change)="compareDateIncorp()">
-
+                            <p-calendar id="dateIncor" [showIcon]="true" formControlName="dateIncorporation"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDateIncorp()"
+                                        appendTo="body"></p-calendar>
                         </div>
 
                         <div class="p-field p-col-3">

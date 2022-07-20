@@ -276,7 +276,7 @@ export class ConventionComponent implements OnInit, OnDestroy {
   const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
   this.conventionForm.patchValue({delai: convention.delai, montant: convention.montant,
     prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
-  dateEffet: new Date(convention.dateEffet), acte, garantie}); 
+  dateEffet: convention.dateEffet, acte, garantie}); 
  // this.displayFormConvention = true;
   this.displaySousActe = true;
   this.displayActe = true;
