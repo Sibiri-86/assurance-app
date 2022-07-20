@@ -1202,8 +1202,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   modifierAdherent(adherent: Adherent){
     this.adherent = {...adherent};
-    this.adherent.dateNaissance = new Date(this.adherent.dateNaissance);
-    this.adherent.dateEntree = new Date(this.adherent.dateEntree);
+    this.adherent.dateNaissance = this.adherent.dateNaissance;
+    this.adherent.dateEntree = this.adherent.dateEntree;
     this.displayDialogFormUpdateAdherent = true;
     this.adherentForm.patchValue(this.adherent);
   }
@@ -2462,7 +2462,7 @@ changeGarantie(garantie, indexLigne: number) {
       id: adherent?.id || null,
       nom: adherent?.nom,
       prenom: adherent?.prenom,
-      dateNaissance: new Date(adherent?.dateNaissance),
+      dateNaissance: adherent?.dateNaissance,
       matriculeGarant: adherent?.matriculeGarant,
       matriculeSouscripteur: adherent?.matriculeSouscripteur,
       lieuNaissance: adherent?.lieuNaissance,
@@ -2473,7 +2473,7 @@ changeGarantie(garantie, indexLigne: number) {
       referenceBancaire: adherent?.referenceBancaire,
       qualiteAssure: adherent?.qualiteAssure,
       genre: adherent?.genre,
-      dateEntree: new Date(adherent?.dateEntree),
+      dateEntree: adherent?.dateEntree,
       numero: adherent.numero
     });
     console.log('***************this.adherentForm*******************', this.adherentForm);
