@@ -96,6 +96,8 @@ export class AdherentBasculerComponent implements OnInit {
   adherentPermutList?: AdherentPermute [] = [];
   adherentPermutSelect?: AdherentPermute = {};
   historiqueAveantAdherantsPermuteSelected: HistoriqueAvenantAdherant[] = [];
+  clonedHistoriqueAveantAdherant: { [s: string]: HistoriqueAvenantAdherant } = {};
+  case: boolean = false;
 
   constructor(
       private store: Store<AppState>,
@@ -185,4 +187,42 @@ export class AdherentBasculerComponent implements OnInit {
     }
     console.log(event);
 }
+
+
+
+cocherCase(historiqueAveantAdherant: HistoriqueAvenantAdherant, index: number) {
+  if(historiqueAveantAdherant.coser) {
+    historiqueAveantAdherant.coser = false;
+    this.case = false;
+  } else {
+    historiqueAveantAdherant.coser = true;
+    this.case = true;
+    //this.historiqueAveantAdherantsPermute[index] =historiqueAveantAdherant;
+    // this.historiqueAveantAdherantsPermute.find(his=>his.id === historiqueAveantAdherant.id).coser = true;
+
+  }
+  this.historiqueAveantAdherantsPermute[index] =historiqueAveantAdherant;
+
+  console.log(historiqueAveantAdherant.coser);
+}
+
+
+
+onRowEditInit(historiqueAveantAdherant: HistoriqueAvenantAdherant) {
+  this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id] = {...historiqueAveantAdherant};
+ 
+}
+
+onRowEditSave(historiqueAveantAdherant: HistoriqueAvenantAdherant) {
+  delete this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id];
+}
+
+onRowEditCancel(historiqueAveantAdherant: HistoriqueAvenantAdherant, index: number) {
+this.historiqueAveantAdherantsPermute[index] = this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id];
+delete this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id];
+}
+
+
+
+
 }

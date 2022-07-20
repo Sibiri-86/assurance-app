@@ -534,7 +534,7 @@ isSaving = false;
       this.bulletinAdhesion = {...bulletin};
       this.bulletinForm.patchValue(this.bulletinAdhesion);
       this.bulletinForm.get('dateSaisie').setValue(new Date(bulletin.dateSaisie));
-      this.bulletinForm.get('dateEntreeService').setValue(new Date(bulletin.dateEntreeService));
+      this.bulletinForm.get('dateEntreeService').setValue(bulletin.dateEntreeService);
       this.bulletinForm.get('situationFamiliale').setValue(bulletin.situationFamiliale);
       this.quuestionAssures = [];
       this.questionEpoux = [];

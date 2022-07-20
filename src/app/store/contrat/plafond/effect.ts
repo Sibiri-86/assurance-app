@@ -25,8 +25,8 @@ export class PlafondEffects {
         mergeMap((Plafond: Plafond) =>
             this.PlafondService.posPlafond(Plafond).pipe(
                 switchMap(value => [
-                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                   featureActions.loadPlafondGroupe(Plafond.groupe)
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg)
+                  //featureActions.loadPlafondGroupe(Plafond.groupe)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

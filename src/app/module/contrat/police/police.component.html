@@ -153,7 +153,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date"  pInputText [(ngModel)]="rowData.dateEffet">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{rowData.dateEffet | formatTableValue : 'date'}}
@@ -419,7 +419,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar [showIcon]="true" [(ngModel)]="plafond.dateEffet" (onSelect)="controleDateActe(plafond)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" [(ngModel)]="plafond.dateEffet"  pInputText  (change)="controleDateActe(plafond)">
 
                                 
                                 </ng-template>
@@ -538,7 +538,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet" (onSelect)="controleDateActe1(acte)"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date"  pInputText [(ngModel)]="acte.dateEffet" (change)="controleDateActe1(acte)">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{acte.dateEffet | formatTableValue : 'date'}}
@@ -663,7 +663,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  (onSelect)="controleDateActe2(sousActe)" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <input type="date"  pInputText [(ngModel)]="acte.dateEffet" (change)="controleDateActe2(sousActe)">
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -813,7 +813,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date"  pInputText [(ngModel)]="plafond.dateEffet">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{plafond.dateEffet | formatTableValue : 'date'}}
@@ -930,7 +930,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        <input type="date" name="dateEffet" pInputText [(ngModel)]="acte.dateEffet">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{acte.dateEffet | formatTableValue : 'date'}}
@@ -1052,7 +1052,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <input type="date" name="dateEffet" pInputText [(ngModel)]="sousActe.dateEffet">
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{sousActe.dateEffet | formatTableValue : 'date'}}
@@ -1274,7 +1274,7 @@
                         <td >
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" placeholder="date effet"></p-calendar>
+                                    <input type="date" name="dateEffet" pInputText [(ngModel)]="rowData.dateEffet">
                                 </ng-template>
                                 <ng-template  pTemplate="output">
                                     <span *ngIf="rowData?.garantie?.libelle">
@@ -1379,7 +1379,7 @@
                         <td >
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [showIcon]="true" [(ngModel)]="rowData.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" placeholder="date effet"></p-calendar>
+                                    <input type="date" name="dateEffet" pInputText [(ngModel)]="rowData.dateEffet">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.dateEffet | formatTableValue : 'date'}}
@@ -1500,8 +1500,9 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar id="dateEffet" #effetSousActe  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="onCheckDateEffetSousActe($event, effetSousActe)" placeholder="date effet"></p-calendar>
-                                </ng-template>
+                                    <input type="date" name="dateEffet" #effetSousActe pInputText [(ngModel)]="rowData2.dateEffet" (change)="onCheckDateEffetSousActe($event, effetSousActe)">
+<!--                                     <p-calendar id="dateEffet" #effetSousActe  [showIcon]="true" [(ngModel)]="rowData2.dateEffet" appendTo="body"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" (onSelect)="onCheckDateEffetSousActe($event, effetSousActe)" placeholder="date effet"></p-calendar>
+ -->                                </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData2.dateEffet | formatTableValue : 'date'}}
                                 </ng-template>
@@ -1598,7 +1599,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateEffet">Date effet <span style="color: red !important;">*</span></label>
-                                    <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
+                                    <input type="date" name="dateEffet" id="dateEffet"  pInputText formControlName="dateEffet" (change)="checkDateEffet()">
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
                                     </app-entity-validation>
@@ -1624,7 +1625,7 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-4">
                                     <label for="dateEcheance">Date écheance</label>
-                                    <p-calendar id="dateEcheance" [disabled]="adherentForm" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                    <input type="date" name="dateEcheance" [disabled]="adherentForm" id="dateEcheance" pInputText formControlName="dateEcheance" >
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEcheance'">
                                     </app-entity-validation>
@@ -1798,7 +1799,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateNaissance">Date de naissance <span style="color: red">*</span> </label>
-                                    <p-calendar id="dateNaissance" [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" name="dateNaissance" id="dateNaissance"  pInputText formControlName="dateNaissance">
                                 </div>
 
                                 <div class="p-field p-col">
@@ -1808,7 +1809,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateEntree">Date entrée <span style="color: red">*</span> </label>
-                                    <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" name="dateEntree" id="dateEntree"  pInputText formControlName="dateEntree">
                                 </div>
                             </div>
 
@@ -1916,7 +1917,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
+                                                <input type="date" name="dateNaissance"   pInputText [(ngModel)]="rowData.dateNaissance">
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateNaissance | formatTableValue : 'date'}}
@@ -1927,7 +1928,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" required></p-calendar>
+                                                <input type="date" name="dateEntree"   pInputText [(ngModel)]="rowData.dateEntree">
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.dateEntree | formatTableValue : 'date'}}
@@ -2562,7 +2563,7 @@
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Date de naissance</label>
-                                <p-calendar  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input type="date" name="dateNaissance" id="dateNaissance"  pInputText formControlName="dateNaissance">
                             </div>
 
                             <div class="p-field p-col">
@@ -2572,7 +2573,8 @@
 
                             <div class="p-field p-col">
                                 <label for="lastname2">Date entrée</label>
-                                <p-calendar  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                <input type="date" name="dateEntree" id="dateEntree"  pInputText formControlName="dateEntree">
+
                             </div>
                         </div>
 
@@ -2683,7 +2685,7 @@
 
                         <div class="p-field p-col">
                             <label for="dateNaissance">Date de naissance <span style="color: red !important;">*</span></label>
-                            <p-calendar id="dateNaissance"  [showIcon]="true" formControlName="dateNaissance" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            <input type="date" name="dateNaissance" id="dateNaissance"  pInputText formControlName="dateNaissance">
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'dateNaissance'">
                             </app-entity-validation>
@@ -2703,7 +2705,7 @@
                         
                         <div class="p-field p-col">
                             <label for="dateEntree">Date entrée <span style="color: red !important;">*</span></label>
-                            <p-calendar id="dateEntree"  [showIcon]="true" formControlName="dateEntree" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                            <input type="date" name="dateEntree" id="dateEntree"  pInputText formControlName="dateEntree">
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'dateEntree'">
                             </app-entity-validation>
@@ -2818,7 +2820,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [(ngModel)]="rowData.dateNaissance" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date" name="dateNaissance"   pInputText [(ngModel)]="rowData.dateNaissance">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData.dateNaissance | formatTableValue : 'date'}}
@@ -2828,7 +2830,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar  [(ngModel)]="rowData.dateEntree" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                    <input type="date"  pInputText [(ngModel)]="rowData.dateEntree">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{rowData?.dateEntree | formatTableValue : 'date'}}
@@ -3292,7 +3294,7 @@
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
                             <label for="dateEffet">Date effet <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-calendar  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEffet" appendTo="body"></p-calendar>
+                            <input type="date"name="dateEffet" id="dateEffet" pInputText formControlName="dateEffet">
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'dateEffet'">
                             </app-entity-validation>
@@ -3316,7 +3318,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="lastname2">Date échéance <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance"  appendTo="body"></p-calendar>
+                            <input type="date"name="dateEcheance" id="dateEcheance" pInputText formControlName="dateEcheance">
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'dateEcheance'">
                             </app-entity-validation>

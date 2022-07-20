@@ -1408,7 +1408,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         this.policeForm.get('typeDuree').value, this.policeForm.get('duree').value ).subscribe(
           (res) => {
             this.policeForm.patchValue({
-              dateEcheance: new Date(res.body)
+              dateEcheance: res.body
             });
           }
         );
@@ -1575,7 +1575,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       this.groupeForm.get('typeDuree').value, this.groupeForm.get('duree').value ).subscribe(
         (res) => {
           this.groupeForm.patchValue({
-            dateEcheance: new Date(res.body)
+            dateEcheance: res.body
           });
         }
       );
@@ -1655,10 +1655,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     
 
     if (this.police.dateEffet) {
-      this.police.dateEffet = new Date(this.police.dateEffet);
+      this.police.dateEffet = this.police.dateEffet;
     }
     if (this.police.dateEcheance) {
-      this.police.dateEcheance = new Date(this.police.dateEcheance);
+      this.police.dateEcheance = this.police.dateEcheance;
     }
     this.policeForm.patchValue(this.police);
     if (this.police.fraisBadge) {
@@ -1740,7 +1740,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         dimensionPeriode: {},
         taux: this.police.taux,
-        dateEffet: new Date(this.police.dateEffet),
+        dateEffet: this.police.dateEffet,
         garantie: {}
       }
     ];
@@ -1750,7 +1750,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         montantPlafond: 0,
         dimensionPeriode: {},
         nombre: 0,
-        dateEffet: new Date(this.police.dateEffet),
+        dateEffet: this.police.dateEffet,
         taux: this.police.taux,
         acte: {}
       }
@@ -1762,7 +1762,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         dimensionPeriode: {},
         nombre: 0,
         taux: this.police.taux,
-        dateEffet: new Date(this.police.dateEffet),
+        dateEffet: this.police.dateEffet,
         sousActe: {}
       }
     ];
@@ -1875,6 +1875,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   onRowEditInitPlafondConfiguration(plafond: PlafondFamilleActe) {
+   
     this.clonedPlafondConfiguration[plafond.garantie.id] = {...plafond};
     console.log(this.clonedPlafondConfiguration);
   }
@@ -1883,7 +1884,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (new Date(plafond.dateEffet).getTime() > new Date(this.groupe.dateEffet).getTime()) {
       // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre supérieur à celle du groupe");
-       plafond.dateEffet =   new Date(this.groupe.dateEffet);
+       plafond.dateEffet =   this.groupe.dateEffet;
        delete this.clonedPlafondConfiguration[plafond.garantie.id];
      }
     
@@ -1904,7 +1905,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (new Date(plafond.dateEffet).getTime() >  new Date(this.groupe.dateEffet).getTime()) {
       // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
        this.showToast("error", "INFORMATION", "la date effet ne doit pas etre superieur à celle du groupe");
-       plafond.dateEffet =   new Date(this.groupe.dateEffet);
+       plafond.dateEffet =   this.groupe.dateEffet;
        delete this.clonedPlafondConfiguration[plafond.acte.id];
      }
     
@@ -1926,7 +1927,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (new Date(plafond.dateEffet).getTime() > new Date(this.groupe.dateEffet).getTime()) {
      // this.plafondActe[this.indexActeExpand].listeSousActe[ri].dateEffet = new Date(this.groupe.dateEffet);
       this.showToast("error", "INFORMATION", "la date effet ne doit pas etre supérieur à celle du groupe");
-      plafond.dateEffet =   new Date(this.groupe.dateEffet);
+      plafond.dateEffet =   this.groupe.dateEffet;
     }
     delete this.clonedPlafondSousActe[plafond.sousActe.id];
   }
@@ -2070,11 +2071,13 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
           });
         });*/
         this.plafondFamilleActeConstruct = this.plafondActuelleConfiguration;
+        this.bareme = null
         this.displayConfigurationPlafond = false;
         this.plafondActuelleConfiguration = [];
         this.bareme = null;
       }
     });
+    
   }
 
   /**permet de valider le plafond */
@@ -2104,11 +2107,13 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
     this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
-    this.countfamilleActe = 0;
     this.plafondForm.reset();
-    if(this.plafond.id){
+    this.countfamilleActe = 0;
+    
+   
+   
       this.displayParametragePlafond = false;
-    }
+    
   }
 
   addSousActe() {
@@ -2413,9 +2418,9 @@ changeGarantie(garantie, indexLigne: number) {
       taux: grp?.taux,
       territorialite: grp.territorialite,
       duree: grp.duree,
-      dateEffet: new Date(grp.dateEffet),
+      dateEffet: grp.dateEffet,
       typeDuree: {},
-      dateEcheance: new Date(grp.dateEcheance),
+      dateEcheance: grp.dateEcheance,
       adresse: grp.adresse,
       commune: grp.commune,
       description: grp.description
