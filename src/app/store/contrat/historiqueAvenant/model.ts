@@ -47,6 +47,7 @@ export interface HistoriqueAvenant {
     isTerminer?: boolean;
     primettc?: number;
     primenette?: number;
+    historiqueAvenantPrime?:HistoriqueAvenantPrime;
 }
 
 export enum TypeEtat {

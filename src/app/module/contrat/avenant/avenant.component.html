@@ -59,9 +59,8 @@
                         <th pSortableColumn="nom" style="width: 15rem">Souscripteur
                             <p-sortIcon field="nom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="taux" style="width: 7rem">Taux
-                            <p-sortIcon field="taux.taux"></p-sortIcon>
-                        </th>
+                        <th pSortableColumn="taux" style="width: 12rem">Personne ressource 
+                            <p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <!--<th pSortableColumn="territorialite" style="width: 14rem">Territorialite
                             <p-sortIcon field="territorialite.libelle"></p-sortIcon>
                         </th>-->
@@ -87,7 +86,7 @@
                         </td>
                         <td><span class="p-column-title">{{police.nom}}</span>
                         </td>
-                        <td><span class="p-column-title">{{police.taux.taux}}</span>
+                        <td><span class="p-column-title">{{police.personneRessource}}</span>
                         </td>
                         <!--<td>
                             <span class="p-column-title" *ngFor="let t of police.territorialite">
@@ -1987,12 +1986,19 @@
                                         [style]="{'width':'100%'}" [dataKey]="id" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
                             </p-dropdown>
                         </div>
-                        <div class="p-col-4">
+                        <div class="p-col-4 primeeee">
+                            <p-card>
+                                <span class="prime">Prime Police => {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue : 'number'}} FCFA </span><br>
+                                <hr *ngIf="curentExercice?.id != null">
+                                <span *ngIf="curentExercice?.id != null" class="prime"> Prime Exercice {{exoNumber}} => {{primeExercice | formatTableValue : 'number'}} FCFA </span>
+                            </p-card>
+                        </div>
+                        <div class="p-col-2">
                             <button pButton pRipple icon="pi pi-dollar" style="margin-top: 17px !important;" pTooltip="Prime Totale de la Police"
                                     class="p-button-raised p-button-help p-mr-2" label="Prime Totale de la Police" (click)="getPolicePrimeTotale(police)">
                             </button>
                         </div>
-                        <div class="p-col-4">
+                        <div class="p-col-2">
                             <button pButton pRipple icon="pi pi-list" style="margin-top: 17px !important;" pTooltip="Liste actualisée de la police"
                                     class="p-button-raised p-button-secondary p-mr-2" label="Liste actualisée" (click)="loadActualList(police)">
                             </button>
@@ -2054,7 +2060,28 @@
                                 <td>
                                     <span class="p-column-title">{{rowdata?.exercice?.fin | formatTableValue : 'date'}}</span>
                                 </td>
-                                <td><span *ngIf="rowdata?.primeTotal" class="p-column-title">{{rowdata?.primeTotal | formatTableValue : 'number'}}</span>
+                                <td style="font-weight:bold !important">
+                                    <p-button *ngIf="rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'AFAIRE_NOUVELLE' || 
+                                        rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'RENOUVELLEMENT' || 
+                                        rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'INCORPORATION' " 
+                                        styleClass="p-button-success" class="p-column-title">{{rowdata?.primeTotal | formatTableValue : 'number'}} FCFA
+                                    </p-button>
+                                    <p-button *ngIf="rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'RESILIATION' || 
+                                        rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'RETRAIT' || 
+                                        rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'SUSPENSION' " 
+                                        styleClass="p-button-danger" class="p-column-title">{{rowdata?.primeTotal | formatTableValue : 'number'}} FCFA
+                                    </p-button>
+
+                                    <p-button *ngIf=" curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'AFAIRE_NOUVELLE' || 
+                                         curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'RENOUVELLEMENT' || 
+                                         curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'INCORPORATION' " 
+                                        styleClass="p-button-success" class="p-column-title">{{rowdata?.historiqueAvenantPrime?.primeTotaleEncaissee | formatTableValue : 'number'}} FCFA
+                                    </p-button>
+                                    <p-button *ngIf="curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'RESILIATION' || 
+                                         curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'RETRAIT' || 
+                                         curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'SUSPENSION' " 
+                                        styleClass="p-button-danger" class="p-column-title">{{rowdata?.historiqueAvenantPrime?.primeTotalRestituee | formatTableValue : 'number'}} FCFA
+                                    </p-button>
                                 </td>
                                 <td>
                                     <span *ngIf="rowdata?.valide" style="color: green; font-weight: bold">VALIDÉ</span>
@@ -2483,7 +2510,7 @@
                             
                                 <span *ngIf="historiqueAvenantPrime?.primeTotaleEncaissee" class="primeCaisse">Prime Totale encaissée =>  {{historiqueAvenantPrime?.primeTotaleEncaissee | formatTableValue: 'number':true}} FCFA </span>
                                 <span *ngIf="historiqueAvenantPrime?.primeTotalRestituee" class="primeRendu">Prime Totale restituée =>  {{historiqueAvenantPrime?.primeTotalRestituee | formatTableValue: 'number':true}} FCFA </span>
-                                <span *ngIf="historiqueAvenantPrime?.primeTotalCalcul" class="prime"> Prime Réelle de la police =>  {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue: 'number':true}} FCFA </span>
+                                <span *ngIf="historiqueAvenantPrime?.primeTotalCalcul" class="primeL"> Prime Réelle de la police =>  {{historiqueAvenantPrime?.primeTotalCalcul | formatTableValue: 'number':true}} FCFA </span>
         
                             <!-- <div class="p-col-2">
                                 <button type="button" pButton pRipple label="Valider Prime" icon="pi pi-save" class="p-button p-button-success"

@@ -10,5 +10,6 @@ export interface Exercice {
 	actived?: boolean;
 	typeDuree?: TypeDuree;
 	duree?: number,
-	nomExo?:string
+	nomExo?:string,
+	numero?: number
 }
