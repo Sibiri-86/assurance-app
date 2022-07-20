@@ -163,7 +163,7 @@
                     
                     <div class="p-field p-col">
                         <label for="dateEffet">Date de declaration <span class="required">*</span></label>
-                        <p-calendar id="dateDeclaration"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateDeclaration" appendTo="body" (onSelect)="checkDateCondition()"></p-calendar>
+                        <input type="date" name="dateDeclaration" id="dateDeclaration" pInputText formControlName="dateDeclaration" (change)="checkDateCondition()">
                     </div>
                     
                     <div class="p-field p-col">
@@ -291,7 +291,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="dateEffet">Date de soins <span class="required">*</span></label>
-                                <p-calendar [showIcon]="true" dateFormat="dd/mm/yy" formControlName="dateSoins" appendTo="body" (onSelect)="selectDateSoins(i)"></p-calendar>
+                                <input type="date" name="dateSoins" id="dateSoins" pInputText formControlName="dateSoins" (change)="selectDateSoins(i)">
                             </div>
                             
                            </div>

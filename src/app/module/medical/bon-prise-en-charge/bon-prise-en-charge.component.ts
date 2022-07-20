@@ -399,7 +399,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom);
-    this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+    this.prestationForm.get('dateDeclaration').setValue(pref.dateDeclaration);
     this.prestationForm.get('prestataire').setValue(pref.prestataire);
     this.prestationForm.get('prestataire').setValue(pref.prestataire);
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));

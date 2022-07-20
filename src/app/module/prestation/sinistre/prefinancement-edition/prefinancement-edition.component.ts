@@ -480,13 +480,13 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
     this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom);
     this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
-    this.prestationForm.get('dateDeclaration').setValue(new Date(pref.dateDeclaration));
+    this.prestationForm.get('dateDeclaration').setValue(pref.dateDeclaration);
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
     this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
     for (const pr of pref.prestation) {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
-    formPrestation.get('dateSoins').setValue(new Date(pr.dateSoins));
+    formPrestation.get('dateSoins').setValue(pr.dateSoins);
     formPrestation.get('debours').setValue(pr.debours);
     formPrestation.get('taux').setValue(pr.taux);
     formPrestation.get('montantRembourse').setValue(pr.montantRembourse);

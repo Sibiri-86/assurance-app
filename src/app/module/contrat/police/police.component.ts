@@ -470,7 +470,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
    if (new Date(rowData.dateEffet).getTime()  >  new Date(this.groupe.dateEffet).getTime()) {
       
     this.messageService.add({severity:'success', summary: 'Error', detail:'la date effet ne doit pas être supérieur à celle du groupe'});
-    rowData.dateEffet =  new Date(this.groupe.dateEffet);
+    rowData.dateEffet =  this.groupe.dateEffet;
   }
 
 
@@ -481,7 +481,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       if (new Date(rowData.dateEffet).getTime() > new Date(this.groupe.dateEffet).getTime()) {
        
         this.messageService.add({severity:'success', summary: 'Error', detail:'la date effet ne doit pas être supérieur à celle du groupe'});
-        rowData.dateEffet =  new Date(this.groupe.dateEffet);
+        rowData.dateEffet =  this.groupe.dateEffet;
       }
     
   
@@ -491,7 +491,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     if (new Date(rowData.dateEffet).getTime() >  new Date(this.groupe.dateEffet).getTime()) {
        
       this.messageService.add({severity:'success', summary: 'Error', detail:'la date effet ne doit pas être supérieur à celle du groupe'});
-      rowData.dateEffet =  new Date(this.groupe.dateEffet);
+      rowData.dateEffet =  this.groupe.dateEffet;
     }
   }
 
