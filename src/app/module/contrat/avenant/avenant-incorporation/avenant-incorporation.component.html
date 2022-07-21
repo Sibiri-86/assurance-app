@@ -283,17 +283,17 @@
                                         <div class="p-col-3">
                                             <label [for]="'dateNaissance' + ri">Date Naisse. <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'dateNaissance' + ri" type="date" [name]="'dateNaissance' + ri"
-                                                   formControlName="dateNaissance" pInputText/>
+                                                   formControlName="dateNaissance" pInputText (change) ="controleAgeRi(ri)"/>
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                             <input [id]="'dateEntree' + ri" type="date" [name]="'dateEntree' + ri"
-                                                   formControlName="dateEntree" pInputText/>
+                                                   formControlName="dateEntree" pInputText (change) ="controleEntreRi(ri)"/>
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateIncorporation' + ri">Date Incorpotration <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'dateIncorporation' + ri" type="date" [name]="'dateIncorporation' + ri"
-                                                   formControlName="dateIncorporation" pInputText/>
+                                                   formControlName="dateIncorporation" pInputText (change) ="controleIncorporRi(ri)"/>
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'nom1' + ri">Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>

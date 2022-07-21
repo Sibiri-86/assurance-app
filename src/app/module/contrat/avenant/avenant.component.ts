@@ -2027,7 +2027,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de suspension', icon: 'pi pi-print', command: () => {
-          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.typeReporting = TypeReport.FACTURE_SUSPEN;
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));

@@ -343,10 +343,21 @@ export class AvenantIncorporationComponent implements OnInit{
             if (new Date(this.adherentForm.value.dateNaissance).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
                 this.adherentForm.get('dateNaissance').setValue('');
                 this.addMessage('error', 'Date de naissance invalide',
-                'La date de naissance de peut pas être postérieure à celle de la police');
+                'La date de naissance ne peut pas être postérieure à celle de la police');
             }
           }
     }
+
+    controleEntre() {
+        if(this.adherentForm.value.dateEntree) {
+            if (new Date(this.adherentForm.value.dateEntree).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+                this.adherentForm.get('dateEntree').setValue('');
+                this.addMessage('error', 'Date d\' entrée invalide',
+                'La date d\'entrée ne peut pas être postérieure à celle de la police');
+            }
+          }
+    }
+
 
     ajouter(): void {
         const formAdherent: FormGroup = this.createForm();
@@ -368,6 +379,39 @@ export class AvenantIncorporationComponent implements OnInit{
     delete(ri: number): void {
         console.log(ri);
         this.familys.removeAt(ri);
+    }
+
+    controleAgeRi(ri: number) {
+        let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
+        if(this.adherentForm.get('familys').value[ri].dateNaissance) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateNaissance).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+                myForm.patchValue({dateNaissance: null});
+                this.addMessage('error', 'Date de naissance invalide',
+                'La date de naissance ne peut pas être postérieure à celle de la police');
+            }
+          }
+    }
+
+    controleEntreRi(ri: number) {
+        let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
+        if(this.adherentForm.get('familys').value[ri].dateEntree) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateEntree).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+                myForm.patchValue({dateEntree: null});
+                this.addMessage('error', 'Date d\' entrée invalide',
+                'La date d\'entrée ne peut pas être postérieure à celle de la police');
+            }
+          }
+    }
+
+    controleIncorporRi(ri: number) {
+        let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
+        if(this.adherentForm.get('familys').value[ri].dateIncorporation) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateIncorporation).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+                myForm.patchValue({dateIncorporation: null});
+                this.addMessage('error', 'Date d\' incorporation invalide',
+                'La date d\'incoporation ne peut pas être postérieure à celle de la police');
+            }
+          }
     }
 
     get familys() {
