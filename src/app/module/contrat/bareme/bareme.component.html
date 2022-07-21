@@ -324,7 +324,7 @@
                 <br/>
                 <br/>
                 <br/>
-            <p-table #dtActe [value]="plafondActe" dataKey="id" editMode="row"  [scrollable]="true" scrollHeight="400px" *ngIf="displayActe">
+            <p-table #dtActe [value]="plafondActe" dataKey="id" editMode="row"  [scrollable]="true"  *ngIf="displayActe">
             <ng-template pTemplate="header">
                 <tr>
                     <th></th>
@@ -434,7 +434,7 @@
                 <tr [pEditableRow]="rowData2">
                 <td colspan="11">
                 <div class="p-0">
-                <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" scrollHeight="400px">
+                <p-table [value]="rowData.listeSousActe" dataKey="id" editMode="row" [scrollable]="true" >
                 <ng-template pTemplate="header">
                 <tr>
                     <th></th>

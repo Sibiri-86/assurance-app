@@ -338,6 +338,16 @@ export class AvenantIncorporationComponent implements OnInit{
         this.init();
     }
 
+    controleAge() {
+        if(this.adherentForm.value.dateNaissance) {
+            if (new Date(this.adherentForm.value.dateNaissance).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+                this.adherentForm.get('dateNaissance').setValue('');
+                this.addMessage('error', 'Date de naissance invalide',
+                'La date de naissance de peut pas être postérieure à celle de la police');
+            }
+          }
+    }
+
     ajouter(): void {
         const formAdherent: FormGroup = this.createForm();
         formAdherent.patchValue({
