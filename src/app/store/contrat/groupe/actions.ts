@@ -10,3 +10,4 @@ export const setGroupe = createAction('[App Init] set Groupe',  props<GroupeList
 export const importGroupe = createAction('[App Init] import Groupe',  props<{file: File}>());
 export const loadRapport = createAction('[App Init] load Rapport groupe', props<Groupe>());
 export const setRapport = createAction('[App Init] set Rapport Statistique groupe', props<Rapport>());
+export const createGroupeRenouvAndModif = createAction('[App Init] Create Groupe Renouv and Modif', props<{groupe: Groupe, avenantId: string}>());

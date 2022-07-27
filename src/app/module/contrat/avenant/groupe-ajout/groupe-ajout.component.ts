@@ -110,6 +110,7 @@ import {groupeList} from "../../../../store/contrat/groupe/selector";
 import * as adherentSelector from "../../../../store/contrat/adherent/selector";
 import * as groupeSelector from '../../../../store/contrat/groupe/selector';
 import {loadPolice} from "src/app/store/contrat/police/actions";
+import { Exercice } from 'src/app/store/contrat/exercice/model';
 
 
 
@@ -123,7 +124,9 @@ import {loadPolice} from "src/app/store/contrat/police/actions";
 export class GroupeAjoutComponent implements OnInit{
 
     @Input() police: Police;
+    @Input() avenantIdEnv: string;
     @Input() groupeListes: Array<Groupe>;
+    @Input() exerciceRevenu: Exercice;
     destroy$ = new Subject<boolean>();
   cols: any[];
   policeList$: Observable<Array<Police>>;
@@ -390,6 +393,7 @@ export class GroupeAjoutComponent implements OnInit{
 
     ngOnInit(): void {
         console.log("==============grope1=========",this.groupeListes);
+        console.log("==============avenantId=========",this.avenantIdEnv);
         this.tauxCommissionIntermediaireList$ = this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
     this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
     this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
@@ -1143,7 +1147,7 @@ export class GroupeAjoutComponent implements OnInit{
         this.groupe.adherentFamille = this.adherentFamille;
         console.log(this.groupe);
         this.groupeListPolice$ = this.store.pipe(select(groupeList));
-        this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
+        this.store.dispatch(featureActionGroupe.createGroupeRenouvAndModif({groupe: this.groupe, avenantId: this.avenantIdEnv}));
         this.store.dispatch(featureActionGroupe.loadGroupe({policeId: this.police.id}));
         this.groupeListPolice$.pipe(takeUntil(this.destroy$)).subscribe(
             (res) => {
@@ -1184,10 +1188,11 @@ export class GroupeAjoutComponent implements OnInit{
     this.displayDialogFormAdherent = true;
     this.groupe = groupe;
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherent({idGroupe: groupe.id}));
+    this.store.dispatch(featureActionAdherent.loadAdherentByExercice({idGroupe: groupe.id, exerciceId: this.exerciceRevenu.id}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentList = value.slice();
+        console.log(this.adherentList.length)
       }
     });
 

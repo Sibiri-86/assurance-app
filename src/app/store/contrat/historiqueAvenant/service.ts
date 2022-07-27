@@ -336,6 +336,26 @@ private handleError<T>() {
             {params: createRequestOption({avenantId})});
     }
 
+    postAvenantGroupeAndUpdatePlafond(avenant: Avenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/groupe-save`, avenant);
+    }
+
+    postAvenantUpdatePlafond(avenant: Avenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/plafond-save`, avenant);
+    }
+
+    postAvenantUpdateRenouvellementIncorp(avenant: Avenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/incorporation-save`, avenant);
+    }
+
+    postAvenantUpdateRenouvellementRetrait(avenant: Avenant): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/retrait-save`, avenant);
+    }
+
 
    /*  getHistoriqueAvenantWithoutActive(policeId: string): Observable<HistoriqueAvenant[]> {
         return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police/${policeId}`).pipe(

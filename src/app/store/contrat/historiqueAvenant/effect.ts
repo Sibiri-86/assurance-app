@@ -6,7 +6,7 @@ import { HistoriqueAvenantService} from './service';
 import * as featureActions from './actions';
 import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import {AdherentPermute, AdherentPermuteList, HistoriqueAvenant} from "./model";
+import {AdherentPermute, AdherentPermuteList, Avenant, HistoriqueAvenant} from "./model";
 
 @Injectable()
 export class HistoriqueAvenantEffects {
@@ -203,4 +203,57 @@ export class HistoriqueAvenantEffects {
             )
         )
         );
+
+    createAvenantGroupeAndUpdatePlafond$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createAvenantGroupe),
+        mergeMap((avenant: Avenant) =>
+            this.historiqueAvenantService.postAvenantGroupeAndUpdatePlafond(avenant).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
+    createAvenantUpdatePlafond$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createAvenantPlafond),
+        mergeMap((avenant: Avenant) =>
+            this.historiqueAvenantService.postAvenantUpdatePlafond(avenant).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        )); createAvenantRenouvellementIncorporation
+
+    createAvenantRenouvellementIncorporation$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createAvenantRenouvellementIncorporation),
+        mergeMap((avenant: Avenant) =>
+            this.historiqueAvenantService.postAvenantUpdateRenouvellementIncorp(avenant).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    // featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        )); 
+
+
+        createAvenantRenouvellementRetarit$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.createAvenantRenouvellementRetrait),
+            mergeMap((avenant: Avenant) =>
+                this.historiqueAvenantService.postAvenantUpdateRenouvellementRetrait(avenant).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        // featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            )); 
 }

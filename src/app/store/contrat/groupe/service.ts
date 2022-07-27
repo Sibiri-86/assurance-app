@@ -58,6 +58,11 @@ rapportGroupe(groupe: Groupe): Observable<any> {
   return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/rapport`, groupe);
 }
 
+posGroupeRenouvAndModif(groupe: Groupe, avenantId: string): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_GROUPE)}/${avenantId}`, groupe);
+}
+
 
 pushFileToStorage(file: File): Observable<any> {
   const data: FormData = new FormData();

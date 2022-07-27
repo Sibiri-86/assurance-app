@@ -22,6 +22,14 @@ $getAdherents(idPolice: string): Observable<AdherentList> {
     );
 }
 
+$getAdherentsByExercice(idGroupe: string, exerciceId: string): Observable<AdherentList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${idGroupe}/${exerciceId}`).pipe(
+    map((response: AdherentList) => response),
+    catchError(this.handleError())
+  );
+}
+
 $getAdherentsAll(idGarantie: string, idPolice: string): Observable<AdherentList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, {params: createRequestOption({idGarantie,
