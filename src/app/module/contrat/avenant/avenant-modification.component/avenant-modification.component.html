@@ -1128,13 +1128,13 @@
           <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
 
-        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
-            <app-groupe-ajout [police] = "police" [groupeListes]="groupeListes"></app-groupe-ajout>
+        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="ADD GROUPE" [disabled]="!avenantId">
+            <app-groupe-ajout [police] = "police" [groupeListes]="groupeListes" [exerciceRevenu] = "exerciceRevenu"  [avenantIdEnv] = "avenantId"></app-groupe-ajout>
           </p-tabPanel>
 
-        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER" [disabled]="!avenantId">
 
-            <app-adherent-basculer [groupeListes]="groupeListes" [police] = "police"></app-adherent-basculer>
+            <app-adherent-basculer [groupeListes]="groupeListes" [police] = "police" ></app-adherent-basculer>
 
          <!--    <div class="p-grid">
                 <div class="p-col-4">
@@ -1245,6 +1245,15 @@
         </p-tabPanel>
     </p-tabView>
     <hr>
+    <p-fieldset legend="Enregistrement de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                                    
+                                    
+        <div class="p-grid p-justify-center">
+            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+            <button type="button"  pTooltip="Enregistrer l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantModif()" [disabled]="myForm.invalid || etat==='VIEW'"></button>
+        </div>
+
+    </p-fieldset>
 
     <div class="p-grid"> 
         <div class="p-col-4"></div>
@@ -1254,7 +1263,7 @@
         </div>
         <div class="p-col-2">
             <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="createAvenantModif()" [disabled]="myForm.invalid || etat==='VIEW'"></button>
+                    (click)="fermerAvenantModif()" [disabled]="avenantIdEnv || etat==='VIEW'"></button>
         </div>
     </div>
 </div>

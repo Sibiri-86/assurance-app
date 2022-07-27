@@ -2093,13 +2093,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
     // avenant.historiqueAvenant = historiqueAvenant;
     avenant.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
     console.log("envoyé 2", avenant);
-    this.historiqueAvenantService.postAvenant(avenant).subscribe(
+    if(avenant.historiqueAvenant.isTerminer) {
+      this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    } else {
+      this.historiqueAvenantService.postAvenant(avenant).subscribe(
         (res) => {
           console.log('***************RETOUR********************');
           if (res) {
+            console.log('***************RETOUR  res********************', res);
+            this.historiqueAvenant = res.historiqueAvenant;
+            this.exerciceRev = res.historiqueAvenant.exercice;
             this.addMessage('success', 'Opération reussie', 'Avenant créé avec succès');
-            this.initDisplayAvenant();
-            this.dissplayavenant = false;
+            if(avenant.historiqueAvenant?.isTerminer) {
+              this.dissplayavenant = false;
+              this.initDisplayAvenant();
+            }
           } else {
             this.addMessage('error', 'Echec de l\'Opération', 'Verrifiez vos informations');
           }
@@ -2108,7 +2118,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('********************Avenant modification************************');
     console.log(avenant);
     avenant = {};
-  }
+
+    }
+      }
 
   getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;

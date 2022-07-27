@@ -93,6 +93,7 @@ export class AdherentBasculerComponent implements OnInit {
   qualiteAssureList$: Observable<Array<QualiteAssure>>;
   curentExercice: Exercice = {};
   historiqueAveantAdherantsPermute: Array<HistoriqueAvenantAdherant> = [];
+  historiqueAveantAdherantsPermuteList: Array<HistoriqueAvenantAdherant> = [];
 
   groupeSelectedPermuter: Groupe = {};
   groupeListNouvo: Groupe []= [];
@@ -161,6 +162,7 @@ export class AdherentBasculerComponent implements OnInit {
         this.historiqueAveantAdherantsPermute = res;
       }
     );
+    
     this.groupeListNouvo = this.groupeListes.filter(group=>group.id !== this.groupeSelectedPermuter.id); 
   }
 
@@ -192,12 +194,12 @@ export class AdherentBasculerComponent implements OnInit {
   }
 
   saveAherentNewGroupe() {
+    this.addAherentNewGroupe();
     const adherentPermutList1:  AdherentPermuteList = {};
     adherentPermutList1.adherentPermuteList = this.adherentPermutList;
     
     console.log(adherentPermutList1);
     this.store.dispatch(featureActionHistoriqueAdherant.permuterAherent(adherentPermutList1));
-    this.historiqueAveantAdherantsTMP.filter
     this.historiqueAveantAdherantsPermute = [];
     this.groupeSelectedPermuter = {};
     this.historiqueAveantAdherantsPermuteSelected = [];
@@ -250,6 +252,26 @@ delete this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id];
 }
 
 
+onRowSelect(event: any) {
+  console.log('row event 1 : ', event);
+  this.historiqueAveantAdherantsPermuteList =  this.historiqueAveantAdherantsPermute.filter(his=>his.adherent?.adherentPrincipal?.id === event.data.adherent?.id);
+  console.log('row historiqueAveantAdherantsPermuteSelected 1 : ',  this.historiqueAveantAdherantsPermuteList);
+  if(this.historiqueAveantAdherantsPermuteList) {
+    this.historiqueAveantAdherantsPermuteList?.forEach(adh=>{
 
+      this.historiqueAveantAdherantsPermuteSelected.push(adh);
+    });
+
+    this.historiqueAveantAdherantsPermuteList = [];
+   
+  }
+  console.log('row historiqueAveantAdherantsPermuteSelected : ',  this.historiqueAveantAdherantsPermuteSelected);
+  }
+  onRowUnselect(event: any) {
+  // simply logging the event
+  this.historiqueAveantAdherantsPermuteSelected =this.historiqueAveantAdherantsPermuteSelected.filter(ah=>ah.adherent?.adherentPrincipal?.id !== event.data.adherent?.id);
+  
+  console.log('row historiqueAveantAdherantsPermuteSelected 2 : ',  this.historiqueAveantAdherantsPermuteSelected);
+  }
 
 }

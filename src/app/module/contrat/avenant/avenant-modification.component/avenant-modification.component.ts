@@ -102,6 +102,7 @@ export class AvenantModificationComponent implements OnInit {
   @Input() historiqueAvenantAdherantList: Array<HistoriqueAvenantAdherant>;
   @Input() police: Police;
   @Input() avenant: HistoriqueAvenant;
+  @Input() exerciceRevenu: Exercice;
   groupe: Groupe;
   groupePolicy: any;
   adherantListTmp: Array<HistoriqueAvenantAdherant>;
@@ -1166,8 +1167,14 @@ export class AvenantModificationComponent implements OnInit {
       default: break;
     }
     this.objet.historiqueGroupes = this.historiqueGroupes;
+    this.objet.historiqueAvenant.isTerminer = false;
     console.log("objet envoyé**************", this.objet);
    this.eventEmitterM.emit(this.objet);
+  }
+  fermerAvenantModif() {
+    this.objet.historiqueAvenant = this.historiqueAvenant;
+    this.objet.historiqueAvenant.isTerminer = true;
+    this.eventEmitterM.emit(this.objet);
   }
 
   loadHistoriquePlafondGroupe(): void {

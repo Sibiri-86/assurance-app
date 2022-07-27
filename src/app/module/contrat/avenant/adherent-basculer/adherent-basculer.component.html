@@ -16,22 +16,23 @@
             </p-dropdown>
         </div>
 
-        <div class="p-col-2">
+       <!--  <div class="p-col-2">
             <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <button type="button" pButton pRipple label="Ajouter" class="p-button-success" icon="pi pi-plus"
                     (click)="addAherentNewGroupe()" [disabled]="!groupeSelectedNouvo.libelle"></button>
         </div>
-
+ -->
         <div class="p-col-2">
             <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="saveAherentNewGroupe()" [disabled]="!adherentPermutList?.length"></button>
+                    (click)="saveAherentNewGroupe()" [disabled]="!groupeSelectedNouvo.id"></button>
         </div>
 
         
         <div class="p-col-12">
             <p-table #dt [value]="historiqueAveantAdherantsPermute" [(selection)]="historiqueAveantAdherantsPermuteSelected" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
             [rowHover]="true" styleClass="p-datatable-customers"
+            (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
             [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
@@ -51,9 +52,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-historiqueAveantAdherant let-editing="editing"
                              let-ri="rowIndex">
-                    <tr [pEditableRow]="historiqueAveantAdherant" [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
+                    <tr [pEditableRow]="historiqueAveantAdherant"  [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td style="width: 3rem">
-                            <p-tableCheckbox [value]="historiqueAveantAdherant" (click)="cocherCase(historiqueAveantAdherant)"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="historiqueAveantAdherant" [disabled]="historiqueAveantAdherant.adherent.adherentPrincipal" ></p-tableCheckbox>
                         </td>
                         <td>{{historiqueAveantAdherant.adherent.numero}}</td>
                         <td>{{historiqueAveantAdherant?.adherent?.nom | upercase}}

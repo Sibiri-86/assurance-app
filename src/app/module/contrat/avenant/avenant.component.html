@@ -1781,7 +1781,7 @@
                                          (adherentFamilleEvent)="deleteAdherant($event)"></app-avenant-retrait>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantModification">
-                    <app-avenant-modification [police]="policeItem" [avenant]="historiqueAvenant" (returnEvent)="getSortie($event)" [etat]="etat" [avenantId]="historiqueAvenant.id"
+                    <app-avenant-modification [police]="policeItem" [avenant]="historiqueAvenant" (returnEvent)="getSortie($event)" [etat]="etat" [avenantId]="historiqueAvenant.id" [exerciceRevenu]="exerciceRev"
                                               (eventEmitterM)="getAvenantModification($event)"></app-avenant-modification>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
