@@ -1,5 +1,6 @@
 import {
     HistoriqueAvenant,
+    HistoriqueAvenantAdherant,
     HistoriquePlafond,
     HistoriquePlafondActe,
     HistoriquePlafondFamilleActe,
@@ -16,4 +17,5 @@ export interface HistoriqueAvenantState {
     historiqueAvenantListWithoutActive: Array<HistoriqueAvenant>;
     historiqueAvenantListByExercie: Array<HistoriqueAvenant>;
     verifyIsOverlap: VerifyRenouvellementIsOverlapReponse;
+    // historiqueAvenantAdherentList: Array<HistoriqueAvenantAdherant>;
 }

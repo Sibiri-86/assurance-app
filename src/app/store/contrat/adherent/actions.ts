@@ -22,4 +22,5 @@ export const importPhotosAdherentLot = createAction('[App Init] import photos ad
 export const loadListeActualisee = createAction('[App Init] load liste actualisee', props<{policeId: string}>());
 export const setListeActualisee = createAction('[App Init] set Adherent',  props<{listeActualisee: Adherent[]}>());
 export const searchAssureAndFamilleActe = createAction('[App Init] search Assure',  props<{numero: number}>());
+export const loadAdherentByExercice = createAction('[App Init] load Adherent by exercice', props<{idGroupe: string, exerciceId: string}>());
 

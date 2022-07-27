@@ -50,6 +50,8 @@ import { ConventionState } from './medical/convention/state';
 import { OrdonnanceMedicalProduitPharmaceutique } from './medical/ordonnance-medical/model';
 import { OrdonnanceMedicaleState } from './medical/ordonnance-medical/state';
 import { BulletinAdhesionState } from './contrat/bulletin-adhesion/state';
+import { HistoriqueAvenantAdherant } from './contrat/historiqueAvenantAdherent/model';
+import { HistoriqueAvenantAdherantState } from './contrat/historiqueAvenantAdherent/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -102,4 +104,5 @@ export interface AppState {
   bulletinAdhesionState: BulletinAdhesionState;
   conventionState: ConventionState;
   ordonnanceMedicaleState: OrdonnanceMedicaleState;
+  historiqueAvenantAdherantState: HistoriqueAvenantAdherantState;
 }

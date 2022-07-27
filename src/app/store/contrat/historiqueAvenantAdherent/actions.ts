@@ -1,5 +1,5 @@
 import {props, createAction} from '@ngrx/store';
-import {HistoriqueAvenant, HistoriqueAvenantAdherentList, HistoriqueAvenantList} from './model';
+import {HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantAdherentList, HistoriqueAvenantList} from './model';
 import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
 export const loadHistoriqueAvenantAdherent = createAction('[App Init] load AvenantAdherent', props<{haId: string}>());
 export const setHistoriqueAvenantAdherent = createAction('[App Init] set AvenantAdherent',  props<HistoriqueAvenantAdherentList>());
@@ -11,3 +11,5 @@ export const loadHistoriqueAvenantAdherentByHistoriqueId = createAction('[App In
     'AvenantAdherentByHistoriqueIdAndTypeHistorique', props<{haId: string}>());
 
 
+export const loadHistoriqueAvenantAdherentByPoliceAndExercice = createAction('[App Init] load ' +
+'loadHistoriqueAvenantAdherent By Police And Exercice', props<{idPolice: string, exerciceId: string}>());

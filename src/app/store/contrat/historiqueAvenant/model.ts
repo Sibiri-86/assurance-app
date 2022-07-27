@@ -127,6 +127,7 @@ export class Avenant {
     creation?: string;
     groupe?: Groupe;
     historiquePlafondGroupeFamilleActes?: HistoriquePlafondFamilleActe[];
+    idHisto?: string;
 }
 
 export class HistoriqueGroupe {

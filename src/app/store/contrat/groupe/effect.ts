@@ -104,4 +104,18 @@ this.actions$.pipe(
 )
 );
 
+createGroupeRenouvAndModif$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createGroupeRenouvAndModif),
+        mergeMap(({groupe, avenantId}) =>
+            this.GroupeService.posGroupeRenouvAndModif(groupe, avenantId).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                     featureActions.loadGroupe({policeId: groupe.police.id})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
 }

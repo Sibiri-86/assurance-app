@@ -43,6 +43,8 @@ import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { HistoriqueAvenantAdherentService } from 'src/app/store/contrat/historiqueAvenantAdherent/service';
 import { Police } from 'src/app/store/contrat/police/model';
 import * as featureActionHistoriqueAdherant from '../../../../store/contrat/historiqueAvenant/actions';
+import * as featureActionHistoriqueAvenantAdherant from '../../../../store/contrat/historiqueAvenantAdherent/actions';
+import * as selectorHistoriqueAvenantAdherant from '../../../../store/contrat/historiqueAvenantAdherent/selector';
 
 @Component({
   selector: 'app-adherent-basculer',
@@ -52,9 +54,10 @@ import * as featureActionHistoriqueAdherant from '../../../../store/contrat/hist
 export class AdherentBasculerComponent implements OnInit {
 
   @Input() police: Police;
-  
+  @Input() exerciceRevenu: Exercice;
   @Input() groupeListes: Array<Groupe>;
-  historiqueAveantAdherantsTMP: HistoriqueAvenantAdherant[] = [];
+
+  @Input() historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant>
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -80,6 +83,7 @@ export class AdherentBasculerComponent implements OnInit {
   clonedPlafondConfiguration: any = {};
   plafondActuelleConfiguration: any = {};
   dimensionPeriodeList$: Observable<Array<DimensionPeriode>>;
+  
   dimensionPeriodeList: Array<DimensionPeriode>;
   plafond: Plafond;
   plafondForm: FormGroup;
@@ -98,6 +102,7 @@ export class AdherentBasculerComponent implements OnInit {
   historiqueAveantAdherantsPermuteSelected: HistoriqueAvenantAdherant[] = [];
   clonedHistoriqueAveantAdherant: { [s: string]: HistoriqueAvenantAdherant } = {};
   case: boolean = false;
+  historiqueAveantAdherantsTMPList$:  Observable<Array<HistoriqueAvenantAdherant>>;
 
   constructor(
       private store: Store<AppState>,
@@ -108,19 +113,32 @@ export class AdherentBasculerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadHistoriqueAvenantAdherantByPolice();
+    console.log('******this.historiqueAveantAdherantsTMP*******', this.historiqueAveantAdherantsTMP);
  
   }
  
 
   loadHistoriqueAvenantAdherantByPolice(): void {
-    this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallList(this.police.id).subscribe(
+
+
+    console.log("==============this.police.id==",this.police.id);
+    console.log("==============this.exerciceRevd==",this.exerciceRevenu.id);
+    this.historiqueAveantAdherantsTMPList$ = this.store.pipe(select(selectorHistoriqueAvenantAdherant.historiqueAvenantAdherantListByPoliceAndExercice));
+    
+        this.store.dispatch(featureActionHistoriqueAvenantAdherant.loadHistoriqueAvenantAdherentByPoliceAndExercice({idPolice: this.police.id, exerciceId: this.exerciceRevenu.id}));
+        this.historiqueAveantAdherantsTMPList$.pipe(takeUntil(this.destroy$)).subscribe(
+            (res) => {
+                this.historiqueAveantAdherantsTMP = res;
+                console.log('******this.historiqueAveantAdherantsTMP*******', this.historiqueAveantAdherantsTMP);
+            }
+        );
+   /* this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExercice(this.police.id, this.exerciceRevenu.id).subscribe(
         (res) => {
      
           this.historiqueAveantAdherantsTMP = res;
           console.log("==============jj==",this.historiqueAveantAdherantsTMP);
         }
-    );
+    );*/
 }
 
   loadAherantByGroupe1(): void {

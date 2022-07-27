@@ -77,6 +77,14 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
+    findHistoriqueAvenantAdherantActuallByExercice(idPolice: string, exerciceId: string): Observable<HistoriqueAvenantAdherant[]> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALISE)}/${idPolice}/${exerciceId}`).pipe(
+            map((response: HistoriqueAvenantAdherant[]) => response),
+            catchError(this.handleError())
+        );
+    }
+
     findHistoriqueAvenantPrime(idHa: string): Observable<HistoriqueAvenantPrime[]> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_HISTORIQUE_AVENANT_PRIME)}`,

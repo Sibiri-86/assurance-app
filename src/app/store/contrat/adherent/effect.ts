@@ -240,4 +240,20 @@ this.actions$.pipe(
         )
     );
 
+
+    fetchAdherentByExercice$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadAdherentByExercice),
+        mergeMap(({idGroupe, exerciceId}) =>
+            this.AdherentService.$getAdherentsByExercice(idGroupe,exerciceId).pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setAdherent(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
 }

@@ -108,6 +108,19 @@ export class HistoriqueAvenantAdherantEffects {
             )
         ));
 
+        fetchHistoriqueAvenantAdherentByPoliceAndExercice$ = createEffect(() =>
+    this.actions$.pipe(
+            ofType(featureActions.loadHistoriqueAvenantAdherentByPoliceAndExercice),
+            mergeMap(({idPolice, exerciceId}) => this.historiqueAvenantAdherantService
+                .findHistoriqueAvenantAdherantActuallByExercice(idPolice, exerciceId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenantAdherent(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
+
         /* fetchgetAvenantModificationInfo$ = createEffect(() =>
     this.actions$.pipe(
             ofType(featureActions.loadAvenantModificationInfos),
