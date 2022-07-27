@@ -29,7 +29,7 @@
                         </th>
                         <th pSortableColumn="numero" style="width: 12rem">Numero<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 12rem">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 5rem">Taux <p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="width: 12rem">Personne ressource <p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 14rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="width: 6rem">Duree <p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="width: 12rem">Date effet <p-sortIcon field="dateEffet"></p-sortIcon></th>
@@ -47,7 +47,7 @@
                         </td>
                         <td><span class="p-column-title">{{police.nom}}</span>
                         </td>
-                        <td><span class="p-column-title">{{police.taux.taux}}</span>
+                        <td><span class="p-column-title">{{police.personneRessource}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" *ngFor="let t of police.territorialite">
@@ -362,7 +362,7 @@
                                     <p-inputNumber [(ngModel)]="plafond.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{plafond.montantPlafond}}
+                                    {{plafond.montantPlafond | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -479,7 +479,7 @@
                                         <p-inputNumber [(ngModel)]="acte.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{acte.montantPlafond}}
+                                        {{acte.montantPlafond | formatTableValue : 'number'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -596,7 +596,7 @@
                                             <p-inputNumber [(ngModel)]="sousActe.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="plafond/acte"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{sousActe.montantPlafondParActe}}
+                                            {{sousActe.montantPlafondParActe | formatTableValue : 'number'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -606,7 +606,7 @@
                                             <p-inputNumber [(ngModel)]="sousActe.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{sousActe?.montantPlafond}}
+                                            {{sousActe?.montantPlafond | formatTableValue : 'number'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>        
@@ -756,7 +756,7 @@
                                     <p-inputNumber [(ngModel)]="plafond.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{plafond.montantPlafond}}
+                                    {{plafond.montantPlafond | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -871,7 +871,7 @@
                                         <p-inputNumber [(ngModel)]="acte.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{acte.montantPlafond}}
+                                        {{acte.montantPlafond | formatTableValue : 'number'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -985,7 +985,7 @@
                                             <p-inputNumber [(ngModel)]="sousActe.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="montant plafond/acte"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{sousActe.montantPlafond}}
+                                            {{sousActe.montantPlafond | formatTableValue : 'number'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -995,7 +995,7 @@
                                             <p-inputNumber [(ngModel)]="sousActe.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{sousActe?.montantPlafond}}
+                                            {{sousActe?.montantPlafond | formatTableValue : 'number'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>        
@@ -1216,7 +1216,7 @@
                                     <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData?.montantPlafond}}
+                                    {{rowData?.montantPlafond | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1336,7 +1336,7 @@
                                     <p-inputNumber [(ngModel)]="rowData.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData.montantPlafond}}
+                                    {{rowData.montantPlafond | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1441,7 +1441,7 @@
                                     <p-inputNumber [(ngModel)]="rowData2.montantPlafondParActe" mode="decimal" locale="fr-FR" placeholder="montant plafond/acte"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData2.montantPlafondParActe}}
+                                    {{rowData2.montantPlafondParActe | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1452,7 +1452,7 @@
                                     <p-inputNumber [(ngModel)]="rowData2.montantPlafond" mode="decimal" locale="fr-FR" placeholder="montant plafond/periode"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{rowData2.montantPlafond}}
+                                    {{rowData2.montantPlafond | formatTableValue : 'number'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -1667,7 +1667,8 @@
 
                                 <div class="p-field p-col-4">
                                     <label for="typePrime">Type de prime<span style="color: red !important;">*</span></label>
-                                    <p-dropdown id="typePrime" dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
+                                    <p-dropdown id="typePrime" dataKey="id" inputId="typePrime" [filter]="true" showClear="true" [options]="typePrimeList" 
+                                    formControlName="prime" optionLabel="libelle" placeholder="selectionnez" (onChange)="changePrime($event)"></p-dropdown>
                                 </div>
 
                                 <div class="p-field p-col-4" *ngIf="selectedTypePrime.code =='PECE'">
@@ -2385,10 +2386,11 @@
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
                             <th pSortableColumn="numeroGroupe" style="width: 4rem">N° <p-sortIcon field="numero.groupe"></p-sortIcon></th>
-                            <th pSortableColumn="nom">Libelle <p-sortIcon field="garant.nom"></p-sortIcon></th>
-                            <th pSortableColumn="intermediaire" style="width: 12rem">Taux <p-sortIcon field="intermediaire.nom"></p-sortIcon></th>
-                            <th pSortableColumn="numero">Duree<p-sortIcon field="numero"></p-sortIcon></th>
-                            <th pSortableColumn="territorialite" style="width: 12rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                            <th pSortableColumn="nom" style="width: 17rem">Libelle <p-sortIcon field="garant.nom"></p-sortIcon></th>
+                            <th pSortableColumn="intermediaire" style="width: 8rem">Taux <p-sortIcon field="intermediaire.nom"></p-sortIcon></th>
+                            <th pSortableColumn="numero" style="width: 12rem">Date d'éffet<p-sortIcon field="numero"></p-sortIcon></th>
+                            <th pSortableColumn="numero" style="width: 6rem">Duree<p-sortIcon field="numero"></p-sortIcon></th>
+                            <th pSortableColumn="territorialite" style="width: 10rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                             <th></th>
                         </tr>
                     </ng-template>
@@ -2400,6 +2402,7 @@
                             <td><span class="p-column-title">{{groupe.numeroGroupe}}</span>
                             <td><span class="p-column-title">{{groupe.libelle}}</span></td>
                             <td><span class="p-column-title">{{groupe.taux.taux}}</span></td>
+                            <td><span class="p-column-title">{{groupe.dateEffet | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title">{{groupe.duree}}</span></td>
                             <td><span class="p-column-title" *ngFor="let t of groupe.territorialite">{{t.libelle}} </span></td>
                             <td>
@@ -3340,17 +3343,18 @@
                             </app-entity-validation>
                         </div>
 
-                        <div class="p-field p-col-4">
+                        <!-- <div class="p-field p-col-4">
                             <label for="lastname2">Taux de couverture <span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'taux'">
                             </app-entity-validation>
-                        </div>
+                        </div> -->
 
                         <div class="p-field p-col-4">
                             <label for="lastname2">Taux de commission intermediaire en % <span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown dataKey="id" inputId="taux commission intermediaire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" formControlName="tauxCommissionIntermediaire" placeholder="Select" optionLabel="taux"></p-dropdown>
+                            <p-dropdown dataKey="id" inputId="taux commission intermediaire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" 
+                            formControlName="tauxCommissionIntermediaire" placeholder="Select" optionLabel="taux"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="policeForm" [entityField]="'taux'">
                         </app-entity-validation>
@@ -3444,7 +3448,7 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">RCCM souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <label for="lastname2">RCCM souscripteur <span style="color: red !important; font-size: 1.4em"></span></label>
                             <input id="rccm" type="text" formControlName="rccm" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'rccm'">

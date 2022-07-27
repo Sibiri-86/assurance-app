@@ -325,6 +325,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueRev: HistoriqueAvenant;
   historiqueGroupeRev: Groupe[] = [];
   exerciceRev: Exercice = {};
+  primeExercice: number;
+  exoNumber: number;
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -1651,6 +1653,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (value) {
         // this.loading = false;
         this.historiqueAvenants1 = value.slice();
+        console.log('..this.historiqueAvenants1....', this.historiqueAvenants1);
         this.historiqueAvenants1.forEach(element => {
           console.log('.........1........', element.validePrime);
           element.isPossible = this.calculePossible(element);
@@ -1666,6 +1669,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('==================================', this.historiqueAvenants1);
         }
     ); */
+    this.getPrimeTotalByPoliceId();
   }
 
   /** afficher les details de l'avenant' */
@@ -2287,6 +2291,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
         }
     );
     historiqueAvenant = {};
+    this.onRowSelectPolice(this.police);
+  }
+
+  femerAvenant() {
+    this.curentExercice = null;
+  }
+
+  femerAvenantPrime() {
+    this.curentExercice = null;
+    this.onRowSelectPolice(this.police);
   }
 
 
@@ -2339,6 +2353,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.onExerciceChange2();
         }
     ); 
+    this.onRowSelectPolice(this.police);
     /* this.historiqueAvenantService.validerPrime(this.historiqueAvenantPrimes).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res;
@@ -2410,8 +2425,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('curent exo === ');
     console.log(this.curentExercice);
     // this.exercice = {...exercice}
-    if (this.curentExercice && this.curentExercice.id !== '') {
-      this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    if (this.curentExercice ) {
+      /* this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
       this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenantByExercice({exerciceId: this.curentExercice.id}));
       this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         if (value) {
@@ -2422,7 +2437,15 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('................historiqueAvenantListWithoutActiveList............................');
           console.log(this.historiqueAvenantList.length);
         }
-      });
+      }); */
+      this.historiqueAvenantService.findHistoriqueAvenantByExercice(this.curentExercice.id).subscribe((res) => {
+        this.historiqueAvenants1 = res.body;
+          console.log('....historiqueAvenants1.....', this.historiqueAvenants1);
+        this.historiqueAvenants1.forEach(p => {
+          this.primeExercice = p.historiqueAvenantPrime?.primeTotalCalcul;
+          this.exoNumber = p.exercice?.numero;
+        })
+      })
     } else {
     this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
     this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: this.police.id}));

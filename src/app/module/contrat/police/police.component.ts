@@ -341,7 +341,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       garant: new FormControl(null, [Validators.required]),
       intermediaire: new FormControl(null, [Validators.required]),
       //numero: new FormControl('',[Validators.required]),
-      taux: new FormControl(null, [Validators.required]),
+      taux: new FormControl(),
       territorialite: new FormControl('', [Validators.required]),
       typeDuree: new FormControl('', [Validators.required]),
       duree: new FormControl('', [Validators.required]),
@@ -387,14 +387,15 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.primeForm = this.formBuilder.group({
+      id: new FormControl(null),
       prime: new FormControl(null, [Validators.required]),
-      primeEmploye: new FormControl(""),
-      primeConjoint: new FormControl(""),
-      primeEnfant: new FormControl(""),
-      primeFamille: new FormControl(""),
-      primeAdulte: new FormControl(""),
-      primePersonne: new FormControl(""),
-      primeAnnuelle: new FormControl(null)
+      primeEmploye: new FormControl(''),
+      primeConjoint: new FormControl(''),
+      primeEnfant: new FormControl(''),
+      primeFamille: new FormControl(''),
+      primeAdulte: new FormControl(''),
+      primePersonne: new FormControl(''),
+      primeAnnuelle: new FormControl('')
     });
 
     this.breadcrumbService.setItems([{ label: "Police" }]);
@@ -418,7 +419,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   fermerConfigurationPlafond() {
+    this.plafondActuelleConfiguration = [];
     this.displayConfigurationPlafond = false;
+    this.bareme = null;
   }
 
   /**permet de parametrer le plafond pour un groupe */
@@ -1211,44 +1214,69 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   changePrime(event) {
-   
-        this.selectedTypePrime = event.value;
-      /*  this.primeForm = this.formBuilder.group({
-          prime: new FormControl(null, [Validators.required]),
-          primeEmploye: new FormControl(""),
-          primeConjoint: new FormControl(""),
-          primeEnfant: new FormControl(""),
-          primeFamille: new FormControl(""),
-          primeAdulte: new FormControl(""),
-          primePersonne: new FormControl(""),
-          primeAnnuelle: new FormControl(null)
+    this.selectedTypePrime = {} ;
+    console.log('=======this.selectedTypePrime======', this.selectedTypePrime);
+    this.primeForm.reset({});
+    console.log('=======this.primeForm======', this.primeForm);
+    this.selectedTypePrime = event.value;
+    console.log('=======this.selectedTypePrime 2======', this.selectedTypePrime);
+    
+    /* this.primeForm.get('prime').setValue(this.selectedTypePrime);
+    this.primeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+    this.groupeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+    console.log("=====this.selectedTypePrime.libelle=====>", this.selectedTypePrime.libelle);
+    console.log("=====this.groupeForm.get('prime').=====>", this.groupeForm.get('prime').value); */
+    // this.primeForm.reset({});
+    if(this.selectedTypePrime.code === "PAE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEnfant: new FormControl('', [Validators.required]),
+            primeAdulte: new FormControl('', [Validators.required])
         });
-        console.log(this.selectedTypePrime.code);
-        this.primeForm.get('prime').setValue(event.value);
-    /*
-    console.log(event.value);
-    if (event.value.libelle === "famille") {
-      this.primeForm = this.formBuilder.group({
-        typePrime: new FormControl(""),
-        primeFamille: new FormControl("", [Validators.required]),
-      });
-    } else if (event.value.libelle === "adulte et enfant") {
-      this.primeForm = this.formBuilder.group({
-        typePrime: new FormControl(""),
-        primeAdulte: new FormControl("", [Validators.required]),
-        primeEnfant: new FormControl("", [Validators.required]),
-      });
-    } else if (event.value.libelle === "employe,conjoint,enfant") {
-      this.primeForm = this.formBuilder.group({
-        typePrime: new FormControl(""),
-        primeEmploye: new FormControl("", [Validators.required]),
-        primeConjoint: new FormControl("", [Validators.required]),
-        primeEnfant: new FormControl("", [Validators.required]),
-      });
-    } else {
     }
-    */
-  }
+    if(this.selectedTypePrime.code === "PECE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEmploye: new FormControl('', [Validators.required]),
+            primeConjoint: new FormControl('', [Validators.required]),
+            primeEnfant: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PF"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeFamille: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEmploye: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PP"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primePersonne: new FormControl('', [Validators.required])
+        });
+    }
+
+    this.primeForm.patchValue({
+        prime: this.typePrimeList.find(p=> p.libelle === event.value.libelle),
+        // prime: event.value.libelle,
+        
+    });
+    console.log('=======prime======', this.primeForm.get('prime').value);
+
+    
+    console.log("=====event=====>", event);
+}
+
   enregistrerAdherent() {
     this.adherentFamille.push({adherent: this.adherentForm.value, famille: this.adherentFamilleList});
     this.adherentForm.reset();
@@ -2046,6 +2074,7 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
         this.bareme = null
         this.displayConfigurationPlafond = false;
         this.plafondActuelleConfiguration = [];
+        this.bareme = null;
       }
     });
     

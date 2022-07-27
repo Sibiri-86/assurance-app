@@ -14,7 +14,7 @@
     border-radius: 0.2em;
 }
 
-.prime{
+.primeL{
     font-size: 2.5em !important;
     // font-style: italic;
     font-weight: bold;
@@ -42,4 +42,35 @@
     font-size: 1.5em !important;
     // font-style: italic;
     font-weight: bold;
+}
+
+.prime {
+    font-size: 1.5em !important;
+    color: green !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border-radius: 0.3em;
+    // background-color: yellow;
+
+}
+
+/* .prime:hover {
+    font-size: 1.8em !important;
+    color: green !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border-radius: 0.3em;
+    background-color: yellow;
+    
+} */
+
+
+.primeeee{
+    border-radius: 1em;
+    background-color: darkgray !important;
+}
+
+.primeeee:hover{
+    border-radius: 1em;
+    background-color: yellowgreen !important;
 }

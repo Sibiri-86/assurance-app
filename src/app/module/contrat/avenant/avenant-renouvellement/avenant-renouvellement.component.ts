@@ -1303,7 +1303,7 @@ export class AvenantRenouvellementComponent implements OnInit {
             this.objet.plafondFamilleActes = [];
         
             this.historiqueAvenant.id = this.avenantArrivedId;
-            this.objet.groupes = [];
+            this.objet.groupes = this.groupesRev;
             this.objet.exercice = this.exerciceRevenu;
             this.historiqueAvenant.isTerminer = false;
             this.objet.historiqueAvenant.numero = this.avenantNumero;
