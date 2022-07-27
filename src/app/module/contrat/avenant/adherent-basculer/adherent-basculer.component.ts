@@ -123,7 +123,7 @@ export class AdherentBasculerComponent implements OnInit {
 
     console.log("==============this.police.id==",this.police.id);
     console.log("==============this.exerciceRevd==",this.exerciceRevenu.id);
-    this.historiqueAveantAdherantsTMPList$ = this.store.pipe(select(selectorHistoriqueAvenantAdherant.historiqueAvenantAdherantListByPoliceAndExercice));
+    /* this.historiqueAveantAdherantsTMPList$ = this.store.pipe(select(selectorHistoriqueAvenantAdherant.historiqueAvenantAdherantListByPoliceAndExercice));
     
         this.store.dispatch(featureActionHistoriqueAvenantAdherant.loadHistoriqueAvenantAdherentByPoliceAndExercice({idPolice: this.police.id, exerciceId: this.exerciceRevenu.id}));
         this.historiqueAveantAdherantsTMPList$.pipe(takeUntil(this.destroy$)).subscribe(
@@ -131,7 +131,7 @@ export class AdherentBasculerComponent implements OnInit {
                 this.historiqueAveantAdherantsTMP = res;
                 console.log('******this.historiqueAveantAdherantsTMP*******', this.historiqueAveantAdherantsTMP);
             }
-        );
+        );*/
    /* this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExercice(this.police.id, this.exerciceRevenu.id).subscribe(
         (res) => {
      

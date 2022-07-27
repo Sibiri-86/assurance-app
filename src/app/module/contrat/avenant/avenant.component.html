@@ -125,7 +125,7 @@
                             <!-- <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
                                            (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
                             <!-- SPlit sans la fonction setPolice -->
-                            <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
+                            <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
                                 (onDropdownClick)="policeItem = police; loadGoupeByPolice() ;setPolice(police)">
                             </p-splitButton>
 
@@ -1827,12 +1827,12 @@
                             </div>
                         </div>
 
-                        <div class="p-field p-col">
+                        <!-- <div class="p-field p-col">
                             <label for="lastname2">Taux de couverture</label>
                             <div>
                                 <span>{{police.taux.taux}}</span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="p-fluid p-formgrid p-grid">

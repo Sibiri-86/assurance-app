@@ -53,6 +53,7 @@ export interface Police{
     listGroupe?: Groupe[];
     typeDuree?: TypeDuree;
     isPlafond?: boolean;
+    isResilie?: boolean;
 }
 
 export interface Statistique {
