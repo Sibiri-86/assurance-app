@@ -825,13 +825,13 @@ export class AvenantRenouvellementComponent implements OnInit {
                         this.exerciceRevenu = this.exerciceOfLast;
                         console.log('******this.exerciceRevenu*******', this.exerciceRevenu);
 
-                        this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExercice(this.police.id, this.exerciceRevenu.id).subscribe(
+                        /* this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExercice(this.police.id, this.exerciceRevenu.id).subscribe(
                             (res) => {
                          
                               this.historiqueAveantAdherantsTMP1 = res;
                               console.log("==============jj==",this.historiqueAveantAdherantsTMP);
                             }
-                        );
+                        ); */
                         this.lastExerciceForm.patchValue({
                             id: this.exerciceOfLast.id,
                             debut: this.exerciceOfLast.debut,

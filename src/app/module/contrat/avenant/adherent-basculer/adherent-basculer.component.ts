@@ -57,7 +57,7 @@ export class AdherentBasculerComponent implements OnInit {
   @Input() exerciceRevenu: Exercice;
   @Input() groupeListes: Array<Groupe>;
 
-  @Input() historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant>
+  historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant>
   tauxList$: Observable<Array<Taux>>;
   tauxList: Array<Taux>;
   sousActeList$: Observable<Array<SousActe>>;
@@ -142,7 +142,9 @@ export class AdherentBasculerComponent implements OnInit {
 }
 
   loadAherantByGroupe1(): void {
-    if(this.adherentPermutList) {
+    console.log("==============this.police.id==",this.police.id);
+    console.log("==============this.groupeSelectedPermuter.id==",this.groupeSelectedPermuter.id);
+    /* if(this.adherentPermutList) {
       this.adherentPermutList.forEach(adh=>{
         if(adh.historiqueAvenantAdherents) {
           adh.historiqueAvenantAdherents.forEach(ht=>{
@@ -152,7 +154,14 @@ export class AdherentBasculerComponent implements OnInit {
       })
     }
     this.historiqueAveantAdherantsPermute = this.historiqueAveantAdherantsTMP.filter(a => a.adherent?.groupe?.id === this.groupeSelectedPermuter.id);
-    this.groupeListNouvo = this.groupeListes.filter(group=>group.id !== this.groupeSelectedPermuter.id);
+   */
+
+    this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByPoliceAndGroupe(this.police.id, this.groupeSelectedPermuter.id).subscribe(
+      (res) => {
+        this.historiqueAveantAdherantsPermute = res;
+      }
+    );
+    this.groupeListNouvo = this.groupeListes.filter(group=>group.id !== this.groupeSelectedPermuter.id); 
   }
 
 
