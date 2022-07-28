@@ -1263,7 +1263,7 @@
         </div>
         <div class="p-col-2">
             <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="fermerAvenantModif()" [disabled]="avenantIdEnv || etat==='VIEW'"></button>
+                    (click)="fermerAvenantModif()" [disabled]="!avenantId || etat==='VIEW'"></button>
         </div>
     </div>
 </div>
