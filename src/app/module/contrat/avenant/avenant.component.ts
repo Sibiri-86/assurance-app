@@ -2646,7 +2646,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   supprimerAvenant(rowdata: HistoriqueAvenant): void {
-    this.store.dispatch(historiqueAvenantAction.deleteHistoriqueAvenant(rowdata));
+
+    this.confirmationService.confirm({
+      message: 'Etes-vous sûre de vouloir supprimer cet avenant ? Cette action est irréversible',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(historiqueAvenantAction.deleteHistoriqueAvenant(rowdata));
+        this.getPrimeTotalByPoliceId();
+      },
+    });
+    
     // this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
   }
 
