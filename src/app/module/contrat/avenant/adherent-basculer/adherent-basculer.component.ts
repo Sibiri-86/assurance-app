@@ -243,6 +243,9 @@ onRowEditInit(historiqueAveantAdherant: HistoriqueAvenantAdherant) {
 }
 
 onRowEditSave(historiqueAveantAdherant: HistoriqueAvenantAdherant) {
+  this.historiqueAveantAdherantsPermuteSelected.filter(his=>his.adherent?.adherentPrincipal?.id === historiqueAveantAdherant.adherent?.id)?.forEach(hist=>{
+    hist.dateEffet = historiqueAveantAdherant.dateEffet;
+  });
   delete this.clonedHistoriqueAveantAdherant[historiqueAveantAdherant.id];
 }
 
@@ -258,6 +261,7 @@ onRowSelect(event: any) {
   console.log('row historiqueAveantAdherantsPermuteSelected 1 : ',  this.historiqueAveantAdherantsPermuteList);
   if(this.historiqueAveantAdherantsPermuteList) {
     this.historiqueAveantAdherantsPermuteList?.forEach(adh=>{
+    //  adh.dateEffet = event.data.dateEffet;
 
       this.historiqueAveantAdherantsPermuteSelected.push(adh);
     });

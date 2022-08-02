@@ -54,7 +54,7 @@
                              let-ri="rowIndex">
                     <tr [pEditableRow]="historiqueAveantAdherant"  [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td style="width: 3rem">
-                            <p-tableCheckbox [value]="historiqueAveantAdherant" [disabled]="historiqueAveantAdherant.adherent.adherentPrincipal" ></p-tableCheckbox>
+                            <p-tableCheckbox [value]="historiqueAveantAdherant" [disabled]="historiqueAveantAdherant.adherent.adherentPrincipal" (click)="cocherCase(historiqueAveantAdherant)"></p-tableCheckbox>
                         </td>
                         <td>{{historiqueAveantAdherant.adherent.numero}}</td>
                         <td>{{historiqueAveantAdherant?.adherent?.nom | upercase}}
@@ -68,7 +68,7 @@
 
                         <td>
                             <p-cellEditor>
-                                <ng-template pTemplate="input" >
+                                <ng-template pTemplate="input">
                                     <input id="dateEffet"
                                      type="date" name="dateEffet" pInputText  [(ngModel)]="historiqueAveantAdherant.dateEffet">
                                 </ng-template>
