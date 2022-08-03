@@ -1812,6 +1812,8 @@ export class GroupeAjoutComponent implements OnInit{
   /**permet de valider le plafond */
   validerPlafond() {
     this.plafond = this.plafondForm.value;
+    this.plafond.avenantId = this.avenantIdEnv;
+    console.log('*********************this.plafond.avenantId', this.plafond.avenantId);
     this.plafond.plafondAnnuelleFamille = removeBlanks(this.plafond.plafondAnnuelleFamille + '');
     this.plafond.plafondAnnuellePersonne = removeBlanks(this.plafond.plafondAnnuellePersonne + '');
     this.plafond.plafondGlobalInternationnal = removeBlanks(this.plafond.plafondGlobalInternationnal + '');

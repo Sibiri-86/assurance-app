@@ -16,7 +16,7 @@
 
             <div class="p-field p-col-6"></div>
         </div>-->
-        <div class="p-field p-col-12" *ngIf="!isRenouv">
+        <div class="p-field p-col-12" *ngIf="!isRenouv && etat !== 'VIEW'">
             <div class="p-field p-col-7">
                 <div class="p-field-checkbox">
                     <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel ?</label>

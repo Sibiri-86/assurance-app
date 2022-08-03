@@ -13,6 +13,7 @@ export interface Plafond {
     plafondFamilleActe?: Array<PlafondFamilleActe>;
     groupe?: Groupe;
     plafondGlobalEvacuationSanitaire?: number;
+    avenantId?: string;
 }
 
 export interface PlafondConfig {
