@@ -169,7 +169,7 @@ export class AvenantSuspensionComponent implements OnInit {
   init() {
     this.myForm = this.formBuilder.group({
       id: new FormControl(null),
-      numero: new FormControl(null),
+      numeroGarant:new FormControl(null),
       dateAvenant: new FormControl(null, [Validators.required]),
       // dateEffet: new FormControl(null, [Validators.required]),
       observation: new FormControl(null, [Validators.required]),
@@ -211,7 +211,7 @@ export class AvenantSuspensionComponent implements OnInit {
 
   createAvenantSuspension(): void {
     this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
-    this.historiqueAvenant.numero = this.myForm.get('numero').value;
+    this.historiqueAvenant.numero = this.myForm.get('numeroGarant').value;
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.SUSPENSION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
@@ -301,6 +301,7 @@ export class AvenantSuspensionComponent implements OnInit {
             this.historiqueAvenant = res;
             this.police = res.police;
             this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
+            console.log('jkjhjkjhjkjhghjkjh', this.historiqueAveantAdherantsByExercice);
             this.historiqueAveantAdherantsByExercice.forEach(haa => {
               if(haa.id) {
                 haa.dateRetrait = new Date(haa.dateRetrait);
@@ -310,7 +311,7 @@ export class AvenantSuspensionComponent implements OnInit {
             });
             this.myForm.setValue({
                 id: avenantId,
-                numero: res.numero,
+                numeroGarant: res.numeroGarant,
                 dateAvenant: res.dateAvenant,
                 observation: res.observation,
                 demandeur: res.typeDemandeur,

@@ -99,6 +99,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     curentExercice: Exercice = {};
     adherentsListeActuelleByExercice: Adherent[]= [];
     adherentsListe: Adherent[]= [];
+    exerciceOfLast : Exercice;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -152,7 +153,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
                 (res) => {
                     this.exercice = res;
-                    console.log('******this.exercice*******', this.exercice);
+                    console.log('******this.exercice445522552225525255*******', this.exercice);
                     if (this.exercice) {
                         this.lastExerciceForm.patchValue({
                             debut: this.exercice.debut,
@@ -250,6 +251,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     }
 
     ngOnInit(): void {
+        
         console.log("ghjklkhghjklkjhjk",this.isRenouv);
         
         console.log("ghjklkhghjklkjhjk2",this.isRenouv);
@@ -287,9 +289,12 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
                 this.loadExerciceByPolice(this.police);
             }
 
-            this.loadAdherent();
+            // this.loadAdherent();
+            
 
             this.init();
+
+            this.loadAdherentByPoliceAndExercice();
        
     }
 
@@ -699,5 +704,35 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             }
         );
       }
+
+      loadAdherentByPoliceAndExercice() {
+        this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            console.log('******this.police.id*******', this.police.id);
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exerciceOfLast = res;
+                    console.log('******this.exerciceOfLastCRM*******', this.exerciceOfLast);
+                    if(this.exerciceOfLast.id != null) {
+                        console.log("******this.police.id*******", this.police.id);
+                        console.log("******this.exercice.id*******", this.exerciceOfLast.id);
+                        this.adherentService.loadAdherentsByPoliceAndExercice(this.police.id, this.exerciceOfLast.id).subscribe(
+                            (res) => {
+                              res.forEach(a => {
+                                a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
+                              });
+                              this.adherentPrincipauxTMP = res.filter(e => e.adherentPrincipal === null);
+                              console.log(':::::::::::::this.adherentPrincipauxTMP454542110:::::::::::::');
+                              console.log(this.adherentPrincipauxTMP);
+                            }
+                        );
+                    }
+                }
+            );
+           
+        
+      }
+
+      
 
 }

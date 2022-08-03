@@ -61,7 +61,7 @@ export class AvenantResiliationComponent implements OnInit {
   init() {
     this.myForm = this.formBuilder.group({
       id: new FormControl(null),
-      numero: new FormControl(null, [Validators.required]),
+      numeroGarant: new FormControl(),
       dateAvenant: new FormControl(null, [Validators.required]),
       observation: new FormControl(null),
       typeDemandeur: new FormControl(null, [Validators.required]),
@@ -152,7 +152,7 @@ export class AvenantResiliationComponent implements OnInit {
             }); */
             this.myForm.setValue({
                 id: avenantId,
-                numero: res.numero,
+                numeroGarant: res.numeroGarant,
                 dateAvenant: res.dateAvenant,
                 observation: res.observation,
                 demandeur: res.typeDemandeur,

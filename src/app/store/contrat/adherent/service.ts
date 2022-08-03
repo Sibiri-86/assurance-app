@@ -224,5 +224,13 @@ private handleError<T>() {
       );
   }
 
+  loadAdherentsByPoliceAndExercice(policeId: string, exoId: string): Observable<Adherent[]> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${policeId}/${exoId}`).pipe(
+        map((response: Adherent[]) => response),
+        catchError(this.handleError())
+    );
+}
+
 }
 
