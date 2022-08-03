@@ -91,6 +91,8 @@ export interface HistoriqueAvenantAdherant {
     selected?: boolean;
     dateEcheance?: Date;
     singe?: string;
+    dateReintegration?: Date;
+    isSuspendu?:boolean;
 }
 
 export interface HistoriqueAvenantList {

@@ -126,7 +126,7 @@
                                            (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
                             <!-- SPlit sans la fonction setPolice -->
                             <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
-                                (onDropdownClick)="policeItem = police; loadGoupeByPolice() ;setPolice(police)">
+                                (onDropdownClick)="policeItem = police; setPolice(police)">
                             </p-splitButton>
 
 

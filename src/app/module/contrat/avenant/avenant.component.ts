@@ -1474,8 +1474,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
         console.log(this.groupePolicy);
       }
     });
-
-    this.adherentService.loadAdherentsByPolice(this.policeItem.id).subscribe(
+    if (!this.isAvenantRenouvellement) {
+      this.adherentService.loadAdherentsByPolice(this.policeItem.id).subscribe(
         (res) => {
           res.forEach(a => {
             a.fullName = a.numero +' - '+ a.nom + ' ' + a.prenom;
@@ -1485,6 +1485,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log(this.adherentListGroupe);
         }
     );
+    }
+    
   }
 
   loadActualList(police: Police): void {

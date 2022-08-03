@@ -111,6 +111,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() etat: string;
     @Input() avenantId: string;
     @Input() avenantArrivedId: string;
+    
     @Input() avenantNumero: number;
     @Input() groupesRev: Array<Groupe>;
     @Input() exerciceRevenu: Exercice;
@@ -617,6 +618,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    
         if(this.etat!=='CREATE') {
             this.charge();
         }
@@ -807,12 +809,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         if(this.etat !== 'CREATE') {
             // this.updateAvenant(this.avenantId);
           }
-        this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentByPoliceAndUnsuspend(this.police.id).subscribe(
-            (res) => {
-                console.log('..............RES..............   ', res);
-                this.historiqueAveantAdherantList = res;
-            }
-        );
+        
 
         this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
         console.log('******this.police.id*******', this.police.id);
@@ -822,8 +819,8 @@ export class AvenantRenouvellementComponent implements OnInit {
                     this.exerciceOfLast = res;
                     console.log('******this.exerciceOfLast*******', this.exerciceOfLast);
                     if (this.exerciceOfLast) {
-                        this.exerciceRevenu = this.exerciceOfLast;
-                        console.log('******this.exerciceRevenu*******', this.exerciceRevenu);
+                        /* this.exerciceRevenu = this.exerciceOfLast;
+                        console.log('******this.exerciceRevenu*******', this.exerciceRevenu); */
 
                         /* this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExercice(this.police.id, this.exerciceRevenu.id).subscribe(
                             (res) => {
@@ -846,6 +843,14 @@ export class AvenantRenouvellementComponent implements OnInit {
            
 
            
+    }
+    loadActualList() {
+        this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentByPoliceAndUnsuspend(this.police.id).subscribe(
+            (res) => {
+                console.log('..............RES..............   ', res);
+                this.historiqueAveantAdherantList = res;
+            }
+        );
     }
 
     addSousActe() {

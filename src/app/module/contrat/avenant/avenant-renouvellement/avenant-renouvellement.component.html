@@ -270,7 +270,7 @@
                 </p-fieldset>
 
         </p-tabPanel>
-        <p-tabPanel  [style]="{'width': '100%'}" header="GROUPE && PLAFOND" leftIcon="pi pi-users" tooltip="Groupe">
+        <p-tabPanel *ngIf="etat ==='CREATE'" [disabled]="myForm.invalid || !avenantArrivedId"  [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond">
             <div class="p-grid">
                 <div class="p-col-12">
                     <p-table #dt [value]="groupeListes" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -314,7 +314,7 @@
                                 <td class="p-text-left">
                                     <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="groupeSelected = groupe; loadAherantByGroupe()"></button>
                                     <button pButton  pRipple icon="pi pi-eye" pTooltip="voir adherent" class="p-button-rounded p-button-info p-mr-2" (click)="voirAdherent(groupe)"></button>
-                                    <button pButton  pRipple icon="pi pi-sort-numeric-up-alt" pTooltip="Barème" class="p-button-rounded p-button-secondary p-mr-2" (click)="loadPlafondConfigBygroupe2(groupe)"></button>
+                                    <button pButton *ngIf="etat === 'CREATE'"  pRipple icon="pi pi-sort-numeric-up-alt" pTooltip="Barème" class="p-button-rounded p-button-secondary p-mr-2" (click)="loadPlafondConfigBygroupe2(groupe)"></button>
                                 </td>
                             </tr>
                         </ng-template>
@@ -967,8 +967,8 @@
                                         </th>
                                         <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule<p-sortIcon field="numero"></p-sortIcon></th>
                                         <!--<th pSortableColumn="matricule" >Mle.<p-sortIcon field="matricule"></p-sortIcon></th>-->
-                                        <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
-                                        <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th>
+                                        <!-- <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                                        <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th> -->
                                         <th pSortableColumn="nom" style="min-width:200px" >Nom<p-sortIcon field="nom"></p-sortIcon></th>
                                         <th pSortableColumn="prenom" style="min-width:200px" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
                                         <th pSortableColumn="numero" style="min-width:200px" >Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
@@ -981,8 +981,8 @@
                                     <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
                                         <td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
                                         <td style="min-width:100px"><span class="p-column-title">{{adherent.numero}}</span></td>
-                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
-                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeSouscripteur}}</span></td>
+                                        <!-- <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeSouscripteur}}</span></td> -->
                                         <!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->
                                         <td style="min-width:200px"><span class="p-column-title">{{adherent.nom}}</span></td>
                                         <td style="min-width:200px"><span class="p-column-title">{{adherent.prenom}}</span></td>
