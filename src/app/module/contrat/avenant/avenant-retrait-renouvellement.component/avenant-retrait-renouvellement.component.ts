@@ -263,6 +263,7 @@ export class AvenantRetraitRenouvellementComponent implements OnInit {
   }
   onSelect1(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
     console.log('liste1 === ', this.historiqueAveantAdherantsByExercice);
+    historiqueAvenantAdherant.dateRetrait = this.avenantDate;
     this.historiqueAveantAdherantsByExerciceTMP2 = this.historiqueAveantAdherantsByExercice.filter(his=>his.adherent?.adherentPrincipal?.id === historiqueAvenantAdherant.adherent.id);
     console.log('liste2 === ', this.historiqueAveantAdherantsByExerciceTMP2);
     if( this.historiqueAveantAdherantsByExerciceTMP2) {
