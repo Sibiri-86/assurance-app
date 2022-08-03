@@ -161,7 +161,7 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant >
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
                         <td>
-                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary"  (onChange)="onSelect1(historiqueAveantAdherant)"
                             [disabled]="etat === 'VIEW'"></p-checkbox>
                             <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
                         </td>
@@ -178,13 +178,14 @@
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
                         <td>
                             <span class="p-column-title">
-                                <!--<input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
+                                <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"
                                        (change)="compareDateRetrait(historiqueAveantAdherant)"
-                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="!historiqueAveantAdherant.selected"/>-->
-                            <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
+                                       [disabled]="etat === 'VIEW'"
+                                       [(ngModel)]="historiqueAveantAdherant.dateRetrait" pInputText [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"/>
+                            <!-- <p-calendar [id]="'dateIncor' + historiqueAveantAdherant.id" [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateRetrait"
                                         dateFormat="dd/mm/yy" inputId="calendar" [disabled]="historiqueAveantAdherant.selected === null || !historiqueAveantAdherant.selected"
                                         appendTo="body" (onSelect)="compareDateRetrait(historiqueAveantAdherant)"
-                                        [disabled]="etat === 'VIEW'"></p-calendar>
+                                        [disabled]="etat === 'VIEW'"></p-calendar> -->
                             </span>
                         </td>
                         <td>

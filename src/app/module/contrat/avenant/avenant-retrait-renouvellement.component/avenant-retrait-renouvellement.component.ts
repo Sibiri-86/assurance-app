@@ -28,6 +28,9 @@ import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 import {HistoriqueAdherent} from '../../../../store/contrat/historiqueAvenantAdherent/model';
+import * as historiqueAvenantAdherantSelector from '../../../../store/contrat/historiqueAvenantAdherent/selector';
+import * as featureActionhistoriqueAvenantAdherant from '../../../../store/contrat/historiqueAvenantAdherent/actions';
+
 
 @Component({
   selector: 'app-avenant-retrait-renouvellement',
@@ -53,6 +56,7 @@ export class AvenantRetraitRenouvellementComponent implements OnInit {
   adherantDeleteds: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherants: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherantsTMP: Array<HistoriqueAvenantAdherant> = [];
+  historiqueAveantAdherantsList$: Observable<Array<HistoriqueAvenantAdherant>>;
   historiqueAveantAdherantsByExercice: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherantsByExerciceTMP2: Array<HistoriqueAvenantAdherant> = [];
   historiqueAveantAdherantsByExerciceTMP: Array<HistoriqueAvenantAdherant> = [];
@@ -257,17 +261,46 @@ export class AvenantRetraitRenouvellementComponent implements OnInit {
     );
     // this.exerciceList = [];
   }
+  onSelect1(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+    console.log('liste1 === ', this.historiqueAveantAdherantsByExercice);
+    this.historiqueAveantAdherantsByExerciceTMP2 = this.historiqueAveantAdherantsByExercice.filter(his=>his.adherent?.adherentPrincipal?.id === historiqueAvenantAdherant.adherent.id);
+    console.log('liste2 === ', this.historiqueAveantAdherantsByExerciceTMP2);
+    if( this.historiqueAveantAdherantsByExerciceTMP2) {
+      this.historiqueAveantAdherantsByExerciceTMP2.forEach(hist=>{
+        hist.selected = true;
+        hist.dateRetrait = this.avenantDate;
 
-  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
-    // const value: boolean = !historiqueAvenantAdherant.selected;
-    console.log(historiqueAvenantAdherant);
-    // historiqueAvenantAdherant.selected = value;
-    const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
-    historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
-    console.log("*****historiqueAdherent.historiqueAvenantAdherant****", historiqueAvenantAdherant);
+        this.adherantDeleteds.push(hist);
+      });
+    }
     
-    console.log("*****historiqueAdherent.historiqueAvenantAdherentList****", historiqueAdherent.historiqueAvenantAdherentList);
-
+  }
+  onSelect(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+   this.historiqueAvenantAdherantService.findFamilleByAdherentPrincipal(historiqueAvenantAdherant.adherent.id, this.curentExercice.id).subscribe((res)=>{
+    if(res) {
+      this.historiqueAveantAdherantsByExerciceTMP2  = res;
+      console.log('liste === ', res);
+      if( this.historiqueAveantAdherantsByExerciceTMP2) {
+        this.historiqueAveantAdherantsByExerciceTMP2.forEach(hist=>{
+          hist.dateRetrait = new Date(this.avenantDate);
+          this.adherantDeleteds.push(hist);
+        });
+      }
+    }
+   });
+   /* this.historiqueAveantAdherantsList$ = this.store.pipe(select(historiqueAvenantAdherantSelector.historiqueAvenantAdherantFamilleList));
+    this.store.dispatch(featureActionhistoriqueAvenantAdherant.loadHistoriqueAvenantAdherentByAdherentPrincipal({adherentId: historiqueAvenantAdherant.adherent.id}));
+    this.historiqueAveantAdherantsList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiqueAveantAdherantsByExerciceTMP2  = value.slice();
+        if( this.historiqueAveantAdherantsByExerciceTMP2) {
+          this.historiqueAveantAdherantsByExerciceTMP2.forEach(hist=>{
+  
+            this.adherantDeleteds.push(hist);
+          });
+        }
+      }
+    });*/
     /* Methode de selection du Backend */
     /* this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
         (res) => {
@@ -281,12 +314,9 @@ export class AvenantRetraitRenouvellementComponent implements OnInit {
     ); */
 
     /* Methode de selection du Frontend */
-    if(historiqueAvenantAdherant.adherent.adherentPrincipal === null) {
-      this.historiqueAveantAdherantsByExerciceTMP2 = this.historiqueAveantAdherantsByExercice
-      .filter(a => a.adherent.adherentPrincipal?.id === historiqueAvenantAdherant.adherent.id);
-      console.log('***this.historiqueAveantAdherantsByExerciceTMP2**', this.historiqueAveantAdherantsByExerciceTMP2);
-    }
-    historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherantsByExercice;
+
+    
+   
   }
 
   addAdherentFamilleToList(): void {

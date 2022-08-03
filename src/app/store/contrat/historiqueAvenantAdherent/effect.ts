@@ -67,6 +67,19 @@ export class HistoriqueAvenantAdherantEffects {
                 )
             )
         ));
+        
+        fetchHistoriqueAvenantByAdherentPrincipal$ = createEffect(() =>
+    this.actions$.pipe(
+            ofType(featureActions.loadHistoriqueAvenantAdherentByAdherentPrincipal),
+            mergeMap(({adherentId}) =>
+                this.historiqueAvenantAdherantService.findFamilleByAdherentPrincipal(adherentId).pipe(
+                    switchMap(value => [
+                        featureActions.setHistoriqueAvenantAdherent(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        ));
 
         fetchHistoriqueAvenantByHistoriqueIdAndTypeHistorique$ = createEffect(() =>
     this.actions$.pipe(
