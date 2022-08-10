@@ -383,4 +383,12 @@ findListeActualiseeByExerciceId(currentExercice: Exercice) {
     this.findListeActualisee(this.police);
   }
 }
+
+annulerSuspension(haa: HistoriqueAvenantAdherant) {
+  this.historiqueAvenantService.getSuspensionAnnuler(haa.avenant.id, haa.adherent.id).subscribe(
+    (res) => {
+      console.log("effectué");
+    }
+  )
+}
 }

@@ -252,6 +252,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       console.log(value);
       if (value) {
         this.bonPriseEnChargeList = value.slice();
+        console.log("this.bonPriseEnChargeList", this.bonPriseEnChargeList);
       }
     });
 
@@ -682,6 +683,7 @@ console.log(myForm);
     console.log(this.bonPriseEnCharge);
      this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
     this.displayPrestation = false;
+    this.displayFormPrefinancement = false;
    }
 
    valider(bon: BonPriseEnCharge){

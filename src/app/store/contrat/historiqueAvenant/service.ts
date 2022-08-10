@@ -356,6 +356,14 @@ private handleError<T>() {
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/retrait-save`, avenant);
     }
 
+    getSuspensionAnnuler(idHisto: string, idAdherent: string): Observable<any> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/annulationSuspension/${idHisto}/${idAdherent}`).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+    }
+
 
    /*  getHistoriqueAvenantWithoutActive(policeId: string): Observable<HistoriqueAvenant[]> {
         return this.http.get<any>(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/active-by-police/${policeId}`).pipe(

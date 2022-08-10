@@ -93,8 +93,8 @@
                         <th pSortableColumn="adresseEmail">Groupe<p-sortIcon field="adresseEmail"></p-sortIcon></th>
                         <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
                         <th><span>Ré-intégrer??</span></th>
-                        <th>Date de suspension</th>
-                        <th>Date de ré-intégration</th>
+                        <th style="width: 9rem">Date de suspension</th>
+                        <th style="width: 9rem">Date de ré-intégration</th>
                         <th>Status</th>
                     </tr>
                 </ng-template>
@@ -111,14 +111,14 @@
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.email}}</span>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.groupe?.libelle}}</span>
 
                         </td>
                         
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.genre?.libelle}}</span></td>
                         <td><span *ngIf="historiqueAveantAdherant?.dateSuspension && !historiqueAveantAdherant?.dateReintegration && historiqueAveantAdherant?.isSuspendu">
                             <button [disabled]="etat === 'VIEW'" pButton  pRipple icon=" pi pi-check-square" pTooltip="Ré-intégrer cet assuré"
-                             class="p-button-plain p-button-secondary p-mr-2" (click)="parametrerPlafond(groupe)"> </button></span></td>
+                             class="p-button-plain p-button-secondary p-mr-2" (click)="annulerSuspension(historiqueAveantAdherant)"> </button></span></td>
                         <td >
                             <span class="p-column-title">
                                 <input [id]="'dateIncor' + historiqueAveantAdherant.id" type="date" [name]="'dateIncor' + historiqueAveantAdherant.id"

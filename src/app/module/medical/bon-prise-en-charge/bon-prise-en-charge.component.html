@@ -34,13 +34,12 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="duree" style="min-width:100px">Numeros<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th pSortableColumn="numero" style="min-width:200px">Nom adhérent<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:150px">Nom adhérent<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Prenom adhérent<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Type bon<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numéro police<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:100px">Type bon<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Souscripteur<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="duree" style="min-width:100px">Prestataire<p-sortIcon field="duree"></p-sortIcon></th>
-                        <th style="min-width:200px"></th>
+                        <th style="min-width:100px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-bon>
@@ -56,8 +55,6 @@
                         <td><span class="p-column-title" style="min-width:200px">{{bon.typeBon | medical:'displayTypeBon'}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{bon.police.numero}}</span>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{bon.police.nom}}</span>
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:100px">{{bon.prestataire.libelle}}</span>
@@ -146,7 +143,7 @@
         </p-dialog>
         
         
-        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Bon prise en charge" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Bon prise en charge/Entente Préalable" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
             <ng-template pTemplate="content">
                 <div class="card">
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">
@@ -451,12 +448,12 @@
                 
                 <div class="p-field p-col">
                     <label for="dateEffet">Date de saisie </label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateSaisie}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateSaisie | formatTableValue : 'date'}}
                 </div>
                 
                 <div class="p-field p-col">
                     <label for="dateEffet">Date de declaration <span style="color: red !important;">*</span></label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateDeclaration}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.dateDeclaration | formatTableValue : 'date'}}
                 </div>
                 
                 
@@ -466,17 +463,17 @@
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col">
                     <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.matriculeAdherent}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.adherent.numero}}
                 </div>
 
                     <div class="p-field p-col">
                         <label for="nomAdherent">Nom</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.nomAdherent}}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.adherent.nom}}
                     </div>
                     
                     <div class="p-field p-col">
                         <label for="nomAdherent">Prenom</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.prenomAdherent}}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.adherent.prenom}}
                     </div>
                     
                     
@@ -484,11 +481,11 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="groupeAdherent">Numero groupe</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.numeroGroupe}}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.adherent.groupe.numeroGroupe}}
                     </div>
                     <div class="p-field p-col">
                         <label for="policeAdherent">Numero police</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.numeroPolice}}                    </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail.police.numero}}                    </div>
                     <div class="p-field p-col-4">
                         <label for="medecin">Prestataire</label>
                         &nbsp;&nbsp;&nbsp;&nbsp;{{bonPriseEnChargeDetail?.prestataire?.libelle}}
