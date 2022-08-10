@@ -235,7 +235,10 @@ private handleError<T>() {
 searchAdherentByDateSoinsAndMatricule(dateSoins: Date, matricule: number): Observable<AdherentResearchReponse> {
   // @FIXME: post request
   if (matricule && matricule != 0) {
-  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByDateSoinsAndNumero/${dateSoins}/${matricule}`).pipe(
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.numero = matricule; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByDateSoinsAndNumero`, adherent).pipe(
     map((response: AdherentResearchReponse) => response)
     //catchError(this.handleError())
    );
