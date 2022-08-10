@@ -232,5 +232,15 @@ private handleError<T>() {
     );
 }
 
+searchAdherentByDateSoinsAndMatricule(dateSoins: Date, matricule: number): Observable<AdherentResearchReponse> {
+  // @FIXME: post request
+  if (matricule && matricule != 0) {
+  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getByDateSoinsAndNumero/${dateSoins}/${matricule}`).pipe(
+    map((response: AdherentResearchReponse) => response)
+    //catchError(this.handleError())
+   );
+  }
+}
+
 }
 

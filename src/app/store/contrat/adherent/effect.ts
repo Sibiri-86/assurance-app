@@ -175,7 +175,7 @@ this.actions$.pipe(
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )
     )
-)
+) 
 );
 
 searchAdherentByNom$ = createEffect(() =>
@@ -255,5 +255,20 @@ this.actions$.pipe(
         )
     )
     );
+
+searchAdherentByDateSoinsAndMatricule$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.searchAdherentByDateSoinsAndMatricule),
+        mergeMap(({dateSoins, matricule}) =>
+            this.AdherentService.searchAdherentByDateSoinsAndMatricule(dateSoins, matricule).pipe(
+                switchMap(value => [
+                    //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.selectedAdherentForSearch(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+) 
+);
 
 }
