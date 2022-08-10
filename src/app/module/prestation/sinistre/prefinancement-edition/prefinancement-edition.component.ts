@@ -85,6 +85,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   tauxList: Array<Taux>;
   typeSort = Object.keys(Sort).map(key => ({ label: Sort[key], value: key }));
   prestationForm: FormGroup;
+  prestationPopForm: FormGroup;
   acteList$: Observable<Array<Acte>>;
   acteList: Array<Acte>;
   prestataireList$: Observable<Array<Prestataire>>;
@@ -126,6 +127,9 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   numberPrestation = 0;
   montantConvention: number = 0;
   montantConsomme:number = 0;
+  displayPrestationpop = false;
+  prestationsList: Prestation[]= [];
+  compteur: number = null;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -140,8 +144,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
    }
 
    addItemPrestation(): void {
-    const formPrestation: FormGroup = this.createItem();
-    this.prestation.push(formPrestation);
+  //  const formPrestation: FormGroup = this.createItem();
+   // this.prestation.push(formPrestation);
+   this.prestationPopForm = this.createItem();
+    this.displayPrestationpop = true;
+    
   }
 
    deleteItemPrestation(i: number) {
@@ -191,6 +198,15 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       medecin: new FormControl(),
       historiqueAvenant: new FormControl(),
       inotPlafond: new FormControl(),
+      matriculeAdherent: new FormControl(''),
+      nomAdherent: new FormControl({value: '', disabled: true}),
+      prenomAdherent: new FormControl({value: '', disabled: true}),
+      numeroGroupe: new FormControl({value: '', disabled: true}),
+      numeroPolice: new FormControl({value: '', disabled: true}),
+      bonPriseEnCharge: new FormControl(),
+      souscripteur: new FormControl(),
+      nomGroupeAdherent: new FormControl(),
+      dateRetrait: new FormControl({value: '', disabled: true})
     });
   }
 
@@ -240,29 +256,69 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
     if (value) {
-        console.log(value);
-        this.adherentSelected = value;
+        
+        if(this.adherentSelected && this.prestationsList.length > 0) {
+          console.log(this.prestationsList.length);
+          console.log("====adherentSelected2021=======");
+          if(this.adherentSelected.numero !== value.numero) {
+            this.addMessage('error', 'Assuré(e) non pris en compte', 'Veuillez continuer avec le même assuré');
+          } else{
+            this.adherentSelected = value;
+             
+        console.log(this.adherentSelected.dateIncorporation);
+        console.log(this.prestationForm.value.dateDeclaration);
+       
         console.log('***********this.adherentSelected***********', this.adherentSelected);
         console.log(this.adherentSelected);
-        this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
-        // this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
-        this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
-        this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
-        this.prestationForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
-        this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
-        if (this.adherentSelected.adherentPrincipal != null) {
-          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+        this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+       //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+        this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+        this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+        this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+        if (this.adherentSelected.adherentPrincipal !== null) {
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
       } else {
-          this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
       }
         if(this.adherentSelected.signeAdherent ==='-') {
           this.addMessage('error', 'Assuré(e) non pris en compte',
                         'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
-          this.prestationForm.patchValue({
+          this.prestationPopForm.patchValue({
             dateRetrait: new Date(this.adherentSelected.dateSortie),
             // sort: Sort.ACCORDE
             });
+             }
+          }
+        } else {
+          this.adherentSelected = value;
+          console.log(this.adherentSelected.dateIncorporation);
+          console.log(this.prestationForm.value.dateDeclaration);
+         
+          console.log('***********this.adherentSelected***********', this.adherentSelected);
+          console.log(this.adherentSelected);
+          this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+         //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+          this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+          this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+          this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+          this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+          if (this.adherentSelected.adherentPrincipal !== null) {
+            this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+        } else {
+            this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
         }
+          if(this.adherentSelected.signeAdherent ==='-') {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+                          'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSortie),
+              // sort: Sort.ACCORDE
+              });
+          }
+        }
+       
+       
         console.log(this.bonPriseEnChargeList);
         this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
           e.typeBon === TypeBon.ENTENTEPREALABLE);
@@ -393,13 +449,37 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     }
     return true;
   }
-
+  selectDateSoins1() {
+  
+    this.plafondSousActe = {};
+    this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
+    const toDay = new Date();
+    console.log('************************ date de soins' + this.plafondSousActe.dateSoins);
+    if (this.plafondSousActe.dateSoins  && new Date(this.plafondSousActe.dateSoins).getTime() > toDay.getTime()) {
+      this.showToast('error', 'INFORMATION', 'la date de soins est superieure à la date du jour');
+      this.prestationPopForm.get('dateSoins').setValue(null);
+      return;
+    }
+    
+  }
   selectDateSoins(i) {
     console.log('************************ selection de la date de soins' + i);
     this.numberPrestation = i;
     const myForm = (this.prestationForm.get('prestation') as FormArray).at(i);
     this.plafondSousActe = {};
     this.plafondSousActe.dateSoins = myForm.get('dateSoins').value;
+    if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.plafondSousActe.dateSoins).getTime()) {
+            
+
+      this.addMessage('error', 'Date de soins invalide',
+                  'La date de soins du sinistre ne peut pas être antérieure à celle de la date d\'incorporation du sinitre');
+                  myForm.get('dateSoins').setValue(null);
+                  
+                  
+           
+
+
+  }
     console.log('************************ date de soins' + this.plafondSousActe.dateSoins);
     if (this.plafondSousActe.dateSoins && !this.checkIfDateIsCorrect(this.plafondSousActe.dateSoins)) {
       this.showToast('error', 'INFORMATION', 'la date de soins est superieure à la date du jour');
@@ -426,7 +506,26 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     }
     console.log(this.plafondSousActe);
   }
+  selectDateSoinsSousActe() {
+    this.plafondSousActe.adherent = this.adherentSelected;
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
+      this.montantConvention = rest;
 
+  });
+    if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+    this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+    this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        console.log('la valeur de i est ********************' + this.numberPrestation);
+        console.log('le montant de i est ********************' + value);
+        this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
+      } else {
+      }
+    });
+    }
+  }
   supprimerPrefinancement() {
     console.log(this.selectedPrefinancement);
     if (!this.selectedPrefinancement) {
@@ -468,6 +567,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     console.log("=====================");
     console.log(pref);
     this.adherentSelected = pref.adherent;
+    this.prestationsList = pref.prestation; 
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
@@ -640,6 +740,124 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   
   }
 
+  calculDebours1() {
+    const myForm = this.prestationPopForm;
+  
+   if((this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
+   (this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+      myForm.patchValue({ montantRembourse : 0});
+      myForm.patchValue({ montantRestant:  this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value});
+      if(this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+        myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour les enfants filles"}); 
+
+      } else {
+        myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+
+      }
+      myForm.patchValue({sort: Sort.REJETE}); 
+
+      myForm.patchValue({
+        debours: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+      this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, montantSupporte: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value});
+   } else {
+
+  
+    if(this.prestationPopForm.get('coutUnitaire').value > this.montantConvention && this.montantConvention !== 0) {
+      this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
+      const c =this.montantConvention - this.prestationPopForm.get('coutUnitaire').value;
+      myForm.patchValue({inotPlafond: true});
+      myForm.patchValue({coutUnitaire: this.montantConvention})
+      myForm.patchValue({observation: "la differnce entre le coût unitaire et le montant de la convention est " + c});
+    }
+    
+    myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+
+    if (this.prestationPopForm.get('nombreActe').value &&
+    this.prestationPopForm.get('coutUnitaire').value) {
+
+      myForm.patchValue({montantRembourse:
+        (this.prestationPopForm.get('coutUnitaire').value *
+        this.prestationPopForm.get('taux').value.taux) / 100,
+        debours: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+      this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value});
+    }
+
+    this.prefinancementModel = this.prestationForm.value;
+    this.prefinancementModel.dateSaisie = new Date();
+    this.prefinancementModel.adherent = this.adherentSelected;
+    this.prefinancementList.push(this.prefinancementModel);
+    /* executer le controle de la prestation */
+   /* this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (!value) {
+
+      } else {
+        this.checkPrefinancementResult = value.slice();
+        console.log(this.checkPrefinancementResult);
+        for (let j = 0; j < this.checkPrefinancementResult.length; j++){
+          const myForm1 = (this.prestationForm.get('prestation') as FormArray).at(j);
+         
+          const plafond = myForm1.get('montantPlafond').value;
+          const totalPlafond = plafond * this.prestationForm.get('prestation').value[j].nombreActe;
+          let montantRembourse = this.checkPrefinancementResult[j].montantRembourse;
+          let montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+          this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+          if (this.checkPrefinancementResult[j].montantRembourse > totalPlafond) {
+            montantRembourse = totalPlafond;
+            montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+            this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+          }
+          myForm1.patchValue({montantRembourse, montantSupporte,
+            sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
+            observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
+          });
+          if(!this.checkPrefinancementResult[j].montantRestant) {
+            myForm1.patchValue({ montantRestant: this.prestationForm.get('prestation').value[j].baseRemboursement -  this.prestationForm.get('prestation').value[j].montantRembourse });
+          }
+        }*/
+      /* Gestion des personnes rétirées au front */
+      if (this.adherentSelected.signeAdherent ==='-') {
+        if(this.prestationForm.get('dateSaisie').value >= this.prestationPopForm.get('dateRetrait').value ||
+        this.prestationPopForm.get('dateRetrait').value <= myForm.get('dateSoins').value) {
+          myForm.patchValue({
+            sort: Sort.REJETE,
+            observation: "Assuré(e) rétiré(e)",
+            montantRembourse: 0,
+            montantSupporte: this.prestationPopForm.get('nombreActe').value *
+            this.prestationPopForm.get('coutUnitaire').value
+          });
+        }
+      } else {
+        console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
+        if(this.montantConsomme >  this.prestationPopForm.get('montantPlafond').value) {
+          this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
+          myForm.patchValue({observation: "Votre plafond est atteint"});
+          myForm.patchValue({
+            sort: Sort.REJETE,
+            observation: "Votre plafond est atteint",
+            montantRembourse: 0,
+            montantSupporte: this.prestationPopForm.get('nombreActe').value *
+            this.prestationPopForm.get('coutUnitaire').value
+          });
+        }
+      }
+      if(myForm.get('sort').value === Sort.ACCORDE) {
+        myForm.patchValue({
+          montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
+          this.prestationPopForm.get('montantRembourse').value
+        });
+      }
+
+    }
+  
+  }
+    
   setNombreActe(data: FraisReels, ri) {
     this.prestationList[ri].nombreActe = data.cle;
   }
@@ -651,7 +869,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestationForm.get('prenomAdherent').setValue('');
     this.prestationForm.get('numeroGroupe').setValue('');
     this.prestationForm.get('numeroPolice').setValue('');
-    this.adherentSelected = null;
+    // this.adherentSelected = null;
     this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
     }
   }
@@ -666,24 +884,44 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
 
   closeDialog() {
-   this.prefinancementList = [];
-   this.prestationForm.reset();
-   this.prestation.clear();
-   console.log(this.prestation);
+    
+      this.confirmationService.confirm({
+        message: 'voulez-vous fermer le préfinancement',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.prefinancementList = [];
+          this.prestationForm.reset();
+          this.prestation.clear();
+          console.log(this.prestation);
+      },
+      reject:()=>{
+        this.displayFormPrefinancement = true;
+      }
+     });
+    
+   
   }
 
   /** enregistrement cas de prefinancement */
   onCreate() {
     /** fonction pour enregistrer la prestation */ 
    console.log('creation prefinancement');
+   this.prefinancementList = [];
    this.prefinancementModel = this.prestationForm.value;
+
    this.prefinancementModel.dateSaisie = new Date();
    this.prefinancementModel.adherent = this.adherentSelected;
+   this.prefinancementModel.prestation = this.prestationsList;
    this.prefinancementList.push(this.prefinancementModel);
+   console.log(this.prefinancementList);
    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-   console.log(this.prefinancementModel);
+  console.log("===========bon==================");
+  console.log(this.prefinancementModel);
+   console.log("==============bon===============");
    this.prefinancementList = [];
+   this.prestationsList = [];
    this.prestationForm.reset();
    //this.prestationForm.get('dateSaisie').setValue(new Date());
    this.displayFormPrefinancement = false;
@@ -696,9 +934,24 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     //this.prefinancementModel.dateSoins = this.prestationForm.get('dateSoins').value;
     this.prefinancementModel.referenceBordereau = this.prestationForm.get('referenceBordereau').value;
     this.prefinancementModel.adherent = this.adherentSelected;
-    this.prefinancementList.push(this.prefinancementModel);
+    // this.prefinancementList.push(this.prefinancementModel);
     this.prestationList = [];
     this.prestationForm.reset();
+  }
+
+  compareDateSoinDateIncorporaion() {
+    if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationForm.value.dateDeclaration).getTime()) {
+            
+
+      this.addMessage('error', 'Date de soins invalide',
+                  'La date de déclaration du sinistre ne peut pas être antérieure à celle de la date d\'incorporation du sinitre');
+                  this.prestationForm.get('dateDeclaration').setValue(null);
+                  this.adherentSelected = null;
+                  
+           
+
+
+  }
   }
   
   changeGarantie(garantie) {
@@ -749,7 +1002,50 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     return {"background-color":"red"};
   } 
 
+
+  addPrestation1() {
+    const prestat = this.prestationPopForm.value as Prestation;
+    prestat.adherent = this.adherentSelected;
+    if(this.compteur !==null) {
+      this.prestationsList[this.compteur] = prestat;
+      this.compteur = null;
+    } else {
+      this.prestationsList.push(prestat);
+    }
+   
+   this.prestationPopForm.reset();
+    console.log( this.prestationsList);
+    
+   
+    
+    
+    
+    
 }
+editerPrestation1(prestation: Prestation, rowIndex: number) {
+  this.compteur = rowIndex;
+  this.prestationPopForm.patchValue(prestation);
+  this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
+  this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);
+  this.prestationPopForm.get('souscripteur').setValue(prestation.adherent.groupe.police.nom);
+  this.prestationPopForm.get('nomGroupeAdherent').setValue(prestation.adherent.groupe.libelle);
+  if (prestation.adherent.adherentPrincipal != null) {
+    this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.adherentPrincipal.nom+" "+prestation.adherent.adherentPrincipal.prenom);
+} else {
+    this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  }
+  this.displayPrestationpop = true;
+}
+
+
+fermerPrestation(){
+  this.displayPrestationpop = false;
+  // this.prestationPopForm.reset()
+}
+
+}
+
 
 
 export interface FraisReels {

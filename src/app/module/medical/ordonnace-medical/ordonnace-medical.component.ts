@@ -151,7 +151,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService) {
-        this.breadcrumbService.setItems([{ label: 'Ordonnance Médicale' }]);
+        this.breadcrumbService.setItems([{ label: 'Bon de prise en charge Pharmacie' }]);
     }
 
     onCreate() {

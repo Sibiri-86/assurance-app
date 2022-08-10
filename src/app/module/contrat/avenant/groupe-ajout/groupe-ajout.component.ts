@@ -369,9 +369,9 @@ export class GroupeAjoutComponent implements OnInit{
             libelle: new FormControl('', [Validators.required]),
             taux: new FormControl(null, [Validators.required]),
             territorialite: new FormControl('', [Validators.required]),
-            duree: new FormControl('', [Validators.required]),
+            duree: new FormControl(''),
             dateEffet: new FormControl('', [Validators.required]),
-            typeDuree: new FormControl('', [Validators.required]),
+            typeDuree: new FormControl(''),
             adresse:  new FormControl('', [Validators.required]),
             description: new FormControl('', [Validators.required]),
             commune: new FormControl('', [Validators.required]),
@@ -679,13 +679,16 @@ export class GroupeAjoutComponent implements OnInit{
         if(this.importer) {
           this.plafondActuelleConfiguration =  this.plafondActuelleConfiguration.filter(plafond=>plafond.etat === Etat.ACTIF);
         for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
-          this.plafondActuelleConfiguration[i].dateEffet = new Date(this.police.dateEffet);
+          this.plafondActuelleConfiguration[i].dateEffet = new Date(this.groupe.dateEffet);
+          this.plafondActuelleConfiguration[i].taux = this.groupe.taux;
           this.plafondActuelleConfiguration[i].listeActe = this.plafondActuelleConfiguration[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
           for (var j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
-            this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.police.dateEffet);
+            this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
+            this.plafondActuelleConfiguration[i].listeActe[j].taux = this.groupe.taux;
             this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe = this.plafondActuelleConfiguration[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
             for (var k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++){
-              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.police.dateEffet);
+              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
+              this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
             }
           }
         }
@@ -1035,6 +1038,11 @@ export class GroupeAjoutComponent implements OnInit{
         this.groupeForm.reset();
         this.primeForm.reset();
         this.selectedTypePrime = {} ;
+        console.log("====================", this.exerciceRevenu);
+        
+        this.groupeForm.get('dateEffet').setValue(new Date(this.exerciceRevenu.debut));
+        this.groupeForm.get('dateEcheance').setValue(new Date(this.exerciceRevenu.fin));
+
       }
 
       editGroupe(groupe: Groupe) {
@@ -1968,5 +1976,48 @@ export class GroupeAjoutComponent implements OnInit{
     delete this.clonedPlafondFamilleActe["0"];
   }
 
+
+  appliquerTauxFamilleGlobal(plafond: PlafondFamilleActe) {
+    if(plafond.taux) {
+      if(plafond.listeActe) {
+        plafond.listeActe.forEach(act=>{
+          act.taux =plafond.taux;
+          if(act.listeSousActe) {
+            act.listeSousActe.forEach(sous=>{
+
+              sous.taux = act.taux;
+            });
+          }
+        })
+      }
+    }
+  }
+
+  appliquerDomaineFamilleGlobal(plafond: PlafondFamilleActe) {
+    if(plafond.domaine) {
+      if(plafond.listeActe) {
+        plafond.listeActe.forEach(act=>{
+          act.domaine =plafond.domaine;
+          if(act.listeSousActe) {
+            act.listeSousActe.forEach(sous=>{
+              sous.domaine = act.domaine;
+            });
+          }
+        })
+      }
+    }
+  }
+
+  appliquerDomaineActeGlobal(acte: PlafondActe) {
+    if(acte.domaine) {
+      
+          if(acte.listeSousActe) {
+            acte.listeSousActe.forEach(sous=>{
+              sous.domaine = acte.domaine;
+            });
+          }
+      }
+  }
+  
  
 }

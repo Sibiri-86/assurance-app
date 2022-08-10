@@ -1883,7 +1883,7 @@
         </p-tabPanel>
         <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'"  header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
             <div *ngIf="etat !=='VIEW'">
-                <app-avenant-retrait-renouvellement [exerciceRevenu]="exerciceRev" *ngIf="myForm.get('dateEffet')" [isRenouv]="true" [police]="police" (adherentFamilleEvent)="createAvenantRetrait($event)"
+                <app-avenant-retrait-renouvellement [exerciceRevenu]="exerciceRev"  [isRenouv]="true" [police]="police" (adherentFamilleEvent)="createAvenantRetrait($event)"
                 [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="avenantD">
                 </app-avenant-retrait-renouvellement>
             </div>

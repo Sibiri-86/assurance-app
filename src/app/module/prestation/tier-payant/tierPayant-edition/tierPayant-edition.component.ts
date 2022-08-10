@@ -282,6 +282,18 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
+            
+
+                    this.addMessage('error', 'Date de soins invalide',
+                                'La date de soins du sinistre ne peut pas être antérieure à celle de la date d\'incorporation du sinitre');
+                                this.prestationAdd.dateSoins = null;
+                                this.adherentSelected = null;
+                                
+                         
+        
+        
+                }
                 if(this.adherentSelected.signeAdherent !=='*') {
                     this.addMessage('error', 'Assuré(e) non pris en compte',
                                   'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
@@ -1202,11 +1214,22 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     closeDialog() {
-        this.tierPayantList = [];
-        this.prestationForm.reset();
-        this.prestation.clear();
-        console.log('******************this.prestation************************', this.prestation);
-        this.displayFormPrefinancement = false;
+        this.confirmationService.confirm({
+            message: 'voulez-vous fermer le préfinancement',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.tierPayantList = [];
+                this.prestationForm.reset();
+                this.prestation.clear();
+                console.log('******************this.prestation************************', this.prestation);
+                this.displayFormPrefinancement = false;
+          },
+          reject:()=>{
+            this.displayFormPrefinancement = true;
+          }
+         });
+       
     }
 
     supprimerPrestation(prestation: Prestation) {
@@ -1431,6 +1454,22 @@ export class TierPayantEditionComponent implements OnInit {
         
         this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
       }
+
+      compareToDateIncorportion() {
+
+        if( new Date(this.adherentSelected.dateIncor).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
+            
+
+            this.addMessage('error', 'Date de soins invalide',
+                        'La date de soins du sinistre ne peut pas être antérieure à celle de la date d\'incorporation du sinitre');
+                        this.prestationAdd.dateSoins = null;
+                        
+                 
+
+
+        }
+      }
+      
 
 }
 

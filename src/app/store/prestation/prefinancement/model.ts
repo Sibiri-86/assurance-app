@@ -96,6 +96,7 @@ export interface Prestation {
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
     sinistreTierPayant?: SinistreTierPayant; 
     inotPlafond?: Boolean;
+    adherent?: Adherent;
     /*ajout information pour bon de prise en charge*/
 }
 

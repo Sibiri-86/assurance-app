@@ -44,9 +44,9 @@ export class AppMenuComponent implements OnInit {
                                      visible: this.keycloak.isUserInRole(Function.sm_sinistre_valide)},
                                     {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation'],
                                     visible: this.keycloak.isUserInRole(Function.sm_sinistre_consultation)},
-                                    {label: 'ordre reglement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_edition)},
-                                    {label: 'ordre reglement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_valide)},
-                                    {label: 'ordre reglement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_consultation)}
+                                    {label: 'ordre de paiement | edition', icon: '',  routerLink: ['/prestation/prefinancement/ordre-reglement'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_edition)},
+                                    {label: 'ordre de paiement | valide', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/valide'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_valide)},
+                                    {label: 'ordre de paiement | consultation', icon: '', routerLink: ['/prestation/prefinancement/ordre-reglement/consultation'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_consultation)}
                                 ]
                             },
                             {
@@ -59,11 +59,11 @@ export class AppMenuComponent implements OnInit {
                                     visible: this.keycloak.isUserInRole(Function.sm_sinistre_valide)},
                                     {label: 'Sinistre | Consultation ', icon: '', routerLink: ['/prestation/tierPayant/consultation'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_consultation)},
-                                    {label: 'Ordre règlement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement'],
+                                    {label: 'Ordre de paiement | Edition', icon: '',  routerLink: ['/prestation/tierPayant/ordre-reglement'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_edition)},
-                                    {label: 'Ordre règlement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
+                                    {label: 'Ordre de paiement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_valide)},
-                                    {label: 'Ordre règlement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
+                                    {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)}
                                 ]
                             }
@@ -75,7 +75,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'convention', icon: 'pi pi-pencil', routerLink: ['/medical/convention'], visible: true},
                     {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
-                    {label: 'ordonnance médicale', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
+                    {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
                     {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
                 ]
             },

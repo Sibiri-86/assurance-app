@@ -2071,10 +2071,12 @@
                                 </td>
                                 <td>
                                     <span class="p-column-title">{{rowdata?.exercice?.fin | formatTableValue : 'date'}}</span>
+                                    
                                 </td>
                                 <td style="font-weight:bold !important">
                                     <p-button *ngIf="rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'AFAIRE_NOUVELLE' || 
                                         rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'RENOUVELLEMENT' || 
+                                        rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'MODIFICATION' || 
                                         rowdata?.primeTotal && rowdata?.typeHistoriqueAvenant === 'INCORPORATION' " 
                                         styleClass="p-button-success" class="p-column-title">{{rowdata?.primeTotal | formatTableValue : 'number'}} FCFA
                                     </p-button>

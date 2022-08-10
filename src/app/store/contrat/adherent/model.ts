@@ -36,6 +36,7 @@ export interface Adherent{
     deleted?: boolean;
     actif?: boolean;
     exercice?: Exercice;
+    ancienGroupes?: Array<Groupe>;
 }
 
 export interface AdherentResearchReponse {
