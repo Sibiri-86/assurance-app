@@ -191,17 +191,17 @@
                        
                     <div class="p-field p-col">
                         <label for="nombreActe">Nombre Acte</label>
-                        <span> {{prestation.nombreActe}}</span>
+                        <span> {{prestation.nombreActe | formatTableValue: 'number':true}}</span>
                     </div>
                        
                     <div class="p-field p-col">
                         <label for="nombreActe">Cout unitaire</label>
-                        <span> {{prestation.coutUnitaire}}</span>
+                        <span> {{prestation.coutUnitaire | formatTableValue: 'number':true}}</span>
                     </div>
                        
                     <div class="p-field p-col">
                         <label for="nombreActe">Debours</label>
-                        <span> {{prestation.debours}}</span>  
+                        <span> {{prestation.debours | formatTableValue: 'number':true}}</span>  
                     </div>
                     
                    </div>
@@ -211,7 +211,7 @@
                        
                     <div class="p-field p-col">
                         <label for="nombreActe">Base remboursement</label>
-                        <span> {{prestation.baseRemboursement}}</span>
+                        <span> {{prestation.baseRemboursement | formatTableValue: 'number':true}}</span>
                     </div>
                        
                     <div class="p-field p-col-4">
@@ -221,7 +221,7 @@
                        
                     <div class="p-field p-col-4">
                         <label for="nombreActe">Montant remboursé</label>
-                        <span> {{prestation.montantRembourse}}</span>
+                        <span> {{prestation.montantRembourse | formatTableValue: 'number':true}}</span>
                     </div>
                     
                     <!--
@@ -239,7 +239,7 @@
                        
                     <div class="p-field p-col-4">
                         <label for="nombreActe">Montant remboursé restant</label>
-                        <span> {{prestation.montantRestant}}</span>
+                        <span> {{prestation.montantRestant | formatTableValue: 'number':true}}</span>
                     </div>
                     
                     <div class="p-field p-col-4">

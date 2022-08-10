@@ -369,9 +369,9 @@ export class GroupeAjoutComponent implements OnInit{
             libelle: new FormControl('', [Validators.required]),
             taux: new FormControl(null, [Validators.required]),
             territorialite: new FormControl('', [Validators.required]),
-            duree: new FormControl('', [Validators.required]),
+            duree: new FormControl(''),
             dateEffet: new FormControl('', [Validators.required]),
-            typeDuree: new FormControl('', [Validators.required]),
+            typeDuree: new FormControl(''),
             adresse:  new FormControl('', [Validators.required]),
             description: new FormControl('', [Validators.required]),
             commune: new FormControl('', [Validators.required]),
@@ -1038,6 +1038,11 @@ export class GroupeAjoutComponent implements OnInit{
         this.groupeForm.reset();
         this.primeForm.reset();
         this.selectedTypePrime = {} ;
+        console.log("====================", this.exerciceRevenu);
+        
+        this.groupeForm.get('dateEffet').setValue(new Date(this.exerciceRevenu.debut));
+        this.groupeForm.get('dateEcheance').setValue(new Date(this.exerciceRevenu.fin));
+
       }
 
       editGroupe(groupe: Groupe) {
