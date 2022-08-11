@@ -125,6 +125,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   bonPriseEnChargeList$: Observable<Array<BonPriseEnCharge>>;
   bonPriseEnChargeList: Array<BonPriseEnCharge>;
   plafondSousActe: CheckPlafond;
+  plafondSousActeFinal: CheckPlafond;
   numberPrestation = 0;
   montantConvention: number = 0;
   montantConsomme:number = 0;
@@ -513,24 +514,28 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   }
   selectDateSoinsSousActe() {
     console.log( this.adherentSelected);
-    this.plafondSousActe.adherent = this.adherentSelected;
+    this.plafondSousActe = {};
+    this.plafondSousActe.adherent = this.adherentSelectedfinal;
+    console.log("========================" ,this.prestationPopForm.get('sousActe').value);
     this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
       this.montantConvention = rest;
 
   });
-    if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+   // if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
         console.log('la valeur de i est ********************' + this.numberPrestation);
         console.log('le montant de i est ********************' + value);
-        this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
+        this.prestationPopForm.get('montantPlafond').setValue(value);
+        //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
       } else {
       }
     });
-    }
+    //}
   }
   supprimerPrefinancement() {
     console.log(this.selectedPrefinancement);
@@ -552,6 +557,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     console.log(event);
     this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
   }
+  
 
   onRowSelectBon($event){
     console.log($event.value);
