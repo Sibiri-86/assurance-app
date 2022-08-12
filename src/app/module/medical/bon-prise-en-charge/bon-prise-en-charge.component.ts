@@ -126,6 +126,18 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   plafondSousActe: CheckPlafond;
  // userCurent: Us
 
+
+ prestationPopForm: FormGroup;
+ displayPrestationpop = false;
+ adherentSelectedfinal: Adherent;
+ prestationsList: Prestation[]= [];
+ numberPrestation = 0;
+ compteur: number = null;
+
+
+
+
+
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private keycloak: KeycloakService,
@@ -140,8 +152,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
    }
 
    addItemPrestation(): void {
-    const formPrestation: FormGroup = this.createItem();
-    this.prestation.push(formPrestation);
+    /* const formPrestation: FormGroup = this.createItem();
+    this.prestation.push(formPrestation); */
+    this.prestationPopForm = this.createItem();
+    this.displayPrestationpop = true;
   }
 
    deleteItemPrestation(i: number) {
@@ -157,7 +171,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestation.removeAt(i);
    }
 
-   createItem(): FormGroup {
+   /* createItem(): FormGroup {
     return this.formBuilder.group({
       id: new FormControl(),
       nombreActe: new FormControl('', [Validators.required]),
@@ -178,6 +192,43 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
       acte: new FormControl(),
       familleActe: new FormControl(),
       medecin: new FormControl()
+    });
+  } */
+
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      id: new FormControl(),
+      nombreActe: new FormControl('', [Validators.required]),
+      coutUnitaire: new FormControl('', [Validators.required]),
+      debours: new FormControl(),
+      sousActe: new FormControl(Validators.required),
+      baseRemboursement: new FormControl('', [Validators.required]),
+      taux: new FormControl('', [Validators.required]),
+      montantRembourse: new FormControl('', [Validators.required]),
+      montantPlafond: new FormControl(),
+      sort: new FormControl(),
+      montantRestant: new FormControl(''),
+      montantSupporte: new FormControl('', [Validators.required]),
+      observation: new FormControl('', [Validators.required]),
+      prestataire: new FormControl(),
+      centreExecutant: new FormControl(),
+      produitPharmaceutique: new FormControl(),
+      pathologie: new FormControl(),
+      dateSoins: new FormControl(null, Validators.required),
+      acte: new FormControl(null, [Validators.required]),
+      familleActe: new FormControl(null, [Validators.required]),
+      medecin: new FormControl(),
+      historiqueAvenant: new FormControl(),
+      inotPlafond: new FormControl(),
+      matriculeAdherent: new FormControl(''),
+      nomAdherent: new FormControl({value: '', disabled: true}),
+      prenomAdherent: new FormControl({value: '', disabled: true}),
+      numeroGroupe: new FormControl({value: '', disabled: true}),
+      numeroPolice: new FormControl({value: '', disabled: true}),
+      bonPriseEnCharge: new FormControl(),
+      souscripteur: new FormControl({value: '', disabled: true}),
+      nomGroupeAdherent: new FormControl({value: '', disabled: true}),
+      dateRetrait: new FormControl({value: '', disabled: true})
     });
   }
 
@@ -223,7 +274,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     });
 
     // this.adherentSelected$ = ;
-    this.store.dispatch(featureActionAdherent.selectedAdherentForSearch(null));
+    /* this.store.dispatch(featureActionAdherent.selectedAdherentForSearch(null));
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
 
@@ -242,6 +293,84 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
         
         this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
         this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+      
+      }
+    }); */
+
+    this.store.dispatch(featureActionAdherent.selectedAdherentForSearch(null));
+    this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    console.log(value);
+    if (value) {
+        
+        if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
+          console.log(this.prestationsList.length);
+          console.log("====adherentSelected2021=======");
+          console.log(this.adherentSelectedfinal.numero);
+          console.log(value.numero);
+          console.log("====adherentSelected2021=======");
+          if(this.adherentSelectedfinal.numero !== value.numero) {
+            this.addMessage('error', 'Assuré(e) non pris en compte', 'Veuillez continuer avec le même assuré');
+          } else{
+            this.adherentSelected = value;
+            this.adherentSelectedfinal = this.adherentSelected;
+        console.log(this.adherentSelected.dateIncorporation);
+        console.log(this.prestationForm.value.dateDeclaration);
+       
+        console.log('***********this.adherentSelected***********', this.adherentSelected);
+        console.log(this.adherentSelected);
+        this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+       //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+        this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+        this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+        this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+        if (this.adherentSelected.adherentPrincipal !== null) {
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+      } else {
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+      }
+        if(this.adherentSelected.signeAdherent ==='-') {
+          this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
+          this.prestationPopForm.patchValue({
+            dateRetrait: new Date(this.adherentSelected.dateSortie),
+            // sort: Sort.ACCORDE
+            });
+             }
+          }
+        } else {
+          this.adherentSelected = value;
+          this.adherentSelectedfinal = this.adherentSelected;
+          console.log(this.adherentSelected.dateIncorporation);
+          console.log(this.prestationForm.value.dateDeclaration);
+         
+          console.log('***********this.adherentSelected***********', this.adherentSelected);
+          console.log(this.adherentSelected);
+          this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+         //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+          this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+          this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+          this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+          this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+          if (this.adherentSelected.adherentPrincipal !== null) {
+            this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+        } else {
+            this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+        }
+          if(this.adherentSelected.signeAdherent ==='-') {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+                          'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSortie),
+              // sort: Sort.ACCORDE
+              });
+          }
+        }
+       
+       
+        /* console.log(this.bonPriseEnChargeList);
+        this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+          e.typeBon === TypeBon.ENTENTEPREALABLE); */
         //this.taux = this.adherentSelected.groupe.taux;
       }
     });
@@ -426,6 +555,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.displayDetail = true;
     this.bonPriseEnChargeDetail = bon;
     console.log(bon);
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   voirPrestation(pref: Prefinancement){
@@ -632,8 +765,8 @@ console.log(myForm);
     this.prestationForm.get('prenomAdherent').setValue('');
     this.prestationForm.get('numeroGroupe').setValue('');
     this.prestationForm.get('numeroPolice').setValue('');
-    this.adherentSelected = null;
-    this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+     this.adherentSelected = null;
+    this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
     }
   }
 
@@ -735,8 +868,11 @@ console.log(myForm);
   }
 
   addPrefinancement(){
+    /* this.displayFormPrefinancement = true;
+    this.prestationForm.get('dateSaisie').setValue(new Date()); */
     this.displayFormPrefinancement = true;
     this.prestationForm.get('dateSaisie').setValue(new Date());
+    //this.displayPrestationpop = true;
   }
 
   showToast(severity: string, summary: string, detail: string) {
@@ -765,7 +901,209 @@ console.log(myForm);
     this.destroy$.unsubscribe();
   }
 
+
+
+  /********************************************************************************************************************* */
+
+  checkDateCondition() {
+    if (!this.checkIfDateIsCorrect(new Date(this.prestationForm.get('dateDeclaration').value))){
+      this.showToast('error', 'INFORMATION', 'la date de declaration est superieure à la date du jour');
+      this.prestationForm.reset({dateSaisie: new Date()});
+    }
+  }
+
+  checkIfDateIsCorrect(d: Date){
+    const toDay = new Date();
+    console.log(d.getTime);
+    if (toDay.getTime() < d.getTime()){
+      return false;
+    }
+    return true;
+  }
+
+  rechercheAdherentDateSoin(event) {
+    if(this.prestationPopForm.get('dateSoins').value  && this.prestationPopForm.get('matriculeAdherent').value) {
+      this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: this.prestationPopForm.get('matriculeAdherent').value}));
+  
+    }
+  }
+
+  selectDateSoinsSousActe() {
+    console.log( this.adherentSelected);
+    this.plafondSousActe = {};
+    this.plafondSousActe.adherent = this.adherentSelectedfinal;
+    console.log("========================" ,this.prestationPopForm.get('sousActe').value);
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
+    this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
+      this.montantConvention = rest;
+
+  });
+   // if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+    this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+    this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        console.log('la valeur de i est ********************' + this.numberPrestation);
+        console.log('le montant de i est ********************' + value);
+        this.prestationPopForm.get('montantPlafond').setValue(value);
+        //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
+      } else {
+      }
+    });
+    //}
+  }
+
+  addPrestation1() {
+    const prestat = this.prestationPopForm.value as Prestation;
+    prestat.adherent = this.adherentSelected;
+    if(this.compteur !==null) {
+      this.prestationsList[this.compteur] = prestat;
+      this.compteur = null;
+    } else {
+      this.prestationsList.push(prestat);
+    }
+   
+   this.prestationPopForm.reset();
+   this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelectedfinal.numero);
+   this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+    this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+    this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+    this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+    if (this.adherentSelected.adherentPrincipal !== null) {
+      this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+  } else {
+      this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+  }
+    console.log( this.prestationsList);
 }
+
+
+calculDebours1() {
+  const myForm = this.prestationPopForm;
+ 
+ if((this.prestationPopForm.get('sousActe').value.idGenre  && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
+ (this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+    myForm.patchValue({ montantRembourse : 0});
+    myForm.patchValue({ montantRestant:  this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value});
+    if(this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+      myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+      myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour les enfants filles"}); 
+
+    } else {
+      myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+      myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
+
+    }
+    myForm.patchValue({sort: Sort.REJETE}); 
+
+    myForm.patchValue({
+      debours: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+    this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, montantSupporte: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value});
+ } else {
+
+
+  if(this.prestationPopForm.get('coutUnitaire').value > this.montantConvention && this.montantConvention !== 0) {
+    this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
+    const c =this.montantConvention - this.prestationPopForm.get('coutUnitaire').value;
+    myForm.patchValue({inotPlafond: true});
+    myForm.patchValue({coutUnitaire: this.montantConvention})
+    myForm.patchValue({observation: "la differnce entre le coût unitaire et le montant de la convention est " + c});
+  }
+  
+  myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+  myForm.patchValue({observation: "Remboursement favorable"});
+
+  if (this.prestationPopForm.get('nombreActe').value &&
+  this.prestationPopForm.get('coutUnitaire').value) {
+
+    myForm.patchValue({montantRembourse:
+      (this.prestationPopForm.get('coutUnitaire').value *
+      this.prestationPopForm.get('taux').value.taux) / 100,
+      debours: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+    this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value});
+  }
+
+  this.prefinancementModel = this.prestationForm.value;
+  this.prefinancementModel.dateSaisie = new Date();
+  this.prefinancementModel.adherent = this.adherentSelected;
+  this.prefinancementList.push(this.prefinancementModel);
+  /* executer le controle de la prestation */
+ /* this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
+  this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    console.log(value);
+    if (!value) {
+
+    } else {
+      this.checkPrefinancementResult = value.slice();
+      console.log(this.checkPrefinancementResult);
+      for (let j = 0; j < this.checkPrefinancementResult.length; j++){
+        const myForm1 = (this.prestationForm.get('prestation') as FormArray).at(j);
+       
+        const plafond = myForm1.get('montantPlafond').value;
+        const totalPlafond = plafond * this.prestationForm.get('prestation').value[j].nombreActe;
+        let montantRembourse = this.checkPrefinancementResult[j].montantRembourse;
+        let montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+        this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+        if (this.checkPrefinancementResult[j].montantRembourse > totalPlafond) {
+          montantRembourse = totalPlafond;
+          montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
+          this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
+        }
+        myForm1.patchValue({montantRembourse, montantSupporte,
+          sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
+          observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
+        });
+        if(!this.checkPrefinancementResult[j].montantRestant) {
+          myForm1.patchValue({ montantRestant: this.prestationForm.get('prestation').value[j].baseRemboursement -  this.prestationForm.get('prestation').value[j].montantRembourse });
+        }
+      }*/
+    /* Gestion des personnes rétirées au front */
+    if (this.adherentSelected.signeAdherent ==='-') {
+      if(this.prestationForm.get('dateSaisie').value >= this.prestationPopForm.get('dateRetrait').value ||
+      this.prestationPopForm.get('dateRetrait').value <= myForm.get('dateSoins').value) {
+        myForm.patchValue({
+          sort: Sort.REJETE,
+          observation: "Assuré(e) rétiré(e)",
+          montantRembourse: 0,
+          montantSupporte: this.prestationPopForm.get('nombreActe').value *
+          this.prestationPopForm.get('coutUnitaire').value
+        });
+      }
+    } else {
+      console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
+      if(this.montantConsomme >  this.prestationPopForm.get('montantPlafond').value) {
+        this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
+        myForm.patchValue({observation: "Votre plafond est atteint"});
+        myForm.patchValue({
+          sort: Sort.REJETE,
+          observation: "Votre plafond est atteint",
+          montantRembourse: 0,
+          montantSupporte: this.prestationPopForm.get('nombreActe').value *
+          this.prestationPopForm.get('coutUnitaire').value
+        });
+      }
+    }
+    if(myForm.get('sort').value === Sort.ACCORDE) {
+      myForm.patchValue({
+        montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
+        this.prestationPopForm.get('montantRembourse').value
+      });
+    }
+
+  }
+
+}
+
+}
+
+
 
 
 export interface FraisReels {

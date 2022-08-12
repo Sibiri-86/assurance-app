@@ -754,15 +754,17 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   calculDebours1() {
     const myForm = this.prestationPopForm;
-  
+    console.log(this.prestationPopForm.get('sousActe').value.idGenre);
    if((this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
-   (this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+   (this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
       myForm.patchValue({ montantRembourse : 0});
       myForm.patchValue({ montantRestant:  this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value});
       if(this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
         myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour les enfants filles"}); 
 
       } else {
+        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
         myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
 
       }
@@ -782,7 +784,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       const c =this.montantConvention - this.prestationPopForm.get('coutUnitaire').value;
       myForm.patchValue({inotPlafond: true});
       myForm.patchValue({coutUnitaire: this.montantConvention})
-      myForm.patchValue({observation: "la differnce entre le coût unitaire et le montant de la convention est " + c});
+      myForm.patchValue({observation: "la difference entre le coût unitaire et le montant de la convention est " + c});
     }
     
     myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
