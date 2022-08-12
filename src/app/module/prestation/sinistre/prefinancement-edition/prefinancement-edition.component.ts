@@ -330,6 +330,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
           e.typeBon === TypeBon.ENTENTEPREALABLE);
         //this.taux = this.adherentSelected.groupe.taux;
       }
+      
     });
 
     this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
@@ -523,7 +524,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       this.montantConvention = rest;
 
   });
-   // if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+    if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
@@ -535,7 +536,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
       } else {
       }
     });
-    //}
+    }
   }
   supprimerPrefinancement() {
     console.log(this.selectedPrefinancement);
@@ -1073,7 +1074,7 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
 
 fermerPrestation(){
   this.displayPrestationpop = false;
-  // this.prestationPopForm.reset()
+  this.prestationPopForm.reset()
 }
 
 }
