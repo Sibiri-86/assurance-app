@@ -417,7 +417,7 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-3">
                         <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins">
+                        <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins" (blur)="rechercheAdherentDateSoin($event)">
                     </div>
                     <div class="p-field p-col-3">
                         <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>

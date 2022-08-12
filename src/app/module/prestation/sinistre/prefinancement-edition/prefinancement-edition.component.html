@@ -147,7 +147,7 @@
             </ng-template>
         </p-dialog>
         
-        <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid">
+        <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
     
             <ng-template pTemplate="content"> 
                 <div class="card">
@@ -380,7 +380,8 @@
                             <br/>
                             <div class="p-grid p-justify-between">
                                 <div>
-                                    <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" (click)="fermerPrestation()"></button>
+                                 
+                                    <button pButton pRipple label="Quitter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" (click)="fermerPrestation()"></button>
                                 </div>
                                 <div>
                                     <button  pButton  pRipple  label="Ajouter"[disabled]="!adherentSelected || prestationPopForm.invalid " icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>

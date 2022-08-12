@@ -645,7 +645,7 @@ export class TierPayantEditionComponent implements OnInit {
     rechercherAdherent1(event) {
 
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
-        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: event.target.value}));;
         this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
@@ -1469,6 +1469,15 @@ export class TierPayantEditionComponent implements OnInit {
 
         }
       }
+
+      rechercheAdherentDateSoin(event) {
+        if(this.prestationAdd.dateSoins  && this.prestationAdd.matriculeAdherent) {
+          this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: Number(this.prestationAdd.matriculeAdherent)}));
+      
+        }
+      }
+      
+
       
 
 }
