@@ -235,7 +235,7 @@
                                 
                                 <div class="p-field p-col">
                                     <label for="lastname2">Acte <span class="required">*</span></label>
-                                    <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                                    <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
                                 </div>  
                                 
                                 <div class="p-field p-col">

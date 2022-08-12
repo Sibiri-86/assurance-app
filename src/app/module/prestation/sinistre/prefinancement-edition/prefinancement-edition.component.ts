@@ -129,6 +129,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   numberPrestation = 0;
   montantConvention: number = 0;
   montantConsomme:number = 0;
+  montantPlafond1:number = 0;
   displayPrestationpop = false;
   prestationsList: Prestation[]= [];
   compteur: number = null;
@@ -173,6 +174,14 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         console.log(this.montantConsomme);
        
     });
+}
+
+findMontantPlafond(event){
+  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+
+      this.montantPlafond1 = rest;
+     
+  });
 }
 
    createItem(): FormGroup {
@@ -795,8 +804,17 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.prestationPopForm.get('coutUnitaire').value) {
 
       myForm.patchValue({montantRembourse:
-        (this.prestationPopForm.get('coutUnitaire').value *
+        (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
         this.prestationPopForm.get('taux').value.taux) / 100,
+        debours: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+      this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value});
+    }
+
+    if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
+      myForm.patchValue({montantRembourse:
+        (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
         debours: this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
       this.prestationPopForm.get('nombreActe').value *
@@ -851,7 +869,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
         }
       } else {
         console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
-        if(this.montantConsomme >  this.prestationPopForm.get('montantPlafond').value) {
+        if(this.montantConsomme >  this.montantPlafond1) {
           this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
           myForm.patchValue({observation: "Votre plafond est atteint"});
           myForm.patchValue({

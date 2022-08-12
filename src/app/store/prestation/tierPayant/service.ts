@@ -66,6 +66,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
        
       }
 
+      $findMontantPlafond(idAdherent: string, idActe: string): Observable<any> {
+        // @FIXME: get request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/find-montant-consomme-Acte`, {params :
+          this.createRequestOption({idAdherent,idActe})});
+       
+      }
+
     $getTierPayantValide(): Observable<SinistreTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/valide`).pipe(

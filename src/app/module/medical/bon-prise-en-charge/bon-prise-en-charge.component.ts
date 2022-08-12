@@ -122,6 +122,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   typeBon: Array<SelectItem>;
   montantConvention :number = 0;
   montantConsomme: number = 0;
+  montantPlafond1: number = 0;
   montantPlafond: number = 0;
   plafondSousActe: CheckPlafond;
  // userCurent: Us
@@ -239,6 +240,13 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
         this.montantConsomme = rest;
        
     });
+}
+findMontantPlafond(event){
+  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+
+      this.montantPlafond1 = rest;
+     
+  });
 }
 
   ngOnInit(): void {
@@ -562,6 +570,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   }
 
   voirPrestation(pref: Prefinancement){
+    console.log(pref);
     this.displayPrestation = true;
     this.prestationListPrefinancement = pref.prestation;
     this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
@@ -814,9 +823,11 @@ console.log(myForm);
     }
     */
     console.log(this.bonPriseEnCharge);
+    this.bonPriseEnCharge.prestation = this.prestationsList;
      this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
     this.displayPrestation = false;
     this.displayFormPrefinancement = false;
+    this.prestationsList = [];
    }
 
    valider(bon: BonPriseEnCharge){
@@ -1012,7 +1023,7 @@ calculDebours1() {
     const c =this.montantConvention - this.prestationPopForm.get('coutUnitaire').value;
     myForm.patchValue({inotPlafond: true});
     myForm.patchValue({coutUnitaire: this.montantConvention})
-    myForm.patchValue({observation: "la differnce entre le coût unitaire et le montant de la convention est " + c});
+    myForm.patchValue({observation: "la difference entre le coût unitaire et le montant de la convention est " + c});
   }
   
   myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
@@ -1022,13 +1033,22 @@ calculDebours1() {
   this.prestationPopForm.get('coutUnitaire').value) {
 
     myForm.patchValue({montantRembourse:
-      (this.prestationPopForm.get('coutUnitaire').value *
+      (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('taux').value.taux) / 100,
       debours: this.prestationPopForm.get('nombreActe').value *
     this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
     this.prestationPopForm.get('nombreActe').value *
     this.prestationPopForm.get('coutUnitaire').value});
   }
+  if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
+    myForm.patchValue({montantRembourse:
+      (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
+      debours: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+    this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value});
+  }
+
 
   this.prefinancementModel = this.prestationForm.value;
   this.prefinancementModel.dateSaisie = new Date();
@@ -1078,7 +1098,7 @@ calculDebours1() {
       }
     } else {
       console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
-      if(this.montantConsomme >  this.prestationPopForm.get('montantPlafond').value) {
+      if(this.montantConsomme >   this.montantPlafond1) {
         this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
         myForm.patchValue({observation: "Votre plafond est atteint"});
         myForm.patchValue({
@@ -1099,6 +1119,22 @@ calculDebours1() {
 
   }
 
+}
+
+editerPrestation1(prestation: Prestation, rowIndex: number) {
+  this.compteur = rowIndex;
+  this.prestationPopForm.patchValue(prestation);
+  this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
+  this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);
+  this.prestationPopForm.get('souscripteur').setValue(prestation.adherent.groupe.police.nom);
+  this.prestationPopForm.get('nomGroupeAdherent').setValue(prestation.adherent.groupe.libelle);
+  if (prestation.adherent.adherentPrincipal != null) {
+    this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.adherentPrincipal.nom+" "+prestation.adherent.adherentPrincipal.prenom);
+} else {
+    this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  }
+  this.displayPrestationpop = true;
 }
 
 }

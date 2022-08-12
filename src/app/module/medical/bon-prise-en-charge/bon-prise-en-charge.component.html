@@ -37,7 +37,7 @@
         </p-toolbar>
         
         
-        <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+        <p-table #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                  [rowHover]="true" dataKey="id"
                  styleClass="p-datatable-customers"
                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectedPrefinancement">
@@ -69,7 +69,7 @@
                     <td>
                         <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
                     </td>
-                    <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeroSinistre}}</span>
+                    <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeros}}</span>
                     </td>
                     <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
                     </td>
@@ -98,7 +98,7 @@
             </ng-template>
             <ng-template pTemplate="summary">
                 <div class="p-d-flex p-ai-center p-jc-between">
-                    {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+                    {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon/entente-préalable(s).
                 </div>
             </ng-template>
         </p-table>
@@ -235,13 +235,13 @@
                             <p-calendar id="dateSaisie" [inputStyle] = "{'color':'red', 'font-weight':'bold'}" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateRetrait" appendTo="body"></p-calendar>
                         </div>
                         
-                        <div class="p-field p-col" style="margin-top: 7px;">
+                        <!-- <div class="p-field p-col" style="margin-top: 7px;">
                             <label for="medecin">Entente préalable </label>
                             <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                                         showClear="true" [options]="bonPriseEnChargeList"
                                         formControlName="bonPriseEnCharge"  [autoDisplayFirst]="false"
                                         optionLabel="numeros" (onChange)="onRowSelectBon($event)"></p-dropdown>
-                        </div>
+                        </div> -->
                         
 
                        </div>
@@ -256,7 +256,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="lastname2">Acte <span class="required">*</span></label>
-                                <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                                <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
                             </div>  
                             
                             <div class="p-field p-col">
@@ -425,12 +425,21 @@
                                 formControlName="typeBon"  [autoDisplayFirst]="false"
                                 ></p-dropdown>
                 </div>
+
+                <div class="p-field p-col">
+                    <label for="medecin">Prestataire<span class="required">*</span></label>
+                    <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
+                                showClear="true" [options]="prestatairePrescripteur"
+                                formControlName="prestataire"  [autoDisplayFirst]="false"
+                                optionLabel="libelle"></p-dropdown>
+                </div>
                 
             </div>
 
                 <div class="p-field p-col-2"></div>
                     <div class="p-field p-col-2">
-                        <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" [disabled]="!this.prestationForm.get('dateDeclaration').value || !this.prestationForm.get('typeBon').value" label="Ajouter prestation"
+                        <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" [disabled]="!this.prestationForm.get('dateDeclaration').value || !this.prestationForm.get('typeBon').value
+                        || !this.prestationForm.get('prestataire').value" label="Ajouter prestation"
                                 class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                 </div>
              

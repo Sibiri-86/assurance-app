@@ -165,6 +165,7 @@ export class TierPayantEditionComponent implements OnInit {
     montantPlafond: number = null; 
     montantConvention: number = 0;
     montantConsomme: number = 0;
+    montantPlafond1: number = 0;
     displayAdherent = false;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
 
@@ -231,6 +232,15 @@ export class TierPayantEditionComponent implements OnInit {
            
         });
     }
+
+    findMontantPlafond(){
+        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, this.prestationAdd.acte.id).subscribe(rest=>{
+
+            this.montantPlafond1 = rest;
+           
+        });
+    }
+
 
     ngOnInit(): void {
 
@@ -463,9 +473,9 @@ export class TierPayantEditionComponent implements OnInit {
 
 
     initilisation() {
-        if(!this.prefinancement.montantPaye) {
+        
             this.prefinancement.montantPaye = 0;
-        }
+      
        
         
     }
@@ -915,6 +925,7 @@ export class TierPayantEditionComponent implements OnInit {
         console.log("=====================bien==========");
         console.log(this.prefinancement.dateSaisie);
         console.log("=====================bien==========");
+        this.prefinancement.montantPaye = 0;
         this.displayFormPrefinancement = true;
     }
 
@@ -942,7 +953,7 @@ export class TierPayantEditionComponent implements OnInit {
     calculDebours() {
         console.log("======idGenre=======",this.adherentSelected.qualiteAssure.code);
         if((this.prestationAdd?.sousActe.idGenre && this.adherentSelected.genre.id === this.prestationAdd?.sousActe.idGenre) ||
-         (this.adherentSelected.genre.id !== this.prestationAdd?.sousActe?.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
+         (this.prestationAdd?.sousActe.idGenre && this.adherentSelected.genre.id !== this.prestationAdd?.sousActe?.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
           
             this.prestationAdd.montantRembourse = 0;
             this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
@@ -972,10 +983,10 @@ export class TierPayantEditionComponent implements OnInit {
             });
         }
         console.log(this.montantConsomme , this.montantPlafond);
-        if(this.montantConsomme > this.montantPlafond  ) {
+        if(this.montantConsomme > this.montantPlafond1  ) {
             this.showToast('error', 'INFORMATION', 'Vous avez atteint votre plafond');
 
-            console.log(this.montantConsomme , this.montantPlafond);
+         //   console.log(this.montantConsomme , this.montantPlafond);
 
             this.prestationAdd.sort = Sort.REJETE;
             this.prestationAdd.observation = "Vous avez atteint votre plafond " ;
@@ -1015,7 +1026,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
-                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ){
+                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond1  ){
 
                         this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
                         this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
@@ -1051,7 +1062,7 @@ export class TierPayantEditionComponent implements OnInit {
                         console.log("compter============",this.compteur);
                         console.log("===============montantPaye=============");
 
-                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond  ) {
+                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond1  ) {
                            
                        
                             this.prefinancement.montantPaye = this.prefinancement.montantPaye +  this.prestationAdd.montantRembourse;
@@ -1089,9 +1100,9 @@ export class TierPayantEditionComponent implements OnInit {
             }
 
             if(this.montantPlafond !== null) {
-                if(this.montantPlafond < this.prestationAdd.montantRembourse) {
-                    this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
-                    this.prestationAdd.montantRembourse = this.montantPlafond;
+                if(this.montantPlafond < this.prestationAdd.coutUnitaire) {
+                   // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
+                    this.prestationAdd.montantRembourse = this.montantPlafond * this.prestationAdd.nombreActe;
                     this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 }
                 this.prestationAdd.montantPlafond = this.montantPlafond;
@@ -1101,12 +1112,12 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.observation= "remboursement favorable";
             }
 
-            if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) > this.montantPlafond  ) {
+            if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) > this.montantPlafond1  ) {
 
 
                 this.prestationAdd.sort = Sort.ACCORDE;
-                this.prestationAdd.observation = "Remborsement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond -(this.montantConsomme +  (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100)) ;
-                this.prestationAdd.montantRembourse = this.montantPlafond - this.montantConsomme;
+                this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100)) ;
+                this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
                 this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 console.log("=============montantRembourse=============",this.prestationAdd.montantRembourse);
                 console.log("=============montantRembourse=============",this.prefinancement.montantPaye);
@@ -1171,6 +1182,7 @@ export class TierPayantEditionComponent implements OnInit {
     addItemPrestation(): void {
         this.displayPrestationpop = true;
         this.prestationAdd = {};
+        // this.prefinancement.montantRestant = this.prefinancement.montantPaye;
         const formPrestation: FormGroup = this.createItem();
         this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
