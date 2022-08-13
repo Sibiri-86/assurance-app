@@ -1074,6 +1074,8 @@ rechercheAdherentDateSoin(event) {
     
 }
 editerPrestation1(prestation: Prestation, rowIndex: number) {
+  console.log("5555555555555555555555555",prestation);
+  console.log("6666666666666666666666666",rowIndex);
   this.compteur = rowIndex;
   this.prestationPopForm.patchValue(prestation);
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);

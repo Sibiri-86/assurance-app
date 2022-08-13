@@ -55,11 +55,12 @@
                     <th style="width: 3rem">
                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                     </th>
-                    <th pSortableColumn="numero" style="min-width:200px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                    <th pSortableColumn="nom" style="min-width:200px">Date declaration<p-sortIcon field="nom"></p-sortIcon></th>
-                    <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
-                    <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
-                    <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
+                    <th pSortableColumn="numero" style="min-width:60px">Numero sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                    <th pSortableColumn="nom" style="min-width:40px">Date déclaration<p-sortIcon field="nom"></p-sortIcon></th>
+                    <th pSortableColumn="duree" style="min-width:10px">Matricule<p-sortIcon field="duree"></p-sortIcon></th>
+                    <th pSortableColumn="dateEffet" style="min-width:200px">Bénéficiare <p-sortIcon field="dateEffet"></p-sortIcon></th>
+                    <th pSortableColumn="duree" style="min-width:10px">Matricule<p-sortIcon field="duree"></p-sortIcon></th>
+                    <th pSortableColumn="dateEcheance" style="min-width:200px">Assuré Principal<p-sortIcon field="prenom"></p-sortIcon></th>
                     <th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
                     <th style="min-width:150px"></th>
                 </tr>
@@ -69,18 +70,21 @@
                     <td>
                         <p-tableCheckbox [value]="prefinancement"></p-tableCheckbox>
                     </td>
-                    <td><span class="p-column-title" style="min-width:200px">{{prefinancement.numeros}}</span>
+                    <td><span class="p-column-title">{{prefinancement.numeros}}</span>
                     </td>
-                    <td><span class="p-column-title" style="min-width:200px">{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
-                    </td>
-                    <td>
-                        <span class="p-column-title" style="min-width:100px">{{prefinancement.adherent.numero}}</span>
+                    <td><span class="p-column-title" >{{prefinancement.dateDeclaration | formatTableValue : 'date'}}</span>
                     </td>
                     <td>
-                        <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.nom}}</span>
+                        <span class="p-column-title" >{{prefinancement.adherent.numero}}</span>
                     </td>
                     <td>
-                        <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+                        <span class="p-column-title" >{{prefinancement.adherent.nom}} {{prefinancement.adherent.prenom}}</span>
+                    </td>
+                    <td>
+                        <span class="p-column-title" >{{prefinancement.adherent?.adherentPrincipal?.numero}}</span>
+                    </td>
+                    <td>
+                        <span class="p-column-title" *ngIf="prefinancement.adherent.adherentPrincipal">{{prefinancement.adherent?.adherentPrincipal?.nom}} {{prefinancement.adherent?.adherentPrincipal?.prenom}}</span>
                     </td>
                     <td>
                         <!-- <span class="p-column-title" style="min-width:200px">{{prefinancement.etat}}</span> -->
@@ -98,7 +102,7 @@
             </ng-template>
             <ng-template pTemplate="summary">
                 <div class="p-d-flex p-ai-center p-jc-between">
-                    {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon/entente-préalable(s).
+                    {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
                 </div>
             </ng-template>
         </p-table>
@@ -256,7 +260,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="lastname2">Acte <span class="required">*</span></label>
-                                <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
+                                <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                             </div>  
                             
                             <div class="p-field p-col">
@@ -469,7 +473,7 @@
                                    
                                   
                                     <th>Date de soins</th>
-                                    <th>Assuré</th>
+                                    <th>Bénéficiaire</th>
                                     <th>Famille acte</th>
                                     <th>Acte</th>
                                     <th>Sous Acte</th>

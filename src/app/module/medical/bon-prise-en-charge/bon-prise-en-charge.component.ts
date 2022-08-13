@@ -262,14 +262,14 @@ findMontantPlafond(event){
       referenceBordereau: new FormControl(''),
       dateSaisie: new FormControl({value: '', disabled: true}),
       dateDeclaration: new FormControl(''),
-      matriculeAdherent: new FormControl(''),
+      /* matriculeAdherent: new FormControl(''),
       nomAdherent: new FormControl({value: '', disabled: true}),
       prenomAdherent: new FormControl({value: '', disabled: true}),
       numeroGroupe: new FormControl({value: '', disabled: true}),
-      numeroPolice: new FormControl({value: '', disabled: true}),
+      numeroPolice: new FormControl({value: '', disabled: true}), */
       prestataire: new FormControl('', Validators.required),
       typeBon: new FormControl('', Validators.required),
-      souscripteur: new FormControl({value: '', disabled: true}),
+      /* souscripteur: new FormControl({value: '', disabled: true}), */
       prestation: this.formBuilder.array([])
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
@@ -1122,9 +1122,11 @@ calculDebours1() {
 }
 
 editerPrestation1(prestation: Prestation, rowIndex: number) {
+  console.log("5555555555555555555555555",prestation);
+  console.log("6666666666666666666666666",rowIndex);
   this.compteur = rowIndex;
-  this.prestationPopForm.patchValue(prestation);
-  this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  this.prestationPopForm?.patchValue(prestation);
+  this.prestationPopForm?.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
   this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);
   this.prestationPopForm.get('souscripteur').setValue(prestation.adherent.groupe.police.nom);
@@ -1135,6 +1137,43 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   }
   this.displayPrestationpop = true;
+}
+
+editerPrestation(pref: BonPriseEnCharge) {
+  console.log("=====================");
+  console.log(pref);
+  this.adherentSelected = pref.adherent;
+  this.prestationsList = pref.prestation; 
+  // this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
+  /* this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
+  this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+  if (this.adherentSelected.adherentPrincipal != null) {
+    this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+} else {
+    this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+}
+  this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
+  this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
+  this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom); */
+  this.prestationForm.get('typeBon').setValue(pref?.typeBon);
+  this.prestationForm.get('prestataire').setValue(pref?.prestataire);
+  // this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
+  this.prestationForm.get('dateDeclaration').setValue(pref.dateDeclaration);
+  //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+  this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+  for (const pr of pref.prestation) {
+  const formPrestation: FormGroup = this.createItem();
+  formPrestation.patchValue(pr);
+  formPrestation.get('dateSoins').setValue(pr.dateSoins);
+  formPrestation.get('debours').setValue(pr.debours);
+  formPrestation.get('taux').setValue(pr.taux);
+  formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+  formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+  formPrestation.get('montantSupporte').setValue(pr.montantSupporte);
+  formPrestation.get('montantPlafond').setValue(pr.montantPlafond);
+  this.prestation.push(formPrestation);
+  }
+  this.displayFormPrefinancement = true;
 }
 
 }
