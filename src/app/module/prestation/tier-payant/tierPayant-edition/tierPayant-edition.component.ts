@@ -1033,8 +1033,13 @@ export class TierPayantEditionComponent implements OnInit {
 
             }
         }
+
        /*  if(this.montantPlafond === 0 || !this.montantPlafond ) {
             console.log('gggggggggggggggggg');
+=======
+        if(this.montantPlafond === 0  ) {
+            this.showToast('error', 'INFORMATION', 'l\'assurance ne couvre pas ce produit');
+>>>>>>> feature_button_policy_validation
 
             this.prestationAdd.sort = Sort.ACCORDE;
             if (this.prestationAdd.nombreActe &&

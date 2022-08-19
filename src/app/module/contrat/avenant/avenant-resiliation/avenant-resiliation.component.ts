@@ -82,7 +82,7 @@ export class AvenantResiliationComponent implements OnInit {
   createAvenantSuspension(): void {
     this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
     this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
-    this.historiqueAvenant.numero = this.myForm.get('numero').value;
+    this.historiqueAvenant.numero = this.myForm.get('numeroGarant').value;
     this.historiqueAvenant.groupe = this.groupe;
     this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RESILIATION;
     this.historiqueAvenant.observation = this.myForm.get('observation').value;
