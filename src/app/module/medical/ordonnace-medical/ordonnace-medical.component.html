@@ -183,10 +183,12 @@
                                                 optionLabel="code"></p-dropdown>
                                 </div>
 
-                                <div class="p-field p-col-3">
-                                    <label for="matriculeAdherent">Matricule assuré<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                <div class="p-field p-col">
+                                    <label for="dateEffet">Date de soins <span class="required">*</span></label>
+                                    <input type="date" name="dateSoins" id="dateSoins" pInputText formControlName="dateSoins" (blur)="rechercheAdherentDateSoin($event)">
                                 </div>
+
+                                
 
                                 
 
@@ -194,6 +196,10 @@
 
 
                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="matriculeAdherent">Matricule assuré<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent"  (blur)="rechercherAdherent($event)" pInputText>
+                                </div>
                                 <div class="p-field p-col-3">
                                     <label for="nomAdherent">Nom <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" pInputText>
@@ -209,16 +215,18 @@
                                     <input id="nomAssurePrin" class="champ" type="text" formControlName="nomAssurePrin" pInputText>
                                 </div>
 
-                                <div class="p-field p-col-3">
-                                    <label for="nomAdherent">Prénom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="prenomAssurePrin" class="champ" type="text" formControlName="prenomAssurePrin" pInputText>
-                                </div>
+                               
 
 
                                 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="nomAdherent">Prénom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="prenomAssurePrin" class="champ" type="text" formControlName="prenomAssurePrin" pInputText>
+                                </div>
+
                                 <div class="p-field p-col-3">
                                     <label for="groupeAdherent">Numéro du groupe<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" pInputText>
@@ -234,15 +242,16 @@
                                     <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" pInputText>
                                 </div>
 
-                                <div class="p-field p-col-3">
-                                    <label for="nomPoliceAdherent">Souscripteur<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="nomPoliceAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" pInputText>
-                                </div>
+                               
 
                                 
                             </div>
 
                             <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="nomPoliceAdherent">Souscripteur<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <input id="nomPoliceAdherent" class="champ" type="text" formControlName="nomPoliceAdherent" pInputText>
+                                </div>
                                 <div class="p-field p-col-3">
                                     <label for="dateEffet">Date de saisie <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
@@ -305,7 +314,7 @@
 
                                         <div class="p-field p-col-4">
                                             <label for="taux">Taux <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-dropdown inputId="taux" dataKey="id" [filter]="true"
+                                            <p-dropdown inputId="taux" dataKey="id" [filter]="true" [disabled]="true"
                                                         showClear="true" [options]="tauxList"
                                                         formControlName="taux"
                                                         optionLabel="taux" [autoDisplayFirst]="false"></p-dropdown>
@@ -313,7 +322,7 @@
 
                                         <div class="p-field p-col-4">
                                             <label for="montantRembourse">Montant remboursé <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                            <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" placeholder="Montant remboursé"></p-inputNumber>
+                                            <p-inputNumber formControlName="montantRembourse" mode="decimal" locale="fr-FR" placeholder="Montant remboursé" [disabled]="true"></p-inputNumber>
                                         </div>
 
 

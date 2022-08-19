@@ -2419,11 +2419,12 @@ changeGarantie(garantie, indexLigne: number) {
       territorialite: grp.territorialite,
       duree: grp.duree,
       dateEffet: grp.dateEffet,
-      typeDuree: {},
+      typeDuree: grp?.typeDuree,
       dateEcheance: grp.dateEcheance,
       adresse: grp.adresse,
       commune: grp.commune,
-      description: grp.description
+      description: grp.description,
+      numeroGroupe: grp.numeroGroupe
     });
 
     this.primeForm.patchValue({
@@ -2449,6 +2450,7 @@ changeGarantie(garantie, indexLigne: number) {
     groupe1.prime = this.primeForm.value;
     groupe1.groupeId = this.newGroupe.id;
     groupe1.typePrime = this.primeForm.get('prime').value;
+    groupe1.typeDuree = this.groupeForm.get('typeDuree').value;
     groupe1.police = this.newGroupe.police;
     if (groupe1.prime.primeAdulte) {
       groupe1.prime.primeAdulte = removeBlanks(groupe1.prime.primeAdulte + '');

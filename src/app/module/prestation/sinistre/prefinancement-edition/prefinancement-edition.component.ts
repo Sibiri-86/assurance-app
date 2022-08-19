@@ -886,6 +886,19 @@ findMontantPlafond(event){
           montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
           this.prestationPopForm.get('montantRembourse').value
         });
+        if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
+          if(this.prestationPopForm.get('montantPlafond').value <= this.prestationPopForm.get('coutUnitaire').value) {
+             // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
+             myForm.patchValue({
+              montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,
+              montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
+              this.prestationPopForm.get('montantRembourse').value
+            });
+             
+          }
+          
+      }
+
       }
 
     }
@@ -905,11 +918,18 @@ rechercheAdherentDateSoin(event) {
   rechercherAdherent(event) {
     if (event.target.value !== '') {
     console.log(event.target.value);
-    this.prestationForm.get('nomAdherent').setValue('');
-    this.prestationForm.get('prenomAdherent').setValue('');
-    this.prestationForm.get('numeroGroupe').setValue('');
-    this.prestationForm.get('numeroPolice').setValue('');
      this.adherentSelected = null;
+     this.prestationPopForm.get('nomAdherent').setValue("");
+     
+      this.prestationPopForm.get('numeroGroupe').setValue("");
+      this.prestationPopForm.get('numeroPolice').setValue("");
+      this.prestationPopForm.get('souscripteur').setValue("");
+      this.prestationPopForm.get('nomGroupeAdherent').setValue("");
+      
+        this.prestationPopForm.get('prenomAdherent').setValue("");
+   
+        this.prestationPopForm.get('prenomAdherent').setValue("");
+    
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
     }
   }

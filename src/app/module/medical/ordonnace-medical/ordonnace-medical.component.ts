@@ -160,12 +160,14 @@ export class OrdonnaceMedicalComponent implements OnInit {
             /** partie concernant la mise à jour */
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = this.prestationForm.get('dateSaisie').value;
+        this.ordonnance.dateSoins = this.prestationForm.get('dateSoins').value;
         this.store.dispatch(featureActionOrdonnanceMedical.updateOrdonnance(this.ordonnance));
         
         } else {
             /** partie concernant la création d'un nouvel ordonnance */
         this.ordonnance = this.prestationForm.value;
         this.ordonnance.dateSaisie = new Date();
+        this.ordonnance.dateSoins = this.prestationForm.get('dateSoins').value;
         this.ordonnance.adherent = this.adherentSelected;
         this.ordonnance.prescripteur = this.prestationForm.get('prescripteur').value;
         this.ordonnance.prestataire= this.prestationForm.get('prestataire').value;
@@ -210,6 +212,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
             matriculeAdherent: new FormControl('', Validators.required),
             adherent: new FormControl(''),
             pathologie: new FormControl(''),
+            dateSoins: new FormControl('',Validators.required),
             ordonnanceMedicalProduitPharmaceutiques: this.formBuilder.array([], Validators.required),
         });
 
@@ -323,6 +326,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
             if (pref) {
                 this.prestationForm.get('id').setValue(pref.id);
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+                this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('matriculeAdherent').enable();
                 this.prestationForm.get('adherent').patchValue(pref.adherent);
                 this.prestationForm.get('prestataire').enable();
@@ -341,6 +345,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
+                this.prestationForm.get('dateSoins').setValue(pref.dateSoins);
 
                 for (const pr of pref.ordonnanceMedicalProduitPharmaceutiques) {
                     const formPrestation: FormGroup = this.createItem();
@@ -372,6 +377,13 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.adherentSelected = null;
         this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
     }
+
+    rechercheAdherentDateSoin(event) {
+        if(this.prestationForm.get('dateSoins').value  && this.prestationForm.get('matriculeAdherent').value) {
+          this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationForm.get('dateSoins').value, matricule: this.prestationForm.get('matriculeAdherent').value}));
+      
+        }
+      }
 
     // valider TierPayant
     validerTierPayant() {

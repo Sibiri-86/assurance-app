@@ -28,6 +28,7 @@ export interface OrdonnanceMedical {
     numeroOrdonnance?: string;
     ordonnanceMedicalProduitPharmaceutiques?: Array<OrdonnanceMedicalProduitPharmaceutique>;
     pathologie?: Pathologie;
+    dateSoins?: Date;
 }
 
 export enum TypeQuantite {

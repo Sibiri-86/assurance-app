@@ -406,12 +406,16 @@ isSaving = false;
     if(this.displayQuestionEpoux) {
       this.questionEpoux = [];
       this.epouse.question  = this.question;
+     
       this.questionEpoux.push(this.question);
+      console.log("========================");
+      console.log(this.questionEpoux);
       this.displayQuestionEpoux = false;
     } 
      
     this.questionnaireForm.reset();
     this.displayQuestionEpoux = false;
+    this.displayQuestionEnfant = false;
     this.displayQuestionAssurer = false;
     this.displayQuestion = false;
   }
@@ -481,8 +485,9 @@ isSaving = false;
   editQuestionEpoux(question: Questionnaire) {
     console.log(question);
     this.displayQuestionAssurer = false;
-    this.displayQuestionEnfant = true;
-    this.displayQuestionEpoux = false;
+    this.displayQuestionEnfant = false;
+   
+    this.displayQuestionEpoux = true;
     this.displayQuestion = true;
     this.question = {...question};
     this.questionnaireForm.patchValue(this.question);
@@ -562,7 +567,8 @@ isSaving = false;
         this.bulletinAdhesion = this.bulletinForm.value;
         this.bulletinAdhesion.enfants = this.enfants;
         this.bulletinAdhesion.epouse = this.epouse;
-        this.bulletinAdhesion.situationFamiliale= this.bulletinForm.value.situationFamiliale.value;
+        this.bulletinAdhesion.epouse.question =this.questionEpoux[0];
+        this.bulletinAdhesion.situationFamiliale = this.bulletinForm.value.situationFamiliale.value;
         console.log(this.bulletinAdhesion);
         console.log(this.bulletinForm.value);
         if(this.bulletinAdhesion.sexe ==='M' ) {
@@ -577,7 +583,7 @@ isSaving = false;
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
             if (this.bulletinAdhesion.id) {
-              console.log(this.bulletinForm.value);
+              console.log(this.bulletinAdhesion);
               this.bulletinAdhesion.question = this.quuestionAssures[0];
               this.store.dispatch(featureActionBulletinAdhesion.updateBulletin(this.bulletinAdhesion));
               console.log(this.bulletinForm.value);
@@ -671,6 +677,7 @@ isSaving = false;
         this.questionnaireDetail = question;
         this.sexe = sexe;
         this.displayDetailQuestion = true;
+        
       }
 
       voirQuestion(question: Questionnaire, sexe: string) {

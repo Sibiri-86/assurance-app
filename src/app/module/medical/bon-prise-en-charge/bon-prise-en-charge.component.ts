@@ -770,11 +770,18 @@ console.log(myForm);
   rechercherAdherent(event) {
     if (event.target.value !== '') {
     console.log(event.target.value);
-    this.prestationForm.get('nomAdherent').setValue('');
-    this.prestationForm.get('prenomAdherent').setValue('');
-    this.prestationForm.get('numeroGroupe').setValue('');
-    this.prestationForm.get('numeroPolice').setValue('');
+   
      this.adherentSelected = null;
+     this.prestationPopForm.get('nomAdherent').setValue("");
+     
+     this.prestationPopForm.get('numeroGroupe').setValue("");
+     this.prestationPopForm.get('numeroPolice').setValue("");
+     this.prestationPopForm.get('souscripteur').setValue("");
+     this.prestationPopForm.get('nomGroupeAdherent').setValue("");
+     
+       this.prestationPopForm.get('prenomAdherent').setValue("");
+  
+       this.prestationPopForm.get('prenomAdherent').setValue("");
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
     }
   }
