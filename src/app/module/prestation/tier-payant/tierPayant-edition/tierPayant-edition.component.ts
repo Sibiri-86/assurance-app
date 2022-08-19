@@ -1005,7 +1005,7 @@ export class TierPayantEditionComponent implements OnInit {
 
             }
         }
-        if(this.montantPlafond === 0 || !this.montantPlafond ) {
+        if(this.montantPlafond === 0  ) {
             this.showToast('error', 'INFORMATION', 'l\'assurance ne couvre pas ce produit');
 
             this.prestationAdd.sort = Sort.REJETE;
