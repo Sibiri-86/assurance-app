@@ -33,6 +33,7 @@ export interface Adherent{
     manageIncorporation?: number;
     signeAdherent?: string;
     dateSortie?:Date;
+    dateSuspension?:Date;
     deleted?: boolean;
     actif?: boolean;
     exercice?: Exercice;

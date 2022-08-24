@@ -248,7 +248,7 @@ export class TierPayantValideComponent implements OnInit {
     } else {
 
       this.confirmationService.confirm({
-        message: 'voulez-vous creer l\'ordre de reglement',
+        message: 'voulez-vous creer l\'ordre de paiement',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {

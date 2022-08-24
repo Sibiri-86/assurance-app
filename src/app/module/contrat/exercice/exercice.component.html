@@ -38,6 +38,8 @@
                         
                         <th pSortableColumn="nom">Date  debut <p-sortIcon field="matricule"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Date fin <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Police<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Garant<p-sortIcon field="nom"></p-sortIcon></th>
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -51,6 +53,12 @@
                         </td>
                         
                         <td><span class="p-column-title">{{exercice.fin | formatTableValue : 'date'}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{exercice?.police?.nom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{exercice?.police?.garant?.nom}}</span>
 
                         </td>
                         <td>

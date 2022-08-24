@@ -444,7 +444,7 @@
                 
                 <div class="p-field p-col-3">
                     <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
-                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.groupeAdherent" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
+                    <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.numeroGroupe" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="groupeAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.numeroGroupe" name="numeroGroupe" pInputText>
                 </div>
                 <div class="p-field p-col-3">

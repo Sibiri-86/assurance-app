@@ -338,12 +338,44 @@ findMontantPlafond(event){
           this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
       }
         if(this.adherentSelected.signeAdherent ==='-') {
-          this.addMessage('error', 'Assuré(e) non pris en compte',
-                        'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
-          this.prestationPopForm.patchValue({
-            dateRetrait: new Date(this.adherentSelected.dateSortie),
-            // sort: Sort.ACCORDE
-            });
+
+          if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  suspendu(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                  //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                    sort : Sort.REJETE
+                    // sort: Sort.ACCORDE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSuspension),
+                // sort: Sort.ACCORDE
+                });
+              
+          } 
+          if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  retiré(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été retiré(e)",
+                    sort : Sort.REJETE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSortie),
+                });
+              
+          }
+          
              }
           }
         } else {
@@ -366,12 +398,42 @@ findMontantPlafond(event){
             this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
         }
           if(this.adherentSelected.signeAdherent ==='-') {
-            this.addMessage('error', 'Assuré(e) non pris en compte',
-                          'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
-            this.prestationPopForm.patchValue({
-              dateRetrait: new Date(this.adherentSelected.dateSortie),
-              // sort: Sort.ACCORDE
-              });
+            if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+            && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+                this.addMessage('error', 'Assuré(e) non pris en compte',
+                'Cet(te) assuré(e) est  suspendu(e) !!!');
+                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                    this.prestationPopForm.patchValue({
+                    //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                      montantRembourse : 0,
+                      observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                      sort : Sort.REJETE
+                      // sort: Sort.ACCORDE
+                      });
+                   
+                }
+                this.prestationPopForm.patchValue({
+                  dateRetrait: new Date(this.adherentSelected.dateSuspension),
+                  // sort: Sort.ACCORDE
+                  });
+                
+            } 
+            if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+                this.addMessage('error', 'Assuré(e) non pris en compte',
+                'Cet(te) assuré(e) est  retiré(e) !!!');
+                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                    this.prestationPopForm.patchValue({
+                      montantRembourse : 0,
+                      observation: "Cet(te) assuré(e) a  été retiré(e)",
+                      sort : Sort.REJETE
+                      });
+                   
+                }
+                this.prestationPopForm.patchValue({
+                  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                  });
+                
+            }
           }
         }
        

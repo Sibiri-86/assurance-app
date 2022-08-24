@@ -283,7 +283,7 @@ export class PrefinancementValideComponent implements OnInit {
       this.showToast('error', 'INFORMATION', 'Veuillez selectionner au moins un sinistre');
     } else {
       this.confirmationService.confirm({
-        message: 'voulez-vous creer l\'ordre de reglement',
+        message: 'voulez-vous creer l\'ordre de paiement',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {

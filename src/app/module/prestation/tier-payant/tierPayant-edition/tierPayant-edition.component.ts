@@ -305,27 +305,47 @@ export class TierPayantEditionComponent implements OnInit {
         
                 }
                 if(this.adherentSelected.signeAdherent !=='*') {
-                    this.addMessage('error', 'Assuré(e) non pris en compte',
-                                  'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+                    if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+                    && new Date(value.dateSortie).getTime() > new Date(this.prestationAdd.dateSoins).getTime())) {
+                        this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) est  suspendu(e) !!!');
+                        if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                            this.prestationAdd.observation = "Cet(te) assuré(e) a  été suspendu(e)";
+                            this.prestationAdd.sort = Sort.REJETE;
+                            this.prestationAdd.montantRembourse = 0;
+                           
+                        }
+                        this.prestationAdd.dateRetrait = new Date(this.adherentSelected.dateSuspension);
+                        
+                    } 
+                    
+                    if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+                        this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
 
-                                  console.log("========dateSortie============", this.adherentSelect?.dateSortie?.getTime() );
-                                  console.log("========dateSoins============", this.prestationAdd.dateSoins );
-                                  console.log("========Date============", new Date(this.prestationAdd.dateSoins).getTime() );
-                                  if( new Date(this.adherentSelect?.dateSortie).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
-                                    this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
-                                    this.prestationAdd.sort = Sort.REJETE;
-                                    this.prestationAdd.montantRembourse = 0;
-                                    console.log("========montantRembourse2============", this.prestationAdd.montantRembourse);
-                                }
+                     
+                        if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                          this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
+                          this.prestationAdd.sort = Sort.REJETE;
+                          this.prestationAdd.montantRembourse = 0;
+                         
+                      }
+                      this.prestationAdd.dateRetrait = new Date(this.adherentSelected.dateSortie);
+                     
+                    }
+                   
     
-                    this.prestationAdd.dateRetrait = this.adherentSelected.dateSortie;
+           
+                    
                   }
                 this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
                 this.prestationAdd.nomAdherent = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
                 
                 this.prestationAdd.prenomAdherent = this.adherentSelected.prenom;
                 
-                this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe.toString();
+                this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe?.toString();
+                console.log("========this.prestationAdd.numeroGroupe============", this.prestationAdd.numeroGroupe);
+                
                 this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
                 this.prestationAdd.souscripteur =  this.adherentSelected.groupe.police.nom;
                 this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
@@ -348,6 +368,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+                
                 
 
                
