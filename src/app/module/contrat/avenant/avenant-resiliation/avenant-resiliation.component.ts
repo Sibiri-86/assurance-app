@@ -53,10 +53,11 @@ export class AvenantResiliationComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.loadActivedExercice(this.police);
+    this.loadLastExercice();
     if(this.etat !== 'CREATE') {
       this.updateAvenant(this.avenantId);
     }
+   
   }
   init() {
     this.myForm = this.formBuilder.group({
@@ -77,6 +78,24 @@ export class AvenantResiliationComponent implements OnInit {
       fin: new FormControl('', [Validators.required]),
       actived: new FormControl('', [Validators.required]),
     });
+  }
+
+  loadLastExercice() {
+    this.exercice$ = this.store.pipe(select(exerciceSelector.selectLastExercice));
+            this.store.dispatch(featureExerciceAction.loadLastExercice({policeId: this.police.id}));
+            this.exercice$.pipe(takeUntil(this.destroy$)).subscribe(
+                (res) => {
+                    this.exercice = res;
+                    console.log('******this.exercice*******', this.exercice);
+                    if (this.exercice) {
+                        this.exerciceForm.patchValue({
+                            debut: this.exercice.debut,
+                            fin: this.exercice.fin
+                            // actived: this.exercice.actived,
+                        });
+                    }
+                }
+            );
   }
 
   createAvenantSuspension(): void {
@@ -103,7 +122,7 @@ export class AvenantResiliationComponent implements OnInit {
   }
 
   compareDate(): void {
-    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.police.dateEffet).subscribe(
+    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.exerciceForm.value.debut).subscribe(
         (res) => {
           if (res) {
             this.addMessage('error', 'Date d\'effet invalide',
@@ -112,6 +131,12 @@ export class AvenantResiliationComponent implements OnInit {
           }
         }
     );
+
+    if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.exerciceForm.get('fin').value)?.getTime() ) {
+      this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+            this.myForm.patchValue({dateAvenant: null});
+    }
   }
 
   addMessage(severite: string, resume: string, detaile: string): void {

@@ -576,10 +576,11 @@
              <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
              <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
            </div>
-               <div class="p-field p-col-3">
-                   <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-inputNumber name="debours" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
-               </div>
+           <div class="p-field p-col-3">
+            <label for="coutUnitaire" id="coutUnitaire">Montant exclu <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+            <p-inputNumber name="montantExclu" [disabled]="!prestationAdd.coutUnitaire"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantExclu"  mode="decimal" locale="fr-FR" placeholder="montant exclu" (onBlur)="calculExclu()"></p-inputNumber>
+          </div>
+              
               
 
            </div>
@@ -587,7 +588,10 @@
            <div class="p-fluid p-formgrid p-grid">
 
                
-              
+            <div class="p-field p-col-3">
+                <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-inputNumber name="debours" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
+            </div>
               
             <div class="p-field p-col-3">
                 <label for="baseRemboursement" id="baseRemboursement">Base remboursement<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -606,15 +610,16 @@
              <label for="montantRembourse" id="montantRembourse">Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
              <p-inputNumber name="montantRembourse" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRembourse"  [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
          </div>
-               <div class="p-field p-col-3">
-                   <label for="nombreActe">Montant supporté<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
-               </div>
+              
 
             
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-3">
+                <label for="nombreActe">Montant supporté<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
+            </div>
             <div class="p-field p-col-3">
                 <label for="sousActe">Decision <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="decision" [filter]="true"

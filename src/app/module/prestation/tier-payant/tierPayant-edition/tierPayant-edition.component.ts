@@ -1247,6 +1247,15 @@ export class TierPayantEditionComponent implements OnInit {
        
     }
 
+    calculExclu() {
+        if(this.prestationAdd.montantExclu) {
+            if(this.prestationAdd.sort === Sort.ACCORDE) {
+               this.prestationAdd.montantRembourse =  ((this.prestationAdd.baseRemboursement - this.prestationAdd.montantExclu) *  this.prestationAdd.adherent?.groupe?.taux?.taux) /100;
+               this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement  - this.prestationAdd.montantRembourse ;
+            }
+        }
+    }
+
 
     get prestation() {
         return this.prestationForm.controls.prestation as FormArray;
