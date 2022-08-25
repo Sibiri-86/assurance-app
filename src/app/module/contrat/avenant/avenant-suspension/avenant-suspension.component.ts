@@ -305,6 +305,7 @@ export class AvenantSuspensionComponent implements OnInit {
             this.historiqueAveantAdherantsByExercice.forEach(haa => {
               if(haa.id) {
                 haa.dateRetrait = new Date(haa.dateRetrait);
+               
               } else{
                 haa.dateRetrait = null;
               } 
@@ -322,6 +323,7 @@ export class AvenantSuspensionComponent implements OnInit {
                 dateEffet: new Date(res.dateAvenant), */
             });
             if(this.etat === 'VIEW') {
+              this.adherantSuspendds =  this.historiqueAveantAdherantsByExercice.filter(ad=>ad.selected === true);
               this.myForm.disable();
             }
             this.exercice = res.exercice;

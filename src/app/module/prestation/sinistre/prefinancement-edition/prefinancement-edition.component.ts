@@ -295,14 +295,45 @@ findMontantPlafond(event){
       } else {
           this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
       }
+      
         if(this.adherentSelected.signeAdherent ==='-') {
-          this.addMessage('error', 'Assuré(e) non pris en compte',
-                        'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
-          this.prestationPopForm.patchValue({
-            dateRetrait: new Date(this.adherentSelected.dateSortie),
-            // sort: Sort.ACCORDE
-            });
-             }
+          if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  suspendu(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                  //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                    sort : Sort.REJETE
+                    // sort: Sort.ACCORDE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSuspension),
+                // sort: Sort.ACCORDE
+                });
+              
+          } 
+          if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  retiré(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                    sort : Sort.REJETE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSortie),
+                });
+              
+          } 
+         }
           }
         } else {
           this.adherentSelected = value;
@@ -324,12 +355,42 @@ findMontantPlafond(event){
             this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
         }
           if(this.adherentSelected.signeAdherent ==='-') {
-            this.addMessage('error', 'Assuré(e) non pris en compte',
-                          'Cet(te) assuré(e) a problablement été rétiré(e)!!!');
-            this.prestationPopForm.patchValue({
-              dateRetrait: new Date(this.adherentSelected.dateSortie),
-              // sort: Sort.ACCORDE
-              });
+            if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  suspendu(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                  //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                    sort : Sort.REJETE
+                    // sort: Sort.ACCORDE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSuspension),
+                // sort: Sort.ACCORDE
+                });
+              
+          } 
+          if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+              this.addMessage('error', 'Assuré(e) non pris en compte',
+              'Cet(te) assuré(e) est  retiré(e) !!!');
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                  this.prestationPopForm.patchValue({
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été retiré(e)",
+                    sort : Sort.REJETE
+                    });
+                 
+              }
+              this.prestationPopForm.patchValue({
+                dateRetrait: new Date(this.adherentSelected.dateSortie),
+                });
+              
+          } 
           }
         }
        
@@ -856,18 +917,41 @@ findMontantPlafond(event){
           }
         }*/
       /* Gestion des personnes rétirées au front */
-      if (this.adherentSelected.signeAdherent ==='-') {
-        if(this.prestationForm.get('dateSaisie').value >= this.prestationPopForm.get('dateRetrait').value ||
-        this.prestationPopForm.get('dateRetrait').value <= myForm.get('dateSoins').value) {
-          myForm.patchValue({
-            sort: Sort.REJETE,
-            observation: "Assuré(e) rétiré(e)",
-            montantRembourse: 0,
-            montantSupporte: this.prestationPopForm.get('nombreActe').value *
-            this.prestationPopForm.get('coutUnitaire').value
-          });
-        }
-      } else {
+      if(this.adherentSelected.signeAdherent ==='-') {
+        if((this.adherentSelected.dateSortie === null && this.adherentSelected.dateSuspension  !== null) || (new Date(this.adherentSelected.dateSuspension).getTime() < new Date(this.adherentSelected.dateSortie).getTime()
+        && new Date(this.adherentSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+    
+            if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                 myForm.patchValue({
+               
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                  montantSupporte: this.prestationPopForm.get('nombreActe').value *
+                  this.prestationPopForm.get('coutUnitaire').value,
+                  sort : Sort.REJETE
+                  // sort: Sort.ACCORDE
+                  });
+               
+            }
+            
+            
+        } 
+        if(this.adherentSelected.dateSortie !== null && (new Date(this.adherentSelected.dateSuspension)?.getTime() < new Date(this.adherentSelected.dateSortie)?.getTime() )) {
+            
+            if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+              myForm.patchValue({
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                  montantSupporte: this.prestationPopForm.get('nombreActe').value *
+                  this.prestationPopForm.get('coutUnitaire').value,
+                  sort : Sort.REJETE
+                  });
+               
+            }
+      
+            
+        } 
+       } else {
         console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
         if(this.montantConsomme >  this.montantPlafond1) {
           this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
@@ -946,7 +1030,7 @@ rechercheAdherentDateSoin(event) {
   closeDialog() {
     
       this.confirmationService.confirm({
-        message: 'voulez-vous fermer le préfinancement',
+        message: 'voulez-vous valider ou fermer le préfinancement',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
@@ -959,6 +1043,8 @@ rechercheAdherentDateSoin(event) {
         this.displayFormPrefinancement = true;
       }
      });
+  
+     
     
    
   }

@@ -96,6 +96,7 @@ export interface Prestation {
     dateRetrait?: Date; 
     souscripteur?: string;
     nomGroupe?: string;
+    montantExclu?: number;
 }
 
 export interface SinistreTierPayantList {
