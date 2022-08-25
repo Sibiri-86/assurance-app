@@ -501,6 +501,7 @@ export class AvenantIncorporationComponent implements OnInit{
             (res) => {
                 this.adherentFamilleListe = res.slice();
                 console.log('***************A******************* ', this.adherentFamilleListe.length);
+                console.log('***************B******************* ', this.adherentFamilleListe);
                 this.viewListe = !this.viewListe;
             }
         );
@@ -595,7 +596,7 @@ export class AvenantIncorporationComponent implements OnInit{
             this.adherentService.getAdherentPrincipauxByGroupe(this.curentGroupe.id).subscribe(
                 (res: Adherent[]) => {
                     this.adherentPrincipaux = res;
-                    console.log('-------------this.adherentPrincipaux--------------------' + this.adherentPrincipaux);
+                    console.log('-------------this.adherentPrincipaux--------------------', this.adherentPrincipaux);
                 }
             );
         }
@@ -713,8 +714,10 @@ export class AvenantIncorporationComponent implements OnInit{
 
       onExerciceChange(): void {
         console.log('curent exo === ');
-        console.log(this.curentExercice);
-        this.adherentPrincipaux2 = this.adherentPrincipauxTMP.filter(ad => ad.exercice.id === this.curentExercice.id);
+        console.log(this.curentExercice.id);
+        console.log("this.adherentPrincipaux", this.adherentPrincipaux);
+        console.log("this.adherentPrincipaux2", this.adherentPrincipaux2);
+        this.adherentPrincipaux2 = this.adherentPrincipaux.filter(ad => ad.exercice.id === this.curentExercice.id);
         console.log('adherentPrincipaux2 === ', this.adherentPrincipaux2);
      }
      

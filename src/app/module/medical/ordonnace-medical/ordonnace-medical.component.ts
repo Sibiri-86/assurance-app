@@ -346,6 +346,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 // this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
                 this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
                 this.prestationForm.get('dateSoins').setValue(pref.dateSoins);
+                this.adherentSelected = pref.adherent;
 
                 for (const pr of pref.ordonnanceMedicalProduitPharmaceutiques) {
                     const formPrestation: FormGroup = this.createItem();
@@ -495,10 +496,12 @@ export class OrdonnaceMedicalComponent implements OnInit {
 
     calculMontant(i:number) {
         let myForm = (this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques') as FormArray).at(i);
+        console.log('lmmmmmmmmmmmmmmmmmmmmmmmmmmmm', this.adherentSelected);   
         myForm.patchValue({taux: this.adherentSelected.groupe.taux});
-        if(this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration) {
+        if(this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration 
+        && this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite) {
             myForm.patchValue({
-                montantRembourse: ((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.adherentSelected.groupe.taux.taux) / 100)
+                montantRembourse: (((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite) * this.adherentSelected.groupe.taux.taux) / 100)
                 // * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite
         })
         

@@ -1951,7 +1951,7 @@
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
-                                                <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" optionLabel="libelle" placeholder="Select Make"
+                                                <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" (onChange)="verifieDate(rowData)" optionLabel="libelle" placeholder="Select Make"
                                                             [style]="{'width':'100%'}" required></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
@@ -2176,9 +2176,45 @@
 </p-dialog>
 
 <p-dialog  [maximizable]="true" [(visible)]="displayBareme" header="Configuration actuelle" [modal]="true"
-           styleClass="p-fluid" [style]="{'width':'1100px'}" (onHide)="loadAllPolice()">
+           styleClass="p-fluid" [style]="{'width':'1400px'}" (onHide)="loadAllPolice()">
 
             <span style="color: green !important"> <h4> Informations sur les plafonds</h4></span>
+            <p-fieldset legend="Plafond" toggleable="true">
+                <form [formGroup]="plafondForm">
+    
+                    <div class="p-fluid p-formgrid p-grid">
+                        <!--
+                        <div class="p-field p-col-4">
+                            <label for="domaine">Domaine d'application</label>
+                            <div>
+                            <span *ngFor="let qualite of qualiteAssureList">
+                            <p-radioButton [id]="qualite.id" name="domaine" [value]="qualite" formControlName="domaine" class="p-mr-2"></p-radioButton>
+                            <span class="p-mr-2">{{qualite.libelle}}</span>
+                            </span>
+                            </div>
+                        </div>
+                        -->
+                        <div class="p-field p-col">
+                            <label for="primeFamille">Plafond global annuel par personne</label>
+                            <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondAnnuellePersonne" (blur) ='saisiePrimePersonne()'></p-inputNumber>
+                        </div>
+    
+                        <div class="p-field p-col">
+                            <label for="montantPrimeEnfant">Plafond global par famille</label>
+                            <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondAnnuelleFamille" (blur) ='saisiePrimeFamille()'></p-inputNumber>
+                        </div>
+    
+                        <div class="p-field p-col">
+                            <label for="plafondGlobalEvacuationSanitaire">Plafond global d'évacuation sanitaire</label>
+                            <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondGlobalEvacuationSanitaire"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col" *ngIf="isInternationalGroupe">
+                            <label for="montantPrimeEnfant">Plafond global international</label>
+                            <p-inputNumber mode="decimal" locale="fr-FR" formControlName="plafondGlobalInternationnal"></p-inputNumber>
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
             <ng-template pTemplate="content">
                 <!-- <div class="p-grid">
                     <div class="p-col-4">
