@@ -3698,7 +3698,7 @@
                   </tr>
               </ng-template>
               <ng-template pTemplate="body" let-historiqueAvenantPrime let-editing="editing" let-ri="rowIndex">
-                  <tr [pEditableRow]="historiqueAvenantPrime" *ngIf="historiqueAvenantPrime.groupe" style="font-size: large; height: 5em">
+                  <tr [pEditableRow]="historiqueAvenantPrime" *ngIf="historiqueAvenantPrime.groupe && historiqueAvenantPrime.primeNet" style="font-size: large; height: 5em">
                       <td><span>{{historiqueAvenantPrime.groupe?.libelle}}</span></td>
                       <td><span>{{historiqueAvenantPrime.typePrime?.libelle}}</span></td>
                       <!--<td><span>{{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</span></td>
