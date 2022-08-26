@@ -858,7 +858,7 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <!--<input pInputText type="number" [(ngModel)]="rowData.telephone" required>-->
-                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99" required></p-inputMask>
+                                                <p-inputMask [(ngModel)]="rowData.numeroTelephone" mask="99 99 99 99" ></p-inputMask>
                                             </ng-template>
                                             <ng-template pTemplate="output">
                                                 {{rowData?.numeroTelephone}}
@@ -1597,7 +1597,7 @@
                         </div>
                         <div class="p-field p-col">
                             <label for="numeroTelephone">Telephone <span style="color: red !important;">*</span></label>
-                            <input id="numeroTelephone" type="text" formControlName="numeroTelephone" pInputText>
+                            <p-inputMask id="numeroTelephone" formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="adherentForm" [entityField]="'numeroTelephone'">
                             </app-entity-validation>

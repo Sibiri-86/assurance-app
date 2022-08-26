@@ -99,7 +99,7 @@
                         </div>
                         <div class="p-field p-col-4">
                             <label for="nom">Date d'Avenant<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input [disabled]="etat === 'VIEW'" id="dateAvenant" type="date" formControlName="dateAvenant" pInputText>
+                            <input [disabled]="etat === 'VIEW'" id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
 
                            
                         </div>

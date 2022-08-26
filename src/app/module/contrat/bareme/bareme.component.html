@@ -302,7 +302,7 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-dropdown [options]="typeEtat" [(ngModel)]="rowData.etat" placeholder="Select status"
+                                            <p-dropdown [options]="typeEtat" [(ngModel)]="rowData.etat" placeholder="Select status" (onChange)="modificationEtatActe1(rowData)"
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -1459,7 +1459,7 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"  appendTo="body"
+                                <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"  appendTo="body" (onChange)="modificationEtatActe(plafond)"
                                             [style]="{'width':'100%'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output" *ngIf="plafond.etat">

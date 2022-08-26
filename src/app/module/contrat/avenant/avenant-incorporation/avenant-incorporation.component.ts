@@ -533,9 +533,31 @@ export class AvenantIncorporationComponent implements OnInit{
                         this.addMessage('error', 'Date d\'effet invalide',
                             'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
                         this.myForm.patchValue({dateIncorparation: null});
-                    }
+                    } 
+                    if(new Date(this.myForm.get('dateIncorparation').value)?.getTime() > new Date(this.exerciceForm.get('fin').value)?.getTime() ) {
+                        this.addMessage('error', 'Date d\'effet invalide',
+                                  'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+                              this.myForm.patchValue({dateIncorparation: null});
+                      }
                 }
             );
+        }
+    }
+
+    compareDateavenant(): void {
+     
+        if (this.lastExerciceForm.get('debut').value) {
+            console.log(this.lastExerciceForm.get('debut').value);
+            if(new Date(this.myForm.get('dateAvenant').value)?.getTime() < new Date(this.lastExerciceForm.get('debut')?.value).getTime() ) {
+                this.addMessage('error', 'Date d\'effet invalide',
+                            'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                      this.myForm.patchValue({dateAvenant: null});
+              }
+            if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.lastExerciceForm.get('fin').value)?.getTime() ) {
+                this.addMessage('error', 'Date d\'effet invalide',
+                          'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+                      this.myForm.patchValue({dateAvenant: null});
+              }
         }
     }
 

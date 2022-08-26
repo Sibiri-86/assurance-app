@@ -577,7 +577,7 @@
              <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
            </div>
            <div class="p-field p-col-3">
-            <label for="coutUnitaire" id="coutUnitaire">Montant exclu <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+            <label for="coutUnitaire" id="coutUnitaire">Montant exclu </label>
             <p-inputNumber name="montantExclu" [disabled]="!prestationAdd.coutUnitaire"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantExclu"  mode="decimal" locale="fr-FR" placeholder="montant exclu" (onBlur)="calculExclu()"></p-inputNumber>
           </div>
               

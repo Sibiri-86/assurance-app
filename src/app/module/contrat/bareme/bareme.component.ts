@@ -380,6 +380,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
+    
     for ( let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
       /** verifier si la garantie existe deja, juste le modifier */
       if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id) {
@@ -394,7 +395,8 @@ export class BaremeComponent implements OnInit, OnDestroy {
         return;
         }
     }
-
+   
+  
     /** si la garantie n'est pas encore ajouté, ajouter */
     this.plafondFamilleActeConstruct.forEach( async (element, index) => {
     if (element.garantie.id === rowData.garantie.id) {
@@ -408,8 +410,6 @@ export class BaremeComponent implements OnInit, OnDestroy {
     return;
     }
     });
-
-    
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
@@ -419,6 +419,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
     console.log(this.countfamilleActe);
     this.countfamilleActe++;
     console.log(this.plafondFamilleActeConstruct);
+
   },
   });
   }
@@ -550,6 +551,37 @@ changeGarantie(garantie, indexLigne: number) {
     }
   } 
 
+
+  
+  modificationEtatActe(plafond: PlafondFamilleActe) {
+    if(plafond){
+
+      plafond?.listeActe?.forEach(acte=>{
+
+        acte.etat = plafond.etat;
+        acte?.listeSousActe?.forEach(sous=>{
+
+          sous.etat = plafond.etat;
+        });
+
+      })
+    }
+  }
+
+  modificationEtatActe1(plafond: PlafondFamilleActe) {
+    if(plafond){
+
+      this.plafondActe.forEach(acte=>{
+
+        acte.etat = plafond.etat;
+        acte?.listeSousActe?.forEach(sous=>{
+
+          sous.etat = plafond.etat;
+        });
+
+      })
+    }
+  }
   ngOnDestroy() {
 
   }

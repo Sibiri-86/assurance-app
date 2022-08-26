@@ -217,6 +217,7 @@ findMontantPlafond(event){
       bonPriseEnCharge: new FormControl(),
       souscripteur: new FormControl(),
       nomGroupeAdherent: new FormControl(),
+      montantExclu: new FormControl(),
       dateRetrait: new FormControl({value: '', disabled: true})
     });
   }
@@ -988,6 +989,25 @@ findMontantPlafond(event){
     }
   
   }
+
+  calculExclu() {
+    if(this.prestationPopForm.get('montantExclu').value) {
+        if(this.prestationPopForm.get('sort').value === Sort.ACCORDE) {
+          this.prestationPopForm.get('montantRembourse').setValue (((this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantExclu').value) *  this.adherentSelected?.groupe?.taux?.taux) /100);
+          this.prestationPopForm.get('montantSupporte').setValue( this.prestationPopForm.get('baseRemboursement').value  - this.prestationPopForm.get('montantRembourse').value) ;
+           if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.prestationPopForm.get('montantPlafond').value  ) {
+          
+            this.prestationPopForm.get('observation').setValue( "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value)))) ;
+           
+            this.prestationPopForm.get('montantRembourse').setValue( this.prestationPopForm.get('montantPlafond').value - this.montantConsomme);
+            this.prestationPopForm.get('montantSupporte').setValue(this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value);
+            
+            
+        }
+        }
+    }
+}
+
     
   setNombreActe(data: FraisReels, ri) {
     this.prestationList[ri].nombreActe = data.cle;
@@ -1182,6 +1202,7 @@ rechercheAdherentDateSoin(event) {
 editerPrestation1(prestation: Prestation, rowIndex: number) {
   console.log("5555555555555555555555555",prestation);
   console.log("6666666666666666666666666",rowIndex);
+  this.prestationPopForm = this.createItem();
   this.compteur = rowIndex;
   this.prestationPopForm.patchValue(prestation);
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);

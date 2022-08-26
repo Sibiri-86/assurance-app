@@ -306,7 +306,10 @@
                                
                                
                                <div class="p-fluid p-formgrid p-grid">
-                                   
+                                <div class="p-field p-col-3">
+                                    <label for="coutUnitaire" id="coutUnitaire">Montant exclu </label>
+                                    <p-inputNumber name="montantExclu"   [inputStyle]="{'font-weight': 'bold'}" formControlName="montantExclu"  mode="decimal" locale="fr-FR" placeholder="montant exclu" (onBlur)="calculExclu()"></p-inputNumber>
+                                  </div>
                                 <div class="p-field p-col">
                                     <label for="nombreActe">Debours <span class="required">*</span></label>
                                     <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
@@ -317,13 +320,7 @@
                                     <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="baseRemboursement" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
                                 </div>
                                    
-                                <div class="p-field p-col">
-                                    <label for="sousActe">Taux <span class="required">*</span></label>
-                                    <p-dropdown inputId="taux" dataKey="id" [filter]="true"
-                                                showClear="true" [options]="tauxList"
-                                                formControlName="taux"
-                                                optionLabel="taux" [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
-                                </div>
+                                
                                 
                                </div>
                                
@@ -331,7 +328,13 @@
                                
                                <div class="p-fluid p-formgrid p-grid">
                                    
-                                
+                                <div class="p-field p-col">
+                                    <label for="sousActe">Taux <span class="required">*</span></label>
+                                    <p-dropdown inputId="taux" dataKey="id" [filter]="true"
+                                                showClear="true" [options]="tauxList"
+                                                formControlName="taux"
+                                                optionLabel="taux" [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
+                                </div>
                                    
                                 <div class="p-field p-col">
                                     <label for="nombreActe">Montant remboursé<span class="required">*</span></label>
@@ -342,6 +345,14 @@
                                     <p-inputNumber formControlName="montantSupporte" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
                                 </div>
                                 
+                                
+                               
+                                   
+                               </div>
+        
+                               
+                               <div class="p-fluid p-formgrid p-grid">
+
                                 <div class="p-field p-col-4">
                                     <label for="sousActe">Decision <span class="required">*</span></label>
                                     <p-dropdown inputId="decision" [filter]="true"
@@ -349,12 +360,6 @@
                                                 formControlName="sort"
                                                  [disabled]="true" [autoDisplayFirst]="false"></p-dropdown>
                                 </div>
-                               
-                                   
-                               </div>
-        
-                               
-                               <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-4">
                                     <label>Montant plafond sous-acte</label>
                                     <p-inputNumber formControlName="montantPlafond" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>   
