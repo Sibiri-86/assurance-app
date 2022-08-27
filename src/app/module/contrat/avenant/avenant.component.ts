@@ -1888,9 +1888,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.typeAvenants = [
       {label: 'Avenant de modification', icon: 'pi pi-print', command: ($event) => {
 
+        this.report.typeReporting = TypeReport.AVENANT_MODIFICATION;
+        this.report.historiqueAvenant = historiqueAvenant;
+        console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+        this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste modifiée', icon: 'pi pi-print', command: () => {
 
+        this.report.typeReporting = TypeReport.LISTE_MODIFIER;
+        this.report.historiqueAvenant = historiqueAvenant;
+        console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+        this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Liste actualisée de la police', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.LISTE_ACTUALISE_POLICE;
@@ -1899,7 +1907,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
       {label: 'Facture de modification', icon: 'pi pi-print', command: () => {
-
+        this.report.typeReporting = TypeReport.FACTURE_INCORP;
+        this.report.historiqueAvenant = historiqueAvenant;
+        console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+        this.store.dispatch(featureAction.FetchReport(this.report));
         }}
     ];
   }
