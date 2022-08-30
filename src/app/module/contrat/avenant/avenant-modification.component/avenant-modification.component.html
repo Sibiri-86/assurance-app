@@ -36,7 +36,7 @@
                             <div class="p-field p-col-6">
                                 <label for="dateAvenant">Date de l'avenant <sup
                                         style="color:#ff0539; size: 1.2em">*</sup></label>
-                                        <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText >
+                                        <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
                                 
                                 <app-entity-validation [entityValidations]="entityValidations"
                                                        [formGroup]="groupeForm" [entityField]="'dateAvenant'">

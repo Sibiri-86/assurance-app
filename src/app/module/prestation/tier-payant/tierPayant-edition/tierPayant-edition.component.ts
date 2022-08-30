@@ -1089,6 +1089,11 @@ export class TierPayantEditionComponent implements OnInit {
             this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
             if(!this.prestationAdd.sort) {
                 this.prestationAdd.sort = Sort.ACCORDE;
+                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+    
+               
+
             }
             
         
@@ -1252,6 +1257,20 @@ export class TierPayantEditionComponent implements OnInit {
             if(this.prestationAdd.sort === Sort.ACCORDE) {
                this.prestationAdd.montantRembourse =  ((this.prestationAdd.baseRemboursement - this.prestationAdd.montantExclu) *  this.prestationAdd.adherent?.groupe?.taux?.taux) /100;
                this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement  - this.prestationAdd.montantRembourse ;
+               if((this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
+
+                
+                this.prestationAdd.sort = Sort.ACCORDE;
+                this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.baseRemboursement))) ;
+               
+                this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
+                this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+               
+
+                this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+            }
             }
         }
     }

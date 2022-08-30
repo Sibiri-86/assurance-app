@@ -261,6 +261,11 @@ export class AvenantSuspensionComponent implements OnInit {
           }
         }
     );
+    if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.police.dateEcheance)?.getTime() ) {
+      this.addMessage('error', 'Date d\'effet invalide',
+                'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+            this.myForm.patchValue({dateAvenant: null});
+    }
   }
 
   addMessage(severite: string, resume: string, detaile: string): void {

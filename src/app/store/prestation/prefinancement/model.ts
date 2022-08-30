@@ -97,6 +97,7 @@ export interface Prestation {
     sinistreTierPayant?: SinistreTierPayant; 
     inotPlafond?: Boolean;
     adherent?: Adherent;
+    montantExclu?: number;
     /*ajout information pour bon de prise en charge*/
 }
 

@@ -95,11 +95,11 @@ import * as selectorHistoriqueAvenantAdherant from '../../../../store/contrat/hi
 
 
 @Component({
-    selector: 'app-avenant-renouvellement',
-    templateUrl: './avenant-renouvellement.component.html',
-    styleUrls: ['./avenant-renouvellement.component.scss']
+    selector: 'app-avenant-prorogation',
+    templateUrl: './avenant-prorogation.component.html',
+    styleUrls: ['./avenant-prorogation.component.scss']
 })
-export class AvenantRenouvellementComponent implements OnInit {
+export class AvenantProrogationComponent implements OnInit {
     adherantList: Array<Adherent>;
     @Input() police: Police;
     groupe: Groupe;
