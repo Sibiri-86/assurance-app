@@ -2738,6 +2738,22 @@ changeGarantie(garantie, indexLigne: number) {
 
 verifieDate(adherent: Adherent) {
   console.log("mlkjhjklkhghjklkh", adherent);
+  const date1 = new Date(adherent.dateNaissance);
+  const date2 = new Date();
+  const date = date1.getFullYear() - date2.getFullYear();
+  console.log("52525255522", date);
+  console.log((date1.getTime() - date2.getTime()) / 3,154e+7);
+  console.log(Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24)));
+  if((Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24))) >= 9130 
+  && adherent.qualiteAssure.code === "ENFANT") {
+    this.addMessage('error', 'Date de naissance invalide',
+                  'L\'enfant ne peut pas avoir plus de 25ans');
+    adherent.dateEntree = null;
+    adherent.dateNaissance = null;
+    adherent.genre = null;
+    adherent.qualiteAssure = null;
+  }
+  
 }
 
 getStatistique(police: Police): void {

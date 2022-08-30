@@ -2887,7 +2887,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" (onChange)="controleDateNaissanceEnfant(rowData)" optionLabel="libelle" placeholder="Select Make"
+                                    <p-dropdown [options]="membreList" [(ngModel)]="rowData.qualiteAssure" (onChange)="verifieDate(rowData)" (onChange)="controleDateNaissanceEnfant(rowData)" optionLabel="libelle" placeholder="Select Make"
                                                 [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
