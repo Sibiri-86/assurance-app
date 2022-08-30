@@ -1,0 +1,2009 @@
+<div class="p-fluid">
+    <p-tabView (onChange)="onTabChange($event)">
+        <p-tabPanel header="INFOS" leftIcon="pi pi-info" tooltip="Information sur la police" [style]="{'width': '100%'}">
+            <!-- <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-4">
+                    <label for="fraisBadge">Exercice</label>
+                    <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                    </p-dropdown>
+                </div>
+            </div> -->
+
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" [transitionOptions]="'400ms'">
+                <form [formGroup]="lastExerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet de l'exercice</label>
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance de l'exercice</label>
+                            <input class="exo" id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+
+            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                <form [formGroup]="exerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="debut">Date d'effet <sup style="color: red; size: 1.7em">*</sup></label>
+                            <!-- <p-calendar id="debut" [showIcon]="true" formControlName="debut"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar> -->
+                            <input id="debut"   type="date" name="dateSoins" formControlName="debut" pInputText>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="dateIncorparation">Type durée <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDuree" dataKey="id" [filter]="true" showClear="true" id="typeDuree"
+                                        [options]="typeDuree" formControlName="typeDuree" (onChange)="changeTypeDuree()"
+                                        placeholder="Select" optionLabel="label"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="nom">Durée <sup style="color: red; size: 1.7em"></sup></label>
+                            <input id="durée" type="text" required formControlName="duree" pInputText (blur)="onRefreshDateEcheanceForGroupe()"/>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="fin" type="date" formControlName="fin" pInputText >
+                           
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+                <form [formGroup]="myForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
+                            <input id="numeroGarant" type="number" min="0" formControlName="numeroGarant" pInputText>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="dateAvenant">Date de l'avenant <sup></sup></label>
+                            <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
+                            
+                        </div>
+                        <!--<div class="p-field p-col-6">
+                            <label for="dateEffetA">Date d'effet du renouvellement</label>
+                            <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateEcheance">Date d'échéance</label>
+                            <p-calendar id="dateEcheance" [showIcon]="true" formControlName="dateEcheance"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>-->
+                        <div class="p-field p-col-4">
+                            <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
+                                        [options]="demandeursList" formControlName="demandeur"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Motif <sup></sup></label>
+                            <input id="Observation" type="text" required formControlName="observation" pInputText/>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup></sup></label>
+                            <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisBadges">Total Frais Badges <sup></sup></label>
+                            <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                           
+                            <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                        dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                        appendTo="body"></p-calendar>  
+                        </div>
+                    </div>
+                </form>
+                <p-fieldset legend="RECAPITULATIF" toggleable="true">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Garant</label>
+                        <div>
+                            <span>{{police.garant.nom}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Intermediaire</label>
+                        <div>
+                            <span>{{police.intermediaire.nom}}</span>
+                        </div>
+                    </div>
+
+                   
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Territorialité</label>
+                        <div>
+                            <span *ngFor="let t of police.territorialite">{{t.libelle}} </span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="dateEffet">Date effet</label>
+                        <div>
+                            <span>{{police.dateEffet}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Date échéance</label>
+                        <div>
+                            <span>{{police.dateEcheance}}</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="firstname2">Nom du souscripteur</label>
+                        <div>
+                            <span>{{police.nom}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact</label>
+                        <div>
+                            <span>{{police.contact}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Adresse email</label>
+                        <div>
+                            <span>{{police.adresseEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="adressePostale">Adresse postale</label>
+                        <div>
+                            <span>{{police.adressePostale}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur activite</label>
+                        <div>
+                            <span>{{police.secteurActivite.libelle}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numéro IFU</label>
+                        <div>
+                            <span>{{police.numeroIfu}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Personne ressource</label>
+                        <div>
+                            <span>{{police.personneRessource}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Contact personne ressource</label>
+                        <div>
+                            <span>{{police.contactPersonneRessource}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="refPolice">Reference police</label>
+                        <div>
+                            <span>{{police.referencePolice}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Rccm</label>
+                        <div>
+                            <span>{{police.rccm}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Numero police</label>
+                        <div>
+                            <span>{{police.numero}}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Secteur</label>
+                        <div>
+                            <span>{{police.secteur.libelle}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-4">
+                        <label for="fraisAccessoire">Frais accessoire</label>
+                        <div>
+                            <span>{{police?.fraisAccessoire | formatTableValue: 'number':true}}</span>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="fraisBadge">Frais badge</label>
+                        <div>
+                            <span>{{police?.fraisBadge | formatTableValue: 'number':true}}</span>
+                        </div>
+                    </div>
+                </div>
+                </p-fieldset>
+
+                <p-fieldset legend="Enregistrement des infos de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                    
+                    
+                        <div class="p-grid p-justify-center">
+                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                            <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pTooltip="Enregistrer les infos de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantInfo()"></button>
+                        </div>
+
+                </p-fieldset>
+
+        </p-tabPanel>
+        <p-tabPanel *ngIf="etat ==='CREATE'" [disabled]="myForm.invalid || !avenantArrivedId"  [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond">
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <p-table #dt [value]="groupeListes" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [rowHover]="true" dataKey="id"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}" />
+                            </span>
+
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th pSortableColumn="numeroGroupe" style="width: 4rem">N° <p-sortIcon field="numero.groupe"></p-sortIcon></th>
+                                <th pSortableColumn="nom">Libelle <p-sortIcon field="garant.nom"></p-sortIcon></th>
+                                <th pSortableColumn="intermediaire" style="width: 12rem">Taux <p-sortIcon field="intermediaire.nom"></p-sortIcon></th>
+                                <th pSortableColumn="numero">Duree<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="width: 12rem">Territorialite <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-groupe>
+                            <tr>
+                                <td>
+                                    <p-tableCheckbox [value]="groupe"></p-tableCheckbox>
+                                </td>
+                                <td><span class="p-column-title">{{groupe.numeroGroupe}}</span>
+                                <td><span class="p-column-title">{{groupe.libelle}}</span></td>
+                                <td><span class="p-column-title">{{groupe.taux.taux}}</span></td>
+                                <td><span class="p-column-title">{{groupe.duree}}</span></td>
+                                <td><span class="p-column-title" *ngFor="let t of groupe.territorialite">{{t.libelle}} </span></td>
+                                <td class="p-text-left">
+                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="groupeSelected = groupe; loadAherantByGroupe()"></button>
+                                    <button pButton  pRipple icon="pi pi-eye" pTooltip="voir adherent" class="p-button-rounded p-button-info p-mr-2" (click)="voirAdherent(groupe)"></button>
+                                    <button pButton *ngIf="etat === 'CREATE'"  pRipple icon="pi pi-sort-numeric-up-alt" pTooltip="Barème" class="p-button-rounded p-button-secondary p-mr-2" (click)="loadPlafondConfigBygroupe2(groupe)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{groupeListes ? groupeListes.length : 0 }} groupe(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="p-col-12">
+                    <!--<app-avenant-groupe [obj]="obj" (groupeEvent)="obj = $event"></app-avenant-groupe>-->
+                    <p-fieldset legend="Caracteristique" toggleable="true">
+                        <form [formGroup]="groupeForm">
+                            <h5></h5>
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col-4">
+                                    <label for="firstname2">Groupe</label>
+                                    <input id="nom" type="text" formControlName="libelle" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'nom'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="description">Description</label>
+                                    <input id="description" type="text" formControlName="description" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'description'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="lastname2">Taux de couverture</label>
+                                    <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true"
+                                                [options]="tauxList" formControlName="taux" placeholder="Select"
+                                                optionLabel="taux"></p-dropdown>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'taux'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="firstname2">Territorialité</label>
+                                    <p-multiSelect dataKey="id" inputId="territorialite" [filter]="true"
+                                                   showClear="true" [options]="territorialiteList"
+                                                   formControlName="territorialite" placeholder="Select"
+                                                   optionLabel="libelle"></p-multiSelect>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'territorialite'">
+                                    </app-entity-validation>
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <label for="dateEffet">Date effet</label>
+                                    <!--<input type="date" class="form-control" formControlName="dateEffet" id="dateEffet" required style="width: 100%">-->
+                                    <input id="dateEffet" type="date" formControlName="dateEffet" pInputText >
+                                    
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'dateEffet'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="firstname2">Type durée</label>
+                                    <p-dropdown inputId="typeDuree" [filter]="true"
+                                                showClear="true" (onChange)="changeTypeDuree()" [options]="typeDuree"
+                                                [autoDisplayFirst]="false"
+                                                formControlName="typeDuree" placeholder="Select"></p-dropdown>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="policeForm" [entityField]="'typeDuree'">
+                                    </app-entity-validation>
+                                </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="lastname2">Durée</label>
+                                    <input id="lastname2" type="number" (input)="onRefreshDateEcheanceForGroupe()"
+                                           formControlName="duree" pInputText>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'duree'">
+                                    </app-entity-validation>
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <label for="lastname2">Date d'écheance</label>
+                                    <input id="dateEcheance" type="date" formControlName="dateEcheance" pInputText >
+                                    <!--<input type="date" formControlName="dateEcheance"
+                                           style="width: 100%; height: 2.5em">-->
+                                    <!--<p-calendar [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
+                                    <app-entity-validation [entityValidations]="entityValidations"
+                                                           [formGroup]="groupeForm" [entityField]="'dateEcheance'">
+                                    </app-entity-validation>-->
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <label for="lastname2">Commune</label>
+                                    <p-dropdown dataKey="id" id="commune" inputId="commune" [filter]="true"
+                                                showClear="true" [options]="communeList" formControlName="commune"
+                                                optionLabel="libelle"></p-dropdown>
+                                </div>
+                            </div>
+                        </form>
+                    </p-fieldset>
+                </div>
+                <div class="p-col-12">
+                    <p-fieldset legend="Parametrage prime" toggleable="true">
+                        <form [formGroup]="primeForm">
+                            <h5></h5>
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col-4">
+                                    <label for="typePrime">Type de prime /période</label>
+                                    <p-dropdown dataKey="id" id="typePrime" inputId="typePrime" [filter]="true"
+                                                showClear="true" [options]="typePrimeList" formControlName="prime"
+                                                placeholder="selectionnez"
+                                                optionLabel="libelle" (onChange)="changePrime($event)"></p-dropdown>
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PECE'">
+                                    <label for="montantPrimeEmploye1">Prime par employé </label>
+                                    <input id="montantPrimeEmploye1" type="text" pInputText
+                                           formControlName="primeEmploye" 
+                                           [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true">
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PF'">
+                                    <label for="primeFamille">Prime par famille</label>
+                                    <input id="primeFamille" type="text" pInputText 
+                                           [value]="primeForm.get('primeFamille').value | formatTableValue: 'number':true"
+                                           formControlName="primeFamille">
+                                </div>
+
+                                <!-- <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PA'">
+                                    <label for="montantPrimeAdulte">Prime par adulte</label>
+                                    <input id="montantPrimeAdulte" type="text" pInputText required="true" formControlName="primeAdulte"
+                                           [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true">
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime.code === 'PC'">
+                                    <label for="montantPrimeConjoint">Prime par conjoint</label>
+                                    <input id="montantPrimeConjoint" type="text" pInputText
+                                           formControlName="primeConjoint" required="true"
+                                           [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true">
+                                </div> -->
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PAE'">
+                                    <label for="montantPrimeEnfant">Prime par enfant</label>
+                                    <input id="montantPrimeEnfant" type="text"  pInputText formControlName="primeEnfant"
+                                           [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true">
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PP'">
+                                    <label for="montantPrimePersonne">Prime par personne</label>
+                                    <input id="montantPrimePersonne" type="text" pInputText
+                                           formControlName="primePersonne" 
+                                           [value]="primeForm.get('primePersonne').value | formatTableValue: 'number':true">
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PE'">
+                                    <label for="montantPrimeEmploye">Prime par employé</label>
+                                    <input id="montantPrimeEmploye" type="text" pInputText
+                                           formControlName="primeEmploye" 
+                                           [value]="primeForm.get('primeEmploye').value | formatTableValue: 'number':true">
+                                </div>
+
+                                
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PECE'">
+                                    <label for="montantPrimeEnfant1">Prime par enfant</label>
+                                    <input id="montantPrimeEnfant1" type="text"  pInputText formControlName="primeEnfant"
+                                           [value]="primeForm.get('primeEnfant').value | formatTableValue: 'number':true">
+                                </div>
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PAE'">
+                                    <label for="montantPrimeAdulte1">Prime par adulte </label>
+                                    <input id="montantPrimeAdulte1" type="text"  pInputText formControlName="primeAdulte"
+                                           [value]="primeForm.get('primeAdulte').value | formatTableValue: 'number':true">
+                                </div>
+                                
+
+                                <div class="p-field p-col-4" *ngIf="selectedTypePrime?.code === 'PECE'">
+                                    <label for="montantPrimeConjoint1">Prime par conjoint </label>
+                                    <input id="montantPrimeConjoint1"  type="text" pInputText
+                                           formControlName="primeConjoint"
+                                           [value]="primeForm.get('primeConjoint').value | formatTableValue: 'number':true">
+                                </div>
+                            </div>
+                        </form>
+                    </p-fieldset>
+                    <!-- <div class="p-grid">
+                        <div class="p-col-4"></div>
+                        <div class="p-col-2">
+                            <button pButton pRipple *ngIf="etat=='CREATE'" label="Annuler la modification" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
+                        </div>
+                        <div class="p-col-2">
+                            <button type="button" pButton pRipple *ngIf="etat=='CREATE'"
+                            label="Valider la modification" [disabled]="primeForm?.invalid || groupeForm?.invalid" class="p-button-success" icon="pi pi-check" (click)="validerGroupe()"></button>
+                        </div>
+                    </div> -->
+
+                    <p-fieldset legend="Enregistrement des groupes de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                    
+                    
+                        <div class="p-grid p-justify-center">
+                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                            <button type="button" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
+                        </div>
+
+                </p-fieldset>
+                </div>
+            </div>
+
+
+
+
+            <!-- Plafond pop-up -->
+            <p-dialog   [maximizable]="true"    [(visible)]="plafondBoolean" header="Plafond" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}" (onHide)="fermerPlafond()">
+                <p-table #dtConfigurationPlafond [value]="plafondFamilleActePlafongConfig" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th>Famille acte</th>
+                            <th>Montant plafonné / acte</th>
+                            <th>Montant plafonné / periode</th>
+                            <th>Periode</th>
+                            <th>Nombre acte</th>
+                            <th>Taux de couverture</th>
+                            <th>Domaine</th>
+                            <th>Date effet</th>
+                            <th>Status</th>
+                            <th>
+                                <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                                         icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+                        <tr [pEditableRow]="plafond" class="colorZone">
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.garantie?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <!--
+                            <td>{{plafond.montantPlafond}}</td>
+                            -->
+                            <td>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs" inputId="integeronly" [(ngModel)]="plafond.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        <!--<input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.montantPlafond | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="plafond.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.dimensionPeriode?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs1" inputId="integeronly" [(ngModel)]="plafond.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        <!--<input pInputText type="text" [(ngModel)]="plafond.nombre">-->
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.nombre | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
+                                                    [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.taux?.taux}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                                       [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        <span *ngFor="let d of plafond.domaine">
+                                            {{d.libelle}}
+                                        </span>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
+                                        <!-- <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet" (onSelect)="changeFamilleActeDate(plafond)" 
+                                            dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
+                                    </ng-template>
+                                    <ng-template pTemplate="output" >
+                                        {{plafond?.dateEffet | formatTableValue : 'date'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output" *ngIf="plafond.etat">
+                                        {{plafond?.etat}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td style="text-align:center">
+                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
+                        <tr >
+                            <td colspan="11">
+                                <div class="">
+                                    <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                            <tr  [pEditableRow]="acte" class="colorZoneActe">
+
+                                <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="acte.listeActe" [(ngModel)]="acte.acte" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.acte?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.montantPlafond | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="acte.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.dimensionPeriode?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.nombre">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.nombre | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="tauxList" [(ngModel)]="acte.taux" optionLabel="taux" placeholder="Select taux"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.taux?.taux}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine"
+                                                           [style]="{'width':'100%'}"></p-multiSelect>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <span *ngFor="let d of acte.domaine">
+                                                {{d.libelle}}
+                                            </span>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  (onSelect)="changeDateSousActe(acte)"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.dateEffet | formatTableValue : 'date'}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="typeEtat" [(ngModel)]="acte.etat" placeholder="Select Make"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output" *ngIf="acte.etat">
+                                            {{acte?.etat}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td style="text-align:center">
+                                    <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationActe(acte, ri, ri1)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-acte>
+                            <tr>
+                                <td colspan="11">
+                                    <div class="">
+                                        <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
+                                    <td></td>
+                                    <td>{{sousActe?.sousActe?.libelle}}</td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs2" inputId="integeronly" [(ngModel)]="sousActe.montantPlafondParActe" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs3" inputId="integeronly" [(ngModel)]="sousActe.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/acte" required>-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.montantPlafond | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.dimensionPeriode?.libelle}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs4" inputId="integeronly" [(ngModel)]="sousActe.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.nombre">-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.nombre | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.taux?.taux}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                                               [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                <span *ngFor="let d of sousActe.domaine">
+                                                    {{d.libelle}}
+                                                </span>
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.dateEffet | formatTableValue : 'date'}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output" *ngIf="sousActe.etat">
+                                                {{sousActe?.etat}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td style="text-align:center">
+                                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                <p-fieldset legend="Enregistrement des plafond de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                                    
+                                    
+                    <div class="p-grid p-justify-center">
+                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <button type="button" [disabled]="plafondFamilleActePlafongConfig?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
+                    </div>
+
+                </p-fieldset>
+
+            </p-dialog>
+
+            <p-dialog   [maximizable]="true"    [(visible)]="displayDialogFormAdherent" header="Adherent et famille" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+                <ng-template pTemplate="content">
+                    <div class="">
+                        <div class="card">
+                            <p-table #dt [value]="adherentList" [rows]="10" [paginator]="true" [globalFilterFields]="['numero', 'prenom', 'nom', 'matriculeGarant', 'matriculeSouscripteur']"
+                                     [rowHover]="true" dataKey="id"
+                                     styleClass="p-datatable-customers"
+                                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '20%'}"/>
+                    </span>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 3rem">
+                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                        </th>
+                                        <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold; min-width:100px;" >Matricule<p-sortIcon field="numero"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="matricule" >Mle.<p-sortIcon field="matricule"></p-sortIcon></th>-->
+                                        <!-- <th pSortableColumn="matriculeGarant" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Garant<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                                        <th pSortableColumn="matriculeSouscripteur" style="font-size: 12px !important; font-weight: bold; min-width:200px;" >Matricule Souscripteur<p-sortIcon field="matriculeSouscripteur"></p-sortIcon></th> -->
+                                        <th pSortableColumn="nom" style="min-width:200px" >Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                                        <th pSortableColumn="prenom" style="min-width:200px" >Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
+                                        <th pSortableColumn="numero" style="min-width:200px" >Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="lieuNaissance" style="width: 12rem" >Lieu de naissance <p-sortIcon field="lieuNaissance"></p-sortIcon></th>-->
+                                        <th pSortableColumn="numeroTelephone" style="min-width:200px"  >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                                        <!--<th pSortableColumn="adresse" style="width: 10rem">Adresse<p-sortIcon field="adresse"></p-sortIcon></th>-->
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-adherent>
+                                    <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
+                                        <td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>
+                                        <td style="min-width:100px"><span class="p-column-title">{{adherent.numero}}</span></td>
+                                        <!-- <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeGarant}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.matriculeSouscripteur}}</span></td> -->
+                                        <!--<td><span class="p-column-title">{{adherent.groupe?.numero}}</span></td>-->
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.nom}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.prenom}}</span></td>
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
+                                        <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                                        <td style="min-width:200px"><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
+                                        <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        {{adherentList ? adherentList.length : 0 }} assuré(s).
+                                    </div>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dialog>
+        </p-tabPanel>
+       <!--  *ngIf="etat ==='CREATE'" [disabled]="myForm.invalid || !avenantArrivedId" -->
+        <!-- <p-tabPanel  [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
+
+            <ng-template pTemplate="content">
+                <div class="p-grid">
+                    <div class="p-col-4">
+                        <label class="p-fieldset-content">Choisir le Groupe</label>
+                        <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
+                                    [filter]="true" filterBy="libelle" selected="selectedGroupeD" [showClear]="true"
+                                    placeholder="Choisir un groupe"
+                                    (onChange)="loadPlafondConfigBygroupe2()" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+               
+                <p-table #dtConfigurationPlafond [value]="plafondFamilleActePlafongConfig" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th>Famille acte</th>
+                            <th>Montant plafonné / acte</th>
+                            <th>Montant plafonné / periode</th>
+                            <th>Periode</th>
+                            <th>Nombre acte</th>
+                            <th>Taux de couverture</th>
+                            <th>Domaine</th>
+                            <th>Date effet</th>
+                            <th>Status</th>
+                            <th>
+                                <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                                         icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+                        <tr [pEditableRow]="plafond" class="colorZone">
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}" (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.garantie?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            
+                            <td>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs" inputId="integeronly" [(ngModel)]="plafond.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.montantPlafond | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="plafond.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.dimensionPeriode?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs1" inputId="integeronly" [(ngModel)]="plafond.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond.nombre | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
+                                                    [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.taux?.taux}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                                       [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        <span *ngFor="let d of plafond.domaine">
+                                            {{d.libelle}}
+                                        </span>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="output" >
+                                        {{plafond?.dateEffet | formatTableValue : 'date'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output" *ngIf="plafond.etat">
+                                        {{plafond?.etat}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td style="text-align:center">
+                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
+                        <tr >
+                            <td colspan="11">
+                                <div class="">
+                                    <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                            <tr  [pEditableRow]="acte" class="colorZoneActe">
+
+                                <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="acte.listeActe" [(ngModel)]="acte.acte" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.acte?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.montantPlafond | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="acte.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.dimensionPeriode?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.nombre">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.nombre | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="tauxList" [(ngModel)]="acte.taux" optionLabel="taux" placeholder="Select taux"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.taux?.taux}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine"
+                                                           [style]="{'width':'100%'}"></p-multiSelect>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <span *ngFor="let d of acte.domaine">
+                                                {{d.libelle}}
+                                            </span>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  (onSelect)="changeDateSousActe(acte)"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte.dateEffet | formatTableValue : 'date'}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="typeEtat" [(ngModel)]="acte.etat" placeholder="Select Make"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output" *ngIf="acte.etat">
+                                            {{acte?.etat}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td style="text-align:center">
+                                    <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationActe(acte, ri, ri1)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-acte>
+                            <tr>
+                                <td colspan="11">
+                                    <div class="">
+                                        <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
+                                    <td></td>
+                                    <td>{{sousActe?.sousActe?.libelle}}</td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs2" inputId="integeronly" [(ngModel)]="sousActe.montantPlafondParActe" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.montantPlafondParActe | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs3" inputId="integeronly" [(ngModel)]="sousActe.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.montantPlafond | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.dimensionPeriode?.libelle}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs4" inputId="integeronly" [(ngModel)]="sousActe.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.nombre | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.taux?.taux}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                                               [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                <span *ngFor="let d of sousActe.domaine">
+                                                    {{d.libelle}}
+                                                </span>
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe.dateEffet | formatTableValue : 'date'}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output" *ngIf="sousActe.etat">
+                                                {{sousActe?.etat}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td style="text-align:center">
+                                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                <p-fieldset legend="Enregistrement des plafond de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                                    
+                                    
+                    <div class="p-grid p-justify-center">
+                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <button type="button" [disabled]="plafondFamilleActePlafongConfig?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
+                    </div>
+
+                </p-fieldset>
+                </ng-template>
+        </p-tabPanel> -->
+
+        <!-- Reproduction des plafonds pour la visualisation et la modification  -->
+
+        <p-tabPanel *ngIf="etat !=='CREATE'" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
+
+            <ng-template pTemplate="content">
+                <div class="p-grid">
+                    <div class="p-col-4">
+                        <label class="p-fieldset-content">Choisir le Groupe</label>
+                        <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
+                                    [filter]="true" filterBy="libelle" selected="selectedGroupeD" [showClear]="true"
+                                    placeholder="Choisir un groupe"
+                                    (onChange)="loadPlafondConfigBygroupe()" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <!--<div class="p-grid p-formgroup-inline">
+                    <div class="p-field">
+                        <button [disabled]="!plafondFamilleActeConstruct || !plafondFamilleActeConstruct.length" pButton pRipple type="button" (click)="validerRecap()" label="Valider"></button>
+                    </div>
+                    <div class="p-field">
+                        <button pButton pRipple type="button" (click)="viderRecap()" label="Reinitialiser"></button>
+                    </div>
+                </div>-->
+                <p-table #dtConfigurationPlafond [value]="historiquePlafondFamilleActePlafongConfig" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th>Famille acte</th>
+                            <th>Montant plafonné / acte</th>
+                            <th>Montant plafonné / periode</th>
+                            <th>Periode</th>
+                            <th>Nombre acte</th>
+                            <th>Taux de couverture</th>
+                            <th>Domaine</th>
+                            <th>Date effet</th>
+                            <th>Status</th>
+                            <th>
+                                <!-- <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
+                                         icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button> -->
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri1="rowIndex" let-expanded="expanded" >
+                        <tr [pEditableRow]="plafond" class="colorZone">
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="garanties" [(ngModel)]="plafond.garantie" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.plafondGroupeFamilleActe?.garantie?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <!--
+                            <td>{{plafond.montantPlafond}}</td>
+                            -->
+                            <td>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs" inputId="integeronly" [(ngModel)]="plafond.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        <!--<input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.plafondGroupeFamilleActe?.montantPlafond | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="plafond.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.plafondGroupeFamilleActe?.dimensionPeriode?.libelle}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber id="fraisBadgetAccessoirs1" inputId="integeronly" [(ngModel)]="plafond.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                        <!--<input pInputText type="text" [(ngModel)]="plafond.nombre">-->
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.plafondGroupeFamilleActe?.nombre | formatTableValue: 'number':true}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
+                                                    [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{plafond?.plafondGroupeFamilleActe?.taux?.taux}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
+                                                       [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        <span *ngFor="let d of plafond?.plafondGroupeFamilleActe?.domaine">
+                                            {{d.libelle}}
+                                        </span>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input id="fin" type="date" [(ngModel)]="plafond.dateEffet" pInputText (change)="changeFamilleActeDate(plafond)">
+                                        <!-- <p-calendar  [showIcon]="true" [(ngModel)]="plafond.dateEffet" (onSelect)="changeFamilleActeDate(plafond)" 
+                                            dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
+                                    </ng-template>
+                                    <ng-template pTemplate="output" >
+                                        {{plafond?.plafondGroupeFamilleActe?.dateEffet | formatTableValue : 'date'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"
+                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output" *ngIf="plafond?.plafondGroupeFamilleActe?.etat">
+                                        {{plafond?.plafondGroupeFamilleActe?.etat}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+
+                            <td style="text-align:center">
+                                <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
+                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button> -->
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
+                        <tr >
+                            <td colspan="11">
+                                <div class="">
+                                    <p-table [value]="plafond.historiquePlafondGroupeActes" dataKey="id" editMode="row">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                            <tr  [pEditableRow]="acte" class="colorZoneActe">
+
+                                <td> 
+                                    <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="acte.plafondGroupeActe" [(ngModel)]="acte.acte" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.acte?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.montantPlafond" [value]="acte.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.montantPlafond | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="acte.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.dimensionPeriode?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="acte.nombre">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.nombre | formatTableValue: 'number':true}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="tauxList" [(ngModel)]="acte.taux" optionLabel="taux" placeholder="Select taux"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.taux?.taux}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="acte.domaine" optionLabel="libelle" placeholder="Select domaine"
+                                                           [style]="{'width':'100%'}"></p-multiSelect>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            <span *ngFor="let d of acte?.plafondGroupeActe?.domaine">
+                                                {{d.libelle}}
+                                            </span>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-calendar  [showIcon]="true" [(ngModel)]="acte.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{acte?.plafondGroupeActe?.dateEffet | formatTableValue : 'date'}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="typeEtat" [(ngModel)]="acte.etat" placeholder="Select Make"
+                                                        [style]="{'width':'100%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output" *ngIf="acte?.plafondGroupeActe?.etat">
+                                            {{acte?.plafondGroupeActe?.etat}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td style="text-align:center">
+                                    <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationActe(acte)"></button>
+                                    <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationActe(acte, ri, ri1)"></button> -->
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-acte>
+                            <tr>
+                                <td colspan="11">
+                                    <div class="">
+                                        <p-table [value]="acte?.listeSousActe" dataKey="id" editMode="row">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
+                                    <td></td>
+                                    <td>{{sousActe?.plafondGroupeSousActe?.sousActe?.libelle}}</td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs2" inputId="integeronly" [(ngModel)]="sousActe.montantPlafondParActe" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafondParActe" [value]="sousActe.montantPlafondParActe | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.montantPlafondParActe | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs3" inputId="integeronly" [(ngModel)]="sousActe.montantPlafond" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.montantPlafond" [value]="sousActe.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/acte" required>-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.montantPlafond | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="sousActe.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.dimensionPeriode?.libelle}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber id="fraisBadgetAccessoirs4" inputId="integeronly" [(ngModel)]="sousActe.nombre" [style]="{'width': '100%'}" placeholder="plafond/periode"></p-inputNumber>
+                                                <!--<input pInputText type="text" [(ngModel)]="sousActe.nombre">-->
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.nombre | formatTableValue: 'number':true}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.taux?.taux}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="sousActe.domaine" optionLabel="libelle"
+                                                               [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                <span *ngFor="let d of sousActe?.plafondGroupeSousActe?.domaine">
+                                                    {{d.libelle}}
+                                                </span>
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-calendar  [showIcon]="true" [(ngModel)]="sousActe.dateEffet"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{sousActe?.plafondGroupeSousActe?.dateEffet | formatTableValue : 'date'}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-dropdown [options]="typeEtat" [(ngModel)]="sousActe.etat" placeholder="Select status"
+                                                            [style]="{'width':'100%'}"></p-dropdown>
+                                            </ng-template>
+                                            <ng-template pTemplate="output" *ngIf="sousActe?.plafondGroupeSousActe?.etat">
+                                                {{sousActe?.plafondGroupeSousActe?.etat}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+
+                                    <td style="text-align:center">
+                                        <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(sousActe)"></button>
+                                        <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(sousActe, ri, ri1)"></button> -->
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                </div>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+                <p-fieldset legend="Enregistrement des plafond de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                                    
+                                    
+                    <div class="p-grid p-justify-center">
+                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <button type="button" [disabled]="plafondFamilleActes?.length === 0 || plafondGroupeActes?.length === 0 || plafondGroupeSousActes?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
+                    </div>
+
+                </p-fieldset>
+                </ng-template>
+        </p-tabPanel>
+
+        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'" header="INCORPORATION" leftIcon="pi pi-user-plus" tooltip="INCORPORATION">
+        <div *ngIf="etat !=='VIEW'">
+            <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length > 0 || etat ==='VIEW'" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police"
+                 (adherentFamilleEvent)="createAvenantIncorporation($event)" [groupesInput]="groupeListes"></app-avenant-incorporation-renouvellement>
+        </div>
+
+                 <!-- Affichage de la liste des personnees incorporées -->
+            <div class="p-fluid p-formgrid p-grid" *ngIf="etat ==='VIEW'">
+                <div class="p-field p-col-12">
+                            <app-renouvellement-adherent-list [historiqueAvenantAdherants]="historiqueAveantAdherantIncorp" *ngIf="historiqueAveantAdherantIncorp?.length > 0"
+                            (historiqueAvenantAdherantList)="listeModifier($event)" [statut]="etat">
+                            </app-renouvellement-adherent-list>
+        
+                </div>
+            </div>
+            <!-- <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement> -->
+        </p-tabPanel>
+        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'"  header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
+            <div *ngIf="etat !=='VIEW'">
+                <app-avenant-retrait-renouvellement [exerciceRevenu]="exerciceRev"  [isRenouv]="true" [police]="police" (adherentFamilleEvent)="createAvenantRetrait($event)"
+                [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="avenantD">
+                </app-avenant-retrait-renouvellement>
+            </div>
+
+            <!-- Affichage de la liste des personnees rétirées -->
+            <div class="p-fluid p-formgrid p-grid" *ngIf="etat ==='VIEW'">
+                <div class="p-field p-col-12">
+                            <app-renouvellement-adherent-list [historiqueAvenantAdherants]="historiqueAveantAdherantRetr" *ngIf="historiqueAveantAdherantRetr?.length > 0"
+                            (historiqueAvenantAdherantList)="listeModifier($event)" [statut]="etat">
+                            </app-renouvellement-adherent-list>
+        
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+            <app-groupe-ajout [police] = "police"  [exerciceRevenu] = "exerciceRevenu"  [avenantIdEnv] = "avenantIdEnv" [groupeListes]="groupeListes"></app-groupe-ajout>
+          </p-tabPanel>
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+
+            <app-adherent-basculer [police] = "police" [exerciceRevenu] = "exerciceRevenu"  [groupeListes]="groupeListes" ></app-adherent-basculer>
+
+        </p-tabPanel>
+        <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
+            <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
+            <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                   
+
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
+                    </span>
+                    
+                        <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedFilter"
+                                    [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" (onChange)="loadAdherentFiltertByGroupe()"
+                                   >
+                        </p-dropdown>
+                    </div>
+                    
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>-->
+                        <th style="width: 5rem">Matricule</th>
+                        <th pSortableColumn="groupe" style="width: 7rem">Groupe<p-sortIcon field="matriculeGarant"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="width: 15rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 15rem">Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 5rem" >Genre<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 7rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 5rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                        <th pSortableColumn="numeroTelephone" style="width: 10rem" >Telephone <p-sortIcon field="numeroTelephone"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-adherent>
+                    <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
+                        <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
+                        <td><span class="p-column-title">{{adherent.numero}}</span></td>
+                        <td><span class="p-column-title">{{adherent.groupe?.libelle}}</span></td>
+                        <td><span class="p-column-title">{{adherent.nom | upercase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.prenom | beginLowerCase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.genre?.libelle | upercase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
+                        <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                        <td><span class="p-column-title">{{adherent.numeroTelephone}}</span></td>
+                        <!--<td><span class="p-column-title">{{adherent.adresse}}</span></td>-->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody" let-columns="columns">
+                    <tr style="height:34px">
+                        <div class="loading-text"></div>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="7" style="color: red; font-weight: bold">
+                            Aucun adhérent trouvé !
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{adherantPoliceListActualisee ? adherantPoliceListActualisee.length : 0 }} assurés
+                    </div>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+    <!-- <hr>
+    <div class="p-grid">
+        <div class="p-col-4"></div>
+            <div class="p-col-2">
+                <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+            </div>
+            <div class="p-col-2">
+                <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+            </div>
+    </div> -->
+    <p-fieldset legend="Enregistrement global de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+        <!-- <div class="p-grid p-justify-center"> 
+            <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+        <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+        </div> -->
+
+        <div class="p-grid">
+            <div class="p-col-4"></div>
+                <div class="p-col-2">
+                    <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                </div>
+                <div class="p-col-2">
+                    <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid || !avenantArrivedId" pButton pRipple label="Enregistrer" pTooltip="Enregistrer tout l'avenant" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>
+                </div>
+        </div>
+    </p-fieldset>
+</div>

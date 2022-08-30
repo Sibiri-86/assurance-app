@@ -272,6 +272,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   isAvenantResiliation = false;
   isAvenantSuspension = false;
   isAvenantFacturation = false;
+  isAvenantProrogation = false;
   historiqueAvenantListWithoutActiveList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantListWithoutActiveList: Array<HistoriqueAvenant>;
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
@@ -757,12 +758,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantRenouvellement();
           this.etat = 'CREATE';
       }},
-      /* {label: 'Facturation', icon: 'pi pi-euro', command: () => {
+     {label: 'Prorogation', icon: 'pi pi-euro', command: () => {
           this.initDisplayAvenant();
-          this.isAvenantFacturation = true;
-          this.entete = 'Avenant de Suspension';
-          this.addAvenantFacturation();
-      }}, */
+          this.isAvenantProrogation = true;
+          this.entete = 'Avenant de Prorogation';
+          this.addAvenantProrogation();
+      }},
       {label: 'Suspension', icon: 'pi pi-pause', command: () => {
           this.initDisplayAvenant();
           this.isAvenantSuspension = true;
@@ -1436,6 +1437,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.dissplayavenant = true;
   }
 
+  addAvenantProrogation(): void {
+    this.dissplayavenant = true;
+  }
+
   add(): void {
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(""),
@@ -1618,6 +1623,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.isAvenantRenouvellement = false;
     this.isAvenantSuspension = false;
     this.isAvenantResiliation = false;
+    this.isAvenantProrogation = false;
   }
 
   deValiderPolice(police: Police){

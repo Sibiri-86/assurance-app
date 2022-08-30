@@ -1089,6 +1089,11 @@ export class TierPayantEditionComponent implements OnInit {
             this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
             if(!this.prestationAdd.sort) {
                 this.prestationAdd.sort = Sort.ACCORDE;
+                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+    
+               
+
             }
             
         

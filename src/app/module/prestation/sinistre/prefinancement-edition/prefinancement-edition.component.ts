@@ -887,6 +887,24 @@ findMontantPlafond(event){
     this.prefinancementModel.dateSaisie = new Date();
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
+
+    if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
+
+      myForm.patchValue({
+        sort: Sort.ACCORDE,
+        observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+        montantRembourse: this.montantPlafond1 - this.montantConsomme,
+        montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+      })
+     
+  }/* else {
+    myForm.patchValue({
+      sort: Sort.REJETE,
+      observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de ",
+      montantRembourse: 0,
+      montantRestant:   this.prestationPopForm.get('baseRemboursement').value
+    })
+  } */
     /* executer le controle de la prestation */
    /* this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
     this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
