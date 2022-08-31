@@ -653,7 +653,7 @@ export class AvenantIncorporationComponent implements OnInit{
                     this.myForm.setValue({
                         id: res.id,
                         numero: res.numero,
-                        dateIncorparation: res.dateAvenant,
+                        dateIncorparation: res.dateEffet,
                         dateAvenant: res.dateAvenant,
                         observation: res.observation,
                         demandeur: res.typeDemandeur,

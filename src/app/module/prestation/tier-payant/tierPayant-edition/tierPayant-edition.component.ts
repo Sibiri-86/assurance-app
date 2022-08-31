@@ -286,7 +286,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
-        // this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
+        this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
         this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
@@ -305,7 +305,7 @@ export class TierPayantEditionComponent implements OnInit {
         
                 }
                 if(this.adherentSelected.signeAdherent !=='*') {
-                    if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
+                    if((value.dateSortie === null && value.dateSuspension  !== null) || (value.dateSortie !== null && value.dateSuspension  !== null && new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
                     && new Date(value.dateSortie).getTime() > new Date(this.prestationAdd.dateSoins).getTime())) {
                         this.addMessage('error', 'Assuré(e) non pris en compte',
                         'Cet(te) assuré(e) est  suspendu(e) !!!');
@@ -329,6 +329,13 @@ export class TierPayantEditionComponent implements OnInit {
                           this.prestationAdd.sort = Sort.REJETE;
                           this.prestationAdd.montantRembourse = 0;
                          
+                      }
+
+                      if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                        this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été suspendu(e)";
+                          this.prestationAdd.sort = Sort.REJETE;
+                          this.prestationAdd.montantRembourse = 0;
+            
                       }
                       this.prestationAdd.dateRetrait = new Date(this.adherentSelected.dateSortie);
                      
