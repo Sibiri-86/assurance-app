@@ -214,7 +214,7 @@
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="garanties" [(ngModel)]="rowData.garantie" optionLabel="libelle" placeholder="Select Famille Acte"
-                                                        [style]="{'width':'100%'}" (onChange)="changeGarantie($event, ri)"></p-dropdown>
+                                                        [style]="{'width':'100%'}" (onChange)="changeGarantie($event, ri); changeDomaine(rowData)"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output" *ngIf="rowData.garantie">
                                             {{rowData?.garantie.libelle}}

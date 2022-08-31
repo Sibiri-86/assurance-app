@@ -1721,6 +1721,16 @@ export class AvenantComponent implements OnInit, OnDestroy {
         // this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
+
+      case TypeHistoriqueAvenant.PROROGATION: {
+        this.policeItem = avenant.police;
+        this.initDisplayAvenant();
+        this.isAvenantProrogation = true;
+        this.addAvenant();
+        this.entete = 'Avenant de prorogation'.toUpperCase();
+        this.etat = 'VIEW';
+        break;
+      }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
         this.viewAvenantAffaireNouvelle(avenant, avenant.typeHistoriqueAvenant);
         this.etat = 'VIEW';
@@ -2000,6 +2010,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
     ];
   }
 
+  printAvenantProrogation(historiqueAvenant: HistoriqueAvenant) {
+    this.typeAvenants = [
+      {label: 'Avenant de prorogation', icon: 'pi pi-print', command: ($event) => {
+          this.report.typeReporting = TypeReport.AVENANT_PROROGATION;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }},
+      {label: 'Facture de prorogation', icon: 'pi pi-print', command: () => {
+          this.report.typeReporting = TypeReport.FACTURE_INCORP;
+          this.report.historiqueAvenant = historiqueAvenant;
+          console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+          this.store.dispatch(featureAction.FetchReport(this.report));
+        }}
+    ];
+  }
+
   printAvenantResiliation(historiqueAvenant: HistoriqueAvenant) {
     this.typeAvenants = [
       {label: 'Avenant de résiliation', icon: 'pi pi-print', command: ($event) => {
@@ -2075,6 +2102,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
       case TypeHistoriqueAvenant.RENOUVELLEMENT: {
         this.printAvenantRenouvellement(historiqueAvenant);
+        break;
+      }
+      case TypeHistoriqueAvenant.PROROGATION: {
+        this.printAvenantProrogation(historiqueAvenant);
         break;
       }
       case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
@@ -2557,6 +2588,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
       case TypeHistoriqueAvenant.MODIFICATION:
         return true;
       case TypeHistoriqueAvenant.RENOUVELLEMENT:
+        if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
+          return true;
+        }
+        return false;
+        case TypeHistoriqueAvenant.PROROGATION:
         if (historiqueAvenant.historiqueAvenantPrimes.length > 0) {
           return true;
         }

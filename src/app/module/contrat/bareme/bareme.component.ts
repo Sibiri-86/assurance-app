@@ -487,9 +487,14 @@ export class BaremeComponent implements OnInit, OnDestroy {
   fermerConfigurationPlafond() {
     this.displayPrevisualiserParametrage = false;
   }
+  changeDomaine(rowData: PlafondFamilleActe) {
+
+    rowData.domaine = [];
+  }
   
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
+  garantie.value.domaine = [];
   this.plafondSousActe = [];
   this.displayActe = true;
   if (this.plafondActe.length === 0){

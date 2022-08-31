@@ -65,6 +65,7 @@ export enum TypeHistoriqueAvenant {
     AFAIRE_NOUVELLE = 'AFAIRE_NOUVELLE',
     RESILIATION = 'RESILIATION',
     SUSPENSION = 'SUSPENSION',
+    PROROGATION = 'PROROGATION',
 }
 
 export interface AdherentPermute {
