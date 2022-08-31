@@ -1559,11 +1559,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
       console.log(this.historiqueAvenant);
       if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
           && this.historiqueAvenant.fileToLoad.size > 0) {
+            console.log('*aaaaaaaaaaaaaaaaaaaa***envoie de fichier 1*zzzzzzzzzzzzzzzzzzz');
         this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenantFile({
           historiqueAvenant: this.historiqueAvenant,
           file: this.historiqueAvenant.fileToLoad
         }));
       } else {
+        console.log('*aaaaaaaaaaaaaaaaaaaa***envoie de fichier 2*zzzzzzzzzzzzzzzzzzz');
         this.store.dispatch(featureActionHistoriqueAdherant.createHistoriqueAvenant(this.historiqueAvenant));
       }
     } else {
@@ -2307,6 +2309,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantAdherentService.findHistoriqueAvenantPrime(rowdata.id).subscribe(
         (res) => {
           this.historiqueAvenantPrimes = res || [];
+          console.log('this.historiqueAvenantPrimes ', this.historiqueAvenantPrimes);
           this.displayDialogPrime = true;
           res.forEach(prime => {
             this.primetotal += prime.primeTotal;

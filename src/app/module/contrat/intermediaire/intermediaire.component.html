@@ -7,7 +7,7 @@
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
 					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addIntermediaire()"></button>
-					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedIntermediaire()" [disabled]="!selectedIntermediaires || !selectedIntermediaires.length"></button>
+					<!-- <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedIntermediaire()" [disabled]="!selectedIntermediaires || !selectedIntermediaires.length"></button> -->
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -32,9 +32,9 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th style="width: 3rem">
+						<!-- <th style="width: 3rem">
 							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-						</th>
+						</th> -->
 						<th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
 						<th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
 						<th pSortableColumn="contact">Contact<p-sortIcon field="contact"></p-sortIcon></th>
@@ -46,9 +46,9 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-intermediaire>
 					<tr>
-						<td>
+						<!-- <td>
 							<p-tableCheckbox [value]="intermediaire"></p-tableCheckbox>
-						</td>
+						</td> -->
 						<td><span class="p-column-title">{{intermediaire.nom}}</span>
 							
 						</td>

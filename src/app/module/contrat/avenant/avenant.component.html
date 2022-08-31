@@ -2141,7 +2141,7 @@
                                             </button>
                                         </div>
                                         <div class="p-col-">
-                                            <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants"
+                                            <p-splitButton label="Quittance" icon="pi pi-print" [model]="typeAvenants" styleClass="p-button-secondary mr-2 mb-2"
                                                            (onDropdownClick)="onTypeHistoriqueAvenantChoose(rowdata.typeHistoriqueAvenant, rowdata)">
                                             </p-splitButton>
                                         </div>
@@ -3704,7 +3704,7 @@
                   </tr>
               </ng-template>
               <ng-template pTemplate="body" let-historiqueAvenantPrime let-editing="editing" let-ri="rowIndex">
-                  <tr [pEditableRow]="historiqueAvenantPrime" *ngIf="historiqueAvenantPrime.groupe" style="font-size: large; height: 5em">
+                  <tr [pEditableRow]="historiqueAvenantPrime" *ngIf="historiqueAvenantPrime.groupe && historiqueAvenantPrime.primeNet" style="font-size: large; height: 5em">
                       <td><span>{{historiqueAvenantPrime.groupe?.libelle}}</span></td>
                       <td><span>{{historiqueAvenantPrime.typePrime?.libelle}}</span></td>
                       <!--<td><span>{{historiqueAvenantPrime.fraisAccessoir | formatTableValue: 'number':true}}</span></td>

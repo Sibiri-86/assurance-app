@@ -384,6 +384,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       description: new FormControl('', [Validators.required]),
       commune: new FormControl('', [Validators.required]),
       dateEcheance: new FormControl(''),
+      numeroGroupe:new FormControl(''),
     });
 
     this.primeForm = this.formBuilder.group({
@@ -1733,6 +1734,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeList = value.slice();
+        console.log('this.groupeList', this.groupeList);
       }
     });
 
@@ -2434,7 +2436,7 @@ changeGarantie(garantie, indexLigne: number) {
       primeEnfant: prm?.primeEnfant,
       primeFamille: prm?.primeFamille,
       primeAdulte: prm?.primeAdulte,
-      // primePersonne: prm?.primePersonne,
+      primePersonne: prm?.primePersonne,
       primeAnnuelle: null
     });
     this.selectedTypePrime = grp.typePrime;
@@ -2469,6 +2471,9 @@ changeGarantie(garantie, indexLigne: number) {
     }
     if (groupe1.prime.primeFamille) {
       groupe1.prime.primeFamille = removeBlanks(groupe1.prime.primeFamille + '');
+    }
+    if (groupe1.prime.primePersonne) {
+      groupe1.prime.primePersonne = removeBlanks(groupe1.prime.primePersonne + '');
     }
     console.log(this.newGroupe);
     this.store.dispatch(featureActionGroupe.updateGroupe(groupe1));
@@ -2590,6 +2595,12 @@ changeGarantie(garantie, indexLigne: number) {
         console.log(this.policeList);
       }
     });
+    this.plafondForm.patchValue({
+      plafondAnnuellePersonne: "",
+      plafondAnnuelleFamille: "",
+      plafondGlobalEvacuationSanitaire: "",
+      plafondGlobalInternationnal: ""
+    });
   }
 
   // calcule des dates d'échéance pour la police
@@ -2697,9 +2708,24 @@ changeGarantie(garantie, indexLigne: number) {
                   }
                 });
               }
-              console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes)
+              console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes);
             }
     );
+    this.plafondService.getPlafondGroupeByGroupe(groupe.id).subscribe(
+      (res) => {
+        this.plafondGroupe = res.body;
+        console.log('******this.plafondGroupe*******', this.plafondGroupe);
+        if(res && this.displayBareme) {
+          this.plafondForm.patchValue({
+            plafondAnnuellePersonne: this.plafondGroupe.plafondAnnuellePersonne,
+            plafondAnnuelleFamille: this.plafondGroupe.plafondAnnuelleFamille,
+            plafondGlobalEvacuationSanitaire: this.plafondGroupe.plafondGlobalEvacuationSanitaire,
+            plafondGlobalInternationnal: this.plafondGroupe.plafondGlobalInternationnal
+          });
+        }
+      }
+    )
+
     /* this.plafondService.getPlafondGroupeActeByGroupe(groupe.id).subscribe(
       (rest) => {
         this.avenantModif.plafondGroupeActes = rest.body;
@@ -2707,6 +2733,26 @@ changeGarantie(garantie, indexLigne: number) {
   
       }
   ); */
+  
+}
+
+verifieDate(adherent: Adherent) {
+  console.log("mlkjhjklkhghjklkh", adherent);
+  const date1 = new Date(adherent.dateNaissance);
+  const date2 = new Date();
+  const date = date1.getFullYear() - date2.getFullYear();
+  console.log("52525255522", date);
+  console.log((date1.getTime() - date2.getTime()) / 3,154e+7);
+  console.log(Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24)));
+  if((Math.floor((Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()) - Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()) ) /(1000 * 60 * 60 * 24))) >= 9130 
+  && adherent.qualiteAssure.code === "ENFANT") {
+    this.addMessage('error', 'Date de naissance invalide',
+                  'L\'enfant ne peut pas avoir plus de 25ans');
+    adherent.dateEntree = null;
+    adherent.dateNaissance = null;
+    adherent.genre = null;
+    adherent.qualiteAssure = null;
+  }
   
 }
 

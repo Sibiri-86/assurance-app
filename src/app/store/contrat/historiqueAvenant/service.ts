@@ -119,6 +119,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     }
 
     postHistoriqueAvenantFile(historiqueAvenant: HistoriqueAvenant, file: File): Observable<any> {
+        console.log('88888888888888888888888888888888888888',historiqueAvenant);
         // @FIXME: post request
         const data: FormData = new FormData();
         data.append('file', file);
@@ -127,14 +128,22 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
             data.append('numeroGarant', historiqueAvenant.numeroGarant?.toString());
         }
         const date = new Date();
-        date.setFullYear(historiqueAvenant.dateAvenant.getFullYear(), historiqueAvenant.dateAvenant.getMonth(),
-        historiqueAvenant.dateAvenant.getDay());
-        data.append('year', historiqueAvenant.dateAvenant.getFullYear().toString());
-        data.append('month', historiqueAvenant.dateAvenant.getMonth() + 1 + '');
-        data.append('day', historiqueAvenant.dateAvenant.getDate().toString());
+        console.log(historiqueAvenant.dateAvenant);
+        console.log(new Date(historiqueAvenant.dateAvenant).getFullYear());
+        console.log(new Date(historiqueAvenant.dateAvenant).getMonth());
+        console.log(new Date(historiqueAvenant.dateAvenant).getDay());
+        date.setFullYear(new Date(historiqueAvenant.dateAvenant).getFullYear(), new Date(historiqueAvenant.dateAvenant).getMonth(),
+        new Date(historiqueAvenant.dateAvenant).getDay());
+        data.append('year', new Date(historiqueAvenant.dateAvenant).getFullYear().toString());
+        data.append('month', new Date(historiqueAvenant.dateAvenant).getMonth() + 1 + '');
+        data.append('day', new Date(historiqueAvenant.dateAvenant).getDay().toString());
         data.append('groupeId', historiqueAvenant.groupe.id);
         data.append('fraisAccessoires', historiqueAvenant.fraisAccessoires.toString());
         data.append('fraisBadges', historiqueAvenant.fraisBadges.toString());
+        data.append('exerciceId', historiqueAvenant.exercice.id);
+        data.append('yearEffet', new Date(historiqueAvenant.dateEffet).getFullYear().toString());
+        data.append('monthEffet', new Date(historiqueAvenant.dateEffet).getMonth() + 1 + '');
+        data.append('dayEffet', new Date(historiqueAvenant.dateEffet).getDay().toString());
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');

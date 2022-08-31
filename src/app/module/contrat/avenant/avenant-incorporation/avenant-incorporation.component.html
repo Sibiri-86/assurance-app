@@ -20,7 +20,8 @@
                         class="p-button p-button-icon" label="export model" (click)="exportModel()">
                 </button>
             </div>
-            <div class="p-field p-col-8" *ngIf="isImport === 'OUI'"><app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
+            <div class="p-field p-col-8" *ngIf="isImport === 'OUI'">
+                <app-upload-file (fileEvent)="getFiles($event)"></app-upload-file> </div>
         </div>
         <div class="p-field p-col-12">
             <p-fieldset legend="Dernier Exercice de la police" toggleable="true" *ngIf="!isRenouv">
@@ -37,6 +38,9 @@
                     </div>
                 </form>
             </p-fieldset>
+            <div *ngIf="viewListe">
+                <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
+            </div>
             <p-fieldset legend="Selection" toggleable="true">
                 <div class="p-fluid p-grid">
 
@@ -343,19 +347,23 @@
                         </button>
                     </div>
                     <div class="p-field p-col-2 p-ac-center">
-                        <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
+                        <button *ngIf="isImport === 'NON'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
                                 [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
+                        </button>
+                        <button *ngIf="isImport === 'OUI'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
+                                class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
+                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'OUI'">
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérents à incorporer"
+    <!-- <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérents à incorporer"
               [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}" (onHide)="hideListe()">
             <app-adherent-list [adherentFamilleList]="adherentFamilleListe" [statut]="etat" *ngIf="adherentFamilleListe?.length > 0"></app-adherent-list>
-    </p-dialog>
+    </p-dialog> -->
     <div class="p-fluid p-formgrid p-grid" *ngIf="viewListeEdit">
         <div class="p-field p-col-12">
                     <app-adherent-list-edit [historiqueAvenantAdherants]="historiqueAvenantAdherants" *ngIf="historiqueAvenantAdherants?.length > 0"

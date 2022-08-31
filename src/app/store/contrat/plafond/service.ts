@@ -158,5 +158,10 @@ private handleError<T>() {
             {params: createRequestOption({groupeId}), observe: 'response'}
         );
     }
+
+    getPlafondGroupeyGroupe(idGroupe: string): Observable<HttpResponse<Plafond>> {
+      return this.http.get<Plafond>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/plafond-groupe`,
+          {params: createRequestOption({idGroupe}), observe: 'response'});
+  }
 }
 
