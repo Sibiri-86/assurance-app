@@ -787,7 +787,7 @@ export class GroupeAjoutComponent implements OnInit{
       }
     });
 
-    // this.loadActualList();
+    // this.loadActualList();    new Boolean(!($F{primeNet}.equals( null )))
 
     this.garantList$ = this.store.pipe(select(garantSelector.garantList));
     this.store.dispatch(loadGarant());

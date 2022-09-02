@@ -92,6 +92,7 @@ import { removeBlanks } from 'src/app/module/util/common-util';
 import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import { onInitEffects } from '@ngrx/effects/src/lifecycle_hooks';
+import { HistoriqueAvenantAdherentList } from 'src/app/store/contrat/historiqueAvenantAdherent/model';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -783,7 +784,7 @@ export class AvenantModificationComponent implements OnInit {
           }
         });
 
-    this.loadHistoriqueAvenantAdherantByPolice();
+    // this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
     // this.loadActivedExercice(this.police);
     if(this.etat !== 'CREATE') {
@@ -844,14 +845,16 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   onRowEditInit(product: HistoriqueAvenantAdherant) {
+    console.log("llllllllllllllllllllllllllllllll", product);
     this.clonedProducts[product.id] = {...product};
   }
 
   onRowEditSave(product: HistoriqueAvenantAdherant) {
       delete this.clonedProducts[product.id];
+      this.historiqueAveantAdherantEdited = this.historiqueAveantAdherantEdited.filter(haa => haa?.id !== product?.id);
       this.historiqueAveantAdherantEdited.push(product);
       console.log(this.historiqueAveantAdherantEdited);
-      // this.messageService.add({severity: 'success', summary: 'Success', detail: 'Adherant is updated'});
+      this.messageService.add({severity: 'success', summary: 'Success', detail: 'Adherant is updated'});
   }
 
   onRowEditCancel(product: HistoriqueAvenantAdherant, index: number) {
@@ -1047,6 +1050,27 @@ export class AvenantModificationComponent implements OnInit {
           }
       );
   }
+
+  loadHistoriqueAvenantAdherantByPoliceAndExerciceId(): void {
+    console.log("lelllelelelelelelelelel");
+    console.log(this.curentExercice.id);
+    console.log(this.police.id);
+    this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherantActuallByExerciceSecond(this.police.id, this.curentExercice.id).subscribe(
+        (res) => {
+          this.historiqueAveantAdherants = res;
+          this.historiqueAveantAdherantsTMP = res;
+        /* const historiqueAvenantAdherentList: HistoriqueAvenantAdherentList = {};
+        historiqueAvenantAdherentList.historiqueAvenantList = res;
+        this.historiqueAveantAdherants = historiqueAvenantAdherentList.historiqueAvenantList;
+        this.historiqueAveantAdherantsTMP = historiqueAvenantAdherentList.historiqueAvenantList; */
+        console.log("lelllelelelelelelelelel", this.historiqueAveantAdherants);
+           /* this.historiqueAveantAdherants = res.values().;
+           
+          this.historiqueAveantAdherantsTMP = res.slice(); */
+           
+        }
+    );
+}
 
   addHistoriqueAvenantAdherant(adherantsListe: Adherent[]): void {
     adherantsListe.forEach(adherant => {
@@ -1845,6 +1869,8 @@ export class AvenantModificationComponent implements OnInit {
     this.getHistoriquePlafondGroupeFamilleActeByPolice();
     console.log('curent exo === ');
     console.log(this.curentExercice);
+    this.loadHistoriqueAvenantAdherantByPoliceAndExerciceId();
+
  }
 
 
