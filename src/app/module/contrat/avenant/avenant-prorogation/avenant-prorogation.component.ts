@@ -157,7 +157,8 @@ export class AvenantProrogationComponent implements OnInit {
     sousActeList: Array<SousActe>;
     garantList$: Observable<Array<Garant>>;
     garantList: Array<Garant>;
-    private displaySousActe = false;
+    private displaySousActe
+     = false;
     acteList$: Observable<Array<Acte>>;
     acteList: Array<Acte>;
     paysList$: Observable<Array<Pays>>;
@@ -191,7 +192,7 @@ export class AvenantProrogationComponent implements OnInit {
         plafondGroupeSousActes: []
     };
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
-    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
+    typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}];
     adherentFamilleListe: AdherentFamille[] = [];
     myForm: FormGroup;
     typeDureeSelected = '';
@@ -1232,7 +1233,7 @@ export class AvenantProrogationComponent implements OnInit {
         this.historiqueAvenant.dateEcheance = this.myForm.get('dateEcheance').value;
         this.historiqueAvenant.exercice = this.exerciceForm.value;
         this.objet.exercice = this.exerciceForm.value;
-        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RENOUVELLEMENT;
+        this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.PROROGATION;
         this.historiqueAvenant.observation = this.myForm.get('observation').value;
         this.historiqueAvenant.fraisBadges = this.myForm.get('fraisBadges').value;
         this.historiqueAvenant.fraisAccessoires = this.myForm.get('fraisAccessoires').value;

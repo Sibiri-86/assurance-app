@@ -17,7 +17,7 @@
                 -->
 			</p-toolbar>
 
-			<p-table #dt [value]="garantList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu']"
+			<p-table #dt [value]="garantList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu','commissionPrime.taux']"
 					 [(selection)]="selectedGarants" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rowHover]="true" dataKey="id"
 					 styleClass="p-datatable-customers"
 					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -40,7 +40,7 @@
 						<th pSortableColumn="contact">Contact<p-sortIcon field="contact"></p-sortIcon></th>
 						<th pSortableColumn="personneRessource" style="width: 14rem">Personne Ressource<p-sortIcon field="personneRessource"></p-sortIcon></th>
                         <th pSortableColumn="numeroCompteBancaire1" style="width: 13rem">compte Bancaire 1 <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
-                        <th pSortableColumn="numeroCompteBancaire2" style="width: 13rem">compte Bancaire 2 <p-sortIcon field="numeroCompteBancaire2"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> taux de commission  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
                         <th pSortableColumn="numeroIfu">IFU <p-sortIcon field="numeroIfu"></p-sortIcon></th>
 						<th></th>
 					</tr>
@@ -64,7 +64,7 @@
 						<td><span class="p-column-title">{{garant.numeroCompteBancaire1}}</span>
 							
 						</td>
-                        <td><span class="p-column-title">{{garant.numeroCompteBancaire2}}</span>
+                        <td><span class="p-column-title">{{garant?.commissionPrime?.taux}}</span>
 						</td>
 
                         <td><span class="p-column-title">{{garant.numeroIfu}}</span>
@@ -409,11 +409,9 @@
                         </div>
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Numero compte bancaire 2<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <label for="lastname2">Numero compte bancaire 2</label>
                             <input id="lastname2" type="text" formControlName="numeroCompteBancaire2" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                                              [formGroup]="garantForm" [entityField]="'numeroCompteBancaire2'">
-                            </app-entity-validation>
+                            
                         </div>
 
                        
@@ -423,11 +421,9 @@
 
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
-                        <label for="lastname2">Nom Banque 2<span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <label for="lastname2">Nom Banque 2</label>
                         <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque2" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                        <app-entity-validation [entityValidations]="entityValidations"
-                        [formGroup]="garantForm" [entityField]="'banque2'">
-                        </app-entity-validation>
+                        
                     </div>
 
                     <div class="p-field p-col">

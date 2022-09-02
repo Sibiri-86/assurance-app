@@ -105,9 +105,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.baremeForm = this.formBuilder.group({
     // domaine: new FormControl({}),
     id: new FormControl(null),
-    libelle: new FormControl(null, [Validators.required]),
+    libelle: new FormControl(),
     description: new FormControl(null, [Validators.required]),
-    taux: new FormControl(null, [Validators.required]),
+    taux: new FormControl(),
     typeBareme: new FormControl(null, [Validators.required])
   });
 
@@ -487,9 +487,14 @@ export class BaremeComponent implements OnInit, OnDestroy {
   fermerConfigurationPlafond() {
     this.displayPrevisualiserParametrage = false;
   }
+  changeDomaine(rowData: PlafondFamilleActe) {
+
+    rowData.domaine = [];
+  }
   
 changeGarantie(garantie, indexLigne: number) {
   this.plafondActe = [];
+  garantie.value.domaine = [];
   this.plafondSousActe = [];
   this.displayActe = true;
   if (this.plafondActe.length === 0){

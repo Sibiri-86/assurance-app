@@ -328,7 +328,7 @@
                 </div>
             </div> -->
         
-            <p-table #dtConfigurationPlafond [value]="plafondActuelleConfiguration" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll" [scrollable]="true">
+            <p-table #dtConfigurationPlafond [value]="plafondActuelleConfiguration" dataKey="garantie.id" dataKey="id" editMode="row" responsiveLayout="scroll" [scrollable]="true" scrollHeight="400px">
                 <ng-template pTemplate="header">
                     <tr>
                         <th></th>
@@ -432,7 +432,7 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"  (onChange)="modificationEtatActe(plafond)"
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"  (onChange)="modificationEtatActe(plafond)" 
                                                 [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output" *ngIf="plafond.etat">
@@ -3388,7 +3388,7 @@
                         </div> -->
 
                         <div class="p-field p-col-4">
-                            <label for="lastname2">Taux de commission intermediaire en % <span style="color: red !important; font-size: 1.4em"></span></label>
+                            <label for="lastname2">Taux de gestion en % <span style="color: red !important; font-size: 1.4em"></span></label>
                             <p-dropdown dataKey="id" inputId="taux commission intermediaire" [filter]="true" showClear="true" [options]="tauxCommissionIntermediaireList" 
                             formControlName="tauxCommissionIntermediaire" placeholder="Select" optionLabel="taux"></p-dropdown>
                             <app-entity-validation [entityValidations]="entityValidations"

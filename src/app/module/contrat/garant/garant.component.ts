@@ -549,6 +549,7 @@ showToast(severity: string, summary: string, detail: string) {
 addGarant() {
   this.garant = {};
   this.displayDialogFormGarant = true;
+  this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 }
 
 voirDetail(garant: Garant) {
@@ -591,6 +592,8 @@ this.confirmationService.confirm({
     this.garantForm.reset();
   }
 });
+this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+
 }
 
 annulerSaisie() {
