@@ -21,7 +21,7 @@
 
                 <div class="p-fluid p-formgrid p-grid">
                         <div class="p-col-4">
-                            <label for="fraisBadge">Exercice</label>
+                            <label for="fraisBadge">Exercice <span style="color: red !important; font-size: 1.4em;">*</span></label>
                             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                                         [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
                             </p-dropdown>
@@ -30,12 +30,11 @@
                     <form [formGroup]="myForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-6">
-                                <label for="numero">Numéro de l'avenant chez le garant</label>
+                                <label for="numero">Numéro de l'avenant chez le garant<span style="color: red !important; font-size: 1.4em;"></span></label>
                                 <input id="numero" type="number" min="0" formControlName="numero" pInputText>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateAvenant">Date de l'avenant <sup
-                                        style="color:#ff0539; size: 1.2em">*</sup></label>
+                                <label for="dateAvenant">Date de l'avenant <span style="color: red !important; font-size: 1.4em;">*</span></label>
                                         <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
                                 
                                 <app-entity-validation [entityValidations]="entityValidations"
@@ -43,8 +42,7 @@
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateEffetA">Date d'éffet de la modification <sup
-                                        style="color:#ff0539; size: 1.2em">*</sup></label>
+                                <label for="dateEffetA">Date d'éffet de la modification <span style="color: red !important; font-size: 1.4em;">*</span></label>
                                         <input id="dateEffetA" type="date" formControlName="dateEffet" pInputText  (change)="compareDate()">
                                 
                                 <app-entity-validation [entityValidations]="entityValidations"
@@ -52,20 +50,20 @@
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                                <label for="dateIncorparation">Initiateur <span style="color: red !important; font-size: 1.4em;">*</span></label>
                                 <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
                                             [options]="demandeursList" formControlName="demandeur"
                                             placeholder="Select" optionLabel="libelle"></p-dropdown>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="nom">Motif <sup style="color: red; size: 1.7em">*</sup></label>
+                                <label for="nom">Motif <span style="color: red !important; font-size: 1.4em;">*</span></label>
                                 <input id="Observation" type="text" formControlName="observation" pInputText/>
                                 <app-entity-validation [entityValidations]="entityValidations"
                                                        [formGroup]="groupeForm" [entityField]="'dateEffetA'">
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col-6">
-                                <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                                <label for="nom">Date saisie <span style="color: red !important; font-size: 1.4em;">*</span></label>
                             <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
                             dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
                             appendTo="body"></p-calendar>  
@@ -1040,7 +1038,7 @@
                         <ng-template pTemplate="body" let-historiqueAveantAdherant let-editing="editing"
                                      let-ri="rowIndex">
                             <tr [pEditableRow]="historiqueAveantAdherant" [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
-                                <td>{{historiqueAveantAdherant.adherent.numero}}</td>
+                                <td>{{historiqueAveantAdherant?.adherent?.numero}}</td>
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input" *ngIf="etat !== 'UPDATE'">
@@ -1066,8 +1064,8 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text"
-                                                   [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
+                                            <input pInputText type="date"
+                                            [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.adherent.dateNaissance">
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{historiqueAveantAdherant?.adherent?.dateNaissance | formatTableValue : 'date'}}
@@ -1081,17 +1079,19 @@
                                                    [(ngModel)]="historiqueAveantAdherant.adherent.mail">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant.adherent.mail}}
+                                            {{historiqueAveantAdherant?.adherent?.mail}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-calendar  [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorparation"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar>
+                                            <!-- <p-calendar  [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorparation"  dateFormat="dd/mm/yy" inputId="calendar" appendTo="body"></p-calendar> -->
+                                            <input pInputText type="date"
+                                            [showIcon]="true" [(ngModel)]="historiqueAveantAdherant.dateIncorporation">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant.dateIncor | formatTableValue : 'date'}}
+                                            {{historiqueAveantAdherant?.dateIncorporation | formatTableValue : 'date'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -1103,7 +1103,7 @@
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant.adherent?.genre?.libelle}}
+                                            {{historiqueAveantAdherant?.adherent?.genre?.libelle}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>

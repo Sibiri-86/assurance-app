@@ -294,7 +294,9 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
 
             this.init();
 
-            this.loadAdherentByPoliceAndExercice();
+            if(this.etat === 'CREATE' || this.isRenouv) {
+                this.loadAdherentByPoliceAndExercice();
+            }
        
     }
 

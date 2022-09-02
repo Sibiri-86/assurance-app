@@ -2172,7 +2172,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     avenant = {};
 
     }
-      }
+  }
 
   getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;
