@@ -33,10 +33,10 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="libelle" style="width: 12rem">libelle<p-sortIcon field="libelle"></p-sortIcon></th>
-                        <th pSortableColumn="description" style="width: 12rem">Description<p-sortIcon field="description"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 14rem">Taux<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="typeBareme" style="width: 14rem">Type Barème<p-sortIcon field="typeBareme"></p-sortIcon></th>
+<!--                         <th pSortableColumn="libelle" style="width: 12rem">libelle<p-sortIcon field="libelle"></p-sortIcon></th>
+ -->                        <th pSortableColumn="description" >Description<p-sortIcon field="description"></p-sortIcon></th>
+<!--                         <th pSortableColumn="taux" style="width: 14rem">Taux<p-sortIcon field="taux.taux"></p-sortIcon></th>
+ -->                        <th pSortableColumn="typeBareme" >Type Barème<p-sortIcon field="typeBareme"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -46,12 +46,12 @@
                             <p-tableCheckbox [value]="bareme"></p-tableCheckbox>
                         </td>
 
-                        <td><span class="p-column-title">{{bareme.libelle}}</span>
-                        </td>
+                       <!--  <td><span class="p-column-title">{{bareme.libelle}}</span>
+                        </td> -->
                         <td><span class="p-column-title">{{bareme.description}}</span>
                         </td>
-                        <td><span class="p-column-title">{{bareme.taux.taux}}</span>
-                        </td>
+                       <!--  <td><span class="p-column-title">{{bareme.taux.taux}}</span>
+                        </td> -->
                         <td><span class="p-column-title">{{bareme.typeBareme}}</span>
                         </td>
                         <td>
@@ -150,10 +150,10 @@
                         <p-fieldset legend="Identification" toggleable="true">
 
                         <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col">
+                           <!--  <div class="p-field p-col">
                                 <label for="firstname2">Libelle <span class="required">*</span></label>
                                 <input id="nom" type="text" required formControlName="libelle"  pInputText>
-                            </div>
+                            </div> -->
 
                             
                             <div class="p-field p-col">
@@ -167,12 +167,12 @@
                             </div>
                         </div>
 
-                        <div class="p-fluid p-formgrid p-grid">
+                        <!-- <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
                                 <label for="taux">Taux de couverture en % <span class="required">*</span></label>
                                 <p-dropdown id="taux" dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" formControlName="taux" placeholder="Select" optionLabel="taux"></p-dropdown>
                             </div>
-                        </div>
+                        </div> -->
                         </p-fieldset>
                     </div>
                     </form>

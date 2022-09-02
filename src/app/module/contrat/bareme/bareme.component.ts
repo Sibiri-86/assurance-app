@@ -105,9 +105,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.baremeForm = this.formBuilder.group({
     // domaine: new FormControl({}),
     id: new FormControl(null),
-    libelle: new FormControl(null, [Validators.required]),
+    libelle: new FormControl(),
     description: new FormControl(null, [Validators.required]),
-    taux: new FormControl(null, [Validators.required]),
+    taux: new FormControl(),
     typeBareme: new FormControl(null, [Validators.required])
   });
 

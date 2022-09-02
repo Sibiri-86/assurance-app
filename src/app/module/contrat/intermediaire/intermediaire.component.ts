@@ -122,7 +122,7 @@ export class IntermediaireComponent implements OnInit, OnDestroy {
         personneRessource: new FormControl('',[Validators.required]),
         numeroCompteBancaire1: new FormControl(''),
         banque1: new FormControl('',[Validators.required]),
-        banque2: new FormControl(null),
+        banque2: new FormControl(''),
         numeroCompteBancaire2: new FormControl(''),
         numeroIfu: new FormControl(''),
         //periodiciteAppelFond: new FormControl(''),
@@ -529,6 +529,8 @@ showToast(severity: string, summary: string, detail: string) {
 addIntermediaire() {
   this.intermediaire = {};
   this.displayDialogFormIntermediaire = true;
+  this.intermediaireForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+
 }
 
 annulerSaisie() {
@@ -587,6 +589,8 @@ this.confirmationService.confirm({
     
   }
 });
+this.intermediaireForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+
 }
 
 voirDetail(intermediaire: Intermediaire ) {

@@ -295,11 +295,9 @@
                             </div>
 
                             <div class="p-field p-col">
-                            <label for="lastname2">Numero compte bancaire 2 <span class="required"></span></label>
+                            <label for="lastname2">Numero compte bancaire 2</label>
                             <input id="lastname2" type="text"  formControlName="numeroCompteBancaire2" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                                              [formGroup]="intermediaireForm" [entityField]="'numeroCompteBancaire2'">
-                            </app-entity-validation>
+                            
                              </div>
 
                             
@@ -317,11 +315,9 @@
                     <div class="p-fluid p-formgrid p-grid">
 
                         <div class="p-field p-col">
-                            <label for="lastname2">Nom banque 2 <span class="required"></span></label>
+                            <label for="lastname2">Nom banque 2</label>
                             <p-dropdown dataKey="id" inputId="banque" [filter]="true" showClear="true" [options]="banqueList" formControlName="banque1" placeholder="Select" optionLabel="libelle"></p-dropdown>
-                            <app-entity-validation [entityValidations]="entityValidations"
-                            [formGroup]="intermediaireForm" [entityField]="'banque1'">
-                            </app-entity-validation>
+                           
                         </div>
 
                           <div class="p-field p-col">
