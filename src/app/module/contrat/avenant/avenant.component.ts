@@ -2077,13 +2077,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));
-        }},
+        }}/* ,
       {label: 'Facture de suspension', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.FACTURE_INCORP;
           this.report.historiqueAvenant = historiqueAvenant;
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));
-        }}
+        }} */
     ];
   }
 
@@ -2745,6 +2745,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.groupeView = value.slice();
+        this.loadExerciceByPolice(police);
       }
     });
   }
@@ -2766,6 +2767,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
     
   }
 
+
+  loadPlafondByGroupeAndExerciceId(exo: Exercice, groupe: Groupe): void {
+    if(exo?.id != null && groupe?.id != null) {
+      this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceId(exo?.id, groupe?.id).subscribe(
+        (res) => {
+          this.avenantModif1.plafondFamilleActes = res.body;
+          console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes)
+        }
+      );
+    }
+  
+}
 
   loadActualListByContrat(police: Police): void {
     this.adherentService.findAdherantActuallList(police.id).subscribe(

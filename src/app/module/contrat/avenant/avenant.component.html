@@ -4223,13 +4223,19 @@
             <p-tabPanel header="PLAFOND" leftIcon="pi pi-user-edit" tooltip="PLAFOND">
                 <span style="color: green !important"> <h4> Informations sur les plafonds de l'avenant</h4></span>
                 <ng-template pTemplate="content">
-                    <div class="p-grid">
-                        <div class="p-col-4">
-                            <label class="p-fieldset-content">Choisir le Groupe</label>
+                    <div class="p-grid mt-3 mb-3">
+                        <div class="p-col-3">
+                            <label for="fraisBadge">Exercice<span style="color: red !important; size: 4em">*</span></label>
+                            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="loadPlafondByGroupeAndExerciceId(curentExercice,groupePlafongConfig)">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-3">
+                            <label class="p-fieldset-content">Choisir le Groupe<span style="color: red !important; size: 4em">*</span></label>
                             <p-dropdown [options]="groupeView" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
                                         [filter]="true" filterBy="libelle" [showClear]="true"
                                         placeholder="Choisir un groupe"
-                                        (onChange)="loadPlafondByGroupe(groupePlafongConfig)" [style]="{'width': '100%'}">
+                                        (onChange)="loadPlafondByGroupeAndExerciceId(curentExercice,groupePlafongConfig)" [style]="{'width': '100%'}">
                             </p-dropdown>
                         </div>
                     </div>
