@@ -62,6 +62,7 @@ import { BonPriseEnChargeState } from 'src/app/store/medical/bon-prise-en-charge
 import { KeycloakService } from 'keycloak-angular';
 import { ConventionService } from 'src/app/store/medical/convention/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -144,6 +145,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
                private keycloak: KeycloakService,
                private conventionService: ConventionService,
                private tierPayantService: TierPayantService,
+               private prefinancementService: PrefinancementService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -340,10 +342,10 @@ findMontantPlafond(event){
         if(this.adherentSelected.signeAdherent ==='-') {
 
           if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
-          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+          && new Date(value.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime())) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  suspendu(e) !!!');
-              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                   this.prestationPopForm.patchValue({
                   //  dateRetrait: new Date(this.adherentSelected.dateSortie),
                     montantRembourse : 0,
@@ -362,7 +364,7 @@ findMontantPlafond(event){
           if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  retiré(e) !!!');
-              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+              if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                   this.prestationPopForm.patchValue({
                     montantRembourse : 0,
                     observation: "Cet(te) assuré(e) a  été retiré(e)",
@@ -402,7 +404,7 @@ findMontantPlafond(event){
             && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
                 this.addMessage('error', 'Assuré(e) non pris en compte',
                 'Cet(te) assuré(e) est  suspendu(e) !!!');
-                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                     this.prestationPopForm.patchValue({
                     //  dateRetrait: new Date(this.adherentSelected.dateSortie),
                       montantRembourse : 0,
@@ -421,7 +423,7 @@ findMontantPlafond(event){
             if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
                 this.addMessage('error', 'Assuré(e) non pris en compte',
                 'Cet(te) assuré(e) est  retiré(e) !!!');
-                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                     this.prestationPopForm.patchValue({
                       montantRembourse : 0,
                       observation: "Cet(te) assuré(e) a  été retiré(e)",
@@ -1061,6 +1063,9 @@ console.log(myForm);
 
 
 calculDebours1() {
+  if(this.prestationPopForm.get('sort').value !==Sort.REJETE) {
+
+  
   const myForm = this.prestationPopForm;
  
  if((this.prestationPopForm.get('sousActe').value.idGenre  && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
@@ -1068,11 +1073,11 @@ calculDebours1() {
     myForm.patchValue({ montantRembourse : 0});
     myForm.patchValue({ montantRestant:  this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value});
     if(this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
-      myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+  
       myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour les enfants filles"}); 
 
     } else {
-      myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+     
       myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
 
     }
@@ -1095,7 +1100,7 @@ calculDebours1() {
     myForm.patchValue({observation: "la difference entre le coût unitaire et le montant de la convention est " + c});
   }
   
-  myForm.patchValue({taux: this.adherentSelected.groupe.taux, sort: Sort.ACCORDE});
+  myForm.patchValue({ sort: Sort.ACCORDE});
   myForm.patchValue({observation: "Remboursement favorable"});
 
   if (this.prestationPopForm.get('nombreActe').value &&
@@ -1210,7 +1215,14 @@ calculDebours1() {
     }
 
   }
+}
+}
 
+findTaux() {
+  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.id, this.adherentSelected.id).subscribe((rest)=>{
+    
+    this.prestationPopForm.get('taux').setValue(rest);
+  });
 }
 
 editerPrestation1(prestation: Prestation, rowIndex: number) {

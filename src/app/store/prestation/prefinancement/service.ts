@@ -10,6 +10,7 @@ import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistr
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Report } from '../../contrat/police/model';
 import {formatDate} from '@angular/common';
+import { Taux } from '../../parametrage/taux/model';
 
 @Injectable({providedIn: 'root'})
 export class PrefinancementService {
@@ -42,6 +43,12 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     // @FIXME: post request
     return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/consulter`, {params :
       this.createRequestOption({matricule, dateDeclaration})});
+  }
+
+  findTauxSousActe(groupeId: string, sousActeId: string, idAdherent: string): Observable<any> {
+    // @FIXME: post request
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/taux`, {params :
+      this.createRequestOption({groupeId, sousActeId, idAdherent})});;
   }
   
   searchOrdreReglement(numero: string, date: string): Observable<any> {

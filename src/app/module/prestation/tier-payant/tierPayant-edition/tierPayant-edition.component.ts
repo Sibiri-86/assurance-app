@@ -76,6 +76,7 @@ import { Event } from '@angular/router';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { GlobalConfig } from 'src/app/config/global.config';
 import { ConventionService } from 'src/app/store/medical/convention/service';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 
 
@@ -174,6 +175,7 @@ export class TierPayantEditionComponent implements OnInit {
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private tierPayantService: TierPayantService,
+                private prefinancementService: PrefinancementService,
                 private conventionService: ConventionService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
@@ -309,7 +311,7 @@ export class TierPayantEditionComponent implements OnInit {
                     && new Date(value.dateSortie).getTime() > new Date(this.prestationAdd.dateSoins).getTime())) {
                         this.addMessage('error', 'Assuré(e) non pris en compte',
                         'Cet(te) assuré(e) est  suspendu(e) !!!');
-                        if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                        if( new Date(this.adherentSelected?.dateSuspension).getTime() <= new Date(this.prestationAdd.dateSoins).getTime()) {
                             this.prestationAdd.observation = "Cet(te) assuré(e) a  été suspendu(e)";
                             this.prestationAdd.sort = Sort.REJETE;
                             this.prestationAdd.montantRembourse = 0;
@@ -324,14 +326,15 @@ export class TierPayantEditionComponent implements OnInit {
                         'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
 
                      
-                        if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                        if( new Date(this.adherentSelected?.dateSortie).getTime() <= new Date(this.prestationAdd.dateSoins).getTime() 
+                        ) {
                           this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
                           this.prestationAdd.sort = Sort.REJETE;
                           this.prestationAdd.montantRembourse = 0;
                          
                       }
 
-                      if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationAdd.dateSoins).getTime()) {
+                      if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() <= new Date(this.prestationAdd.dateSoins).getTime()) {
                         this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été suspendu(e)";
                           this.prestationAdd.sort = Sort.REJETE;
                           this.prestationAdd.montantRembourse = 0;
@@ -1093,10 +1096,10 @@ export class TierPayantEditionComponent implements OnInit {
         }
 
        */
-            this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
+           // this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
             if(!this.prestationAdd.sort) {
                 this.prestationAdd.sort = Sort.ACCORDE;
-                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd?.taux?.taux) / 100;
                 this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
     
                
@@ -1110,9 +1113,9 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
                 if(this.prestationAdd.montantRembourse !== 0) {
-                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond1  ){
+                    if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd?.taux?.taux) / 100) <= this.montantPlafond1  ){
 
-                        this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
+                        this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd?.taux?.taux) / 100;
                         this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
     
                     } 
@@ -1146,7 +1149,7 @@ export class TierPayantEditionComponent implements OnInit {
                         console.log("compter============",this.compteur);
                         console.log("===============montantPaye=============");
 
-                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond1  ) {
+                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd?.taux?.taux) / 100) <= this.montantPlafond1  ) {
                            
                        
                             this.prefinancement.montantPaye = this.prefinancement.montantPaye +  this.prestationAdd.montantRembourse;
@@ -1258,13 +1261,14 @@ export class TierPayantEditionComponent implements OnInit {
             // console.log('**************** this.prestationForm.getTMP******************', this.prestationForm.get('prestation').value[i].montantPayeTMP);
        
     }
+    
 
     calculExclu() {
         if(this.prestationAdd.montantExclu) {
             if(this.prestationAdd.sort === Sort.ACCORDE) {
-               this.prestationAdd.montantRembourse =  ((this.prestationAdd.baseRemboursement - this.prestationAdd.montantExclu) *  this.prestationAdd.adherent?.groupe?.taux?.taux) /100;
+               this.prestationAdd.montantRembourse =  ((this.prestationAdd.baseRemboursement - this.prestationAdd.montantExclu) *  this.prestationAdd.taux?.taux) /100;
                this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement  - this.prestationAdd.montantRembourse ;
-               if((this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
+               if( this.montantPlafond1 !== null && (this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
 
                 
                 this.prestationAdd.sort = Sort.ACCORDE;
@@ -1282,6 +1286,13 @@ export class TierPayantEditionComponent implements OnInit {
         }
     }
 
+
+    findTaux() {
+        this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationAdd?.sousActe?.id, this.adherentSelected.id).subscribe((rest)=>{
+          
+          this.prestationAdd.taux  =rest;
+        });
+      }
 
     get prestation() {
         return this.prestationForm.controls.prestation as FormArray;

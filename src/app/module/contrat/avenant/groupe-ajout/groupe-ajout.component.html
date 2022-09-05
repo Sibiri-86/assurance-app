@@ -1828,7 +1828,7 @@
                     <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
                 </div>
                 <div class="p-mr-2 p-mb-2">
-                    <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="image" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+                    <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="image" uploadLabel="Valider"  multiple="multiple" name="demo2[]"  accept="image/*" maxFileSize="10000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
                 </div>
             </ng-template>
             
@@ -1906,4 +1906,12 @@
     </div>
     </div>
 </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="displayPhotos" header="Photos" [modal]="true" styleClass="p-fluid" [style]="{width: '300px'}">
+    <ng-template pTemplate="content">
+        <div class="card">
+        <img [src]="pictureUrl" [alt]="" class="p-shadow-4"  width="200" height="200" />
+        </div>
+    </ng-template>
 </p-dialog>
