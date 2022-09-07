@@ -2099,12 +2099,12 @@ export class AvenantProrogationComponent implements OnInit {
             console.log(this.exerciceForm.get('debut').value);
             if(new Date(this.myForm.get('dateAvenant').value)?.getTime() < new Date(this.exerciceForm.get('debut')?.value).getTime() ) {
                 this.addMessage('error', 'Date d\'effet invalide',
-                            'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                            'La date d\'effet de l\'avenant de peut pas être postérieure à celle de l\'exercice');
                       this.myForm.patchValue({dateAvenant: null});
               }
             if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.exerciceForm.get('fin').value)?.getTime() ) {
                 this.addMessage('error', 'Date d\'effet invalide',
-                          'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+                          'La date d\'effet de l\'avenant de peut pas être antérieure à celle de l\'exercice');
                       this.myForm.patchValue({dateAvenant: null});
               }
         }
