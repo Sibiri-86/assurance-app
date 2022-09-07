@@ -490,6 +490,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
   changeDomaine(rowData: PlafondFamilleActe) {
 
     rowData.domaine = [];
+    rowData.etat = null;
   }
   
 changeGarantie(garantie, indexLigne: number) {
