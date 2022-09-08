@@ -118,6 +118,8 @@ export class AdherentEffects {
     )
     );
 
+   
+
      fetchAdherentGroupe$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherentGroupe),

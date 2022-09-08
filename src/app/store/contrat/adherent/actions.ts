@@ -24,4 +24,4 @@ export const setListeActualisee = createAction('[App Init] set Adherent',  props
 export const searchAssureAndFamilleActe = createAction('[App Init] search Assure',  props<{numero: number}>());
 export const loadAdherentByExercice = createAction('[App Init] load Adherent by exercice', props<{idGroupe: string, exerciceId: string}>());
 export const searchAdherentByDateSoinsAndMatricule = createAction('[App Init] search Adherent By DateSoins And Matricule',  props<{dateSoins: Date, matricule: number}>());
-
+export const loadListeFamille = createAction('[App Init] load liste famille', props<{adherentId: string}>());

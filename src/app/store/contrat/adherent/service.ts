@@ -183,6 +183,22 @@ private handleError<T>() {
       );
   }
 
+  findFamilleByAdherent(adherentId: string, dateSoins: Date): Observable<Array<Adherent>> {
+    // @FIXME: get request
+    // adherent/liste-actualisee
+
+    if (adherentId) {
+      const adherent :Adherent = {};
+      adherent.dateEntree = dateSoins;
+      adherent.id = adherentId; 
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/famille`, adherent).pipe(
+      map((response: Adherent[]) => response)
+    
+     );
+    }
+    
+}
+
     searchAssure(numero: number): Observable<AdherentResearchReponse> {
         // @FIXME: post request
         if (numero && numero !== 0) {

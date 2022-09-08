@@ -28,10 +28,11 @@ export interface BulletinAdhesion {
     lieuNaissance?: string;
     situationFamiliale?: SituationFamiliale;
     nombreEnfant?: string;
-    epouse?: Epouse;
-    enfants?: Enfant[];
+    epouses?: Adherent[];
+    enfants?: Adherent[];
     question?: Questionnaire;
     sexe?: string;
+    dateIncorporation?: Date;
     
     
 }
