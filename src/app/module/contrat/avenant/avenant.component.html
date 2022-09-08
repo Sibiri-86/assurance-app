@@ -2100,7 +2100,7 @@
                                     <p-button *ngIf="curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'RESILIATION' || 
                                          curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'RETRAIT' || 
                                          curentExercice?.id != null && rowdata?.typeHistoriqueAvenant === 'SUSPENSION' " 
-                                        styleClass="p-button-danger" class="p-column-title">{{rowdata?.historiqueAvenantPrime?.primeTotalRestituee | formatTableValue : 'number'}} FCFA
+                                        styleClass="p-button-danger" class="p-column-title">{{rowdata.historiqueAvenantPrime.primeTotalRestituee | formatTableValue : 'number' ? rowdata.historiqueAvenantPrime.primeTotalRestituee : 0}} FCFA
                                     </p-button>
                                 </td>
                                 <td>
