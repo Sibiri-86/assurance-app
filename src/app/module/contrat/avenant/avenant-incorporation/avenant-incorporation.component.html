@@ -38,9 +38,9 @@
                     </div>
                 </form>
             </p-fieldset>
-            <div *ngIf="viewListe">
+           <!--  <div *ngIf="viewListe">
                 <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
-            </div>
+            </div> -->
             <p-fieldset legend="Selection" toggleable="true">
                 <div class="p-fluid p-grid">
 
@@ -127,7 +127,7 @@
                             <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges" [disabled]="etat === 'VIEW'"></p-inputNumber>
                         </div>
                         <div class="p-field p-col-4">
-                            <label for="nom">Motif <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                            <label for="nom">Motif <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <input id="Observation" type="text" required formControlName="observation" pInputText [disabled]="etat === 'VIEW'">
                         </div>
                         <div class="p-field p-col-4">
@@ -140,6 +140,9 @@
                     </div>
                 </form>
             </p-fieldset>
+            <div *ngIf="viewListe">
+                <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
+            </div>
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
@@ -349,11 +352,11 @@
                     <div class="p-field p-col-2 p-ac-center">
                         <button *ngIf="isImport === 'NON'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
+                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON' || !this.customForm.get('groupe').value">
                         </button>
                         <button *ngIf="isImport === 'OUI'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'OUI'">
+                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'OUI' || !this.customForm.get('groupe').value && myForm.invalid">
                         </button>
                     </div>
                 </div>

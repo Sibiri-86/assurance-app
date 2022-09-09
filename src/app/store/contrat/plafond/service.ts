@@ -163,5 +163,10 @@ private handleError<T>() {
       return this.http.get<Plafond>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/plafond-groupe`,
           {params: createRequestOption({idGroupe}), observe: 'response'});
   }
+
+  getPlafondGroupeFamilleActeByGroupeAndExerciceId(idExo: string, idGroupe: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
+    return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/famille-acte-groupe-byGroupe-andExercice`,
+        {params: createRequestOption({idExo,idGroupe}), observe: 'response'});
+}
 }
 
