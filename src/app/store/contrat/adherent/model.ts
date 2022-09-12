@@ -4,6 +4,7 @@ import {Genre} from '../../parametrage/genre/model';
 import {QualiteAssure} from '../../parametrage/qualite-assure/model';
 import {Profession} from '../../parametrage/profession/model';
 import { Exercice } from "../exercice/model";
+import { Questionnaire } from "../bulletin-adhesion/model";
 export interface Adherent{
     id?: string;
     matriculeGarant?: string;
@@ -38,6 +39,7 @@ export interface Adherent{
     actif?: boolean;
     exercice?: Exercice;
     ancienGroupes?: Array<Groupe>;
+    question?: Questionnaire;
 }
 
 export interface AdherentResearchReponse {

@@ -22,6 +22,9 @@ import * as selectorsBulletinAdhesion from '../../../store/contrat/bulletin-adhe
 import { BulletinAdhesion, BulletinAdhesionList, Enfant, Epouse, Questionnaire } from 'src/app/store/contrat/bulletin-adhesion/model';
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
 import { AffectionPasse, Choix, Defaut, MaladieProche, SituationFamiliale } from 'src/app/store/contrat/enum/model';
+import * as loadListeActualisee from '../../../store/contrat/adherent/actions';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+
 
 
 @Component({
@@ -35,6 +38,10 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   typeSort = Object.keys(Sort).map(key => ({ label: Sort[key], value: key }));
   adherentSelected: Adherent;
   adherentSelected$: Observable<Adherent>;
+  adherantFamilles: Array<Adherent>;
+  adherantEnfants: Array<Adherent>;
+  adherantEpoux: Array<Adherent>;
+  adherantFamilles$: Observable<Array<Adherent>>;
   cols: any[];
   tab: number[] = [];
   taux: Taux;
@@ -51,10 +58,10 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   listeBulletin: BulletinAdhesionList = {};
   BulletinDetail: BulletinAdhesion = {};
   items: MenuItem[];
-  enfants: Enfant[] = [];
-  enfant: Enfant = {};
-  enfantDetail: Enfant = {};
-  clonedEnfant: { [s: string]: Enfant; } = {};
+  enfants: Adherent[] = [];
+  enfant: Adherent = {};
+  enfantDetail: Adherent = {};
+  clonedEnfant: { [s: string]: Adherent; } = {};
   displayReCTO = false;
   displayQuestionAssurer = false;
   displayQuestion = false;
@@ -64,7 +71,8 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
   displayDetailQuestion = false;
   displayQuestionDetailEnfant = false;
   question: Questionnaire = {};
-  epouse: Epouse = {};
+  epouses: Adherent[] = [];
+  epouse: Adherent = {};
   label: string;
   quuestionAssures: Questionnaire[] =[];
   questionEpoux: Questionnaire[] =[];
@@ -109,11 +117,14 @@ export class BulletinAdhesionComponent implements OnInit, OnDestroy {
     choi: Choix;
 marie = false;
 sexe : string = ""; 
+sexeE : string = ""; 
 index = -1;
+inde = -1;
 isSaving = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
+               private adherentService: AdherentService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bulletin d\'adhésion'}]);
    }
@@ -195,6 +206,7 @@ isSaving = false;
     enfants:  new FormControl(),
     epouse:  new FormControl(),
     sexe: new FormControl(),
+    dateIncorporation: new FormControl(),
     
     });
   }
@@ -257,7 +269,7 @@ isSaving = false;
     enfants:  new FormControl(''),
     epouse:  new FormControl(''),
     sexe: new FormControl(''),
-   
+    dateIncorporation: new FormControl(),
   
     });
 
@@ -285,6 +297,10 @@ isSaving = false;
       traitement:  new FormControl(''),
       subiAccident:  new FormControl(''),
     });  
+    this.enfants = [];
+   this.enfant = {};
+   this.question = {};
+   this.epouse = {};
     this.bulletinForm.get('dateSaisie').setValue(new Date());
     this.bulletinAdhesionList$ = this.store.pipe(select(selectorsBulletinAdhesion.bulletinAdhesionList));
 
@@ -308,15 +324,32 @@ isSaving = false;
         if (value) {
             console.log(value);
             this.adherentSelected = value;
-            this.bulletinForm.get('nomAdherent').setValue(this.adherentSelected.nom);
-            this.bulletinForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+            this.marie = false;
+            this.bulletinForm.get('nomAdherent').setValue(this.adherentSelected.nom.concat(" ").concat(this.adherentSelected.prenom));
+           
             if (this.adherentSelected.adherentPrincipal != null) {
-                this.bulletinForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
-                this.bulletinForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
-               // this.bulletinForm.get('adherent').setValue(this.adherentSelected);
+                this.bulletinForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom.concat(" ").concat(this.adherentSelected.adherentPrincipal.prenom));
+                
               } else {
-                this.bulletinForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
-                this.bulletinForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
+                this.bulletinForm.get('nomAssurePrin').setValue(this.adherentSelected.nom.concat(" ").concat(this.adherentSelected.prenom));
+
+                this.adherentService.findFamilleByAdherent(value.id, this.bulletinForm.get('dateIncorporation').value).subscribe((rest)=>{
+                  this.adherantFamilles = rest;
+                  this.adherantEnfants = this.adherantFamilles.filter(ad=>ad.qualiteAssure.code === "ENFANT");
+                  this.bulletinForm.get('nombreEnfant').setValue(this.adherantEnfants?.length);
+                  this.enfants = this.adherantEnfants;
+                  this.adherantEpoux= this.adherantFamilles.filter(ad=>ad.qualiteAssure.code === "CONJOINT");
+                    this.epouses = this.adherantEpoux;
+                  if(this.epouses.length > 0) {
+                    
+                    console.log("======================");
+                    console.log(this.epouses);
+
+                    this.marie = true;
+                    this.bulletinForm.get('situationFamiliale').setValue(this.situationFamiliales.find(situ=>situ.value == SituationFamiliale.MARIE));
+                  }
+                });
+                
             }
             this.bulletinForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
             this.bulletinForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
@@ -325,14 +358,18 @@ isSaving = false;
             this.bulletinForm.get('police').setValue(this.adherentSelected.groupe.police);
             this.bulletinForm.get('groupe').setValue(this.adherentSelected.groupe);
             this.bulletinForm.get('sexe').setValue(this.adherentSelected.genre.code);
+            this.bulletinForm.get('adresse').setValue(this.adherentSelected.adresse);
+            this.bulletinForm.get('adresse').setValue(this.adherentSelected.adresseEmail);
+            this.bulletinForm.get('tel').setValue(this.adherentSelected.numeroTelephone);
+            this.bulletinForm.get('emploi').setValue(this.adherentSelected?.profession?.description);
+            this.bulletinForm.get('lieuNaissance').setValue(this.adherentSelected.lieuNaissance);
+          //  this.bulletinForm.get('emploi').setValue(this.adherentSelected.profession.description);
             this.sexe = this.adherentSelected.genre.code;
+
         }
     });
 
-   this.enfants = [];
-   this.enfant = {};
-   this.question = {};
-   this.epouse = {};
+   
 
   }
 
@@ -357,6 +394,17 @@ isSaving = false;
     this.displayQuestionEnfant = false
     this.displayQuestion = true;
     this.label = "Epouse";
+  }
+  updateEpoux(epoux: Adherent, index: number) {
+    this.sexe = epoux?.genre?.code;
+    this.displayQuestionEpoux = true;
+    this.displayQuestionAssurer = false;
+    this.displayQuestionEnfant = false
+    this.displayQuestion = true;
+    this.epouse = epoux;
+    this.inde = index;
+   
+    this.questionnaireForm.patchValue(epoux.question);
   }
 
   addQuestionEnfant(index: number) {
@@ -406,8 +454,11 @@ isSaving = false;
     if(this.displayQuestionEpoux) {
       this.questionEpoux = [];
       this.epouse.question  = this.question;
+      if(this.inde !== - 1) {
      
-      this.questionEpoux.push(this.question);
+        this.epouses[this.inde] = this.epouse;
+      } 
+      // this.questionEpoux.push(this.question);
       console.log("========================");
       console.log(this.questionEpoux);
       this.displayQuestionEpoux = false;
@@ -454,7 +505,9 @@ isSaving = false;
     
    
   }
-  updateEnfant(enfant: Enfant, index: number) {
+  updateEnfant(enfant: Adherent, index: number) {
+    this.displayQuestionEpoux = false;
+    this.displayQuestionAssurer = false;
     this.displayQuestionEnfant = true;
     this.enfant = enfant;
     this.index = index;
@@ -532,7 +585,7 @@ isSaving = false;
 
 
     editBulletin(bulletin: BulletinAdhesion) {
-      
+      this.displayFormBulletin = true;
      // this.bulletinAdhesion.dateSaisie = bulletin.dateSaisie;
      console.log("===========", bulletin);
   
@@ -540,20 +593,20 @@ isSaving = false;
       this.bulletinForm.patchValue(this.bulletinAdhesion);
       this.bulletinForm.get('dateSaisie').setValue(new Date(bulletin.dateSaisie));
       this.bulletinForm.get('dateEntreeService').setValue(bulletin.dateEntreeService);
-      this.bulletinForm.get('situationFamiliale').setValue(bulletin.situationFamiliale);
+     //  this.bulletinForm.get('situationFamiliale').setValue(bulletin.situationFamiliale);
       this.quuestionAssures = [];
       this.questionEpoux = [];
       this.quuestionAssures.push(bulletin.question);
-      this.questionEpoux.push(bulletin.epouse.question);
-      this.epouse = bulletin.epouse;
-      this.epouse.dateNaissanceEpoux = new Date(bulletin.epouse.dateNaissanceEpoux);
+     // this.questionEpoux.push(bulletin.epouse);
+      this.epouses = bulletin.epouses;
+     // this.epouse.dateNaissanceEpoux = new Date(bulletin.epouses.dateNaissanceEpoux);
  
       this.enfants = bulletin.enfants;
       
       if(bulletin.situationFamiliale == 'MARIE') {
         this.marie = true;
       }
-      this.displayFormBulletin = true;
+     
       }
 
       closeDialog() {
@@ -566,17 +619,10 @@ isSaving = false;
       onCreate() {
         this.bulletinAdhesion = this.bulletinForm.value;
         this.bulletinAdhesion.enfants = this.enfants;
-        this.bulletinAdhesion.epouse = this.epouse;
-        this.bulletinAdhesion.epouse.question =this.questionEpoux[0];
-        this.bulletinAdhesion.situationFamiliale = this.bulletinForm.value.situationFamiliale.value;
+        this.bulletinAdhesion.epouses = this.epouses;
+        this.bulletinAdhesion.situationFamiliale = this.bulletinForm.value?.situationFamiliale?.value;
         console.log(this.bulletinAdhesion);
         console.log(this.bulletinForm.value);
-        if(this.bulletinAdhesion.sexe ==='M' ) {
-          this.bulletinAdhesion.epouse.sexe = 'F';
-        }
-        if(this.bulletinAdhesion.sexe ==='F' ) {
-          this.bulletinAdhesion.epouse.sexe = 'M';
-        }
           this.confirmationService.confirm({
           message: 'Etes vous sur de vouloir ajouter ce bulletin?',
           header: 'Confirmation',
@@ -588,6 +634,7 @@ isSaving = false;
               this.store.dispatch(featureActionBulletinAdhesion.updateBulletin(this.bulletinAdhesion));
               console.log(this.bulletinForm.value);
               // this.displayFormBulletin = false;
+             
             }else{
 
             this.store.dispatch(featureActionBulletinAdhesion.createBulletin(this.bulletinAdhesion));
@@ -617,9 +664,10 @@ isSaving = false;
         voirBulletin(bulletin: BulletinAdhesion) {
           this.questionsEpoux = [];
           this.quuestionsAssures = [];
+          
           console.log(bulletin);
           this.BulletinDetail = bulletin;
-          this.questionsEpoux.push(bulletin.epouse.question);
+         // this.questionsEpoux.push(bulletin.epouse.question);
           this.quuestionsAssures.push(bulletin.question);
 
           // this.enfants = this.BulletinDetail.enfants;
@@ -638,8 +686,9 @@ isSaving = false;
           this.bulletinForm.get('numeroPolice').setValue('');
           this.bulletinForm.get('nomGroupeAdherent').setValue('');
           this.bulletinForm.get('nomPoliceAdherent').setValue('');
+          console.log(this.bulletinForm.get('dateIncorporation').value);
           this.adherentSelected = null;
-          this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+          this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.bulletinForm.get('dateIncorporation').value, matricule: event.target.value}));
         
       }
 
@@ -649,14 +698,14 @@ isSaving = false;
        this.displayQuestionEnfant = true;
       }
 
-      editEnfant(enfant: Enfant) {
+      editEnfant(enfant: Adherent) {
         console.log(this.enfants);
         console.log(enfant);
         this.clonedEnfant[enfant.id] = {...enfant};
         
       }
     
-      onRowEditSaveEnfant(enfant: Enfant, index: number) {
+      onRowEditSaveEnfant(enfant: Adherent, index: number) {
          // enfant.question = ;
          if(enfant.id === null) {
            this.enfants = this.enfants.filter(enf=> enf !== this.enfants[index]);
@@ -686,9 +735,9 @@ isSaving = false;
         this.displayDetailQuestion = true;
       }
 
-      VoirEnfant(enfant: Enfant) {
+      VoirEnfant(enfant: Adherent) {
         this.enfantDetail = enfant;
-        this.enfantDetail.dateNassance = new Date(enfant.dateNassance);
+        this.enfantDetail.dateNaissance = new Date(enfant.dateNaissance);
         this.displayQuestionDetailEnfant = true;
       }
       

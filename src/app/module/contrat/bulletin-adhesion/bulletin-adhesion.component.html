@@ -63,7 +63,7 @@
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editBulletin(bulletin)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteBulletin(bulletin)"></button>
                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirBulletin(bulletin)"></button>
-    
+   
                         </td>
                     </tr>
                 </ng-template>
@@ -148,23 +148,21 @@
                         <p-fieldset legend="Information de l'Assuré" toggleable="true">
                                 
                         <div class="p-fluid p-formgrid p-grid">
-
-            
-                            
-                        
+                           
+                            <div class="p-field p-col">
+                                <label for="dateIncorporation">Date d'incorporation </label>
+                                <input type="date" name="dateIncorporation" id="dateIncorporation" pInputText formControlName="dateIncorporation">
+                            </div>
                             
                             <div class="p-field p-col">
                                 <label for="matriculeAdherent">Matricule adhérent<span class="required">*</span></label>
                                 <input id="matriculeAdherent" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
                             </div>
                             <div class="p-field p-col">
-                                <label for="nomAdherent">Nom</label>
+                                <label for="nomAdherent">Nom et prenom assuré</label>
                                 <input id="nomAdherent" class="champ" type="text" formControlName="nomAdherent" disabled pInputText>
                             </div>
-                            <div class="p-field p-col">
-                                <label for="prenomAdherent">Prenom</label>
-                                <input id="prenomAdherent" class="champ" type="text" formControlName="prenomAdherent" disabled pInputText>
-                            </div>
+                           
                             
                         </div>
                             
@@ -174,26 +172,25 @@
                             
 
                                 <div class="p-field p-col" >
-                                    <label for="nomAssurePrin">Nom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <label for="nomAssurePrin">Nom et Prénom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                                     <input id="nomAssurePrin" class="champ" type="text" formControlName="nomAssurePrin" disabled pInputText>
                                 </div>
             
-                                <div class="p-field p-col">
-                                    <label for="nomAdherent">Prénom Assuré Principal<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="prenomAssurePrin" class="champ" type="text" formControlName="prenomAssurePrin" disabled pInputText>
-                                </div>
+                               
                                 
                                 <div class="p-field p-col">
                                     <label for="groupeAdherent">Numero groupe</label>
                                     <input id="groupeAdherent" class="champ" type="text" formControlName="numeroGroupe" disabled pInputText>
                                 </div>
-                            </div>
-                            <div class="p-fluid p-formgrid p-grid">
-                                
+
                                 <div class="p-field p-col">
                                     <label for="policeAdherent">Numero police</label>
                                     <input id="policeAdherent" class="champ" type="text" formControlName="numeroPolice" disabled pInputText>
                                 </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                
+                                
                                 
                                 <div class="p-field p-col">
                                     <label for="souscripteur">Souscripteur</label>
@@ -204,14 +201,16 @@
                                     <label for="dateEffet">Date de saisie <span style="color: red !important;">*</span></label>
                                     <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy"  inputId="calendar" disabled formControlName="dateSaisie" appendTo="body" disabled></p-calendar>
                                 </div>
+
+                                <div class="p-field p-col">
+                                    <label for="raisonSociale">Raison sociale </label>
+                                    <input id="raisonSociale" type="text" formControlName="raisonSociale" pInputText>
+                                    
+                                </div>
+
                             </div>
                             
-                        
-                        <!--  <div class="p-field p-col-2"></div>
-                            <div class="p-field p-col-6">
-                                <input id="file" class="champ" type="file" formControlName="nomPoliceAdherent" pInputText>
-
-                            </div> -->
+                    
                         
                        
                      
@@ -221,11 +220,7 @@
                                     
                                     <div class="p-fluid p-formgrid p-grid">
 
-                                        <div class="p-field p-col">
-                                            <label for="raisonSociale">Raison sociale </label>
-                                            <input id="raisonSociale" type="text" formControlName="raisonSociale" pInputText>
-                                            
-                                        </div>
+                                        
                                         <div class="p-field p-col">
                                             <label for="dateEntreeService">Entrée au service du contractant le </label>
                                             <input type="date" name="dateEntreeService" id="dateEntreeService" pInputText formControlName="dateEntreeService">
@@ -236,15 +231,16 @@
                                             <input id="adresse" type="text" formControlName="adresse" pInputText>
                                             
                                         </div>
-                                    </div>
-
-                                    <div class="p-fluid p-formgrid p-grid">
-
                                         <div class="p-field p-col">
                                             <label for="tel">Tel</label>
                                             <p-inputMask id="numeroTelephone" formControlName="tel" mask="99 99 99 99"></p-inputMask>
                                             
                                         </div>
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+
+                                        
                                         <div class="p-field p-col">
                                             <label for="emploi">Emploi</label>
                                             <input id="emploi" type="text" formControlName="emploi" pInputText>
@@ -255,16 +251,17 @@
                                             <input id="lieuNaissance" type="text" formControlName="lieuNaissance" pInputText>
                                             
                                         </div>
-                                    </div>
-
-                                    <div class="p-fluid p-formgrid p-grid">
-                        
                                         <div class="p-field p-col" >
                                             <label for="situationFamiliale">Situation Familiale</label>
                                             <p-dropdown  inputId="situationFamiliale" dataKey="id" [filter]="true" showClear="true" [options]="situationFamiliales"
                                             (onChange)="viewSituation()" formControlName="situationFamiliale" placeholder="Select" optionLabel="label"></p-dropdown>
                                             
                                         </div>
+                                    </div>
+
+                                    <div class="p-fluid p-formgrid p-grid">
+                        
+                                        
                                         
                     
                                         <div class="p-field p-col">
@@ -329,58 +326,46 @@
                <p-fieldset legend="Information de l'épouse(x)" toggleable="true" *ngIf="marie">
                 <div class="card">
                         
-                    <div class="p-fluid p-formgrid p-grid" >
-                            <div class="p-field p-col">
-                                <label for="nomEpouse">Nom et prénom épouse(x)</label>
-                                <input id="nomEpouse" class="champ" type="text" [(ngModel)]="epouse.nomEpouse" pInputText>
-                            </div>
-                            <div class="p-field p-col">
-                                <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
-                                <p-calendar id="dateNaissanceEpoux" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [(ngModel)]="epouse.dateNaissanceEpoux" appendTo="body"></p-calendar>
-                            </div>
-                            <div class="p-field p-col" >
-                                <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
-                                <input id="lieuNaissanceEpouse" class="champ" type="text" [(ngModel)]="epouse.lieuNaissanceEpouse" pInputText>
-                            </div>
-
-                            <div class="p-field p-col" >
-                                <label for="emploiEpouse">Emploi</label>
-                                <input id="emploiEpouse" class="champ" type="text" [(ngModel)]="epouse.emploiEpouse"  pInputText>
-                            </div>
-                     </div>
+                   
                      <div class="p-fluid p-formgrid p-grid">
             
                         
-                        <div  *ngIf="questionEpoux.length <= 0">
-                           
-                            <p-button  label="Repondez aux questions" icon="pi pi-plus" (click)="addQuestionEpouse()"></p-button>
-                        </div>
+                       
                         
-                            <p-table [value]="questionEpoux" dataKey="" *ngIf="questionEpoux.length > 0">
-                                <ng-template pTemplate="header">
-                                    <tr>
+                        <p-table [value]="epouses" dataKey="id" editMode="row" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                
+                                   
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Date Naissance</th>
+                                    <th>Lieu de naissance</th>
+                                    <th style="width:8rem"></th>
                                     
-                                        <th>Poids</th>
-                                        <th>Taille</th>
-                                        <th>Modifiication du questionnaire</th>
-                                       
+                                </tr>
+                            </ng-template>
+        
+                            <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                <tr >
+                            
+                                    
+                                    <td>{{rowData.nom}}</td>
+                                    <td>{{rowData.prenom}}</td>
+                                    <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
+        
+                                    <td> {{rowData.lieuNaissance}}</td>
+                                    
+                                    <td style="text-align:center">
                                         
-                                    </tr>
-                                </ng-template>
-                                <ng-template  pTemplate="body" let-question >
-                                    <tr>
-                                        <td> {{question?.poids}}
-                                        </td>
-                                        <td> {{question?.taille}}
-                                        </td>
-
-                                        <td>
-                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestionEpoux(question)"></button>
-                                        </td>
-                                        
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                                        <button  pButton pRipple type="button"  icon="pi pi-plus" *ngIf="!rowData.question" (click)="updateEpoux(rowData,ri)" class="p-button-rounded p-button-text"></button>
+        
+                                        <button  pButton pRipple type="button"  icon="pi pi-pencil" *ngIf="rowData.question" (click)="updateEpoux(rowData,ri)" class="p-button-rounded p-button-text"></button>
+                                     </td>
+                            
+                                </tr>
+                            </ng-template>
+                        </p-table>
                         
                         
                 
@@ -389,9 +374,9 @@
         </p-fieldset>
                <div class="p-grid p-justify-between" *ngIf="this.bulletinForm.value.nombreEnfant > 0 && enfants.length <= this.bulletinForm.value.nombreEnfant -1">
                 <div> </div>
-                <div>
+                <!-- <div>
                     <p-button   label="Ajoute un  enfant"  icon="pi pi-plus" (click)="addEnfant()"></p-button>
-                </div>
+                </div> -->
             </div>
                
                <div class="p-fluid p-formgrid p-grid"  *ngIf="this.bulletinForm.value.nombreEnfant > 0" >
@@ -414,17 +399,18 @@
                         <tr >
                     
                             
-                            <td>{{rowData.nomEnfant}}</td>
-                            <td>{{rowData.prenomEnfant}}</td>
-                            <td>{{rowData.dateNaissanceEnfant  | formatTableValue : 'date'}}</td>
+                            <td>{{rowData.nom}}</td>
+                            <td>{{rowData.prenom}}</td>
+                            <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
 
-                            <td> {{rowData.lieuNaisssance}}</td>
+                            <td> {{rowData.lieuNaissance}}</td>
                             
                             <td style="text-align:center">
-                                <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="updateEnfant(rowData,ri)" class="p-button-rounded p-button-text"></button>
-        
+                                
+                                <button  pButton pRipple type="button"  icon="pi pi-plus" *ngIf="!rowData.question" (click)="updateEnfant(rowData,ri)" class="p-button-rounded p-button-text"></button>
 
-                                </td>
+                                <button  pButton pRipple type="button"  icon="pi pi-pencil" *ngIf="rowData.question" (click)="updateEnfant(rowData,ri)" class="p-button-rounded p-button-text"></button>
+                             </td>
                     
                         </tr>
                     </ng-template>
@@ -636,59 +622,39 @@
        <p-fieldset legend="Information de l'épouse(x)" toggleable="true">
         <div class="card">
                 
-            <div class="p-fluid p-formgrid p-grid" >
-                    <div class="p-field p-col">
-                        <label for="nomEpouse">Nom et prénom épouse(x)</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.nomEpouse}}
-                    </div>
-                    <div class="p-field p-col">
-                        <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.dateNaissanceEpoux | formatTableValue : 'date'}}
-                    </div>
-                    <div class="p-field p-col" >
-                        <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.lieuNaissanceEpouse}}
-                    </div>
+            <p-table [value]="BulletinDetail.epouses" dataKey="id" editMode="row" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                    
+                       
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Date Naissance</th>
+                        <th>Lieu de naissance</th>
+                        <th style="width:8rem"></th>
+                        
+                    </tr>
+                </ng-template>
 
-                    <div class="p-field p-col" >
-                        <label for="emploiEpouse">Emploi</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.emploiEpouse}}
-                    </div>
-             </div>
-             <div class="p-fluid p-formgrid p-grid">
-    
+                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                    <tr >
                 
-               
-                
-                    <p-table [value]="questionsEpoux" dataKey="">
-                        <ng-template pTemplate="header">
-                            <tr>
+                        
+                        <td>{{rowData.nom}}</td>
+                        <td>{{rowData.prenom}}</td>
+                        <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
+
+                        <td> {{rowData.lieuNaissance}}</td>
+                        
+                        <td style="text-align:center">
                             
-                                <th>Poids</th>
-                                <th>Taille</th>
-                                <th>Détail du questionnaire</th>
-                               
-                                
-                            </tr>
-                        </ng-template>
-                        <ng-template  pTemplate="body" let-question >
-                            <tr>
-                                <td> {{question.poids}}
-                                </td>
-                                <td> {{question.taille}}
-                                </td>
-
-                                <td>
-                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question, BulletinDetail.epouse?.sexe)"></button>
-                                </td>
-                                
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir"  class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(rowData.question, BulletinDetail.epouse?.sexe)"></button>
+                        </td>
                 
-                
-        
-            </div>
+                    </tr>
+                </ng-template>
+            </p-table>
+             
        </div>
 </p-fieldset>
        
@@ -713,14 +679,15 @@
                 <tr >
             
                     
-                    <td>{{rowData.nomEnfant}}</td>
-                    <td>{{rowData.prenomEnfant}}</td>
-                    <td>{{rowData.dateNassance  | formatTableValue : 'date'}}</td>
+                    <td>{{rowData.nom}}</td>
+                    <td>{{rowData.prenom}}</td>
+                    <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
 
-                    <td> {{rowData.lieuNaisssance}}</td>
+                    <td> {{rowData.lieuNaissance}}</td>
+                    
                     
                     <td style="text-align:center">
-                        <button  pButton pRipple type="button"  icon="pi pi-eye" (click)="VoirEnfant(rowData)" class="p-button-rounded p-button-success p-mr-2"></button>
+                        <button  pButton pRipple type="button"  icon="pi pi-eye"  (click)="VoirEnfant(rowData)" class="p-button-rounded p-button-success p-mr-2"></button>
 
 
                         </td>
@@ -742,12 +709,12 @@
     </p-dialog>
 
 
-<p-dialog [(visible)]="displayQuestionEnfant"  header="Veuillez ajouter l'enfant et repondre aux questions" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="displayQuestionEnfant"  header="Veuillez repondre aux questions" [modal]="true" styleClass="p-fluid">
     
     <ng-template pTemplate="content"> 
         <div class="card">
 
-        <p-fieldset legend="Information de l'enfant" toggleable="true">
+       <!--  <p-fieldset legend="Information de l'enfant" toggleable="true">
             <div class="card">
                     
                 <div class="p-fluid p-formgrid p-grid" >
@@ -774,7 +741,7 @@
                  </div>
                 
            </div>
-    </p-fieldset>
+    </p-fieldset> -->
     <p-fieldset legend="Veuillez repondre aux questions" toggleable="true">
     <form  [formGroup]="questionnaireForm">
                      <div class="card">
