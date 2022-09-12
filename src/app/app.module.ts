@@ -263,6 +263,7 @@ import { RenouvellementAdherentListComponent } from './module/contrat/avenant/re
 import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/groupe-ajout.component';
 import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
+import { TypeJournauxEffects } from './store/parametrage/typeJournaux/effect';
 
 @NgModule({
     imports: [
@@ -371,7 +372,7 @@ import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-pr
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects,TypeJournauxEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

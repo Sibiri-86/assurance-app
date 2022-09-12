@@ -566,6 +566,10 @@ isSaving = false;
   addBulletin() {
     this.bulletinAdhesion = {};
     this.displayFormBulletin = true;
+    this.bulletinForm.get('dateSaisie').setValue(new Date());
+    this.epouses = [];
+    this.enfants = [];
+    this.marie = false;
     }
 
     

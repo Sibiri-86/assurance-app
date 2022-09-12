@@ -403,4 +403,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly PARAMETRAGE_TYPE_JOURNAUX = {
+            prod: `${SERVICE_PREFIX}/parametrage/typeJournaux`,
+            mock: `assets/mock/parametrage/typeJournaux.mock.json`
+        };
+
 }

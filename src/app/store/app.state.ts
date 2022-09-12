@@ -52,6 +52,7 @@ import { OrdonnanceMedicaleState } from './medical/ordonnance-medical/state';
 import { BulletinAdhesionState } from './contrat/bulletin-adhesion/state';
 import { HistoriqueAvenantAdherant } from './contrat/historiqueAvenantAdherent/model';
 import { HistoriqueAvenantAdherantState } from './contrat/historiqueAvenantAdherent/state';
+import { TypeJournauxState } from './parametrage/typeJournaux/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -105,4 +106,5 @@ export interface AppState {
   conventionState: ConventionState;
   ordonnanceMedicaleState: OrdonnanceMedicaleState;
   historiqueAvenantAdherantState: HistoriqueAvenantAdherantState;
+  typeJournauxState: TypeJournauxState;
 }

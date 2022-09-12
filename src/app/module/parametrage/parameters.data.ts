@@ -105,6 +105,8 @@ import { banqueList } from 'src/app/store/parametrage/Banques/selector';
 import * as tauxCommissionIntermediaireAction from '../../store/parametrage/taux-commission-intermediaire/actions';
 import { TauxCommissionIntermediaireList } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
 import { tauxcommissionintermediaireList } from 'src/app/store/parametrage/taux-commission-intermediaire/selector';
+import { typeJournauxList } from 'src/app/store/parametrage/typeJournaux/selector';
+import * as typeJournauxActions from '../../store/parametrage/typeJournaux/actions';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -142,6 +144,7 @@ export const DATA_TYPE = [
   {label: 'Type Affaire', value: 'TypeAffaire'},
   {label: 'Type Prime', value: 'TypePrime'},
   {label: 'Mode de paiement', value: 'ModePaiement'},
+  {label: 'type de journal', value: 'TypeJournaux'},
   {label: 'Type intermediaire', value: 'TypeIntermediaire'}
 ];
 
@@ -2072,6 +2075,56 @@ export const DATA_DEFINITION = [
       updateAction: zonePaysActions.updateZonePays,
       deleteAction: zonePaysActions.deleteZonePays,
       importAction: zonePaysActions.importZonePays
+    }
+  },
+
+
+  {
+    entity: 'TypeJournaux',
+    cols: [
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: typeJournauxList,
+      fetchAction: typeJournauxActions.loadTypeJournaux(),
+      createAction: typeJournauxActions.createTypeJournaux,
+      updateAction: typeJournauxActions.updateTypeJournaux,
+      deleteAction: typeJournauxActions.deleteTypeJournaux,
+      importAction: typeJournauxActions.importTypeJournaux
     }
   }
 
