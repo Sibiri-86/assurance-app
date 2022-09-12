@@ -664,6 +664,7 @@ isSaving = false;
         voirBulletin(bulletin: BulletinAdhesion) {
           this.questionsEpoux = [];
           this.quuestionsAssures = [];
+          
           console.log(bulletin);
           this.BulletinDetail = bulletin;
          // this.questionsEpoux.push(bulletin.epouse.question);

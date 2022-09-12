@@ -62,8 +62,8 @@
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editBulletin(bulletin)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteBulletin(bulletin)"></button>
-<!--                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirBulletin(bulletin)"></button>
- -->    
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirBulletin(bulletin)"></button>
+   
                         </td>
                     </tr>
                 </ng-template>
@@ -622,62 +622,39 @@
        <p-fieldset legend="Information de l'épouse(x)" toggleable="true">
         <div class="card">
                 
-            <div class="p-fluid p-formgrid p-grid" >
-                    <div class="p-field p-col">
-                        <label for="nomEpouse">Nom et prénom épouse(x)</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.nomEpouse}}
-                    </div>
-                    <div class="p-field p-col">
-                        <label for="dateNaissanceEpoux">Date naissance epouse(x)</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.dateNaissanceEpoux | formatTableValue : 'date'}}
-                    </div>
-                    <div class="p-field p-col" >
-                        <label for="lieuNaissanceEpouse">Lieu de Naissance</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail?.epouse?.lieuNaissanceEpouse}}
-                    </div>
+            <p-table [value]="BulletinDetail.epouses" dataKey="id" editMode="row" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                    
+                       
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Date Naissance</th>
+                        <th>Lieu de naissance</th>
+                        <th style="width:8rem"></th>
+                        
+                    </tr>
+                </ng-template>
 
-                    <div class="p-field p-col" >
-                        <label for="emploiEpouse">Emploi</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{BulletinDetail.epouse?.emploiEpouse}}
-                    </div>
-             </div>
-             <div class="p-fluid p-formgrid p-grid">
-    
+                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                    <tr >
                 
-               
-                
-                    <p-table [value]="questionsEpoux" dataKey="">
-                        <ng-template pTemplate="header">
-                            <tr>
+                        
+                        <td>{{rowData.nom}}</td>
+                        <td>{{rowData.prenom}}</td>
+                        <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
+
+                        <td> {{rowData.lieuNaissance}}</td>
+                        
+                        <td style="text-align:center">
                             
-                                <th>Poids</th>
-                                <th>Taille</th>
-                                <th>Détail du questionnaire</th>
-                               
-                                
-                            </tr>
-                        </ng-template>
-                        <ng-template  pTemplate="body" let-question >
-                            <tr>
-                                <td> {{question.poids}}
-                                </td>
-                                <td> {{question.taille}}
-                                </td>
-
-                                <td>
-                                    
-                                    <button pButton pRipple icon="pi pi-plus"  pTooltip="voir" class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question, BulletinDetail.epouse?.sexe)"></button>
-
-                                <button pButton pRipple icon="pi pi-eye" pTooltip="voir"  class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(question, BulletinDetail.epouse?.sexe)"></button>
-                                </td>
-                                
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir"  class="p-button-rounded p-button-success p-mr-2" (click)="voirQuestionEpoux(rowData.question, BulletinDetail.epouse?.sexe)"></button>
+                        </td>
                 
-                
-        
-            </div>
+                    </tr>
+                </ng-template>
+            </p-table>
+             
        </div>
 </p-fieldset>
        
@@ -702,11 +679,11 @@
                 <tr >
             
                     
-                    <td>{{rowData.nomEnfant}}</td>
-                    <td>{{rowData.prenomEnfant}}</td>
-                    <td>{{rowData.dateNassance  | formatTableValue : 'date'}}</td>
+                    <td>{{rowData.nom}}</td>
+                    <td>{{rowData.prenom}}</td>
+                    <td>{{rowData.dateNaissance  | formatTableValue : 'date'}}</td>
 
-                    <td> {{rowData.lieuNaisssance}}</td>
+                    <td> {{rowData.lieuNaissance}}</td>
                     
                     
                     <td style="text-align:center">
