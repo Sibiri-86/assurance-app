@@ -264,6 +264,7 @@ import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/grou
 import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
 import { TypeJournauxEffects } from './store/parametrage/typeJournaux/effect';
+import { CompteComponent } from './module/comptabilite/compte/compte.component';
 
 @NgModule({
     imports: [
@@ -478,7 +479,8 @@ import { TypeJournauxEffects } from './store/parametrage/typeJournaux/effect';
         AvenantRetraitRenouvellementComponent,
         RenouvellementAdherentListComponent,
         AdherentBasculerComponent,
-        GroupeAjoutComponent
+        GroupeAjoutComponent,
+        CompteComponent
     ],
     providers: [
         {
