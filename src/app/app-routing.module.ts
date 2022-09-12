@@ -66,6 +66,7 @@ import { TierPayantOrdreReglementSearchComponent } from './module/prestation/tie
 import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bulletin-adhesion.component';
 import { PrestataireCartographieComponent } from './module/contrat/prestataire-cartographie/prestataire-cartographie.component';
 import { ExerciceComponent } from './module/contrat/exercice/exercice.component';
+import { CompteComponent } from './module/comptabilite/compte/compte.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -136,7 +137,8 @@ import { ExerciceComponent } from './module/contrat/exercice/exercice.component'
                     {path: 'prestation/tierPayant/consultation', component: SinistreTiersPayantConsultationComponent},
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent},
-                    {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent}
+                    {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent},
+                    {path: 'comptabilite/compte', component: CompteComponent}
                 ]
             },
             {path: 'error', component: AppErrorComponent},

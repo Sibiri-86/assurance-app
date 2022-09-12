@@ -263,6 +263,7 @@ import { RenouvellementAdherentListComponent } from './module/contrat/avenant/re
 import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/groupe-ajout.component';
 import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
+import { CompteComponent } from './module/comptabilite/compte/compte.component';
 
 @NgModule({
     imports: [
@@ -477,7 +478,8 @@ import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-pr
         AvenantRetraitRenouvellementComponent,
         RenouvellementAdherentListComponent,
         AdherentBasculerComponent,
-        GroupeAjoutComponent
+        GroupeAjoutComponent,
+        CompteComponent
     ],
     providers: [
         {
