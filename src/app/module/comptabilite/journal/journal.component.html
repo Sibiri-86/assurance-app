@@ -1,0 +1,172 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addJournal()"></button>
+<!-- 					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedBulletin()"></button>
+ -->				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            
+            <p-table #dt [value]="journauxList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle','typeJournaux.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="type" style="min-width:200px">Type<p-sortIcon field="type"></p-sortIcon></th>
+                        <th pSortableColumn="code" style="min-width:100px">Code<p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="libelle" style="min-width:200px">Intitullé<p-sortIcon field="numero"></p-sortIcon></th>
+                       
+                       
+                        <th style="min-width:150px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-journal>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="journal"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{journal?.typeJournaux?.libelle}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{journal.code}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{journal.libelle}}</span>
+                        </td>
+                        
+                        
+                        <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editJournal(journal)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteJournal(journal)"></button>
+<!--                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirJournal(journal)"></button>
+ -->   
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{journauxList ? journauxList.length : 0 }} journaux.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div> 
+        
+        
+        
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayJournalDetail" header="Journal" [modal]="true" styleClass="p-fluid" >
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="">Type</label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{journalDetail?.typeJournaux?.libelle}}
+                             </div>
+
+                             <div class="p-field p-col">
+                                <label for="">Code</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;{{journalDetail?.code}}
+                                 </div>
+
+                                 <div class="p-field p-col">
+                                    <label for="">Intitulé</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;{{journalDetail?.libelle}}
+                                     </div>
+
+                    </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+
+        
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayJournal" header="Journal" [modal]="true" styleClass="p-fluid" >
+            <ng-template pTemplate="content">
+                <div class="card">
+                <form >
+                    <div class="card">
+                        
+                                
+                        <div class="p-fluid p-formgrid p-grid">
+                           
+                           <!--  <div class="p-field p-col">
+                                <label for="dateIncorporation">Date de saisie </label>
+                                <input type="date" name="dateSaisie" pInputText [(ngModel)]="journal.dateSaisie">
+                            </div> -->
+                            
+
+                            <div class="p-field p-col-12">
+                                <label for="typeJournaux">Type Journal </label>
+                                <p-dropdown inputId="typeJournaux" [filter]="true"
+                                showClear="true" [options]="typeJournauxList" name="typeJournaux"
+                                [(ngModel)]="journal.typeJournaux" placeholder="Select type journal"
+                                optionLabel="libelle" ></p-dropdown>
+                          </div>
+                           
+                            
+                           
+                            
+                        </div>
+                            
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label for="matriculeAdherent">Code<span class="required">*</span></label>
+                                <input id="matriculeAdherent" type="text" required [(ngModel)]="journal.code"  name="code" pInputText>
+                            </div>
+                            <div class="p-field p-col">
+                                <label for="nomAdherent">Intitulé<span class="required">*</span></label>
+                                <input id="nomAdherent" class="champ" type="text" [(ngModel)]="journal.libelle"  name="libelle" required pInputText>
+                            </div>
+                                
+                            
+
+                       </div>
+                            
+                            
+                                                   
+                    </div>
+               </form>
+
+               
+               
+               
+               
+                        
+                
+                        
+                      
+            <div class="p-grid p-justify-between">
+                <div>
+                    <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                </div>
+                <div>
+                    <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreate()" ></button>
+                </div>
+            </div>
+             
+
+         
+               </div>    
+               </ng-template>      
+            </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

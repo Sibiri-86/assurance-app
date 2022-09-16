@@ -265,6 +265,13 @@ import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-bas
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
 import { TypeJournauxEffects } from './store/parametrage/typeJournaux/effect';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { JournalComponent } from './module/comptabilite/journal/journal.component';
+import { JournauxEffects } from './store/comptabilite/journaux/effect';
+import { ExerciceComptableEffects } from './store/comptabilite/exercice-comptable/effect';
+import { ExerciceComptableComponent } from './module/comptabilite/exercice-comptable/exercice-comptable.component';
+import { ExerciceComptableOperationEffects } from './store/comptabilite/exercice-comptable-operation/effect';
+import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
+import {  OperationEffects } from './store/comptabilite/operation/effect';
 
 @NgModule({
     imports: [
@@ -373,7 +380,8 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects,TypeJournauxEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects,TypeJournauxEffects, JournauxEffects,
+            ExerciceComptableEffects, ExerciceComptableOperationEffects, OperationEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -480,7 +488,10 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
         RenouvellementAdherentListComponent,
         AdherentBasculerComponent,
         GroupeAjoutComponent,
-        CompteComponent
+        CompteComponent,
+        JournalComponent,
+        ExerciceComptableComponent,
+        ExerciceComptableOperationComponent
     ],
     providers: [
         {

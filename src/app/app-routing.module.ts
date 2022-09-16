@@ -67,6 +67,9 @@ import { BulletinAdhesionComponent } from './module/contrat/bulletin-adhesion/bu
 import { PrestataireCartographieComponent } from './module/contrat/prestataire-cartographie/prestataire-cartographie.component';
 import { ExerciceComponent } from './module/contrat/exercice/exercice.component';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { JournalComponent } from './module/comptabilite/journal/journal.component';
+import { ExerciceComptableComponent } from './module/comptabilite/exercice-comptable/exercice-comptable.component';
+import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -138,7 +141,11 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent},
                     {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent},
-                    {path: 'comptabilite/compte', component: CompteComponent}
+                    {path: 'comptabilite/compte', component: CompteComponent},
+                    {path: 'comptabilite/journal', component: JournalComponent},
+                    {path: 'comptabilite/exercice-comptable', component: ExerciceComptableComponent},
+                    {path: 'comptabilite/exercice-comptable-operation', component: ExerciceComptableOperationComponent}
+                    
                 ]
             },
             {path: 'error', component: AppErrorComponent},

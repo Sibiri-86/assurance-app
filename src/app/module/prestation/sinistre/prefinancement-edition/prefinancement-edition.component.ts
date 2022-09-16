@@ -1043,6 +1043,15 @@ findMontantPlafond(event){
       }
 
     }
+  } else {
+    const myForm1 = this.prestationPopForm;
+    myForm1.patchValue({
+      montantRembourse: 0,
+      debours: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+    this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, montantSupporte: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value});
   }
   
   }
@@ -1077,6 +1086,8 @@ findTaux() {
     this.prestationList[ri].nombreActe = data.cle;
   }
 rechercheAdherentDateSoin(event) {
+  this.prestationPopForm.get('sort').setValue("");
+  this.prestationPopForm.get('observation').setValue("");
   if(this.prestationPopForm.get('dateSoins').value  && this.prestationPopForm.get('matriculeAdherent').value) {
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: this.prestationPopForm.get('matriculeAdherent').value}));
 
@@ -1097,6 +1108,8 @@ rechercheAdherentDateSoin(event) {
         this.prestationPopForm.get('prenomAdherent').setValue("");
    
         this.prestationPopForm.get('prenomAdherent').setValue("");
+        this.prestationPopForm.get('sort').setValue("");
+        this.prestationPopForm.get('observation').setValue("");
     
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
     }
