@@ -26,6 +26,12 @@ $getOperation(): Observable<OperationList> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}`, operation);
   }
 
+  posOperationList(operationList: Array<Operation>): Observable<any> {
+
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/liste`, operationList);
+  }
+
 updateOperation(operation: Operation): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/${operation.id}`, operation);

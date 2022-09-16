@@ -23,11 +23,12 @@ import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 import * as featureActionExerciceComptableOperation from '../../../store/comptabilite/exercice-comptable-operation/actions';
 import * as exerciceComptableOperationListSelector from '../../../store/comptabilite/exercice-comptable-operation/selector';
 import { ExerciceComptableOperation } from 'src/app/store/comptabilite/exercice-comptable-operation/model';
-import { Operation } from 'src/app/store/comptabilite/operation/model';
+import { Operation, OperationList } from 'src/app/store/comptabilite/operation/model';
 import * as featureActionOperation from '../../../store/comptabilite/operation/actions';
 import * as operationListSelector from '../../../store/comptabilite/operation/selector';
 import * as featureActionJournal from '../../../store/comptabilite/journaux/actions';
 import * as journalListSelector from '../../../store/comptabilite/journaux/selector';
+import { OperationService } from 'src/app/store/comptabilite/operation/service';
 
 
 
@@ -41,6 +42,7 @@ import * as journalListSelector from '../../../store/comptabilite/journaux/selec
 export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
+  displayAddOperationListe = false;
   destroy$ = new Subject<boolean>();
   typeSort = Object.keys(Sort).map(key => ({ label: Sort[key], value: key }));
   cols: any[];
@@ -58,11 +60,18 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   journalList:Array<Journaux> = [];
   journalList$: Observable<Array<Journaux>>;
   journal: Journaux ;
+  operationAddList:Array<Operation> = [];
+  debit: number = 0;
+  debitAvant: number = 0;
+  credit: number = 0;
+  creditAvant: number = 0;
+  index: number = null;
 
   
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
+               private operationService: OperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Opération'}]);
    }
@@ -111,6 +120,9 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   
   }
 
+  onAdd() { 
+    this.displayAddOperationListe = true;
+  }
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
     this.exerciceComptableOperation = exerciceComptableOperation;
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
@@ -134,6 +146,73 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     
   }
 
+  addOperationList() {
+    this.operation.exerciceComptableOperation = this.exerciceComptableOperation;
+    if(this.index !== null) {
+      if(this.operationAddList[this.index].montantCredit) {
+        console.log(this.credit);
+        this.credit = this.credit - this.creditAvant;
+        console.log(this.credit);
+        if(this.operation.montantCredit) {
+          this.credit = this.credit + this.operation.montantCredit;
+        }
+      }
+
+      if(this.operationAddList[this.index].montantDebit) {
+        console.log(this.debit);
+       this.debit = this.debit - this.debitAvant;
+        console.log(this.debit);
+        if(this.operation.montantDebit) {
+          this.debit = this.debit + this.operation.montantDebit;
+        }
+      }
+      this.operationAddList[this.index] = this.operation;
+    }
+    
+    
+    if(this.index === null){
+      if(this.operation.montantDebit) {
+        this.debit = this.debit + this.operation.montantDebit;
+      }
+      if(this.operation.montantCredit) {
+        this.credit = this.credit + this.operation.montantCredit;
+      }
+      this.operationAddList.push(this.operation);
+    }
+    
+    this.operation = {};
+    this.creditAvant = 0;
+    this.debitAvant = 0;
+    this.index = null;
+    this.operation.dateSaisie = new Date();
+    console.log(this.debit);
+    console.log(this.credit);
+  }
+
+  editOperationList(operation: Operation, index: number) {
+    this.index = index;
+    if(operation.montantDebit) {
+      this.debitAvant = operation.montantDebit;
+    }
+    
+    if(operation.montantCredit) {
+      this.creditAvant = operation.montantCredit;
+    }
+    
+    this.operation = operation;
+    this.operation.dateSaisie = new Date(operation.dateSaisie);
+  }
+
+  deleteOperationList(operation: Operation, index: number) {
+    if(operation.montantDebit) {
+      this.debit =this.debit - operation.montantDebit;
+    }
+    
+    if(operation.montantCredit) {
+      this.credit =this.credit - operation.montantCredit;
+    }
+    this.operationAddList = this.operationAddList.filter(oper=>oper !== operation);
+  }
   onCreateOperation() {
     console.log(this.operation);
     this.operation.exerciceComptableOperation = this.exerciceComptableOperation;
@@ -148,6 +227,25 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     
     this.operation.dateSaisie = new Date();
   
+  }
+
+  onCreateOperationList() {
+    console.log(this.operationAddList);
+    this.operationService.posOperationList(this.operationAddList).subscribe((rest)=>{
+      this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: this.exerciceComptableOperation.id}));
+      
+    });
+    this.displayAddOperationListe = false;
+    this.operationAddList = [];
+    this.credit = 0;
+    this.debit = 0;
+  }
+
+  onFermer() {
+    this.displayAddOperationListe = false;
+    this.operationAddList = [];
+
+
   }
 
   deleteOperation(operation: Operation) {
