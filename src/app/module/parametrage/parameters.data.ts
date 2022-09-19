@@ -107,6 +107,8 @@ import { TauxCommissionIntermediaireList } from 'src/app/store/parametrage/taux-
 import { tauxcommissionintermediaireList } from 'src/app/store/parametrage/taux-commission-intermediaire/selector';
 import { typeJournauxList } from 'src/app/store/parametrage/typeJournaux/selector';
 import * as typeJournauxActions from '../../store/parametrage/typeJournaux/actions';
+import { compteList } from 'src/app/store/comptabilite/compte/selector';
+import * as compteActions from '../../store/comptabilite/compte/actions';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -145,7 +147,8 @@ export const DATA_TYPE = [
   {label: 'Type Prime', value: 'TypePrime'},
   {label: 'Mode de paiement', value: 'ModePaiement'},
   {label: 'type de journal', value: 'TypeJournaux'},
-  {label: 'Type intermediaire', value: 'TypeIntermediaire'}
+  {label: 'Type intermediaire', value: 'TypeIntermediaire'},
+  {label: 'Compte', value: 'Compte'}
 ];
 
 const dropdownEntriesObj: Array<SelectItem> = [
@@ -2135,12 +2138,12 @@ export const DATA_DEFINITION = [
       ],
         
         store: {
-          select: zonepaysList,
-          fetchAction: zonePaysActions.loadZonePays(),
-          createAction: zonePaysActions.createZonePays,
-          updateAction: zonePaysActions.updateZonePays,
-          deleteAction: zonePaysActions.deleteZonePays,
-          importAction: zonePaysActions.importZonePays
+          select: compteList,
+          fetchAction: compteActions.loadCompte(),
+          createAction: compteActions.createCompte,
+          updateAction: compteActions.updateCompte,
+          // deleteAction: compteActions.deleteZonePays,
+          importAction: compteActions.importCompte
         } 
       },
   {

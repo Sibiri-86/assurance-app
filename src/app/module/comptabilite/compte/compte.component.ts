@@ -61,6 +61,7 @@ import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/t
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
+import { DATA_DEFINITION, DATA_TYPE } from '../../parametrage/parameters.data';
 
 @Component({
   selector: 'app-compte',
@@ -120,6 +121,10 @@ export class CompteComponent implements OnInit, OnDestroy {
   compte: Compte;
   compteList$: Observable<Array<Compte>>;
   compteList: Array<Compte>;
+  selectedDataType: any;
+  dataTypes = DATA_TYPE;
+  dataDefinitions = DATA_DEFINITION;
+  editForm: FormGroup;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -280,8 +285,44 @@ ngOnDestroy() {
 
 upload(event){
   //this.file = event.files[0];
- this.store.dispatch(this.selectedDataDef.store.importAction({file: event.files[0]}));
+  this.onTypeChange(event);
+ //this.store.dispatch(this.selectedDataDef.store.importAction({file: event.files[0]}));
  //this.service.pushFileToStorage(event.files [0]);
+}
+
+onTypeChange(event) {
+  if (this.editForm) {
+    this.editForm = null;
+  }
+  if (event.value) {
+    console.log(event.value);
+    this.selectedDataType = this.dataTypes.find(dataType => dataType.value === event.value);
+    if (this.selectedDataType) {
+      this.selectedDataDef = this.dataDefinitions.find(df => df.entity === event.value);
+      if (this.selectedDataDef) {
+        this.selectedDataDefList$ = this.store.pipe(select(this.selectedDataDef.store.select));
+        this.selectedDataDefList$.pipe(takeUntil(this.destroy$))
+          .subscribe(value => {
+            if (value) {
+              this.annulerSaisie();
+              this.selectedDataDefList = value.slice();
+            }
+          });
+        this.store.dispatch(this.selectedDataDef.store.fetchAction);
+        this.editForm = this.formBuilder.group({});
+        this.cols = this.selectedDataDef.cols;
+        this.entityValidations = this.selectedDataDef.entityValidations;
+        this.cols.forEach(col => {
+          const control = new FormControl('', col.validators);
+          this.editForm.addControl(col.field, control);
+        });
+        //this.setDropdownObservableObj();
+      }
+    }
+  } else {
+    // this.onInputDroped();
+  }
+
 }
 
 /* getAdherentFiles(event: any): void {
