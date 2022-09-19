@@ -39,6 +39,11 @@ $getComptes(): Observable<CompteList> {
   );
 }
 
+findCompteByNumero(numero: number): Observable<any> {
+  // @FIXME: post request+
+  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE)}/find-compte/${numero}`);
+}
+
 private handleError<T>() {
   return (error: HttpErrorResponse) => {
     return throwError(error.message || 'Something went wrong');

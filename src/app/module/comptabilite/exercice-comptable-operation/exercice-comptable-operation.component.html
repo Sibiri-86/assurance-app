@@ -93,13 +93,13 @@
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompte" [disabled]="!operation.numFacture"  name="numCompte" mode="decimal" locale="fr-FR" ></p-inputNumber>  
+                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompte" [disabled]="!operation.numFacture"  name="numCompte" mode="decimal" locale="fr-FR" (onBlur)="findCompte1()"></p-inputNumber>  
             
                                 </div>
             
                                 <div class="p-field p-col">
                                     <label for="numCompte2">N° compte auxiliaire<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" ></p-inputNumber>  
+                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" (onBlur)="findCompteAuxiliaire()"></p-inputNumber>  
             
                                 </div>
             
@@ -109,28 +109,37 @@
             
                                 </div>
 
-                                <div class="p-field p-col">
+                                <div class="p-field p-col" *ngIf="operation.compte?.soldeDebiteur === verificationDebitCredit">
                                     <label for="nombreActe">Débit <span class="required"></span></label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.montantDebit" name="montantDebit" mode="decimal" locale="fr-FR" ></p-inputNumber>  
+                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.montantDebit"  name="montantDebit" mode="decimal" locale="fr-FR" ></p-inputNumber>  
                                 </div>
 
-                                <div class="p-field p-col">
+                                <div class="p-field p-col" *ngIf="operation.compte?.soldeCrediteur === verificationDebitCredit">
                                     <label for="nombreActe">Crédit <span class="required"></span></label>
                                     <p-inputNumber [inputStyle]="{'font-weight': 'bold'}"[(ngModel)]="operation.montantCredit" name="montantCredit" mode="decimal" locale="fr-FR"></p-inputNumber>  
                                 </div>
                                 
                             </div>
                             
-        
                         </div>
                     </form>
                     <div></div>
                     <p-toolbar styleClass="mb-4">
                         <ng-template pTemplate="left">
+                            <div class="p-fluid p-formgrid p-grid">
+                                   
+                                <div class="p-field p-col">
+                                    <span>{{operation.compte?.libelle}}</span>
+                                </div>
+                                <div class="p-field p-col">
+                                    <span>{{operation.compteAuxiliaire?.libelle}}</span>
+                                </div>
+                            </div>
+                           
                              </ng-template>
                 
                         <ng-template pTemplate="right">
-                            <button pButton pRipple  icon="pi pi-plus" [disabled]="!operation.libelle"  class="p-button-success p-mr-2 p-mb-2" (click)="addOperationList()"></button>
+                            <button pButton pRipple  icon="pi pi-plus" [disabled]="!operation.libelle "  class="p-button-success p-mr-2 p-mb-2" (click)="addOperationList()"></button>
                            <button pButton pRipple  icon="pi pi-times" class="p-button-success p-mr-2 p-mb-2" (click)="annuleaddOperation()"></button>
                         </ng-template>
                     </p-toolbar> 
@@ -173,7 +182,12 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                    <div></div>
+                    <div>
+                        <!-- <p-toolbar styleClass="p-mb-4">
+
+                            <span>{{operation.compte?.libelle}}</span>
+                        </p-toolbar> -->
+                    </div>
                     <p-toolbar styleClass="mb-4">
                         <ng-template pTemplate="left">
                             <button pButton pRipple label="Annuler" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" (click)="onFermer()"  ></button>

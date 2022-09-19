@@ -29,6 +29,8 @@ import * as operationListSelector from '../../../store/comptabilite/operation/se
 import * as featureActionJournal from '../../../store/comptabilite/journaux/actions';
 import * as journalListSelector from '../../../store/comptabilite/journaux/selector';
 import { OperationService } from 'src/app/store/comptabilite/operation/service';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
 
 
 
@@ -66,12 +68,16 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   credit: number = 0;
   creditAvant: number = 0;
   index: number = null;
+  compteSelected: Compte = {};
+  CompteAuxiliaireSelecte: Compte = {};
+  verificationDebitCredit: string = "1";
 
   
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private operationService: OperationService,
+               private compteService: CompteService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Opération'}]);
    }
@@ -120,6 +126,25 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   
   }
 
+  findCompte1() {
+    this.compteService.findCompteByNumero(this.operation.numCompte).subscribe((rest)=>{
+      if(rest) {
+        this.compteSelected = rest;
+        this.operation.compte =rest;
+        console.log(this.operation.compte);
+      }
+     
+    });
+  }
+  findCompteAuxiliaire() {
+    this.compteService.findCompteByNumero(this.operation.numCompteAuxi).subscribe((res)=>{
+      if(res) {
+      
+        this.operation.compteAuxiliaire =res;
+      }
+     
+    });
+  }
   onAdd() { 
     this.displayAddOperationListe = true;
   }
