@@ -403,6 +403,11 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly COMPTABILITE_COMPTE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+
         static readonly PARAMETRAGE_TYPE_JOURNAUX = {
             prod: `${SERVICE_PREFIX}/parametrage/typeJournaux`,
             mock: `assets/mock/parametrage/typeJournaux.mock.json`
@@ -427,7 +432,5 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/comptabilite/operation`,
             mock: `assets/mock/comptabilite/operation.mock.json`
         };
-
-        
 
 }

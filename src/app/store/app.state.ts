@@ -52,6 +52,7 @@ import { OrdonnanceMedicaleState } from './medical/ordonnance-medical/state';
 import { BulletinAdhesionState } from './contrat/bulletin-adhesion/state';
 import { HistoriqueAvenantAdherant } from './contrat/historiqueAvenantAdherent/model';
 import { HistoriqueAvenantAdherantState } from './contrat/historiqueAvenantAdherent/state';
+import { CompteState } from './comptabilite/compte/state';
 import { TypeJournauxState } from './parametrage/typeJournaux/state';
 import { JournauxState } from './comptabilite/journaux/state';
 import { ExerciceComptableState } from './comptabilite/exercice-comptable/state';
@@ -110,6 +111,7 @@ export interface AppState {
   conventionState: ConventionState;
   ordonnanceMedicaleState: OrdonnanceMedicaleState;
   historiqueAvenantAdherantState: HistoriqueAvenantAdherantState;
+  compteState: CompteState;
   typeJournauxState: TypeJournauxState;
   journauxState: JournauxState;
   exerciceComptableState: ExerciceComptableState;

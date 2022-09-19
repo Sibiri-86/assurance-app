@@ -264,7 +264,7 @@ import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/grou
 import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
 import { TypeJournauxEffects } from './store/parametrage/typeJournaux/effect';
-import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { CompteEffects } from './store/comptabilite/compte/effect';
 import { JournalComponent } from './module/comptabilite/journal/journal.component';
 import { JournauxEffects } from './store/comptabilite/journaux/effect';
 import { ExerciceComptableEffects } from './store/comptabilite/exercice-comptable/effect';
@@ -272,6 +272,7 @@ import { ExerciceComptableComponent } from './module/comptabilite/exercice-compt
 import { ExerciceComptableOperationEffects } from './store/comptabilite/exercice-comptable-operation/effect';
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 import {  OperationEffects } from './store/comptabilite/operation/effect';
+import { CompteComponent } from './module/comptabilite/compte/compte.component';
 
 @NgModule({
     imports: [
@@ -380,8 +381,8 @@ import {  OperationEffects } from './store/comptabilite/operation/effect';
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects,TypeJournauxEffects, JournauxEffects,
-            ExerciceComptableEffects, ExerciceComptableOperationEffects, OperationEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects,
+             TypeJournauxEffects, JournauxEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

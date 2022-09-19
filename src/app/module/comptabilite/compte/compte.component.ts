@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import {Garant} from '../../../store/contrat/garant/model';
-import * as featureAction from '../../../store/contrat/garant/actions';
+import * as featureAction from '../../../store/comptabilite/compte/actions';
 import {garantList} from '../../../store/contrat/garant/selector';
 import {Pays} from '../../../store/parametrage/pays/model';
 import {Region} from '../../../store/parametrage/region/model';
@@ -58,6 +58,9 @@ import { element } from 'protractor';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import { TauxCommissionIntermediaire } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
 import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import * as compteSelector from '../../../store/comptabilite/compte/selector';
+import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 
 @Component({
   selector: 'app-compte',
@@ -110,356 +113,67 @@ export class CompteComponent implements OnInit, OnDestroy {
   pays: Pays;
 
 
+  selectedDataDef: any;
+  selectedDataDefList$: Observable<Array<any>>;
+  selectedDataDefList: Array<any>;
+  compteForm: FormGroup;
+  compte: Compte;
+  compteList$: Observable<Array<Compte>>;
+  compteList: Array<Compte>;
+
+
   constructor(private formBuilder: FormBuilder,
               private store: Store<AppState>, private messageService: MessageService,
               private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
-      this.garantForm = this.formBuilder.group({
+
+      this.compteForm = this.formBuilder.group({
         id: new FormControl(''),
-        code: new FormControl(''),
-        nom: new FormControl('', [Validators.required]),
-        contact: new FormControl('', [Validators.required]),
-        adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
-        personneRessource1: new FormControl('', [Validators.required]),
-        contactPersonneRessource1: new FormControl('', [Validators.required]),
-        emailPersonneRessource1: new FormControl('', [Validators.required, Validators.email]),
-        emailPersonneRessource2: new FormControl('', [Validators.email]),
-        personneRessource2: new FormControl(''),
-        contactPersonneRessource2: new FormControl(''),
-        numeroCompteBancaire1: new FormControl('', [Validators.required]),
-        numeroCompteBancaire2: new FormControl(''),
-        adressePostale: new FormControl('', [Validators.required]),
-        secteurActivite: new FormControl('', [Validators.required]),
-        numeroIfu: new FormControl('', [Validators.required]),
-        periodiciteAppelFond: new FormControl('', [Validators.required]),
-        rccm: new FormControl('', [Validators.required]),
-        pays: new FormControl(null),
-        region: new FormControl(null),
-        departement: new FormControl(null),
-        arrondissement: new FormControl(null),
-        typeGarant: new FormControl('', [Validators.required]),
-        commune: new FormControl('', [Validators.required]),
-        banque1: new FormControl('', [Validators.required]),
-        banque2: new FormControl(''),
-        secteur: new FormControl('', [Validators.required]),
-        commissionPrime: new FormControl('', [Validators.required]),
-        commissionAccessoire: new FormControl('', [Validators.required])
+        compte: new FormControl('', [Validators.required]),
+        poste: new FormControl('', [Validators.required]),
+        libelle: new FormControl('', [Validators.required]),
+        soldeDebiteur: new FormControl(''),
+        soldeCrediteur: new FormControl(''),
+        compteParent: new FormControl(''),
       });
 
       this.breadcrumbService.setItems([
-        {label: 'Garant'}
+        {label: 'Compte'}
     ]);
-
-      this.firstFormGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-      this.secondFormGroup = this.formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
-
     }
 
 ngOnInit(): void {
-  this.garantList = [];
-  this.loading = true;
+  this.compteList = [];
+  // this.loading = true;
   this.entityValidations = [
     {
-      field: 'nom',
+      field: 'compte',
       validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'code',
+      field: 'poste',
       validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'contact',
+      field: 'libelle',
       validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'adresseEmail',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        },
-        {
-          validName: 'email',
-          validMessage: 'Veuillez renseigner une adresse email valide'
-        },
-      ]
-    },
-    {
-      field: 'emailPersonneRessource1',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'email',
-          validMessage: 'Veuillez renseigner une adresse email valide'
-        },
-      ]
-    },
-    {
-      field: 'emailPersonneRessource2',
-      validations: [
-        {
-          validName: 'email',
-          validMessage: 'Veuillez renseigner une adresse email valide'
-        },
-      ]
-    },
-    {
-      field: 'numeroCompteBancaire1',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'personneRessource',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'numeroCompteBancaire2',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'numeroIfu',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'numeroPattente',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'secteurActivite',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'pays',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'region',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'departement',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'commune',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'periodiciteAppelFond',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
-      ]
-    },
-    {
-      field: 'rccm',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'},
-        {
-          validName: 'maxlength',
-          validMessage: 'Ce champs requiert au plus 5 caractères'
-        }
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     }
   ];
 
-
-  this.tauxCommissionIntermediaireList$ = this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
-  this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
-  this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
+  this.compteList$ = this.store.pipe(select(compteSelector.compteList));
+  this.store.dispatch(compteAction.loadCompte());
+  this.compteList$.pipe(takeUntil(this.destroy$))
             .subscribe(value => {
               if (value) {
-                this.tauxCommissionIntermediaireList = value.slice();
-              }
-  });
-
-  this.banqueList$ = this.store.pipe(select(banqueSelector.banqueList));
-  this.store.dispatch(banqueAction.loadBanque());
-  this.banqueList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.loading = false;
-                this.banqueList = value.slice();
-              }
-  });
-
-  this.typeGarantList$ = this.store.pipe(select(typeGarantSelector.garantList));
-  this.store.dispatch(typeGarantAction.loadGarant());
-  this.typeGarantList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.loading = false;
-                this.typeGarantList = value.slice();
-              }
-  });
-
-  this.arrondissementList$ = this.store.pipe(select(arrondissementSelector.arrondissementList));
-  this.store.dispatch(arrondissementAction.loadArrondissement());
-  this.arrondissementList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.loading = false;
-                this.arrondissementList = value.slice();
-              }
-  });
-
-  this.secteurList$ = this.store.pipe(select(secteurSelector.secteurList));
-  this.store.dispatch(secteurAction.loadSecteur());
-  this.secteurList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.loading = false;
-                this.secteurList = value.slice();
-              }
-  });
-
-
-  this.garantList$ = this.store.pipe(select(garantList));
-  this.store.dispatch(loadGarant());
-  this.garantList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.loading = false;
-                this.garantList = value.slice();
-              }
-  });
-
-  this.paysList$ = this.store.pipe(select(paysSelector.paysList));
-  this.store.dispatch(loadPays());
-  this.paysList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.paysList = value.slice();
-              }
-  });
-
-
-  this.regionList$ = this.store.pipe(select(regionSelector.regionList));
-  this.store.dispatch(loadRegion());
-  this.regionList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.regionList = value.slice();
-              }
-  });
-
-  this.departementList$ = this.store.pipe(select(departementSelector.departementList));
-  this.store.dispatch(loadDepartement());
-  this.departementList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.departementList = value.slice();
-              }
-  });
-
-  this.communeList$ = this.store.pipe(select(communeSelector.communeList));
-  this.store.dispatch(loadCommune());
-  this.communeList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.communeList = value.slice();
-              }
-  });
-
-  this.secteurActiviteList$ = this.store.pipe(select(secteurActiviteSelector.secteurActiviteList));
-  this.store.dispatch(loadSecteurActivite());
-  this.secteurActiviteList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.secteurActiviteList = value.slice();
-              }
-  });
-
-  this.dimensionPeriodeList$ = this.store.pipe(select(dimensionPeriodeSelector.dimensionPeriodeList));
-  this.store.dispatch(loadDimensionPeriode());
-  this.dimensionPeriodeList$.pipe(takeUntil(this.destroy$))
-            .subscribe(value => {
-              if (value) {
-                this.dimensionPeriodeList = value.slice();
+                //this.loading = false;
+                this.compteList = value.slice();
+                console.log('value', value.slice());
+                console.log('compteList', this.compteList);
               }
   });
 
@@ -468,73 +182,14 @@ ngOnInit(): void {
 
 }
 
-changeCountry(event) {
-  this.regionList$.pipe(takeUntil(this.destroy$))
-  .subscribe(value => {
-    if (value) {
-      this.regionList = value.slice();
-      this.regionList = this.regionList.filter(elements => elements.idTypePays === event.value.id);
-    }
-});
-}
-
-changeRegion(event) {
-  this.departementList$.pipe(takeUntil(this.destroy$))
-  .subscribe(value => {
-    if (value) {
-      this.departementList = value.slice();
-      this.departementList = this.departementList.filter(element => element.idRegion === event.value.id);
-    }
-});
-}
-
-changeDepartement(event) {
-  this.communeList$.pipe(takeUntil(this.destroy$))
-  .subscribe(value => {
-    if (value) {
-      this.communeList = value.slice();
-      this.communeList = this.communeList.filter(element => element.idDepartement === event.value.id);
-    }
-});
-}
-
-changeCommune(event) {
-  this.arrondissementList$.pipe(takeUntil(this.destroy$))
-  .subscribe(value => {
-    if (value) {
-      this.arrondissementList = value.slice();
-      // tslint:disable-next-line: no-shadowed-variable
-      this.arrondissementList = this.arrondissementList.filter(element => element.idCommune === event.value.id);
-    }
-});
-}
-
-changeArrondissement(event) {
-  this.secteurList$.pipe(takeUntil(this.destroy$))
-  .subscribe(value => {
-    if (value) {
-      this.secteurList = value.slice();
-      this.secteurList = this.secteurList.filter(element => element.idArrondissement === event.value.id);
-    }
-});
-}
 
 
 checkStatus() {
   this.statusObject$.pipe(takeUntil(this.destroy$))
       .subscribe(statusObj => {
         if (statusObj) {
-          // this.loading = false;
           this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
-          /*
-          if (this.isAdding && statusObj.status === StatusEnum.success) {
-            this.display = false;
-            this.isAdding = false;
           }
-          this.loading = false;
-          */
-
-        }
       });
 }
 
@@ -547,9 +202,9 @@ showToast(severity: string, summary: string, detail: string) {
 }
 
 addGarant() {
-  this.garant = {};
+  this.compte = {};
   this.displayDialogFormGarant = true;
-  this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+  // this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 }
 
 voirDetail(garant: Garant) {
@@ -557,14 +212,14 @@ voirDetail(garant: Garant) {
   this.garant = garant;
 }
 
-editGarant(garant: Garant) {
+editGarant(compte: Compte) {
 // this.garantForm.get('id').setValue(garant.id);
-this.garant = {...garant};
-this.garantForm.patchValue(this.garant);
+this.compte = {...compte};
+this.compteForm.patchValue(this.compte);
 this.displayDialogFormGarant = true;
 }
 
-deleteGarant(garant: Garant) {
+/* deleteGarant(garant: Garant) {
   this.confirmationService.confirm({
     message: 'Etes vous sur de vouloir supprimer?',
     header: 'Confirmation',
@@ -573,35 +228,38 @@ deleteGarant(garant: Garant) {
         this.store.dispatch(featureAction.deleteGarant(garant));
     }
 });
-}
+} */
 
 onCreate() {
-this.garant = this.garantForm.value;
-console.log(this.garant);
+this.compte = this.compteForm.value;
+console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn',this.compte);
 this.confirmationService.confirm({
-  message: 'Etes vous sur de vouloir ajouter ce garant?',
+  message: 'Etes vous sur de vouloir ajouter ce compte?',
   header: 'Confirmation',
   icon: 'pi pi-exclamation-triangle',
   accept: () => {
-    if (this.garant.id) {
-      this.store.dispatch(featureAction.updateGarant(this.garantForm.value));
+    if (this.compte.id) {
+      console.log('1',this.compte);
+      this.store.dispatch(featureAction.updateCompte(this.compteForm.value));
       this.displayDialogFormGarant = false;
     }else{
-    this.store.dispatch(featureAction.createGarant(this.garantForm.value));
+      console.log('2',this.compte);
+    this.store.dispatch(featureAction.createCompte(this.compteForm.value));
     }
-    this.garantForm.reset();
+    this.compteForm.reset();
+    this.displayDialogFormGarant = false;
   }
 });
-this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+// this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 
 }
 
 annulerSaisie() {
-  this.garantForm.reset();
+  this.compteForm.reset();
   this.displayDialogFormGarant = false;
 }
 
-deleteSelectedGrant() {
+/* deleteSelectedGrant() {
   this.listeGarant.garantDtoList = this.selectedGarants;
   this.confirmationService.confirm({
     message: 'Etes vous sur de vouloir supprimer ces garants?',
@@ -611,13 +269,36 @@ deleteSelectedGrant() {
       this.store.dispatch(featureAction.deleteGarants(this.listeGarant));
     }
   });
-}
+} */
 
 ngOnDestroy() {
   this.destroy$.next(true);
   // Now let's also unsubscribe from the subject itself:
   this.destroy$.unsubscribe();
 }
+
+
+upload(event){
+  //this.file = event.files[0];
+ this.store.dispatch(this.selectedDataDef.store.importAction({file: event.files[0]}));
+ //this.service.pushFileToStorage(event.files [0]);
+}
+
+/* getAdherentFiles(event: any): void {
+    console.log(event);
+    this.FamilyListToImport = [];
+    this.adherentFamille = [];
+    this.afficheDetail = false;
+    this.policeService.loadAdherentsByExcelFile(event).subscribe(
+        (res) => {
+          console.log('liste des adhérents === ');
+          console.log(res);
+          this.FamilyListToImport = res;
+          this.adherentFamille = res;
+          this.afficheDetail = true;
+        }
+    );
+  } */
 }
 
 
