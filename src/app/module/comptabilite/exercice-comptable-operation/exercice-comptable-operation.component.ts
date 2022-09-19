@@ -252,6 +252,11 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionOperation.deleteOperation(operation));
 
   }
+
+  annuleaddOperation() {
+    this.operation = {};
+    this.operation.dateSaisie = new Date();
+  }
  
     ngOnDestroy() {
     this.destroy$.next(true);
