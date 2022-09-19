@@ -273,6 +273,7 @@ import { ExerciceComptableOperationEffects } from './store/comptabilite/exercice
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 import {  OperationEffects } from './store/comptabilite/operation/effect';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paiment-instance/ordre-paiment-instance.component';
 
 @NgModule({
     imports: [
@@ -492,7 +493,8 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
         CompteComponent,
         JournalComponent,
         ExerciceComptableComponent,
-        ExerciceComptableOperationComponent
+        ExerciceComptableOperationComponent,
+        OrdrePaimentInstanceComponent,
     ],
     providers: [
         {

@@ -292,4 +292,18 @@ export class PrefinancementEffects {
                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                     ))
                                 ));
+
+                                loadOrdrePaiementInstance$ = createEffect(() =>
+                                this.actions$.pipe(
+                                    ofType(featureActions.loadOrdrePaiementInstance),
+                                    mergeMap(() =>
+                                        this.prefinancementService.$getOrdrePaiementInstance().pipe(
+                                            switchMap(value => [
+                                                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                            featureActions.setLoadOrdreReglement(value)
+                                            ]),
+                                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                            ))
+                                        ));
 }
