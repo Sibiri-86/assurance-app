@@ -137,6 +137,7 @@ import * as conventionReducer from '../medical/convention/reducer';
 import * as ordonnanceMedicalReducer from '../medical/ordonnance-medical/reducer';
 import * as bulletinAdhesionReducer from '../contrat/bulletin-adhesion/reducer';
 import * as historiqueAvenantAdherentReducer from '../contrat/historiqueAvenantAdherent/reducer';
+import * as compteReducer from '../comptabilite/compte/reducer'
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -190,7 +191,8 @@ export const reducers: ActionReducerMap<AppState> = {
     conventionState: conventionReducer.reducer,
     ordonnanceMedicaleState: ordonnanceMedicalReducer.reducer,
     bulletinAdhesionState: bulletinAdhesionReducer.reducer,
-    historiqueAvenantAdherantState: historiqueAvenantAdherentReducer.reducer
+    historiqueAvenantAdherantState: historiqueAvenantAdherentReducer.reducer,
+    compteState: compteReducer.reducer
 
 };
 

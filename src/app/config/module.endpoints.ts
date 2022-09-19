@@ -403,4 +403,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly COMPTABILITE_COMPTE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+
 }

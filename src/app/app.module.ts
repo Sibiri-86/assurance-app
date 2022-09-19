@@ -264,6 +264,7 @@ import { GroupeAjoutComponent } from './module/contrat/avenant/groupe-ajout/grou
 import { AdherentBasculerComponent } from './module/contrat/avenant/adherent-basculer/adherent-basculer.component';
 import { AvenantProrogationComponent } from './module/contrat/avenant/avenant-prorogation/avenant-prorogation.component';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { CompteEffects } from './store/comptabilite/compte/effect';
 
 @NgModule({
     imports: [
@@ -372,7 +373,7 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [

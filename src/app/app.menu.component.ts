@@ -81,13 +81,13 @@ export class AppMenuComponent implements OnInit {
             },
 
             {
-                label: 'COmptabilité', icon: 'pi pi-fw pi-star', routerLink: ['/comptabilite'],
+                label: 'Finance', icon: 'pi pi-fw pi-money-bill', routerLink: ['/comptabilite'],
                  visible: true,
                 items: [
-                    {label: 'compte', icon: 'pi pi-pencil', routerLink: ['/comptabilite/compte'], visible: true},
-                    {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
+                    {label: 'compte', icon: 'pi pi-euro', routerLink: ['/comptabilite/compte'], visible: true},
+                    /*{label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
                     {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
-                    {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
+                    {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},*/
                 ]
             }
             /*

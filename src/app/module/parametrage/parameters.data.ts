@@ -2073,6 +2073,84 @@ export const DATA_DEFINITION = [
       deleteAction: zonePaysActions.deleteZonePays,
       importAction: zonePaysActions.importZonePays
     }
+  },
+  {
+    entity: 'Compte',
+    cols: [
+      {
+        field: 'compte', header: 'compte', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'poste', header: 'poste', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'soldeDebiteur', header: 'soldeDebiteur', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'soldeCrediteur', header: 'soldeCrediteur', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'compteParent', header: 'compteParent', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'isRacine', header: 'isRacine', type: 'boolean', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'compte',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'poste',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'soldeDebiteur',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'soldeCrediteur',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: zonepaysList,
+      fetchAction: zonePaysActions.loadZonePays(),
+      createAction: zonePaysActions.createZonePays,
+      updateAction: zonePaysActions.updateZonePays,
+      deleteAction: zonePaysActions.deleteZonePays,
+      importAction: zonePaysActions.importZonePays
+    }
   }
 
 ];

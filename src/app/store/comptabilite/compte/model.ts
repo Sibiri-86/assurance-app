@@ -7,4 +7,9 @@ export interface Compte {
     soldeCrediteur?: Date;
     compteParent?: string;
     isRacine?: boolean;
+    isDeleted?: boolean;
+}
+
+export interface CompteList{
+    compteDtoList: Array<Compte>; 
 }
