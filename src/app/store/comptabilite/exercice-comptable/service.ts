@@ -32,6 +32,11 @@ updateExerciceComptable(exercice: ExerciceComptable): Observable<any> {
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_JOURNAUX)}/${exercice.id}`, exercice);
   }
 
+  activeExerciceComptable(exercice: ExerciceComptable): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_JOURNAUX)}/active/${exercice.id}`, exercice);
+  }
+
 deleteExerciceComptable(exercice: ExerciceComptable): Observable<any> {
     // @FIXME: post request
     return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_JOURNAUX)}/${exercice.id}`, null);

@@ -5,4 +5,6 @@ export const updateExerciceComptable = createAction('[App Init] update ExerciceC
 export const deleteExerciceComptable = createAction('[App Init] delete ExerciceComptable', props<ExerciceComptable>());
 export const loadExerciceComptable = createAction('[App Init] load ExerciceComptable');
 export const setExerciceComptable = createAction('[App Init] set ExerciceComptable',  props<ExerciceComptableList>());
+export const cloture = createAction('[App Init] cloture ExerciceComptable ',  props<ExerciceComptable>());
+
 

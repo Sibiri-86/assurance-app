@@ -35,7 +35,8 @@
                         </th>
                         <th pSortableColumn="annee" style="min-width:200px">Annee<p-sortIcon field="annee"></p-sortIcon></th>
                         
-                       
+                        <th>Status</th>
+                        <th></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -46,7 +47,17 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{exercice?.annee}}</span>
                         
-                        
+                            <td>
+                                <span *ngIf="exercice.actived === true" style="color: green; font-weight: bold">ACTIVE</span>
+                                <span *ngIf="exercice.actived === false" style="color: red; font-weight: bold">FERMEE</span>
+                            
+                            </td>
+                            <td>
+                                <div class="p-col- p-mr-2">
+                                    <p-inputSwitch (onChange)="changeStatus(exercice)"  [(ngModel)]="exercice.actived"
+                                                   ></p-inputSwitch>
+                                </div>
+                            </td>
                         
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editExercice(exercice)"></button>
