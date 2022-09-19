@@ -138,6 +138,11 @@ import * as ordonnanceMedicalReducer from '../medical/ordonnance-medical/reducer
 import * as bulletinAdhesionReducer from '../contrat/bulletin-adhesion/reducer';
 import * as historiqueAvenantAdherentReducer from '../contrat/historiqueAvenantAdherent/reducer';
 import * as compteReducer from '../comptabilite/compte/reducer'
+import * as typeJournauxReducer from '../parametrage/typeJournaux/reducer';
+import * as journauxReducer from '../comptabilite/journaux/reducer';
+import * as exerciceComptaleReducer from '../comptabilite/exercice-comptable/reducer';
+import * as exerciceComptaleOperationReducer from '../comptabilite/exercice-comptable-operation/reducer';
+import * as operationReducer from '../comptabilite/operation/reducer';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -192,7 +197,13 @@ export const reducers: ActionReducerMap<AppState> = {
     ordonnanceMedicaleState: ordonnanceMedicalReducer.reducer,
     bulletinAdhesionState: bulletinAdhesionReducer.reducer,
     historiqueAvenantAdherantState: historiqueAvenantAdherentReducer.reducer,
-    compteState: compteReducer.reducer
+    compteState: compteReducer.reducer,
+    typeJournauxState: typeJournauxReducer.reducer,
+    journauxState:  journauxReducer.reducer,
+    exerciceComptableState: exerciceComptaleReducer.reducer,
+    exerciceComptableOperationState: exerciceComptaleOperationReducer.reducer,
+    operationState: operationReducer.reducer,
+
 
 };
 

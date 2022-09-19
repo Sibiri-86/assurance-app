@@ -294,6 +294,7 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                this.onRowSelectBonAdherent();
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
             
 
@@ -709,6 +710,8 @@ export class TierPayantEditionComponent implements OnInit {
                 
                     this.prestationAdd.nomAdherentPrincipal = "";
                     this.prestationAdd.prenomAdherentPrincipal = "";
+                    this.prestationAdd.sort = null;
+                    this.prestationAdd.observation = "";
                 
         
         this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: event.target.value}));;
@@ -1011,6 +1014,13 @@ export class TierPayantEditionComponent implements OnInit {
 
     calculDebours() {
         console.log("======idGenre=======",this.adherentSelected.qualiteAssure.code);
+        if(this.prestationAdd.sort === Sort.REJETE) {
+            this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+            this.prestationAdd.montantRestant = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
+        } else {
+
+       
         if((this.prestationAdd?.sousActe.idGenre && this.adherentSelected.genre.id === this.prestationAdd?.sousActe.idGenre) ||
          (this.prestationAdd?.sousActe.idGenre && this.adherentSelected.genre.id !== this.prestationAdd?.sousActe?.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
           
@@ -1257,6 +1267,7 @@ export class TierPayantEditionComponent implements OnInit {
             });*/
             this.tierPayantList = [];
             this.prefinancementModel = {};
+        }
             // this.prestationForm.get('prestation').value[i].montantPayeTMP = this.prestationForm.get('prestation').value[i].montantPaye;
             // console.log('**************** this.prestationForm.getTMP******************', this.prestationForm.get('prestation').value[i].montantPayeTMP);
        
@@ -1602,6 +1613,8 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       rechercheAdherentDateSoin(event) {
+        this.prestationAdd.sort = null;
+        this.prestationAdd.observation = "";
         if(this.prestationAdd.dateSoins  && this.prestationAdd.matriculeAdherent) {
           this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: Number(this.prestationAdd.matriculeAdherent)}));
       
