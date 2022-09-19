@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, Prefinancement, Prestation, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -134,6 +134,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayPrestationpop = false;
   prestationsList: Prestation[]= [];
   compteur: number = null;
+  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -244,7 +245,8 @@ findMontantPlafond(event){
       souscripteur: new FormControl(),
       nomGroupeAdherent: new FormControl(),
       prestation: this.formBuilder.array([]),
-      dateRetrait: new FormControl({value: '', disabled: true})
+      dateRetrait: new FormControl({value: '', disabled: true}),
+      typePaiement: new FormControl('', Validators.required),
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -689,6 +691,7 @@ findMontantPlafond(event){
     this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom);
     this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
     this.prestationForm.get('dateDeclaration').setValue(pref.dateDeclaration);
+    this.prestationForm.get('typePaiement').setValue(pref.typePaiement);
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
     this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
     for (const pr of pref.prestation) {

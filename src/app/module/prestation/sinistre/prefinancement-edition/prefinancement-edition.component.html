@@ -34,7 +34,8 @@
                         <th pSortableColumn="duree" style="min-width:100px">Matricule assuré<p-sortIcon field="duree"></p-sortIcon></th>
                         <th pSortableColumn="dateEffet" style="min-width:200px">Nom <p-sortIcon field="dateEffet"></p-sortIcon></th>
                         <th pSortableColumn="dateEcheance" style="min-width:200px">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="dateEcheance" style="min-width:200px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="min-width:100px">Type de paiement<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="dateEcheance" style="min-width:100px">Etat<p-sortIcon field="etat"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -55,6 +56,10 @@
                         </td>
                         <td>
                             <span class="p-column-title" style="min-width:200px">{{prefinancement.adherent.prenom}}</span>
+                        </td>
+
+                        <td>
+                            <span class="p-column-title" style="min-width:200px">{{prefinancement.typePaiement}}</span>
                         </td>
                         <td>
                             <span *ngIf="prefinancement?.etat ==='VALIDE'" class="p-badge p-badge-success">{{prefinancement?.etat}}</span>
@@ -396,13 +401,21 @@
                         <label for="dateEffet">Date de declaration <span class="required">*</span></label>
                         <input type="date" name="dateDeclaration" id="dateDeclaration" pInputText formControlName="dateDeclaration" (change)="checkDateCondition()">
                     </div>
+                    <div class="p-field p-col">
+                        <label for="typePaiement">Type de paiement <span class="required">*</span></label>
+                        <p-dropdown inputId="typePaiement" [filter]="true"
+                                                showClear="true" [options]="typePaiement"
+                                                formControlName="typePaiement"
+                                                 [autoDisplayFirst]="false"></p-dropdown>
+                    </div>
                  
                 </div>
                     
                                    
                     <div class="p-field p-col-2"></div>
                         <div class="p-field p-col-2">
-                            <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" [disabled]="!this.prestationForm.get('dateDeclaration').value" label="Ajouter prestation"
+                            <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" [disabled]="!this.prestationForm.get('dateDeclaration').value || !this.prestationForm.get('typePaiement').value" 
+                            label="Ajouter prestation"
                                     class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                     </div>
                  

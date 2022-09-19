@@ -47,6 +47,7 @@ export interface Prefinancement {
     prestation?: Array<Prestation>;
     prestataire?: Prestataire;
     bonPriseEnCharge?: BonPriseEnCharge;
+    typePaiement?: TypePaiement;
 }
 
 export interface BonPriseEnCharge {
@@ -116,4 +117,13 @@ historiqueAvenant?: HistoriqueAvenant;
 
 export interface CheckPrefinancementReponse {
     list: Array<CheckPrefinancementResult>;
+}
+
+export enum TypePaiement {
+    ESPECE = 'ESPECE',
+    ORANGE_MONEY = 'ORANGE_MONEY',
+    MOOV_MONEY = 'MOOV_MONEY',
+    CHEQUE = 'CHEQUE',
+    VIREMENT = 'VIREMENT'
+
 }
