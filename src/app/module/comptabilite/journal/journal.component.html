@@ -105,11 +105,21 @@
                     <div class="card">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-12">
-                                <label for="typePaiement">Type de paiement <span class="required">*</span></label>
+                                <label for="typePaiement">Type de paiement <span class="required"></span></label>
                                 <p-dropdown inputId="typePaiement" [filter]="true"
                                                         showClear="true" [options]="typePaiement"
                                                         name="typePaiement"
                                                        [(ngModel)]="journalPaiement.typePaiement"
+                                                         [autoDisplayFirst]="false"></p-dropdown>
+                            </div>
+
+                            <div class="p-field p-col-12" *ngIf="journalPaiement.typePaiement === typePaiementCheque || journalPaiement.typePaiement === typePaiementVirement">
+                                <label for="typePaiement">Banque <span class="required"></span></label>
+                                <p-dropdown inputId="typePaiement" [filter]="true"
+                                                        showClear="true" [options]="banqueList"
+                                                        name="banque"
+                                                       [(ngModel)]="journalPaiement.banque"
+                                                       placeholder="Select banque" optionLabel="code"
                                                          [autoDisplayFirst]="false"></p-dropdown>
                             </div>
                         </div>
