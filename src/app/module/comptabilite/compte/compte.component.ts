@@ -134,7 +134,7 @@ export class CompteComponent implements OnInit, OnDestroy {
       this.compteForm = this.formBuilder.group({
         id: new FormControl(''),
         compte: new FormControl('', [Validators.required]),
-        poste: new FormControl('', [Validators.required]),
+        poste: new FormControl(''),
         libelle: new FormControl('', [Validators.required]),
         soldeDebiteur: new FormControl(''),
         soldeCrediteur: new FormControl(''),
@@ -152,12 +152,6 @@ ngOnInit(): void {
   this.entityValidations = [
     {
       field: 'compte',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'poste',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
