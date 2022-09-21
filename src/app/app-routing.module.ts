@@ -70,6 +70,8 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
 import { JournalComponent } from './module/comptabilite/journal/journal.component';
 import { ExerciceComptableComponent } from './module/comptabilite/exercice-comptable/exercice-comptable.component';
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
+import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paiment-instance/ordre-paiment-instance.component';
+import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre-paiment-instance-cheque/ordre-paiment-instance-cheque.component';
 import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 @NgModule({
     imports: [
@@ -146,6 +148,8 @@ import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.co
                     {path: 'comptabilite/journal', component: JournalComponent},
                     {path: 'comptabilite/exercice-comptable', component: ExerciceComptableComponent},
                     {path: 'comptabilite/exercice-comptable-operation', component: ExerciceComptableOperationComponent},
+                    {path: 'comptabilite/ordre-paiment-instance', component: OrdrePaimentInstanceComponent},
+                    {path: 'comptabilite/ordre-paiment-instance-cheque', component: OrdrePaimentInstanceChequeComponent},
                     {path: 'comptabilite/appel-fond', component: AppelFondComponent}
                     
                 ]

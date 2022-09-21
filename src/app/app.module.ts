@@ -273,6 +273,8 @@ import { ExerciceComptableOperationEffects } from './store/comptabilite/exercice
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 import {  OperationEffects } from './store/comptabilite/operation/effect';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paiment-instance/ordre-paiment-instance.component';
+import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre-paiment-instance-cheque/ordre-paiment-instance-cheque.component';
 import { AppelFondEffects } from './store/comptabilite/appelFond/effect';
 import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 
@@ -383,8 +385,9 @@ import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.co
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
-             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects,
-             TypeJournauxEffects, JournauxEffects, AppelFondEffects])
+             ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects])
+
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -494,8 +497,14 @@ import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.co
         CompteComponent,
         JournalComponent,
         ExerciceComptableComponent,
+
+        ExerciceComptableOperationComponent,
+        OrdrePaimentInstanceComponent,
+        OrdrePaimentInstanceChequeComponent,
+
         ExerciceComptableOperationComponent, 
         AppelFondComponent
+
     ],
     providers: [
         {

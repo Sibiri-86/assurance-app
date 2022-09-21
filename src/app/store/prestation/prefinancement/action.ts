@@ -38,3 +38,7 @@ export const searchOrdreReglement = createAction('[App Init] search ordre reglem
 /**check plafond des sous actes */
 export const checkPlafond = createAction('[App Init] Check plafond sous acte', props<CheckPlafond>());
 export const setPlafondSousActe = createAction('[set Plafond] set plafond', props<CheckPlafondResponse>());
+export const loadOrdrePaiementInstance = createAction('[App Init] load ordre paiement instance');
+export const loadOrdrePaiementInstanceCheque = createAction('[App Init] load ordre paiement instance cheque');
+export const validerPaiementEspece = createAction('[App Init] valider ordre paiement espece',
+props<{ordre: OrdreReglement}>());

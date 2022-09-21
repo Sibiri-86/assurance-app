@@ -33,6 +33,7 @@ export interface OrdreReglement {
     police?: Police;
     prefinancement?: Array<Prefinancement>;
     etat?: TypeEtatOrdreReglement;
+    montantPaye?: number;
 }
 
 export interface Prefinancement {

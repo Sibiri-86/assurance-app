@@ -8,6 +8,7 @@ export interface Compte {
     compteParent?: string;
     isRacine?: boolean;
     isDeleted?: boolean;
+    typePaiement?: Compte;
 }
 
 export interface CompteList{

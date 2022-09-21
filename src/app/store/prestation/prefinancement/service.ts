@@ -121,6 +121,27 @@ $getPrefinancementValide(): Observable<PrefinancementList> {
     );
 }
 
+$getOrdrePaiementInstance(): Observable<OrdreReglementList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/instance`).pipe(
+      map((response: OrdreReglementList) => response),
+      catchError(this.handleError())
+  );
+}
+
+$getOrdrePaiementInstanceCheque(): Observable<OrdreReglementList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/cheque`).pipe(
+      map((response: OrdreReglementList) => response),
+      catchError(this.handleError())
+  );
+}
+
+paiementEspece(ordre: OrdreReglement): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-espece`, ordre);
+}
+
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {

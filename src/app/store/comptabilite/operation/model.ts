@@ -1,3 +1,4 @@
+import { Compte } from "../compte/model";
 import { ExerciceComptableOperation } from "../exercice-comptable-operation/model";
 
 export interface Operation {
@@ -12,6 +13,8 @@ export interface Operation {
     exerciceComptableOperation?: ExerciceComptableOperation;
     montantDebit?: number;
     montantCredit?: number;
+    compte?: Compte;
+    compteAuxiliaire?: Compte;
    
 }
 export interface  OperationList {

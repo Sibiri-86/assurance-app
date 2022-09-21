@@ -89,6 +89,10 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Exercice comptabilité', icon: 'pi pi-clock', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
                     {label: 'Opération', icon: 'pi pi-fw pi-list', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
                     {label: 'Appel de Fond', icon: 'pi pi-fw pi-phone', routerLink: ['/comptabilite/appel-fond'], visible: true},
+                    {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
+                    {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
+                    
+                    
                 ]
             }
             /*
