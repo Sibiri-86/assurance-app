@@ -273,6 +273,8 @@ import { ExerciceComptableOperationEffects } from './store/comptabilite/exercice
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 import {  OperationEffects } from './store/comptabilite/operation/effect';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
+import { AppelFondEffects } from './store/comptabilite/appelFond/effect';
+import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 
 @NgModule({
     imports: [
@@ -382,7 +384,7 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects,
-             TypeJournauxEffects, JournauxEffects])
+             TypeJournauxEffects, JournauxEffects, AppelFondEffects])
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -492,7 +494,8 @@ import { CompteComponent } from './module/comptabilite/compte/compte.component';
         CompteComponent,
         JournalComponent,
         ExerciceComptableComponent,
-        ExerciceComptableOperationComponent
+        ExerciceComptableOperationComponent, 
+        AppelFondComponent
     ],
     providers: [
         {

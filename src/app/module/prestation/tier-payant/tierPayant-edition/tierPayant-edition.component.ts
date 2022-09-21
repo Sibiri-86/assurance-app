@@ -1074,38 +1074,6 @@ export class TierPayantEditionComponent implements OnInit {
 
             }
         }
-
-       /*  if(this.montantPlafond === 0 || !this.montantPlafond ) {
-            console.log('gggggggggggggggggg');
-=======
-        if(this.montantPlafond === 0  ) {
-            this.showToast('error', 'INFORMATION', 'l\'assurance ne couvre pas ce produit');
->>>>>>> feature_button_policy_validation
-
-            this.prestationAdd.sort = Sort.ACCORDE;
-            if (this.prestationAdd.nombreActe &&
-                this.prestationAdd.coutUnitaire) {
-                    this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
-                    this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
-                    if(this.prestationAdd.montantRembourse !== 0  || this.prestationAdd.montantRembourse === 0 ) {
-                        if((this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100) <= this.montantPlafond1  ){
-                            console.log('gggggggggggggggggg');
-                            this.prestationAdd.montantRembourse = (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd.adherent?.groupe?.taux?.taux) / 100;
-                            console.log('this.prestationAdd.montantRembourse', this.prestationAdd.montantRembourse);
-                            this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
-                            console.log('this.prestationAdd.montantRestant', this.prestationAdd.montantRestant );
-        
-                        } 
-                       
-                    } else {
-                        console.log('else');
-                        this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement;
-                    }
-                }
-
-        }
-
-       */
            // this.prestationAdd.taux = this.prestationAdd.adherent?.groupe?.taux;
             if(!this.prestationAdd.sort) {
                 this.prestationAdd.sort = Sort.ACCORDE;

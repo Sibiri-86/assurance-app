@@ -26,7 +26,9 @@ export enum TypeReport {
     ORDRE_REGLEMENT_TIER_PAYANT = 'ORDRE_REGLEMENT_TIER_PAYANT',
     /** type report pour le module medical */
     BONPRISEENCHARGE = 'BONPRISEENCHARGE',
-    ORDONNANCEMEDICALE = 'ORDONNANCEMEDICALE'
+    ORDONNANCEMEDICALE = 'ORDONNANCEMEDICALE',
+    /** type report pour le module comptabilité */
+    APPEL_FOND = 'APPEL_FOND'
 }
 
 export enum TypeDuree {

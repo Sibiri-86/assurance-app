@@ -85,9 +85,10 @@ export class AppMenuComponent implements OnInit {
                  visible: true,
                 items: [
                     {label: 'compte', icon: 'pi pi-pencil', routerLink: ['/comptabilite/compte'], visible: true},
-                    {label: 'Journal', icon: 'pi pi-comment', routerLink: ['/comptabilite/journal'], visible: true},
-                    {label: 'Exercice comptabilité', icon: 'pi pi-comments', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
-                    {label: 'Opération', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
+                    {label: 'Journal', icon: 'pi pi-book', routerLink: ['/comptabilite/journal'], visible: true},
+                    {label: 'Exercice comptabilité', icon: 'pi pi-clock', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
+                    {label: 'Opération', icon: 'pi pi-fw pi-list', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
+                    {label: 'Appel de Fond', icon: 'pi pi-fw pi-phone', routerLink: ['/comptabilite/appel-fond'], visible: true},
                 ]
             }
             /*

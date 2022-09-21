@@ -143,6 +143,7 @@ import * as journauxReducer from '../comptabilite/journaux/reducer';
 import * as exerciceComptaleReducer from '../comptabilite/exercice-comptable/reducer';
 import * as exerciceComptaleOperationReducer from '../comptabilite/exercice-comptable-operation/reducer';
 import * as operationReducer from '../comptabilite/operation/reducer';
+import * as appelFondReducer from '../comptabilite/appelFond/reducer';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -203,6 +204,7 @@ export const reducers: ActionReducerMap<AppState> = {
     exerciceComptableState: exerciceComptaleReducer.reducer,
     exerciceComptableOperationState: exerciceComptaleOperationReducer.reducer,
     operationState: operationReducer.reducer,
+    appelFondState: appelFondReducer.reducer
 
 
 };

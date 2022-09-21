@@ -54,7 +54,7 @@
 						<!-- <td>
 							<p-tableCheckbox [value]="garant"></p-tableCheckbox>
 						</td> -->
-						<td><span class="p-column-title">{{garant.compte}}</span>
+						<td><span class="p-column-title">{{garant.compte | formatTableValue: 'number':true}}</span>
 							
 						</td>
                         <td><span class="p-column-title">{{garant.poste}}</span>
@@ -62,13 +62,13 @@
 						</td>
                         <td><span class="p-column-title">{{garant.libelle}}</span>
 						</td>
-						<td><span class="p-column-title">{{garant.soldeDebiteur}}</span>
+						<td><span class="p-column-title">{{garant.soldeDebiteur | formatTableValue: 'number':true}}</span>
 							
 						</td>
-						<td><span class="p-column-title">{{garant.soldeCrediteur}}</span>
+						<td><span class="p-column-title">{{garant.soldeCrediteur | formatTableValue: 'number':true}}</span>
 							
 						</td>
-                        <td><span class="p-column-title">{{garant?.compteParent}}</span>
+                        <td><span class="p-column-title">{{garant?.compteParent | formatTableValue: 'number':true}}</span>
 						</td>
 						<td>
 							<button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" class="p-button-rounded p-button-success p-mr-2" (click)="editGarant(garant)"></button>
@@ -94,7 +94,7 @@
                        <div class="p-field p-col">
                         <label for="lastname2">Compte</label>
                         <div>
-                            <span>{{garant.compte}}</span>
+                            <span>{{garant.compte | formatTableValue: 'number':true}}</span>
                         </div>
                         </div>
                         <div class="p-field p-col">
@@ -117,21 +117,21 @@
                     <div class="p-field p-col">
                         <label for="lastname2">Solde Débiteur</label>
                         <div>
-                            <span>{{garant.soldeDebiteur}}</span>
+                            <span>{{garant.soldeDebiteur | formatTableValue: 'number':true}}</span>
                         </div>
                     </div>
                     
                     <div class="p-field p-col">
                     <label for="firstname2">Solde Créditeur</label>
                     <div>
-                        <span>{{garant.soldeCrediteur}}</span>
+                        <span>{{garant.soldeCrediteur | formatTableValue: 'number':true}}</span>
                     </div>
                     </div>
 
                         <div class="p-field p-col">
                         <label for="dateEffet">Compte Parent</label>
                         <div>
-                            <span>{{garant?.compteParent}}</span>
+                            <span>{{garant?.compteParent | formatTableValue: 'number':true}}</span>
                         </div>
                         </div>  
     
