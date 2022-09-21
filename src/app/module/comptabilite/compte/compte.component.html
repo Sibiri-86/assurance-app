@@ -46,7 +46,8 @@
 						<th pSortableColumn="personneRessource" style="width: 14rem">Solde Débiteur<p-sortIcon field="personneRessource"></p-sortIcon></th>
                         <th pSortableColumn="numeroCompteBancaire1" style="width: 13rem">Solde Créditeur <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
                         <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> Compte Parent  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
-						<th></th>
+                        <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> Mode de paiement  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th></th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-garant>
@@ -70,10 +71,14 @@
 						</td>
                         <td><span class="p-column-title">{{garant?.compteParent}}</span>
 						</td>
+                        <td><span class="p-column-title">{{garant?.typePaiement}}</span>
+						</td>
 						<td>
 							<button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" class="p-button-rounded p-button-success p-mr-2" (click)="editGarant(garant)"></button>
 							<button pButton pRipple icon="pi pi-trash"  pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteGarant(garant)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info" (click)="voirDetail(garant)"></button>
+                            <button pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-warning p-mr-2" (click)="relierPaiement(garant)"></button>
+
 						</td>
 					</tr>
 				</ng-template>
@@ -220,6 +225,36 @@
                 </form>                     
              </ng-template>
             </p-dialog>
+
+            <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement" [modal]="true" styleClass="p-fluid" >
+                <ng-template pTemplate="content">
+                    <div class="card">
+                    <form >
+                        <div class="card">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <label for="typePaiement">Type de paiement <span class="required">*</span></label>
+                                    <p-dropdown inputId="typePaiement" [filter]="true"
+                                                            showClear="true" [options]="typePaiement"
+                                                            name="typePaiement"
+                                                           [(ngModel)]="comptePaiement.typePaiement"
+                                                             [autoDisplayFirst]="false"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="p-grid p-justify-between">
+                        <div>
+                            <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                        </div>
+                        <div>
+                            <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreatePaiement()" ></button>
+                        </div>
+                    </div>
+                    </div>
+                </ng-template>
+            </p-dialog>
+           
 
             <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 	</div>

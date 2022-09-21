@@ -33,8 +33,6 @@
                         <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
@@ -52,13 +50,10 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.typePaiement}}</span>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
-                        </td>
+                        
                         <td style="min-width:150px">
                         <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                        <button pButton icon="pi pi-check" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiemrntEspece(ordre)"></button>
+                        <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)"></button>
                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
                         </td>
                         

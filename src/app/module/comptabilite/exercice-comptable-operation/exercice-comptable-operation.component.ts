@@ -255,7 +255,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   }
 
   onCreateOperationList() {
-    console.log(this.operationAddList);
+    //console.log(this.operationAddList);
     this.operationService.posOperationList(this.operationAddList).subscribe((rest)=>{
       this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: this.exerciceComptableOperation.id}));
       

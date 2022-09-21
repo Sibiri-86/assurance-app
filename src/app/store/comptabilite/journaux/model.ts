@@ -1,4 +1,5 @@
 import { TypeJournaux } from "../../parametrage/typeJournaux/model"
+import { TypePaiement } from "../../prestation/prefinancement/model";
 
 export interface Journaux {
     id?: string,
@@ -6,6 +7,7 @@ export interface Journaux {
     libelle?: string,
     typeJournaux?: TypeJournaux,
     dateSaisie?: Date;
+    typePaiement?: TypePaiement;
    
 }
 export interface  JournauxList {

@@ -34,11 +34,11 @@ import * as featureActionPrefinancement from '../../../store/prestation/prefinan
 
 
 @Component({
-  selector: 'app-ordre-paiement-instance',
-  templateUrl: './ordre-paiement-instance.component.html',
-  styleUrls: ['./ordre-paiement-instance.component.scss']
+  selector: 'app-ordre-paiement-instance-cheque',
+  templateUrl: './ordre-paiement-instance-cheque.component.html',
+  styleUrls: ['./ordre-paiement-instance-cheque.component.scss']
 })
-export class OrdrePaimentInstanceComponent implements OnInit {
+export class OrdrePaimentInstanceChequeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
@@ -50,7 +50,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-     this.breadcrumbService.setItems([{ label: 'Ordre de paiement en espèce instance' }]);
+     this.breadcrumbService.setItems([{ label: 'Ordre de paiement par chèque en  instance' }]);
 }
 
   ngOnInit(): void {
@@ -63,7 +63,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     });
 
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
-    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceCheque());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -78,11 +78,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT;
     this.report.ordreReglementDto = pref;
     this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
-  }
-
-  paiemrntEspece(ordre: OrdreReglement) {
-    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
-    //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
   }
 
   voirSinistre(ordre: OrdreReglement) {

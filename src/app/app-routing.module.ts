@@ -71,6 +71,7 @@ import { JournalComponent } from './module/comptabilite/journal/journal.componen
 import { ExerciceComptableComponent } from './module/comptabilite/exercice-comptable/exercice-comptable.component';
 import { ExerciceComptableOperationComponent } from './module/comptabilite/exercice-comptable-operation/exercice-comptable-operation.component';
 import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paiment-instance/ordre-paiment-instance.component';
+import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre-paiment-instance-cheque/ordre-paiment-instance-cheque.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -147,6 +148,7 @@ import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paime
                     {path: 'comptabilite/exercice-comptable', component: ExerciceComptableComponent},
                     {path: 'comptabilite/exercice-comptable-operation', component: ExerciceComptableOperationComponent},
                     {path: 'comptabilite/ordre-paiment-instance', component: OrdrePaimentInstanceComponent},
+                    {path: 'comptabilite/ordre-paiment-instance-cheque', component: OrdrePaimentInstanceChequeComponent},
                     
                 ]
             },

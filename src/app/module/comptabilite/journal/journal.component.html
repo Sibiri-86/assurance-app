@@ -36,6 +36,7 @@
                         <th pSortableColumn="type" style="min-width:200px">Type<p-sortIcon field="type"></p-sortIcon></th>
                         <th pSortableColumn="code" style="min-width:100px">Code<p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="libelle" style="min-width:200px">Intitullé<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="libelle" style="min-width:200px">Mode de paiement<p-sortIcon field="numero"></p-sortIcon></th>
                        
                        
                         <th style="min-width:150px"></th>
@@ -51,13 +52,16 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{journal.libelle}}</span>
                         </td>
+
+                        <td><span class="p-column-title" style="min-width:200px">{{journal.typePaiement}}</span>
+                        </td>
                         
                         
                         <td style="min-width:150px">
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editJournal(journal)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteJournal(journal)"></button>
-<!--                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirJournal(journal)"></button>
- -->   
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="relierJournal(journal)"></button>
+  
                         </td>
                     </tr>
                 </ng-template>
@@ -94,8 +98,35 @@
                 </div>
             </ng-template>
         </p-dialog>
-
-        
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement" [modal]="true" styleClass="p-fluid" >
+            <ng-template pTemplate="content">
+                <div class="card">
+                <form >
+                    <div class="card">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12">
+                                <label for="typePaiement">Type de paiement <span class="required">*</span></label>
+                                <p-dropdown inputId="typePaiement" [filter]="true"
+                                                        showClear="true" [options]="typePaiement"
+                                                        name="typePaiement"
+                                                       [(ngModel)]="journalPaiement.typePaiement"
+                                                         [autoDisplayFirst]="false"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="p-grid p-justify-between">
+                    <div>
+                        <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                    </div>
+                    <div>
+                        <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreatePaiement()" ></button>
+                    </div>
+                </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+       
         <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayJournal" header="Journal" [modal]="true" styleClass="p-fluid" >
             <ng-template pTemplate="content">
                 <div class="card">
@@ -119,6 +150,7 @@
                                 optionLabel="libelle" ></p-dropdown>
                           </div>
                            
+                         
                             
                            
                             

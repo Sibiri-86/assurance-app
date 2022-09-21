@@ -62,6 +62,7 @@ import { Compte } from 'src/app/store/comptabilite/compte/model';
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 import { DATA_DEFINITION, DATA_TYPE } from '../../parametrage/parameters.data';
+import { TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 
 @Component({
   selector: 'app-compte',
@@ -125,6 +126,11 @@ export class CompteComponent implements OnInit, OnDestroy {
   dataTypes = DATA_TYPE;
   dataDefinitions = DATA_DEFINITION;
   editForm: FormGroup;
+  displayPaiement = false;
+  comptePaiement: Compte = {};
+
+  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+
 
 
   constructor(private formBuilder: FormBuilder,
@@ -234,6 +240,16 @@ this.displayDialogFormGarant = true;
     }
 });
 } */
+
+relierPaiement(compte: Compte) {
+  this.displayPaiement = true;
+  this.comptePaiement = compte;
+}
+onCreatePaiement() {
+  this.store.dispatch(featureAction.updateCompte(this.comptePaiement));;
+  this.displayPaiement = false;
+  this.comptePaiement = {};
+}
 
 onCreate() {
 this.compte = this.compteForm.value;
