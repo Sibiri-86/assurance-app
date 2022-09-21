@@ -275,6 +275,8 @@ import {  OperationEffects } from './store/comptabilite/operation/effect';
 import { CompteComponent } from './module/comptabilite/compte/compte.component';
 import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paiment-instance/ordre-paiment-instance.component';
 import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre-paiment-instance-cheque/ordre-paiment-instance-cheque.component';
+import { AppelFondEffects } from './store/comptabilite/appelFond/effect';
+import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 
 @NgModule({
     imports: [
@@ -384,7 +386,8 @@ import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects])
+
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     declarations: [
@@ -494,9 +497,14 @@ import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre
         CompteComponent,
         JournalComponent,
         ExerciceComptableComponent,
+
         ExerciceComptableOperationComponent,
         OrdrePaimentInstanceComponent,
         OrdrePaimentInstanceChequeComponent,
+
+        ExerciceComptableOperationComponent, 
+        AppelFondComponent
+
     ],
     providers: [
         {
