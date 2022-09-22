@@ -48,6 +48,10 @@ export const searchTiersPayantByFacture = createAction('[App Init] search TierPa
 
 export const searchTierPayantOrdreReglement = createAction('[App Init] search Tier payantordre reglement', props<{numero: string,
         date: string}>() );
+export const loadTierPayantOrdreReglementFactureInstance = createAction('[App Init] load tier payant facture instance');
+export const validerPaiement = createAction('[App Init] valider facture',
+props<{ordre: OrdreReglementTierPayant}>());
+
 
 
 

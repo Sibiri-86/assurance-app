@@ -42,3 +42,5 @@ export const loadOrdrePaiementInstance = createAction('[App Init] load ordre pai
 export const loadOrdrePaiementInstanceCheque = createAction('[App Init] load ordre paiement instance cheque');
 export const validerPaiementEspece = createAction('[App Init] valider ordre paiement espece',
 props<{ordre: OrdreReglement}>());
+export const validerPaiementCheque = createAction('[App Init] valider ordre paiement cheque',
+props<{ordre: OrdreReglement}>());

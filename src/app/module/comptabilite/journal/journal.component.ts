@@ -60,7 +60,7 @@ export class JournalComponent implements OnInit, OnDestroy {
   typePaiementCheque= TypePaiement.CHEQUE;
   typePaiementVirement= TypePaiement.VIREMENT;
   banqueList$: Observable<Array<Banque>>;
-  banqueList: Array<Journaux>;
+  banqueList: Array<Banque>;
   
 
   

@@ -31,7 +31,9 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
-
+import * as banqueSelector from '../../../store/parametrage/Banques/selector';
+import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
+import { Banque } from 'src/app/store/parametrage/Banques/model';
 
 @Component({
   selector: 'app-ordre-paiement-instance-cheque',
@@ -46,6 +48,10 @@ export class OrdrePaimentInstanceChequeComponent implements OnInit {
   displaySinistre = false;
   prefinancement: Array<Prefinancement>;
   report: Report = {};
+  displayPaiement = false;
+  ordreReglementPaiement: OrdreReglement;
+  banqueList$: Observable<Array<Banque>>;
+  banqueList: Array<Banque>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -70,16 +76,35 @@ export class OrdrePaimentInstanceChequeComponent implements OnInit {
         this.ordreReglementList = value.slice();
     }
     });
+
+    this.banqueList$ = this.store.pipe(select(banqueSelector.banqueList));
+    this.store.dispatch(featureActionBanque.loadBanque());
+    this.banqueList$.pipe(takeUntil(this.destroy$)).subscribe((banque) => {
+      
+      if (banque) {
+     
+        this.banqueList = banque.slice();
+        
+       
+      }
+    });
   }
 
-  
+  paiement(ordre: OrdreReglement) {
+    this.displayPaiement = true;
+    this.ordreReglementPaiement = ordre;
+  }
 
   imprimer(pref: OrdreReglement) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT;
     this.report.ordreReglementDto = pref;
     this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
   }
-
+  paiementCheque() {
+    this.store.dispatch(featureActionPrefinancement.validerPaiementCheque({ordre: this.ordreReglementPaiement}));
+    this.ordreReglementPaiement = {};
+    //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+  }
   voirSinistre(ordre: OrdreReglement) {
     this.displaySinistre = true;
     this.prefinancement = ordre.prefinancement;

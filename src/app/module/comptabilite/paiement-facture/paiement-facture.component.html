@@ -26,39 +26,48 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!--<th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        </th>-->
+                        <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ordre>
                     <tr>
-                        <td>
+                        <!--<td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                        </td>-->
+
+                        <td><span class="p-column-title" >{{ordre.numeroBordereau}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
                         </td>
 
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
+                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                        <td>
+                            <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
+                            <span *ngIf="ordre?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
+                            <span *ngIf="ordre?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{ordre?.etat}}</span>
                         </td>
 
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
-                        </td>
-                        
                         <td style="min-width:150px">
-                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                        <button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiement(ordre)"></button>
-                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
+                            <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
+                                    class="p-button-rounded p-button-help p-mr-2"
+                                    (click)="voirSinistre(ordre)">
+                            </button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
+                                    class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
+                            </button>
+                            <button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiement(ordre)"></button>
+
                         </td>
                         
                         <!--
@@ -82,22 +91,20 @@
             </p-table>
         </div>
         
-        
-        
         <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement" [modal]="true" styleClass="p-fluid" >
             <ng-template pTemplate="content">
                 <div class="card">
                 <form >
                     <div class="card">
                         <div class="p-fluid p-formgrid p-grid">
-                            <!-- <div class="p-field p-col-12">
+                           <div class="p-field p-col-12">
                                 <label for="typePaiement">Type de paiement <span class="required"></span></label>
                                 <p-dropdown inputId="typePaiement" [filter]="true"
                                                         showClear="true" [options]="typePaiement"
                                                         name="typePaiement"
-                                                       [(ngModel)]="journalPaiement.typePaiement"
+                                                       [(ngModel)]="ordreReglementPaiement.typePaiement"
                                                          [autoDisplayFirst]="false"></p-dropdown>
-                            </div> -->
+                            </div>
 
                             <div class="p-field p-col-12">
                                 <label for="typePaiement">Banque <span class="required"></span></label>
@@ -122,35 +129,20 @@
                 </div>
             </ng-template>
         </p-dialog>
-        
-        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}"> 
+
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}">
             <ng-template pTemplate="content">
                 <div class="card">
-                    <div class="p-formgroup-inline">
-                        <div class="p-field">
-                            <label for="matricule" class="p-sr-only">Matricule</label>
-                            <input id="matricule" type="text" pInputText placeholder="Matricule">
-                        </div>
-                        <div class="p-field">
-                            <label for="dateSoins" class="p-sr-only">Date soins</label>
-                            <p-calendar  [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" appendTo="body" placeholder="Date declaration"></p-calendar>
-                        </div>
-                        <div class="p-field">
-                            <button pButton pRipple type="button" label="Rechercher"></button>
-                        </div>
-                    </div>
-                    
-                    <p-table #dt [value]="prefinancement" [columns]="cols" [rows]="10" [paginator]="true"
+                    <p-table #dt [value]="sinistreTierPayant" [columns]="cols" [rows]="10" [paginator]="true"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
-               
-                     <ng-template pTemplate="header">
+                <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="width: 150px">Date saisie<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -163,7 +155,7 @@
                         <td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.dateSaisie | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
@@ -177,7 +169,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{prefinancement ? prefinancement.length : 0 }} sinistre(s).
+                        {{sinistreTierPayant ? sinistreTierPayant.length : 0 }} sinistre(s).
                     </div>
                 </ng-template>
             </p-table>   
