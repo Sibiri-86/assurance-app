@@ -87,7 +87,7 @@ export interface Report {
     sinistreTierPayantDTO?: SinistreTierPayant;
     ordreReglementTierPayant?: OrdreReglementTierPayant;
     ordonnanceMedical?: OrdonnanceMedical;
-    appelFond?: AppelFond
+    appelFond?: AppelFond;
 }
 
 export interface PoliceList {

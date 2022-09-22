@@ -404,12 +404,27 @@
                     <div class="p-field p-col">
                         <label for="typePaiement">Type de paiement <span class="required">*</span></label>
                         <p-dropdown inputId="typePaiement" [filter]="true"
-                                                showClear="true" [options]="typePaiement"
+                                                showClear="true" [options]="typePaiement2"
                                                 formControlName="typePaiement"
-                                                 [autoDisplayFirst]="false"></p-dropdown>
+                                                 [autoDisplayFirst]="false" (onChange)="changeType(typePaiement)"></p-dropdown>
                     </div>
                  
                 </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div *ngIf="typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">numero Orange Money<span class="required">*</span></label>
+                        <input type="date" name="numeroOrange" id="numeroOrange" pInputText formControlName="numeroOrange" (change)="checkDateCondition()">
+                    </div>
+                    <div *ngIf="typePaiement === 'MOOV_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">numero Moov Money <span class="required">*</span></label>
+                        <input type="date" name="numeroMobicash" id="numeroMobicash" pInputText formControlName="numeroMobicash" (change)="checkDateCondition()">
+                    </div>
+                    <div *ngIf="typePaiement === 'VIREMENT'" class="p-field p-col">
+                        <label for="dateEffet">numero Virement <span class="required">*</span></label>
+                        <input type="date" name="numeroVirement" id="numeroVirement" pInputText formControlName="numeroVirement" (change)="checkDateCondition()">
+                    </div>
+                </div>
+                
                     
                                    
                     <div class="p-field p-col-2"></div>

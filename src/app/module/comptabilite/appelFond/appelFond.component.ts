@@ -364,6 +364,7 @@ ngOnDestroy() {
 
 
 imprimerAppelFond(appelFond: AppelFond) {
+  console.log('appelFond', appelFond);
   this.report.typeReporting = TypeReport.APPEL_FOND;
   this.report.appelFond = appelFond;
   console.log('this.report', this.report);

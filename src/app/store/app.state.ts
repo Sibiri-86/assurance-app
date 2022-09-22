@@ -57,7 +57,6 @@ import { JournauxState } from './comptabilite/journaux/state';
 import { ExerciceComptableState } from './comptabilite/exercice-comptable/state';
 import { ExerciceComptableOperationState } from './comptabilite/exercice-comptable-operation/state';
 import { OperationState } from './comptabilite/operation/state';
-import { AppelFond } from './comptabilite/appelFond/model';
 import { AppelFondState } from './comptabilite/appelFond/state';
 import { CompteState } from './comptabilite/compte/state';
 
