@@ -1,3 +1,5 @@
+import { Garant } from "../../contrat/garant/model";
+
 export interface AppelFond {
     id?: string;
     destinataire?: string;
@@ -7,8 +9,12 @@ export interface AppelFond {
     typeCompte?: TypeCompte;
     dateAppel?: Date;
     montantAppel?: number;
+    garant?:Garant;
     signataire?: string;
     isDeleted?: boolean;
+    totalAppel?: number;
+    dateDebut?: Date;
+    dateFin?: Date;
 }
 
 export enum TypeCompte {
