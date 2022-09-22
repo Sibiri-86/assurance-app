@@ -92,7 +92,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
                     {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
                     {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
-                    {label: 'Facture en payée', routerLink: ['/comptabilite/facture-paye'], visible: true},
+                    {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
                     {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
                     
                     

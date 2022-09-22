@@ -41,7 +41,7 @@ export class FacturePayeComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
-  this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
+  this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
