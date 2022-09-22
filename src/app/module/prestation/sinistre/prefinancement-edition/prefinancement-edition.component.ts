@@ -134,7 +134,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayPrestationpop = false;
   prestationsList: Prestation[]= [];
   compteur: number = null;
-  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -247,6 +247,9 @@ findMontantPlafond(event){
       prestation: this.formBuilder.array([]),
       dateRetrait: new FormControl({value: '', disabled: true}),
       typePaiement: new FormControl('', Validators.required),
+      numeroOrange: new FormControl(''),
+      numeroMobicash: new FormControl(''),
+      numeroVirement: new FormControl(''),
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -1302,6 +1305,10 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
 fermerPrestation(){
   this.displayPrestationpop = false;
   this.prestationPopForm.reset()
+}
+
+changeType(typePaiement) {
+console.log(typePaiement);
 }
 
 }

@@ -19,7 +19,7 @@ const featureReducer = createReducer(
   })),
   on(featureActions.setReportAppelFond, (state, payload: ReportFile) => ({
       ...state, reportFile: payload.reportFile
-  })),
+  }))
 );
 
 export function reducer(state: AppelFondState | undefined, action: Action) {

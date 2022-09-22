@@ -66,6 +66,8 @@ import * as featureAction from '../../../store/comptabilite/appelFond/actions';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
+import * as garantSelector from "../../../store/contrat/garant/selector";
+import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
 
 
 @Component({
@@ -110,6 +112,7 @@ export class AppelFondComponent implements OnInit, OnDestroy {
   secondFormGroup: FormGroup;
   isEditable = false;
   infosGarant = false;
+  etatAppel = false;
   tauxCommissionIntermediaireList: Array<TauxCommissionIntermediaire>;
   tauxCommissionIntermediaireList$: Observable<Array<TauxCommissionIntermediaire>>;
   arrondissement: Arrondissement;
@@ -136,11 +139,15 @@ export class AppelFondComponent implements OnInit, OnDestroy {
   appelFondList$: Observable<Array<AppelFond>>;
   appelFondList: Array<AppelFond>;
   report: Report = {};
+  dateDebut: Date;
+  dateFin: Date;
+  appelFondTotal: AppelFond;
 
 
   constructor(private formBuilder: FormBuilder,
               private store: Store<AppState>, private messageService: MessageService,
-              private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
+              private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService,
+              private appelFondService: AppelFondService) {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
@@ -151,7 +158,8 @@ export class AppelFondComponent implements OnInit, OnDestroy {
         typeCompte: new FormControl('', [Validators.required]),
         dateAppel: new FormControl('', [Validators.required]),
         montantAppel: new FormControl('', [Validators.required]),
-        signataire: new FormControl('', [Validators.required])
+        signataire: new FormControl('', [Validators.required]),
+        garant: new FormControl('', [Validators.required]),
     });
 
       this.breadcrumbService.setItems([
@@ -210,7 +218,13 @@ ngOnInit(): void {
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
-    }
+    },
+    {
+      field: 'garant',
+      validations: [
+        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
+      ]
+    },
   ];
 
   this.appelFondList$ = this.store.pipe(select(appelFondSelector.appelFondList));
@@ -224,6 +238,15 @@ ngOnInit(): void {
                 console.log('appelFondList', this.appelFondList);
               }
   });
+
+  this.garantList$ = this.store.pipe(select(garantSelector.garantList));
+    this.store.dispatch(loadGarant());
+    this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.garantList = value.slice();
+        console.log("garantListe", this.garantList);
+      }
+    });
 
   this.store.dispatch(featureAction.setReportAppelFond(null));
   this.store.pipe(select(appelFondSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -267,6 +290,12 @@ voirDetail(garant: Garant) {
   this.infosGarant = true;
   this.garant = garant;
 }
+
+voirDetailEtatAppel() {
+  this.etatAppel = true;
+}
+
+
 
 editGarant(compte: Compte) {
 // this.garantForm.get('id').setValue(garant.id);
@@ -334,70 +363,33 @@ ngOnDestroy() {
 }
 
 
-upload(event){
-  //this.file = event.files[0];
-  this.onTypeChange(event);
- //this.store.dispatch(this.selectedDataDef.store.importAction({file: event.files[0]}));
- //this.service.pushFileToStorage(event.files [0]);
-}
-
-onTypeChange(event) {
-  if (this.editForm) {
-    this.editForm = null;
-  }
-  if (event.value) {
-    console.log(event.value);
-    this.selectedDataType = this.dataTypes.find(dataType => dataType.value === event.value);
-    if (this.selectedDataType) {
-      this.selectedDataDef = this.dataDefinitions.find(df => df.entity === event.value);
-      if (this.selectedDataDef) {
-        this.selectedDataDefList$ = this.store.pipe(select(this.selectedDataDef.store.select));
-        this.selectedDataDefList$.pipe(takeUntil(this.destroy$))
-          .subscribe(value => {
-            if (value) {
-              this.annulerSaisie();
-              this.selectedDataDefList = value.slice();
-            }
-          });
-        this.store.dispatch(this.selectedDataDef.store.fetchAction);
-        this.editForm = this.formBuilder.group({});
-        this.cols = this.selectedDataDef.cols;
-        this.entityValidations = this.selectedDataDef.entityValidations;
-        this.cols.forEach(col => {
-          const control = new FormControl('', col.validators);
-          this.editForm.addControl(col.field, control);
-        });
-        //this.setDropdownObservableObj();
-      }
-    }
-  } else {
-    // this.onInputDroped();
-  }
-
-}
-
 imprimerAppelFond(appelFond: AppelFond) {
+  console.log('appelFond', appelFond);
   this.report.typeReporting = TypeReport.APPEL_FOND;
   this.report.appelFond = appelFond;
   console.log('this.report', this.report);
   this.store.dispatch(featureAction.FetchReportAppelFond(this.report));
 }
 
-/* getAdherentFiles(event: any): void {
-    console.log(event);
-    this.FamilyListToImport = [];
-    this.adherentFamille = [];
-    this.afficheDetail = false;
-    this.policeService.loadAdherentsByExcelFile(event).subscribe(
-        (res) => {
-          console.log('liste des adhérents === ');
-          console.log(res);
-          this.FamilyListToImport = res;
-          this.adherentFamille = res;
-          this.afficheDetail = true;
-        }
-    );
-  } */
+searchAppelFond() {
+  this.appelFond = {};
+  this.appelFond.garant = this.garant;
+  this.appelFond.dateDebut = this.dateDebut;
+  this.appelFond.dateFin = this.dateFin;
+  if(this.appelFond.garant && this.appelFond.dateDebut && this.appelFond.dateFin) {
+    this.appelFondService.findAppelFondTotalAmount(this.appelFond).subscribe((res) => {
+      this.appelFondTotal = res;
+      console.log("this.appelFondTotal", res);
+    });
+  }
+}
+annulerAppelFond() {
+  this.garant = {};
+  this.dateDebut = null;
+  this.dateFin = null;
+  this.appelFondTotal = {};
+  this.etatAppel = false;
+}
 }
 
 

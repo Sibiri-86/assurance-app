@@ -51,6 +51,9 @@ export interface Prefinancement {
     prestataire?: Prestataire;
     bonPriseEnCharge?: BonPriseEnCharge;
     typePaiement?: TypePaiement;
+    numeroOrange?: string;
+    numeroMobicash?: string;
+    numeroVirement?: string;
 }
 
 export interface BonPriseEnCharge {
