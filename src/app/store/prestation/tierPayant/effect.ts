@@ -219,6 +219,20 @@ export class TierPayantEffects {
                 ))
         ));
 
+        loadTierPayantOrdreReglementFactureInstance$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantOrdreReglementFactureInstance),
+            mergeMap(() =>
+                this.tierPayantService.$getTierPayantOrdreReglementFactureIstance().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
     updateETatDeValiderOrdreReglement$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.deValiderOrdreReglement),
@@ -233,6 +247,19 @@ export class TierPayantEffects {
                 ))
         ));
 
+        validerPaiement$ = createEffect(() =>
+        this.actions$.pipe(
+                ofType(featureActions.validerPaiement),
+                mergeMap(({ordre}) =>
+                    this.tierPayantService.paiementFacture(ordre).pipe(
+                        switchMap(value => [
+                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                           featureActions.loadOrdreReglementTierPayant()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    ))
+                ));
     /** delete ordre de reglement */
     deleteOrdreDeReglement$ = createEffect(() =>
         this.actions$.pipe(

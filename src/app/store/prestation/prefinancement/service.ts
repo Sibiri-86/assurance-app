@@ -142,6 +142,11 @@ paiementEspece(ordre: OrdreReglement): Observable<any> {
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-espece`, ordre);
 }
 
+
+paiementCheque(ordre: OrdreReglement): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-cheque`, ordre);
+}
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {

@@ -63,6 +63,7 @@ import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 import { DATA_DEFINITION, DATA_TYPE } from '../../parametrage/parameters.data';
 import { TypePaiement } from 'src/app/store/prestation/prefinancement/model';
+import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
 
 @Component({
   selector: 'app-compte',
@@ -130,7 +131,9 @@ export class CompteComponent implements OnInit, OnDestroy {
   comptePaiement: Compte = {};
 
   typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
-
+  typePaiementCheque= TypePaiement.CHEQUE;
+  typePaiementVirement= TypePaiement.VIREMENT;
+  
 
 
   constructor(private formBuilder: FormBuilder,
@@ -190,6 +193,17 @@ ngOnInit(): void {
 
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
+  this.banqueList$ = this.store.pipe(select(banqueSelector.banqueList));
+  this.store.dispatch(featureActionBanque.loadBanque());
+  this.banqueList$.pipe(takeUntil(this.destroy$)).subscribe((banque) => {
+    
+    if (banque) {
+   
+      this.banqueList = banque.slice();
+      
+     
+    }
+  });
 
 }
 

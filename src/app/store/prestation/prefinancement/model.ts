@@ -5,6 +5,7 @@ import { Adherent } from '../../contrat/adherent/model';
 import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
 import { Acte } from '../../parametrage/acte/model';
+import { Banque } from '../../parametrage/Banques/model';
 import { Garantie } from '../../parametrage/garantie/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { PlafondSousActe } from '../../parametrage/plafond/model';
@@ -34,6 +35,7 @@ export interface OrdreReglement {
     prefinancement?: Array<Prefinancement>;
     etat?: TypeEtatOrdreReglement;
     montantPaye?: number;
+    banque?: Banque;
 }
 
 export interface Prefinancement {

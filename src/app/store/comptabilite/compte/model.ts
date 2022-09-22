@@ -1,3 +1,6 @@
+import { Banque } from "../../parametrage/Banques/model";
+import { TypePaiement } from "../../prestation/prefinancement/model";
+
 export interface Compte {
     id?: string;
     compte?: string;
@@ -8,7 +11,9 @@ export interface Compte {
     compteParent?: string;
     isRacine?: boolean;
     isDeleted?: boolean;
-    typePaiement?: Compte;
+    typePaiement?: TypePaiement;
+    banque?: Banque;
+
 }
 
 export interface CompteList{
