@@ -54,11 +54,12 @@ export class JournalComponent implements OnInit, OnDestroy {
   journauxList: Array<Journaux>;
   displayJournalDetail = false;
   journalDetail: Journaux= {} ;
-  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.CHEQUE && kj !== TypePaiement.VIREMENT).map(key => ({ label: TypePaiement[key], value: key }));
   displayPaiement = false;
   journalPaiement: Journaux = {};
-  typePaiementCheque= TypePaiement.CHEQUE;
-  typePaiementVirement= TypePaiement.VIREMENT;
+  typePaiementCheque= TypePaiement.ORANGE_MONEY;
+  typePaiementVirement= TypePaiement.MOOV_MONEY;
+  typePaiementEspece= TypePaiement.ESPECE;
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
   

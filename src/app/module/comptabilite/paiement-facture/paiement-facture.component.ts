@@ -35,7 +35,7 @@ export class PaiementFactureComponent implements OnInit {
   ordreReglementPaiement: OrdreReglementTierPayant = {};
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
-  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.ORANGE_MONEY && kj !== TypePaiement.MOOV_MONEY && kj !== TypePaiement.ESPECE).map(key => ({ label: TypePaiement[key], value: key }));
 
 
   constructor(private store: Store<AppState>,

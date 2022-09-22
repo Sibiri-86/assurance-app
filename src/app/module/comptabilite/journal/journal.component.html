@@ -98,7 +98,7 @@
                 </div>
             </ng-template>
         </p-dialog>
-        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement" [modal]="true" styleClass="p-fluid" >
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement ou a une banque" [modal]="true" styleClass="p-fluid" >
             <ng-template pTemplate="content">
                 <div class="card">
                 <form >
@@ -113,7 +113,7 @@
                                                          [autoDisplayFirst]="false"></p-dropdown>
                             </div>
 
-                            <div class="p-field p-col-12" *ngIf="journalPaiement.typePaiement === typePaiementCheque || journalPaiement.typePaiement === typePaiementVirement">
+                            <div class="p-field p-col-12" *ngIf="!journalPaiement.typePaiement">
                                 <label for="typePaiement">Banque <span class="required"></span></label>
                                 <p-dropdown inputId="typePaiement" [filter]="true"
                                                         showClear="true" [options]="banqueList"
