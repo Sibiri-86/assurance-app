@@ -233,6 +233,20 @@ export class TierPayantEffects {
                 ))
         ));
 
+        loadTierPayantOrdreReglementFacturePaye$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantOrdreReglementFacturePaye),
+            mergeMap(() =>
+                this.tierPayantService.$getTierPayantOrdreReglementFacturePaye().pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
     updateETatDeValiderOrdreReglement$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.deValiderOrdreReglement),
@@ -260,6 +274,19 @@ export class TierPayantEffects {
                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
                 ));
+                devaliderPaiement$ = createEffect(() =>
+                this.actions$.pipe(
+                        ofType(featureActions.devaliderPaiement),
+                        mergeMap(({ordre}) =>
+                            this.tierPayantService.devaliderPaiementFacture(ordre).pipe(
+                                switchMap(value => [
+                                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                   featureActions.loadTierPayantOrdreReglementFacturePaye()
+                                ]),
+                                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            ))
+                        ));
     /** delete ordre de reglement */
     deleteOrdreDeReglement$ = createEffect(() =>
         this.actions$.pipe(

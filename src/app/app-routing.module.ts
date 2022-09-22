@@ -74,6 +74,8 @@ import { OrdrePaimentInstanceComponent } from './module/comptabilite/ordre-paime
 import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre-paiment-instance-cheque/ordre-paiment-instance-cheque.component';
 import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 import { PaiementFactureComponent } from './module/comptabilite/paiement-facture/paiement-facture.component';
+import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
+import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -152,7 +154,9 @@ import { PaiementFactureComponent } from './module/comptabilite/paiement-facture
                     {path: 'comptabilite/ordre-paiment-instance', component: OrdrePaimentInstanceComponent},
                     {path: 'comptabilite/ordre-paiment-instance-cheque', component: OrdrePaimentInstanceChequeComponent},
                     {path: 'comptabilite/appel-fond', component: AppelFondComponent},
-                    {path: 'comptabilite/paiement-facture', component: PaiementFactureComponent}
+                    {path: 'comptabilite/paiement-facture', component: PaiementFactureComponent},
+                    {path: 'comptabilite/facture-paye', component: FacturePayeComponent},
+                    {path: 'comptabilite/remboursement-effectue', component: RemboursementEffectueComponent}
                     
                 ]
             },

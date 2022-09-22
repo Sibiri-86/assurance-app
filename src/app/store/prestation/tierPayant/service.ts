@@ -68,10 +68,24 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    $getTierPayantOrdreReglementFacturePaye(): Observable<OrdreReglementTierPayantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-paye`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
     paiementFacture(ordre: OrdreReglementTierPayant): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/paiement-facture`, ordre);
       }
+
+      devaliderPaiementFacture(ordre: OrdreReglementTierPayant): Observable<any> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/paiement-devalider`, ordre);
+      }
+
     $findMontantConsomme(idAdherent: string, idSousActe: string): Observable<any> {
         // @FIXME: get request
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/find-montant-consomme`, {params :

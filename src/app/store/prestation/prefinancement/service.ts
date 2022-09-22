@@ -137,6 +137,14 @@ $getOrdrePaiementInstanceCheque(): Observable<OrdreReglementList> {
   );
 }
 
+$getOrdrePaiementValide(): Observable<OrdreReglementList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-valide`).pipe(
+      map((response: OrdreReglementList) => response),
+      catchError(this.handleError())
+  );
+}
+
 paiementEspece(ordre: OrdreReglement): Observable<any> {
   // @FIXME: post request
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-espece`, ordre);
@@ -146,6 +154,11 @@ paiementEspece(ordre: OrdreReglement): Observable<any> {
 paiementCheque(ordre: OrdreReglement): Observable<any> {
   // @FIXME: post request
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-cheque`, ordre);
+}
+
+paiementChequeCaisseDevalider(ordre: OrdreReglement): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-devalider`, ordre);
 }
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();

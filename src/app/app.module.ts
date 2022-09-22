@@ -278,6 +278,8 @@ import { OrdrePaimentInstanceChequeComponent } from './module/comptabilite/ordre
 import { AppelFondEffects } from './store/comptabilite/appelFond/effect';
 import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 import { PaiementFactureComponent } from './module/comptabilite/paiement-facture/paiement-facture.component';
+import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
+import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
 
 @NgModule({
     imports: [
@@ -505,7 +507,9 @@ import { PaiementFactureComponent } from './module/comptabilite/paiement-facture
 
         ExerciceComptableOperationComponent, 
         AppelFondComponent,
-        PaiementFactureComponent
+        PaiementFactureComponent,
+        FacturePayeComponent,
+        RemboursementEffectueComponent
 
     ],
     providers: [
