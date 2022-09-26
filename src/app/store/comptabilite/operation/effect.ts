@@ -62,6 +62,20 @@ export class OperationEffects {
                     ))
                 ));    
 
+            findOperationCaisseJournalier$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.findOperationCaisseJournalier),
+                mergeMap((operation: Operation) =>
+                    this.operationService.findOperationCaisseJournalier(operation).pipe(
+                        switchMap(value => [
+                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setOperation(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    ))
+                ));    
+
 
    
     fetchOperation$ = createEffect(() =>

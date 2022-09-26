@@ -1,3 +1,5 @@
+import { OrdreReglement } from "../../prestation/prefinancement/model";
+import { OrdreReglementTierPayant } from "../../prestation/tierPayant/model";
 import { Compte } from "../compte/model";
 import { ExerciceComptableOperation } from "../exercice-comptable-operation/model";
 
@@ -15,6 +17,12 @@ export interface Operation {
     montantCredit?: number;
     compte?: Compte;
     compteAuxiliaire?: Compte;
+    journauxId?: string;
+    ordreReglement?: OrdreReglement;
+    ordreReglementTierpayant?: OrdreReglementTierPayant;
+    montantRecette?: number;
+    montantDepense?: number;
+    solde?: number;
    
 }
 export interface  OperationList {

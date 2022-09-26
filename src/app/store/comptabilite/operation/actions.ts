@@ -6,5 +6,5 @@ export const deleteOperation = createAction('[App Init] delete Operation', props
 export const loadOperation = createAction('[App Init] load Operation');
 export const setOperation = createAction('[App Init] set Operation',  props<OperationList>());
 export const loadOperationByExerciceOperation = createAction('[App Init] load Operation By Exercice', props<{exerciceOperationId: string}>());
-
+export const findOperationCaisseJournalier = createAction('[App Init] update Operation journaliere', props<Operation>());
 

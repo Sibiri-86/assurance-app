@@ -280,6 +280,7 @@ import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.co
 import { PaiementFactureComponent } from './module/comptabilite/paiement-facture/paiement-facture.component';
 import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
 import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
+import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
 
 @NgModule({
     imports: [
@@ -509,7 +510,8 @@ import { RemboursementEffectueComponent } from './module/comptabilite/remboursem
         AppelFondComponent,
         PaiementFactureComponent,
         FacturePayeComponent,
-        RemboursementEffectueComponent
+        RemboursementEffectueComponent,
+        ArreteJournauxComponent
 
     ],
     providers: [

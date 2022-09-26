@@ -32,6 +32,15 @@ $getOperation(): Observable<OperationList> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/liste`, operationList);
   }
 
+  findOperationCaisseJournalier(operation: Operation): Observable<OperationList> {
+
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/liste-journalier`, operation).pipe(
+      map((response: OperationList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 updateOperation(operation: Operation): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/${operation.id}`, operation);
