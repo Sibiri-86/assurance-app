@@ -31,6 +31,7 @@ import * as journalListSelector from '../../../store/comptabilite/journaux/selec
 import { OperationService } from 'src/app/store/comptabilite/operation/service';
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
 
 
 
@@ -78,6 +79,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
                private confirmationService: ConfirmationService,
                private operationService: OperationService,
                private compteService: CompteService,
+               private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Opération'}]);
    }
@@ -143,6 +145,14 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
      
     });
   }
+  findExerciceOperationAjour() {
+    this.exerciceOperationService.$getExerciceComptableOperationMisaJous(this.exerciceComptableOperation.id).subscribe((rest)=>{
+      if(rest) {
+        this.exerciceComptableOperation = rest;
+      }
+      
+    });
+  }
   findCompteAuxiliaire() {
     this.compteService.findCompteByNumero(this.operation.numCompteAuxi).subscribe((res)=>{
       if(res) {
@@ -154,6 +164,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   }
   onAdd() { 
     this.displayAddOperationListe = true;
+    this.findExerciceOperationAjour();
   }
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
     this.exerciceComptableOperation = exerciceComptableOperation;
@@ -161,6 +172,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
 
     this.displayOperation = true;
     this.operation.dateSaisie = new Date();
+  //  this.findExerciceOperationAjour();
   }
 
   operationByJournal() {
