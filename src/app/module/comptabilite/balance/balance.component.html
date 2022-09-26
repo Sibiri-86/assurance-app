@@ -1,0 +1,300 @@
+
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<button pButton pRipple label="Imprimer Balance" icon="pi pi-print" class="p-button-warning p-mr-2 p-mb-2" (click)="PrintGarant()"></button>
+				</ng-template>
+			</p-toolbar>
+            <p-table #dt [value]="operationList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="territorialite" style="min-width:4rem">N° de Compte<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="numero" style="min-width:200px">Compte<p-sortIcon field="numero"></p-sortIcon></th> -->
+                        <th pSortableColumn="nom" style="min-width:6rem">Type de journal<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:4rem">Journal<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:15rem">Libellé<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:5rem">N° Facture<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:5rem">Ref<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:5reem">N° Pièce<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:6rem">Montant Débité<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:6rem">Montant Crédité<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th ></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ordre>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.numCompte}}</span>
+                        </td>
+                        <!-- <td><span class="p-column-title" style="min-width:200px">{{ordre.compte.libelle}}</span>
+                        </td> -->
+                        <td><span class="p-column-title" >{{ordre?.exerciceComptableOperation.journaux.typeJournaux.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.exerciceComptableOperation.journaux.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre.numFacture}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre.reference}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre.numPiece}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.montantDebit}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.montantCredit}}</span>
+                        </td>
+                        <td style="min-width:150px">
+                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <!-- <button pButton icon="pi pi-check" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiemrntEspece(ordre)"></button>
+                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button> -->
+                        </td>
+                        
+                        <!--
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editPolice(police)"></button>
+                            <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2" (click)="deletePolice(police)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2" (click)="voirGroupe(police)"></button>
+                            <button pButton  pRipple icon="pi pi-search" pTooltip="voir details" class="p-button-rounded p-button-help p-mr-2" (click)="onRowSelectPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-info p-mr-2" (click)="validerPolice(police)"></button>
+                            <button pButton  [disabled]="!police.listGroupe ||!police.listGroupe.length" pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(police)"></button>
+                        </td>
+                        -->
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{operationList ? operationList.length : 0 }} Ligne(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        
+        
+        
+        
+        
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Balance détail" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                <h5></h5>
+                <div class="p-fluid p-formgrid p-grid">
+                       <div class="p-field p-col">
+                        <label for="lastname2">N° de Compte</label>
+                        <div>
+                            <span>{{ordre1?.numCompte}}</span>
+                        </div>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Type de journal</label>
+                            <div>
+                                <span>{{ordre1?.exerciceComptableOperation?.journaux?.typeJournaux?.libelle}}</span>
+                            </div>
+                            </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Journal</label>
+                            <div>
+                                <span>{{ordre1?.exerciceComptableOperation?.journaux?.libelle}}</span>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Libelle</label>
+                        <div>
+                            <span>{{ordre1?.libelle}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">N° Facture</label>
+                    <div>
+                        <span>{{ordre1?.numFacture}}</span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Ref</label>
+                        <div>
+                            <span>{{ordre1?.reference}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">N° Pièce</label>
+                        <div>
+                            <span>{{ordre1?.numPiece}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Montant Débité</label>
+                    <div>
+                        <span>{{ordre1?.montantDebit}}</span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Montant Crédité</label>
+                        <div>
+                            <span>{{ordre1?.montantCredit}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [maximizable]="true" [(visible)]="displayBalancePrint" header="Balance des comptes" [modal]="true" styleClass="p-fluid" [style]="{width: '600px'}">
+            <hr>
+            <ng-template pTemplate="content">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-3">
+                        <label for="firstname2">Type de Balance<span style="color: red !important; font-size: 1.4em"></span></label>
+                    </div>
+                    <div class="p-field p-col-9">
+                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                showClear="true" [options]="garantList"
+                                                [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                        </p-dropdown>
+                    </div>
+                </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="compteParent">Date écriture de  <span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <input id="dateAppel" type="date" pInputText [(ngModel)]="dateDebut" (onchange)="searchAppelFond()">
+                            <!-- <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                            </app-entity-validation> -->
+                        </div>
+                        <div class="p-field p-col-2">
+                            
+                        </div>
+                        <div class="p-field p-col-1">
+                            <label for="compteParent">A <span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <input id="dateAppel" type="date" pInputText [(ngModel)]="dateDebut" (onchange)="searchAppelFond()">
+                            <!-- <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                            </app-entity-validation> -->
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="firstname2">N° Compte de<span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-2">
+                            
+                        </div>
+                        <div class="p-field p-col-1">
+                            <label for="firstname2">A<span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="firstname2">Code Journal de<span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-2">
+                            
+                        </div>
+                        <div class="p-field p-col-1">
+                            <label for="firstname2">A<span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="firstname2">Type d'etat<span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-9">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="compteParent">Date fin <span style="color: red !important; font-size: 1.4em"></span></label>
+                        </div>
+                        <div class="p-field p-col-9">
+                            <input id="dateAppel" type="date"  pInputText [(ngModel)]="dateFin" (onchange)="searchAppelFond()">
+                            
+                        </div>
+                    </div> -->
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            
+                            <button pButton pRipple label="Rechercher"icon="pi pi-times" class="p-button-danger p-mr-2 p-mb-2" (click)="searchAppelFond()"></button>
+                        </div>
+                        <div class="p-field p-col-6">
+                            
+                            <button pButton pRipple label="Rechercher" [disabled]="!garant || !dateDebut || !dateFin" icon="pi pi-search-plus" class="p-button-success p-mr-2 p-mb-2" (click)="searchAppelFond()"></button>
+                        </div>
+                    </div>
+                    
+                    
+             </ng-template>
+        </p-dialog>
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

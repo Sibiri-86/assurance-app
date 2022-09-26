@@ -5,7 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {  ExerciceComptableOperationList} from "./model";
+import {  ExerciceComptableOperationList, OperationList} from "./model";
 
 
 @Injectable({providedIn: 'root'})
@@ -24,6 +24,14 @@ $getExerciceComptableOperation(): Observable<ExerciceComptableOperationList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_EXERCICE_OPERATION)}/${journalId}`).pipe(
       map((response: ExerciceComptableOperationList) => response),
+      catchError(this.handleError())
+    );
+  }
+
+  $getOperations(): Observable<OperationList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_EXERCICE_OPERATION)}/liste-opration`).pipe(
+      map((response: OperationList) => response),
       catchError(this.handleError())
     );
   }
