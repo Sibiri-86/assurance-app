@@ -8,7 +8,10 @@ export interface ExerciceComptableOperation {
     mois?: string;
     dateDebut?:Date;
     dateFin?: Date;
-    journaux?: Journaux
+    journaux?: Journaux;
+    montantDebit?: number;
+    montantCredit?: number;
+    solde?: number;
    
 }
 export interface  ExerciceComptableOperationList {

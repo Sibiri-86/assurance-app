@@ -279,6 +279,8 @@ import { AppelFondEffects } from './store/comptabilite/appelFond/effect';
 import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.component';
 import { PaiementFactureComponent } from './module/comptabilite/paiement-facture/paiement-facture.component';
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
+import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
+import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
 
 @NgModule({
     imports: [
@@ -507,7 +509,9 @@ import { BalanceComponent } from './module/comptabilite/balance/balance.componen
         ExerciceComptableOperationComponent, 
         AppelFondComponent,
         PaiementFactureComponent,
-        BalanceComponent
+        BalanceComponent,
+        FacturePayeComponent,
+        RemboursementEffectueComponent
 
     ],
     providers: [

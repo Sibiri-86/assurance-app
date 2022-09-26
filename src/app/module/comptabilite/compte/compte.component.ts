@@ -130,7 +130,7 @@ export class CompteComponent implements OnInit, OnDestroy {
   displayPaiement = false;
   comptePaiement: Compte = {};
 
-  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.CHEQUE && kj !== TypePaiement.VIREMENT).map(key => ({ label: TypePaiement[key], value: key }));
   typePaiementCheque= TypePaiement.CHEQUE;
   typePaiementVirement= TypePaiement.VIREMENT;
   
@@ -252,6 +252,12 @@ this.displayDialogFormGarant = true;
 relierPaiement(compte: Compte) {
   this.displayPaiement = true;
   this.comptePaiement = compte;
+}
+
+vider() {
+  if(this.comptePaiement.typePaiement) {
+    this.comptePaiement.banque = {};
+  }
 }
 onCreatePaiement() {
   this.store.dispatch(featureAction.updateCompte(this.comptePaiement));;

@@ -72,6 +72,40 @@
                 <div class="card">
                     <p-toolbar styleClass="p-mb-4">
                    <div class="card">
+                    <p-toolbar styleClass="mb-4">
+                        <ng-template pTemplate="left">
+                           
+                           
+                             </ng-template>
+                
+                        <ng-template pTemplate="right">
+                            <div class="p-fluid p-formgrid p-grid">
+                                   
+                                <div class="p-field p-col-3">
+                                    <label for="dateSaisie">solde Débiteur <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <span>{{exerciceComptableOperation?.montantDebit | formatTableValue: 'number':true}}</span>
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label for="dateSaisie">solde Créditeur  <span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                                    <span>{{exerciceComptableOperation?.montantCredit | formatTableValue: 'number':true}}</span>
+                                    
+                                </div>
+
+                                <div class="p-field p-col-3">
+                                    
+                                </div>
+                                
+                                    <div class="p-field p-col-3">
+                                        <label for="dateSaisie">solde restant<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                                        
+                                       
+                                        <span>{{exerciceComptableOperation?.solde | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                
+                            </div>
+                        </ng-template>
+                    </p-toolbar>
                     <form>
                         <div class="card">
                             <div class="p-fluid p-formgrid p-grid">
@@ -109,14 +143,14 @@
             
                                 </div>
 
-                                <div class="p-field p-col" *ngIf="operation.compte?.soldeDebiteur === verificationDebitCredit">
+                                <div class="p-field p-col"  *ngIf="!operation.montantCredit">
                                     <label for="nombreActe">Débit <span class="required"></span></label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.montantDebit"  name="montantDebit" mode="decimal" locale="fr-FR" ></p-inputNumber>  
+                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.montantDebit"  name="montantDebit" mode="decimal" locale="fr-FR" (onBlur)="viderCredit()" ></p-inputNumber>  
                                 </div>
 
-                                <div class="p-field p-col" *ngIf="operation.compte?.soldeCrediteur === verificationDebitCredit">
+                                <div class="p-field p-col" *ngIf="!operation.montantDebit">
                                     <label for="nombreActe">Crédit <span class="required"></span></label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}"[(ngModel)]="operation.montantCredit" name="montantCredit" mode="decimal" locale="fr-FR"></p-inputNumber>  
+                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}"[(ngModel)]="operation.montantCredit" name="montantCredit" mode="decimal" locale="fr-FR" (onBlur)="viderDebit()"></p-inputNumber>  
                                 </div>
                                 
                             </div>
@@ -208,6 +242,41 @@
         <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayOperation" header="Opération" [modal]="true" styleClass="p-fluid" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '200vw'}">
             <ng-template pTemplate="content">
                 <div class="card">
+                    <!-- <p-toolbar styleClass="mb-4">
+                        <ng-template pTemplate="left">
+                           
+                           
+                             </ng-template>
+                
+                        <ng-template pTemplate="right">
+                            <div class="p-fluid p-formgrid p-grid">
+                                   
+                                <div class="p-field p-col-3">
+                                    <label for="dateSaisie">solde Débiteur <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <span>{{exerciceComptableOperation?.montantDebit | formatTableValue: 'number':true}}</span>
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label for="dateSaisie">solde Créditeur  <span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                                    <span>{{exerciceComptableOperation?.montantCredit | formatTableValue: 'number':true}}</span>
+                                    
+                                </div>
+
+                                <div class="p-field p-col-3">
+                                    
+                                </div>
+                                
+                                    <div class="p-field p-col-3">
+                                        <label for="dateSaisie">solde restant<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                                        
+                                       
+                                        <span>{{exerciceComptableOperation?.solde | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                
+                            </div>
+                        </ng-template>
+                    </p-toolbar> -->
+                
                     <p-toolbar styleClass="p-mb-4">
                         <p-toolbar styleClass="mb-4">
                             <ng-template pTemplate="left">

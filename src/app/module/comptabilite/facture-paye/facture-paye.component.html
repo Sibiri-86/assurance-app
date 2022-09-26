@@ -63,7 +63,7 @@
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
                             </button>
-                            <button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiement(ordre)"></button>
+                            <button pButton icon="pi pi-times" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderPayement(ordre)"></button>
 
                         </td>
                         
@@ -88,7 +88,7 @@
             </p-table>
         </div>
         
-        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Choisir un mode de paiement et la banque" [modal]="true" styleClass="p-fluid" >
+        <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayPaiement" header="Relier à un mode de paiement" [modal]="true" styleClass="p-fluid" >
             <ng-template pTemplate="content">
                 <div class="card">
                 <form >

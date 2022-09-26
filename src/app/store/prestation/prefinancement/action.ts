@@ -40,7 +40,10 @@ export const checkPlafond = createAction('[App Init] Check plafond sous acte', p
 export const setPlafondSousActe = createAction('[set Plafond] set plafond', props<CheckPlafondResponse>());
 export const loadOrdrePaiementInstance = createAction('[App Init] load ordre paiement instance');
 export const loadOrdrePaiementInstanceCheque = createAction('[App Init] load ordre paiement instance cheque');
+export const loadOrdrePaiementValide = createAction('[App Init] load ordre paiement valide en caisse');
 export const validerPaiementEspece = createAction('[App Init] valider ordre paiement espece',
 props<{ordre: OrdreReglement}>());
 export const validerPaiementCheque = createAction('[App Init] valider ordre paiement cheque',
+props<{ordre: OrdreReglement}>());
+export const paiementChequeCaisseDevalider = createAction('[App Init] devalider ordre paiement caisse',
 props<{ordre: OrdreReglement}>());

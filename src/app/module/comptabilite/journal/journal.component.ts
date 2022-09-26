@@ -29,6 +29,8 @@ import { TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
 
 
 
@@ -54,13 +56,15 @@ export class JournalComponent implements OnInit, OnDestroy {
   journauxList: Array<Journaux>;
   displayJournalDetail = false;
   journalDetail: Journaux= {} ;
-  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.CHEQUE && kj !== TypePaiement.VIREMENT).map(key => ({ label: TypePaiement[key], value: key }));
   displayPaiement = false;
   journalPaiement: Journaux = {};
-  typePaiementCheque= TypePaiement.CHEQUE;
-  typePaiementVirement= TypePaiement.VIREMENT;
+  typePaiementCheque= TypePaiement.ORANGE_MONEY;
+  typePaiementVirement= TypePaiement.MOOV_MONEY;
+  typePaiementEspece= TypePaiement.ESPECE;
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
+  compteSelected: Compte = {};
   
 
   
@@ -68,6 +72,7 @@ export class JournalComponent implements OnInit, OnDestroy {
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private typeJournauxService: TypeJournauxService,
+               private compteService: CompteService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Journal'}]);
    }
@@ -115,6 +120,7 @@ export class JournalComponent implements OnInit, OnDestroy {
       }
     });
     this.journal = null;
+    
   }
 
   relierJournal(journal: Journaux) {
@@ -126,7 +132,18 @@ export class JournalComponent implements OnInit, OnDestroy {
     this.displayPaiement = false;
     this.journalPaiement = {};
   }
-
+  findCompte1() {
+    if(this.journal.numCompte) {
+      this.compteService.findCompteByNumero(this.journal.numCompte).subscribe((rest)=>{
+        if(rest) {
+          this.journal.compte = rest;
+         
+        }
+       
+      });
+    }
+    
+  }
   addJournal() {
     this.displayJournal = true;
     this.journal = {};

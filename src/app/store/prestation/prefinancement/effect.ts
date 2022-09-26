@@ -308,6 +308,22 @@ export class PrefinancementEffects {
                                         ));
 
 
+                                        loadOrdrePaiementValide$ = createEffect(() =>
+                                        this.actions$.pipe(
+                                            ofType(featureActions.loadOrdrePaiementValide),
+                                            mergeMap(() =>
+                                                this.prefinancementService.$getOrdrePaiementValide().pipe(
+                                                    switchMap(value => [
+                                                            // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                    featureActions.setLoadOrdreReglement(value)
+                                                    ]),
+                                                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                    ))
+                                                ));
+
+
+
                                 loadOrdrePaiementInstanceCheque$ = createEffect(() =>
                                 this.actions$.pipe(
                                     ofType(featureActions.loadOrdrePaiementInstanceCheque),
@@ -350,4 +366,18 @@ export class PrefinancementEffects {
                                                                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                                             ))
                                                         ));
+
+                                                        paiementChequeCaisseDevalider$ = createEffect(() =>
+                                                        this.actions$.pipe(
+                                                                ofType(featureActions.paiementChequeCaisseDevalider),
+                                                                mergeMap(({ordre}) =>
+                                                                    this.prefinancementService.paiementChequeCaisseDevalider(ordre).pipe(
+                                                                        switchMap(value => [
+                                                                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                           featureActions.loadOrdrePaiementInstanceCheque()
+                                                                        ]),
+                                                                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                    ))
+                                                                ));
 }

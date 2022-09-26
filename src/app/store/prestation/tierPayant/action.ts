@@ -51,6 +51,10 @@ export const searchTierPayantOrdreReglement = createAction('[App Init] search Ti
 export const loadTierPayantOrdreReglementFactureInstance = createAction('[App Init] load tier payant facture instance');
 export const validerPaiement = createAction('[App Init] valider facture',
 props<{ordre: OrdreReglementTierPayant}>());
+export const devaliderPaiement = createAction('[App Init] devalider facture par facture',
+props<{ordre: OrdreReglementTierPayant}>());
+export const loadTierPayantOrdreReglementFacturePaye = createAction('[App Init] load tier payant facture paye');
+
 
 
 

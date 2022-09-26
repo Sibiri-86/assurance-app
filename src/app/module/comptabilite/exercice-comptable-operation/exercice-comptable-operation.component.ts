@@ -126,6 +126,13 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   
   }
 
+  viderDebit() {
+    this.operation.montantDebit = null;
+  }
+  viderCredit() {
+    this.operation.montantCredit = null;
+  }
+
   findCompte1() {
     this.compteService.findCompteByNumero(this.operation.numCompte).subscribe((rest)=>{
       if(rest) {

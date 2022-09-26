@@ -15,14 +15,14 @@ import {TypeEtatOrdreReglement} from '../../common/models/emum.etat.ordre-reglem
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
-import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
+import * as featureActionBanque from '../../../store/parametrage/Banques/actions';
 
 @Component({
-  selector: 'app-paiement-facture',
-  templateUrl: './paiement-facture.component.html',
-  styleUrls: ['./paiement-facture.component.scss']
+  selector: 'app-facture-paye',
+  templateUrl: './facture-paye.component.html',
+  styleUrls: ['./facture-paye.component.scss']
 })
-export class PaiementFactureComponent implements OnInit {
+export class FacturePayeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
@@ -35,13 +35,13 @@ export class PaiementFactureComponent implements OnInit {
   ordreReglementPaiement: OrdreReglementTierPayant = {};
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
-  typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.ORANGE_MONEY && kj !== TypePaiement.MOOV_MONEY && kj !== TypePaiement.ESPECE).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
 
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
-  this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
+  this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class PaiementFactureComponent implements OnInit {
           }
         });
     this.ordreReglementList$ = this.store.pipe(select(tierPayantSelector.ordreReglementTierPayantList));
-    this.store.dispatch(featureActionTierPayant.loadTierPayantOrdreReglementFactureInstance());
+    this.store.dispatch(featureActionTierPayant.loadTierPayantOrdreReglementFacturePaye());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -77,13 +77,13 @@ export class PaiementFactureComponent implements OnInit {
     this.displayPaiement = true;
     this.ordreReglementPaiement = ordre;
   }
-  deValiderOrdreReglement(ordre: OrdreReglementTierPayant) {
+  deValiderPayement(ordre: OrdreReglementTierPayant) {
     this.confirmationService.confirm({
       message: 'voulez-vous annuler cet ordre de reglement',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionTierPayant.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.DEVALIDE}));
+        this.store.dispatch(featureActionTierPayant.devaliderPaiement({ordre}));
       },
     });
   }
