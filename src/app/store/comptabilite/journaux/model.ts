@@ -1,6 +1,7 @@
 import { Banque } from "../../parametrage/Banques/model";
 import { TypeJournaux } from "../../parametrage/typeJournaux/model"
 import { TypePaiement } from "../../prestation/prefinancement/model";
+import { Compte } from "../compte/model";
 
 export interface Journaux {
     id?: string,
@@ -10,6 +11,9 @@ export interface Journaux {
     dateSaisie?: Date;
     typePaiement?: TypePaiement;
     banque?: Banque;
+    compte?: Compte;
+    numCompte?: number;
+   
    
 }
 export interface  JournauxList {
