@@ -84,7 +84,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Finance', icon: 'pi pi-fw pi-money-bill', routerLink: ['/comptabilite'],
                  visible: true,
                 items: [
-                    
+                      
                     {label: 'Opération', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
                          items: [
                             {label: 'compte', icon: 'pi pi-pencil', routerLink: ['/comptabilite/compte'], visible: true},
@@ -108,13 +108,18 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true},
 
                     ]
+                },
+                {
+                    label: 'Etat', icon: 'pi pi-print', routerLink: ['/comptabilite'], visible: true,
+                    items: [
+                        {label: 'Balance', icon: 'pi pi-ticket', routerLink: ['/comptabilite/balance'], visible: true},
+                    ]
                 }
                     
                     
                     
                     
-                    
-                ]
+                                    ]
             }
             /*
             {

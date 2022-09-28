@@ -78,6 +78,8 @@ import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture
 import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
 import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
 import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
+import { BalanceComponent } from './module/comptabilite/balance/balance.component';
+
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -160,7 +162,9 @@ import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-ge
                     {path: 'comptabilite/facture-paye', component: FacturePayeComponent},
                     {path: 'comptabilite/remboursement-effectue', component: RemboursementEffectueComponent},
                     {path: 'comptabilite/arrete-journaux', component: ArreteJournauxComponent},
-                    {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent}
+                    {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent},
+                    {path: 'comptabilite/balance', component: BalanceComponent}
+
                     
                 ]
             },

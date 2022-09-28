@@ -1,5 +1,6 @@
 import { ExerciceComptable } from "../exercice-comptable/model";
 import { Journaux } from "../journaux/model";
+import { Operation } from "../operation/model";
 
 export interface ExerciceComptableOperation {
     id?: string,
@@ -15,4 +16,8 @@ export interface ExerciceComptableOperation {
 }
 export interface  ExerciceComptableOperationList {
     exerciceComptableOperationList: Array<ExerciceComptableOperation>
+}
+
+export interface OperationList {
+    operationList: Array<Operation>
 }

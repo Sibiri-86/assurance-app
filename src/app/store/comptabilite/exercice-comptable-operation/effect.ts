@@ -44,6 +44,21 @@ export class ExerciceComptableOperationEffects {
             )
         )
     )
-    ); 
+    );
+    
+    fetchOperations$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadOperations),
+                mergeMap(() =>
+                    this.exerciceComptableOperationService.$getOperations().pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setOperations(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+    );
 
 }
