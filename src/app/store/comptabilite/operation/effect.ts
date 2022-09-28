@@ -7,6 +7,7 @@ import {StatusEnum} from '../../global-config/model';
 import {  OperationService } from './service';
 import * as featureActions from './actions';
 import { Operation } from './model';
+import { Report } from '../../contrat/police/model';
 
 @Injectable()
 export class OperationEffects {
@@ -76,7 +77,19 @@ export class OperationEffects {
                     ))
                 ));    
 
-
+                fetchReportArreter$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.FetchReport),
+                    mergeMap((report: Report) =>
+                        this.operationService.$getReport(report).pipe(
+                            switchMap(value => [
+                                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setReportArrete({reportFile: value})
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                    ));
    
     fetchOperation$ = createEffect(() =>
     this.actions$.pipe(

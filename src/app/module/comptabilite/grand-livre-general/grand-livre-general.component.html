@@ -4,7 +4,7 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
-                    <div class="p-field p-col">
+                    <!-- <div class="p-field p-col">
                         <label for="journal">Journal </label>
                    
                         
@@ -12,13 +12,30 @@
                                     showClear="true" [options]="journalList"
                                     name="journal" [(ngModel)]="journal"  optionLabel="code"  [style]="{'width':'100%'}"
                                     [autoDisplayFirst]="false" ></p-dropdown>
-                    </div>
+                    </div> -->
 
-                    <div class="p-field p-col">
-                        <label for="journal">Date </label>
+                    <div class="p-field p-col-2">
+                        <label for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                    
                         
                         <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" (change)="findJournalier()">
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                   
+                        
+                        <input  type="date" pInputText [(ngModel)]="operation.dateFin" (change)="findJournalier()">
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompte" name="numCompte" mode="decimal" locale="fr-FR" (onBlur)="findCompte1()"></p-inputNumber>  
+
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="numCompte2"> N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" (onBlur)="findCompteAuxiliaire()"></p-inputNumber>  
+
                     </div>
  			</ng-template>
              <ng-template pTemplate="right">
@@ -32,15 +49,13 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Date de saisie</th>
-                        <th>N° police</th>
+                        <th>c.j</th>
                         <th>Reférence</th>
-                        <th>N° odre de paiement</th>
-                        <th>Bénéficiaire</th>
-                        <th>N° compte auxiliaire</th>
+                        <th>N° pièce</th>
                         <th>Libellé d'écriture</th>
-                        <th>Annulation</th>
-                        <th>Dépense</th>
-                        <th>Recette</th>
+                        <th>Mouvement débit</th>
+                        <th>Mouvement crédit</th>
+                        <th>Solde progressif</th>
                        
                     </tr>
                 </ng-template>
@@ -49,49 +64,22 @@
                         <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
                                
                         </td>
-                        <td>{{operation.ordreReglement?.police?.numero}}</td>
+                        <td>{{operation.exerciceComptableOperation?.journaux?.code}}</td>
                         <td>{{operation.reference}} </td>
-                        <td>{{operation?.ordreReglement?.numero}}</td>
-                        <td>{{operation?.beneficiaire}}</td>
-                        <td >{{operation.numCompteAuxi | formatTableValue: 'number':true}}
-                        </td>
+                        <td>{{operation.numPiece}}</td>
                         <td>{{operation.libelle}} </td>
-                        <td >0</td>
+                        
+                        
+                        
                         <td>{{operation.montantCredit | formatTableValue: 'number':true}} </td>
                         <td >{{operation.montantDebit | formatTableValue: 'number':true}}</td>
+                        <td >{{operation.solde | formatTableValue: 'number':true}}</td>
                         
                     </tr>
                 </ng-template>
             </p-table>
 
-            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0"></p-toolbar>
-            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0">
-				<ng-template pTemplate="left">
-                   
- 			</ng-template>
-            <ng-template pTemplate="right">
-                <div class="p-field p-col">
-                    <label for="journal">Total opération des dépenses:  {{operationSelected.montantDepense | formatTableValue: 'number':true}}</label>
-    
-                    
-                </div>
-
-                <div class="p-field p-col">
-                    <label for="journal">Total opération de recette: {{operationSelected.montantRecette | formatTableValue: 'number':true}} </label>
-               
-                    
-                   
-                </div>
-
-                <div class="p-field p-col">
-                    <label for="journal">Total solde : {{operationSelected.solde | formatTableValue: 'number':true}} </label>
-               
-                    
-                   
-                </div>
-            </ng-template>
             
-            </p-toolbar>
         </div> 
         
         

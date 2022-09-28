@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {   Operation, OperationList} from "./model";
+import { Report } from '../../contrat/police/model';
 
 
 @Injectable({providedIn: 'root'})
@@ -57,6 +58,11 @@ $getOperationByExerciceOperation(exerciceOperationId: string): Observable<Operat
     map((response: OperationList) => response),
     catchError(this.handleError())
   );
+}
+
+$getReport(report: Report): Observable<ArrayBuffer> {
+  // @FIXME: get request
+  return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
 }
 
 

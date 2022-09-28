@@ -23,6 +23,8 @@ export interface Operation {
     montantRecette?: number;
     montantDepense?: number;
     solde?: number;
+    beneficiaire?: string;
+    datefin?: Date;
    
 }
 export interface  OperationList {

@@ -41,11 +41,11 @@ import { printPdfFile } from '../../util/common-util';
 
 
 @Component({
-  selector: 'app-arrete-journaux',
-  templateUrl: './arrete-journaux.component.html',
-  styleUrls: ['./arrete-journaux.component.scss']
+  selector: 'app-grand-livre-general',
+  templateUrl: './grand-livre-general.component.html',
+  styleUrls: ['./grand-livre-general.component.scss']
 })
-export class ArreteJournauxComponent implements OnInit, OnDestroy {
+export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -85,7 +85,7 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
                private compteService: CompteService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Arrêté'}]);
+                this.breadcrumbService.setItems([{ label: 'Grand livre'}]);
    }
 
   

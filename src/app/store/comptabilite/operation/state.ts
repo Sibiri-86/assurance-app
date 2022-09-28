@@ -1,5 +1,6 @@
 import { Operation } from "./model";
 
 export interface OperationState {
-    operationList: Array<Operation>
+    operationList: Array<Operation>;
+    reportFile: ArrayBuffer;
 }
