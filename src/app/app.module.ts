@@ -281,6 +281,8 @@ import { PaiementFactureComponent } from './module/comptabilite/paiement-facture
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
 import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
 import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
+import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
+import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
 
 @NgModule({
     imports: [
@@ -511,7 +513,9 @@ import { RemboursementEffectueComponent } from './module/comptabilite/remboursem
         PaiementFactureComponent,
         BalanceComponent,
         FacturePayeComponent,
-        RemboursementEffectueComponent
+        RemboursementEffectueComponent,
+        ArreteJournauxComponent,
+        GrandLivreGeneralComponent
 
     ],
     providers: [

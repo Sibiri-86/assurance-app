@@ -32,17 +32,20 @@ import { OperationService } from 'src/app/store/comptabilite/operation/service';
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
+import { Report } from 'src/app/store/contrat/police/model';
+import { TypeReport } from 'src/app/store/contrat/enum/model';
+import { printPdfFile } from '../../util/common-util';
 
 
 
 
 
 @Component({
-  selector: 'app-exercice-comptable-operation',
-  templateUrl: './exercice-comptable-operation.component.html',
-  styleUrls: ['./exercice-comptable-operation.component.scss']
+  selector: 'app-arrete-journaux',
+  templateUrl: './arrete-journaux.component.html',
+  styleUrls: ['./arrete-journaux.component.scss']
 })
-export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
+export class ArreteJournauxComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -72,7 +75,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   compteSelected: Compte = {};
   CompteAuxiliaireSelecte: Compte = {};
   verificationDebitCredit: string = "1";
-
+  operationSelected: Operation = {};
+  report: Report = {};
   
   
   constructor( private store: Store<AppState>,
@@ -81,7 +85,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
                private compteService: CompteService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Opération'}]);
+                this.breadcrumbService.setItems([{ label: 'Arrêté'}]);
    }
 
   
@@ -102,6 +106,14 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
        
       }
     });
+
+    this.store.dispatch(featureActionOperation.setReportArrete(null));
+    this.store.pipe(select(operationListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+        if (bytes) {
+                printPdfFile(bytes);
+        }
+    });
     this.journal = null;
 
     this.journalList$ = this.store.pipe(select(journalListSelector.journauxList));
@@ -115,12 +127,13 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
        
       }
     });
-    this.operationList$ = this.store.pipe(select(operationListSelector.operationList));
+    this.operationList$ = this.store.pipe(select(operationListSelector.operationArreterList));
     this.operationList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
         
         this.operationList = value.slice();
+        this.operationSelected  = this.operationList[this.operationList.length -1]
         
        
       }
@@ -175,6 +188,12 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   //  this.findExerciceOperationAjour();
   }
 
+  imprimer() {
+    
+    this.report.typeReporting = TypeReport.OPERATION;
+    this.report.operation = this.operation;
+    this.store.dispatch(featureActionOperation.FetchReport(this.report));
+  }
   operationByJournal() {
     this.store.dispatch(featureActionExerciceComptableOperation.loadExerciceComptableOperationByJournal({journalId: this.journal.id}));
 
@@ -271,6 +290,10 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     
     this.operation.dateSaisie = new Date();
   
+  }
+  findJournalier() {
+    this.operation.journauxId = this.journal.id;
+    this.store.dispatch(featureActionOperation.findOperationCaisseJournalier(this.operation));
   }
 
   onCreateOperationList() {

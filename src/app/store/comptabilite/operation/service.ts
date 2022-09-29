@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {   Operation, OperationList} from "./model";
+import { Report } from '../../contrat/police/model';
 
 
 @Injectable({providedIn: 'root'})
@@ -32,6 +33,15 @@ $getOperation(): Observable<OperationList> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/liste`, operationList);
   }
 
+  findOperationCaisseJournalier(operation: Operation): Observable<OperationList> {
+
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/liste-journalier`, operation).pipe(
+      map((response: OperationList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 updateOperation(operation: Operation): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/${operation.id}`, operation);
@@ -48,6 +58,11 @@ $getOperationByExerciceOperation(exerciceOperationId: string): Observable<Operat
     map((response: OperationList) => response),
     catchError(this.handleError())
   );
+}
+
+$getReport(report: Report): Observable<ArrayBuffer> {
+  // @FIXME: get request
+  return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
 }
 
 

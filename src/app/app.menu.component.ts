@@ -104,6 +104,9 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
                         {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
                         {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
+                        {label: 'Arreté journalier', routerLink: ['/comptabilite/arrete-journaux'], visible: true},
+                        {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true},
+
                     ]
                 },
                 {

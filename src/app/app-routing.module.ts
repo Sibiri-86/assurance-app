@@ -76,6 +76,8 @@ import { AppelFondComponent } from './module/comptabilite/appelFond/appelFond.co
 import { PaiementFactureComponent } from './module/comptabilite/paiement-facture/paiement-facture.component';
 import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture-paye.component';
 import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
+import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
+import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
 
 @NgModule({
@@ -159,6 +161,8 @@ import { BalanceComponent } from './module/comptabilite/balance/balance.componen
                     {path: 'comptabilite/paiement-facture', component: PaiementFactureComponent},
                     {path: 'comptabilite/facture-paye', component: FacturePayeComponent},
                     {path: 'comptabilite/remboursement-effectue', component: RemboursementEffectueComponent},
+                    {path: 'comptabilite/arrete-journaux', component: ArreteJournauxComponent},
+                    {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent},
                     {path: 'comptabilite/balance', component: BalanceComponent}
 
                     

@@ -1,0 +1,107 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <div class="p-field p-col">
+                        <label for="journal">Journal </label>
+                   
+                        
+                        <p-dropdown inputId="journal" [filter]="true"
+                                    showClear="true" [options]="journalList"
+                                    name="journal" [(ngModel)]="journal"  optionLabel="code"  [style]="{'width':'100%'}"
+                                    [autoDisplayFirst]="false" ></p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="journal">Date </label>
+                   
+                        
+                        <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" (change)="findJournalier()">
+                    </div>
+ 			</ng-template>
+             <ng-template pTemplate="right">
+                <div>
+                    <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
+                </div>
+             </ng-template>
+			</p-toolbar>
+            
+            <p-table [value]="operationList" dataKey="id" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date de saisie</th>
+                        <th>N° police</th>
+                        <th>Reférence</th>
+                        <th>N° odre de paiement</th>
+                        <th>Bénéficiaire</th>
+                        <th>N° compte auxiliaire</th>
+                        <th>Libellé d'écriture</th>
+                        <th>Annulation</th>
+                        <th>Dépense</th>
+                        <th>Recette</th>
+                       
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-operation let-ri="rowIndex">
+                    <tr>
+                        <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
+                               
+                        </td>
+                        <td>{{operation.ordreReglement?.police?.numero}}</td>
+                        <td>{{operation.reference}} </td>
+                        <td>{{operation?.ordreReglement?.numero}}</td>
+                        <td>{{operation?.beneficiaire}}</td>
+                        <td >{{operation.numCompteAuxi | formatTableValue: 'number':true}}
+                        </td>
+                        <td>{{operation.libelle}} </td>
+                        <td >0</td>
+                        <td>{{operation.montantCredit | formatTableValue: 'number':true}} </td>
+                        <td >{{operation.montantDebit | formatTableValue: 'number':true}}</td>
+                        
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0"></p-toolbar>
+            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0">
+				<ng-template pTemplate="left">
+                   
+ 			</ng-template>
+            <ng-template pTemplate="right">
+                <div class="p-field p-col">
+                    <label for="journal">Total opération des dépenses:  {{operationSelected.montantDepense | formatTableValue: 'number':true}}</label>
+    
+                    
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="journal">Total opération de recette: {{operationSelected.montantRecette | formatTableValue: 'number':true}} </label>
+               
+                    
+                   
+                </div>
+
+                <div class="p-field p-col">
+                    <label for="journal">Total solde : {{operationSelected.solde | formatTableValue: 'number':true}} </label>
+               
+                    
+                   
+                </div>
+            </ng-template>
+            
+            </p-toolbar>
+        </div> 
+        
+        
+        
+        
+      
+        
+        
+
+  
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>
