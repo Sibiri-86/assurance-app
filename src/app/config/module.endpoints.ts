@@ -438,5 +438,10 @@ export class Endpoints {
             mock: `assets/mock/comptabilite/appelFond.mock.json`
         };
 
+        static readonly COMPTABILITE_TIERS = {
+            prod: `${SERVICE_PREFIX}/comptabilite/tiers`,
+            mock: `assets/mock/comptabilite/tiers.mock.json`
+        };
+
 
 }

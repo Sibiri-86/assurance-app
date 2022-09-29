@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import {Garant} from '../../../store/contrat/garant/model';
-import {garantList} from '../../../store/contrat/garant/selector';
 import {Pays} from '../../../store/parametrage/pays/model';
 import {Region} from '../../../store/parametrage/region/model';
 import * as typeGarant from '../../../store/parametrage/garant/model';
@@ -14,49 +13,16 @@ import { Secteur } from 'src/app/store/parametrage/secteur/model';
 import {Commune} from '../../../store/parametrage/commune/model';
 import { Arrondissement } from 'src/app/store/parametrage/arrondissement/model';
 import {SecteurActivite} from '../../../store/parametrage/secteur-activite/model';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState} from 'src/app/store/app.state';
-import {loadPays} from '../../../store/parametrage/pays/actions';
-import * as paysSelector from '../../../store/parametrage/pays/selector';
-import {loadRegion} from '../../../store/parametrage/region/actions';
-import * as regionSelector from '../../../store/parametrage/region/selector';
-import * as typeGarantSelector from '../../../store/parametrage/garant/selector';
-import {loadDepartement} from '../../../store/parametrage/departement/actions';
-import * as departementSelector from '../../../store/parametrage/departement/selector';
-import {loadCommune} from '../../../store/parametrage/commune/actions';
-import * as communeSelector from '../../../store/parametrage/commune/selector';
-
-import {loadSecteurActivite} from '../../../store/parametrage/secteur-activite/actions';
-import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
-import * as secteurAction from '../../../store/parametrage/secteur/actions';
-import {loadSecteur} from '../../../store/parametrage/secteur/actions';
-import * as secteurSelector from '../../../store/parametrage/secteur/selector';
-
-import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
-import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
-import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
-
-
-import * as banqueAction from '../../../store/parametrage/Banques/actions';
-import * as banqueSelector from '../../../store/parametrage/Banques/selector';
-
-import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
-import * as tauxCommissionAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
-
-import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
-import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
-import { loadGarant } from 'src/app/store/contrat/garant/actions';
-import * as typeGarantAction from 'src/app/store/parametrage/garant/actions';
 import {Status} from '../../../store/global-config/model';
 import {status} from '../../../store/global-config/selector';
 import { EntityValidations } from '../../common/models/validation';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
-import { element } from 'protractor';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import { TauxCommissionIntermediaire } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
-import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import * as appelFondSelector from '../../../store/comptabilite/appelFond/selector';
 import * as appelFondAction from 'src/app/store/comptabilite/appelFond/actions';
@@ -65,16 +31,20 @@ import { AppelFond, TypeCompte } from 'src/app/store/comptabilite/appelFond/mode
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
-import * as garantSelector from "../../../store/contrat/garant/selector";
 import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
+import { Tiers, TypeCompteTiers } from 'src/app/store/comptabilite/tiers/model';
+import * as compteSelector from '../../../store/comptabilite/compte/selector';
+import * as compteAction from 'src/app/store/comptabilite/compte/actions';
+import * as tiersAction from 'src/app/store/comptabilite/tiers/actions';
+
 
 
 @Component({
-  selector: 'app-appelFond',
-  templateUrl: './appelFond.component.html',
-  styleUrls: ['./appelFond.component.scss']
+  selector: 'app-tiers',
+  templateUrl: './tiers.component.html',
+  styleUrls: ['./tiers.component.scss']
 })
-export class AppelFondComponent implements OnInit, OnDestroy {
+export class TiersComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   garantList$: Observable<Array<Garant>>;
@@ -133,7 +103,8 @@ export class AppelFondComponent implements OnInit, OnDestroy {
   dataDefinitions = DATA_DEFINITION;
   editForm: FormGroup;
   appelFondForm: FormGroup;
-  typeCompte = Object.keys(TypeCompte).map(key => ({ label: TypeCompte[key], value: key }));
+  compteCollectif = Object.keys(TypeCompte).map(key => ({ label: TypeCompte[key], value: key }));
+  typeCompteTiers = Object.keys(TypeCompteTiers).map(key => ({ label: TypeCompteTiers[key], value: key }));
   appelFond: AppelFond;
   appelFondList$: Observable<Array<AppelFond>>;
   appelFondList: Array<AppelFond>;
@@ -141,6 +112,8 @@ export class AppelFondComponent implements OnInit, OnDestroy {
   dateDebut: Date;
   dateFin: Date;
   appelFondTotal: AppelFond;
+  tiersForm: FormGroup;
+  tiers: Tiers;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -148,21 +121,25 @@ export class AppelFondComponent implements OnInit, OnDestroy {
               private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService) {
 
-      this.appelFondForm = this.formBuilder.group({
+      this.tiersForm = this.formBuilder.group({
         id: new FormControl(''),
-        destinataire: new FormControl('', [Validators.required]),
-        numeroRef: new FormControl(''),
-        libelle: new FormControl('', [Validators.required]),
-        objet: new FormControl('', [Validators.required]),
-        typeCompte: new FormControl('', [Validators.required]),
-        dateAppel: new FormControl('', [Validators.required]),
-        montantAppel: new FormControl('', [Validators.required]),
-        signataire: new FormControl('', [Validators.required]),
-        garant: new FormControl('', [Validators.required]),
+        compteTiers: new FormControl('', [Validators.required]),
+        intitule: new FormControl('', [Validators.required]),
+        abrege: new FormControl('', [Validators.required]),
+        compteCollectif: new FormControl('', [Validators.required]),
+        typeCompteTiers: new FormControl('', [Validators.required]),
+        description: new FormControl('', [Validators.required]),
+        interlocuteur: new FormControl(''),
+        adresse: new FormControl(''),
+        codePostal: new FormControl(''),
+        /* pays: new FormControl(''),
+        region: new FormControl(''),
+        ville: new FormControl(''), */
+        numTel: new FormControl('', [Validators.required]),
     });
 
       this.breadcrumbService.setItems([
-        {label: 'Appel de Fond'}
+        {label: ' Compte Tiers'}
     ]);
     }
 
@@ -171,59 +148,47 @@ ngOnInit(): void {
   // this.loading = true;
   this.entityValidations = [
     {
-      field: 'compte',
+      field: 'compteTiers',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'poste',
+      field: 'intitule',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'libelle',
+      field: 'abrege',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'objet',
+      field: 'compteCollectif',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'typeCompte',
+      field: 'typeCompteTiers',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'dateAppel',
+      field: 'Description',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
     },
     {
-      field: 'montantAppel',
+      field: 'numTel',
       validations: [
         {validName: 'required', validMessage: 'Ce champs est obligatoire'}
       ]
-    },
-    {
-      field: 'signataire',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'garant',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
+    }
   ];
 
   this.appelFondList$ = this.store.pipe(select(appelFondSelector.appelFondList));
@@ -238,14 +203,17 @@ ngOnInit(): void {
               }
   });
 
-  this.garantList$ = this.store.pipe(select(garantSelector.garantList));
-    this.store.dispatch(loadGarant());
-    this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.garantList = value.slice();
-        console.log("garantListe", this.garantList);
-      }
-    });
+  this.compteList$ = this.store.pipe(select(compteSelector.compteList));
+  this.store.dispatch(compteAction.loadCompte());
+  this.compteList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                //this.loading = false;
+                this.compteList = value.slice().filter(c => c.isRacine === true);
+                console.log('value', value.slice());
+                console.log('compteList', this.compteList);
+              }
+  });
 
   this.store.dispatch(appelFondAction.setReportAppelFond(null));
   this.store.pipe(select(appelFondSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -315,22 +283,22 @@ this.displayDialogFormGarant = true;
 } */
 
 onCreate() {
-this.appelFond = this.appelFondForm.value;
-console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn', this.appelFond);
+this.tiers = this.tiersForm.value;
+console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn', this.tiers);
 this.confirmationService.confirm({
-  message: 'Etes vous sur de vouloir ajouter cet appel de fond ?',
+  message: 'Etes vous sur de vouloir ajouter ce compte tiers ?',
   header: 'Confirmation',
   icon: 'pi pi-exclamation-triangle',
   accept: () => {
-    if (this.appelFond.id) {
-      console.log('1', this.appelFond);
-      this.store.dispatch(appelFondAction.updateAppelFond(this.appelFondForm.value));
+    if (this.tiers.id) {
+      console.log('1', this.tiers);
+      this.store.dispatch(tiersAction.updateTiers(this.tiersForm.value));
       this.displayDialogFormGarant = false;
     }else{
-      console.log('2', this.appelFond);
-    this.store.dispatch(appelFondAction.createAppelFond(this.appelFondForm.value));
+      console.log('2', this.tiers);
+    this.store.dispatch(tiersAction.createTiers(this.tiersForm.value));
     }
-    this.appelFondForm.reset();
+    this.tiersForm.reset();
     this.displayDialogFormGarant = false;
   }
 });

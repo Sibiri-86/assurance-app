@@ -144,6 +144,7 @@ import * as exerciceComptaleReducer from '../comptabilite/exercice-comptable/red
 import * as exerciceComptaleOperationReducer from '../comptabilite/exercice-comptable-operation/reducer';
 import * as operationReducer from '../comptabilite/operation/reducer';
 import * as appelFondReducer from '../comptabilite/appelFond/reducer';
+import * as tiersReducer from '../comptabilite/tiers/reducer';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -204,7 +205,8 @@ export const reducers: ActionReducerMap<AppState> = {
     exerciceComptableState: exerciceComptaleReducer.reducer,
     exerciceComptableOperationState: exerciceComptaleOperationReducer.reducer,
     operationState: operationReducer.reducer,
-    appelFondState: appelFondReducer.reducer
+    appelFondState: appelFondReducer.reducer,
+    tiersState: tiersReducer.reducer
 
 
 };

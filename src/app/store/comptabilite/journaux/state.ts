@@ -1,5 +1,6 @@
 import { Journaux } from "./model";
 
 export interface JournauxState {
-    journauxList: Array<Journaux>
+    journauxList: Array<Journaux>;
+    reportFile: ArrayBuffer;
 }

@@ -33,7 +33,15 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
 import { Operation } from 'src/app/store/comptabilite/operation/model';
 import * as exerciceComptableOperationListSelector from '../../../store/comptabilite/exercice-comptable-operation/selector';
+import { Balance, TypeBalance, TypeEtatBalance } from 'src/app/store/comptabilite/appelFond/model';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import * as compteSelector from '../../../store/comptabilite/compte/selector';
+import * as compteAction from 'src/app/store/comptabilite/compte/actions';
+import { Journaux } from 'src/app/store/comptabilite/journaux/model';
+import * as featureActionJournal from '../../../store/comptabilite/journaux/actions';
+import * as journauxSelector from '../../../store/comptabilite/journaux/selector';
 import * as featureActionExerciceComptableOperation from '../../../store/comptabilite/exercice-comptable-operation/actions';
+
 
 
 
@@ -56,21 +64,56 @@ export class BalanceComponent implements OnInit {
   operationList$: Observable<Array<Operation>>;
   ordre1: Operation = {};
   displayBalancePrint = false;
+  balanceForm: FormGroup;
+  // typeBalance = Object.keys(TypeBalance).map(key => ({ label: TypeBalance[key], value: key }));
+  // typeEtatBalance = Object.keys(TypeEtatBalance).map(key => ({ label: TypeEtatBalance[key], value: key }));
+  typeBalance: any = [{label: 'Complète', value: 'COMPLETE'},
+    {label: 'Incomplète', value: 'INCOMPLETE'}];
+  typeEtatBalance: any = [{label: '6 colonnes', value: 'SIX'},
+    {label: '8 colonnes', value: 'HUIT'}];
+    compteList$: Observable<Array<Compte>>;
+    compteList: Array<Compte>;
+    journauxList$: Observable<Array<Journaux>>;
+    journauxList: Array<Journaux>;
+    balance: Balance = {};
+
+
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,) {
+            
+          this.balanceForm = this.formBuilder.group({
+            id: new FormControl(''),
+            typeBalance: new FormControl('', [Validators.required]),
+            dateDebut: new FormControl('', [Validators.required]),
+            dateFin: new FormControl('', [Validators.required]),
+            compteDebut: new FormControl('', [Validators.required]),
+            compteFin: new FormControl('', [Validators.required]),
+            codeDebut: new FormControl(''),
+            codeFin: new FormControl(''),
+            typeEtatBalance: new FormControl('', [Validators.required])
+          });
+
      this.breadcrumbService.setItems([{ label: 'Balance' }]);
 }
 
   ngOnInit(): void {
-    this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
+    /* this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
                 printPdfFile(bytes);
         }
-    });
+    }); */
+
+    this.store.dispatch(featureActionJournal.setReportBalanceHuit(null));
+    this.store.pipe(select(journauxSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+      .subscribe(bytes => {
+          if (bytes) {
+              printPdfFile(bytes);
+          }
+      });
 
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
     this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
@@ -87,6 +130,31 @@ export class BalanceComponent implements OnInit {
       console.log(value);
       if(value) {
         this.operationList = value.slice();
+      }
+    });
+
+    this.compteList$ = this.store.pipe(select(compteSelector.compteList));
+    this.store.dispatch(compteAction.loadCompte());
+    this.compteList$.pipe(takeUntil(this.destroy$))
+              .subscribe(value => {
+                if (value) {
+                  //this.loading = false;
+                  this.compteList = value.slice();
+                  console.log('value', value.slice());
+                  console.log('compteList', this.compteList);
+                }
+    });
+
+    this.journauxList$ = this.store.pipe(select(journauxSelector.journauxList));
+    this.store.dispatch(featureActionJournal.loadJournaux());
+    this.journauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        console.log("================================", value);
+        console.log(this.journauxList);
+        this.journauxList = value.slice();
+        
+       
       }
     });
   }
@@ -111,6 +179,20 @@ export class BalanceComponent implements OnInit {
 
   PrintGarant() {
     this.displayBalancePrint = true;
+  }
+
+  ImprimerBalance8colonnes() {
+    this.balance = {};
+    this.balance.typeBalance = this.balanceForm.get('typeBalance').value;
+    this.balance.dateDebut = this.balanceForm.get('dateDebut').value;
+    this.balance.dateFin = this.balanceForm.get('dateFin').value;
+    this.balance.compteDebut = this.balanceForm.get('compteDebut').value;
+    this.balance.compteFin = this.balanceForm.get('compteFin').value;
+    this.balance.typeEtatBalance = this.balanceForm.get('typeEtatBalance').value;
+    console.log("this.balance", this.balance);
+    this.report.typeReporting = TypeReport.BALANCE_HUIT_COLONNES;
+    this.report.balance = this.balance;
+    this.store.dispatch(featureActionJournal.FetchReportBalanceHuit(this.report));
   }
 
 }

@@ -30,7 +30,8 @@ export enum TypeReport {
     /** type report pour le module comptabilité */
     APPEL_FOND = 'APPEL_FOND',
     OPERATION = 'OPERATION',
-    GRAND_LIVRE_GENERAL= 'GRAND_LIVRE_GENERAL'
+    GRAND_LIVRE_GENERAL= 'GRAND_LIVRE_GENERAL',
+    BALANCE_HUIT_COLONNES = 'BALANCE_HUIT_COLONNES'
 }
 
 export enum TypeDuree {

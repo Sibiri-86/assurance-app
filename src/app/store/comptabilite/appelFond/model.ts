@@ -1,4 +1,5 @@
 import { Garant } from "../../contrat/garant/model";
+import { Compte } from "../compte/model";
 
 export interface AppelFond {
     id?: string;
@@ -22,6 +23,29 @@ export enum TypeCompte {
     BANCAIRE = 'BANCAIRE'
 }
 
+export enum TypeBalance {
+    COMPLETE = 'COMPLETE',
+    INCOMPLETE = 'INCOMPLETE'
+}
+
+export enum TypeEtatBalance {
+    SIX = '6 COLONNES',
+    HUIT = '8 COLONNES'
+}
+
 export interface AppelFondList{
     appelFondDtoList: Array<AppelFond>; 
+}
+
+export interface Balance {
+    id?: string;
+    typeBalance?: TypeBalance;
+    dateDebut?: Date;
+    dateFin?: Date;
+    compteDebut?: Compte;
+    compteFin?: Compte;
+    codeDebut?: Compte;
+    codeFin?: Compte;
+    typeEtatBalance?: TypeEtatBalance;
+    
 }

@@ -112,7 +112,8 @@ export class AppMenuComponent implements OnInit {
                 {
                     label: 'Etat', icon: 'pi pi-print', routerLink: ['/comptabilite'], visible: true,
                     items: [
-                        {label: 'Balance', icon: 'pi pi-ticket', routerLink: ['/comptabilite/balance'], visible: true},
+                        {label: 'Balance', icon: 'pi pi-print', routerLink: ['/comptabilite/balance'], visible: true},
+                        {label: 'Tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/tiers'], visible: true},
                     ]
                 }
                     
