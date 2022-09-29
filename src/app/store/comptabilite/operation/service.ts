@@ -65,7 +65,14 @@ $getReport(report: Report): Observable<ArrayBuffer> {
   return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
 }
 
+findOperationGrandLivre(operation: Operation): Observable<OperationList> {
 
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/grand-livre`, operation).pipe(
+    map((response: OperationList) => response),
+    catchError(this.handleError())
+  );
+}
 
 
 private handleError<T>() {

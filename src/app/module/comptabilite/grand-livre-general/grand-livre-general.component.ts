@@ -151,7 +151,7 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   findCompte1() {
     this.compteService.findCompteByNumero(this.operation.numCompte).subscribe((rest)=>{
       if(rest) {
-        this.compteSelected = rest;
+      
         this.operation.compte =rest;
         console.log(this.operation.compte);
       }
@@ -190,7 +190,7 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
 
   imprimer() {
     
-    this.report.typeReporting = TypeReport.OPERATION;
+    this.report.typeReporting = TypeReport.GRAND_LIVRE_GENERAL;
     this.report.operation = this.operation;
     this.store.dispatch(featureActionOperation.FetchReport(this.report));
   }
@@ -291,9 +291,9 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
     this.operation.dateSaisie = new Date();
   
   }
-  findJournalier() {
-    this.operation.journauxId = this.journal.id;
-    this.store.dispatch(featureActionOperation.findOperationCaisseJournalier(this.operation));
+  findOperationGrandLivre() {
+   
+    this.store.dispatch(featureActionOperation.findOperationGrandLivre(this.operation));
   }
 
   onCreateOperationList() {

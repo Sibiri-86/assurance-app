@@ -18,13 +18,13 @@
                         <label for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                    
                         
-                        <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" (change)="findJournalier()">
+                        <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" >
                     </div>
                     <div class="p-field p-col-2">
                         <label for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
                    
                         
-                        <input  type="date" pInputText [(ngModel)]="operation.dateFin" (change)="findJournalier()">
+                        <input  type="date" pInputText [(ngModel)]="operation.dateFin" >
                     </div>
                     <div class="p-field p-col">
                         <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
@@ -37,10 +37,18 @@
                         <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" (onBlur)="findCompteAuxiliaire()"></p-inputNumber>  
 
                     </div>
+                    <div class="p-field p-col espace">
+                        <label for="numCompte2"> <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+
+                        <button pButton pRipple icon="pi pi-search" pTooltip="recherche" class="p-button-rounded p-button-info" (click)="findOperationGrandLivre()"></button>
+
+                    </div>
+
  			</ng-template>
              <ng-template pTemplate="right">
                 <div>
                     <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
+
                 </div>
              </ng-template>
 			</p-toolbar>

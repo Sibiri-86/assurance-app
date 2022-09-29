@@ -29,7 +29,8 @@ export enum TypeReport {
     ORDONNANCEMEDICALE = 'ORDONNANCEMEDICALE',
     /** type report pour le module comptabilité */
     APPEL_FOND = 'APPEL_FOND',
-    OPERATION = 'OPERATION'
+    OPERATION = 'OPERATION',
+    GRAND_LIVRE_GENERAL= 'GRAND_LIVRE_GENERAL'
 }
 
 export enum TypeDuree {
