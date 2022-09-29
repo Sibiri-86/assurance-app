@@ -79,6 +79,7 @@ import { RemboursementEffectueComponent } from './module/comptabilite/remboursem
 import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
 import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
+import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
 
 @NgModule({
     imports: [
@@ -163,7 +164,8 @@ import { BalanceComponent } from './module/comptabilite/balance/balance.componen
                     {path: 'comptabilite/remboursement-effectue', component: RemboursementEffectueComponent},
                     {path: 'comptabilite/arrete-journaux', component: ArreteJournauxComponent},
                     {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent},
-                    {path: 'comptabilite/balance', component: BalanceComponent}
+                    {path: 'comptabilite/balance', component: BalanceComponent},
+                    {path: 'comptabilite/tiers', component: TiersComponent}
 
                     
                 ]

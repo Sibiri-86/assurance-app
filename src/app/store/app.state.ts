@@ -59,6 +59,7 @@ import { ExerciceComptableOperationState } from './comptabilite/exercice-comptab
 import { OperationState } from './comptabilite/operation/state';
 import { AppelFondState } from './comptabilite/appelFond/state';
 import { CompteState } from './comptabilite/compte/state';
+import { TiersState } from './comptabilite/tiers/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -119,4 +120,5 @@ export interface AppState {
   exerciceComptableOperationState: ExerciceComptableOperationState;
   operationState: OperationState;
   appelFondState: AppelFondState;
+  tiersState: TiersState;
 }

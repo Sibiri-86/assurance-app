@@ -283,6 +283,8 @@ import { FacturePayeComponent } from './module/comptabilite/facture-paye/facture
 import { RemboursementEffectueComponent } from './module/comptabilite/remboursement-effectue/remboursement-effectue.component';
 import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/arrete-journaux.component';
 import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
+import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
+import { TiersEffects } from './store/comptabilite/tiers/effect';
 
 @NgModule({
     imports: [
@@ -392,7 +394,7 @@ import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-ge
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -515,7 +517,8 @@ import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-ge
         FacturePayeComponent,
         RemboursementEffectueComponent,
         ArreteJournauxComponent,
-        GrandLivreGeneralComponent
+        GrandLivreGeneralComponent,
+        TiersComponent
 
     ],
     providers: [
