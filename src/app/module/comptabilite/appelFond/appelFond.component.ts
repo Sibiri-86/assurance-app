@@ -62,7 +62,6 @@ import * as appelFondSelector from '../../../store/comptabilite/appelFond/select
 import * as appelFondAction from 'src/app/store/comptabilite/appelFond/actions';
 import { DATA_DEFINITION, DATA_TYPE } from '../../parametrage/parameters.data';
 import { AppelFond, TypeCompte } from 'src/app/store/comptabilite/appelFond/model';
-import * as featureAction from '../../../store/comptabilite/appelFond/actions';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
@@ -248,7 +247,7 @@ ngOnInit(): void {
       }
     });
 
-  this.store.dispatch(featureAction.setReportAppelFond(null));
+  this.store.dispatch(appelFondAction.setReportAppelFond(null));
   this.store.pipe(select(appelFondSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
       .subscribe(bytes => {
           if (bytes) {
@@ -325,11 +324,11 @@ this.confirmationService.confirm({
   accept: () => {
     if (this.appelFond.id) {
       console.log('1', this.appelFond);
-      this.store.dispatch(featureAction.updateAppelFond(this.appelFondForm.value));
+      this.store.dispatch(appelFondAction.updateAppelFond(this.appelFondForm.value));
       this.displayDialogFormGarant = false;
     }else{
       console.log('2', this.appelFond);
-    this.store.dispatch(featureAction.createAppelFond(this.appelFondForm.value));
+    this.store.dispatch(appelFondAction.createAppelFond(this.appelFondForm.value));
     }
     this.appelFondForm.reset();
     this.displayDialogFormGarant = false;
@@ -368,7 +367,7 @@ imprimerAppelFond(appelFond: AppelFond) {
   this.report.typeReporting = TypeReport.APPEL_FOND;
   this.report.appelFond = appelFond;
   console.log('this.report', this.report);
-  this.store.dispatch(featureAction.FetchReportAppelFond(this.report));
+  this.store.dispatch(appelFondAction.FetchReportAppelFond(this.report));
 }
 
 searchAppelFond() {

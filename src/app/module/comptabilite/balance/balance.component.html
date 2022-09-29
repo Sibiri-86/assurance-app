@@ -23,9 +23,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="territorialite" style="min-width:4rem">N° de Compte<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <!-- <th pSortableColumn="numero" style="min-width:200px">Compte<p-sortIcon field="numero"></p-sortIcon></th> -->
                         <th pSortableColumn="nom" style="min-width:6rem">Type de journal<p-sortIcon field="nom"></p-sortIcon></th>
@@ -41,9 +41,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-ordre>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                         <td><span class="p-column-title" >{{ordre?.numCompte}}</span>
                         </td>
                         <!-- <td><span class="p-column-title" style="min-width:200px">{{ordre.compte.libelle}}</span>
@@ -177,14 +177,16 @@
         <p-dialog [maximizable]="true" [(visible)]="displayBalancePrint" header="Balance des comptes" [modal]="true" styleClass="p-fluid" [style]="{width: '600px'}">
             <hr>
             <ng-template pTemplate="content">
+                <form  [formGroup]="balanceForm">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-3">
                         <label for="firstname2">Type de Balance<span style="color: red !important; font-size: 1.4em"></span></label>
                     </div>
                     <div class="p-field p-col-9">
-                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="garantList"
-                                                [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                        <p-dropdown inputId="typeBalance" [filter]="true"
+                                                showClear="true" [options]="typeBalance"
+                                                formControlName="typeBalance"
+                                                [autoDisplayFirst]="false">
                         </p-dropdown>
                     </div>
                 </div>
@@ -193,7 +195,7 @@
                             <label for="compteParent">Date écriture de  <span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <input id="dateAppel" type="date" pInputText [(ngModel)]="dateDebut" (onchange)="searchAppelFond()">
+                            <input id="dateAppel" type="date" pInputText formControlName="dateDebut" >
                             <!-- <app-entity-validation [entityValidations]="entityValidations"
                                             [formGroup]="appelFondForm" [entityField]="'dateAppel'">
                             </app-entity-validation> -->
@@ -205,7 +207,7 @@
                             <label for="compteParent">A <span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <input id="dateAppel" type="date" pInputText [(ngModel)]="dateDebut" (onchange)="searchAppelFond()">
+                            <input id="dateAppel" type="date" pInputText formControlName="dateFin" >
                             <!-- <app-entity-validation [entityValidations]="entityValidations"
                                             [formGroup]="appelFondForm" [entityField]="'dateAppel'">
                             </app-entity-validation> -->
@@ -217,9 +219,9 @@
                             <label for="firstname2">N° Compte de<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="compte"
+                                                    showClear="true" [options]="compteList"
+                                                    [autoDisplayFirst]="false" formControlName="compteDebut" >
                             </p-dropdown>
                         </div>
                         <div class="p-field p-col-2">
@@ -229,20 +231,20 @@
                             <label for="firstname2">A<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="compte"
+                                                    showClear="true" [options]="compteList"
+                                                    [autoDisplayFirst]="false" formControlName="compteFin" >
                             </p-dropdown>
                         </div>
                     </div>
-                    <div class="p-fluid p-formgrid p-grid">
+                    <!-- <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
                             <label for="firstname2">Code Journal de<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="code"
+                                                    showClear="true" [options]="journauxList"
+                                                    [autoDisplayFirst]="false" formControlName="codeDebut" >
                             </p-dropdown>
                         </div>
                         <div class="p-field p-col-2">
@@ -252,21 +254,21 @@
                             <label for="firstname2">A<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="code"
+                                                    showClear="true" [options]="journauxList"
+                                                    [autoDisplayFirst]="false" formControlName="codeFin" >
                             </p-dropdown>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
                             <label for="firstname2">Type d'etat<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-9">
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                            <p-dropdown inputId="typeEtatBalance" [filter]="true"
+                                                    showClear="true" [options]="typeEtatBalance"
+                                                    [autoDisplayFirst]="false" formControlName="typeEtatBalance" >
                             </p-dropdown>
                         </div>
                     </div>
@@ -276,22 +278,24 @@
                             <label for="compteParent">Date fin <span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-9">
-                            <input id="dateAppel" type="date"  pInputText [(ngModel)]="dateFin" (onchange)="searchAppelFond()">
+                            <input id="dateAppel" type="date"  pInputText [(ngModel)]="dateFin">
                             
                         </div>
                     </div> -->
+                    <br>
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-6">
                             
-                            <button pButton pRipple label="Rechercher"icon="pi pi-times" class="p-button-danger p-mr-2 p-mb-2" (click)="searchAppelFond()"></button>
+                            <button pButton pRipple label="Annuler"icon="pi pi-times" class="p-button-danger p-mr-2 p-mb-2" (click)="annulerSearchAppelFond()"></button>
                         </div>
                         <div class="p-field p-col-6">
                             
-                            <button pButton pRipple label="Rechercher" [disabled]="!garant || !dateDebut || !dateFin" icon="pi pi-search-plus" class="p-button-success p-mr-2 p-mb-2" (click)="searchAppelFond()"></button>
+                            <button pButton pRipple label="Imprimer" [disabled]="balanceForm.invalid" icon="pi pi-print" class="p-button-success p-mr-2 p-mb-2" (click)="ImprimerBalance8colonnes()"></button>
                         </div>
                     </div>
+                    <br>
                     
-                    
+                </form>    
              </ng-template>
         </p-dialog>
             

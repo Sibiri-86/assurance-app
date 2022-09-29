@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import { Journaux, JournauxList } from "./model";
+import { Report } from "../../contrat/police/model";
 
 
 @Injectable({providedIn: 'root'})
@@ -51,6 +52,12 @@ pushFileToStorage(file: File): Observable<any> {
   //responseType: 'text'
   //});
   return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_JOURNAUX)}/upload`, data, { headers: headers });
+}
+
+$getReport(report: Report): Observable<ArrayBuffer> {
+  // @FIXME: get request
+  return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_JOURNAUX)}/report`,
+      report, {responseType: 'arraybuffer'});
 }
 
 private handleError<T>() {

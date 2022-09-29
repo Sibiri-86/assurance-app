@@ -15,7 +15,7 @@ import { Pays } from '../../parametrage/pays/model';
 import { Region } from '../../parametrage/region/model';
 import { Arrondissement } from '../../parametrage/arrondissement/model';
 import { Departement } from '../../parametrage/departement/model';
-import { AppelFond } from '../../comptabilite/appelFond/model';
+import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 
 export interface Police{
     id?: string;
@@ -88,6 +88,7 @@ export interface Report {
     ordreReglementTierPayant?: OrdreReglementTierPayant;
     ordonnanceMedical?: OrdonnanceMedical;
     appelFond?: AppelFond;
+    balance?: Balance;
 }
 
 export interface PoliceList {

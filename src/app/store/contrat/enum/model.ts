@@ -28,7 +28,8 @@ export enum TypeReport {
     BONPRISEENCHARGE = 'BONPRISEENCHARGE',
     ORDONNANCEMEDICALE = 'ORDONNANCEMEDICALE',
     /** type report pour le module comptabilité */
-    APPEL_FOND = 'APPEL_FOND'
+    APPEL_FOND = 'APPEL_FOND',
+    BALANCE_HUIT_COLONNES = 'BALANCE_HUIT_COLONNES'
 }
 
 export enum TypeDuree {

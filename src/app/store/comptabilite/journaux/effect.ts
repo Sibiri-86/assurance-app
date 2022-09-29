@@ -7,6 +7,7 @@ import {StatusEnum} from '../../global-config/model';
 import { JournauxService } from './service';
 import * as featureActions from './actions';
 import { Journaux } from './model';
+import { Report } from '../../contrat/police/model';
 
 @Injectable()
 export class JournauxEffects {
@@ -95,4 +96,18 @@ this.actions$.pipe(
     )
 )
 );
+
+fetchReportBalanceHuit$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.FetchReportBalanceHuit),
+            mergeMap((report: Report) =>
+                this.journauxService.$getReport(report).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setReportBalanceHuit({reportFile: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
 }
