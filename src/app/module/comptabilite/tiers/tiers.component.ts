@@ -36,6 +36,7 @@ import { Tiers, TypeCompteTiers } from 'src/app/store/comptabilite/tiers/model';
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 import * as tiersAction from 'src/app/store/comptabilite/tiers/actions';
+import * as tiersSelector from '../../../store/comptabilite/tiers/selector';
 
 
 
@@ -114,6 +115,8 @@ export class TiersComponent implements OnInit, OnDestroy {
   appelFondTotal: AppelFond;
   tiersForm: FormGroup;
   tiers: Tiers;
+  tiersList$: Observable<Array<Tiers>>;
+  tiersList: Array<Tiers>;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -202,6 +205,17 @@ ngOnInit(): void {
                 console.log('appelFondList', this.appelFondList);
               }
   });
+
+  this.tiersList$ = this.store.pipe(select(tiersSelector.tiersList));
+  this.store.dispatch(tiersAction.loadTiers());
+  this.tiersList$.pipe(takeUntil(this.destroy$))
+          .subscribe(value => {
+            if(value) {
+              this.tiersList = value.slice();
+              console.log('value', value.slice());
+              console.log('tiersList', this.tiersList);
+            }
+          })
 
   this.compteList$ = this.store.pipe(select(compteSelector.compteList));
   this.store.dispatch(compteAction.loadCompte());
