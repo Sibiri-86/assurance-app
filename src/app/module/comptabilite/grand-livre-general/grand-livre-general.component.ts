@@ -170,7 +170,7 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
     this.compteService.findCompteByNumero(this.operation.numCompteAuxi).subscribe((res)=>{
       if(res) {
       
-        this.operation.compteAuxiliaire =res;
+        this.operation.compteSelected =res;
       }
      
     });
