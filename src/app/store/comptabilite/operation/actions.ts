@@ -10,5 +10,8 @@ export const loadOperationByExerciceOperation = createAction('[App Init] load Op
 export const findOperationCaisseJournalier = createAction('[App Init] update Operation journaliere', props<Operation>());
 export const FetchReport = createAction('[Report] Fetch Report arrete', props<Report>());
 export const setReportArrete = createAction('[set Report] set Report Arreter', props<{reportFile: ArrayBuffer}>());
+export const findOperationGrandLivre = createAction('[App Init] update Operation grand livre', props<Operation>());
+
+
 
 
