@@ -6,7 +6,7 @@ import { Compte } from "../compte/model";
 
 export interface Tiers {
     id?: string;
-    compteTiers?: string;
+    compteTiers?: number;
     intitule?: string;
     abrege?: string;
     compteCollectif?: Compte;

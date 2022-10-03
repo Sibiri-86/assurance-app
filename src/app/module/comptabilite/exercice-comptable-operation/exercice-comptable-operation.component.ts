@@ -32,6 +32,7 @@ import { OperationService } from 'src/app/store/comptabilite/operation/service';
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
+import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 
 
 
@@ -80,6 +81,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private exerciceOperationService: ExerciceComptableOperationService,
+               private tierDService: TiersService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Opération'}]);
    }
@@ -154,7 +156,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     });
   }
   findCompteAuxiliaire() {
-    this.compteService.findCompteByNumero(this.operation.numCompteAuxi).subscribe((res)=>{
+    this.tierDService.$findCompteTierByCode(this.operation.numCompteAuxi).subscribe((res)=>{
       if(res) {
       
         this.operation.compteAuxiliaire =res;

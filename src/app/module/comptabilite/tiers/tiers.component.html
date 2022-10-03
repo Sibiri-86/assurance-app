@@ -146,7 +146,7 @@
 
                         <div class="p-field p-col">
                             <label for="firstname2">Compte Tiers <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <input id="compteTiers" type="text" required formControlName="compteTiers"  pInputText>
+                            <input id="compteTiers" type="number" required formControlName="compteTiers"  pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                           [formGroup]="tiersForm" [entityField]="'compteTiers'">
                             </app-entity-validation>
