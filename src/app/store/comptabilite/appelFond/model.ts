@@ -29,8 +29,8 @@ export enum TypeBalance {
 }
 
 export enum TypeEtatBalance {
-    SIX = '6 COLONNES',
-    HUIT = '8 COLONNES'
+    SIX = 'SIX',
+    HUIT = 'HUIT'
 }
 
 export interface AppelFondList{

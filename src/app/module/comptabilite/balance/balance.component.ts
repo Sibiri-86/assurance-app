@@ -159,6 +159,7 @@ export class BalanceComponent implements OnInit {
                 if (value) {
                   //this.loading = false;
                   this.compteList = value.slice();
+                  this.compteList = this.compteList.filter(cl => cl.isRacine === false);
                   console.log('value', value.slice());
                   console.log('compteList', this.compteList);
                 }
@@ -235,9 +236,18 @@ export class BalanceComponent implements OnInit {
     this.balance.compteDebut = this.balanceForm.get('compteDebut').value;
     this.balance.compteFin = this.balanceForm.get('compteFin').value;
     this.balance.typeEtatBalance = this.balanceForm.get('typeEtatBalance').value;
-    console.log("this.balance", this.balance);
-    this.report.typeReporting = TypeReport.BALANCE_HUIT_COLONNES;
+    console.log("this.balance", this.balance.typeEtatBalance);
+    console.log("****************************", TypeEtatBalance.HUIT);
+    if(this.balance.typeEtatBalance === TypeEtatBalance.HUIT) {
+      this.report.typeReporting = TypeReport.BALANCE_HUIT_COLONNES;
+    } else {
+      this.report.typeReporting = TypeReport.BALANCE_SIX_COLONNES;
+    }
+    console.log("this.balance222222", this.balance);
+    
     this.report.balance = this.balance;
+
+    console.log("this.report.typeReporting ", this.report.typeReporting);
     this.store.dispatch(featureActionJournal.FetchReportBalanceHuit(this.report));
   }
 

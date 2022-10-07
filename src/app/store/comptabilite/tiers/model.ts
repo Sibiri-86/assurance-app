@@ -37,3 +37,15 @@ export enum TypeCompteTiers {
     AUTRES = 'AUTRES'
 }
 
+export enum TypeEtatTiers {
+    HUIT = '8 Colonnes',
+    SIX = '6 Colonnes'
+}
+
+export enum TypeMouvementCompteTiers {
+    TOUS = 'TOUS',
+    MOUVEMENTES = 'MOUVEMENTES',
+    NONSOLDES = 'NON SOLDES',
+    SOLDES = 'SOLDES'
+}
+

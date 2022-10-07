@@ -32,7 +32,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
 import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
-import { Tiers, TypeCompteTiers } from 'src/app/store/comptabilite/tiers/model';
+import { Tiers, TypeCompteTiers, TypeEtatTiers, TypeMouvementCompteTiers } from 'src/app/store/comptabilite/tiers/model';
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 import * as tiersAction from 'src/app/store/comptabilite/tiers/actions';
@@ -117,6 +117,9 @@ export class TiersComponent implements OnInit, OnDestroy {
   tiers: Tiers;
   tiersList$: Observable<Array<Tiers>>;
   tiersList: Array<Tiers>;
+  tiersPrintForm: FormGroup;
+  typeEtatTiers = Object.keys(TypeEtatTiers).map(key => ({ label: TypeEtatTiers[key], value: key }));
+  typeMouvementCompteTiers = Object.keys(TypeMouvementCompteTiers).map(key => ({ label: TypeMouvementCompteTiers[key], value: key }));
 
 
   constructor(private formBuilder: FormBuilder,
@@ -140,6 +143,32 @@ export class TiersComponent implements OnInit, OnDestroy {
         ville: new FormControl(''), */
         numTel: new FormControl('', [Validators.required]),
     });
+
+    this.tiersPrintForm = this.formBuilder.group({
+      id: new FormControl(''),
+      dateDebut: new FormControl('', [Validators.required]),
+      dateFin: new FormControl('', [Validators.required]),
+      compteDebut: new FormControl('', [Validators.required]),
+      compteFin: new FormControl('', [Validators.required]),
+      typeEtatTiers: new FormControl('', [Validators.required]),
+      typeMouvementCompteTiers: new FormControl('', [Validators.required]),
+      typeCompteTiers: new FormControl('', [Validators.required]),
+
+
+      /* compteTiers: new FormControl('', [Validators.required]),
+      intitule: new FormControl('', [Validators.required]),
+      abrege: new FormControl('', [Validators.required]),
+      compteCollectif: new FormControl('', [Validators.required]),
+      typeCompteTiers: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      interlocuteur: new FormControl(''),
+      adresse: new FormControl(''),
+      codePostal: new FormControl(''), */
+      /* pays: new FormControl(''),
+      region: new FormControl(''),
+      ville: new FormControl(''), */
+      //numTel: new FormControl('', [Validators.required]),
+  });
 
       this.breadcrumbService.setItems([
         {label: ' Compte Tiers'}
@@ -278,10 +307,10 @@ voirDetailEtatAppel() {
 
 
 
-editGarant(compte: Compte) {
+editGarant(tiers: Tiers) {
 // this.garantForm.get('id').setValue(garant.id);
-this.compte = {...compte};
-this.compteForm.patchValue(this.compte);
+this.tiers = {...tiers};
+this.tiersForm.patchValue(this.tiers);
 this.displayDialogFormGarant = true;
 }
 
@@ -365,11 +394,14 @@ searchAppelFond() {
   }
 }
 annulerAppelFond() {
-  this.garant = {};
-  this.dateDebut = null;
-  this.dateFin = null;
-  this.appelFondTotal = {};
-  this.etatAppel = false;
+  /* this.tiersPrintForm.get('dateDebut').setValue = null;
+  this.tiersPrintForm.get('dateFin').setValue = null;
+  this.tiersPrintForm.get('compteDebut').setValue = null;
+  this.tiersPrintForm.get('compteFin').setValue = null;
+  this.tiersPrintForm.get('typeEtatTiers').setValue = null;
+  this.tiersPrintForm.get('typeMouvementCompteTiers').setValue = null;
+  this.tiersPrintForm.get('typeCompteTiers').setValue = null; */
+  // this.etatAppel = false;
 }
 }
 
