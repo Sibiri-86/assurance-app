@@ -72,7 +72,7 @@
                 <div class="card">
                     <p-toolbar styleClass="p-mb-4">
                    <div class="card">
-                    <p-toolbar styleClass="mb-4">
+                    <p-toolbar styleClass="mb-4" *ngIf="exerciceComptableOperation?.journaux?.compte !== null">
                         <ng-template pTemplate="left">
                            
                            
@@ -112,34 +112,51 @@
                                    
                                 <div class="p-field p-col">
                                     <label for="dateSaisie">Date de saisie <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                                    <p-calendar id="dateSaisie" [showIcon]="true"  dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="operation.dateSaisie" name="dateSaisie"  appendTo="body"></p-calendar>
+                                    <p-calendar id="dateSaisie" [showIcon]="true"  dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="operation.dateSaisieJour" name="dateSaisieJour"  appendTo="body"></p-calendar>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="dateSaisie">Date de pièce <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                   
+                                    <input id="dateSaisie"   type="date"  required name="dateSaisie" pInputText [(ngModel)]="operation.dateSaisie" (change)="verifieDate()" >
+
                                 </div>
                                 <div class="p-field p-col">
-                                    <label for="numFacture">Numéro facture <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                    <label for="numFacture">Numéro facture <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                     <input id="numFacture"  type="text" required name="numFacture" pInputText [(ngModel)]="operation.numFacture" >
         
                                 </div>
         
                                 <div class="p-field p-col">
-                                    <label for="reference">Réference <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <input id="reference"  type="text" required [disabled]="!operation.numFacture"  name="reference" pInputText [(ngModel)]="operation.reference" >
+                                    <label for="reference">Réference <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                    <input id="reference"  type="text" required   name="reference" pInputText [(ngModel)]="operation.reference">
         
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompte" [disabled]="!operation.numFacture"  name="numCompte" mode="decimal" locale="fr-FR" (onBlur)="findCompte1()"></p-inputNumber>  
+                                        <p-dropdown [filter]="true" 
+                                        showClear="true" [options]="compteList"
+                                        name="compte"
+                                        optionLabel="compte" 
+                                        [autoDisplayFirst]="false" [(ngModel)]="operation.compte" >
+                                        </p-dropdown>
             
                                 </div>
             
                                 <div class="p-field p-col">
-                                    <label for="numCompte2">N° compte auxiliaire<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
-                                    <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" (onBlur)="findCompteAuxiliaire()"></p-inputNumber>  
+                                    <label for="numCompte2">N° compte tier<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                                    <p-dropdown [filter]="true" 
+                                    showClear="true" [options]="tierList"
+                                    name="compteAuxiliaire"
+                                    optionLabel="intitule" 
+                                    [autoDisplayFirst]="false" [(ngModel)]="operation.compteAuxiliaire" >
+                                    </p-dropdown>
             
                                 </div>
             
                                 <div class="p-field p-col">
                                     <label for="reference">Libellé d'écriture<span style="color: red !important; size: 1.4em;" class="required">*</span> </label>
-                                    <input id="libelle"  type="text" required [disabled]="!operation.numCompte"  name="libelle" pInputText [(ngModel)]="operation.libelle" >
+                                    <input id="libelle"  type="text" required [disabled]="!operation.compte"  name="libelle" pInputText [(ngModel)]="operation.libelle" >
             
                                 </div>
 
@@ -160,15 +177,7 @@
                     <div></div>
                     <p-toolbar styleClass="mb-4">
                         <ng-template pTemplate="left">
-                            <div class="p-fluid p-formgrid p-grid">
-                                   
-                                <div class="p-field p-col">
-                                    <span>{{operation.compte?.libelle}}</span>
-                                </div>
-                                <div class="p-field p-col">
-                                    <span>{{operation.compteAuxiliaire?.intitule}}</span>
-                                </div>
-                            </div>
+                            
                            
                              </ng-template>
                 
@@ -185,10 +194,11 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date de saisie</th>
+                                <th>Date de pièce</th>
                                 <th>N° facture</th>
                                 <th>Reférence</th>
                                 <th>N° compte</th>
-                                <th>N° compte auxiliaire</th>
+                                <th>N° compte tier</th>
                                 <th>Libellé d'écriture</th>
                                 <th >Débit</th>
                                 <th>Crédit</th>
@@ -197,13 +207,16 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-operation let-ri="rowIndex">
                             <tr>
+                                <td>   {{operation.dateSaisieJour | formatTableValue : 'date'}}
+                                       
+                                </td>
                                 <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
                                        
                                 </td>
                                 <td>{{operation.numFacture}}</td>
                                 <td>{{operation.reference}} </td>
-                                <td>{{operation.numCompte | formatTableValue: 'number':true}}</td>
-                                <td >{{operation.numCompteAuxi | formatTableValue: 'number':true}}
+                                <td>{{operation.compte.compte | formatTableValue: 'number':true}}</td>
+                                <td >{{operation?.compteAuxiliaire?.intitule}}
                                 </td>
                                 <td>{{operation.libelle}} </td>
                                 <td >{{operation.montantDebit | formatTableValue: 'number':true}}</td>
@@ -374,13 +387,15 @@
                         </th>
                         <th pSortableColumn="annee" >Date saisie<p-sortIcon field="annee"></p-sortIcon></th>
 
+                        <th pSortableColumn="annee" >Date Pièce<p-sortIcon field="annee"></p-sortIcon></th>
+
                         <th pSortableColumn="annee" >N° pièce<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >N° facture<p-sortIcon field="annee"></p-sortIcon></th>
 
                         <th pSortableColumn="annee" >Reférence<p-sortIcon field="annee"></p-sortIcon></th>
                         
                         <th pSortableColumn="annee" >N° compte<p-sortIcon field="annee"></p-sortIcon></th>
-                        <th pSortableColumn="annee" >N° compte<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >N° compte tier<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Libellé d'écriture<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
@@ -393,15 +408,16 @@
                         <td>
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
-                        
+                            <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
 
                              <td><span class="p-column-title" >{{operation?.numFacture}}</span></td>
 
                              <td><span class="p-column-title" >{{operation?.reference}}</span></td>
-                             <td><span class="p-column-title" >{{operation?.numCompte}}</span></td>
-                             <td><span class="p-column-title" >{{operation?.numCompteAuxi}}</span></td>
+                             <td><span class="p-column-title" >{{operation.compte.compte | formatTableValue: 'number':true}}</span></td>
+                             <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span>
+                             </td>
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantCredit | formatTableValue: 'number':true}}</span></td>

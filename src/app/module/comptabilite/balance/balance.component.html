@@ -195,7 +195,7 @@
                             <label for="compteParent">Date écriture de  <span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <input id="dateAppel" type="date" pInputText formControlName="dateDebut" >
+                            <input id="dateAppel" type="date" pInputText formControlName="dateDebut" (change)="verifieDate1()" >
                             <!-- <app-entity-validation [entityValidations]="entityValidations"
                                             [formGroup]="appelFondForm" [entityField]="'dateAppel'">
                             </app-entity-validation> -->
@@ -207,7 +207,7 @@
                             <label for="compteParent">A <span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
                         <div class="p-field p-col-3">
-                            <input id="dateAppel" type="date" pInputText formControlName="dateFin" >
+                            <input id="dateAppel" type="date" pInputText formControlName="dateFin" (change)="verifieDate2()">
                             <!-- <app-entity-validation [entityValidations]="entityValidations"
                                             [formGroup]="appelFondForm" [entityField]="'dateAppel'">
                             </app-entity-validation> -->

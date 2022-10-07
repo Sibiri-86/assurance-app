@@ -12,6 +12,7 @@ export interface ExerciceComptableOperation {
     montantDebit?: number;
     montantCredit?: number;
     solde?: number;
+    reportSoldeMois?: number;
    
 }
 export interface  ExerciceComptableOperationList {

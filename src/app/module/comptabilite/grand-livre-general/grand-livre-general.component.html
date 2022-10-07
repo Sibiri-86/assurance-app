@@ -18,23 +18,33 @@
                         <label for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                    
                         
-                        <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" >
+                        <input  type="date" pInputText [(ngModel)]="operation.dateSaisie" (change)="verifieDate1()">
                     </div>
                     <div class="p-field p-col-2">
                         <label for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
                    
                         
-                        <input  type="date" pInputText [(ngModel)]="operation.dateFin" >
+                        <input  type="date" pInputText [(ngModel)]="operation.dateFin" (change)="verifieDate2()">
                     </div>
-                    <div class="p-field p-col">
+                    <div class="p-field p-col-2">
                         <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompte" name="numCompte" mode="decimal" locale="fr-FR" (onBlur)="findCompte1()"></p-inputNumber>  
+                        <p-dropdown [filter]="true" 
+                        showClear="true" [options]="compteList"
+                        name="compte"
+                        optionLabel="compte" 
+                        [autoDisplayFirst]="false" [(ngModel)]="operation.compte" >
+                        </p-dropdown>
 
                     </div>
 
-                    <div class="p-field p-col">
+                    <div class="p-field p-col-2">
                         <label for="numCompte2"> N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="operation.numCompteAuxi" name="numCompteAuxi" mode="decimal" locale="fr-FR" (onBlur)="findCompteAuxiliaire()"></p-inputNumber>  
+                        <p-dropdown [filter]="true" 
+                        showClear="true" [options]="compteList"
+                        name="compteSelected"
+                        optionLabel="compte" 
+                        [autoDisplayFirst]="false" [(ngModel)]="operation.compteSelected" >
+                        </p-dropdown>
 
                     </div>
                     <div class="p-field p-col espace">
@@ -56,10 +66,11 @@
             <p-table [value]="operationList" dataKey="id" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Date de saisie</th>
+                        <th>Date de pièce</th>
                         <th>c.j</th>
                         <th>Reférence</th>
                         <th>N° pièce</th>
+                        <th>Compte</th>
                         <th>Libellé d'écriture</th>
                         <th>Mouvement débit</th>
                         <th>Mouvement crédit</th>
@@ -68,20 +79,38 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-operation let-ri="rowIndex">
-                    <tr>
+                    <tr *ngIf="operation.boolTotal !== true">
                         <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
                                
                         </td>
                         <td>{{operation.exerciceComptableOperation?.journaux?.code}}</td>
                         <td>{{operation.reference}} </td>
                         <td>{{operation.numPiece}}</td>
+                        <td>{{operation.compte.compte | formatTableValue: 'number':true}}</td>
                         <td>{{operation.libelle}} </td>
                         
                         
-                        
-                        <td>{{operation.montantCredit | formatTableValue: 'number':true}} </td>
                         <td >{{operation.montantDebit | formatTableValue: 'number':true}}</td>
+                        <td>{{operation.montantCredit | formatTableValue: 'number':true}} </td>
+                        
                         <td >{{operation.solde | formatTableValue: 'number':true}}</td>
+                        
+                    </tr>
+                    <tr class="colorZone" *ngIf="operation.boolTotal === true">
+                        <td>   
+                               
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight: bold">{{operation.libelle}} </td>
+                        
+                        
+                        <td style="font-weight: bold">{{operation.montantDebit | formatTableValue: 'number':true}}</td>
+                        <td style="font-weight: bold">{{operation.montantCredit | formatTableValue: 'number':true}} </td>
+                        
+                        <td style="font-weight: bold">{{operation.solde | formatTableValue: 'number':true}}</td>
                         
                     </tr>
                 </ng-template>

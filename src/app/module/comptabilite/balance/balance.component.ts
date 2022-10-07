@@ -41,6 +41,9 @@ import { Journaux } from 'src/app/store/comptabilite/journaux/model';
 import * as featureActionJournal from '../../../store/comptabilite/journaux/actions';
 import * as journauxSelector from '../../../store/comptabilite/journaux/selector';
 import * as featureActionExerciceComptableOperation from '../../../store/comptabilite/exercice-comptable-operation/actions';
+import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
+import * as exerciceListSelector from '../../../store/comptabilite/exercice-comptable/selector';
+import * as featureActionExercice from '../../../store/comptabilite/exercice-comptable/actions';
 
 
 
@@ -76,6 +79,9 @@ export class BalanceComponent implements OnInit {
     journauxList$: Observable<Array<Journaux>>;
     journauxList: Array<Journaux>;
     balance: Balance = {};
+    exerciceList$: Observable<Array<ExerciceComptable>>;
+    exerciceList: Array<ExerciceComptable>;
+    exerciceActif: ExerciceComptable = {};
 
 
 
@@ -124,6 +130,19 @@ export class BalanceComponent implements OnInit {
     }
     });
 
+    this.exerciceList$= this.store.pipe(select(exerciceListSelector.exerciceComptableList));
+    this.store.dispatch(featureActionExercice.loadExerciceComptable());
+    this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.exerciceList = value.slice();
+        this.exerciceActif = this.exerciceList.find(exercice=>exercice.actived === true);
+        
+       
+      }
+    });
+
     this.operationList$ = this.store.pipe(select(exerciceComptableOperationListSelector.operationList));
     this.store.dispatch(featureActionExerciceComptableOperation.loadOperations());
     this.operationList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -159,7 +178,34 @@ export class BalanceComponent implements OnInit {
     });
   }
 
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
   
+  verifieDate2() {
+    if(this.balanceForm.value.dateFin) {
+      
+      if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateFin).getFullYear()) {
+        console.log("============");
+        this.addMessage('error', 'Date  invalide',
+                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+                this.balanceForm.get('dateFin').setValue('');
+      }
+    }
+  }
+
+  verifieDate1() {
+    if(this.balanceForm.value.dateDebut) {
+      
+      if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateDebut).getFullYear()) {
+        console.log("============");
+        this.addMessage('error', 'Date  invalide',
+                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+             
+             this.balanceForm.get('dateDebut').setValue('');
+      }
+    }
+  }
 
   imprimer(pref: OrdreReglement) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT;

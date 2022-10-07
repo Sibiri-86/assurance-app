@@ -223,7 +223,7 @@ ngOnInit(): void {
             .subscribe(value => {
               if (value) {
                 //this.loading = false;
-                this.compteList = value.slice().filter(c => c.isRacine === true);
+                this.compteList = value.slice().filter(c => c.isRacine === false);
                 console.log('value', value.slice());
                 console.log('compteList', this.compteList);
               }

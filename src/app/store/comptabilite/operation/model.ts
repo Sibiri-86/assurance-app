@@ -12,6 +12,7 @@ export interface Operation {
     libelle?:string;
     numCompte?: number;
     numCompteAuxi?: number;
+    dateSaisieJour?: Date;
     dateSaisie?: Date;
     exerciceComptableOperation?: ExerciceComptableOperation;
     montantDebit?: number;
@@ -26,7 +27,9 @@ export interface Operation {
     montantDepense?: number;
     solde?: number;
     beneficiaire?: string;
-    datefin?: Date;
+    dateFin?: Date;
+    reportSoldeMois?: number;
+    boolTotal?: boolean;
    
 }
 export interface  OperationList {

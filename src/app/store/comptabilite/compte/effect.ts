@@ -75,4 +75,18 @@ createCompte$ = createEffect(() =>
             )
     );
 
+    fetchComptesNoRacine$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadCompteNoRacine),
+                mergeMap(() =>
+                    this.compteService.$getComptesNoRacine().pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setCompte(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+    );
 }

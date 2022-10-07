@@ -177,7 +177,7 @@
                             </div>
                                 
                             <div class="p-field p-col">
-                                <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                <label for="numCompte">N° compte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                 <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="journal.numCompte" [disabled]="!journal.libelle"  name="numCompte" mode="decimal" locale="fr-FR" (onBlur)="findCompte1()"></p-inputNumber>  
         
                             </div>
@@ -203,7 +203,7 @@
                     <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                 </div>
                 <div>
-                    <button  pButton  pRipple  label="Enregistrer" [disabled]="!journal.compte" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreate()" ></button>
+                    <button  pButton  pRipple  label="Enregistrer" [disabled]="!journal.libelle" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreate()" ></button>
                 </div>
             </div>
              

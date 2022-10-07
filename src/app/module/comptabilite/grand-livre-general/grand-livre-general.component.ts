@@ -35,7 +35,11 @@ import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/ex
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
-
+import * as featureActionExercice from '../../../store/comptabilite/exercice-comptable/actions';
+import * as exerciceListSelector from '../../../store/comptabilite/exercice-comptable/selector';
+import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
+import * as featureActioncompte from '../../../store/comptabilite/compte/actions';
+import * as compteSelector from '../../../store/comptabilite/compte/selector';
 
 
 
@@ -77,7 +81,11 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   verificationDebitCredit: string = "1";
   operationSelected: Operation = {};
   report: Report = {};
-  
+  exerciceList$: Observable<Array<ExerciceComptable>>;
+  exerciceList: Array<ExerciceComptable>;
+  exerciceActif: ExerciceComptable = {};
+  compteList$: Observable<Array<Compte>>;
+  compteList: Array<Compte>;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -114,6 +122,18 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
                 printPdfFile(bytes);
         }
     });
+
+    this.compteList$ = this.store.pipe(select(compteSelector.compteList));
+    this.store.dispatch(featureActioncompte.loadCompteNoRacine());
+    this.compteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.compteList = value.slice();
+        
+       
+      }
+    }); 
     this.journal = null;
 
     this.journalList$ = this.store.pipe(select(journalListSelector.journauxList));
@@ -123,6 +143,18 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.journalList = value.slice();
+        
+       
+      }
+    });
+    this.exerciceList$= this.store.pipe(select(exerciceListSelector.exerciceComptableList));
+    this.store.dispatch(featureActionExercice.loadExerciceComptable());
+    this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.exerciceList = value.slice();
+        this.exerciceActif = this.exerciceList.find(exercice=>exercice.actived === true);
         
        
       }
@@ -201,6 +233,35 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   editOperation(operation: Operation) {
     this.operation = operation;
     this.operation.dateSaisie = new Date(operation.dateSaisie);
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  verifieDate1() {
+    console.log("=====bien======="+new Date(this.operation.dateSaisie).getFullYear());
+    if(this.operation.dateSaisie) {
+      
+      if(this.exerciceActif.annee != new Date(this.operation.dateSaisie).getFullYear()) {
+        console.log("============");
+        this.addMessage('error', 'Date  invalide',
+                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+        this.operation.dateSaisie = null;
+      }
+    }
+  }
+
+  verifieDate2() {
+    if(this.operation.dateFin) {
+      
+      if(this.exerciceActif.annee != new Date(this.operation.dateFin).getFullYear()) {
+        console.log("============");
+        this.addMessage('error', 'Date  invalide',
+                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+        this.operation.dateFin = null;
+      }
+    }
   }
 
   addOperation1() {

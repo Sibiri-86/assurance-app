@@ -33,6 +33,11 @@ import { Compte } from 'src/app/store/comptabilite/compte/model';
 import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
 import { TiersService } from 'src/app/store/comptabilite/tiers/service';
+import { Tiers } from 'src/app/store/comptabilite/tiers/model';
+import * as featureActioncompte from '../../../store/comptabilite/compte/actions';
+import * as compteSelector from '../../../store/comptabilite/compte/selector';
+import * as featureActiontiers from '../../../store/comptabilite/tiers/actions';
+import * as tiersSelector from '../../../store/comptabilite/tiers/selector';
 
 
 
@@ -60,6 +65,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   operationList:Array<Operation> = [];
   operationList$: Observable<Array<Operation>>;
   operation: Operation = {};
+  operation1: Operation = {};
   exerciceComptableOperation: ExerciceComptableOperation = {};
   journalList:Array<Journaux> = [];
   journalList$: Observable<Array<Journaux>>;
@@ -73,6 +79,11 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   compteSelected: Compte = {};
   CompteAuxiliaireSelecte: Compte = {};
   verificationDebitCredit: string = "1";
+  displaCompte = false;
+  tierList$: Observable<Array<Tiers>>;
+  tierList: Array<Tiers>;
+  compteList$: Observable<Array<Compte>>;
+  compteList: Array<Compte>;
 
   
   
@@ -104,6 +115,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
        
       }
     });
+    
     this.journal = null;
 
     this.journalList$ = this.store.pipe(select(journalListSelector.journauxList));
@@ -117,6 +129,30 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
        
       }
     });
+
+    this.tierList$ = this.store.pipe(select(tiersSelector.tiersList));
+    this.store.dispatch(featureActiontiers.loadTiers());
+    this.tierList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.tierList = value.slice();
+        
+       
+      }
+    });
+
+    this.compteList$ = this.store.pipe(select(compteSelector.compteList));
+    this.store.dispatch(featureActioncompte.loadCompteNoRacine());
+    this.compteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.compteList = value.slice();
+        
+       
+      }
+    }); 
     this.operationList$ = this.store.pipe(select(operationListSelector.operationList));
     this.operationList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
@@ -137,43 +173,28 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     this.operation.montantCredit = null;
   }
 
-  findCompte1() {
-    this.compteService.findCompteByNumero(this.operation.numCompte).subscribe((rest)=>{
-      if(rest) {
-        this.compteSelected = rest;
-        this.operation.compte =rest;
-        console.log(this.operation.compte);
-      }
-     
-    });
-  }
+ 
   findExerciceOperationAjour() {
     this.exerciceOperationService.$getExerciceComptableOperationMisaJous(this.exerciceComptableOperation.id).subscribe((rest)=>{
       if(rest) {
         this.exerciceComptableOperation = rest;
+        
       }
       
     });
   }
-  findCompteAuxiliaire() {
-    this.tierDService.$findCompteTierByCode(this.operation.numCompteAuxi).subscribe((res)=>{
-      if(res) {
-      
-        this.operation.compteAuxiliaire =res;
-      }
-     
-    });
-  }
+ 
   onAdd() { 
     this.displayAddOperationListe = true;
     this.findExerciceOperationAjour();
   }
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
     this.exerciceComptableOperation = exerciceComptableOperation;
+    
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
 
     this.displayOperation = true;
-    this.operation.dateSaisie = new Date();
+    this.operation.dateSaisieJour = new Date();
   //  this.findExerciceOperationAjour();
   }
 
@@ -183,13 +204,16 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   }
   editOperation(operation: Operation) {
     this.operation = operation;
-    this.operation.dateSaisie = new Date(operation.dateSaisie);
+    this.operation.dateSaisieJour = new Date(operation.dateSaisieJour);
   }
 
   addOperation1() {
     this.displayAddOperation = true;
-    this.operation.dateSaisie = new Date();
+    this.operation.dateSaisieJour = new Date();
     
+  }
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   addOperationList() {
@@ -224,15 +248,47 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
         this.credit = this.credit + this.operation.montantCredit;
       }
       this.operationAddList.push(this.operation);
+     
     }
-    
+    this.operation1 =this.operation; 
     this.operation = {};
     this.creditAvant = 0;
     this.debitAvant = 0;
     this.index = null;
-    this.operation.dateSaisie = new Date();
+    this.operation.dateSaisieJour = new Date();
+    this.operation.dateSaisie = this.operation1.dateSaisie;
+    this.operation.reference = this.operation1?.reference;
+    this.operation.numFacture = this.operation1?.numFacture;
+    this.operation.libelle = this.operation1?.libelle;
+    if(this.exerciceComptableOperation?.journaux?.compte) {
+      if(this.operation1.compte.id !== this.exerciceComptableOperation.journaux.compte.id) {
+        this.operation.compte = this.compteList.find(compte=>compte.id === this.exerciceComptableOperation.journaux.compte.id);
+        if(this.operation1.montantCredit) {
+          this.operation.montantDebit = this.operation1.montantCredit;
+        }
+       
+        if(this.operation1.montantDebit) {
+          this.operation.montantCredit = this.operation1.montantDebit;
+        }
+      }
+    }
+   
+
     console.log(this.debit);
     console.log(this.credit);
+  }
+  verifieDate() {
+    console.log("=====bien=======");
+    if(this.operation.dateSaisie) {
+      
+      if(!(new Date(this.operation.dateSaisie).getTime() >= new Date(this.exerciceComptableOperation.dateDebut).getTime() &&
+      new Date(this.operation.dateSaisie).getTime() <= new Date(this.exerciceComptableOperation.dateFin).getTime())) {
+        console.log("============");
+        this.addMessage('error', 'Date de pièce invalide',
+                'Veuillez choisir une date de la pièce valide du mois de '.concat(' ').concat(this.exerciceComptableOperation.mois));
+        this.operation.dateSaisie = null;
+      }
+    }
   }
 
   editOperationList(operation: Operation, index: number) {
@@ -246,7 +302,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     }
     
     this.operation = operation;
-    this.operation.dateSaisie = new Date(operation.dateSaisie);
+    this.operation.dateSaisieJour = new Date(operation.dateSaisieJour);
   }
 
   deleteOperationList(operation: Operation, index: number) {
@@ -271,7 +327,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     this.operation = {};
     }
     
-    this.operation.dateSaisie = new Date();
+    this.operation.dateSaisieJour = new Date();
   
   }
 
@@ -283,8 +339,12 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     });
     this.displayAddOperationListe = false;
     this.operationAddList = [];
+    this.operation1={};
+    this.operation={};
     this.credit = 0;
     this.debit = 0;
+    this.operation1 = {};
+    this.operation.dateSaisieJour = new Date();
   }
 
   onFermer() {
@@ -301,7 +361,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
 
   annuleaddOperation() {
     this.operation = {};
-    this.operation.dateSaisie = new Date();
+    this.operation.dateSaisieJour = new Date();
   }
  
     ngOnDestroy() {

@@ -39,6 +39,13 @@ $getComptes(): Observable<CompteList> {
   );
 }
 
+$getComptesNoRacine(): Observable<CompteList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE)}/no-racine`).pipe(
+    map((response: CompteList) => response),
+    catchError(this.handleError())
+  );
+}
 findCompteByNumero(numero: number): Observable<any> {
   // @FIXME: post request+
   return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE)}/find-compte/${numero}`);
