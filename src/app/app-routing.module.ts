@@ -80,6 +80,7 @@ import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/a
 import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
 import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
+import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre-auxiliaire/grand-livre-auxiliaire.component';
 
 @NgModule({
     imports: [
@@ -165,7 +166,8 @@ import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
                     {path: 'comptabilite/arrete-journaux', component: ArreteJournauxComponent},
                     {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent},
                     {path: 'comptabilite/balance', component: BalanceComponent},
-                    {path: 'comptabilite/tiers', component: TiersComponent}
+                    {path: 'comptabilite/tiers', component: TiersComponent},
+                    {path: 'comptabilite/grand-livre-auxiliaire', component: GrandLivreAuxiliaireComponent}
 
                     
                 ]

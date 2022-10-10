@@ -30,6 +30,7 @@ export interface Operation {
     dateFin?: Date;
     reportSoldeMois?: number;
     boolTotal?: boolean;
+    compteAuxiliaireSelected?: Tiers;
    
 }
 export interface  OperationList {

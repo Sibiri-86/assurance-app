@@ -285,6 +285,7 @@ import { ArreteJournauxComponent } from './module/comptabilite/arrete-journaux/a
 import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-general/grand-livre-general.component';
 import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
 import { TiersEffects } from './store/comptabilite/tiers/effect';
+import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre-auxiliaire/grand-livre-auxiliaire.component';
 
 @NgModule({
     imports: [
@@ -518,7 +519,8 @@ import { TiersEffects } from './store/comptabilite/tiers/effect';
         RemboursementEffectueComponent,
         ArreteJournauxComponent,
         GrandLivreGeneralComponent,
-        TiersComponent
+        TiersComponent,
+        GrandLivreAuxiliaireComponent
 
     ],
     providers: [

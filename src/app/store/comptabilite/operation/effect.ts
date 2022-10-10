@@ -91,6 +91,22 @@ export class OperationEffects {
                         ))
                     )); 
 
+
+                
+                    findOperationGrandLivreAuxiliaire$ = createEffect(() =>
+                    this.actions$.pipe(
+                        ofType(featureActions.findOperationGrandLivreAuxiliaire),
+                        mergeMap((operation: Operation) =>
+                            this.operationService.findOperationGrandLivreAuxiliaire(operation).pipe(
+                                switchMap(value => [
+                                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                    featureActions.setOperation(value)
+                                ]),
+                                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            ))
+                        )); 
+
                 fetchReportArreter$ = createEffect(() =>
                 this.actions$.pipe(
                     ofType(featureActions.FetchReport),

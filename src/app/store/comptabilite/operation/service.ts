@@ -74,6 +74,14 @@ findOperationGrandLivre(operation: Operation): Observable<OperationList> {
   );
 }
 
+findOperationGrandLivreAuxiliaire(operation: Operation): Observable<OperationList> {
+
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/grand-livre-auxiliaire`, operation).pipe(
+    map((response: OperationList) => response),
+    catchError(this.handleError())
+  );
+}
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
