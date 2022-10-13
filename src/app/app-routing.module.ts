@@ -81,6 +81,7 @@ import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-ge
 import { BalanceComponent } from './module/comptabilite/balance/balance.component';
 import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
 import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre-auxiliaire/grand-livre-auxiliaire.component';
+import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balance-tiers.component';
 
 @NgModule({
     imports: [
@@ -167,7 +168,8 @@ import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre
                     {path: 'comptabilite/grand-livre-general', component: GrandLivreGeneralComponent},
                     {path: 'comptabilite/balance', component: BalanceComponent},
                     {path: 'comptabilite/tiers', component: TiersComponent},
-                    {path: 'comptabilite/grand-livre-auxiliaire', component: GrandLivreAuxiliaireComponent}
+                    {path: 'comptabilite/grand-livre-auxiliaire', component: GrandLivreAuxiliaireComponent},
+                    {path: 'comptabilite/balance-tiers', component: BalanceTiersComponent},
 
                     
                 ]

@@ -16,6 +16,7 @@ export interface Tiers {
     adresse?:Garant;
     codePostal?: string;
     isDeleted?: boolean;
+    solde?: number;
     /* pays?: Pays;
     region?: Region;
     ville?: Ville; */

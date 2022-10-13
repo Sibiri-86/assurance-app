@@ -1,5 +1,6 @@
 import { Garant } from "../../contrat/garant/model";
 import { Compte } from "../compte/model";
+import { Tiers } from "../tiers/model";
 
 export interface AppelFond {
     id?: string;
@@ -47,5 +48,7 @@ export interface Balance {
     codeDebut?: Compte;
     codeFin?: Compte;
     typeEtatBalance?: TypeEtatBalance;
+    tiersDebut?: Tiers;
+    tiersFin?: Tiers;
     
 }

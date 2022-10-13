@@ -286,6 +286,7 @@ import { GrandLivreGeneralComponent } from './module/comptabilite/grand-livre-ge
 import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
 import { TiersEffects } from './store/comptabilite/tiers/effect';
 import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre-auxiliaire/grand-livre-auxiliaire.component';
+import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balance-tiers.component';
 
 @NgModule({
     imports: [
@@ -520,7 +521,8 @@ import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre
         ArreteJournauxComponent,
         GrandLivreGeneralComponent,
         TiersComponent,
-        GrandLivreAuxiliaireComponent
+        GrandLivreAuxiliaireComponent,
+        BalanceTiersComponent
 
     ],
     providers: [
