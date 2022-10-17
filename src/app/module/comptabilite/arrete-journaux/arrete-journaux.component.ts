@@ -122,7 +122,7 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
       
       if (value) {
         
-        this.journalList = value.slice();
+        this.journalList = value.slice().filter(journal=>journal.typePaiement !=null);
         
        
       }

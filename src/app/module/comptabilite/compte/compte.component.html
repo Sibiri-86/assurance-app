@@ -47,6 +47,7 @@
                         <th pSortableColumn="numeroCompteBancaire1" style="width: 13rem">Solde Créditeur <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
                         <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> Compte Parent  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
                         <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> Mode de paiement  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="width: 13rem"> Banque  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
                         <th></th>
 					</tr>
 				</ng-template>
@@ -72,6 +73,8 @@
                         <td><span class="p-column-title">{{garant?.compteParent | formatTableValue: 'number':true}}</span>
 						</td>
                         <td><span class="p-column-title">{{garant?.typePaiement}}</span>
+						</td>
+                        <td  style="width: 13rem"><span class="p-column-title">{{garant?.banque?.code}}</span>
 						</td>
 						<td>
 							<button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" class="p-button-rounded p-button-success p-mr-2" (click)="editGarant(garant)"></button>

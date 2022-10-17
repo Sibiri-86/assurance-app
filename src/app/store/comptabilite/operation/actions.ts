@@ -11,7 +11,7 @@ export const findOperationCaisseJournalier = createAction('[App Init] update Ope
 export const FetchReport = createAction('[Report] Fetch Report arrete', props<Report>());
 export const setReportArrete = createAction('[set Report] set Report Arreter', props<{reportFile: ArrayBuffer}>());
 export const findOperationGrandLivre = createAction('[App Init] update Operation grand livre', props<Operation>());
-export const findOperationGrandLivreAuxiliaire = createAction('[App Init] update Operation grand livre', props<Operation>());
+export const findOperationGrandLivreAuxiliaire = createAction('[App Init] update Operation grand auxiliaire', props<Operation>());
 
 
 

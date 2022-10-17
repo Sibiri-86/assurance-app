@@ -83,7 +83,7 @@ export class OperationEffects {
                     mergeMap((operation: Operation) =>
                         this.operationService.findOperationGrandLivre(operation).pipe(
                             switchMap(value => [
-                                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                               // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                                 featureActions.setOperation(value)
                             ]),
                             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -99,7 +99,7 @@ export class OperationEffects {
                         mergeMap((operation: Operation) =>
                             this.operationService.findOperationGrandLivreAuxiliaire(operation).pipe(
                                 switchMap(value => [
-                                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                   // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                                     featureActions.setOperation(value)
                                 ]),
                                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
