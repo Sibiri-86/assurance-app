@@ -138,7 +138,7 @@
                                         showClear="true" [options]="compteList"
                                         name="compte"
                                         optionLabel="compte" 
-                                        [autoDisplayFirst]="false" [(ngModel)]="operation.compte" >
+                                        [autoDisplayFirst]="false" [(ngModel)]="operation.compte"  (onChange)="findTier()">
                                         </p-dropdown>
             
                                 </div>
@@ -182,7 +182,7 @@
                              </ng-template>
                 
                         <ng-template pTemplate="right">
-                            <button pButton pRipple  icon="pi pi-plus" [disabled]="!operation.libelle "  class="p-button-success p-mr-2 p-mb-2" (click)="addOperationList()"></button>
+                            <button pButton pRipple  icon="pi pi-plus" [disabled]="!operation.libelle ||  !operation.montantDebit && !operation.montantCredit"  class="p-button-success p-mr-2 p-mb-2" (click)="addOperationList()"></button>
                            <button pButton pRipple  icon="pi pi-times" class="p-button-success p-mr-2 p-mb-2" (click)="annuleaddOperation()"></button>
                         </ng-template>
                     </p-toolbar> 
@@ -242,7 +242,7 @@
                              </ng-template>
                 
                         <ng-template pTemplate="right">
-                            <button  pButton  pRipple  label="Valider" [disabled]="debit !== credit" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" (click)="onCreateOperationList()" ></button>
+                            <button  pButton  pRipple  label="Valider" [disabled]="debit !== credit ||  operationAddList?.length <= 0" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" (click)="onCreateOperationList()" ></button>
     
                         </ng-template>
                     </p-toolbar> 

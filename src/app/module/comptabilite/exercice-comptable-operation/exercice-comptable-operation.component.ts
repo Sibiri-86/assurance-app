@@ -166,6 +166,16 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   
   }
 
+
+  findTier() {
+    if(this.operation.compte) {
+      this.tierDService.$findCompteTierByCompteCollectif(this.operation?.compte?.id).subscribe((res)=>{
+        if(res) {
+          this.operation.compteAuxiliaire = this.tierList.find(tier=>tier.id === res.id);
+        }
+      });
+    }
+  }
   viderDebit() {
     this.operation.montantDebit = null;
   }
