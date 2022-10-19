@@ -70,7 +70,7 @@
         <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayAddOperationListe" header="Opération" [modal]="true" styleClass="p-fluid" (onHide)="onFermer()" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '200vw'}">
             <ng-template pTemplate="content">
                 <div class="card">
-                    <p-toolbar styleClass="p-mb-4">
+                    <p-toolbar styleClass="p-mb-4" >
                    <div class="card">
                     <p-toolbar styleClass="mb-4" *ngIf="exerciceComptableOperation?.journaux?.compte !== null">
                         <ng-template pTemplate="left">
@@ -145,7 +145,7 @@
             
                                 <div class="p-field p-col">
                                     <label for="numCompte2">N° compte tier<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
-                                    <p-dropdown [filter]="true" 
+                                    <p-dropdown [filter]="true" [disabled]="!operation.compte"
                                     showClear="true" [options]="tierList"
                                     name="compteAuxiliaire"
                                     optionLabel="intitule" 
@@ -290,13 +290,12 @@
                         </ng-template>
                     </p-toolbar> -->
                 
-                    <p-toolbar styleClass="p-mb-4">
-                        <p-toolbar styleClass="mb-4">
+                    <p-toolbar styleClass="p-mb-4" *ngIf="exercice.cloture !== true">
+                        <p-toolbar styleClass="mb-4" >
                             <ng-template pTemplate="left">
                                  </ng-template>
-                    
-                            <ng-template pTemplate="right">
-                                <button pButton pRipple  icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"  (click)="onAdd()"></button>
+                            <ng-template pTemplate="right" >
+                                <button pButton pRipple icon="pi pi-plus"  class="p-button-success p-mr-2 p-mb-2"  (click)="onAdd()"></button>
                             </ng-template>
                         </p-toolbar> 
                         

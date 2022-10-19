@@ -36,6 +36,7 @@
                         <th pSortableColumn="annee" style="min-width:200px">Annee<p-sortIcon field="annee"></p-sortIcon></th>
                         
                         <th>Status</th>
+                        <th>Clôture</th>
                         <th></th>
                         <th style="min-width:150px"></th>
                     </tr>
@@ -47,9 +48,13 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{exercice?.annee}}</span>
                         
-                            <td>
+                             <td>
                                 <span *ngIf="exercice.actived === true" style="color: green; font-weight: bold">ACTIVE</span>
                                 <span *ngIf="exercice.actived === false" style="color: red; font-weight: bold">FERMEE</span>
+                            
+                            </td>
+                            <td>
+                                <span *ngIf="exercice.cloture === true" style="color: red; font-weight: bold">CLÔTURE</span>
                             
                             </td>
                             <td>
@@ -58,8 +63,10 @@
                                                    ></p-inputSwitch>
                                 </div>
                             </td>
+                            
                         
                         <td style="min-width:150px">
+                            <button pButton pRipple icon="pi pi-times" pTooltip="clôturer" class="p-button-rounded p-button-success p-mr-2" (click)="changeFermeture(exercice)"></button>
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editExercice(exercice)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteExercice(exercice)"></button>
 <!--                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirJournal(journal)"></button>

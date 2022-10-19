@@ -21,6 +21,7 @@ export interface Tiers {
     region?: Region;
     ville?: Ville; */
     numTel?: string;
+    garant?: Garant;
 
 }
 

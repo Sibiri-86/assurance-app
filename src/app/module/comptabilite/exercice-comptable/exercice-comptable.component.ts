@@ -132,6 +132,10 @@ export class ExerciceComptableComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionExercice.cloture(exercice));
   }
 
+  changeFermeture(exercice: ExerciceComptable) {
+    this.store.dispatch(featureActionExercice.fermeExerciceComptable(exercice));
+
+  }
   ngOnDestroy() {
     this.destroy$.next(true);
     // Now let's also unsubscribe from the subject itself:

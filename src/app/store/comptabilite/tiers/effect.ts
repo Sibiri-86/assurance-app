@@ -61,6 +61,21 @@ createTiers$ = createEffect(() =>
             )
     );
 
+    fetchByCompteCollectif$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadTiersByCompteCollectif),
+                mergeMap(({compte}) =>
+                    this.tiersService.$findCompteTierByCompteCollectif(compte).pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setTiers(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+    );
+
     /* fetchReportAppelFond$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.FetchReportAppelFond),
