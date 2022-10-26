@@ -23,6 +23,9 @@ export const Function = {
     sm_tiers_payant_ordre_reglement_valide: 'sm_tiers_payant_ordre_reglement_valide',
     sm_tiers_payant_ordre_reglement_consultation: 'sm_tiers_payant_ordre_reglement_consultation',
     sm_bulletin_adhesion: 'sm_bulletin_adhesion',
+    sm_medical: 'sm_medical',
+    sm_finance: 'sm_finance',
+    sm_assure: 'sm_assure'
 };
 
 export const UsersRoles = {
@@ -33,5 +36,5 @@ export const UsersRoles = {
     Function.sm_ordre_reglement_valide, Function.sm_ordre_reglement_consultation,
     Function.sm_tiers_payant, Function.sm_tiers_payant_consultation, Function.sm_tiers_payant_edition,
     Function.sm_tiers_payant_ordre_reglement_consultation, Function.sm_tiers_payant_ordre_reglement_edition,
-    Function.sm_tiers_payant_ordre_reglement_valide, Function.sm_tiers_payant_valide]
+    Function.sm_tiers_payant_ordre_reglement_valide, Function.sm_tiers_payant_valide, Function.sm_medical, Function.sm_finance, Function.sm_assure]
 };
