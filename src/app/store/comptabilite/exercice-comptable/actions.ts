@@ -6,5 +6,7 @@ export const deleteExerciceComptable = createAction('[App Init] delete ExerciceC
 export const loadExerciceComptable = createAction('[App Init] load ExerciceComptable');
 export const setExerciceComptable = createAction('[App Init] set ExerciceComptable',  props<ExerciceComptableList>());
 export const cloture = createAction('[App Init] cloture ExerciceComptable ',  props<ExerciceComptable>());
+export const fermeExerciceComptable = createAction('[App Init] fermer definitivement ExerciceComptable', props<ExerciceComptable>());
+
 
 

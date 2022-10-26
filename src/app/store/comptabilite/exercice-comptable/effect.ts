@@ -45,6 +45,19 @@ export class ExerciceComptableEffects {
                 ))
             ));
 
+            fermeExerciceComptable$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.fermeExerciceComptable),
+                mergeMap((exercice: ExerciceComptable) =>
+                    this.exerciceComptableService.fermeExerciceComptable(exercice).pipe(
+                        switchMap(value => [
+                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.loadExerciceComptable()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    ))
+                ));
+
             activeExerciceComptable$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.cloture),

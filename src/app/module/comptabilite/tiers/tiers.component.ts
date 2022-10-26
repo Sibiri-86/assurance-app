@@ -7,6 +7,7 @@ import {Region} from '../../../store/parametrage/region/model';
 import * as typeGarant from '../../../store/parametrage/garant/model';
 import { GarantList } from '../../../store/contrat/garant/model';
 
+
 import {Departement} from '../../../store/parametrage/departement/model';
 import {DimensionPeriode} from '../../../store/parametrage/dimension-periode/model';
 import { Secteur } from 'src/app/store/parametrage/secteur/model';
@@ -37,6 +38,8 @@ import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as compteAction from 'src/app/store/comptabilite/compte/actions';
 import * as tiersAction from 'src/app/store/comptabilite/tiers/actions';
 import * as tiersSelector from '../../../store/comptabilite/tiers/selector';
+import *as garantAction from '../../../store/contrat/garant/actions';
+import *as garantSelector from '../../../store/contrat/garant/selector';
 
 
 
@@ -138,6 +141,7 @@ export class TiersComponent implements OnInit, OnDestroy {
         interlocuteur: new FormControl(''),
         adresse: new FormControl(''),
         codePostal: new FormControl(''),
+        garant: new FormControl(''),
         /* pays: new FormControl(''),
         region: new FormControl(''),
         ville: new FormControl(''), */
@@ -222,7 +226,15 @@ ngOnInit(): void {
       ]
     }
   ];
-
+  this.garantList$ = this.store.pipe(select(garantSelector.garantList));
+  this.store.dispatch(garantAction.loadGarant());
+  this.garantList$.pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+              if (value) {
+                this.garantList = value.slice();
+                
+              }
+  });
   this.appelFondList$ = this.store.pipe(select(appelFondSelector.appelFondList));
   this.store.dispatch(appelFondAction.loadAppelFond());
   this.appelFondList$.pipe(takeUntil(this.destroy$))
@@ -310,6 +322,7 @@ voirDetailEtatAppel() {
 editGarant(tiers: Tiers) {
 // this.garantForm.get('id').setValue(garant.id);
 this.tiers = {...tiers};
+console.log(tiers);
 this.tiersForm.patchValue(this.tiers);
 this.displayDialogFormGarant = true;
 }

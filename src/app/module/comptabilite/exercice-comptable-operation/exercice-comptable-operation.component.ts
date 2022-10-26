@@ -38,6 +38,8 @@ import * as featureActioncompte from '../../../store/comptabilite/compte/actions
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
 import * as featureActiontiers from '../../../store/comptabilite/tiers/actions';
 import * as tiersSelector from '../../../store/comptabilite/tiers/selector';
+import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
+import { ExerciceComptableService } from 'src/app/store/comptabilite/exercice-comptable/service';
 
 
 
@@ -84,6 +86,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   tierList: Array<Tiers>;
   compteList$: Observable<Array<Compte>>;
   compteList: Array<Compte>;
+  exercice: ExerciceComptable = {};
 
   
   
@@ -92,6 +95,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private exerciceOperationService: ExerciceComptableOperationService,
+               private exerciceComptableService: ExerciceComptableService,
                private tierDService: TiersService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Opération'}]);
@@ -131,7 +135,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     });
 
     this.tierList$ = this.store.pipe(select(tiersSelector.tiersList));
-    this.store.dispatch(featureActiontiers.loadTiers());
+   // this.store.dispatch(featureActiontiers.loadTiers());
+   this.store.dispatch(featureActiontiers.loadTiersByCompteCollectif({compte: null}));
     this.tierList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
@@ -169,11 +174,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
 
   findTier() {
     if(this.operation.compte) {
-      this.tierDService.$findCompteTierByCompteCollectif(this.operation?.compte?.id).subscribe((res)=>{
-        if(res) {
-          this.operation.compteAuxiliaire = this.tierList.find(tier=>tier.id === res.id);
-        }
-      });
+      this.store.dispatch(featureActiontiers.loadTiersByCompteCollectif({compte: this.operation.compte.id}));
     }
   }
   viderDebit() {
@@ -200,6 +201,13 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   }
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
     this.exerciceComptableOperation = exerciceComptableOperation;
+    this.exerciceComptableService.findExerciceComptableActif(exerciceComptableOperation?.exercice).subscribe((res)=>{
+      if(res) {
+        console.log("==================",res);
+        this.exercice = res;
+      }
+      
+    });
     
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
 
@@ -210,6 +218,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
 
   operationByJournal() {
     this.store.dispatch(featureActionExerciceComptableOperation.loadExerciceComptableOperationByJournal({journalId: this.journal.id}));
+   
+    
 
   }
   editOperation(operation: Operation) {

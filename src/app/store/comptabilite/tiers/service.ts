@@ -39,10 +39,10 @@ $findCompteTierByCode(compteTier: number): Observable<any> {
   );
 }
 
-$findCompteTierByCompteCollectif(compte: string): Observable<any> {
+$findCompteTierByCompteCollectif(compte: string): Observable<TiersList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_TIERS)}/find-by-compte-collectif`,{params: createRequestOption({compte})}).pipe(
-    map((response: Tiers) => response),
+    map((response: TiersList) => response),
     catchError(this.handleError())
   );
 }
