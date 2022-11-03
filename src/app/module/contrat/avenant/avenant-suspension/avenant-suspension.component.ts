@@ -252,20 +252,22 @@ export class AvenantSuspensionComponent implements OnInit {
   }
 
   compareDate(): void {
-    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.police.dateEffet).subscribe(
+    if(this.curentExercice.debut != null && this.myForm.get('dateAvenant').value != null && this.curentExercice.fin != null) {
+    this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.curentExercice.debut).subscribe(
         (res) => {
           if (res) {
             this.addMessage('error', 'Date d\'effet invalide',
-                'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
+                'La date d\'effet de l\'avenant de peut pas être antérieure à celle de l\'exercice');
             this.myForm.patchValue({dateAvenant: null});
           }
         }
     );
-    if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.police.dateEcheance)?.getTime() ) {
+    if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.curentExercice.fin)?.getTime() ) {
       this.addMessage('error', 'Date d\'effet invalide',
-                'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
+                'La date d\'effet de l\'avenant de peut pas être postérieure à celle de l\'exercice');
             this.myForm.patchValue({dateAvenant: null});
     }
+  }
   }
 
   addMessage(severite: string, resume: string, detaile: string): void {
@@ -389,6 +391,8 @@ findListeActualiseeByExerciceId(currentExercice: Exercice) {
   } else {
     this.findListeActualisee(this.police);
   }
+
+  this.compareDate();
 }
 
 annulerSuspension(haa: HistoriqueAvenantAdherant) {

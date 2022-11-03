@@ -38,7 +38,7 @@
             </p-dropdown>
         </div>
         <div class="p-col-3">
-            <form [formGroup]="newForm" *ngIf="!isRenouv">
+            <form [formGroup]="newForm" *ngIf="!isRenouv && etat !== 'VIEW'">
                 <div class="p-grid">
                 <div class="p-fluid p-formgrid  p-col-12">
                     <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait <span style="color: red !important; size: 2em">*</span></label>
-                        <span *ngIf="newForm.invalid" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
+                        <span *ngIf="etat !== 'VIEW'" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
                         <input [disabled]="newForm.invalid" id="dateIncorparation" type="date" formControlName="dateAvenant" pInputText (change)="compareDate()">
                         
                     </div>

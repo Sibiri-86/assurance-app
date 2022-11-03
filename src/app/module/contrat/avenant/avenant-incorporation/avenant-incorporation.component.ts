@@ -457,7 +457,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.adherentSelected = {};
         console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
         console.log(adherantFamille);
-        console.log('***************-------------------------');
+        console.log('***************-------------------------', this.customForm.get('groupe').value);
     }
 
     loadAdherentPrincipalInfo() {
