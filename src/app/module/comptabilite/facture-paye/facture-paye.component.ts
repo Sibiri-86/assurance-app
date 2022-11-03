@@ -79,7 +79,7 @@ export class FacturePayeComponent implements OnInit {
   }
   deValiderPayement(ordre: OrdreReglementTierPayant) {
     this.confirmationService.confirm({
-      message: 'voulez-vous annuler cet ordre de reglement',
+      message: 'voulez-vous annuler cette facturée',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

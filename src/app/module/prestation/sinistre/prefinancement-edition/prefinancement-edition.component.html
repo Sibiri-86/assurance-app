@@ -249,7 +249,7 @@
                             <div class="p-fluid p-formgrid p-grid">
                                 
                                     <div class="p-field p-col">
-                                        <label for="sousActe">Pathologie</label>
+                                        <label for="sousActe">Pathologie<span class="required">*</span></label>
                                         <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="pathologieList"
                                                     formControlName="pathologie"  [autoDisplayFirst]="false"
@@ -257,7 +257,7 @@
                                     </div>
                                 
                                     <div class="p-field p-col">
-                                        <label for="produit">Produit pharmaceutique</label>
+                                        <label for="produit">Produit pharmaceutique <span class="required">*</span></label>
                                         <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="produitPharmaceutiqueList"
                                                     formControlName="produitPharmaceutique"  [autoDisplayFirst]="false"
@@ -265,7 +265,7 @@
                                     </div>
                                 
                                     <div class="p-field p-col">
-                                        <label for="medecin">Centre prescripteur</label>
+                                        <label for="medecin">Centre prescripteur<span class="required">*</span></label>
                                         <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="prestatairePrescripteur"
                                                     formControlName="prestataire"  [autoDisplayFirst]="false"
@@ -279,7 +279,7 @@
                             
                                    
                                 <div class="p-field p-col">
-                                    <label for="medecin">Medecin</label>
+                                    <label for="medecin">Medecin<span class="required">*</span></label>
                                     <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
                                                 showClear="true" [options]="medecinList"
                                                 formControlName="medecin"  [autoDisplayFirst]="false"
@@ -406,21 +406,25 @@
                         <p-dropdown inputId="typePaiement" [filter]="true"
                                                 showClear="true" [options]="typePaiement2"
                                                 formControlName="typePaiement"
-                                                 [autoDisplayFirst]="false" (onChange)="changeType(typePaiement)"></p-dropdown>
+                                                 [autoDisplayFirst]="false" (onChange)="changeType(prestationForm.value.typePaiement)"></p-dropdown>
                     </div>
                  
                 </div>
                 <div class="p-fluid p-formgrid p-grid">
-                    <div *ngIf="typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
-                        <label for="dateEffet">numero Orange Money<span class="required">*</span></label>
-                        <input type="date" name="numeroOrange" id="numeroOrange" pInputText formControlName="numeroOrange" (change)="checkDateCondition()">
+                    <div *ngIf="prestationForm.value.typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Numero Orange Money<span class="required">*</span></label>
+                        <input type="tel" name="numeroOrange" id="numeroOrange" pInputText formControlName="numeroOrange" (change)="checkDateCondition()">
                     </div>
-                    <div *ngIf="typePaiement === 'MOOV_MONEY'" class="p-field p-col">
-                        <label for="dateEffet">numero Moov Money <span class="required">*</span></label>
+                    <div *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Numero Moov Money <span class="required">*</span></label>
                         <input type="date" name="numeroMobicash" id="numeroMobicash" pInputText formControlName="numeroMobicash" (change)="checkDateCondition()">
                     </div>
-                    <div *ngIf="typePaiement === 'VIREMENT'" class="p-field p-col">
-                        <label for="dateEffet">numero Virement <span class="required">*</span></label>
+                    <div *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY' || prestationForm.value.typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Nom et prenom du bénéficiaire <span class="required">*</span></label>
+                        <input type="text" name="nomBenefiniciaire" id="nomBenefiniciaire" pInputText formControlName="nomBenefiniciaire" (change)="checkDateCondition()">
+                    </div>
+                    <div *ngIf="prestationForm.value.typePaiement === 'VIREMENT'" class="p-field p-col">
+                        <label for="dateEffet">Numero Virement <span class="required">*</span></label>
                         <input type="date" name="numeroVirement" id="numeroVirement" pInputText formControlName="numeroVirement" (change)="checkDateCondition()">
                     </div>
                 </div>

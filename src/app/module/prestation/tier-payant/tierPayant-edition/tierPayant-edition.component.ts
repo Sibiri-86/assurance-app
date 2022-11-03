@@ -169,6 +169,7 @@ export class TierPayantEditionComponent implements OnInit {
     montantPlafond1: number = 0;
     displayAdherent = false;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
+    private montantRemboursessMsg = 'Le montant remboursé est : ';
 
 
 
@@ -1135,7 +1136,7 @@ export class TierPayantEditionComponent implements OnInit {
                 }
             }
             
-            if(this.prefinancement.montantRestant == null ) {
+           /* if(this.prefinancement.montantRestant == null ) {
                 this.prefinancement.montantRestant = this.prefinancement.montantReclame;
             }
             if(this.prefinancement.montantPaye == null ) {
@@ -1153,7 +1154,6 @@ export class TierPayantEditionComponent implements OnInit {
                         this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             
                     } else {
-                    // this.prefinancement.montantPaye =this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                         console.log("=============montantPaye===============");
                         console.log(this.prefinancement.montantPaye);
                         console.log("compter============",this.compteur);
@@ -1165,10 +1165,8 @@ export class TierPayantEditionComponent implements OnInit {
                             this.prefinancement.montantPaye = this.prefinancement.montantPaye +  this.prestationAdd.montantRembourse;
                             this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
     
-                          //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
                         }
                        
-                        // const valeurprecedent = this.prefinancement.montantPaye;
             
                     }
                 }else {
@@ -1186,7 +1184,6 @@ export class TierPayantEditionComponent implements OnInit {
                         this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
                         this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
 
-                        // const valeurprecedent = this.prefinancement.montantPaye;
             
                     }
                 }
@@ -1194,7 +1191,7 @@ export class TierPayantEditionComponent implements OnInit {
 
             
                 
-            }
+            }*/
 
             if(this.montantPlafond !== null && this.montantPlafond !== 0 ) {
                 if(this.montantPlafond <= this.prestationAdd.coutUnitaire) {
@@ -1219,10 +1216,10 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
                 this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 
-                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+             //   this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
                
 
-                this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+              //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
         }
             /* if(this.prefinancement.montantRestant < 0){
@@ -1456,13 +1453,34 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       addPrestation() {
-          // console.log(this.prestationAdd);
-          if(this.compteur !=null) {
+
+        if(this.prefinancement.montantRestant == null ) {
+            this.prefinancement.montantRestant = 0;
+        }
+        if(this.prefinancement.montantPaye == null ) {
+            this.prefinancement.montantPaye = 0;
+        }
+        if(this.compteur === null){
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
+               
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+        
+          } 
+
+        
+
+        
+            
+        
+        if(this.compteur !=null) {
+            this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
+               
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
             this.prestationsList.push(this.prestationAdd);
           }
-         
+          this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
           
           this.prestationAdd = {};
           this.compteur = null;

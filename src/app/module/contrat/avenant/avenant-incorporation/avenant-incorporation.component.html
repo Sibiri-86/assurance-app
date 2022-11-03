@@ -352,7 +352,7 @@
                     <div class="p-field p-col-2 p-ac-center">
                         <button *ngIf="isImport === 'NON'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                                [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON' || !this.customForm.get('groupe').value">
+                                [disabled]="adherentFamilleListe.length === 0  || !this.customForm.get('groupe').value">
                         </button>
                         <button *ngIf="isImport === 'OUI'" pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la liste des incorporés" label="Enregistrer"
                                 class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
