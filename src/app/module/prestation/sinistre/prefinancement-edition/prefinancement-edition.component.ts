@@ -202,14 +202,14 @@ findMontantPlafond(event){
       montantRestant: new FormControl(''),
       montantSupporte: new FormControl('', [Validators.required]),
       observation: new FormControl('', [Validators.required]),
-      prestataire: new FormControl(),
+      prestataire: new FormControl(null, [Validators.required]),
       centreExecutant: new FormControl(),
-      produitPharmaceutique: new FormControl(),
-      pathologie: new FormControl(),
+      produitPharmaceutique: new FormControl(null, [Validators.required]),
+      pathologie: new FormControl(null, [Validators.required]),
       dateSoins: new FormControl(null, Validators.required),
       acte: new FormControl(null, [Validators.required]),
       familleActe: new FormControl(null, [Validators.required]),
-      medecin: new FormControl(),
+      medecin: new FormControl(null, [Validators.required]),
       historiqueAvenant: new FormControl(),
       inotPlafond: new FormControl(),
       matriculeAdherent: new FormControl(''),
@@ -250,6 +250,7 @@ findMontantPlafond(event){
       numeroOrange: new FormControl(''),
       numeroMobicash: new FormControl(''),
       numeroVirement: new FormControl(''),
+      nomBenefiniciaire: new FormControl(''),
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));

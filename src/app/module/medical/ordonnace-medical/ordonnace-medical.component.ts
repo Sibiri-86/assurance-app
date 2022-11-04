@@ -135,6 +135,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     ordonnaceMedicalProduitPharmaceutiqueDTOList: Array<OrdonnanceMedicalProduitPharmaceutique>;
     prestationListPrefinancement: Array<OrdonnanceMedical>;
     prestationListPrefinancementFilter: Array<OrdonnanceMedical>;
+    prestatairePrescripteur: Array<Prestataire>;
 
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
@@ -256,11 +257,21 @@ export class OrdonnaceMedicalComponent implements OnInit {
           }
     });
 
+
+    this.medecinList$ = this.store.pipe(select(medecinSelector.medecinList));
+    this.store.dispatch(loadMedecin());
+    this.medecinList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.medecinList = value.slice();
+      }
+    });
         this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
         this.store.dispatch(loadPrestataire());
         this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             if (value) {
                 this.prestataireList = value.slice();
+                this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire &&
+                    ele.libelleTypePrestataire.toUpperCase() === 'PHARMACIE');
             }
         });
        this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
@@ -376,7 +387,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.prestationForm.get('nomGroupeAdherent').setValue('');
         this.prestationForm.get('nomPoliceAdherent').setValue('');
         this.adherentSelected = null;
-        this.store.dispatch(featureActionAdherent.searchAdherent({numero: event.target.value}));
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationForm.get('dateSoins').value, matricule: event.target.value}));
+
     }
 
     rechercheAdherentDateSoin(event) {

@@ -1,5 +1,6 @@
 import { Adherent } from '../../contrat/adherent/model';
 import { TypeReport } from '../../contrat/enum/model';
+import { Medecin } from '../../parametrage/medecin/model';
 import { Pathologie } from '../../parametrage/pathologie/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
@@ -24,7 +25,7 @@ export interface OrdonnanceMedical {
     dateSaisie?: Date;
     adherent?: Adherent;
     prestataire?:Prestataire;
-    prescripteur?: string;
+    prescripteur?: Medecin;
     numeroOrdonnance?: string;
     ordonnanceMedicalProduitPharmaceutiques?: Array<OrdonnanceMedicalProduitPharmaceutique>;
     pathologie?: Pathologie;

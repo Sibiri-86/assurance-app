@@ -304,7 +304,7 @@
                                 <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple [disabled]="!prestationsList?.length"   (click)="onCreate()"  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!prestationsList?.length"   (click)="onCreate()"  label="Enregistrer" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     </form>
@@ -435,16 +435,16 @@
             </div>
 
             <div class="p-field p-col">
-                <label for="pathologie" id="pathologie">Pathologie</label>
+                <label for="pathologie" id="pathologie">Pathologie<span style="color: red !important;">*</span></label>
                 <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
-                            showClear="true" [options]="pathologieList" name="pathologie"
+                            showClear="true" [options]="pathologieList" name="pathologie" [disabled]="!prestationAdd.sousActe"
                             [(ngModel)]="prestationAdd.pathologie"
                              placeholder="Select pathologie "
                             optionLabel="code"></p-dropdown>
             </div>
             <div class="p-field p-col">
-             <label for="prestataire" id="prestataire">Centre Prescripteur</label>
-             <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
+             <label for="prestataire" id="prestataire">Centre Prescripteur<span style="color: red !important;">*</span></label>
+             <p-dropdown inputId="prestataire" dataKey="id" [filter]="true" [disabled]="!prestationAdd.pathologie"
                          showClear="true" [options]="prestataireList" name="prestataire" [(ngModel)]="prestationAdd.prestataire"
                           placeholder="Select centre prescripteur"
                          optionLabel="libelle"></p-dropdown>
@@ -454,11 +454,11 @@
              
 
                <div class="p-field p-col">
-                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique</label>
+                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<span style="color: red !important;">*</span></label>
                   
                    <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                   showClear="true" [options]="produitPharmaceutiqueList" name="produitPharmaceutique" [(ngModel)]="prestationAdd.produitPharmaceutique"
-                                   placeholder="Select produit pharmaceutique "
+                                   placeholder="Select produit pharmaceutique " [disabled]="!prestationAdd.pathologie"
                                   optionLabel="libelle">
                    </p-multiSelect>
                </div>
@@ -471,15 +471,15 @@
 
                
             <div class="p-field p-col">
-                <label for="medecin" id="medecin">Medecin</label>
-                <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
+                <label for="medecin" id="medecin">Medecin<span style="color: red !important;">*</span></label>
+                <p-dropdown inputId="medecin" dataKey="id" [filter]="true" [disabled]="!prestationAdd.produitPharmaceutique"
                             showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
                            placeholder="Select medecin"
                             optionLabel="nom"></p-dropdown>
             </div>
             <div class="p-field p-col">
                 <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.sousActe" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
+                <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.medecin" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
             </div>
             <div class="p-field p-col">
              <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>

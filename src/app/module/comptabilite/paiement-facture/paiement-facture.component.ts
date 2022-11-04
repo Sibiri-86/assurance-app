@@ -98,6 +98,7 @@ export class PaiementFactureComponent implements OnInit {
     this.store.dispatch(featureActionTierPayant.validerPaiement({ordre: this.ordreReglementPaiement}));
     this.ordreReglementPaiement = {};
     //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+
   }
   voirSinistre(ordre: OrdreReglementTierPayant) {
     console.log('****************ordre****************', ordre);
