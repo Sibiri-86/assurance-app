@@ -124,6 +124,51 @@ export class AppMenuComponent implements OnInit {
                     
                     
                                     ]
+            },
+            {
+                label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
+                visible: true,
+                items: [
+                      
+                    {label: 'Production', icon: 'pi pi-align-justify', routerLink: ['/reporting'], visible: true,
+                         items: [
+                            {label: 'récapitulatif', icon: 'pi pi-pencil', routerLink: ['/reporting/recapitulatif'], visible: true},
+                            {label: 'Journal', icon: 'pi pi-book', routerLink: ['/comptabilite/journal'], visible: true},
+                            {label: 'Exercice comptabilité', icon: 'pi pi-clock', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
+                            {label: 'Opération', icon: 'pi pi-fw pi-list', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
+                            {label: 'Appel de Fond', icon: 'pi pi-fw pi-phone', routerLink: ['/comptabilite/appel-fond'], visible: true},
+                            
+                         ]
+                
+                },
+                {
+                    label: 'Paiement', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
+                    items: [
+                        {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
+                        {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
+                        {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
+                        {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
+                        {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
+                        {label: 'Arreté journalier', routerLink: ['/comptabilite/arrete-journaux'], visible: true},
+                        {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true},
+
+                    ]
+                },
+                {
+                    label: 'Etat', icon: 'pi pi-print', routerLink: ['/comptabilite'], visible: true,
+                    items: [
+                        {label: 'Balance', icon: 'pi pi-print', routerLink: ['/comptabilite/balance'], visible: true},
+                        {label: 'Tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/tiers'], visible: true},
+                        {label: 'Grand livre auxiliaire', routerLink: ['/comptabilite/grand-livre-auxiliaire'], visible: true},
+
+                        {label: 'Balance tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/balance-tiers'], visible: true},
+                    ]
+                }
+                    
+                    
+                    
+                    
+                                    ]
             }
             /*
             {

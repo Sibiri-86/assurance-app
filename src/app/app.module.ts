@@ -287,6 +287,7 @@ import { TiersComponent } from './module/comptabilite/tiers/tiers.component';
 import { TiersEffects } from './store/comptabilite/tiers/effect';
 import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre-auxiliaire/grand-livre-auxiliaire.component';
 import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balance-tiers.component';
+import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 
 @NgModule({
     imports: [
@@ -522,7 +523,8 @@ import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balan
         GrandLivreGeneralComponent,
         TiersComponent,
         GrandLivreAuxiliaireComponent,
-        BalanceTiersComponent
+        BalanceTiersComponent,
+        RecapitulatifComponent
 
     ],
     providers: [
