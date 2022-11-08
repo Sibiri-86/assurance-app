@@ -7,7 +7,6 @@ import {Pays} from '../../../store/parametrage/pays/model';
 import {Region} from '../../../store/parametrage/region/model';
 import * as typeGarant from '../../../store/parametrage/garant/model';
 import { GarantList } from '../../../store/contrat/garant/model';
-
 import {Departement} from '../../../store/parametrage/departement/model';
 import {DimensionPeriode} from '../../../store/parametrage/dimension-periode/model';
 import { Secteur } from 'src/app/store/parametrage/secteur/model';
@@ -18,37 +17,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState} from 'src/app/store/app.state';
-import {loadPays} from '../../../store/parametrage/pays/actions';
-import * as paysSelector from '../../../store/parametrage/pays/selector';
-import {loadRegion} from '../../../store/parametrage/region/actions';
-import * as regionSelector from '../../../store/parametrage/region/selector';
-import * as typeGarantSelector from '../../../store/parametrage/garant/selector';
-import {loadDepartement} from '../../../store/parametrage/departement/actions';
-import * as departementSelector from '../../../store/parametrage/departement/selector';
-import {loadCommune} from '../../../store/parametrage/commune/actions';
-import * as communeSelector from '../../../store/parametrage/commune/selector';
-
-import {loadSecteurActivite} from '../../../store/parametrage/secteur-activite/actions';
-import * as secteurActiviteSelector from '../../../store/parametrage/secteur-activite/selector';
-import * as secteurAction from '../../../store/parametrage/secteur/actions';
-import {loadSecteur} from '../../../store/parametrage/secteur/actions';
-import * as secteurSelector from '../../../store/parametrage/secteur/selector';
-
-import * as arrondissementAction from '../../../store/parametrage/arrondissement/actions';
-import {loadArrondissement} from '../../../store/parametrage/arrondissement/actions';
-import * as arrondissementSelector from '../../../store/parametrage/arrondissement/selector';
-
-
-import * as banqueAction from '../../../store/parametrage/Banques/actions';
-import * as banqueSelector from '../../../store/parametrage/Banques/selector';
-
-import * as tauxCommissionIntermediaireSelector from '../../../store/parametrage/taux-commission-intermediaire/selector';
-import * as tauxCommissionAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
-
-import {loadDimensionPeriode} from '../../../store/parametrage/dimension-periode/actions';
-import * as dimensionPeriodeSelector from '../../../store/parametrage/dimension-periode/selector';
 import { loadGarant } from 'src/app/store/contrat/garant/actions';
-import * as typeGarantAction from 'src/app/store/parametrage/garant/actions';
 import {Status} from '../../../store/global-config/model';
 import {status} from '../../../store/global-config/selector';
 import { EntityValidations } from '../../common/models/validation';
@@ -56,7 +25,6 @@ import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { element } from 'protractor';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import { TauxCommissionIntermediaire } from 'src/app/store/parametrage/taux-commission-intermediaire/model';
-import * as tauxCommissionIntermediaireAction from '../../../store/parametrage/taux-commission-intermediaire/actions';
 import { Compte } from 'src/app/store/comptabilite/compte/model';
 import * as appelFondSelector from '../../../store/comptabilite/appelFond/selector';
 import * as appelFondAction from 'src/app/store/comptabilite/appelFond/actions';
@@ -135,6 +103,7 @@ export class AppelFondComponent implements OnInit, OnDestroy {
   appelFondForm: FormGroup;
   typeCompte = Object.keys(TypeCompte).map(key => ({ label: TypeCompte[key], value: key }));
   appelFond: AppelFond;
+  appelFondView: AppelFond;
   appelFondList$: Observable<Array<AppelFond>>;
   appelFondList: Array<AppelFond>;
   report: Report = {};
@@ -285,9 +254,10 @@ addGarant() {
   // this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 }
 
-voirDetail(garant: Garant) {
+voirDetail(appelFond: AppelFond) {
+  console.log('==================>', appelFond);
   this.infosGarant = true;
-  this.garant = garant;
+  this.appelFondView = appelFond;
 }
 
 voirDetailEtatAppel() {
@@ -296,10 +266,12 @@ voirDetailEtatAppel() {
 
 
 
-editGarant(compte: Compte) {
-// this.garantForm.get('id').setValue(garant.id);
-this.compte = {...compte};
-this.compteForm.patchValue(this.compte);
+editGarant(appelFond: AppelFond) {
+  console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn>>>>', appelFond);
+// this.appelFond = {...appelFond};
+this.appelFondForm.patchValue(appelFond);
+this.appelFondForm.get('garant').setValue(appelFond?.garant?.nom);
+console.log('========55555555555==========>', this.appelFondForm.get('garant').value);
 this.displayDialogFormGarant = true;
 }
 
@@ -339,7 +311,7 @@ this.confirmationService.confirm({
 }
 
 annulerSaisie() {
-  this.compteForm.reset();
+  this.appelFondForm.reset();
   this.displayDialogFormGarant = false;
 }
 
@@ -362,10 +334,10 @@ ngOnDestroy() {
 }
 
 
-imprimerAppelFond(appelFond: AppelFond) {
-  console.log('appelFond', appelFond);
+imprimerAppelFond(appelFondPrint: AppelFond) {
+  console.log('appelFondPrint=============>', appelFondPrint);
   this.report.typeReporting = TypeReport.APPEL_FOND;
-  this.report.appelFond = appelFond;
+  this.report.appelFond = appelFondPrint;
   console.log('this.report', this.report);
   this.store.dispatch(appelFondAction.FetchReportAppelFond(this.report));
 }

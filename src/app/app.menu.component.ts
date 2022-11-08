@@ -20,15 +20,15 @@ export class AppMenuComponent implements OnInit {
                  visible: this.keycloak.isUserInRole(Function.sm_production),
                 items: [
                     {label: 'Garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
-                    {label: 'Cloture d\'exercice', icon: '', routerLink: ['/contrat/exercice'], visible: this.keycloak.isUserInRole(Function.sm_exercice)},
                     {label: 'Intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
                     visible: this.keycloak.isUserInRole(Function.sm_intermediaire)},
                     {label: 'Barème', icon: '', routerLink: ['/contrat/bareme'], visible: this.keycloak.isUserInRole(Function.sm_bareme)},
                     {label: 'Police', icon: '', routerLink: ['/contrat/police'], visible: this.keycloak.isUserInRole(Function.sm_police)},
-                    {label: 'Assuré', icon: '', routerLink: ['/contrat/assure'], visible: this.keycloak.isUserInRole(Function.sm_police)},
+                    {label: 'Assuré', icon: '', routerLink: ['/contrat/assure'], visible: this.keycloak.isUserInRole(Function.sm_assure)},
                     {label: 'Bulletin d\'adhésion', icon: '', routerLink: ['/contrat/bulletin-adhesion'], visible: this.keycloak.isUserInRole(Function.sm_bulletin_adhesion)},
                     {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant'],
-                    visible: this.keycloak.isUserInRole(Function.sm_avenant)}
+                    visible: this.keycloak.isUserInRole(Function.sm_avenant)},
+                    {label: 'Clôture d\'exercice', icon: '', routerLink: ['/contrat/exercice'], visible: this.keycloak.isUserInRole(Function.sm_exercice)}
                 ]
             },
             {
@@ -71,7 +71,7 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Medical', icon: 'pi pi-fw pi-star', routerLink: ['/medical'],
-                 visible: true,
+                visible: this.keycloak.isUserInRole(Function.sm_medical),
                 items: [
                     {label: 'convention', icon: 'pi pi-pencil', routerLink: ['/medical/convention'], visible: true},
                     {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
@@ -82,7 +82,7 @@ export class AppMenuComponent implements OnInit {
 
             {
                 label: 'Finance', icon: 'pi pi-fw pi-money-bill', routerLink: ['/comptabilite'],
-                 visible: true,
+                visible: this.keycloak.isUserInRole(Function.sm_finance),
                 items: [
                       
                     {label: 'Opération', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
