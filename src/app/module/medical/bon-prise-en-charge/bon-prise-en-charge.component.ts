@@ -135,7 +135,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
  prestationsList: Prestation[]= [];
  numberPrestation = 0;
  compteur: number = null;
-
+ displayFP = false;
 
 
 
@@ -938,7 +938,22 @@ console.log(myForm);
 
   changeGarantie(garantie) {
     console.log(garantie);
+    if(garantie.value?.code == "FP") {
+      this.displayFP = true;
+     } else {
+       this.displayFP = false;
+     }
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+  }
+
+  changeDisplay() {
+    if(this.prestationPopForm.value?.produitPharmaceutique) {
+      this.displayFP = false;
+    } else {
+      if(this.prestationPopForm.value?.familleActe?.code == "FP") {
+        this.displayFP = true;
+      } 
+    }
   }
 
   showDialogPlafondMaximized(dialog: Dialog) {

@@ -135,6 +135,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   prestationsList: Prestation[]= [];
   compteur: number = null;
   typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  displayFP = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -204,7 +205,7 @@ findMontantPlafond(event){
       observation: new FormControl('', [Validators.required]),
       prestataire: new FormControl(null, [Validators.required]),
       centreExecutant: new FormControl(),
-      produitPharmaceutique: new FormControl(null, [Validators.required]),
+      produitPharmaceutique: new FormControl(),
       pathologie: new FormControl(null, [Validators.required]),
       dateSoins: new FormControl(null, Validators.required),
       acte: new FormControl(null, [Validators.required]),
@@ -326,11 +327,11 @@ findMontantPlafond(event){
                 });
               
           } 
-          if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() 
+          if(value.dateSortie !== null || (value.dateSuspension !== null  && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime())
           && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  retiré(e) !!!');
-              if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+              if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                   this.prestationPopForm.patchValue({
                     montantRembourse : 0,
                     observation: "Cet(te) assuré(e) est  retiré(e)",
@@ -396,13 +397,13 @@ findMontantPlafond(event){
                 });
               
           } 
-          if(value.dateSortie !== null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() )) {
+          if(value.dateSortie !== null || (value.dateSuspension !=null && (new Date(value.dateSuspension)?.getTime() < new Date(value.dateSortie)?.getTime() ))) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  retiré(e) !!!');
               if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                   this.prestationPopForm.patchValue({
                     montantRembourse : 0,
-                    observation: "Cet(te) assuré(e) a  été retiré(e2)",
+                    observation: "Cet(te) assuré(e) a  été retiré(e)",
                     sort : Sort.REJETE
                     });
                  
@@ -412,7 +413,7 @@ findMontantPlafond(event){
                
                 this.prestationPopForm.patchValue({
                   montantRembourse : 0,
-                  observation: "Cet(te) assuré(e) a  été suspendu(e4)",
+                  observation: "Cet(te) assuré(e) a  été suspendu(e)",
                   sort : Sort.REJETE
                   });
     
@@ -681,6 +682,7 @@ findMontantPlafond(event){
     console.log("=====================");
     console.log(pref);
     this.adherentSelected = pref.adherent;
+    this.adherentSelectedfinal = pref.adherent;
     this.prestationsList = pref.prestation; 
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
@@ -860,6 +862,7 @@ findMontantPlafond(event){
       
     
     const myForm = this.prestationPopForm;
+  
     
    if((this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
    (this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
@@ -1087,6 +1090,7 @@ findTaux() {
     
     this.prestationPopForm.get('taux').setValue(rest);
   });
+  
 }
     
   setNombreActe(data: FraisReels, ri) {
@@ -1206,7 +1210,21 @@ rechercheAdherentDateSoin(event) {
   
   changeGarantie(garantie) {
     console.log(garantie);
+    if(garantie.value?.code == "FP") {
+     this.displayFP = true;
+    } else {
+      this.displayFP = false;
+    }
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+  }
+  changeDisplay() {
+    if(this.prestationPopForm.value?.produitPharmaceutique) {
+      this.displayFP = false;
+    } else {
+      if(this.prestationPopForm.value?.familleActe?.code == "FP") {
+        this.displayFP = true;
+      } 
+    }
   }
   
   showDialogPlafondMaximized(dialog: Dialog) {
@@ -1264,6 +1282,7 @@ rechercheAdherentDateSoin(event) {
     }
    
    this.prestationPopForm.reset();
+   this.displayFP =false;
    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelectedfinal.numero);
    this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
     this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);

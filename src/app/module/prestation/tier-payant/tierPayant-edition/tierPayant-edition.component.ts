@@ -170,6 +170,7 @@ export class TierPayantEditionComponent implements OnInit {
     displayAdherent = false;
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
     private montantRemboursessMsg = 'Le montant remboursé est : ';
+    displayFP = false;
 
 
 
@@ -944,6 +945,11 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     changeGarantie(event) {
+        if(event.value?.code == "FP") {
+            this.displayFP = true;
+           } else {
+            this.displayFP = false;
+          }
         this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === event.value.id);
         /* this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
         this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
@@ -956,6 +962,16 @@ export class TierPayantEditionComponent implements OnInit {
             }
         }); */
     }
+
+    changeDisplay() {
+        if(this.prestationAdd.produitPharmaceutique) {
+          this.displayFP = false;
+        } else {
+          if(this.prestationAdd?.familleActe?.garantie?.code == "FP") {
+            this.displayFP = true;
+          } 
+        }
+      }
 
     getfamilleActeEnCourId(): string {
         if (this.familleActeEnCour !== null) {
