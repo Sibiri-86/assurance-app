@@ -257,11 +257,13 @@
                                     </div>
                                 
                                     <div class="p-field p-col">
-                                        <label for="produit">Produit pharmaceutique <span class="required">*</span></label>
+                                        <label for="produit">Produit pharmaceutique <span class="required" *ngIf="prestationPopForm?.value?.familleActe?.code === 'FP'">*</span>
+                                            <span class="required" *ngIf="prestationPopForm?.value?.familleActe?.code !== 'FP'"></span></label>
                                         <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="produitPharmaceutiqueList"
-                                                    formControlName="produitPharmaceutique"  [autoDisplayFirst]="false"
-                                                    optionLabel="libelle"></p-multiSelect>  
+                                                    formControlName="produitPharmaceutique"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
+                                                    optionLabel="libelle"></p-multiSelect> 
+                                                   
                                     </div>
                                 
                                     <div class="p-field p-col">
@@ -376,7 +378,7 @@
                                     <button pButton pRipple label="Quitter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" (click)="fermerPrestation()"></button>
                                 </div>
                                 <div>
-                                    <button  pButton  pRipple  label="Ajouter"[disabled]="!adherentSelected || prestationPopForm.invalid " icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                    <button  pButton  pRipple  label="Ajouter"[disabled]="!adherentSelected || prestationPopForm.invalid || displayFP"  icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                                 </div>
                             </div>
 

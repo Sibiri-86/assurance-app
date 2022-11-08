@@ -317,7 +317,7 @@
 
 </div>
 </div>
-<p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation"  [modal]="true" styleClass="p-fluid">
     
     <ng-template pTemplate="content"> 
         <div class="card">
@@ -454,11 +454,12 @@
              
 
                <div class="p-field p-col">
-                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<span style="color: red !important;">*</span></label>
+                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<span class="required" *ngIf="prestationAdd?.familleActe?.code === 'FP'">*</span>
+                    <span class="required" *ngIf="prestationAdd?.familleActe?.code !== 'FP'"></span></label>
                   
                    <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
                                   showClear="true" [options]="produitPharmaceutiqueList" name="produitPharmaceutique" [(ngModel)]="prestationAdd.produitPharmaceutique"
-                                   placeholder="Select produit pharmaceutique " [disabled]="!prestationAdd.pathologie"
+                                   placeholder="Select produit pharmaceutique " [disabled]="!prestationAdd.pathologie" (onChange)="changeDisplay()"
                                   optionLabel="libelle">
                    </p-multiSelect>
                </div>
@@ -472,7 +473,7 @@
                
             <div class="p-field p-col">
                 <label for="medecin" id="medecin">Medecin<span style="color: red !important;">*</span></label>
-                <p-dropdown inputId="medecin" dataKey="id" [filter]="true" [disabled]="!prestationAdd.produitPharmaceutique"
+                <p-dropdown inputId="medecin" dataKey="id" [filter]="true" [disabled]="displayFP"
                             showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
                            placeholder="Select medecin"
                             optionLabel="nom"></p-dropdown>
