@@ -7,5 +7,6 @@ export const createAppelFond = createAction('[App Init] Create AppelFond', props
 export const updateAppelFond = createAction('[App Init] update AppelFond', props<AppelFond>());
 export const FetchReportAppelFond = createAction('[Report] Fetch Report appel de Fond', props<Report>());
 export const setReportAppelFond = createAction('[set Report] set Report appel de Fond', props<{reportFile: ArrayBuffer}>());
+export const deleteAppelFond = createAction('[App Init] delete Appel Fond', props<AppelFond>());
 
 

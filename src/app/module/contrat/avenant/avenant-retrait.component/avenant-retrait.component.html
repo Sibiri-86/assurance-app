@@ -42,7 +42,7 @@
                 <div class="p-grid">
                 <div class="p-fluid p-formgrid  p-col-12">
                     <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
-                    <p-dropdown [options]="groupeList" [disabled]="curentExercice.invalid" optionLabel="libelle" formControlName="groupe"
+                    <p-dropdown [options]="groupeList" [disabled]="!this.curentExercice.id == null" optionLabel="libelle" formControlName="groupe"
                                 [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
                                 (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
                     </p-dropdown>
@@ -87,8 +87,8 @@
                     </div>
                     <div class="p-field p-col-6">
                         <label for="dateIncorparation">Date de retrait <span style="color: red !important; size: 2em">*</span></label>
-                        <span *ngIf="etat !== 'VIEW'" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span>
-                        <input [disabled]="newForm.invalid" id="dateIncorparation" type="date" formControlName="dateAvenant" pInputText (change)="compareDate()">
+                        <!-- <span *ngIf="etat !== 'VIEW' || !this.groupe.id" style="color: red">Veuillez sélectionner un groupe avant de saisir la date de retrait</span> -->
+                        <input [disabled]="!this.newForm.get('groupe').value" id="dateIncorparation" type="date" formControlName="dateAvenant" pInputText (change)="compareDate()">
                         
                     </div>
                     <div class="p-field p-col-6">

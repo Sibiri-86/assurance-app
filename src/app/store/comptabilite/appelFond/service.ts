@@ -54,6 +54,11 @@ private handleError<T>() {
   };
 }
 
+deleteAppelFond(AppelFond: AppelFond): Observable<any> {
+  // @FIXME: post request+
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_APPEL_FOND)}/delete/${AppelFond.id}`, AppelFond);
+}
+
 
 }
 

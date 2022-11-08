@@ -83,6 +83,7 @@ export class AvenantRetraitComponent implements OnInit {
   @Input() avenantId: string;
   @Input() etat: string;
   isAvenantRetrait = false;
+  idGroupeSelected = false;
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -161,6 +162,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         // this.adherantGroupeListe = value.slice();
+        console.log('*********this.groupe**********', this.groupe);
         console.log('*********adherantGroupeListe**********');
         console.log(value);
         // this.makeAderantFamille();
@@ -169,6 +171,7 @@ export class AvenantRetraitComponent implements OnInit {
     this.historiqueAveantAdherantsByExercice = this.historiqueAveantAdherantsByExerciceTMP.filter(ad => ad.adherent.groupe.id === this.groupe.id);
     console.log('adherantGroupeListe11111111111242***', this.historiqueAveantAdherantsByExercice);
     this.historiqueAvenant.groupe = this.groupe;
+    this.idGroupeSelected = true;
   }
 
   init() {

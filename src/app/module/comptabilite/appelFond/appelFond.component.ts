@@ -120,7 +120,7 @@ export class AppelFondComponent implements OnInit, OnDestroy {
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
         destinataire: new FormControl('', [Validators.required]),
-        numeroRef: new FormControl(''),
+        numeroRef: new FormControl(),
         libelle: new FormControl('', [Validators.required]),
         objet: new FormControl('', [Validators.required]),
         typeCompte: new FormControl('', [Validators.required]),
@@ -308,6 +308,21 @@ this.confirmationService.confirm({
 });
 // this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 
+}
+
+deleteAppelFond(appel: AppelFond) {
+  this.confirmationService.confirm({
+    message: 'Etes vous sur de vouloir supprimer cet appel de fond ?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      if (appel.id) {
+        console.log('2', appel);
+        this.store.dispatch(appelFondAction.deleteAppelFond(appel));
+        // this.displayDialogFormGarant = false;
+      } 
+    }
+  });
 }
 
 annulerSaisie() {

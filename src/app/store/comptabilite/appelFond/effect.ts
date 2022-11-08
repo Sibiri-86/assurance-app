@@ -76,4 +76,19 @@ createAppelFond$ = createEffect(() =>
                 ))
         ));
 
+
+        deleteAppelFond$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteAppelFond),
+            mergeMap((AppelFond: AppelFond) =>
+                this.appelfondService.deleteAppelFond(AppelFond).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadAppelFond()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
 }
