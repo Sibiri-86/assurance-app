@@ -18,4 +18,4 @@ export interface Journaux {
 }
 export interface  JournauxList {
     journauxList: Array<Journaux>
-}
+} 

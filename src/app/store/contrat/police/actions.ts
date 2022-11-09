@@ -20,5 +20,6 @@ export const setReport = createAction('[set Report] set Report', props<{reportFi
 export const loadPoliceByAffaireNouvelle = createAction('[load Police] load PoliceByAffaireNouvelle');
 export const deValiderPolice = createAction('[App Init] deValider Police', props<Police>());
 export const getActiveExerciceByPolice = createAction('[App Init] get active exercice', props<{policeId: string}>());
+export const getPoliceByGarant = createAction('[App Init] get active exercice', props<{garantId: string}>());
 
 

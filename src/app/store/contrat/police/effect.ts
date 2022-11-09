@@ -204,6 +204,21 @@ export class PoliceEffects {
         )
     );
 
+    fetchPoliceByGarant$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.getPoliceByGarant),
+            mergeMap(({garantId}) =>
+                this.PoliceService.$getPoliceByGarant(garantId).pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setPolice(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+    );
+
     deValiderPolice$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.deValiderPolice),

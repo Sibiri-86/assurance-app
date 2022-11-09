@@ -98,6 +98,13 @@ export class PoliceService {
             return throwError(error.message || 'Something went wrong');
         };
     }
+    $getPoliceByGarant(garantId: string): Observable<PoliceList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/by-valide-is-true-garant/${garantId}`).pipe(
+            map((response: PoliceList) => response),
+            catchError(this.handleError())
+        );
+    }
 
     $getPoliceByAffaireNouvelles(): Observable<PoliceList> {
         // @FIXME: get request

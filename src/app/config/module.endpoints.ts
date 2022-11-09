@@ -443,5 +443,9 @@ export class Endpoints {
             mock: `assets/mock/comptabilite/tiers.mock.json`
         };
 
+        static readonly REPORTING_PRODUCTION = {
+            prod: `${SERVICE_PREFIX}/reporting/production`,
+            mock: `assets/mock/reporting/production.mock.json`
+        };
 
 }
