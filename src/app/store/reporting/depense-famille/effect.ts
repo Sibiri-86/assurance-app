@@ -9,7 +9,7 @@ import {StatusEnum} from '../../global-config/model';
 import { Check } from './model';
 
 @Injectable()
-export class TierPayantEffects {
+export class DepenseFamilleEffects {
     private successMsg = 'Opération reussie !';
     constructor(
         private actions$: Actions,

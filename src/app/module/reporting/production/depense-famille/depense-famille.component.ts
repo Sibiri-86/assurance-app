@@ -142,8 +142,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.depenseFamilleList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
-        
         this.depenseFamilleList = value.slice();
+        console.log("========================bien===",this.depenseFamilleList);
+
         
        
       }
@@ -209,7 +210,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
 
   }
   loadAdherentByPolice(){
-  this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: this.check.garant.id, idPolice: this.check.police.id}));
+  this.store.dispatch(featureActionAdherent.loadAdherentDistinct({idGarantie: this.check.garant.id, idPolice: this.check.police.id}));
 
 }
   viderDebit() {

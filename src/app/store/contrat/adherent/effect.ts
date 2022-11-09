@@ -90,6 +90,20 @@ export class AdherentEffects {
                 )
                 );
 
+                fetchAdherentDistinct$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.loadAdherentDistinct),
+                    mergeMap(({idGarantie, idPolice}) =>
+                        this.AdherentService.$getAdherentsDistinct(idGarantie, idPolice).pipe(
+                            switchMap(value => [
+                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setAdherent(value)
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        )
+                    )
+                )
+                );             
     fetchAdherent$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherent),
