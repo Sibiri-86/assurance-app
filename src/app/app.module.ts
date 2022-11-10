@@ -290,6 +290,7 @@ import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balan
 import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 import { DepenseFamilleComponent } from './module/reporting/production/depense-famille/depense-famille.component';
 
+
 @NgModule({
     imports: [
         BrowserModule,

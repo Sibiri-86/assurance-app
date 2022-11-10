@@ -35,6 +35,8 @@ import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../../util/common-util';
 import * as garantSelector from "../../../../store/contrat/garant/selector";
 import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
+import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
+import { Recapitulatif } from 'src/app/store/reporting/production/recapitulatif/model';
 
 
 @Component({
@@ -87,8 +89,6 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   province: Departement;
   region: Region;
   pays: Pays;
-
-
   selectedDataDef: any;
   selectedDataDefList$: Observable<Array<any>>;
   selectedDataDefList: Array<any>;
@@ -112,22 +112,33 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   appelFondTotal: AppelFond;
 
 
+  recapitulatif: Recapitulatif;
+  recapitulatifs: Array<Recapitulatif>;
+
+
   constructor(private formBuilder: FormBuilder,
-              private store: Store<AppState>, private messageService: MessageService,
-              private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService,
-              private appelFondService: AppelFondService) {
+              private store: Store<AppState>, 
+              private messageService: MessageService,
+              private confirmationService: ConfirmationService, 
+              private breadcrumbService: BreadcrumbService,
+              private appelFondService: AppelFondService, 
+              private recaptulatifService: RecapitulatifService) {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
-        destinataire: new FormControl('', [Validators.required]),
-        numeroRef: new FormControl(),
-        libelle: new FormControl('', [Validators.required]),
-        objet: new FormControl('', [Validators.required]),
-        typeCompte: new FormControl('', [Validators.required]),
-        dateAppel: new FormControl('', [Validators.required]),
-        montantAppel: new FormControl('', [Validators.required]),
-        signataire: new FormControl('', [Validators.required]),
-        garant: new FormControl('', [Validators.required]),
+        police: new FormControl(),
+        souscripteur: new FormControl(),
+        dateEffet: new FormControl(),
+        dateEcheance: new FormControl(),
+        effectif: new FormControl(),
+        primeNette: new FormControl(),
+        primeAcquise: new FormControl(),
+        sinistre: new FormControl(),
+        sinistreSurPrime: new FormControl(),
+        resultatTechnique: new FormControl(),
+        observation: new FormControl(),
+        datePrime: new FormControl('', [Validators.required]),
+        idGarant: new FormControl('', [Validators.required])
     });
 
       this.breadcrumbService.setItems([
@@ -138,62 +149,7 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
 ngOnInit(): void {
   this.compteList = [];
   // this.loading = true;
-  this.entityValidations = [
-    {
-      field: 'compte',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'poste',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'libelle',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'objet',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'typeCompte',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'dateAppel',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'montantAppel',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'signataire',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-    {
-      field: 'garant',
-      validations: [
-        {validName: 'required', validMessage: 'Ce champs est obligatoire'}
-      ]
-    },
-  ];
+
 
   this.appelFondList$ = this.store.pipe(select(appelFondSelector.appelFondList));
   this.store.dispatch(appelFondAction.loadAppelFond());
@@ -286,7 +242,7 @@ this.displayDialogFormGarant = true;
 });
 } */
 
-onCreate() {
+/* onCreate() {
 this.appelFond = this.appelFondForm.value;
 console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn', this.appelFond);
 this.confirmationService.confirm({
@@ -306,9 +262,9 @@ this.confirmationService.confirm({
     this.displayDialogFormGarant = false;
   }
 });
-// this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
 
-}
+
+} */
 
 deleteAppelFond(appel: AppelFond) {
   this.confirmationService.confirm({
@@ -375,6 +331,19 @@ annulerAppelFond() {
   this.dateFin = null;
   this.appelFondTotal = {};
   this.etatAppel = false;
+}
+
+onCreate() {
+  this.recapitulatif = {};
+  console.log('===========================================>', this.appelFondForm.get('idGarant').value);
+  this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
+
+  this.recapitulatif.datePrime = this.appelFondForm.get('datePrime').value;
+  console.log('===========================================>', this.recapitulatif);
+  this.recaptulatifService.fetchRecap$(this.recapitulatif).subscribe((res) => {
+    this.recapitulatifs = res;
+    console.log("this.recapitulatifs", res);
+  });
 }
 }
 
