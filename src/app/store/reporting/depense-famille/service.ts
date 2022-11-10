@@ -7,7 +7,7 @@ import {Endpoints} from '../../../config/module.endpoints';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Report } from '../../contrat/police/model';
-import { Check, DepenseFamille, DepenseFamilleList } from './model';
+import { Check, DepenseFamilleList } from './model';
 import { DepartementList } from '../../parametrage/departement/model';
 
 @Injectable({providedIn: 'root'})
@@ -17,7 +17,6 @@ constructor(private http: HttpClient) {
 }
 
  findDepenseFamille(check: Check): Observable<DepenseFamilleList> {
-    console.log("==============", check);
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}`, check).pipe(
             map((response: DepenseFamilleList) => response),

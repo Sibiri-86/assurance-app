@@ -289,6 +289,7 @@ import { GrandLivreAuxiliaireComponent } from './module/comptabilite/grand-livre
 import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balance-tiers.component';
 import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 import { DepenseFamilleComponent } from './module/reporting/production/depense-famille/depense-famille.component';
+import { DepenseFamilleEffects } from './store/reporting/depense-famille/effect';
 
 
 @NgModule({
@@ -399,7 +400,7 @@ import { DepenseFamilleComponent } from './module/reporting/production/depense-f
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -527,7 +528,7 @@ import { DepenseFamilleComponent } from './module/reporting/production/depense-f
         GrandLivreAuxiliaireComponent,
         BalanceTiersComponent,
         RecapitulatifComponent,
-        DepenseFamilleComponent
+        DepenseFamilleComponent,
 
     ],
     providers: [

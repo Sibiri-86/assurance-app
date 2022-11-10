@@ -67,7 +67,8 @@
             <p-table [value]="depenseFamilleList" dataKey="id" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Matricule</th>
+                        <th style="width: 5rem"></th>
+                      
                         <th>Nom</th>
                         <th>Prenom</th>
                         <th>Age</th>
@@ -75,11 +76,12 @@
                        
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-famille let-ri="rowIndex">
-                    <tr  class="colorZone" *ngIf="famille.adherent.adherentPrincipal !== null">
-                        <td>   {{famille.adherent.numero | formatTableValue : 'number':true}}
-                               
+                <ng-template pTemplate="body" let-famille  let-expanded="expanded">
+                    <tr   *ngIf="famille.adherent.adherentPrincipal !== null">
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="famille" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
+                      
                         <td>{{famille.adherent.nom}}</td>
                         <td>{{famille.adherent.prenom}} </td>
                         <td>{{famille.adherent.age}}</td>
@@ -89,18 +91,59 @@
                         
                         
                     </tr>
-                    <tr   *ngIf="famille.adherent.adherentPrincipal === null">
-                        <td>   {{famille.adherent.numero | formatTableValue : 'number':true}}
-                               
+                    <tr  class="colorZone" *ngIf="famille.adherent.adherentPrincipal === null">
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="famille" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
+                      
                         <td>{{famille.adherent.nom}}</td>
                         <td>{{famille.adherent.prenom}} </td>
-                        <td>{{famille.adherent.age}}</td>
+                        <td>{{famille.adherent.dateNaissance | formatTableValue : 'date'}}</td>
                       
                         
                         
                         
                         
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-famille>
+                    <tr>
+                        <td colspan="4">
+                            <div class="p-3">
+                                <p-table [value]="famille.prestationList" dataKey="id">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th pSortableColumn="id">Prestataire <p-sortIcon field="price"></p-sortIcon></th>
+                                            <th pSortableColumn="customer">Sous acte <p-sortIcon field="customer"></p-sortIcon></th>
+                                            <th pSortableColumn="date">Medecin <p-sortIcon field="date"></p-sortIcon></th>
+                                            <th pSortableColumn="amount">Date soins <p-sortIcon field="amount"></p-sortIcon></th>
+                                            <th pSortableColumn="status">Pathologie <p-sortIcon field="status"></p-sortIcon></th>
+                                            <th pSortableColumn="status">Type <p-sortIcon field="status"></p-sortIcon></th>
+                                            <th pSortableColumn="status">Montant reclamé <p-sortIcon field="status"></p-sortIcon></th>
+                                            <th pSortableColumn="status">Montant Remboursé <p-sortIcon field="status"></p-sortIcon></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-prestation>
+                                        <tr>
+                                            <td>{{prestation.prestataire?.libelle}}</td>
+                                            <td>{{prestation.sousActe.libelle}}</td>
+                                            <td>{{prestation.medecin?.nom}}</td>
+                                            <td>{{prestation.dateSoins | formatTableValue : 'date'}}</td>
+                                            <td>{{prestation.pathologie?.code }}</td>
+                                            <td>{{prestation.pathologie?.code }}</td>
+                                            <td>{{prestation.baseRemboursement | formatTableValue: 'number':true}}</td>
+                                            <td>{{prestation.montantRembourse | formatTableValue: 'number':true}}</td>
+                                            
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="11">Pas de prestation</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
