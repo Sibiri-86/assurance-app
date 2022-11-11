@@ -5,7 +5,7 @@
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
                     <div class="p-field p-col-2">
-                        <label for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                         <p-dropdown [filter]="true" 
                         showClear="true" [options]="garantList"
                         name="garant"
@@ -16,16 +16,17 @@
                     </div>
 
                     <div class="p-field p-col-2">
-                        <label for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                         <p-dropdown [filter]="true" 
                         showClear="true" [options]="policeList"
                         name="police"
+                        
                         optionLabel="nom" 
                         [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadAdherentByPolice()">
                         </p-dropdown>
                     </div>
                         <div class="p-field p-col-2">
-                            <label for="numCompte2"> Adherent <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <label  class="espace1" for="numCompte2"> Adherent <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                             <p-dropdown [filter]="true" 
                             showClear="true" [options]="adherentList"
                             name="adherent"
@@ -35,13 +36,13 @@
                         </div>
 
                     <div class="p-field p-col-2">
-                        <label for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                    
                         
                         <input  type="date" pInputText [(ngModel)]="check.dateDebut" >
                     </div>
                     <div class="p-field p-col-2">
-                        <label for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                        <label class="espace1" for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
                    
                         
                         <input  type="date" pInputText [(ngModel)]="check.dateFin">
@@ -51,20 +52,20 @@
                     <div class="p-field p-col espace">
                         <label for="numCompte2"> <span style="color: red !important; size: 1.4em;" class="required"></span></label>
 
-                        <button pButton pRipple icon="pi pi-search" pTooltip="recherche" class="p-button-rounded p-button-info" (click)="findOperationGrandLivre()"></button>
+                        <button pButton pRipple [disabled]="!check.garant || !check.police || !check.adherent || !check.dateDebut || !check.dateFin" icon="pi pi-search" pTooltip="recherche" class="p-button-rounded p-button-info" (click)="findOperationGrandLivre()"></button>
 
                     </div>
 
  			</ng-template>
-             <ng-template pTemplate="right">
+             <!-- <ng-template pTemplate="right">
                 <div>
                     <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
 
                 </div>
-             </ng-template>
+             </ng-template> -->
 			</p-toolbar>
             
-            <p-table [value]="depenseFamilleList" dataKey="id" responsiveLayout="scroll">
+            <p-table [value]="depenseFamilleList" dataKey="adherent" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 5rem"></th>
@@ -130,7 +131,7 @@
                                             <td>{{prestation.medecin?.nom}}</td>
                                             <td>{{prestation.dateSoins | formatTableValue : 'date'}}</td>
                                             <td>{{prestation.pathologie?.code }}</td>
-                                            <td>{{prestation.pathologie?.code }}</td>
+                                            <td>{{prestation.pathologie?.typePrestation }}</td>
                                             <td>{{prestation.baseRemboursement | formatTableValue: 'number':true}}</td>
                                             <td>{{prestation.montantRembourse | formatTableValue: 'number':true}}</td>
                                             
@@ -138,7 +139,7 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td colspan="11">Pas de prestation</td>
+                                            <td colspan="3">Pas de prestation</td>
                                         </tr>
                                     </ng-template>
                                 </p-table>

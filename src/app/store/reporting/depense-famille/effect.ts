@@ -27,7 +27,19 @@ export class DepenseFamilleEffects {
             mergeMap((check: Check) =>
                 this.depenseFamilleService.findDepenseFamille(check).pipe(
                     switchMap(value => [
-                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                       // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setDepenseFamille(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+        findDepenseFamilleActe$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.updateDepenseFamilleActe),
+            mergeMap((check: Check) =>
+                this.depenseFamilleService.findDepenseFamilleActe(check).pipe(
+                    switchMap(value => [
                         featureActions.setDepenseFamille(value)
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

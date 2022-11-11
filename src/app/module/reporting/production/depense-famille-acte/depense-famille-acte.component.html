@@ -1,0 +1,97 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <div class="p-field p-col-3">
+                        <label class="espace1" for="numCompte">Famille d' acte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                        <p-dropdown [filter]="true" 
+                        showClear="true" [options]="garanties"
+                        name="famille"
+                        optionLabel="libelle" 
+                        [autoDisplayFirst]="false" [(ngModel)]="check.famille"  >
+                        </p-dropdown>
+
+                    </div>
+
+                    
+
+                    <div class="p-field p-col-3">
+                        <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                   
+                        
+                        <input  type="date" pInputText [(ngModel)]="check.dateDebut" >
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label class="espace1" for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                   
+                        
+                        <input  type="date" pInputText [(ngModel)]="check.dateFin">
+                    </div>
+                    
+                   
+                    <div class="p-field p-col espace">
+                        <label for="numCompte2"> <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+
+                        <button pButton pRipple [disabled]="!check.famille ||  !check.dateDebut || !check.dateFin" icon="pi pi-search" pTooltip="recherche" class="p-button-rounded p-button-info" (click)="findOperationGrandLivre()"></button>
+
+                    </div>
+
+ 			</ng-template>
+             <!-- <ng-template pTemplate="right">
+                <div>
+                    <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
+
+                </div>
+             </ng-template> -->
+			</p-toolbar>
+            <p-table [value]="prestations" dataKey="id">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Prestataire <p-sortIcon field="price"></p-sortIcon></th>
+                        <th pSortableColumn="customer">Sous acte <p-sortIcon field="customer"></p-sortIcon></th>
+                        <th pSortableColumn="date">Medecin <p-sortIcon field="date"></p-sortIcon></th>
+                        <th pSortableColumn="amount">Date soins <p-sortIcon field="amount"></p-sortIcon></th>
+                        <th pSortableColumn="status">Pathologie <p-sortIcon field="status"></p-sortIcon></th>
+                        <th pSortableColumn="status">Type <p-sortIcon field="status"></p-sortIcon></th>
+                        <th pSortableColumn="status">Montant reclamé <p-sortIcon field="status"></p-sortIcon></th>
+                        <th pSortableColumn="status">Montant Remboursé <p-sortIcon field="status"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+                        <td>{{prestation.prestataire?.libelle}}</td>
+                        <td>{{prestation.sousActe.libelle}}</td>
+                        <td>{{prestation.medecin?.nom}}</td>
+                        <td>{{prestation.dateSoins | formatTableValue : 'date'}}</td>
+                        <td>{{prestation.pathologie?.code }}</td>
+                        <td>{{prestation.pathologie?.code }}</td>
+                        <td>{{prestation.baseRemboursement | formatTableValue: 'number':true}}</td>
+                        <td>{{prestation.montantRembourse | formatTableValue: 'number':true}}</td>
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Pas de prestation</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+           
+
+            
+        </div> 
+        
+        
+        
+        
+      
+        
+        
+
+  
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

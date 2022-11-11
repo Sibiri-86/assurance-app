@@ -106,6 +106,7 @@ export interface Prestation {
     inotPlafond?: Boolean;
     adherent?: Adherent;
     montantExclu?: number;
+    typePrestation?: TypePrestation;
     /*ajout information pour bon de prise en charge*/
 }
 
@@ -133,4 +134,10 @@ export enum TypePaiement {
     CHEQUE = 'CHEQUE',
     VIREMENT = 'VIREMENT'
 
+}
+
+export enum TypePrestation {
+    PREFINANCEMENT = 'PREFINANCEMENT',
+    TIERSPAYSANT = 'TIERSPAYSANT',
+    
 }

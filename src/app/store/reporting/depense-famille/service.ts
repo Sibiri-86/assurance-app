@@ -23,6 +23,13 @@ constructor(private http: HttpClient) {
             catchError(this.handleError()));
     }
 
+    findDepenseFamilleActe(check: Check): Observable<DepenseFamilleList> {
+        // @FIXME: post request
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/famille-Acte`, check).pipe(
+            map((response: DepenseFamilleList) => response),
+            catchError(this.handleError()));
+    }
+
    
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();
