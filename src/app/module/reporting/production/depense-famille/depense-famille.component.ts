@@ -175,6 +175,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.adherentList = value.slice();
+        this.adherentList.forEach(ad=>{
+          ad.nom = ad.nom.concat("/").concat(ad.prenom);
+        })
         
        
       }
