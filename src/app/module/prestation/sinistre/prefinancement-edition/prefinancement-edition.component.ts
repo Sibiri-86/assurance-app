@@ -1038,7 +1038,7 @@ findMontantPlafond(event){
           this.prestationPopForm.get('montantRembourse').value
         });
         if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
-          if(this.prestationPopForm.get('montantPlafond').value <= this.prestationPopForm.get('coutUnitaire').value) {
+          if(this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
              // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
              myForm.patchValue({
               montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,

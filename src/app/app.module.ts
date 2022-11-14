@@ -290,6 +290,7 @@ import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balan
 import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 import { DepenseFamilleComponent } from './module/reporting/production/depense-famille/depense-famille.component';
 import { DepenseFamilleEffects } from './store/reporting/depense-famille/effect';
+import { RecapitulatifEffects } from './store/reporting/production/recapitulatif/effect';
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
 
 @NgModule({
@@ -400,7 +401,7 @@ import { DepenseFamilleActeComponent } from './module/reporting/production/depen
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
