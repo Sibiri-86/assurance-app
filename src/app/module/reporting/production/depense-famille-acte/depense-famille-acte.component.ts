@@ -51,16 +51,19 @@ import * as adherentListSelector from '../../../../store/contrat/adherent/select
 import * as featureActionDepense from '../../../../store/reporting/depense-famille/action';
 import * as depenseListSelector from '../../../../store/reporting/depense-famille/selector';
 import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/service';
-
+import {loadGarantie} from '../../../../store/parametrage/garantie/actions';
+import * as garantieSelector from '../../../../store/parametrage/garantie/selector';
+import { Garantie } from 'src/app/store/parametrage/garantie/model';
+import { Prestation } from 'src/app/store/prestation/tierPayant/model';
 
 
 
 @Component({
-  selector: 'app-depense-famille',
-  templateUrl: './depense-famille.component.html',
-  styleUrls: ['./depense-famille.component.scss']
+  selector: 'app-depense-famille-acte',
+  templateUrl: './depense-famille-acte.component.html',
+  styleUrls: ['./depense-famille-acte.component.scss']
 })
-export class DepenseFamilleComponent implements OnInit, OnDestroy {
+export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -105,7 +108,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   adherentList$: Observable<Array<Adherent>>;
   depenseFamilleList:Array<DepenseFamille> = [];
   depenseFamilleList$: Observable<Array<DepenseFamille>>;
-
+  garanties: Array<Garantie>;
+  garantieList$: Observable<Array<Garantie>>;
+  prestations: Array<Prestation> = [];
 
   
   constructor( private store: Store<AppState>,
@@ -115,7 +120,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Depense  Familiale'}]);
+                this.breadcrumbService.setItems([{ label: 'Depense  Famillle acte'}]);
    }
 
   
@@ -137,13 +142,20 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
        
       }
     });
-
+    this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
+    this.store.dispatch(loadGarantie());
+    this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        if (value) {
+            this.garanties = value.slice();
+        }
+    });
     this.depenseFamilleList$ = this.store.pipe(select(depenseListSelector.depenseFamilleList));
     this.depenseFamilleList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
         this.depenseFamilleList = value.slice();
         console.log("========================bien===",this.depenseFamilleList);
+        this.prestations = this.depenseFamilleList[0].prestationList;
 
         
        
@@ -175,9 +187,6 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.adherentList = value.slice();
-        this.adherentList.forEach(ad=>{
-          ad.nom = ad.nom.concat("/").concat(ad.prenom);
-        })
         
        
       }
@@ -396,10 +405,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   
   }
   findOperationGrandLivre() {
-    this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check.police.id;
-    this.check.adherentPrincipalId = this.check.adherent.id;
-    this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
+    this.store.dispatch(featureActionDepense.updateDepenseFamilleActe(this.check));
 
   }
 

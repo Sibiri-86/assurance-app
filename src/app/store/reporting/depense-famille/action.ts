@@ -8,6 +8,7 @@ export const loadDepenseFamille = createAction('[App Init] load DepenseFamille')
 export const FetchReportDepenseFamille = createAction('[Report] Fetch Report DepenseFamille', props<Report>());
 export const setReportDepenseFamille = createAction('[set Report] set Report DepenseFamille', props<{reportFile: ArrayBuffer}>());
 export const updateDepenseFamille = createAction('[App Init] update Depense Famille',props<Check>());
+export const updateDepenseFamilleActe = createAction('[App Init] update Depense Famille acte',props<Check>());
 
 
 

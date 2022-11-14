@@ -1,6 +1,7 @@
 import { Adherent } from '../../contrat/adherent/model';
 import { Garant } from '../../contrat/garant/model';
 import { Police } from '../../contrat/police/model';
+import { Garantie } from '../../parametrage/garantie/model';
 
 import { Prestation } from '../../prestation/tierPayant/model';
 
@@ -20,6 +21,7 @@ export interface Check {
     adherent?: Adherent;
     dateDebut?: Date;
     dateFin?: Date;
+    famille?: Garantie;
 }
 
 export interface DepenseFamilleList {
