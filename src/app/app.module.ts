@@ -290,12 +290,8 @@ import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balan
 import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 import { DepenseFamilleComponent } from './module/reporting/production/depense-famille/depense-famille.component';
 import { DepenseFamilleEffects } from './store/reporting/depense-famille/effect';
-<<<<<<< HEAD
 import { RecapitulatifEffects } from './store/reporting/production/recapitulatif/effect';
-
-=======
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
->>>>>>> feature_button_policy_validation
 
 @NgModule({
     imports: [

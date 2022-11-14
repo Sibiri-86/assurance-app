@@ -1210,7 +1210,7 @@ export class TierPayantEditionComponent implements OnInit {
             }*/
 
             if(this.montantPlafond !== null && this.montantPlafond !== 0 ) {
-                if(this.montantPlafond <= this.prestationAdd.coutUnitaire) {
+                if(this.montantPlafond < this.prestationAdd.coutUnitaire) {
                    // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
                     this.prestationAdd.montantRembourse = this.montantPlafond * this.prestationAdd.nombreActe;
                     this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
