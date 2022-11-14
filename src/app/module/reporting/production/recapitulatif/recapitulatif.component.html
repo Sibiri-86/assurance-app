@@ -31,6 +31,16 @@
                         </div>
                     </form>
                 </ng-template>
+                <ng-template pTemplate="right">
+                    
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col p-mt-5">
+                                
+                                <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-check" (click)="imprimerRecap()"></button>
+                               
+                            </div>
+                        </div>
+                </ng-template>
 				
 			</p-toolbar>
 

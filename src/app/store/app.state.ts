@@ -124,5 +124,6 @@ export interface AppState {
   appelFondState: AppelFondState;
   tiersState: TiersState;
   depenseFamilleState: DepenseFamilleState;
+  recapitulatifState: RecapitulatifState;
 
 }

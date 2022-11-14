@@ -146,6 +146,7 @@ import * as operationReducer from '../comptabilite/operation/reducer';
 import * as appelFondReducer from '../comptabilite/appelFond/reducer';
 import * as tiersReducer from '../comptabilite/tiers/reducer';
 import * as depenseFamilleReducer from '../reporting/depense-famille/reducer';
+import * as recapitulatifReducer from '../reporting/production/recapitulatif/reducer';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -209,6 +210,7 @@ export const reducers: ActionReducerMap<AppState> = {
     appelFondState: appelFondReducer.reducer,
     tiersState: tiersReducer.reducer,
     depenseFamilleState: depenseFamilleReducer.reducer,
+    recapitulatifState: recapitulatifReducer.reducer,
 
 
 };

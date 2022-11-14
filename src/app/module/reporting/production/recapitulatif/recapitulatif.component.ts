@@ -37,6 +37,8 @@ import * as garantSelector from "../../../../store/contrat/garant/selector";
 import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
 import { Recapitulatif } from 'src/app/store/reporting/production/recapitulatif/model';
+import * as recapAction from 'src/app/store/reporting/production/recapitulatif/action';
+import * as recapSelector from '../../../../store/reporting/production/recapitulatif/selector';
 
 
 @Component({
@@ -172,8 +174,8 @@ ngOnInit(): void {
       }
     });
 
-  this.store.dispatch(appelFondAction.setReportAppelFond(null));
-  this.store.pipe(select(appelFondSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+  this.store.dispatch(recapAction.setReportRecapitulatif(null));
+  this.store.pipe(select(recapSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
       .subscribe(bytes => {
           if (bytes) {
               printPdfFile(bytes);
@@ -344,6 +346,18 @@ onCreate() {
     this.recapitulatifs = res;
     console.log("this.recapitulatifs", res);
   });
+}
+
+imprimerRecap() {
+  //console.log('recap=============>', recap);
+  this.recapitulatif = {};
+  this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
+  this.recapitulatif.datePrime = this.appelFondForm.get('datePrime').value;
+  this.report.typeReporting = TypeReport.RECAPITULATIF_POLICE;
+  this.report.recapitulatif = this.recapitulatif;
+  console.log('this.recapitulatif=============>', this.recapitulatif);
+  console.log('this.report', this.report);
+  this.store.dispatch(recapAction.FetchReportRecapitulatif(this.report));
 }
 }
 

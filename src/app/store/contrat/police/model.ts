@@ -17,6 +17,7 @@ import { Arrondissement } from '../../parametrage/arrondissement/model';
 import { Departement } from '../../parametrage/departement/model';
 import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 import { Operation } from '../../comptabilite/operation/model';
+import { Recapitulatif } from '../../reporting/production/recapitulatif/model';
 
 
 export interface Police{
@@ -92,6 +93,7 @@ export interface Report {
     appelFond?: AppelFond;
     balance?: Balance;
     operation?: Operation;
+    recapitulatif?: Recapitulatif;
 }
 
 export interface PoliceList {
