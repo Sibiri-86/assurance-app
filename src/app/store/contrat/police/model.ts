@@ -18,6 +18,7 @@ import { Departement } from '../../parametrage/departement/model';
 import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 import { Operation } from '../../comptabilite/operation/model';
 import { Recapitulatif } from '../../reporting/production/recapitulatif/model';
+import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
 
 
 export interface Police{
@@ -94,6 +95,7 @@ export interface Report {
     balance?: Balance;
     operation?: Operation;
     recapitulatif?: Recapitulatif;
+    repartitionDepenseStatut?: RepartitionDepenseStatut
 }
 
 export interface PoliceList {

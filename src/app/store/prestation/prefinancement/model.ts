@@ -40,7 +40,7 @@ export interface OrdreReglement {
 
 export interface Prefinancement {
     id?: string;
-    //dateSoins?: Date;
+    dateSoins?: Date;
     referenceBordereau?: string;
     dateSaisie?: Date;
     dateDeclaration?: Date;
@@ -59,7 +59,7 @@ export interface Prefinancement {
 
 export interface BonPriseEnCharge {
     id?: string;
-    //dateSoins?: Date;
+    dateSoins?: Date;
     referenceBordereau?: string;
     dateSaisie?: Date;
     dateDeclaration?: Date;

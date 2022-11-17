@@ -292,6 +292,8 @@ import { DepenseFamilleComponent } from './module/reporting/production/depense-f
 import { DepenseFamilleEffects } from './store/reporting/depense-famille/effect';
 import { RecapitulatifEffects } from './store/reporting/production/recapitulatif/effect';
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
+import { RepartitionDepenseStatutEffects } from './store/reporting/production/repartitionDepenseStatut/effect';
+import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 
 @NgModule({
     imports: [
@@ -401,7 +403,7 @@ import { DepenseFamilleActeComponent } from './module/reporting/production/depen
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -531,6 +533,7 @@ import { DepenseFamilleActeComponent } from './module/reporting/production/depen
         RecapitulatifComponent,
         DepenseFamilleComponent,
         DepenseFamilleActeComponent,
+        RepartitionDepenseStatutComponent
 
     ],
     providers: [
