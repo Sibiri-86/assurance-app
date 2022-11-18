@@ -85,6 +85,7 @@ import { BalanceTiersComponent } from './module/comptabilite/balance-tiers/balan
 import { RecapitulatifComponent } from './module/reporting/production/recapitulatif/recapitulatif.component';
 import { DepenseFamilleComponent } from './module/reporting/production/depense-famille/depense-famille.component';
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
+import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
 
 @NgModule({
     imports: [
@@ -176,6 +177,7 @@ import { DepenseFamilleActeComponent } from './module/reporting/production/depen
                     {path: 'reporting/recapitulatif', component: RecapitulatifComponent},
                     {path: 'reporting/depense-famille', component: DepenseFamilleComponent},
                     {path: 'reporting/depense-famille-acte', component: DepenseFamilleActeComponent},
+                    {path: 'reporting/depense-famille-prestataire', component: DepenseFamillePrestataireComponent},
 
                     
                 ]

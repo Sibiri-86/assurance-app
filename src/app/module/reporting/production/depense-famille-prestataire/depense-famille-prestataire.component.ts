@@ -58,15 +58,18 @@ import { Prestation } from 'src/app/store/prestation/tierPayant/model';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
+import * as typePrestataireSlector from '../../../../store/parametrage/type-prestataire/selector';
+import * as typePrestatairefeatureAction from '../../../../store/parametrage/type-prestataire/actions';
+import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
 
 
 
 @Component({
-  selector: 'app-depense-famille-acte',
-  templateUrl: './depense-famille-acte.component.html',
-  styleUrls: ['./depense-famille-acte.component.scss']
+  selector: 'app-depense-famille-prestataire',
+  templateUrl: './depense-famille-prestataire.component.html',
+  styleUrls: ['./depense-famille-prestataire.component.scss']
 })
-export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
+export class DepenseFamillePrestataireComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -117,6 +120,8 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
   display = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
+  typePrestataireList:Array<TypePrestataire> = [];
+  typePrestataireList$: Observable<Array<TypePrestataire>>;
 
   
   constructor( private store: Store<AppState>,
@@ -126,7 +131,7 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Depense par famille de prestation'}]);
+                this.breadcrumbService.setItems([{ label: 'Depense des prescripteur'}]);
    }
 
   
@@ -153,6 +158,19 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
        
       }
     });
+
+
+    this.typePrestataireList$ = this.store.pipe(select(typePrestataireSlector.typePrestataireList));
+    this.store.dispatch(typePrestatairefeatureAction.loadTypePrestataire());
+    this.typePrestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.typePrestataireList = value.slice();
+        
+       
+      }
+    });
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -173,7 +191,6 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
       }
     });
 
-    
     this.store.dispatch(featureActionDepense.setReportDepenseFamille(null));
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -431,11 +448,9 @@ loadGroupeByPolice(){
   
   }
   findOperationGrandLivre() {
-    this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check?.police?.id;
-    // this.check.adherentPrincipalId = this.check?.adherent?.id;
    
-    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_ACTE;
+   
+    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_CENTRE;
     this.report.check = this.check;
     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     //this.store.dispatch(featureActionDepense.updateDepenseFamilleActe(this.check));
