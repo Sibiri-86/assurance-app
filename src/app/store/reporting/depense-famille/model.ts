@@ -30,6 +30,7 @@ export interface Check {
     famille?: Garantie;
     groupe?: Groupe;
     typePrestataire?: Array<TypePrestataire>;
+    pathologies?: Array<TypePrestataire>;
 }
 
 export interface DepenseFamilleList {
