@@ -37,6 +37,7 @@ export interface RepartitionDepenseStatut {
     coutMoyentEnfant?: string;
     dateDebut?: Date;
     dateFin?: Date;
+    tauxChargement?: number;
 }
 
 

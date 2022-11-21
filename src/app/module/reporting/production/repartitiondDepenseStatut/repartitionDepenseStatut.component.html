@@ -23,6 +23,13 @@
                                                 [formGroup]="appelFondForm" [entityField]="'dateFin'">
                                 </app-entity-validation>
                             </div>
+                            <div class="p-field p-col">
+                                <label for="firstname2">Taux de Chargement <span style="color: red !important; font-size: 1.4em">*</span></label>
+                                <input id="tauxChargement" type="number" required formControlName="tauxChargement"  pInputText>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                              [formGroup]="appelFondForm" [entityField]="'tauxChargement'">
+                                </app-entity-validation>
+                            </div>
                             <div class="p-field p-col p-mt-5">
                                 
                                 <!-- <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Rechercher" icon="pi pi-check" type="submit"></button> -->
