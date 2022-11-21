@@ -51,6 +51,9 @@ import * as adherentListSelector from '../../../../store/contrat/adherent/select
 import * as featureActionDepense from '../../../../store/reporting/depense-famille/action';
 import * as depenseListSelector from '../../../../store/reporting/depense-famille/selector';
 import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/service';
+import * as groupeSlector from '../../../../store/contrat/groupe/selector';
+import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
+import { Groupe } from 'src/app/store/contrat/groupe/model';
 
 
 
@@ -105,7 +108,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   adherentList$: Observable<Array<Adherent>>;
   depenseFamilleList:Array<DepenseFamille> = [];
   depenseFamilleList$: Observable<Array<DepenseFamille>>;
-
+  display = false;
+  groupeListes: Array<Groupe>;
+  groupeList$: Observable<Array<Groupe>>;
 
   
   constructor( private store: Store<AppState>,
@@ -138,6 +143,14 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
+        
+        this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+                this.groupeListes = value.slice();
+                console.log(this.groupeListes);
+            }
+        });
     this.depenseFamilleList$ = this.store.pipe(select(depenseListSelector.depenseFamilleList));
     this.depenseFamilleList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
@@ -150,8 +163,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(featureActionOperation.setReportArrete(null));
-    this.store.pipe(select(operationListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    this.store.dispatch(featureActionDepense.setReportDepenseFamille(null));
+    this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
                 printPdfFile(bytes);
@@ -395,13 +408,31 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.operation.dateSaisie = new Date();
   
   }
+  closeDialog() {
+    this.display = false;
+    this.check = {};
+   }
+   imprimerFormulaire() {
+    this.display = true;
+  }
+  loadGroupeByPolice(){
+    this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
+  }
   findOperationGrandLivre() {
     this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check.police.id;
-    this.check.adherentPrincipalId = this.check.adherent.id;
-    this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
+    this.check.policeId = this.check?.police?.id;
+    // this.check.adherentPrincipalId = this.check?.adherent?.id;
+   
+    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
+    this.report.check = this.check;
+    console.log("=====================",this.report)
+
+    this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 
   }
+
+  
 
   onCreateOperationList() {
     //console.log(this.operationAddList);

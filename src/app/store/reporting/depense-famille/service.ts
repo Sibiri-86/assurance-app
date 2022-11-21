@@ -25,10 +25,16 @@ constructor(private http: HttpClient) {
 
     findDepenseFamilleActe(check: Check): Observable<DepenseFamilleList> {
         // @FIXME: post request
-        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/famille-Acte`, check).pipe(
+        return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille`, check).pipe(
             map((response: DepenseFamilleList) => response),
             catchError(this.handleError()));
     }
+
+    $getReport(report: Report): Observable<ArrayBuffer> {
+        // @FIXME: get request
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille/report`,
+            report, {responseType: 'arraybuffer'});
+      }
 
    
     private createRequestOption = (req?: any): HttpParams => {

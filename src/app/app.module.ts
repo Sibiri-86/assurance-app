@@ -294,6 +294,8 @@ import { RecapitulatifEffects } from './store/reporting/production/recapitulatif
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
 import { RepartitionDepenseStatutEffects } from './store/reporting/production/repartitionDepenseStatut/effect';
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
+import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
+import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
 
 @NgModule({
     imports: [
@@ -533,7 +535,9 @@ import { RepartitionDepenseStatutComponent } from './module/reporting/production
         RecapitulatifComponent,
         DepenseFamilleComponent,
         DepenseFamilleActeComponent,
-        RepartitionDepenseStatutComponent
+        RepartitionDepenseStatutComponent,
+        DepenseFamillePrestataireComponent,
+        DepenseFamillePathologieComponent,
 
     ],
     providers: [

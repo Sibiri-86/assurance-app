@@ -58,15 +58,19 @@ import { Prestation } from 'src/app/store/prestation/tierPayant/model';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
+import * as pahologieSlector from '../../../../store/parametrage/pathologie/selector';
+import * as pahologiefeatureAction from '../../../../store/parametrage/pathologie/actions';
+import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
+import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 
 
 
 @Component({
-  selector: 'app-depense-famille-acte',
-  templateUrl: './depense-famille-acte.component.html',
-  styleUrls: ['./depense-famille-acte.component.scss']
+  selector: 'app-depense-famille-pathologie',
+  templateUrl: './depense-famille-pathologie.component.html',
+  styleUrls: ['./depense-famille-pathologie.component.scss']
 })
-export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
+export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -117,6 +121,8 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
   display = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
+  pathologieList:Array<Pathologie> = [];
+  pathologieList$: Observable<Array<Pathologie>>;
 
   
   constructor( private store: Store<AppState>,
@@ -126,7 +132,7 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Depense par famille de prestation'}]);
+                this.breadcrumbService.setItems([{ label: 'Affectation'}]);
    }
 
   
@@ -153,6 +159,19 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
        
       }
     });
+
+
+    this.pathologieList$ = this.store.pipe(select(pahologieSlector.pathologieList));
+    this.store.dispatch(pahologiefeatureAction.loadPathologie());
+    this.pathologieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.pathologieList = value.slice();
+        
+       
+      }
+    });
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
     this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -173,7 +192,6 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
       }
     });
 
-    
     this.store.dispatch(featureActionDepense.setReportDepenseFamille(null));
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -431,11 +449,9 @@ loadGroupeByPolice(){
   
   }
   findOperationGrandLivre() {
-    this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check?.police?.id;
-    // this.check.adherentPrincipalId = this.check?.adherent?.id;
    
-    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_ACTE;
+   
+    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_PATHOLOGIE;
     this.report.check = this.check;
     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     //this.store.dispatch(featureActionDepense.updateDepenseFamilleActe(this.check));
