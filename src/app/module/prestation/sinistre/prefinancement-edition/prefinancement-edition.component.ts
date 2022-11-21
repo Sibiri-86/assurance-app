@@ -234,6 +234,7 @@ findMontantPlafond(event){
       referenceBordereau: new FormControl(''),
       dateSaisie: new FormControl({value: '', disabled: true}),
       dateDeclaration: new FormControl(),
+      dateSoins: new FormControl(),
       matriculeAdherent: new FormControl(''),
       nomAdherent: new FormControl({value: '', disabled: true}),
       prenomAdherent: new FormControl({value: '', disabled: true}),
@@ -1165,6 +1166,7 @@ rechercheAdherentDateSoin(event) {
    this.prefinancementModel = this.prestationForm.value;
 
    this.prefinancementModel.dateSaisie = new Date();
+   // this.prefinancementModel.dateSoins = 
    this.prefinancementModel.adherent = this.adherentSelected;
    this.prefinancementModel.prestation = this.prestationsList;
    this.prefinancementList.push(this.prefinancementModel);

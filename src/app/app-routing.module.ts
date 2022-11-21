@@ -87,6 +87,7 @@ import { DepenseFamilleComponent } from './module/reporting/production/depense-f
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
 import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
 import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
+import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 
 @NgModule({
     imports: [
@@ -180,6 +181,7 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
                     {path: 'reporting/depense-famille-acte', component: DepenseFamilleActeComponent},
                     {path: 'reporting/depense-famille-prestataire', component: DepenseFamillePrestataireComponent},
                     {path: 'reporting/depense-famille-pathologie', component: DepenseFamillePathologieComponent},
+                    {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
 
                     
                 ]

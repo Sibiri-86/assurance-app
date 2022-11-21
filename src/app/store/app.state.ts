@@ -62,6 +62,7 @@ import { CompteState } from './comptabilite/compte/state';
 import { TiersState } from './comptabilite/tiers/state';
 import { DepenseFamilleState } from './reporting/depense-famille/state';
 import { RecapitulatifState } from './reporting/production/recapitulatif/state';
+import { RepartitionDepenseStatutState } from './reporting/production/repartitionDepenseStatut/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -125,5 +126,6 @@ export interface AppState {
   tiersState: TiersState;
   depenseFamilleState: DepenseFamilleState;
   recapitulatifState: RecapitulatifState;
+  repartitionDepenseStatutState: RepartitionDepenseStatutState;
 
 }

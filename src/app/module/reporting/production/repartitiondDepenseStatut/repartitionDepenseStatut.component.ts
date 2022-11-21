@@ -36,17 +36,18 @@ import { printPdfFile } from '../../../util/common-util';
 import * as garantSelector from "../../../../store/contrat/garant/selector";
 import { AppelFondService } from 'src/app/store/comptabilite/appelFond/service';
 import { Recapitulatif } from 'src/app/store/reporting/production/recapitulatif/model';
-import * as recapAction from 'src/app/store/reporting/production/recapitulatif/action';
-import * as recapSelector from '../../../../store/reporting/production/recapitulatif/selector';
+import * as repartitionDepenseStatutAction from 'src/app/store/reporting/production/repartitionDepenseStatut/action';
+import * as repartitionDepenseStatutSelector from '../../../../store/reporting/production/repartitionDepenseStatut/selector';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
+import { RepartitionDepenseStatut } from 'src/app/store/reporting/production/repartitionDepenseStatut/model';
 
 
 @Component({
-  selector: 'app-recapitulatif',
-  templateUrl: './recapitulatif.component.html',
-  styleUrls: ['./recapitulatif.component.scss']
+  selector: 'app-repartitionDepenseStatut',
+  templateUrl: './repartitionDepenseStatut.component.html',
+  styleUrls: ['./repartitionDepenseStatut.component.scss']
 })
-export class RecapitulatifComponent implements OnInit, OnDestroy {
+export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   garantList$: Observable<Array<Garant>>;
@@ -114,7 +115,7 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   appelFondTotal: AppelFond;
 
 
-  recapitulatif: Recapitulatif;
+  repartitionDepenseStatut: RepartitionDepenseStatut;
   recapitulatifs: Array<Recapitulatif>;
 
 
@@ -128,23 +129,43 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
-        police: new FormControl(),
-        souscripteur: new FormControl(),
-        dateEffet: new FormControl(),
-        dateEcheance: new FormControl(),
-        effectif: new FormControl(),
-        primeNette: new FormControl(),
-        primeAcquise: new FormControl(),
-        sinistre: new FormControl(),
-        sinistreSurPrime: new FormControl(),
-        resultatTechnique: new FormControl(),
-        observation: new FormControl(),
-        datePrime: new FormControl('', [Validators.required]),
-        idGarant: new FormControl('', [Validators.required])
+        nombrePopulationAssure: new FormControl(),
+        nombrePopulationConjoint: new FormControl(),
+        nombrePopulationEnfant: new FormControl(), 
+        nombrePopulationTotal: new FormControl(),
+        pourcentagePopulationAssure: new FormControl(),
+        pourcentagePopulationConjoint: new FormControl(),
+        pourcentagePopulationEnfant: new FormControl(),
+        pourcentagePopulationTotal: new FormControl(),
+        ageMoyenAssure: new FormControl(),
+        ageMoyenConjoint: new FormControl(),
+        ageMoyenEnfant: new FormControl(),
+        totalAgeMoyen: new FormControl(),
+        nombreBeneficiaireTraiteAssure: new FormControl(),
+        nombreBeneficiaireTraiteConjoint: new FormControl(),
+        nombreBeneficiaireTraiteEnfant: new FormControl(),
+        nombreBeneficiaireTraiteTotal: new FormControl(),
+        pourcentageBeneficiaireTraiteAssure: new FormControl(),
+        pourcentageBeneficiaireTraiteConjoint: new FormControl(),
+        pourcentageBeneficiaireTraiteEnfant: new FormControl(),
+        pourcentageBeneficiaireTraiteTotal: new FormControl(),
+        montantDepensePeriodeAssure: new FormControl(),
+        montantDepensePeriodeConjoint: new FormControl(),
+        montantDepensePeriodeEnfant: new FormControl(),
+        montantDepensePeriodeTotal: new FormControl(),
+        pourcentageDepensePeriodeTotal: new FormControl(),
+        pourcentageDepensePeriodeAssure: new FormControl(),
+        pourcentageDepensePeriodeConjoint: new FormControl(),
+        pourcentageDepensePeriodeEnfant: new FormControl(),
+        coutMoyentAssure: new FormControl(),
+        coutMoyentConjoint: new FormControl(),
+        coutMoyentEnfant: new FormControl(),
+        dateDebut: new FormControl('', [Validators.required]),
+        dateFin: new FormControl('', [Validators.required]),
     });
 
       this.breadcrumbService.setItems([
-        {label: 'Récapitulatif'}
+        {label: 'Répartition des dépenses par statut'}
     ]);
     }
 
@@ -174,8 +195,8 @@ ngOnInit(): void {
       }
     });
 
-  this.store.dispatch(recapAction.setReportRecapitulatif(null));
-  this.store.pipe(select(recapSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+  this.store.dispatch(repartitionDepenseStatutAction.setReportRepartitionDepenseStatut(null));
+  this.store.pipe(select(repartitionDepenseStatutSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
       .subscribe(bytes => {
           if (bytes) {
               printPdfFile(bytes);
@@ -335,7 +356,7 @@ annulerAppelFond() {
   this.etatAppel = false;
 }
 
-onCreate() {
+/* onCreate() {
   this.recapitulatif = {};
   console.log('===========================================>', this.appelFondForm.get('idGarant').value);
   this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
@@ -346,18 +367,18 @@ onCreate() {
     this.recapitulatifs = res;
     console.log("this.recapitulatifs", res);
   });
-}
+} */
 
 imprimerRecap() {
   //console.log('recap=============>', recap);
-  this.recapitulatif = {};
-  this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
-  this.recapitulatif.datePrime = this.appelFondForm.get('datePrime').value;
-  this.report.typeReporting = TypeReport.RECAPITULATIF_POLICE;
-  this.report.recapitulatif = this.recapitulatif;
-  console.log('this.recapitulatif=============>', this.recapitulatif);
+  this.repartitionDepenseStatut = {};
+  this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
+  this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
+  this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
+  this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
+  console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);
   console.log('this.report', this.report);
-  this.store.dispatch(recapAction.FetchReportRecapitulatif(this.report));
+  this.store.dispatch(repartitionDepenseStatutAction.FetchReportRepartitionDepenseStatut(this.report));
 }
 }
 

@@ -9,23 +9,23 @@
                     <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col">
-                                <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                        showClear="true" [options]="garantList"
-                                                        formControlName="idGarant"
-                                                        [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                                </p-dropdown>
-                            </div>
-                            <div class="p-field p-col">
-                                <label for="compteParent">Date<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <input id="dateAppel" type="date" formControlName="datePrime" pInputText>
+                                <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
+                                <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
                                 <app-entity-validation [entityValidations]="entityValidations"
-                                                [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                                                [formGroup]="appelFondForm" [entityField]="'dateDebut'">
+                                </app-entity-validation>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
+                                <input id="dateFin" type="date" formControlName="dateFin" pInputText>
+                                <app-entity-validation [entityValidations]="entityValidations"
+                                                [formGroup]="appelFondForm" [entityField]="'dateFin'">
                                 </app-entity-validation>
                             </div>
                             <div class="p-field p-col p-mt-5">
                                 
-                                <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Rechercher" icon="pi pi-check" type="submit"></button>
+                                <!-- <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Rechercher" icon="pi pi-check" type="submit"></button> -->
                                
                             </div>
                         </div>
