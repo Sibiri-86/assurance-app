@@ -296,6 +296,8 @@ import { RepartitionDepenseStatutEffects } from './store/reporting/production/re
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
 import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
+import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
+import { StatistiqueParTrancheAgeEffects } from './store/reporting/production/statistiqueParTrancheAge/effect';
 
 @NgModule({
     imports: [
@@ -405,7 +407,8 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
+             StatistiqueParTrancheAgeEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -538,6 +541,7 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
         RepartitionDepenseStatutComponent,
         DepenseFamillePrestataireComponent,
         DepenseFamillePathologieComponent,
+        StatistiqueParTrancheAgeComponent
 
     ],
     providers: [

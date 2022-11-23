@@ -20,6 +20,7 @@ import { Operation } from '../../comptabilite/operation/model';
 import { Recapitulatif } from '../../reporting/production/recapitulatif/model';
 import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
 import { Check } from '../../reporting/depense-famille/model';
+import { StatistiqueParTrancheAge } from '../../reporting/production/statistiqueParTrancheAge/model';
 
 
 export interface Police{
@@ -96,8 +97,9 @@ export interface Report {
     balance?: Balance;
     operation?: Operation;
     recapitulatif?: Recapitulatif;
-    repartitionDepenseStatut?: RepartitionDepenseStatut
+    repartitionDepenseStatut?: RepartitionDepenseStatut;
     check?: Check;
+    statistiqueTrancheAge?: StatistiqueParTrancheAge;
 }
 
 export interface PoliceList {

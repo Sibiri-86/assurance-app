@@ -148,6 +148,8 @@ import * as tiersReducer from '../comptabilite/tiers/reducer';
 import * as depenseFamilleReducer from '../reporting/depense-famille/reducer';
 import * as recapitulatifReducer from '../reporting/production/recapitulatif/reducer';
 import * as repartitionDepenseStatutReducer from '../reporting/production/repartitionDepenseStatut/reducer';
+import * as statistiqueParTrancheAgeReducer from '../reporting/production/statistiqueParTrancheAge/reducer';
+
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -212,7 +214,8 @@ export const reducers: ActionReducerMap<AppState> = {
     tiersState: tiersReducer.reducer,
     depenseFamilleState: depenseFamilleReducer.reducer,
     recapitulatifState: recapitulatifReducer.reducer,
-    repartitionDepenseStatutState: repartitionDepenseStatutReducer.reducer
+    repartitionDepenseStatutState: repartitionDepenseStatutReducer.reducer,
+    statistiqueTrancheAgeState: statistiqueParTrancheAgeReducer.reducer
 
 
 };
