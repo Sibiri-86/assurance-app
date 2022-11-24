@@ -298,10 +298,6 @@ import { DepenseFamillePrestataireComponent } from './module/reporting/productio
 import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
 import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
 import { StatistiqueParTrancheAgeEffects } from './store/reporting/production/statistiqueParTrancheAge/effect';
-import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
-import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
-import { RepartitionDepenseStatutEffects } from './store/reporting/production/repartitionDepenseStatut/effect';
-import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
 
 @NgModule({
