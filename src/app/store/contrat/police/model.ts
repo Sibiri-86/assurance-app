@@ -18,9 +18,14 @@ import { Departement } from '../../parametrage/departement/model';
 import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 import { Operation } from '../../comptabilite/operation/model';
 import { Recapitulatif } from '../../reporting/production/recapitulatif/model';
+<<<<<<< HEAD
 import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
 import { Check } from '../../reporting/depense-famille/model';
 import { StatistiqueParTrancheAge } from '../../reporting/production/statistiqueParTrancheAge/model';
+=======
+import { Check } from '../../reporting/depense-famille/model';
+import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
+>>>>>>> feature_button_policy_validation
 
 
 export interface Police{

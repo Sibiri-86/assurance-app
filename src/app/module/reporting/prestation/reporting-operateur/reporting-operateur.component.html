@@ -1,0 +1,202 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaire()"></button>
+
+                </ng-template>
+             
+			</p-toolbar>
+            
+      </div> 
+        
+        
+        
+        
+      
+        
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Dépense famille acte" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '10 00px'}">
+
+        <ng-template pTemplate="content">
+            <div class="card">
+
+
+                <form>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="garantList"
+                            name="garant"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.garant" (onChange)="loadPoliceByGarant()" >
+                            </p-dropdown>
+    
+                        </div>
+    
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="policeList"
+                            name="police"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadGroupeByPolice()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label  class="espace1" for="numCompte2"> Groupe <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="groupeListes"
+                            name="groupe"
+                            optionLabel="libelle" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.groupe">
+                            </p-dropdown>
+                        </div>
+                            
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-4">
+                                <label  class="espace1" for="numCompte2"> Famille acte <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                <p-dropdown [filter]="true" 
+                                showClear="true" [options]="garanties"
+                                name="famille"
+                                optionLabel="libelle" 
+                                [autoDisplayFirst]="false" [(ngModel)]="check.famille">
+                                </p-dropdown>
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                           
+                                
+                                <input  type="date" pInputText [(ngModel)]="check.dateDebut" name="dateDebut">
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label class="espace1" for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                           
+                                
+                                <input  type="date" pInputText [(ngModel)]="check.dateFin" name="dateFin">
+                            </div>
+                            <div class="p-field p-col-2"></div>
+                            <div class="p-field p-col-2">
+                                <button pButton  
+                                        pRipple icon="pi pi-plus" pTooltip="Ajouter tranche" label="Ajouter tranche"
+                                        class="p-button-success" type="button" (click)="addItemPrestation()"></button>
+                            </div>
+    
+                        </div>
+    
+                        
+
+                        <p-fieldset legend="Liste des Tranches" toggleable="true">
+                            <p-table #dt [value]="trancheList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+                               
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                       
+                                       
+                                        <th>Age 1</th>
+                                        <th>Age 2</th>
+                                        
+                                        
+                                        
+                                    </tr>
+                                </ng-template>
+                    
+                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                    <tr>
+                                
+                                        
+                                      
+                                        <td>{{rowData.age1}}</td>
+                                        <td>{{rowData.age2}}</td>
+                    
+                                         
+                                        
+                                
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
+
+
+                        <div class="p-grid p-justify-between">
+                            <div>
+                                <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                            </div>
+                            <div>
+                                <button pButton pRipple    (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+        </ng-template>
+        </p-dialog>
+
+        <p-dialog [maximizable]="true" [(visible)]="displaytranche" header="Ajouter une tranche" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '10 00px'}">
+
+        <ng-template pTemplate="content">
+            <div class="card">
+
+
+                <form>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12">
+                            <label for="dateFacture">Age 1<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                             <input id="age1"  type="number"  name="age1" pInputText [(ngModel)]="tranche.age1" >
+                     
+    
+                        </div>
+    
+                        <div class="p-field p-col-12">
+                            <label for="age2">Age 2<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                             <input id="age2"  type="number"  name="age2" pInputText [(ngModel)]="tranche.age2" >
+                     
+    
+                        </div>
+                        
+                            
+                        </div>
+                    
+                    
+
+                        
+    
+                        
+
+                        
+
+                        <div class="p-grid p-justify-between">
+                             <div>
+                                <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                            </div> 
+                            <div>
+                                <button pButton pRipple    (click)="add()"  label="Ajouter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+        </ng-template>
+        </p-dialog>
+  
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

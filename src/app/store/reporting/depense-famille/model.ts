@@ -31,6 +31,13 @@ export interface Check {
     groupe?: Groupe;
     typePrestataire?: Array<TypePrestataire>;
     pathologies?: Array<TypePrestataire>;
+    tranches?: Array<Tranche>;
+}
+
+export interface Tranche  {
+    age1?: number;
+    age2?: number;
+    libelle?: string;
 }
 
 export interface DepenseFamilleList {
