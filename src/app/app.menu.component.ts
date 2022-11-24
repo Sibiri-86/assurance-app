@@ -138,6 +138,7 @@ export class AppMenuComponent implements OnInit {
                             {label: 'Dépense centre prescripteur', icon: 'pi pi-clock', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
                             {label: 'Affection', icon: 'pi pi-clock', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
                             {label: 'Dépenses Statuts', icon: 'pi pi-clock', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
+                            {label: 'Dépenses Optique', icon: 'pi pi-clock', routerLink: ['/reporting/depense-optique'], visible: true},
 
                             /* {label: 'Exercice comptabilité', icon: 'pi pi-clock', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
                             {label: 'Opération', icon: 'pi pi-fw pi-list', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
