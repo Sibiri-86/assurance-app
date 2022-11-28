@@ -297,6 +297,7 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
 import { RepartitionDepenseStatutEffects } from './store/reporting/production/repartitionDepenseStatut/effect';
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
+import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
 
 @NgModule({
     imports: [
@@ -540,6 +541,7 @@ import { DepenseOptiqueComponent } from './module/reporting/production/depense-o
         DepenseFamillePathologieComponent,
         RepartitionDepenseStatutComponent,
         DepenseOptiqueComponent,
+        ReportingOperateurComponent,
 
     ],
     providers: [

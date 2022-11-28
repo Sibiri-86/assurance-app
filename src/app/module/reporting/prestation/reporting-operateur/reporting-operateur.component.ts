@@ -442,12 +442,9 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
   findOperationGrandLivre() {
-    this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check?.police?.id;
-    this.check.tranches = this.trancheList;
-    // this.check.adherentPrincipalId = this.check?.adherent?.id;
    
-    this.report.typeReporting = TypeReport.DEPENSE_OPTIQUE;
+   
+    this.report.typeReporting = TypeReport.NOMBRE_CHEQUE_VALIDE;
     this.report.check = this.check;
     console.log("=====================",this.report)
 

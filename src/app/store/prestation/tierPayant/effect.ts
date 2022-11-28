@@ -198,7 +198,7 @@ export class TierPayantEffects {
                 this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, etat).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadOrdreReglementTierPayant()
+                       featureActions.loadOrdreReglementTierPayant()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

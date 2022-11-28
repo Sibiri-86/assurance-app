@@ -1529,8 +1529,21 @@ export class TierPayantEditionComponent implements OnInit {
       editerPrestation1(prestation: Prestation, rowIndex: number) {
         this.compteur = rowIndex;
         console.log("========prestation==============",prestation);
+        this.adherentSelected = prestation?.adherent;
        
-        
+        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.id).subscribe(rest=>{
+
+            this.montantConsomme = rest;
+           
+           
+        });
+
+        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.id).subscribe(rest=>{
+
+            this.montantPlafond1 = rest;
+           
+          });
+
           this.prestationAdd = prestation;
           this.prestationAdd.matriculeAdherent = this.prestationAdd?.adherent?.numero.toString();
           this.prestationAdd.nomAdherent = this.prestationAdd?.adherent?.nom.concat(" ").concat(this.prestationAdd?.adherent?.prenom);

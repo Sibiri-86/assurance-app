@@ -288,9 +288,12 @@ export class PrefinancementValideComponent implements OnInit {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.store.dispatch(featureActionPrefinancement.createOrdreReglement({prefinancement: this.selectPrefinancement}));
+          this.selectPrefinancement = [];
         },
       });
+     // this.selectPrefinancement = [];
     }
+    
   }
 
   validerPrestation(pref: Prefinancement){

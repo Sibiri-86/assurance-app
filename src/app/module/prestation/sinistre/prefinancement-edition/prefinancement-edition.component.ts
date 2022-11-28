@@ -171,10 +171,12 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
    }
 
    findMontantConsomme(event){
+    console.log("====================verifier", event.value?.id);
     console.log(event);
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
+        console.log("==========rest==========", rest);
         console.log(this.montantConsomme);
        
     });
@@ -1309,8 +1311,10 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   console.log("6666666666666666666666666",rowIndex);
   this.prestationPopForm = this.createItem();
   this.compteur = rowIndex;
+  this.adherentSelected = prestation?.adherent;
   this.prestationPopForm.patchValue(prestation);
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
+  this.prestationPopForm.get('matriculeAdherent').setValue(prestation.adherent.numero);
   this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
   this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);
   this.prestationPopForm.get('souscripteur').setValue(prestation.adherent.groupe.police.nom);
@@ -1320,6 +1324,19 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
 } else {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   }
+  this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, prestation.sousActe?.id).subscribe(rest=>{
+
+    this.montantConsomme = rest - prestation.montantRembourse ;
+   
+   
+});
+this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.id).subscribe(rest=>{
+
+  this.montantPlafond1 = rest;
+ 
+});
+  this.findTaux();
+  this.selectDateSoinsSousActe();
   this.displayPrestationpop = true;
 }
 

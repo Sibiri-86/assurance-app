@@ -112,7 +112,7 @@ export class OrdreReglementEditionComponent implements OnInit {
 
   validerOrdreReglement(ordre: OrdreReglement){
     this.confirmationService.confirm({
-      message: 'voulez-vous annuler cet ordre de reglement',
+      message: 'voulez-vous valider cet ordre de reglement',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
