@@ -31,7 +31,7 @@ export const deleteTierPayant = createAction('[delete TierPayant] delete TierPay
 export const loadOrdreReglementTierPayant = createAction('[App Init] load TierPayantReglement');
 export const setLoadOrdreReglementTierPayant = createAction('[App Init] set ordre reglement tierPayant',
     props<OrdreReglementTierPayantList>());
-export const validerTierPayantOrdreReglement = createAction('[App Init] update TierPayant ordre reglement',
+export const validerTierPayantOrdreReglement = createAction('[App Init] update TierPayant ordre reglement ',
     props<{ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement}>());
 export const deValiderOrdreReglement = createAction('[App Init] deValider TierPayant ordre reglement',
     props<{ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement}>());

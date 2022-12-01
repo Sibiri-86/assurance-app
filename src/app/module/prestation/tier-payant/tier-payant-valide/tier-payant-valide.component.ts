@@ -253,9 +253,12 @@ export class TierPayantValideComponent implements OnInit {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.store.dispatch(featureActionTierPayant.createTierPayantOrdreReglement({tierPayant: this.selectTierPayant}));
+          this.selectTierPayant = [];
         },
       });
     }
+  
+
   }
 
   voirPrestation(pref: SinistreTierPayant){

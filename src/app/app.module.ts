@@ -303,6 +303,7 @@ import { FacturePrestatairesComponent } from './module/reporting/prestation/Fact
 import { FacturePrestatairesEffects } from './store/reporting/prestation/facturePrestataires/effect';
 import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 import { ConsommationParSexeEffects } from './store/reporting/medical/consommationParSexe/effect';
+import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
 
 @NgModule({
     imports: [
@@ -550,7 +551,8 @@ import { ConsommationParSexeEffects } from './store/reporting/medical/consommati
         RepartitionDepenseStatutComponent,
         DepenseOptiqueComponent,
         FacturePrestatairesComponent,
-        ConsommationParSexeComponent
+        ConsommationParSexeComponent,
+        ReportingOperateurComponent,
 
     ],
     providers: [
