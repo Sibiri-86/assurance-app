@@ -299,6 +299,10 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
 import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
 import { StatistiqueParTrancheAgeEffects } from './store/reporting/production/statistiqueParTrancheAge/effect';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
+import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
+import { FacturePrestatairesEffects } from './store/reporting/prestation/facturePrestataires/effect';
+import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
+import { ConsommationParSexeEffects } from './store/reporting/medical/consommationParSexe/effect';
 
 @NgModule({
     imports: [
@@ -409,7 +413,7 @@ import { DepenseOptiqueComponent } from './module/reporting/production/depense-o
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -545,6 +549,8 @@ import { DepenseOptiqueComponent } from './module/reporting/production/depense-o
         DepenseFamillePathologieComponent,
         RepartitionDepenseStatutComponent,
         DepenseOptiqueComponent,
+        FacturePrestatairesComponent,
+        ConsommationParSexeComponent
 
     ],
     providers: [

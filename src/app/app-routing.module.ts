@@ -90,6 +90,8 @@ import { DepenseFamillePrestataireComponent } from './module/reporting/productio
 import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
+import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
+import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 
 @NgModule({
     imports: [
@@ -189,6 +191,8 @@ import { DepenseOptiqueComponent } from './module/reporting/production/depense-o
                     {path: 'reporting/depense-famille-pathologie', component: DepenseFamillePathologieComponent},
                     {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
                     {path: 'reporting/depense-optique', component: DepenseOptiqueComponent},
+                    {path: 'reporting/facture-par-prestataires', component: FacturePrestatairesComponent},
+                    {path: 'reporting/medical/consommation-par-sexe', component: ConsommationParSexeComponent},
 
                     
                 ]

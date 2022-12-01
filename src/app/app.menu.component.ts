@@ -132,21 +132,22 @@ export class AppMenuComponent implements OnInit {
                       
                     {label: 'Production', icon: 'pi pi-align-justify', routerLink: ['/reporting'], visible: true,
                          items: [
-                            {label: 'récapitulatif', icon: 'pi pi-pencil', routerLink: ['/reporting/recapitulatif'], visible: true},
-                            {label: 'Dépense familiale', icon: 'pi pi-book', routerLink: ['/reporting/depense-famille'], visible: true},
-                            {label: 'Dépense familiale acte', icon: 'pi pi-clock', routerLink: ['/reporting/depense-famille-acte'], visible: true},
-                            {label: 'Dépenses Statuts', icon: 'pi pi-clock', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
-                            {label: 'Dépense centre prescripteur', icon: 'pi pi-clock', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
-                            {label: 'Affection', icon: 'pi pi-clock', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
-                            {label: 'Stat Tranche Age', icon: 'pi pi-clock', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
-                            {label: 'Dépenses Optique', icon: 'pi pi-clock', routerLink: ['/reporting/depense-optique'], visible: true},
-                           
+                            {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/recapitulatif'], visible: true},
+                            {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille'], visible: true},
+                            {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-acte'], visible: true},
+                            {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
+                            {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
+                            {label: 'Affection', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
+                            {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
+                            {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
+                            
                          ]
                 
                 },
                 {
                     label: 'Prestation', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
                     items: [
+                        {label: 'Fact. Type Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
                         /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
                         {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
                         {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
@@ -157,6 +158,22 @@ export class AppMenuComponent implements OnInit {
 
                     ]
                 },
+                {
+                    label: 'Médical', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
+                    items: [
+                        {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
+                        {label: 'Fact. Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                        /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
+                        {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
+                        {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
+                        {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
+                        {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
+                        {label: 'Arreté journalier', routerLink: ['/comptabilite/arrete-journaux'], visible: true},
+                        {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true}, */
+
+                    ]
+                },
+                
                 /* {
                     label: 'Etat', icon: 'pi pi-print', routerLink: ['/comptabilite'], visible: true,
                     items: [

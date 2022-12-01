@@ -1,0 +1,419 @@
+<div class="p-grid">
+	<div class="p-col-12">
+
+		<p-toast></p-toast>
+
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple icon="pi pi-dollar" pTooltip="Voir les consommations par sexe" label="Consommations par sexe" class=" p-button-info" (click)="imprimerFormulaire()"></button>
+                </ng-template>
+                <!-- <ng-template pTemplate="right">
+                    
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col p-mt-5">
+                                
+                                <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                               
+                            </div>
+                        </div>
+                </ng-template> -->
+				
+			</p-toolbar>
+
+			<p-table #dt [value]="recapitulatifs" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['compte','poste','libelle']"
+					 [(selection)]="selectedGarants" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<!-- <th style="width: 3rem">
+							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+						</th> --> 
+                        <th pSortableColumn="contact" style="font-size: 12px !important;">Police<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" style="font-size: 12px !important;">Souscripteur<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="code" style="font-size: 12px !important;">Effet <p-sortIcon field="code"></p-sortIcon></th>
+						<th pSortableColumn="nom" style="font-size: 12px !important;">Echéance <p-sortIcon field="nom"></p-sortIcon></th>
+						<th pSortableColumn="personneRessource"style="font-size: 12px !important;">Effectif<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" style="font-size: 12px !important;">Prime Nette <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="font-size: 12px !important;"> Prime Acquise  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="font-size: 12px !important;"> Sinistre<p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="font-size: 12px !important;"> S/P<p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux" style="font-size: 12px !important;">Resultat Technique<p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <th pSortableColumn="commissionPrime.taux"style="font-size: 12px !important;">Observation<p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="commissionPrime.taux" style="width: 10rem"> Signataire  <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th> -->
+						<!-- <th></th> -->
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr>
+						<!-- <td>
+							<p-tableCheckbox [value]="garant"></p-tableCheckbox>
+						</td> -->
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.police}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.souscripteur}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.dateEffet | formatTableValue : 'date'}}</span></td>
+						<td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.dateEcheance | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.effectif}}</span></td>
+						<td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.primeNette | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.primeAcquise | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.sinistre | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.sinistreSurPrime | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.resultatTechnique | formatTableValue: 'number':true}}</span></td>
+                        <!-- <td><span class="p-column-title" style="font-size: 12px !important;">{{garant?.observation}}</span></td> -->
+                        <td>
+                            <span *ngIf="garant?.observation === 'Rentable'" class="p-badge p-badge-success" style="width:90px">{{garant?.observation}}</span>
+                            <span *ngIf="garant?.observation === 'Non Rentable'" class="p-badge p-badge-danger" style="width:90px">{{garant?.observation}}</span>
+                        </td>
+                        <!-- <td><span class="p-column-title">{{garant?.signataire}}</span></td> -->
+						<!-- <td>
+							<button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" class="p-button-rounded p-button-success p-mr-1" (click)="editGarant(garant)"></button>
+							<button pButton pRipple icon="pi pi-trash"  pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-1" (click)="deleteAppelFond(garant)"></button>
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info p-mr-1" (click)="imprimerAppelFond(garant)"></button>
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir details" class="p-button-rounded p-button-info" (click)="voirDetail(garant)"></button>
+						</td> -->
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{recapitulatifs ? recapitulatifs.length : 0 }} polices.
+					</div>
+				</ng-template>
+			</p-table>
+		</div>
+
+
+        <!-- <p-dialog [maximizable]="true" [(visible)]="infosGarant" header="Appel de Fond détails" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <h5></h5>
+                <div class="p-fluid p-formgrid p-grid">
+                       <div class="p-field p-col">
+                        <label for="lastname2">Garant</label>
+                        <div>
+                            <span>{{appelFondView?.garant?.nom}}</span>
+                        </div>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname2">Libelle</label>
+                            <div>
+                                <span>{{appelFondView?.libelle}}</span>
+                            </div>
+                            </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">N° Reference</label>
+                            <div>
+                                <span>{{appelFondView?.numeroRef}}</span>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Destinataire</label>
+                        <div>
+                            <span>{{appelFondView?.destinataire}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Objet</label>
+                    <div>
+                        <span>{{appelFondView?.objet}}</span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Type de Compte</label>
+                        <div>
+                            <span>{{appelFondView?.typeCompte}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Date d'appel</label>
+                        <div>
+                            <span>{{appelFondView?.dateAppel | formatTableValue : 'date'}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-field p-col">
+                    <label for="firstname2">Montant d'appel</label>
+                    <div>
+                        <span>{{appelFondView?.montantAppel | formatTableValue: 'number':true}}</span>
+                    </div>
+                    </div>
+
+                        <div class="p-field p-col">
+                        <label for="dateEffet">Signataire</label>
+                        <div>
+                            <span>{{appelFondView?.signataire}}</span>
+                        </div>
+                        </div>  
+    
+                </div>
+            </div>
+            </ng-template>
+        </p-dialog> -->
+        
+         
+
+
+        <p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Ajouter un appel de fond" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()">
+            <ng-template pTemplate="content">
+            <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
+                <div class="card">
+                <p-fieldset legend="Identification" toggleable="true">
+                <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Destinataire <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="destinataire" type="text" required formControlName="destinataire"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'destinataire'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Numéro Reference <span style="color: red !important; font-size: 1.4em"></span></label>
+                            <input id="numeroRef" type="text" disabled formControlName="numeroRef"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'numeroRef'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Libelle <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="libelle" type="text" required formControlName="libelle"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'libelle'">
+                            </app-entity-validation>
+                        </div>
+
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div class="p-field p-col">
+                        <label for="firstname2">Objet <span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <input id="objet" type="text" formControlName="objet"  pInputText>
+                        <app-entity-validation [entityValidations]="entityValidations"
+                                      [formGroup]="appelFondForm" [entityField]="'objet'">
+                        </app-entity-validation>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="firstname2">Type de Compte <span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <p-dropdown inputId="decision" [filter]="true"
+                                                showClear="true" [options]="typeCompte"
+                                                formControlName="typeCompte"
+                                                [autoDisplayFirst]="false">
+                        </p-dropdown>
+                        
+                    </div>
+
+                       <div class="p-field p-col">
+                            <label for="compteParent">Date d'Appel de fond <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateAppel" type="date" formControlName="dateAppel" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                            </app-entity-validation>
+                        </div>
+
+                    </div>
+
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="garant"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                            
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Montant Appel de fond<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="montantAppel" type="text" required formControlName="montantAppel"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'montantAppel'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="firstname2">Signataire <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="signataire" type="text" required formControlName="signataire"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'signataire'">
+                            </app-entity-validation>
+                        </div>
+
+                       
+
+                </div>
+
+                    
+
+                </p-fieldset>
+                    </div>
+
+                <div class="p-grid p-justify-between">
+                    <div>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
+                    </div>
+                    <div>
+                    <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    </div>
+                </div>
+                </form>                     
+             </ng-template>
+        </p-dialog>
+
+        <p-dialog [maximizable]="true" [(visible)]="etatAppel" header="Etat de suivi des appels de fond" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}" (onHide)="annulerAppelFond()">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <h5></h5>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-4">
+                        <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                showClear="true" [options]="garantList"
+                                                [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="compteParent">Date debut <span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <input id="dateAppel" type="date" pInputText [(ngModel)]="dateDebut" (onchange)="searchAppelFond()">
+                        <!-- <app-entity-validation [entityValidations]="entityValidations"
+                                        [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                        </app-entity-validation> -->
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="compteParent">Date fin <span style="color: red !important; font-size: 1.4em">*</span></label>
+                        <input id="dateAppel" type="date"  pInputText [(ngModel)]="dateFin" (onchange)="searchAppelFond()">
+                        <!-- <app-entity-validation [entityValidations]="entityValidations"
+                                        [formGroup]="appelFondForm" [entityField]="'dateAppel'">
+                        </app-entity-validation> -->
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label for="compteParent">Rechercher <span style="color: red !important; font-size: 1.4em"></span></label>
+                        <button pButton pRipple label="Rechercher" [disabled]="!garant || !dateDebut || !dateFin" icon="pi pi-search-plus" class="p-button-success p-mr-2 p-mb-2" (click)="searchAppelFond()"></button>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <span *ngIf="appelFondTotal?.totalAppel != null">
+                        <span style="color: black; font-weight:bold; font-size: 1.3em">Montant total perçu auprès du garant "{{garant?.nom}}" par 
+                        appels de fond du {{dateDebut | formatTableValue : 'date'}} au {{dateFin | formatTableValue : 'date'}}=></span> <span style="color: green; font-weight:bold; font-size: 
+                            1.6em">{{appelFondTotal?.totalAppel | formatTableValue: 'number':true}} FCFA</span> 
+                    </span>
+                </div>
+                
+            </div>
+            </ng-template>
+        </p-dialog>
+
+
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Analyse comparative des consommations par sexe" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '10 00px'}">
+
+        <ng-template pTemplate="content">
+            <div class="card">
+
+                <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <!-- <div class="p-field p-col">
+                            <label for="firstname2">Type Prestataire<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="police"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="groupe"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div> -->
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateDebut'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateFin" type="date" formControlName="dateFin" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateFin'">
+                            </app-entity-validation>
+                        </div>
+                    </div>
+                    <!-- <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="garant"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="police"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="groupe"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        
+                    </div> -->
+                    <div class="p-grid p-justify-between">
+                        <div>
+                            <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                        </div>
+                        <div>
+                            <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </ng-template>
+        </p-dialog>
+
+
+            <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+	</div>
+</div>
