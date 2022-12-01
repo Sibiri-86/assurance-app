@@ -331,29 +331,13 @@
 
 
         <p-dialog [maximizable]="true" [(visible)]="display" header="Factures par types de prestataires" [modal]="true" styleClass="p-fluid" 
-        [style]="{width: '10 00px'}">
+        [style]="{width: '1000px'}">
 
         <ng-template pTemplate="content">
             <div class="card">
 
-                <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
+                <form  [formGroup]="appelFondForm">
                     <div class="p-fluid p-formgrid p-grid">
-                        <!-- <div class="p-field p-col">
-                            <label for="firstname2">Type Prestataire<span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    formControlName="police"
-                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                            </p-dropdown>
-                        </div>
-                        <div class="p-field p-col">
-                            <label for="firstname2">Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
-                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                    showClear="true" [options]="garantList"
-                                                    formControlName="groupe"
-                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                            </p-dropdown>
-                        </div> -->
                         <div class="p-field p-col">
                             <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
                             <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
@@ -367,6 +351,22 @@
                             <app-entity-validation [entityValidations]="entityValidations"
                                             [formGroup]="appelFondForm" [entityField]="'dateFin'">
                             </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Type Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-multiSelect inputId="typePrestataireList" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="typePrestataireList"
+                                                    [autoDisplayFirst]="false" 
+                                                    [formGroup]="appelFondForm" formControlName="typePrestataire"
+                                                    optionLabel="libelle"></p-multiSelect> 
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-multiSelect inputId="prestataire" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="prestataireList"
+                                                    formControlName="prestataire"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
+                                                    optionLabel="libelle" [formGroup]="appelFondForm">
+                            </p-multiSelect> 
                         </div>
                     </div>
                     <!-- <div class="p-fluid p-formgrid p-grid">

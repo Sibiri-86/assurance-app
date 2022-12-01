@@ -53,6 +53,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -99,7 +100,8 @@ export class PrefinancementValideComponent implements OnInit {
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+               private router: Router) {
      this.breadcrumbService.setItems([{ label: 'Sinistre valide' }]);
 }
 
@@ -363,6 +365,15 @@ export class PrefinancementValideComponent implements OnInit {
       }
     });
   }
+
+  navigateSinistre() {
+    this.router.navigateByUrl('/prestation/prefinancement/ordre-reglement');
+  }
+
+  navigateSinistre2() {
+    this.router.navigateByUrl('/prestation/prefinancement');
+  }
+  
 }
 
 

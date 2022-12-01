@@ -16,6 +16,9 @@ export interface FacturePrestataires {
     groupe?: Groupe;
     dateDebut?: Date;
     dateFin?: Date;
+    prestataires?: Array<Prestataire>;
+    prestataire?: Prestataire;
+    isPrestataire?: boolean;
 }
 
 

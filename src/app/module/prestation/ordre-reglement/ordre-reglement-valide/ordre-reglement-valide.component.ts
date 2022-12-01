@@ -53,6 +53,7 @@ import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -70,7 +71,8 @@ export class OrdreReglementValideComponent implements OnInit {
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+               private router: Router) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement valide' }]);
 }
 
@@ -113,6 +115,10 @@ export class OrdreReglementValideComponent implements OnInit {
   voirSinistre(ordre: OrdreReglement) {
     this.displaySinistre = true;
     this.prefinancement = ordre.prefinancement;
+  }
+
+  navigateSinistre2() {
+    this.router.navigateByUrl('/prestation/prefinancement/ordre-reglement');
   }
 
 }

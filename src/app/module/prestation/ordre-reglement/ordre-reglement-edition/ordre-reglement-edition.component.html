@@ -4,8 +4,12 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <p-toolbar styleClass="p-mb-4">
-                    <ng-template pTemplate="left">
+                    <!-- <ng-template pTemplate="left">
                         <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerOrdreReglement()"></button>
+                    </ng-template> -->
+                    <ng-template pTemplate="right">
+                        <button pButton pRipple label="Revenir aux sinistres validés" icon="pi pi-arrow-left" class="p-button-warning p-mr-2 p-mb-2" (click)="navigateSinistre2()"></button>
+                        <button pButton pRipple label="Aller aux ordres de paiement validés" icon="pi pi-arrow-right" class="p-button-secondary p-mr-2 p-mb-2" (click)="navigateSinistre()"></button>
                     </ng-template>
                     <!--
                     <ng-template pTemplate="right">

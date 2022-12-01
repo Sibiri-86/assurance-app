@@ -10,6 +10,9 @@
 					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
 				</ng-template>
                 -->
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Revenir à l'édition des ordres de paiement" icon="pi pi-arrow-left" class="p-button-warning p-mr-2 p-mb-2" (click)="navigateSinistre2()"></button>
+                </ng-template>
 			</p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"

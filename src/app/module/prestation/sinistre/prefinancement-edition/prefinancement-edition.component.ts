@@ -68,6 +68,7 @@ import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { ConventionService } from 'src/app/store/medical/convention/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -136,13 +137,15 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   compteur: number = null;
   typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
   displayFP = false;
+  typePaiementValide = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private conventionService: ConventionService,
                private tierPayantService: TierPayantService,
                private prefinancementService: PrefinancementService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+               private router: Router) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
 
@@ -251,10 +254,10 @@ findMontantPlafond(event){
       prestation: this.formBuilder.array([]),
       dateRetrait: new FormControl({value: '', disabled: true}),
       typePaiement: new FormControl('', Validators.required),
-      numeroOrange: new FormControl(''),
-      numeroMobicash: new FormControl(''),
-      numeroVirement: new FormControl(''),
-      nomBenefiniciaire: new FormControl(''),
+      numeroOrange: new FormControl(),
+      numeroMobicash: new FormControl(),
+      numeroVirement: new FormControl(),
+      nomBenefiniciaire: new FormControl(),
     });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -1108,6 +1111,16 @@ rechercheAdherentDateSoin(event) {
   }
 }
 
+verifieDateSoins(event){
+  if( new Date(this.prestationPopForm.get('dateSoins').value).getTime() > new Date().getTime()) {
+    this.addMessage('error', 'Date de soins invalide',
+                'La date de soins ne peut pas être supérieure à celle du jour');
+                //this.prestationForm.get('dateSoins').setValue("");
+                this.prestationPopForm.patchValue({dateSoins: null});
+                //this.adherentSelected = null;
+}
+}
+
   rechercherAdherent(event) {
     if (event.target.value !== '') {
     console.log(event.target.value);
@@ -1347,7 +1360,24 @@ fermerPrestation(){
 }
 
 changeType(typePaiement) {
+this.typePaiementValide = false;
 console.log(typePaiement);
+console.log(this.typePaiementValide);
+console.log(this.prestationForm.get('numeroOrange').value);
+if(typePaiement == 'ORANGE_MONEY' && this.prestationForm.get('numeroOrange').value == null || typePaiement == 'ORANGE_MONEY' && this.prestationForm.get('nomBenefiniciaire').value == null) {
+  this.typePaiementValide = true;
+} else if ( typePaiement == 'MOOV_MONEY' && this.prestationForm.get('numeroMobicash').value == null || typePaiement == 'MOOV_MONEY' && this.prestationForm.get('nomBenefiniciaire').value == null ) {
+  this.typePaiementValide = true;
+} else if(typePaiement == 'VIREMENT' && this.prestationForm.get('numeroVirement').value == null) {
+  this.typePaiementValide = true;
+} else {
+  this.typePaiementValide = false;
+}
+console.log(this.typePaiementValide);
+}
+
+navigateSinistre() {
+  this.router.navigateByUrl('/prestation/prefinancement/valide');
 }
 
 }

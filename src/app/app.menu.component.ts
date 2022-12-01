@@ -147,8 +147,8 @@ export class AppMenuComponent implements OnInit {
                 {
                     label: 'Prestation', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
                     items: [
-                        {label: 'Fact. Type Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
-                        {label: 'Statistique ', routerLink: ['/reporting/reporting-operateur'], visible: true},
+                        {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                        {label: 'Statistique ',  icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/reporting-operateur'], visible: true},
                         /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
                         {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
                         {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
@@ -163,7 +163,7 @@ export class AppMenuComponent implements OnInit {
                     label: 'Médical', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
                     items: [
                         {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
-                        {label: 'Fact. Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                        {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
                         /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
                         {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
                         {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},

@@ -45,6 +45,12 @@ import * as facturePrestataireSelector from '../../../../store/reporting/prestat
 import { StatistiqueTrancheAgeService } from 'src/app/store/reporting/production/statistiqueParTrancheAge/service';
 import { StatistiqueParTrancheAge } from 'src/app/store/reporting/production/statistiqueParTrancheAge/model';
 import { FacturePrestataires } from 'src/app/store/reporting/prestation/facturePrestataires/model';
+import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
+import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
+import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
+import * as prestatairefeatureAction from '../../../../store/parametrage/prestataire/actions';
+import * as typePrestataireSlector from '../../../../store/parametrage/type-prestataire/selector';
+import * as typePrestatairefeatureAction from '../../../../store/parametrage/type-prestataire/actions';
 
 
 @Component({
@@ -118,6 +124,10 @@ export class FacturePrestatairesComponent implements OnInit, OnDestroy {
   dateDebut: Date;
   dateFin: Date;
   appelFondTotal: AppelFond;
+  prestataireList:Array<Prestataire> = [];
+  prestataireList$: Observable<Array<Prestataire>>;
+  typePrestataireList:Array<TypePrestataire> = [];
+  typePrestataireList$: Observable<Array<TypePrestataire>>;
 
 
   repartitionDepenseStatut: RepartitionDepenseStatut;
@@ -127,6 +137,7 @@ export class FacturePrestatairesComponent implements OnInit, OnDestroy {
   facturePrestataire: FacturePrestataires;
 
   display = false;
+  verif = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -178,6 +189,30 @@ ngOnInit(): void {
       if (value) {
         this.garantList = value.slice();
         console.log("garantListe", this.garantList);
+      }
+    });
+
+    this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
+    this.store.dispatch(prestatairefeatureAction.loadPrestataire());
+    this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.prestataireList = value.slice();
+        
+       
+      }
+    });
+
+    this.typePrestataireList$ = this.store.pipe(select(typePrestataireSlector.typePrestataireList));
+    this.store.dispatch(typePrestatairefeatureAction.loadTypePrestataire());
+    this.typePrestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.typePrestataireList = value.slice();
+        
+       
       }
     });
 
@@ -359,17 +394,42 @@ imprimerFormulaire() {
   this.display = true;
 }
 
+changeDisplay() {
+  if(this.appelFondForm.controls.prestataire.value.length !== 0) {
+    this.verif= true;
+  } else {
+    this.verif = false;
+  }
+}
+
 imprimerRecap() {
-  //console.log('recap=============>', recap);
+  console.log(' this.verif=============>',  this.verif);
   this.facturePrestataire = {};
-  this.facturePrestataire.dateDebut = this.appelFondForm.get('dateDebut').value;
-  this.facturePrestataire.dateFin = this.appelFondForm.get('dateFin').value;
-  //this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
-  this.report.typeReporting = TypeReport.FACTURE_TYPE_PRESTATAIRE;
-  this.report.facturePrestataires = this.facturePrestataire;
-  console.log('this.facturePrestataire=============>', this.facturePrestataire);
-  console.log('this.report', this.report);
-  this.store.dispatch(facturePrestataireAction.FetchReportFacturePrestataires(this.report));
+  this.facturePrestataire.isPrestataire = this.verif;
+  if(this.verif){
+    console.log('entrer prestataires=============>');
+    this.facturePrestataire.dateDebut = this.appelFondForm.get('dateDebut').value;
+    this.facturePrestataire.dateFin = this.appelFondForm.get('dateFin').value;
+    this.facturePrestataire.prestataires = this.appelFondForm.get('prestataire').value;
+    this.report.typeReporting = TypeReport.FACTURE_PRESTATAIRE;
+    this.report.facturePrestataires = this.facturePrestataire;
+    console.log('this.facturePrestataire=============>', this.facturePrestataire);
+    console.log('this.report', this.report);
+    this.store.dispatch(facturePrestataireAction.FetchReportFacturePrestataires(this.report));
+  } else {
+    console.log('entrer type prestataires=============>');
+    this.facturePrestataire.dateDebut = this.appelFondForm.get('dateDebut').value;
+    this.facturePrestataire.dateFin = this.appelFondForm.get('dateFin').value;
+    //this.facturePrestataire.prestataires = this.appelFondForm.get('prestataire').value;
+    //this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
+    this.report.typeReporting = TypeReport.FACTURE_TYPE_PRESTATAIRE;
+    this.report.facturePrestataires = this.facturePrestataire;
+    console.log('this.facturePrestataire=============>', this.facturePrestataire);
+    console.log('this.report', this.report);
+    this.store.dispatch(facturePrestataireAction.FetchReportFacturePrestataires(this.report));
+  }
+  
+  
 }
 }
 
