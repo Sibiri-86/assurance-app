@@ -66,7 +66,7 @@
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
                             </button>
-                            <button pButton icon="pi pi-times" pTooltip="Devalider"
+                            <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Devalider"
                                     class="p-button-rounded p-button-danger "
                                     (click)="deValiderOrdreReglement(ordre)">
                             </button>

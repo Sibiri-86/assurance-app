@@ -33,7 +33,7 @@ import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
 import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
-import { printPdfFile } from '../../../util/common-util';
+import { printExcelfFile, printPdfFile } from '../../../util/common-util';
 import * as featureActionExercice from '../../../../store/comptabilite/exercice-comptable/actions';
 import * as exerciceListSelector from '../../../../store/comptabilite/exercice-comptable/selector';
 import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
@@ -190,7 +190,7 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
-                printPdfFile(bytes);
+                printExcelfFile(bytes);
         }
     });
 
