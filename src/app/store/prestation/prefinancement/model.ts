@@ -37,6 +37,7 @@ export interface OrdreReglement {
     montantPaye?: number;
     banque?: Banque;
     assure?: Adherent;
+    isPaiement?: Boolean;
 }
 
 export interface Prefinancement {

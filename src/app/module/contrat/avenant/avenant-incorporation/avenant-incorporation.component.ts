@@ -442,6 +442,10 @@ export class AvenantIncorporationComponent implements OnInit{
 
     createHistoriqueAvenant(): void {
         console.log("============================", this.adherentForm.value);
+        if(this.adherentForm.value.id === null) {
+
+            this.adherentForm.value.id ="0";
+        }
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
         adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
@@ -452,9 +456,12 @@ export class AvenantIncorporationComponent implements OnInit{
         });
         this.adherentFamilleListe.push(adherantFamille);
         this.adherentForm.reset();
+        
+        console.log("============id==========",this.adherentForm.value.id);
         this.familys.reset();
         this.familys.clear();
         this.adherentSelected = {};
+        
         console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
         console.log(adherantFamille);
         console.log('***************-------------------------', this.customForm.get('groupe').value);

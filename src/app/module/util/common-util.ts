@@ -6,3 +6,8 @@ export function removeBlanks(stringValue: string): number {
 export function printPdfFile(bytes) {
   window.open(URL.createObjectURL(new Blob([bytes], {type: 'application/pdf'})));
 }
+
+export function printExcelfFile(bytes) {
+  window.open(URL.createObjectURL(new Blob([bytes], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})));
+}
+

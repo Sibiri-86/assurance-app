@@ -863,6 +863,65 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   setGroupeAndPrime(group: Groupe): void {
+    console.log('++++  group.prime ++++');
+    console.log(group);
+   // const date1 = new Date(group.dateEcheance);
+    this.groupeForm.setValue({
+        id: group?.id || null,
+        libelle: group?.libelle,
+        taux: group?.taux,
+        territorialite: group.territorialite || [],
+        duree: group.duree,
+        dateEffet: new Date(group.dateEffet),
+        // typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
+        typeDuree: group?.typeDuree,
+        dateEcheance: new Date(group.dateEcheance),
+        numeroGroupe: group.numeroGroupe,
+        typePrime: group?.typePrime,
+        adresse: group?.adresse,
+        prime: group?.prime,
+        police: group?.police,
+        commune: group?.commune,
+        description: group?.description
+    });
+    /* this.groupeForm.patchValue({
+        id: group?.id || null,
+        libelle: group?.libelle,
+        taux: group?.taux,
+        territorialite: group.territorialite || [],
+        duree: group.duree,
+        dateEffet: new Date(group.dateEffet),
+        typeDuree: {},
+        dateEcheance: new Date(group.dateEcheance),
+        numeroGroupe: group.numeroGroupe,
+        typePrime: group?.prime.typePrime,
+        adresse: group?.adresse,
+        prime: group?.prime,
+        police: group?.police,
+        commune: group?.commune,
+        description: group?.description
+    }); */
+
+    this.primeForm.patchValue({
+        prime: group.typePrime,
+        primeEmploye: group.prime?.primeEmploye,
+        primeConjoint: group.prime?.primeConjoint,
+        primeEnfant: group.prime?.primeEnfant,
+        primeFamille: group.prime?.primeFamille,
+        primeAdulte: group.prime?.primeAdulte,
+        primePersonne: group.prime.primeEmploye,
+        primeAnnuelle: group.prime?.primeAnnuelle,
+    });
+    this.groupeForm.get('dateEffet').setValue(new Date(group.dateEffet));
+
+    this.selectedTypePrime = group.typePrime;
+    console.log('++++---------  this.groupeForm.value ------++++');
+    console.log(this.groupeForm.value);
+    // this.selectedTypePrime = group.prime.typePrime;
+}
+
+
+ /* setGroupeAndPrime(group: Groupe): void {
     console.log('***********group************');
     console.log(group);
     this.typeDureeList.find(t => {
@@ -902,7 +961,7 @@ export class AvenantModificationComponent implements OnInit {
     });
     this.selectedTypePrime = group.typePrime;
     // this.changePrime(group.prime);
-  }
+  }*/
 
   onRefreshDateEcheanceForGroupe() {
     if (this.groupeForm.get('dateEffet').value !== null && this.groupeForm.get('typeDuree').value !== null
@@ -1250,6 +1309,71 @@ export class AvenantModificationComponent implements OnInit {
   }
 
   changePrime(event) {
+    this.selectedTypePrime = {} ;
+    console.log('=======this.selectedTypePrime======', this.selectedTypePrime);
+    this.primeForm.reset({});
+    console.log('=======this.primeForm======', this.primeForm);
+    this.selectedTypePrime = event.value;
+    console.log('=======this.selectedTypePrime 2======', this.selectedTypePrime);
+    
+    /* this.primeForm.get('prime').setValue(this.selectedTypePrime);
+    this.primeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+    this.groupeForm.get('prime').setValue(this.selectedTypePrime.libelle);
+    console.log("=====this.selectedTypePrime.libelle=====>", this.selectedTypePrime.libelle);
+    console.log("=====this.groupeForm.get('prime').=====>", this.groupeForm.get('prime').value); */
+    // this.primeForm.reset({});
+    if(this.selectedTypePrime.code === "PAE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEnfant: new FormControl('', [Validators.required]),
+            primeAdulte: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PECE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEmploye: new FormControl('', [Validators.required]),
+            primeConjoint: new FormControl('', [Validators.required]),
+            primeEnfant: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PF"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeFamille: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PE"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primeEmploye: new FormControl('', [Validators.required])
+        });
+    }
+    if(this.selectedTypePrime.code === "PP"){
+        this.primeForm = this.formBuilder.group({
+            id: new FormControl(null),
+            prime: new FormControl('', [Validators.required]),
+            primePersonne: new FormControl('', [Validators.required])
+        });
+    }
+
+    this.primeForm.patchValue({
+        prime: this.typePrimeList.find(p=> p.libelle === event.value.libelle),
+        // prime: event.value.libelle,
+        
+    });
+    console.log('=======prime======', this.primeForm.get('prime').value);
+
+    
+    console.log("=====event=====>", event);
+}
+
+
+ /* changePrime(event) {
     this.selectedTypePrime = event.value;
     console.log('========',this.selectedTypePrime);
     this.primeForm.get('prime').setValue(this.selectedTypePrime);
@@ -1258,7 +1382,7 @@ export class AvenantModificationComponent implements OnInit {
       this.onRefreshDateEcheance(this.policeForm.get('duree').value);
     }
     this.primeForm.reset({});
-  }
+  }*/
 
   onRefreshDateEcheance(value: number) {
     /* this.groupeForm.patchValue({
