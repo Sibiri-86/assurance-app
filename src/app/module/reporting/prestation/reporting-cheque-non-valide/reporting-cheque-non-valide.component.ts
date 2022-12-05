@@ -120,6 +120,7 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
   trancheList:Array<Tranche> = [];
   tranche: Tranche = {};
   displaytranche = false;
+  displayExcel = false;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -190,7 +191,12 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
-                printPdfFile(bytes);
+          if(this.displayExcel) {
+            printExcelfFile(bytes);
+            this.displayExcel = false;
+          } else {
+            printPdfFile(bytes);
+          }
         }
     });
 
@@ -438,6 +444,11 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
    imprimerFormulaire() {
     this.display = true;
   }
+  
+  imprimerFormulaireExcel() {
+    this.display = true;
+    this.displayExcel = true;
+  }
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
@@ -445,7 +456,7 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
    
    
     this.report.typeReporting = TypeReport.NOMBRE_CHEQUE_NON_VALIDE;
-    ;
+    this.check.display = this.displayExcel;
     this.report.check = this.check;
     console.log("=====================",this.report)
 

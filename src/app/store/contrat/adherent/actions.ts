@@ -8,6 +8,7 @@ export const deleteAdherents = createAction('[App Init] delete Adherents', props
 export const loadAdherent = createAction('[App Init] load Adherent', props<{idGroupe: string}>());
 export const loadAdherentAll = createAction('[App Init] load Adherent all', props<{idGarantie: string, idPolice: string}>());
 export const loadAdherentDistinct = createAction('[App Init] load Adherent distinct', props<{idGarantie: string, idPolice: string}>());
+export const loadAdherentDistinctGroupe = createAction('[App Init] load Adherent distinct by groupe', props<{idGarantie: string, idPolice: string, idGroupe: sting}>());
 export const loadAdherentGroupe = createAction('[App Init] load Adherent', props<{idGroupe: string}>());
 export const setAdherent = createAction('[App Init] set Adherent',  props<AdherentList>());
 export const importAdherent = createAction('[App Init] import Adherent',  props<{file: File}>());

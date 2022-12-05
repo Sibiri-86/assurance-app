@@ -33,7 +33,7 @@ import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
 import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
-import { printPdfFile } from '../../../util/common-util';
+import { printExcelfFile, printPdfFile } from '../../../util/common-util';
 import * as featureActionExercice from '../../../../store/comptabilite/exercice-comptable/actions';
 import * as exerciceListSelector from '../../../../store/comptabilite/exercice-comptable/selector';
 import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
@@ -119,6 +119,7 @@ export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
   garantieList$: Observable<Array<Garantie>>;
   prestations: Array<Prestation> = [];
   display = false;
+  displayExcel= false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
   pathologieList:Array<Pathologie> = [];
@@ -143,6 +144,10 @@ export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
    }
    imprimerFormulaire() {
     this.display = true;
+  }
+  imprimerFormulaireExcel() {
+    this.display = true;
+    this.displayExcel = true;
   }
   ngOnInit(): void {
    
@@ -196,7 +201,12 @@ export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
-                printPdfFile(bytes);
+          if(this.displayExcel) {
+            printExcelfFile(bytes);
+            this.displayExcel = false;
+          } else {
+            printPdfFile(bytes);
+          }
         }
     });
 
@@ -453,7 +463,9 @@ loadGroupeByPolice(){
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_PATHOLOGIE;
     this.report.check = this.check;
+    this.check.display = this.displayExcel;
     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+   // this.displayExcel =false;
     //this.store.dispatch(featureActionDepense.updateDepenseFamilleActe(this.check));
     console.log("=====================",this.report)
 

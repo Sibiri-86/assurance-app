@@ -48,6 +48,15 @@ $getAdherentsDistinct(idGarantie: string, idPolice: string): Observable<Adherent
   );
 }
 
+$getAdherentsDistinctGroupe(idGarantie: string, idPolice: string, idGroupe: string): Observable<AdherentList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/distinct-groupe`, {params: createRequestOption({idGarantie,
+     idPolice, idGroupe})}).pipe(
+    map((response: AdherentList) => response),
+    catchError(this.handleError())
+  );
+}
+
 posAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, Adherent);
