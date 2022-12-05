@@ -930,6 +930,7 @@ findMontantPlafond(event){
 
     if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
 
+      console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
       myForm.patchValue({
         sort: Sort.ACCORDE,
         observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
@@ -1075,7 +1076,7 @@ findMontantPlafond(event){
           this.prestationPopForm.get('montantRembourse').setValue(((this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantExclu').value) *  this.prestationPopForm.get('taux').value.taux) /100);
           this.prestationPopForm.get('montantSupporte').setValue( this.prestationPopForm.get('baseRemboursement').value  - this.prestationPopForm.get('montantRembourse').value) ;
            if( this.prestationPopForm.get('montantPlafond').value  && (this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.prestationPopForm.get('montantPlafond').value  ) {
-          
+            console.log("============2==========");
             this.prestationPopForm.get('observation').setValue( "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value)))) ;
            
             this.prestationPopForm.get('montantRembourse').setValue( this.prestationPopForm.get('montantPlafond').value - this.montantConsomme);

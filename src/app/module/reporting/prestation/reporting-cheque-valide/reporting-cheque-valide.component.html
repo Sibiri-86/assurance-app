@@ -102,7 +102,7 @@
         
       
         
-        <p-dialog [maximizable]="true" [(visible)]="display" header="Dépense  d'une famille" [modal]="true" styleClass="p-fluid" 
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Nombre de chèques non valider" [modal]="true" styleClass="p-fluid" 
         [style]="{width: '10 00px'}">
 
         <ng-template pTemplate="content">
@@ -110,49 +110,8 @@
 
 
                 <form>
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <p-dropdown [filter]="true" 
-                            showClear="true" [options]="garantList"
-                            name="garant"
-                            optionLabel="nom" 
-                            [autoDisplayFirst]="false" [(ngModel)]="check.garant" (onChange)="loadPoliceByGarant()" >
-                            </p-dropdown>
-    
-                        </div>
-    
-                        <div class="p-field p-col-4">
-                            <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <p-dropdown [filter]="true" 
-                            showClear="true" [options]="policeList"
-                            name="police"
-                            optionLabel="nom" 
-                            [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadGroupeByPolice()">
-                            </p-dropdown>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label  class="espace1" for="numCompte2"> Groupe <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <p-dropdown [filter]="true" 
-                            showClear="true" [options]="groupeListes"
-                            name="groupe"
-                            optionLabel="libelle" 
-                            [autoDisplayFirst]="false" [(ngModel)]="check.groupe" (onChange)="loadAdherentByGroupe()">
-                            </p-dropdown>
-                        </div>
-                            
-                        </div>
 
                         <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col-4">
-                                <label  class="espace1" for="numCompte2"> Adherent <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                                <p-dropdown [filter]="true" 
-                                showClear="true" [options]="adherentList"
-                                name="adherent"
-                                optionLabel="nom" 
-                                [autoDisplayFirst]="false" [(ngModel)]="check.adherent">
-                                </p-dropdown>
-                            </div> 
                             <div class="p-field p-col-4">
                                 <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                            

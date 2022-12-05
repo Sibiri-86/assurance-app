@@ -63,11 +63,11 @@ import { Garantie } from 'src/app/store/parametrage/garantie/model';
 
 
 @Component({
-  selector: 'app-reporting-operateur',
-  templateUrl: './reporting-operateur.component.html',
-  styleUrls: ['./reporting-operateur.component.scss']
+  selector: 'app-reporting-cheque-non-valide',
+  templateUrl: './reporting-cheque-non-valide.component.html',
+  styleUrls: ['./reporting-cheque-non-valide.component.scss']
 })
-export class ReportingOperateurComponent implements OnInit, OnDestroy {
+export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
   displayOperation = false;
   displayAddOperation = false;
   displayAddOperationListe = false;
@@ -128,7 +128,7 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'statistique des opérateure de saisie'}]);
+                this.breadcrumbService.setItems([{ label: 'Nombre de chèque non valide'}]);
    }
 
   
@@ -444,7 +444,7 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
   findOperationGrandLivre() {
    
    
-    this.report.typeReporting = TypeReport.OPERATEUR_SAISIE
+    this.report.typeReporting = TypeReport.NOMBRE_CHEQUE_NON_VALIDE;
     ;
     this.report.check = this.check;
     console.log("=====================",this.report)

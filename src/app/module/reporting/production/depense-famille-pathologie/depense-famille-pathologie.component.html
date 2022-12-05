@@ -17,7 +17,7 @@
         
       
         
-        <p-dialog [maximizable]="true" [(visible)]="display" header="Dépense des Prescripteur" [modal]="true" styleClass="p-fluid" 
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Affection" [modal]="true" styleClass="p-fluid" 
         [style]="{width: '10 00px'}">
 
         <ng-template pTemplate="content">
@@ -28,7 +28,7 @@
                     
 
                         <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col-4">
+                            <!-- <div class="p-field p-col-4">
                                 <label class="espace1" for="numCompte">Pathologie <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                               
                                 <p-multiSelect inputId="pathologieList" dataKey="id" [filter]="true"
@@ -36,14 +36,9 @@
                                                     name="pathologies"
                                                     [(ngModel)]="check.pathologies"  [autoDisplayFirst]="false" 
                                                     optionLabel="libelle"></p-multiSelect> 
-                                <!--  <p-dropdown [filter]="true" 
-                                showClear="true" [options]="typePrestataireList"
-                                name="typePrestataire"
-                                optionLabel="libelle" 
-                                [autoDisplayFirst]="false" [(ngModel)]="check.typePrestataire"  >
-                                </p-dropdown> -->
+                                
         
-                            </div>
+                            </div>-->
                             <div class="p-field p-col-4">
                                 <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                            

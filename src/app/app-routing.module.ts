@@ -90,6 +90,8 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
+import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
+import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
 
 @NgModule({
     imports: [
@@ -186,6 +188,10 @@ import { ReportingOperateurComponent } from './module/reporting/prestation/repor
                     {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
                     {path: 'reporting/depense-optique', component: DepenseOptiqueComponent},
                     {path: 'reporting/reporting-operateur', component: ReportingOperateurComponent},
+                    {path: 'reporting/reporting-cheque-non-valide', component: ReportingChequeNonValideComponent},
+                    {path: 'reporting/reporting-cheque-valide', component: ReportingChequeValideComponent},
+                    
+                    
                     
 
                     

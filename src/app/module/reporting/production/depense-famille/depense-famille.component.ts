@@ -225,8 +225,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
        this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.check.garant.id}));
 
   }
-  loadAdherentByPolice(){
-  this.store.dispatch(featureActionAdherent.loadAdherentDistinct({idGarantie: this.check.garant.id, idPolice: this.check.police.id}));
+  loadAdherentByGroupe(){
+  this.store.dispatch(featureActionAdherent.loadAdherentGroupe({idGroupe: this.check.groupe.id}));
 
 }
   viderDebit() {
@@ -421,7 +421,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   findOperationGrandLivre() {
     this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
-    // this.check.adherentPrincipalId = this.check?.adherent?.id;
+    this.check.adherentPrincipalId = this.check?.adherent?.id;
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
