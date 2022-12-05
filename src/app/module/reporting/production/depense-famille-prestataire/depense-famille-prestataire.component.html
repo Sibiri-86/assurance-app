@@ -7,7 +7,10 @@
                     <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaire()"></button>
 
                 </ng-template>
-             
+                <ng-template pTemplate="right">
+                    <button pButton pRipple icon="pi pi-file-excel" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
+
+                </ng-template>
 			</p-toolbar>
    
         </div> 
@@ -18,7 +21,7 @@
       
         
         <p-dialog [maximizable]="true" [(visible)]="display" header="Dépense des Prescripteur" [modal]="true" styleClass="p-fluid" 
-        [style]="{width: '10 00px'}">
+        [style]="{width: '20 00px'}">
 
         <ng-template pTemplate="content">
             <div class="card">
@@ -33,9 +36,9 @@
                               
                                 <p-multiSelect inputId="typePrestataireList" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="typePrestataireList"
-                                                    name="typePrestataire"
+                                                    name="typePrestataire" appendTo="body"
                                                     [(ngModel)]="check.typePrestataire"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
-                                                    optionLabel="libelle"></p-multiSelect> 
+                                                    optionLabel="libelle"></p-multiSelect>
                                 <!--  <p-dropdown [filter]="true" 
                                 showClear="true" [options]="typePrestataireList"
                                 name="typePrestataire"

@@ -91,6 +91,8 @@ import { RepartitionDepenseStatutComponent } from './module/reporting/production
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
 import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
+import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
+import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
 import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
 import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 
@@ -195,6 +197,10 @@ import { ConsommationParSexeComponent } from './module/reporting/medical/consomm
                     {path: 'reporting/facture-par-prestataires', component: FacturePrestatairesComponent},
                     {path: 'reporting/medical/consommation-par-sexe', component: ConsommationParSexeComponent},
                     {path: 'reporting/reporting-operateur', component: ReportingOperateurComponent},
+                    {path: 'reporting/reporting-cheque-non-valide', component: ReportingChequeNonValideComponent},
+                    {path: 'reporting/reporting-cheque-valide', component: ReportingChequeValideComponent},
+                    
+                    
                     
                 ]
             },

@@ -103,7 +103,22 @@ export class AdherentEffects {
                         )
                     )
                 )
-                );             
+                );  
+                fetchAdherentDistinctGroupe$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.loadAdherentDistinctGroupe),
+                    mergeMap(({idGarantie, idPolice, idGroupe}) =>
+                        this.AdherentService.$getAdherentsDistinctGroupe(idGarantie, idPolice, idGroupe).pipe(
+                            switchMap(value => [
+                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setAdherent(value)
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        )
+                    )
+                )
+                );     
+                
     fetchAdherent$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherent),

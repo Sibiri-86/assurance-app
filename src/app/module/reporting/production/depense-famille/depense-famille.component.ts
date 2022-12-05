@@ -33,7 +33,7 @@ import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/exercice-comptable-operation/service';
 import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
-import { printPdfFile } from '../../../util/common-util';
+import { printExcelfFile, printPdfFile } from '../../../util/common-util';
 import * as featureActionExercice from '../../../../store/comptabilite/exercice-comptable/actions';
 import * as exerciceListSelector from '../../../../store/comptabilite/exercice-comptable/selector';
 import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
@@ -109,6 +109,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   depenseFamilleList:Array<DepenseFamille> = [];
   depenseFamilleList$: Observable<Array<DepenseFamille>>;
   display = false;
+  displayExcel = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
 
@@ -167,7 +168,13 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
-                printPdfFile(bytes);
+          if(this.displayExcel) {
+            printExcelfFile(bytes);
+            this.displayExcel = false;
+          } else {
+            printPdfFile(bytes);
+          }
+                
         }
     });
 
@@ -225,8 +232,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
        this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.check.garant.id}));
 
   }
-  loadAdherentByPolice(){
-  this.store.dispatch(featureActionAdherent.loadAdherentDistinct({idGarantie: this.check.garant.id, idPolice: this.check.police.id}));
+  loadAdherentByGroupe(){
+  this.store.dispatch(featureActionAdherent.loadAdherentDistinctGroupe({idGarantie: this.check.garant.id, idPolice: this.check.police.id, idGroupe: this.check.groupe.id}));
 
 }
   viderDebit() {
@@ -415,19 +422,26 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
    imprimerFormulaire() {
     this.display = true;
   }
+
+  imprimerFormulaireExcel() {
+    this.display = true;
+    this.displayExcel = true;
+  }
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
   findOperationGrandLivre() {
     this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
-    // this.check.adherentPrincipalId = this.check?.adherent?.id;
+    this.check.adherentPrincipalId = this.check?.adherent?.id;
+    this.check.display = this.displayExcel;
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
     console.log("=====================",this.report)
 
     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    // this.displayExcel= false;
     // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 
   }

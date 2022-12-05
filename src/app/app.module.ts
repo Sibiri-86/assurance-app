@@ -304,6 +304,8 @@ import { FacturePrestatairesEffects } from './store/reporting/prestation/facture
 import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 import { ConsommationParSexeEffects } from './store/reporting/medical/consommationParSexe/effect';
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
+import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
+import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
 
 @NgModule({
     imports: [
@@ -553,6 +555,8 @@ import { ReportingOperateurComponent } from './module/reporting/prestation/repor
         FacturePrestatairesComponent,
         ConsommationParSexeComponent,
         ReportingOperateurComponent,
+        ReportingChequeNonValideComponent,
+        ReportingChequeValideComponent,
 
     ],
     providers: [
