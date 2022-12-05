@@ -36,7 +36,7 @@
                               
                                 <p-multiSelect inputId="typePrestataireList" dataKey="id" [filter]="true"
                                                     showClear="true" [options]="typePrestataireList"
-                                                    name="typePrestataire"
+                                                    name="typePrestataire" appendTo="body"
                                                     [(ngModel)]="check.typePrestataire"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
                                                     optionLabel="libelle"></p-multiSelect>
                                 <!--  <p-dropdown [filter]="true" 
