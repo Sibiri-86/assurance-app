@@ -120,6 +120,7 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
   trancheList:Array<Tranche> = [];
   tranche: Tranche = {};
   displaytranche = false;
+  displayExcel = false;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
