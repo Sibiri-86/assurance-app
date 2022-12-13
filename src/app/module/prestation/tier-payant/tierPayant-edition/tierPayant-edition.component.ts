@@ -1393,12 +1393,22 @@ export class TierPayantEditionComponent implements OnInit {
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.store.dispatch(featureActionTierPayant.deletePrestationTierPayant(prestation));
-                this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
+                if(prestation.id) {
+                    this.store.dispatch(featureActionTierPayant.deletePrestationTierPayant(prestation));
+                    this.prestationsList =    this.prestationsList.filter(el  => el.id  !== prestation.id);
+
+                } else {
+
+                    this.prestationsList = this.prestationsList.filter(el  => el !== prestation);
+                }
+                
+             //   this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
             },
         });
     }
 
+
+  
     supprimerPrefinancement() {
         console.log(this.TierPayantSelected);
         if (!this.TierPayantSelected) {
@@ -1470,6 +1480,7 @@ export class TierPayantEditionComponent implements OnInit {
 
       addPrestation() {
 
+        
         if(this.prefinancement.montantRestant == null ) {
             this.prefinancement.montantRestant = 0;
         }

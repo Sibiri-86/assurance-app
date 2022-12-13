@@ -730,8 +730,17 @@ findMontantPlafond(event){
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.deletePrestation(prestation));
-        this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
+        if(prestation.id) {
+          this.store.dispatch(featureActionPrefinancement.deletePrestation(prestation));
+          this.prestationsList =    this.prestationsList.filter(el  => el.id  !== prestation.id);
+
+      } else {
+
+          this.prestationsList = this.prestationsList.filter(el  => el !== prestation);
+      }
+      
+      /*  this.store.dispatch(featureActionPrefinancement.deletePrestation(prestation));
+        this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);*/
       },
     });
   }
@@ -1279,6 +1288,9 @@ rechercheAdherentDateSoin(event) {
   addPrestation1() {
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
+    this.prestationsList.push(prestat);
+    this.prestationsList.push(prestat);
+    this.prestationsList.push(prestat);
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
