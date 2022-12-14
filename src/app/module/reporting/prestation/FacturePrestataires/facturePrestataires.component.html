@@ -6,33 +6,9 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-                    <!-- <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col">
-                                <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                        showClear="true" [options]="garantList"
-                                                        formControlName="idGarant"
-                                                        [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                                </p-dropdown>
-                            </div>
-                            <div class="p-field p-col">
-                                <label for="compteParent">Date<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <input id="dateAppel" type="date" formControlName="datePrime" pInputText>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                                [formGroup]="appelFondForm" [entityField]="'dateAppel'">
-                                </app-entity-validation>
-                            </div>
-                            <div class="p-field p-col p-mt-5">
-                                
-                                <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Rechercher" icon="pi pi-check" type="submit"></button>
-                               
-                            </div>
-                        </div>
-                    </form> -->
-                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir le récapitulatif" label="Récapitulatif " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
+                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir les factures par prestataire" label="Factures par types de prestataires " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
                 </ng-template>
-                <ng-template pTemplate="right">
+                <!-- <ng-template pTemplate="right">
                     
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col p-mt-5">
@@ -41,7 +17,7 @@
                                
                             </div>
                         </div>
-                </ng-template>
+                </ng-template> -->
 				
 			</p-toolbar>
 
@@ -354,74 +330,90 @@
         </p-dialog>
 
 
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Factures par types de prestataires" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '1000px'}">
+
+        <ng-template pTemplate="content">
+            <div class="card">
+
+                <form  [formGroup]="appelFondForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateDebut'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateFin" type="date" formControlName="dateFin" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateFin'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Type Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-multiSelect inputId="typePrestataireList" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="typePrestataireList"
+                                                    [autoDisplayFirst]="false" 
+                                                    [formGroup]="appelFondForm" formControlName="typePrestataire"
+                                                    optionLabel="libelle"></p-multiSelect> 
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Prestataire<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-multiSelect inputId="prestataire" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="prestataireList"
+                                                    formControlName="prestataire"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
+                                                    optionLabel="libelle" [formGroup]="appelFondForm">
+                            </p-multiSelect> 
+                        </div>
+                    </div>
+                    <!-- <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="garant"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="police"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="groupe"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        
+                    </div> -->
+                    <div class="p-grid p-justify-between">
+                        <div>
+                            <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                        </div>
+                        <div>
+                            <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                        </div>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </ng-template>
+        </p-dialog>
+
+
             <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 	</div>
-
-    <p-dialog [maximizable]="true" [(visible)]="display" header="Récapitulatif" [modal]="true" styleClass="p-fluid" 
-    [style]="{width: '1000px'}">
-
-    <ng-template pTemplate="content">
-        <div class="card">
-
-            <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
-                        <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
-                        <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
-                        <app-entity-validation [entityValidations]="entityValidations"
-                                        [formGroup]="appelFondForm" [entityField]="'dateDebut'">
-                        </app-entity-validation>
-                    </div>
-                    <div class="p-field p-col">
-                        <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
-                        <input id="dateAppel" type="date" formControlName="datePrime" pInputText>
-                        <app-entity-validation [entityValidations]="entityValidations"
-                                        [formGroup]="appelFondForm" [entityField]="'dateAppel'">
-                        </app-entity-validation>
-                    </div>
-                </div>
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col">
-                        <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
-                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="garantList"
-                                                formControlName="idGarant"
-                                                [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                        </p-dropdown>
-                    </div>
-                    <div class="p-field p-col">
-                        <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
-                        <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="policeList"
-                                                formControlName="police"
-                                                [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                        </p-dropdown>
-                    </div>
-                    <div class="p-field p-col">
-                        <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
-                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="garantList"
-                                                formControlName="groupe"
-                                                [autoDisplayFirst]="false" [formGroup]="appelFondForm">
-                        </p-dropdown>
-                    </div>
-                    
-                </div>
-                <div class="p-grid p-justify-between">
-                    <div>
-                        <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
-                    </div>
-                    <div>
-                        <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
-                    </div>
-                </div>
-
-            </form>
-
-
-
-        </div>
-    </ng-template>
-    </p-dialog>
-    
 </div>

@@ -18,8 +18,11 @@ import { Departement } from '../../parametrage/departement/model';
 import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 import { Operation } from '../../comptabilite/operation/model';
 import { Recapitulatif } from '../../reporting/production/recapitulatif/model';
-import { Check } from '../../reporting/depense-famille/model';
 import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
+import { Check } from '../../reporting/depense-famille/model';
+import { StatistiqueParTrancheAge } from '../../reporting/production/statistiqueParTrancheAge/model';
+import { FacturePrestataires } from '../../reporting/prestation/facturePrestataires/model';
+import { ConsommationParSexe } from '../../reporting/medical/consommationParSexe/model';
 
 
 export interface Police{
@@ -96,8 +99,11 @@ export interface Report {
     balance?: Balance;
     operation?: Operation;
     recapitulatif?: Recapitulatif;
+    repartitionDepenseStatut?: RepartitionDepenseStatut;
     check?: Check;
-    repartitionDepenseStatut?: RepartitionDepenseStatut
+    statistiqueTrancheAge?: StatistiqueParTrancheAge;
+    facturePrestataires?: FacturePrestataires;
+    consommationParSexe?: ConsommationParSexe
 }
 
 export interface PoliceList {

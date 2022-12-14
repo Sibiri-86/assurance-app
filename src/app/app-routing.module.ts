@@ -90,8 +90,11 @@ import { DepenseFamillePathologieComponent } from './module/reporting/production
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
+import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
 import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
 import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
+import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
+import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 
 @NgModule({
     imports: [
@@ -183,17 +186,21 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
                     {path: 'reporting/recapitulatif', component: RecapitulatifComponent},
                     {path: 'reporting/depense-famille', component: DepenseFamilleComponent},
                     {path: 'reporting/depense-famille-acte', component: DepenseFamilleActeComponent},
+                    {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
+                    {path: 'reporting/depense-famille-prestataire', component: DepenseFamillePrestataireComponent},
+                    {path: 'reporting/depense-famille-pathologie', component: DepenseFamillePathologieComponent},
+                    {path: 'reporting/statistique-tranche-age', component: StatistiqueParTrancheAgeComponent},
                     {path: 'reporting/depense-famille-prestataire', component: DepenseFamillePrestataireComponent},
                     {path: 'reporting/depense-famille-pathologie', component: DepenseFamillePathologieComponent},
                     {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
                     {path: 'reporting/depense-optique', component: DepenseOptiqueComponent},
+                    {path: 'reporting/facture-par-prestataires', component: FacturePrestatairesComponent},
+                    {path: 'reporting/medical/consommation-par-sexe', component: ConsommationParSexeComponent},
                     {path: 'reporting/reporting-operateur', component: ReportingOperateurComponent},
                     {path: 'reporting/reporting-cheque-non-valide', component: ReportingChequeNonValideComponent},
                     {path: 'reporting/reporting-cheque-valide', component: ReportingChequeValideComponent},
                     
                     
-                    
-
                     
                 ]
             },

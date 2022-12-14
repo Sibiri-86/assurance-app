@@ -6,6 +6,10 @@
                 <ng-template pTemplate="left">
 					<button [disabled]="!disableButtomOrdreReglement" pButton pRipple label="Créer un ordre de paiement" class="p-button-success p-mr-2 p-mb-2" (click)="creerOrdreRglement()"></button>
 				</ng-template>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Revenir à l'édition des sinistres" icon="pi pi-arrow-left" class="p-button-warning p-mr-2 p-mb-2" (click)="navigateSinistre2()"></button>
+					<button pButton pRipple label="Aller à l'édition des ordres de paiement" icon="pi pi-arrow-right" class="p-button-secondary p-mr-2 p-mb-2" (click)="navigateSinistre()"></button>
+				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
 					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>

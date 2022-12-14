@@ -292,11 +292,17 @@ import { DepenseFamilleComponent } from './module/reporting/production/depense-f
 import { DepenseFamilleEffects } from './store/reporting/depense-famille/effect';
 import { RecapitulatifEffects } from './store/reporting/production/recapitulatif/effect';
 import { DepenseFamilleActeComponent } from './module/reporting/production/depense-famille-acte/depense-famille-acte.component';
-import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
-import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
 import { RepartitionDepenseStatutEffects } from './store/reporting/production/repartitionDepenseStatut/effect';
 import { RepartitionDepenseStatutComponent } from './module/reporting/production/repartitiondDepenseStatut/repartitionDepenseStatut.component';
+import { DepenseFamillePrestataireComponent } from './module/reporting/production/depense-famille-prestataire/depense-famille-prestataire.component';
+import { DepenseFamillePathologieComponent } from './module/reporting/production/depense-famille-pathologie/depense-famille-pathologie.component';
+import { StatistiqueParTrancheAgeComponent } from './module/reporting/production/statistiqueParTrancheAge/statistiqueParTrancheAge.component';
+import { StatistiqueParTrancheAgeEffects } from './store/reporting/production/statistiqueParTrancheAge/effect';
 import { DepenseOptiqueComponent } from './module/reporting/production/depense-optique/depense-optique.component';
+import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
+import { FacturePrestatairesEffects } from './store/reporting/prestation/facturePrestataires/effect';
+import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
+import { ConsommationParSexeEffects } from './store/reporting/medical/consommationParSexe/effect';
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
 import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
 import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
@@ -409,7 +415,8 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
-             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects])
+             TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -520,11 +527,9 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
         CompteComponent,
         JournalComponent,
         ExerciceComptableComponent,
-
         ExerciceComptableOperationComponent,
         OrdrePaimentInstanceComponent,
         OrdrePaimentInstanceChequeComponent,
-
         ExerciceComptableOperationComponent, 
         AppelFondComponent,
         PaiementFactureComponent,
@@ -539,10 +544,16 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
         RecapitulatifComponent,
         DepenseFamilleComponent,
         DepenseFamilleActeComponent,
+        RepartitionDepenseStatutComponent,
+        DepenseFamillePrestataireComponent,
+        DepenseFamillePathologieComponent,
+        StatistiqueParTrancheAgeComponent,
         DepenseFamillePrestataireComponent,
         DepenseFamillePathologieComponent,
         RepartitionDepenseStatutComponent,
         DepenseOptiqueComponent,
+        FacturePrestatairesComponent,
+        ConsommationParSexeComponent,
         ReportingOperateurComponent,
         ReportingChequeNonValideComponent,
         ReportingChequeValideComponent,

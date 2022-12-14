@@ -1,3 +1,4 @@
+import { Groupe } from "src/app/store/contrat/groupe/model";
 import { Garant } from "src/app/store/parametrage/garant/model";
 
 
@@ -16,6 +17,11 @@ export interface Recapitulatif {
     observation?: string;
     datePrime?: Date;
     idGarant?: Garant;
+    groupe?: Groupe;
+    dateDebut?: Date;
+    policeId?: string;
+    groupeId?: string;
+    garantId?: string;
 }
 
 

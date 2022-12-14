@@ -36,6 +36,7 @@ export interface OrdreReglement {
     etat?: TypeEtatOrdreReglement;
     montantPaye?: number;
     banque?: Banque;
+    assure?: Adherent;
     isPaiement?: Boolean;
 }
 

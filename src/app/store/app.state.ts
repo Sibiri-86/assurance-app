@@ -63,6 +63,9 @@ import { TiersState } from './comptabilite/tiers/state';
 import { DepenseFamilleState } from './reporting/depense-famille/state';
 import { RecapitulatifState } from './reporting/production/recapitulatif/state';
 import { RepartitionDepenseStatutState } from './reporting/production/repartitionDepenseStatut/state';
+import { StatistiqueTrancheAgeState } from './reporting/production/statistiqueParTrancheAge/state';
+import { FacturePrestatairesState } from './reporting/prestation/facturePrestataires/state';
+import { ConsommationParSexeState } from './reporting/medical/consommationParSexe/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -127,5 +130,8 @@ export interface AppState {
   depenseFamilleState: DepenseFamilleState;
   recapitulatifState: RecapitulatifState;
   repartitionDepenseStatutState: RepartitionDepenseStatutState;
+  statistiqueTrancheAgeState: StatistiqueTrancheAgeState,
+  facturePrestatairesState: FacturePrestatairesState,
+  consommationParSexeState: ConsommationParSexeState
 
 }

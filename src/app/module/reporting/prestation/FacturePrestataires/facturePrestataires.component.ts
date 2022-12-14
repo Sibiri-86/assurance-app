@@ -40,14 +40,25 @@ import * as repartitionDepenseStatutAction from 'src/app/store/reporting/product
 import * as repartitionDepenseStatutSelector from '../../../../store/reporting/production/repartitionDepenseStatut/selector';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
 import { RepartitionDepenseStatut } from 'src/app/store/reporting/production/repartitionDepenseStatut/model';
+import * as facturePrestataireAction from 'src/app/store/reporting/prestation/facturePrestataires/action';
+import * as facturePrestataireSelector from '../../../../store/reporting/prestation/facturePrestataires/selector';
+import { StatistiqueTrancheAgeService } from 'src/app/store/reporting/production/statistiqueParTrancheAge/service';
+import { StatistiqueParTrancheAge } from 'src/app/store/reporting/production/statistiqueParTrancheAge/model';
+import { FacturePrestataires } from 'src/app/store/reporting/prestation/facturePrestataires/model';
+import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
+import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
+import * as prestataireSelector from '../../../../store/parametrage/prestataire/selector';
+import * as prestatairefeatureAction from '../../../../store/parametrage/prestataire/actions';
+import * as typePrestataireSlector from '../../../../store/parametrage/type-prestataire/selector';
+import * as typePrestatairefeatureAction from '../../../../store/parametrage/type-prestataire/actions';
 
 
 @Component({
-  selector: 'app-repartitionDepenseStatut',
-  templateUrl: './repartitionDepenseStatut.component.html',
-  styleUrls: ['./repartitionDepenseStatut.component.scss']
+  selector: 'app-facturePrestataires',
+  templateUrl: './facturePrestataires.component.html',
+  styleUrls: ['./facturePrestataires.component.scss']
 })
-export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
+export class FacturePrestatairesComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   garantList$: Observable<Array<Garant>>;
@@ -113,10 +124,20 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
   dateDebut: Date;
   dateFin: Date;
   appelFondTotal: AppelFond;
+  prestataireList:Array<Prestataire> = [];
+  prestataireList$: Observable<Array<Prestataire>>;
+  typePrestataireList:Array<TypePrestataire> = [];
+  typePrestataireList$: Observable<Array<TypePrestataire>>;
 
 
   repartitionDepenseStatut: RepartitionDepenseStatut;
   recapitulatifs: Array<Recapitulatif>;
+
+  statistiqueParTrancheAge: StatistiqueParTrancheAge;
+  facturePrestataire: FacturePrestataires;
+
+  display = false;
+  verif = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -125,48 +146,23 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
               private confirmationService: ConfirmationService, 
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
-              private recaptulatifService: RecapitulatifService) {
+              private statistiqueParTrancheAgeService: StatistiqueTrancheAgeService) {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
-        nombrePopulationAssure: new FormControl(),
-        nombrePopulationConjoint: new FormControl(),
-        nombrePopulationEnfant: new FormControl(), 
-        nombrePopulationTotal: new FormControl(),
-        pourcentagePopulationAssure: new FormControl(),
-        pourcentagePopulationConjoint: new FormControl(),
-        pourcentagePopulationEnfant: new FormControl(),
-        pourcentagePopulationTotal: new FormControl(),
-        ageMoyenAssure: new FormControl(),
-        ageMoyenConjoint: new FormControl(),
-        ageMoyenEnfant: new FormControl(),
-        totalAgeMoyen: new FormControl(),
-        nombreBeneficiaireTraiteAssure: new FormControl(),
-        nombreBeneficiaireTraiteConjoint: new FormControl(),
-        nombreBeneficiaireTraiteEnfant: new FormControl(),
-        nombreBeneficiaireTraiteTotal: new FormControl(),
-        pourcentageBeneficiaireTraiteAssure: new FormControl(),
-        pourcentageBeneficiaireTraiteConjoint: new FormControl(),
-        pourcentageBeneficiaireTraiteEnfant: new FormControl(),
-        pourcentageBeneficiaireTraiteTotal: new FormControl(),
-        montantDepensePeriodeAssure: new FormControl(),
-        montantDepensePeriodeConjoint: new FormControl(),
-        montantDepensePeriodeEnfant: new FormControl(),
-        montantDepensePeriodeTotal: new FormControl(),
-        pourcentageDepensePeriodeTotal: new FormControl(),
-        pourcentageDepensePeriodeAssure: new FormControl(),
-        pourcentageDepensePeriodeConjoint: new FormControl(),
-        pourcentageDepensePeriodeEnfant: new FormControl(),
-        coutMoyentAssure: new FormControl(),
-        coutMoyentConjoint: new FormControl(),
-        coutMoyentEnfant: new FormControl(),
+        typePrestataire: new FormControl(),
+        prestataire: new FormControl(),
+        nombreFacture: new FormControl(),
+        frequences: new FormControl(),
+        garant: new FormControl(),
+        police: new FormControl(),
+        groupe: new FormControl(),
         dateDebut: new FormControl('', [Validators.required]),
-        dateFin: new FormControl('', [Validators.required]),
-        tauxChargement: new FormControl('', [Validators.required])
+        dateFin: new FormControl('', [Validators.required])
     });
 
       this.breadcrumbService.setItems([
-        {label: 'Répartition des dépenses par statut'}
+        {label: 'Factures par types de prestataires '}
     ]);
     }
 
@@ -196,8 +192,32 @@ ngOnInit(): void {
       }
     });
 
-  this.store.dispatch(repartitionDepenseStatutAction.setReportRepartitionDepenseStatut(null));
-  this.store.pipe(select(repartitionDepenseStatutSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
+    this.store.dispatch(prestatairefeatureAction.loadPrestataire());
+    this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.prestataireList = value.slice();
+        
+       
+      }
+    });
+
+    this.typePrestataireList$ = this.store.pipe(select(typePrestataireSlector.typePrestataireList));
+    this.store.dispatch(typePrestatairefeatureAction.loadTypePrestataire());
+    this.typePrestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.typePrestataireList = value.slice();
+        
+       
+      }
+    });
+
+  this.store.dispatch(facturePrestataireAction.setReportFacturePrestataires(null));
+  this.store.pipe(select(facturePrestataireSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
       .subscribe(bytes => {
           if (bytes) {
               printPdfFile(bytes);
@@ -370,17 +390,46 @@ annulerAppelFond() {
   });
 } */
 
+imprimerFormulaire() {
+  this.display = true;
+}
+
+changeDisplay() {
+  if(this.appelFondForm.controls.prestataire.value.length !== 0) {
+    this.verif= true;
+  } else {
+    this.verif = false;
+  }
+}
+
 imprimerRecap() {
-  //console.log('recap=============>', recap);
-  this.repartitionDepenseStatut = {};
-  this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
-  this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
-  this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
-  this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
-  this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
-  console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);
-  console.log('this.report', this.report);
-  this.store.dispatch(repartitionDepenseStatutAction.FetchReportRepartitionDepenseStatut(this.report));
+  console.log(' this.verif=============>',  this.verif);
+  this.facturePrestataire = {};
+  this.facturePrestataire.isPrestataire = this.verif;
+  if(this.verif){
+    console.log('entrer prestataires=============>');
+    this.facturePrestataire.dateDebut = this.appelFondForm.get('dateDebut').value;
+    this.facturePrestataire.dateFin = this.appelFondForm.get('dateFin').value;
+    this.facturePrestataire.prestataires = this.appelFondForm.get('prestataire').value;
+    this.report.typeReporting = TypeReport.FACTURE_PRESTATAIRE;
+    this.report.facturePrestataires = this.facturePrestataire;
+    console.log('this.facturePrestataire=============>', this.facturePrestataire);
+    console.log('this.report', this.report);
+    this.store.dispatch(facturePrestataireAction.FetchReportFacturePrestataires(this.report));
+  } else {
+    console.log('entrer type prestataires=============>');
+    this.facturePrestataire.dateDebut = this.appelFondForm.get('dateDebut').value;
+    this.facturePrestataire.dateFin = this.appelFondForm.get('dateFin').value;
+    //this.facturePrestataire.prestataires = this.appelFondForm.get('prestataire').value;
+    //this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
+    this.report.typeReporting = TypeReport.FACTURE_TYPE_PRESTATAIRE;
+    this.report.facturePrestataires = this.facturePrestataire;
+    console.log('this.facturePrestataire=============>', this.facturePrestataire);
+    console.log('this.report', this.report);
+    this.store.dispatch(facturePrestataireAction.FetchReportFacturePrestataires(this.report));
+  }
+  
+  
 }
 }
 

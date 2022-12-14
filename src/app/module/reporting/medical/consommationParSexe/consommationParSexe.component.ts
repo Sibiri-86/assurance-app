@@ -40,14 +40,20 @@ import * as repartitionDepenseStatutAction from 'src/app/store/reporting/product
 import * as repartitionDepenseStatutSelector from '../../../../store/reporting/production/repartitionDepenseStatut/selector';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
 import { RepartitionDepenseStatut } from 'src/app/store/reporting/production/repartitionDepenseStatut/model';
+import * as consommationParSexeAction from 'src/app/store/reporting/medical/consommationParSexe/action';
+import * as consommationParSexeSelector from '../../../../store/reporting/medical/consommationParSexe/selector';
+import { StatistiqueTrancheAgeService } from 'src/app/store/reporting/production/statistiqueParTrancheAge/service';
+import { StatistiqueParTrancheAge } from 'src/app/store/reporting/production/statistiqueParTrancheAge/model';
+import { FacturePrestataires } from 'src/app/store/reporting/prestation/facturePrestataires/model';
+import { ConsommationParSexe } from 'src/app/store/reporting/medical/consommationParSexe/model';
 
 
 @Component({
-  selector: 'app-repartitionDepenseStatut',
-  templateUrl: './repartitionDepenseStatut.component.html',
-  styleUrls: ['./repartitionDepenseStatut.component.scss']
+  selector: 'app-consommationParSexe',
+  templateUrl: './consommationParSexe.component.html',
+  styleUrls: ['./consommationParSexe.component.scss']
 })
-export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
+export class ConsommationParSexeComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   garantList$: Observable<Array<Garant>>;
@@ -118,6 +124,12 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
   repartitionDepenseStatut: RepartitionDepenseStatut;
   recapitulatifs: Array<Recapitulatif>;
 
+  statistiqueParTrancheAge: StatistiqueParTrancheAge;
+  facturePrestataire: FacturePrestataires;
+  consommationParSexe: ConsommationParSexe;
+
+  display = false;
+
 
   constructor(private formBuilder: FormBuilder,
               private store: Store<AppState>, 
@@ -125,48 +137,32 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
               private confirmationService: ConfirmationService, 
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
-              private recaptulatifService: RecapitulatifService) {
+              private statistiqueParTrancheAgeService: StatistiqueTrancheAgeService) {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
-        nombrePopulationAssure: new FormControl(),
-        nombrePopulationConjoint: new FormControl(),
-        nombrePopulationEnfant: new FormControl(), 
-        nombrePopulationTotal: new FormControl(),
-        pourcentagePopulationAssure: new FormControl(),
-        pourcentagePopulationConjoint: new FormControl(),
-        pourcentagePopulationEnfant: new FormControl(),
-        pourcentagePopulationTotal: new FormControl(),
-        ageMoyenAssure: new FormControl(),
-        ageMoyenConjoint: new FormControl(),
-        ageMoyenEnfant: new FormControl(),
-        totalAgeMoyen: new FormControl(),
-        nombreBeneficiaireTraiteAssure: new FormControl(),
-        nombreBeneficiaireTraiteConjoint: new FormControl(),
-        nombreBeneficiaireTraiteEnfant: new FormControl(),
-        nombreBeneficiaireTraiteTotal: new FormControl(),
-        pourcentageBeneficiaireTraiteAssure: new FormControl(),
-        pourcentageBeneficiaireTraiteConjoint: new FormControl(),
-        pourcentageBeneficiaireTraiteEnfant: new FormControl(),
-        pourcentageBeneficiaireTraiteTotal: new FormControl(),
-        montantDepensePeriodeAssure: new FormControl(),
-        montantDepensePeriodeConjoint: new FormControl(),
-        montantDepensePeriodeEnfant: new FormControl(),
-        montantDepensePeriodeTotal: new FormControl(),
-        pourcentageDepensePeriodeTotal: new FormControl(),
-        pourcentageDepensePeriodeAssure: new FormControl(),
-        pourcentageDepensePeriodeConjoint: new FormControl(),
-        pourcentageDepensePeriodeEnfant: new FormControl(),
-        coutMoyentAssure: new FormControl(),
-        coutMoyentConjoint: new FormControl(),
-        coutMoyentEnfant: new FormControl(),
+        nombrePopulation: new FormControl(''),
+        nombrePopulationTotal: new FormControl(''),
+        pourcentagePopulation: new FormControl(''),
+        pourcentagePopulationTotal: new FormControl(''),
+        ageMoyen: new FormControl(''),
+        totalAgeMoyen: new FormControl(''),
+        nombreBeneficiaireTraite: new FormControl(''),
+        nombreBeneficiaireTraiteTotal: new FormControl(''),
+        pourcentageBeneficiaireTraite: new FormControl(''),
+        pourcentageBeneficiaireTraiteTotal: new FormControl(''),
+        montantDepensePeriode: new FormControl(''),
+        montantDepensePeriodeTotal: new FormControl(''),
+        pourcentageDepensePeriodeTotal: new FormControl(''),
+        pourcentageDepensePeriode: new FormControl(''),
+        coutMoyent: new FormControl(''),
+        coutMoyentTotal: new FormControl(''),
         dateDebut: new FormControl('', [Validators.required]),
-        dateFin: new FormControl('', [Validators.required]),
-        tauxChargement: new FormControl('', [Validators.required])
+        dateFin: new FormControl('', [Validators.required])
     });
 
       this.breadcrumbService.setItems([
-        {label: 'Répartition des dépenses par statut'}
+        {label: 'Analyse comparative des consommations par sexe'}
     ]);
     }
 
@@ -196,8 +192,8 @@ ngOnInit(): void {
       }
     });
 
-  this.store.dispatch(repartitionDepenseStatutAction.setReportRepartitionDepenseStatut(null));
-  this.store.pipe(select(repartitionDepenseStatutSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+  this.store.dispatch(consommationParSexeAction.setReportConsommationParSexe(null));
+  this.store.pipe(select(consommationParSexeSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
       .subscribe(bytes => {
           if (bytes) {
               printPdfFile(bytes);
@@ -370,17 +366,21 @@ annulerAppelFond() {
   });
 } */
 
+imprimerFormulaire() {
+  this.display = true;
+}
+
 imprimerRecap() {
   //console.log('recap=============>', recap);
-  this.repartitionDepenseStatut = {};
-  this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
-  this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
-  this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
-  this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
-  this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
-  console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);
+  this.consommationParSexe = {};
+  this.consommationParSexe.dateDebut = this.appelFondForm.get('dateDebut').value;
+  this.consommationParSexe.dateFin = this.appelFondForm.get('dateFin').value;
+  //this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
+  this.report.typeReporting = TypeReport.CONSOMMATION_PAR_SEXE;
+  this.report.consommationParSexe = this.consommationParSexe;
+  console.log('this.consommationParSexe=============>', this.consommationParSexe);
   console.log('this.report', this.report);
-  this.store.dispatch(repartitionDepenseStatutAction.FetchReportRepartitionDepenseStatut(this.report));
+  this.store.dispatch(consommationParSexeAction.FetchReportConsommationParSexe(this.report));
 }
 }
 

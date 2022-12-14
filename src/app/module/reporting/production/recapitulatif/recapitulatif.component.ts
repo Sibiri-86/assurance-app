@@ -30,7 +30,7 @@ import * as appelFondSelector from '../../../../store/comptabilite/appelFond/sel
 import * as appelFondAction from 'src/app/store/comptabilite/appelFond/actions';
 import { DATA_DEFINITION, DATA_TYPE } from '../../../parametrage/parameters.data';
 import { AppelFond, TypeCompte } from 'src/app/store/comptabilite/appelFond/model';
-import { Report } from 'src/app/store/contrat/police/model';
+import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../../util/common-util';
 import * as garantSelector from "../../../../store/contrat/garant/selector";
@@ -39,6 +39,8 @@ import { Recapitulatif } from 'src/app/store/reporting/production/recapitulatif/
 import * as recapAction from 'src/app/store/reporting/production/recapitulatif/action';
 import * as recapSelector from '../../../../store/reporting/production/recapitulatif/selector';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
+import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/actions';
+import { policeList } from 'src/app/store/contrat/police/selector';
 
 
 @Component({
@@ -112,6 +114,9 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   dateDebut: Date;
   dateFin: Date;
   appelFondTotal: AppelFond;
+  display = false;
+  policeList$: Observable<Array<Police>>;
+  policeList = [];
 
 
   recapitulatif: Recapitulatif;
@@ -139,8 +144,10 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
         sinistreSurPrime: new FormControl(),
         resultatTechnique: new FormControl(),
         observation: new FormControl(),
+        dateDebut: new FormControl('', [Validators.required]),
         datePrime: new FormControl('', [Validators.required]),
-        idGarant: new FormControl('', [Validators.required])
+        idGarant: new FormControl('', [Validators.required]),
+        groupe: new FormControl()
     });
 
       this.breadcrumbService.setItems([
@@ -164,6 +171,17 @@ ngOnInit(): void {
                 console.log('appelFondList', this.appelFondList);
               }
   });
+
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPoliceByAffaireNouvelle());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+        console.log('................this.policeList............................');
+        console.log(this.policeList);
+      }
+    });
 
   this.garantList$ = this.store.pipe(select(garantSelector.garantList));
     this.store.dispatch(loadGarant());
@@ -348,11 +366,19 @@ onCreate() {
   });
 }
 
+imprimerFormulaire() {
+  this.display = true;
+}
+
 imprimerRecap() {
   //console.log('recap=============>', recap);
   this.recapitulatif = {};
   this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
   this.recapitulatif.datePrime = this.appelFondForm.get('datePrime').value;
+  this.recapitulatif.dateDebut = this.appelFondForm.get('dateDebut').value;
+  this.recapitulatif.policeId = this.appelFondForm.get('police').value?.id;
+  this.recapitulatif.groupeId = this.appelFondForm.get('groupe').value?.id;
+  this.recapitulatif.garantId = this.appelFondForm.get('idGarant').value?.id;
   this.report.typeReporting = TypeReport.RECAPITULATIF_POLICE;
   this.report.recapitulatif = this.recapitulatif;
   console.log('this.recapitulatif=============>', this.recapitulatif);
