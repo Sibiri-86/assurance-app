@@ -154,6 +154,7 @@ export class TierPayantEditionComponent implements OnInit {
     plafondSousActe: CheckPlafond;
     exerciceSelected: Exercice = {};
     prestationsList: Prestation[]= [];
+    prestationsList1: Prestation[]= [];
     prestationDetail:Prestation = {};
     prestationAdd: Prestation = {};
     displayPrestationpop = false;
@@ -1387,7 +1388,7 @@ export class TierPayantEditionComponent implements OnInit {
        
     }
 
-    supprimerPrestation(prestation: Prestation) {
+    supprimerPrestation(prestation: Prestation, i: number) {
         this.confirmationService.confirm({
             message: 'voulez-vous supprimer la prestation',
             header: 'Confirmation',
@@ -1399,7 +1400,22 @@ export class TierPayantEditionComponent implements OnInit {
 
                 } else {
 
-                    this.prestationsList = this.prestationsList.filter(el  => el !== prestation);
+                    this.prestationsList1 = [];
+                    if(i>0) {
+                      for(let j= 0; j< i; j++) {
+                        this.prestationsList1.push(this.prestationsList[j]);
+                      }
+                      for(let j= i+1; j< this.prestationsList.length ; j++) {
+                        this.prestationsList1.push(this.prestationsList[j]);
+                      }
+              
+                    }else {
+                      for(let j= 1; j< this.prestationsList.length; j++) {
+                        this.prestationsList1.push(this.prestationsList[j]);
+                      }
+                    }
+                    
+                      this.prestationsList = this.prestationsList1;
                 }
                 
              //   this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
