@@ -6,37 +6,7 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-                    <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col">
-                                <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                                [formGroup]="appelFondForm" [entityField]="'dateDebut'">
-                                </app-entity-validation>
-                            </div>
-
-                            <div class="p-field p-col">
-                                <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <input id="dateFin" type="date" formControlName="dateFin" pInputText>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                                [formGroup]="appelFondForm" [entityField]="'dateFin'">
-                                </app-entity-validation>
-                            </div>
-                            <div class="p-field p-col">
-                                <label for="firstname2">Taux de Chargement <span style="color: red !important; font-size: 1.4em">*</span></label>
-                                <input id="tauxChargement" type="number" required formControlName="tauxChargement"  pInputText>
-                                <app-entity-validation [entityValidations]="entityValidations"
-                                              [formGroup]="appelFondForm" [entityField]="'tauxChargement'">
-                                </app-entity-validation>
-                            </div>
-                            <div class="p-field p-col p-mt-5">
-                                
-                                <!-- <button  [disabled]="appelFondForm?.invalid" pButton pRipple label="Rechercher" icon="pi pi-check" type="submit"></button> -->
-                               
-                            </div>
-                        </div>
-                    </form>
+                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir la répartition des dépenses par statut" label="Répartition des dépenses par statut " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
                 </ng-template>
                 <ng-template pTemplate="right">
                     
@@ -357,6 +327,81 @@
                 
             </div>
             </ng-template>
+        </p-dialog>
+
+
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Récapitulatif" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '1000px'}">
+    
+        <ng-template pTemplate="content">
+            <div class="card">
+
+                <form (ngSubmit)="onCreate()"  [formGroup]="appelFondForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateDebut'">
+                            </app-entity-validation>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateFin" type="date" formControlName="dateFin" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="appelFondForm" [entityField]="'dateFin'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Taux de Chargement <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="tauxChargement" type="number" required formControlName="tauxChargement"  pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                          [formGroup]="appelFondForm" [entityField]="'tauxChargement'">
+                            </app-entity-validation>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="garant"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="policeList" (onChange)="onPoliceChange()"
+                                                    formControlName="police"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="groupe" [filter]="true" optionLabel="libelle"
+                                                    showClear="true" [options]="groupePolicy"
+                                                    formControlName="groupe"
+                                                    [autoDisplayFirst]="false" [formGroup]="appelFondForm">
+                            </p-dropdown>
+                        </div>
+                        
+                    </div>
+                    <div class="p-grid p-justify-between">
+                        <div>
+                            <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                        </div>
+                        <div>
+                            <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                        </div>
+                    </div>
+                </form>
+    
+    
+    
+            </div>
+        </ng-template>
         </p-dialog>
 
 

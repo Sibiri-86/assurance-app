@@ -41,6 +41,10 @@ import * as recapSelector from '../../../../store/reporting/production/recapitul
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
 import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
+import { Groupe } from 'src/app/store/contrat/groupe/model';
+import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
+import {groupeList} from 'src/app/store/contrat/groupe/selector';
+
 
 
 @Component({
@@ -117,6 +121,10 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   display = false;
   policeList$: Observable<Array<Police>>;
   policeList = [];
+  groupeList$: Observable<Array<Groupe>>;
+  groupeList: [];
+  groupePolicy: Array<Groupe>;
+
 
 
   recapitulatif: Recapitulatif;
@@ -368,6 +376,19 @@ onCreate() {
 
 imprimerFormulaire() {
   this.display = true;
+}
+
+onPoliceChange() {
+  if(this.appelFondForm.get('police').value?.id) {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.appelFondForm.get('police').value?.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
 }
 
 imprimerRecap() {

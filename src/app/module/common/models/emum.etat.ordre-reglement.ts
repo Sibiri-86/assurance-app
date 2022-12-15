@@ -5,3 +5,11 @@ export enum TypeEtatOrdreReglement {
     DEVALIDE = 'DEVALIDE',
     AVANTPROJET = 'AVANTPROJET'
 }
+
+export enum Workflow {
+    PRESTATION = 'PRESTATION',
+    MEDICAL = 'MEDICAL',
+    FINANCE = 'FINANCE', 
+    DIRECTION = 'DIRECTION',
+    CAISSE = 'CAISSE'
+}

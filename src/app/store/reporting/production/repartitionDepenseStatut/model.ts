@@ -38,6 +38,9 @@ export interface RepartitionDepenseStatut {
     dateDebut?: Date;
     dateFin?: Date;
     tauxChargement?: number;
+    policeId?: string;
+    groupeId?: string;
+    garantId?: string;
 }
 
 
