@@ -1316,9 +1316,6 @@ verifieDateSoins(event){
   addPrestation1() {
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
-    this.prestationsList.push(prestat);
-    this.prestationsList.push(prestat);
-    this.prestationsList.push(prestat);
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
