@@ -459,7 +459,8 @@ loadGroupeByPolice(){
   }
   findOperationGrandLivre() {
    
-   
+    this.check.garantId = this.check?.garant?.id;
+    this.check.policeId = this.check?.police?.id;
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE_CENTRE;
     this.check.display = this.displayExcel;
     this.report.check = this.check;

@@ -129,7 +129,7 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Nombre de chèque non valide'}]);
+                this.breadcrumbService.setItems([{ label: 'Factures impayées par prestataire'}]);
    }
 
   
@@ -443,6 +443,7 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
    }
    imprimerFormulaire() {
     this.display = true;
+    this.displayExcel = false;
   }
   
   imprimerFormulaireExcel() {

@@ -29,6 +29,37 @@
 
                 <form>
                     
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="garantList"
+                            name="garant"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.garant" (onChange)="loadPoliceByGarant()" >
+                            </p-dropdown>
+    
+                        </div>
+    
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="policeList"
+                            name="police"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadGroupeByPolice()">
+                            </p-dropdown>
+                        </div>
+                            <div class="p-field p-col-4">
+                                <label  class="espace1" for="numCompte2"> Groupe <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                <p-dropdown [filter]="true" 
+                                showClear="true" [options]="groupeListes"
+                                name="groupe"
+                                optionLabel="libelle" 
+                                [autoDisplayFirst]="false" [(ngModel)]="check.groupe">
+                                </p-dropdown>
+                            </div>
+                        </div>
 
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-4">
@@ -39,13 +70,7 @@
                                                     name="typePrestataire" appendTo="body"
                                                     [(ngModel)]="check.typePrestataire"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
                                                     optionLabel="libelle"></p-multiSelect>
-                                <!--  <p-dropdown [filter]="true" 
-                                showClear="true" [options]="typePrestataireList"
-                                name="typePrestataire"
-                                optionLabel="libelle" 
-                                [autoDisplayFirst]="false" [(ngModel)]="check.typePrestataire"  >
-                                </p-dropdown> -->
-        
+                               
                             </div>
                             <div class="p-field p-col-4">
                                 <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>

@@ -334,6 +334,7 @@ isSaving = false;
                 this.bulletinForm.get('nomAssurePrin').setValue(this.adherentSelected.nom.concat(" ").concat(this.adherentSelected.prenom));
 
                 this.adherentService.findFamilleByAdherent(value.id, this.bulletinForm.get('dateIncorporation').value).subscribe((rest)=>{
+                  console.log("==============rest========",rest);
                   this.adherantFamilles = rest;
                   this.adherantEnfants = this.adherantFamilles.filter(ad=>ad.qualiteAssure.code === "ENFANT");
                   this.bulletinForm.get('nombreEnfant').setValue(this.adherantEnfants?.length);
@@ -363,7 +364,7 @@ isSaving = false;
             this.bulletinForm.get('tel').setValue(this.adherentSelected.numeroTelephone);
             this.bulletinForm.get('emploi').setValue(this.adherentSelected?.profession?.description);
             this.bulletinForm.get('lieuNaissance').setValue(this.adherentSelected.lieuNaissance);
-          //  this.bulletinForm.get('emploi').setValue(this.adherentSelected.profession.description);
+            this.bulletinForm.get('raisonSociale').setValue(this.adherentSelected.groupe?.police?.nom);
             this.sexe = this.adherentSelected.genre.code;
 
         }
@@ -649,6 +650,7 @@ isSaving = false;
             this.questionEpoux = [];
            this.enfants = [];
            this.epouse = {};
+           this.epouses = [];
            this.enfants = [];
           } 
         }); 

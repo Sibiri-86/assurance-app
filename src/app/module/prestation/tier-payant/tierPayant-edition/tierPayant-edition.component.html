@@ -12,7 +12,7 @@
 			</p-toolbar>
 
 
-            <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire.libelle','numeroFacture']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="TierPayantSelected">
@@ -239,7 +239,7 @@
 
                         <p-fieldset legend="Liste des Prestations" toggleable="true">
                             <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
                                
                                 <ng-template pTemplate="caption">
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -284,6 +284,7 @@
                                         
                                         <td style="text-align:center">
                                             <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                            <button pButton pRipple  icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
                     
                     
                                             </td>

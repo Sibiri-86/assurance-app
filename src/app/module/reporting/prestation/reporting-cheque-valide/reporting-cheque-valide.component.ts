@@ -113,6 +113,7 @@ export class ReportingChequeValideComponent implements OnInit, OnDestroy {
   depenseFamilleList:Array<DepenseFamille> = [];
   depenseFamilleList$: Observable<Array<DepenseFamille>>;
   display = false;
+  displayExcel = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
   garanties: Array<Garantie>;
@@ -128,7 +129,7 @@ export class ReportingChequeValideComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
-                this.breadcrumbService.setItems([{ label: 'Nombre de chèque  valide par prestaire' }]);
+                this.breadcrumbService.setItems([{ label: 'Factures payées prestataire' }]);
    }
 
   
@@ -244,6 +245,10 @@ export class ReportingChequeValideComponent implements OnInit, OnDestroy {
   
   }
 
+  imprimerFormulaireExcel() {
+    this.display = true;
+    this.displayExcel = true;
+  }
   loadPoliceByGarant() {
        this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.check.garant.id}));
 
@@ -437,6 +442,7 @@ export class ReportingChequeValideComponent implements OnInit, OnDestroy {
    }
    imprimerFormulaire() {
     this.display = true;
+    this.displayExcel = false;
   }
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
@@ -445,7 +451,7 @@ export class ReportingChequeValideComponent implements OnInit, OnDestroy {
    
    
     this.report.typeReporting = TypeReport.NOMBRE_CHEQUE_VALIDE;
-    ;
+    this.check.display = this.displayExcel;
     this.report.check = this.check;
     console.log("=====================",this.report)
 

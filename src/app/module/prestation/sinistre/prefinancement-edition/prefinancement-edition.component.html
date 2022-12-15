@@ -450,7 +450,7 @@
               
                         <p-fieldset legend="Liste des Prestations" toggleable="true">
                             <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true">
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
                                
                                 <ng-template pTemplate="caption">
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -495,7 +495,8 @@
                                         
                                         <td style="text-align:center">
                                             <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
-                    
+                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+
                     
                                             </td>
                                 
