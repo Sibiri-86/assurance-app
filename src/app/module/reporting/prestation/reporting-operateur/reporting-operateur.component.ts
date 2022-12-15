@@ -438,6 +438,11 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
    }
    imprimerFormulaire() {
     this.display = true;
+    this.displayExcel = false;
+  }
+  imprimerFormulaireExcel() {
+    this.display = true;
+    this.displayExcel = true;
   }
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
@@ -445,8 +450,8 @@ export class ReportingOperateurComponent implements OnInit, OnDestroy {
   findOperationGrandLivre() {
    
    
-    this.report.typeReporting = TypeReport.OPERATEUR_SAISIE
-    ;
+    this.report.typeReporting = TypeReport.OPERATEUR_SAISIE;
+    this.check.display = this.displayExcel;
     this.report.check = this.check;
     console.log("=====================",this.report)
 
