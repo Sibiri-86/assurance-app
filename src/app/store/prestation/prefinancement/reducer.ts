@@ -1,7 +1,7 @@
 import { PrefinancementState } from "./state";
 import * as featureActions from "./action";
 import { Action, createReducer, on } from "@ngrx/store";
-import { CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglementList, PrefinancementList } from "./model";
+import { CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglementList, OrdreReglementListDirection, OrdreReglementListFinance, OrdreReglementListMedical, PrefinancementList } from "./model";
 import { ReportFile } from "../../contrat/police/model";
 
 const initialState: PrefinancementState = {
@@ -9,7 +9,10 @@ const initialState: PrefinancementState = {
     ordreReglementList: null,
     reportFile: null,
     checkPrefinancementReponse: null,
-    montantPlafondSousActe: null
+    montantPlafondSousActe: null,
+    ordreReglementListMedical: null,
+    ordreReglementListFinance: null,
+    ordreReglementListDirection: null
   };
 
 const featureReducer = createReducer(
@@ -28,7 +31,16 @@ const featureReducer = createReducer(
       })),
     on(featureActions.setPlafondSousActe, (state, payload: CheckPlafondResponse) => ({
         ...state, montantPlafondSousActe: payload.montant
-      }))
+      })),
+      on(featureActions.setLoadOrdreReglementMedical, (state, payload: OrdreReglementListMedical) => ({
+        ...state, ordreReglementListMedical: payload.ordreReglementDtoList
+      })),
+      on(featureActions.setLoadOrdreReglementFinance, (state, payload: OrdreReglementListFinance) => ({
+        ...state, ordreReglementListFinance: payload.ordreReglementDtoList
+      })),
+      on(featureActions.setLoadOrdreReglementDirection, (state, payload: OrdreReglementListDirection) => ({
+        ...state, ordreReglementListDirection: payload.ordreReglementDtoList
+      })),
   );
 
 export function reducer(state: PrefinancementState | undefined, action: Action) {

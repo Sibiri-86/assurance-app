@@ -392,15 +392,15 @@
                     <div class="p-field p-col">
                         <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
                         <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="policeList"
+                                                showClear="true" [options]="policeList" (onChange)="onPoliceChange()"
                                                 formControlName="police"
                                                 [autoDisplayFirst]="false" [formGroup]="appelFondForm">
                         </p-dropdown>
                     </div>
                     <div class="p-field p-col">
                         <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
-                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="garantList"
+                        <p-dropdown inputId="groupe" [filter]="true" optionLabel="libelle"
+                                                showClear="true" [options]="groupePolicy"
                                                 formControlName="groupe"
                                                 [autoDisplayFirst]="false" [formGroup]="appelFondForm">
                         </p-dropdown>

@@ -306,6 +306,7 @@ import { ConsommationParSexeEffects } from './store/reporting/medical/consommati
 import { ReportingOperateurComponent } from './module/reporting/prestation/reporting-operateur/reporting-operateur.component';
 import { ReportingChequeNonValideComponent } from './module/reporting/prestation/reporting-cheque-non-valide/reporting-cheque-non-valide.component';
 import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
+import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 
 @NgModule({
     imports: [
@@ -557,6 +558,7 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
         ReportingOperateurComponent,
         ReportingChequeNonValideComponent,
         ReportingChequeValideComponent,
+        OrdreReglementWorkflowComponent
 
     ],
     providers: [

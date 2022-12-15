@@ -240,7 +240,7 @@ export class PrefinancementEffects {
                 updateETatDeValiderOrdreReglement$ = createEffect(() =>
                     this.actions$.pipe(
                             ofType(featureActions.deValiderOrdreReglement),
-                            mergeMap(({ordre, etat}) =>
+                            mergeMap(({ordre, etat, w}) =>
                                 this.prefinancementService.putUpdateOrdreReglement(ordre, etat).pipe(
                                     switchMap(value => [
                                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
@@ -254,7 +254,7 @@ export class PrefinancementEffects {
             updateETatAnnulerOrdreReglement$ = createEffect(() =>
                     this.actions$.pipe(
                             ofType(featureActions.annulerOrdreReglement),
-                            mergeMap(({ordre, etat}) =>
+                            mergeMap(({ordre, etat, w}) =>
                                 this.prefinancementService.putUpdateOrdreReglement(ordre, etat).pipe(
                                     switchMap(value => [
                                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
@@ -380,4 +380,58 @@ export class PrefinancementEffects {
                                                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                                                     ))
                                                                 ));
+
+                                                                loadReglementValideMedical$ = createEffect(() =>
+                                                                this.actions$.pipe(
+                                                                    ofType(featureActions.loadOrdreReglementValideMedical),
+                                                                    mergeMap(() =>
+                                                                        this.prefinancementService.$getOrdreReglementValideAndWorkFlowMedical().pipe(
+                                                                            switchMap(value => [
+                                                                                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                            featureActions.setLoadOrdreReglementMedical(value)
+                                                                            ]),
+                                                                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                            ))
+                                                                        ));
+
+                                                                        loadReglementValideFinance$ = createEffect(() =>
+                                                                        this.actions$.pipe(
+                                                                            ofType(featureActions.loadOrdreReglementValideFinance),
+                                                                            mergeMap(() =>
+                                                                                this.prefinancementService.$getOrdreReglementValideAndWorkFlowFinance().pipe(
+                                                                                    switchMap(value => [
+                                                                                            // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                                    featureActions.setLoadOrdreReglementFinance(value)
+                                                                                    ]),
+                                                                                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                        // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                    ))
+                                                                                ));
+                                                                                updateETatValiderOrdreReglementWorkflow$ = createEffect(() =>
+                                                                                this.actions$.pipe(
+                                                                                        ofType(featureActions.validerOrdreReglementWorkflow),
+                                                                                        mergeMap(({ordre, etat, w}) =>
+                                                                                            this.prefinancementService.putUpdateOrdreReglementWorkflow(ordre, etat, w).pipe(
+                                                                                                switchMap(value => [
+                                                                                                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                                                    featureActions.loadOrdreReglement()
+                                                                                                ]),
+                                                                                                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                            ))
+                                                                                        ));
+                                                                                        loadReglementValideDirection$ = createEffect(() =>
+                                                                                            this.actions$.pipe(
+                                                                                                ofType(featureActions.loadOrdreReglementValideDirection),
+                                                                                                mergeMap(() =>
+                                                                                                    this.prefinancementService.$getOrdreReglementValideAndWorkFlowDirection().pipe(
+                                                                                                        switchMap(value => [
+                                                                                                                // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                                                        featureActions.setLoadOrdreReglementDirection(value)
+                                                                                                        ]),
+                                                                                                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                                                        ))
+                                                                                                    ));
 }
