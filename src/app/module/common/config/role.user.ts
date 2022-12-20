@@ -25,7 +25,13 @@ export const Function = {
     sm_bulletin_adhesion: 'sm_bulletin_adhesion',
     sm_medical: 'sm_medical',
     sm_finance: 'sm_finance',
-    sm_assure: 'sm_assure'
+    sm_assure: 'sm_assure',
+    sm_workflow: 'sm_workflow',
+    sm_workflow_prefinancement: 'sm_workflow_prefinancement',
+    sm_workflow_prefinancement_prestation: 'sm_workflow_prefinancement_prestation',
+    sm_workflow_prefinancement_Medical: 'sm_workflow_prefinancement_Medical',
+    sm_workflow_prefinancement_finance: 'sm_workflow_prefinancement_finance',
+    sm_workflow_prefinancement_direction: 'sm_workflow_prefinancement_direction'
 };
 
 export const UsersRoles = {
@@ -36,5 +42,7 @@ export const UsersRoles = {
     Function.sm_ordre_reglement_valide, Function.sm_ordre_reglement_consultation,
     Function.sm_tiers_payant, Function.sm_tiers_payant_consultation, Function.sm_tiers_payant_edition,
     Function.sm_tiers_payant_ordre_reglement_consultation, Function.sm_tiers_payant_ordre_reglement_edition,
-    Function.sm_tiers_payant_ordre_reglement_valide, Function.sm_tiers_payant_valide, Function.sm_medical, Function.sm_finance, Function.sm_assure]
+    Function.sm_tiers_payant_ordre_reglement_valide, Function.sm_tiers_payant_valide, Function.sm_medical, Function.sm_finance, Function.sm_assure,
+    Function.sm_workflow, Function.sm_workflow_prefinancement, Function.sm_workflow_prefinancement_prestation, Function.sm_workflow_prefinancement_Medical, 
+    Function.sm_workflow_prefinancement_finance, Function.sm_workflow_prefinancement_direction]
 };

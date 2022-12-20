@@ -5,9 +5,10 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {  CheckPlafond, MontantPlafondGarantieResponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation, ReponseCheckMontantRestantGarantie } from './model';
+import {  MontantPlafondGarantieResponse, ReponseCheckMontantRestantGarantie } from './model';
+import { CheckPlafond, OrdreReglement, OrdreReglementList, OrdreReglementListDirection, OrdreReglementListFinance, OrdreReglementListMedical, Prefinancement, PrefinancementList, Prestation } from './model';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
-import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Report } from '../../contrat/police/model';
 import {formatDate} from '@angular/common';
 import { Taux } from '../../parametrage/taux/model';
@@ -176,6 +177,33 @@ checkMontantRestantPlafond(assureId: string, exerciceId: string, familleActeId: 
   }
 }
 
+$getOrdreReglementValideAndWorkFlowMedical(): Observable<OrdreReglementListMedical> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/valide/medical`).pipe(
+      map((response: OrdreReglementListMedical) => response),
+      catchError(this.handleError())
+  );
+}
+
+$getOrdreReglementValideAndWorkFlowFinance(): Observable<OrdreReglementListFinance> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/valide/finance`).pipe(
+      map((response: OrdreReglementListFinance) => response),
+      catchError(this.handleError())
+  );
+}
+
+$getOrdreReglementValideAndWorkFlowDirection(): Observable<OrdreReglementListDirection> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/valide/direction`).pipe(
+      map((response: OrdreReglementListDirection) => response),
+      catchError(this.handleError())
+  );
+}
+putUpdateOrdreReglementWorkflow(ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/etat/${etat}/${w}`, ordre);
+}
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {

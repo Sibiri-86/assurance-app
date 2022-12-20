@@ -45,7 +45,6 @@ import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 import { groupeList } from 'src/app/store/contrat/groupe/selector';
 
-
 @Component({
   selector: 'app-recapitulatif',
   templateUrl: './recapitulatif.component.html',
@@ -122,6 +121,9 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   policeList = [];
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
+
+  groupePolicy: Array<Groupe>;
+
 
 
   recapitulatif: Recapitulatif;
@@ -388,6 +390,19 @@ onCreate() {
 
 imprimerFormulaire() {
   this.display = true;
+}
+
+onPoliceChange() {
+  if(this.appelFondForm.get('police').value?.id) {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.appelFondForm.get('police').value?.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
 }
 
 imprimerRecap() {

@@ -66,7 +66,16 @@ export class AppMenuComponent implements OnInit {
                                     {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)}
                                 ]
-                            }
+                            },
+                            {
+                                label: 'Worflow', icon: 'pi pi-fw pi-align-left', routerLink: ['/prestation'],
+                                visible: this.keycloak.isUserInRole(Function.sm_workflow),
+                                items: [
+                                    {label: 'Prefinancement', icon: 'pi pi-fw pi-chevron-circle-right',  routerLink: ['/prestation/Workflow/ordre-reglement-workflow'], visible: this.keycloak.isUserInRole(Function.sm_workflow_prefinancement)},
+                                    {label: 'Tiers Payant', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/prestation/prefinancement/ordre-reglement/valide'], visible: this.keycloak.isUserInRole(Function.sm_ordre_reglement_valide)}
+                                    
+                                ]
+                            },
                         ]
             },
             {

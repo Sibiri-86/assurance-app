@@ -7,4 +7,7 @@ export interface PrefinancementState {
     checkPrefinancementReponse: Array<CheckPrefinancementResult>;
     montantPlafondSousActe: number;
     selectedMontantResearch: ReponseCheckMontantRestantGarantie;
+    ordreReglementListMedical: Array<OrdreReglement>;
+    ordreReglementListFinance: Array<OrdreReglement>;
+    ordreReglementListDirection: Array<OrdreReglement>;
 }

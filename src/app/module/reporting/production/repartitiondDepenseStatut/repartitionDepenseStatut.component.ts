@@ -30,7 +30,7 @@ import * as appelFondSelector from '../../../../store/comptabilite/appelFond/sel
 import * as appelFondAction from 'src/app/store/comptabilite/appelFond/actions';
 import { DATA_DEFINITION, DATA_TYPE } from '../../../parametrage/parameters.data';
 import { AppelFond, TypeCompte } from 'src/app/store/comptabilite/appelFond/model';
-import { Report } from 'src/app/store/contrat/police/model';
+import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../../util/common-util';
 import * as garantSelector from "../../../../store/contrat/garant/selector";
@@ -40,6 +40,12 @@ import * as repartitionDepenseStatutAction from 'src/app/store/reporting/product
 import * as repartitionDepenseStatutSelector from '../../../../store/reporting/production/repartitionDepenseStatut/selector';
 import { RecapitulatifService } from 'src/app/store/reporting/production/recapitulatif/service';
 import { RepartitionDepenseStatut } from 'src/app/store/reporting/production/repartitionDepenseStatut/model';
+import { Groupe } from 'src/app/store/contrat/groupe/model';
+import {groupeList} from 'src/app/store/contrat/groupe/selector';
+import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
+import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/actions';
+import { policeList } from 'src/app/store/contrat/police/selector';
+
 
 
 @Component({
@@ -113,6 +119,14 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
   dateDebut: Date;
   dateFin: Date;
   appelFondTotal: AppelFond;
+  display = false;
+  policeList$: Observable<Array<Police>>;
+  policeList = [];
+  groupeList$: Observable<Array<Groupe>>;
+  groupeList: [];
+  groupePolicy: Array<Groupe>;
+
+
 
 
   repartitionDepenseStatut: RepartitionDepenseStatut;
@@ -162,7 +176,10 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
         coutMoyentEnfant: new FormControl(),
         dateDebut: new FormControl('', [Validators.required]),
         dateFin: new FormControl('', [Validators.required]),
-        tauxChargement: new FormControl('', [Validators.required])
+        tauxChargement: new FormControl('', [Validators.required]),
+        police: new FormControl(),
+        groupe: new FormControl(),
+        garant: new FormControl(),
     });
 
       this.breadcrumbService.setItems([
@@ -203,6 +220,17 @@ ngOnInit(): void {
               printPdfFile(bytes);
           }
       });
+
+    this.policeList$ = this.store.pipe(select(policeList));
+    this.store.dispatch(loadPoliceByAffaireNouvelle());
+    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.loading = false;
+        this.policeList = value.slice();
+        console.log('................this.policeList............................');
+        console.log(this.policeList);
+      }
+    });
 
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
@@ -370,12 +398,32 @@ annulerAppelFond() {
   });
 } */
 
+imprimerFormulaire() {
+  this.display = true;
+}
+
+onPoliceChange() {
+  if(this.appelFondForm.get('police').value?.id) {
+    this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.appelFondForm.get('police').value?.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupePolicy = value.slice();
+        console.log(this.groupePolicy);
+      }
+    });
+  }
+}
+
 imprimerRecap() {
   //console.log('recap=============>', recap);
   this.repartitionDepenseStatut = {};
   this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
   this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
   this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
+  this.repartitionDepenseStatut.policeId = this.appelFondForm.get('police').value?.id;
+  this.repartitionDepenseStatut.groupeId = this.appelFondForm.get('groupe').value?.id;
+  this.repartitionDepenseStatut.garantId = this.appelFondForm.get('garant').value?.id;
   this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
   this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
   console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);

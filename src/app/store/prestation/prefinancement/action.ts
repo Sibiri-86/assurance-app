@@ -1,8 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { Report } from '../../contrat/police/model';
-import {  CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, MontantPlafondGarantieResponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
+import {  MontantPlafondGarantieResponse } from './model';
+import { CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, OrdreReglementListFinance, OrdreReglementListMedical, Prefinancement, PrefinancementList, Prestation } from './model';
 export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
 export const setPrefinancement = createAction('[App Init] set Prefinancement',  props<PrefinancementList>());
 export const loadPrefinancement = createAction('[App Init] load prefinancement');
@@ -15,9 +16,9 @@ export const createOrdreReglement = createAction('[App Init] Create Ordre de reg
 export const validerOrdreReglement = createAction('[App Init] valider ordre reglement',
 props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement}>());
 export const deValiderOrdreReglement = createAction('[App Init] deValider ordre reglement',
-props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement}>());
+props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
 export const annulerOrdreReglement = createAction('[App Init] annuler ordre reglement',
-props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement}>());
+props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
 export const loadOrdreReglement = createAction('[App Init] load ordre reglement');
 export const loadOrdreReglementValide = createAction('[App Init] load ordre reglement valide');
 export const setLoadOrdreReglement = createAction('[App Init] set ordre reglement',  props<OrdreReglementList>());
@@ -52,4 +53,12 @@ export const setPlafondGarantie = createAction('[set Plafond] set Plafond famill
 export const checkMontantRestantPlafondGarantie = createAction('[App Init] Check plafond famille acte',  props<{assureId: string, exerciceId: string, familleActeId: string, groupeId: string}>());
 export const selectedMontantForSearch = createAction('[App Init] selected for search plafond famille acte',  props<MontantPlafondGarantieResponse>());
 //export const selectedMontantForSearch1 = createAction('[App Init] selected for search1 for plafond famille acte',  props<CheckMontantRestantPlafondGarantie>());
+export const loadOrdreReglementValideMedical = createAction('[App Init] load ordre reglement valide medical');
+export const setLoadOrdreReglementMedical = createAction('[App Init] set ordre reglement Medical',  props<OrdreReglementListMedical>());
+export const loadOrdreReglementValideFinance = createAction('[App Init] load ordre reglement valide Finance');
+export const setLoadOrdreReglementFinance = createAction('[App Init] set ordre reglement Finance',  props<OrdreReglementListFinance>());
+export const validerOrdreReglementWorkflow = createAction('[App Init] valider ordre reglement workflow',
+props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
+export const loadOrdreReglementValideDirection = createAction('[App Init] load ordre reglement valide Direction');
+export const setLoadOrdreReglementDirection = createAction('[App Init] set ordre reglement Direction',  props<OrdreReglementList>());
 

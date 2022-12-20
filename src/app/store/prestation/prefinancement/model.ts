@@ -1,4 +1,4 @@
-import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Sort } from 'src/app/module/common/models/sort.enum';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
@@ -25,6 +25,17 @@ export interface Sinistre {
 export interface OrdreReglementList {
     ordreReglementDtoList?: Array<OrdreReglement>;
 }
+export interface OrdreReglementListMedical {
+    ordreReglementDtoList?: Array<OrdreReglement>;
+}
+
+export interface OrdreReglementListFinance {
+    ordreReglementDtoList?: Array<OrdreReglement>;
+}
+
+export interface OrdreReglementListDirection {
+    ordreReglementDtoList?: Array<OrdreReglement>;
+}
 
 export interface OrdreReglement {
     id?: string;
@@ -38,6 +49,7 @@ export interface OrdreReglement {
     banque?: Banque;
     assure?: Adherent;
     isPaiement?: Boolean;
+    niveauValidation?: Workflow;
 }
 
 export interface Prefinancement {
