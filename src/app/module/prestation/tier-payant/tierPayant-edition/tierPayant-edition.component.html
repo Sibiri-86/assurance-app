@@ -889,3 +889,15 @@
             </div>
         </ng-template>
     </p-dialog>
+    <p-dialog [(visible)]="showMessage" header="Plafond presque atteint" [modal]="true" styleClass="p-fluid" 
+    [style]="{width: '1000px'}">
+
+   <ng-template pTemplate="content">
+       <div class="card primeeee">
+
+       <span class="prime">{{montantReponse.message}} </span><br>
+
+
+       </div>
+   </ng-template>
+</p-dialog>

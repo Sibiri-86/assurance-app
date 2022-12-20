@@ -393,14 +393,14 @@
                         <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
                         <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
                                                 showClear="true" [options]="policeList"
-                                                formControlName="police"
+                                                formControlName="police" (onChange)="loadGroupeList()"
                                                 [autoDisplayFirst]="false" [formGroup]="appelFondForm">
                         </p-dropdown>
                     </div>
                     <div class="p-field p-col">
                         <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
-                        <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
-                                                showClear="true" [options]="garantList"
+                        <p-dropdown inputId="garant" [filter]="true" optionLabel="libelle"
+                                                showClear="true" [options]="groupeList" 
                                                 formControlName="groupe"
                                                 [autoDisplayFirst]="false" [formGroup]="appelFondForm">
                         </p-dropdown>

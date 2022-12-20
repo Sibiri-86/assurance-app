@@ -1,7 +1,7 @@
 import { PrefinancementState } from "./state";
 import * as featureActions from "./action";
 import { Action, createReducer, on } from "@ngrx/store";
-import { CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglementList, PrefinancementList } from "./model";
+import { CheckPlafondResponse, CheckPrefinancementReponse, MontantPlafondGarantieResponse, OrdreReglementList, PrefinancementList } from "./model";
 import { ReportFile } from "../../contrat/police/model";
 
 const initialState: PrefinancementState = {
@@ -9,7 +9,8 @@ const initialState: PrefinancementState = {
     ordreReglementList: null,
     reportFile: null,
     checkPrefinancementReponse: null,
-    montantPlafondSousActe: null
+    montantPlafondSousActe: null,
+    selectedMontantResearch: null
   };
 
 const featureReducer = createReducer(
@@ -28,7 +29,11 @@ const featureReducer = createReducer(
       })),
     on(featureActions.setPlafondSousActe, (state, payload: CheckPlafondResponse) => ({
         ...state, montantPlafondSousActe: payload.montant
-      }))
+      })),
+      on(featureActions.selectedMontantForSearch, (state, payload: MontantPlafondGarantieResponse) => ({
+          ...state, check: payload.checkMontantRestantPlafondGarantie
+        }))
+      
   );
 
 export function reducer(state: PrefinancementState | undefined, action: Action) {

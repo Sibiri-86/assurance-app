@@ -4,3 +4,6 @@ export const ordreReglementList = (state: AppState) => state.prefinancementState
 export const selectByteFile = (state: AppState) => state.prefinancementState.reportFile;
 export const montantSousActe = (state: AppState) => state.prefinancementState.montantPlafondSousActe;
 export const selectCheckPrefinancementReponse = (state: AppState) => state.prefinancementState.checkPrefinancementReponse;
+export const selectedMontant = (state: AppState) => state.prefinancementState.selectedMontantResearch;
+
+

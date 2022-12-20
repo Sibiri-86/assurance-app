@@ -109,6 +109,7 @@ export interface Prestation {
     adherent?: Adherent;
     montantExclu?: number;
     typePrestation?: TypePrestation;
+    garantie?: Garantie;
     /*ajout information pour bon de prise en charge*/
 }
 
@@ -143,3 +144,23 @@ export enum TypePrestation {
     TIERSPAYSANT = 'TIERSPAYSANT',
     
 }
+
+ export interface ReponseCheckMontantRestantGarantie {
+    message?: string;
+    montantPrestation?: number;
+    montantRestant?: number;
+    montantPlafond?: number;
+    assureId?: string;
+    exerciceId?: string;
+    familleActeId?: string;
+    groupeId?: string;
+} 
+
+export interface MontantPlafondGarantieResponse {
+    checkMontantRestantPlafondGarantie?: ReponseCheckMontantRestantGarantie;
+}
+/* export interface CheckMontantRestantPlafondGarantieResponse {
+    checkMontantRestantPlafondGarantie?: CheckMontantRestantPlafondGarantie
+} */
+
+

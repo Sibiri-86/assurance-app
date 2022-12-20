@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { Report } from '../../contrat/police/model';
-import { CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
+import {  CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, MontantPlafondGarantieResponse, OrdreReglement, OrdreReglementList, Prefinancement, PrefinancementList, Prestation } from './model';
 export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
 export const setPrefinancement = createAction('[App Init] set Prefinancement',  props<PrefinancementList>());
 export const loadPrefinancement = createAction('[App Init] load prefinancement');
@@ -47,3 +47,9 @@ export const validerPaiementCheque = createAction('[App Init] valider ordre paie
 props<{ordre: OrdreReglement}>());
 export const paiementChequeCaisseDevalider = createAction('[App Init] devalider ordre paiement caisse',
 props<{ordre: OrdreReglement}>());
+/* export const checkMontantRestantPlafondGarantie = createAction('[App Init] Check plafond famille acte', props<CheckMontantRestantPlafondGarantieResponse>());
+export const setPlafondGarantie = createAction('[set Plafond] set Plafond famille acte', props<{check:CheckMontantRestantPlafondGarantie}>()); */
+export const checkMontantRestantPlafondGarantie = createAction('[App Init] Check plafond famille acte',  props<{assureId: string, exerciceId: string, familleActeId: string, groupeId: string}>());
+export const selectedMontantForSearch = createAction('[App Init] selected for search plafond famille acte',  props<MontantPlafondGarantieResponse>());
+//export const selectedMontantForSearch1 = createAction('[App Init] selected for search1 for plafond famille acte',  props<CheckMontantRestantPlafondGarantie>());
+

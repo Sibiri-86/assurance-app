@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, Prefinancement, Prestation, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
+import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, MontantPlafondGarantieResponse, Prefinancement, Prestation, ReponseCheckMontantRestantGarantie, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -139,6 +139,9 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
   displayFP = false;
   typePaiementValide = false;
+  montantReponse$: Observable<ReponseCheckMontantRestantGarantie>;
+  montantReponse: ReponseCheckMontantRestantGarantie;
+  showMessage = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -267,6 +270,15 @@ findMontantPlafond(event){
         if (bytes) {
                 printPdfFile(bytes);
         }
+    });
+
+    this.montantReponse$ = this.store.pipe(select(prefinancementSelector.selectedMontant));
+    this.montantReponse$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log('hhhhhhhhhhhhhhhhh>', this.montantReponse);
+      if (value) {
+        this.montantReponse = value;
+        console.log('hhhhhhhhhhhhhhhhh>', this.montantReponse);
+      }
     });
 
     // chargement des bons de prise en charge
@@ -1258,6 +1270,7 @@ verifieDateSoins(event){
       this.displayFP = false;
     }
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+    this.findMontantTotalConsommeFamille();
   }
   changeDisplay() {
     if(this.prestationPopForm.value?.produitPharmaceutique) {
@@ -1319,8 +1332,10 @@ verifieDateSoins(event){
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
+      console.log("PREST1", prestat);
     } else {
       this.prestationsList.push(prestat);
+      console.log("PREST2", prestat);
     }
    
    this.prestationPopForm.reset();
@@ -1403,6 +1418,19 @@ console.log(this.typePaiementValide);
 
 navigateSinistre() {
   this.router.navigateByUrl('/prestation/prefinancement/valide');
+}
+
+findMontantTotalConsommeFamille() {
+  if(this.adherentSelected.id  && this.adherentSelected.exercice.id && this.prestationPopForm.get('familleActe').value.id && this.adherentSelected.groupe.id) {
+    this.prefinancementService.checkMontantRestantPlafond(this.adherentSelected.id, this.adherentSelected.exercice.id,  this.prestationPopForm.get('familleActe').value.id, this.adherentSelected.groupe.id).subscribe((res=>{
+      this.montantReponse = res.checkMontantRestantPlafondGarantie;
+      console.log("===================bien======",this.montantReponse);
+      if(this.montantReponse.message != null) {
+        this.showMessage = true;
+      }
+    }));        
+    
+  }
 }
 
 }
