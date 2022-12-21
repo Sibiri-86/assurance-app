@@ -23,7 +23,7 @@ import { Medecin } from 'src/app/store/parametrage/medecin/model';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
 
-import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { printPdfFile } from 'src/app/module/util/common-util';
@@ -52,6 +52,7 @@ export class OrdrePaimentInstanceChequeComponent implements OnInit {
   ordreReglementPaiement: OrdreReglement;
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
+  type = TypePaiement.CHEQUE;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -103,6 +104,7 @@ export class OrdrePaimentInstanceChequeComponent implements OnInit {
   paiementCheque() {
     this.store.dispatch(featureActionPrefinancement.validerPaiementCheque({ordre: this.ordreReglementPaiement}));
     this.ordreReglementPaiement = {};
+    this.displayPaiement = false;
     //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
   }
   voirSinistre(ordre: OrdreReglement) {

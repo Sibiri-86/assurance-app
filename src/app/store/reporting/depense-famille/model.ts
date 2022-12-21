@@ -33,6 +33,7 @@ export interface Check {
     pathologies?: Array<TypePrestataire>;
     tranches?: Array<Tranche>;
     display?: Boolean;
+    taux?: number;
 }
 
 export interface Tranche  {

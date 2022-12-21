@@ -90,20 +90,16 @@
                 <form >
                     <div class="card">
                         <div class="p-fluid p-formgrid p-grid">
-                            <!-- <div class="p-field p-col-12">
-                                <label for="typePaiement">Type de paiement <span class="required"></span></label>
-                                <p-dropdown inputId="typePaiement" [filter]="true"
-                                                        showClear="true" [options]="typePaiement"
-                                                        name="typePaiement"
-                                                       [(ngModel)]="journalPaiement.typePaiement"
-                                                         [autoDisplayFirst]="false"></p-dropdown>
-                            </div> -->
+                           <div class="p-field p-col-12">
+                            <label for="typePaiement">Reférence du chèque <span class="required"></span></label>
+                            <input id="referenceCheque" name="referenceCheque" type="text" pInputText placeholder="reference" [(ngModel)]="ordreReglementPaiement.referenceCheque">
+                           </div>
 
-                            <div class="p-field p-col-12">
+                            <div class="p-field p-col-12" *ngIf="ordreReglementPaiement.typePaiement === type ">
                                 <label for="typePaiement">Banque <span class="required"></span></label>
                                 <p-dropdown inputId="typePaiement" [filter]="true"
                                                         showClear="true" [options]="banqueList"
-                                                        name="banque"
+                                                        name="banque" 
                                                        [(ngModel)]="ordreReglementPaiement.banque"
                                                        placeholder="Select banque" optionLabel="code"
                                                          [autoDisplayFirst]="false"></p-dropdown>
@@ -116,7 +112,7 @@
                         <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                     </div>
                     <div>
-                        <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="paiementCheque()" ></button>
+                        <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" [disabled]="!ordreReglementPaiement.banque"  type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="paiementCheque()" ></button>
                     </div>
                 </div>
                 </div>
