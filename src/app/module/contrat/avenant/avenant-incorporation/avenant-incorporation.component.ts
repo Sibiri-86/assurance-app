@@ -89,13 +89,14 @@ export class AvenantIncorporationComponent implements OnInit{
     groupeList$: Observable<Array<Groupe>>;
     groupeList: Array<Groupe>;
     isNewGroupe = false;
-    exercice$: Observable<Exercice>;exerciceList$
-    : Observable<Array<Exercice>>;
+    exercice$: Observable<Exercice>;
+    exerciceList$: Observable<Array<Exercice>>;
     exerciceList: Array<Exercice>;
     viewListeEdit = false;
     @Input() groupesInput: Array<Groupe>;
     selectedGroup: Groupe = {};
     curentExercice: Exercice = {};
+    compteur: number = null; 
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -454,7 +455,12 @@ export class AvenantIncorporationComponent implements OnInit{
             f.adherentPrincipal = null;
             f.groupe = this.customForm.controls.groupe.value;
         });
-        this.adherentFamilleListe.push(adherantFamille);
+        if(this.compteur !=null) {
+            this.adherentFamilleListe[this.compteur] = adherantFamille;
+        } else {
+            this.adherentFamilleListe.push(adherantFamille);
+        }
+        
         this.adherentForm.reset();
         
         console.log("============id==========",this.adherentForm.value.id);
@@ -464,6 +470,27 @@ export class AvenantIncorporationComponent implements OnInit{
         
         console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
         console.log(adherantFamille);
+        console.log('***************-------------------------', this.customForm.get('groupe').value);
+        this.compteur = null;
+    }
+
+    modifierHistoriqueAvenant1(ri: number): void {
+        
+        this.compteur = ri;
+        
+
+            
+            this.adherentForm.patchValue(this.adherentFamilleListe[ri].adherent);
+            if(this.adherentFamilleListe[ri].famille) {
+                this.ajouter();
+                this.familys.patchValue(this.adherentFamilleListe[ri].famille);
+            }
+       
+       
+       
+        
+        console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
+       
         console.log('***************-------------------------', this.customForm.get('groupe').value);
     }
 

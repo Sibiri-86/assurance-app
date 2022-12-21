@@ -328,6 +328,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   exerciceRev: Exercice = {};
   primeExercice: number;
   exoNumber: number;
+  displayModif = false;
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2407,6 +2408,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (hap.primeTTC) {
         hap.primeTTC = removeBlanks(hap.primeTTC + '');
       }
+      hap.deletedMaj = this.displayModif;
       hap.status = true;
       hap.historiqueAvenant = {};
     });
@@ -2415,6 +2417,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         (res) => {
           historiqueAvenant = res;
           this.displayDialogPrime = false;
+          this.displayModif = false;
           this.onExerciceChange2();
         }
     ); 
@@ -2463,6 +2466,13 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   onRowEditSavePrime(historiqueAvenantPrime: HistoriqueAvenantPrime) {
+    if(this.clonedPPrime[historiqueAvenantPrime.id].primeTotal !== historiqueAvenantPrime.primeTotal || this.clonedPPrime[historiqueAvenantPrime.id].primeNet !== historiqueAvenantPrime.primeNet) {
+      historiqueAvenantPrime.deletedMaj = true;
+      this.displayModif = true;
+      historiqueAvenantPrime.fraisAccessoir = historiqueAvenantPrime?.historiqueAvenant?.fraisAccessoires;
+      historiqueAvenantPrime.fraisBadge = historiqueAvenantPrime?.historiqueAvenant?.fraisBadges;
+    }
+      
       delete this.clonedPPrime[historiqueAvenantPrime.id];
       // this.messageService.add({severity: 'success', summary: 'Success', detail: 'Product is updated'});
   }

@@ -36,7 +36,7 @@ export class PaiementFactureComponent implements OnInit {
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
   typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.ORANGE_MONEY && kj !== TypePaiement.MOOV_MONEY && kj !== TypePaiement.ESPECE).map(key => ({ label: TypePaiement[key], value: key }));
-
+  type = TypePaiement.CHEQUE;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -76,6 +76,13 @@ export class PaiementFactureComponent implements OnInit {
   paiement(ordre: OrdreReglement) {
     this.displayPaiement = true;
     this.ordreReglementPaiement = ordre;
+   
+  }
+  checkType() {
+    if(this.ordreReglementPaiement.typePaiement) {
+      this.type = this.ordreReglementPaiement.typePaiement;
+    }
+    
   }
   deValiderOrdreReglement(ordre: OrdreReglementTierPayant) {
     this.confirmationService.confirm({
@@ -97,6 +104,7 @@ export class PaiementFactureComponent implements OnInit {
   paiementCheque() {
     this.store.dispatch(featureActionTierPayant.validerPaiement({ordre: this.ordreReglementPaiement}));
     this.ordreReglementPaiement = {};
+    this.displayPaiement = false;
     //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
 
   }

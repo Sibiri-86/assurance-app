@@ -319,7 +319,11 @@
 </div>
 </div>
 <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation"  [modal]="true" styleClass="p-fluid">
-    
+    <ng-template pTemplate="header">
+        <Span style="font-weight: bold">Montant reclamé: {{prefinancement?.montantReclame | formatTableValue: 'number':true}}</Span>
+        <Span style="font-weight: bold; color: rgb(12, 125, 12);">Montant remboursé: {{prefinancement?.montantPaye | formatTableValue: 'number':true}}</Span>
+        <Span style="font-weight: bold" >Montant restant: <span style="color: red !important;" *ngIf="prefinancement?.montantRestant <0">{{prefinancement?.montantRestant | formatTableValue: 'number':true}}</span><span *ngIf="prefinancement?.montantRestant >=0">{{prefinancement?.montantRestant | formatTableValue: 'number':true}}</span></Span>
+    </ng-template>
     <ng-template pTemplate="content"> 
         <div class="card">
             <form>
