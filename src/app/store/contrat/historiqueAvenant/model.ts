@@ -215,6 +215,7 @@ export interface HistoriqueAvenantPrime {
     primeNet?: number;
     primeTotal?: number;
     deleted?: boolean;
+    deletedMaj?: boolean;
     historiqueAvenant?: HistoriqueAvenant;
     groupe?: Groupe;
     fraisBadge?: number;

@@ -50,6 +50,7 @@ export interface OrdreReglement {
     assure?: Adherent;
     isPaiement?: Boolean;
     niveauValidation?: Workflow;
+    referenceCheque?:string;
 }
 
 export interface Prefinancement {

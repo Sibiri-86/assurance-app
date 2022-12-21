@@ -149,7 +149,7 @@ export class AppMenuComponent implements OnInit {
                             {label: 'Affection', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
                             {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
                             {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
-                            
+                            {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/evolution-mensuelle'], visible: true},
                          ]
                 
                 },

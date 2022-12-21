@@ -40,6 +40,8 @@ export interface Adherent{
     exercice?: Exercice;
     ancienGroupes?: Array<Groupe>;
     question?: Questionnaire;
+    numeroWhap?: string;
+    compteBancaire?: string;
 }
 
 export interface AdherentResearchReponse {

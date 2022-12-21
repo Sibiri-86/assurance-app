@@ -96,6 +96,7 @@ import { ReportingChequeValideComponent } from './module/reporting/prestation/re
 import { FacturePrestatairesComponent } from './module/reporting/prestation/FacturePrestataires/facturePrestataires.component';
 import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
+import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
 
 @NgModule({
     imports: [
@@ -186,6 +187,7 @@ import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-regle
                     {path: 'comptabilite/balance-tiers', component: BalanceTiersComponent},
                     {path: 'reporting/recapitulatif', component: RecapitulatifComponent},
                     {path: 'reporting/depense-famille', component: DepenseFamilleComponent},
+                    {path: 'reporting/evolution-mensuelle', component: EvolutionMensuelleComponent},
                     {path: 'reporting/depense-famille-acte', component: DepenseFamilleActeComponent},
                     {path: 'reporting/repartition-depense-statut', component: RepartitionDepenseStatutComponent},
                     {path: 'reporting/depense-famille-prestataire', component: DepenseFamillePrestataireComponent},

@@ -1523,7 +1523,7 @@ export class TierPayantEditionComponent implements OnInit {
           } else {
             this.prestationsList.push(this.prestationAdd);
           }
-          this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
+         // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
           
           this.prestationAdd = {};
           this.compteur = null;
