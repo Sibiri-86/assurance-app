@@ -56,6 +56,7 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { Function } from 'src/app/module/common/config/role.user';
+import { AppMainComponent } from 'src/app/app.main.component';
 
 
 
@@ -79,12 +80,32 @@ export class OrdreReglementWorkflowComponent implements OnInit {
   ordreReglementListFinance$: Observable<Array<OrdreReglement>>;
   ordreReglementListDirection: Array<OrdreReglement>;
   ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
-  role ="Function.sm_workflow_prefinancement_prestation";
+  name = '';
+  role = '';
+  role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
+  role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
+  role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
+  role4 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction);
+  role_sm_workflow_prefinancement_prestation_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_valider);
+  role_sm_workflow_prefinancement_Medical_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_valider);
+  role_sm_workflow_prefinancement_finance_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_valider);
+  role_sm_workflow_prefinancement_direction_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_valider);
+  role_sm_workflow_prefinancement_prestation_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_devalider);
+  role_sm_workflow_prefinancement_Medical_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_devalider);
+  role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
+  role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router, private keycloak: KeycloakService) {
+               private router: Router, private keycloak: KeycloakService, public app: AppMainComponent) {
      this.breadcrumbService.setItems([{ label: 'Validation des ordres de paiement' }]);
+     console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
+      this.keycloak.loadUserProfile().then(profile => {
+        this.name = profile.firstName + ' ' + profile.lastName;
+        if (profile['attributes'].role.length != 0){
+        this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+        }
+      })
 }
 
   ngOnInit(): void {
@@ -118,8 +139,15 @@ export class OrdreReglementWorkflowComponent implements OnInit {
     this.loadOrdreReglementFinance();
     this.loadOrdreReglementMedical();
     this.loadOrdreReglementDirection();
+    this.m();
     
 
+  }
+
+  m() {
+    if(this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation)){
+      this.role1 = true;
+    }
   }
 
   loadOrdreReglementFinance() {

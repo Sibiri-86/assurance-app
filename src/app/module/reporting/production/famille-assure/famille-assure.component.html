@@ -1,0 +1,175 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                   <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir les dépenses par Famille d'assuré" label="Famille d'assuré " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
+                </ng-template>
+             
+                <!-- <ng-template pTemplate="right">
+                    <button pButton pRipple icon="pi pi-file-excel" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
+
+                </ng-template> -->
+			</p-toolbar>
+        </div> 
+        
+        
+        
+        
+      
+        
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Famille d'assuré" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '1000px'}">
+
+        <!-- <ng-template pTemplate="content">
+            <div class="card">
+
+
+                <form>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="garantList"
+                            name="garant"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.garant" (onChange)="loadPoliceByGarant()" >
+                            </p-dropdown>
+    
+                        </div>
+    
+                        <div class="p-field p-col-4">
+                            <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="policeList"
+                            name="police"
+                            optionLabel="nom" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadGroupeByPolice()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label  class="espace1" for="numCompte2"> Groupe <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                            <p-dropdown [filter]="true" 
+                            showClear="true" [options]="groupeListes"
+                            name="groupe"
+                            optionLabel="libelle" 
+                            [autoDisplayFirst]="false" [(ngModel)]="check.groupe" (onChange)="loadAdherentByGroupe()">
+                            </p-dropdown>
+                        </div>
+                            
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-4">
+                                <label  class="espace1" for="numCompte2"> Adherent <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                <p-dropdown [filter]="true" 
+                                showClear="true" [options]="adherentList"
+                                name="adherent"
+                                optionLabel="nom"  appendTo="body"
+                                [autoDisplayFirst]="false" [(ngModel)]="check.adherent">
+                                </p-dropdown>
+                            </div> 
+                            <div class="p-field p-col-4">
+                                <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                           
+                                
+                                <input  type="date" pInputText [(ngModel)]="check.dateDebut" name="dateDebut">
+                            </div>
+                            <div class="p-field p-col-4">
+                                <label class="espace1" for="journal">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                           
+                                
+                                <input  type="date" pInputText [(ngModel)]="check.dateFin" name="dateFin">
+                            </div>
+    
+                        </div>
+    
+                        
+
+
+                        <div class="p-grid p-justify-between">
+                            <div>
+                                <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                            </div>
+                            <div>
+                                <button pButton pRipple    (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+        </ng-template>
+ -->
+
+        <ng-template pTemplate="content">
+            <div class="card">
+    
+                <form  [formGroup]="consommationFamilleForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de début<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateDebut" type="date" formControlName="dateDebut" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="consommationFamilleForm" [entityField]="'dateDebut'">
+                            </app-entity-validation>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="compteParent">Date de fin<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="dateAppel" type="date" formControlName="dateFin" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                            [formGroup]="consommationFamilleForm" [entityField]="'dateAppel'">
+                            </app-entity-validation>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="garantList"
+                                                    formControlName="garantId"
+                                                    [autoDisplayFirst]="false" [formGroup]="consommationFamilleForm" (onChange)="loadPoliceByGarant()">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
+                                                    showClear="true" [options]="policeList"
+                                                    formControlName="policeId" (onChange)="loadGroupeByPolice()"
+    
+                                                    [autoDisplayFirst]="false" [formGroup]="consommationFamilleForm">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <p-dropdown inputId="groupe" [filter]="true" optionLabel="libelle"
+                                                    showClear="true" [options]="groupeListes" 
+                                                    formControlName="groupeId"
+                                                    [autoDisplayFirst]="false" [formGroup]="consommationFamilleForm">
+                            </p-dropdown>
+                        </div>
+                        
+                    </div>
+                    <div class="p-grid p-justify-between">
+                        <div>
+                            <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
+                        </div>
+                        <div>
+                            <button class="p-button-info" pTooltip="Imprimer les consommations par Famille" [disabled]="consommationFamilleForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerConsommationParFamille()"></button>
+                        </div>
+                    </div>
+    
+                </form>
+    
+    
+    
+            </div>
+        </ng-template>
+
+
+        </p-dialog>
+
+  
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

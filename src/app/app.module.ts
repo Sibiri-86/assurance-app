@@ -308,6 +308,7 @@ import { ReportingChequeNonValideComponent } from './module/reporting/prestation
 import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
+import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
 
 @NgModule({
     imports: [
@@ -561,6 +562,7 @@ import { EvolutionMensuelleComponent } from './module/reporting/production/evolu
         ReportingChequeValideComponent,
         OrdreReglementWorkflowComponent,
         EvolutionMensuelleComponent,
+        FamilleAssureComponent
 
     ],
     providers: [

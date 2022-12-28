@@ -321,7 +321,8 @@
 <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation"  [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="header">
         <Span style="font-weight: bold">Montant reclamé: {{prefinancement?.montantReclame | formatTableValue: 'number':true}}</Span>
-        <Span style="font-weight: bold; color: rgb(12, 125, 12);">Montant remboursé: {{prefinancement?.montantPaye | formatTableValue: 'number':true}}</Span>
+        <Span *ngIf="prefinancement?.montantReclame > prefinancement?.montantPaye" style="font-weight: bold; color: rgb(12, 125, 12);">Montant remboursé: {{prefinancement?.montantPaye | formatTableValue: 'number':true}}</Span>
+        <Span *ngIf="prefinancement?.montantReclame <= prefinancement?.montantPaye" style="font-weight: bold; color: rgb(224, 16, 9);">Montant remboursé: {{prefinancement?.montantPaye | formatTableValue: 'number':true}}</Span>
         <Span style="font-weight: bold" >Montant restant: <span style="color: red !important;" *ngIf="prefinancement?.montantRestant <0">{{prefinancement?.montantRestant | formatTableValue: 'number':true}}</span><span *ngIf="prefinancement?.montantRestant >=0">{{prefinancement?.montantRestant | formatTableValue: 'number':true}}</span></Span>
     </ng-template>
     <ng-template pTemplate="content"> 
@@ -338,11 +339,11 @@
                         <input id="numeroBon" [disabled]="!prestationAdd.dateSoins"  type="text" name="numeroBon" pInputText [(ngModel)]="prestationAdd.numeroBon">
                     </div>
                     <div class="p-field p-col">
-                        <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important;">*</span></label>
+                        <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                         <input id="matriculeAdherent" [disabled]="!prestationAdd.numeroBon" type="text"  [(ngModel)]="prestationAdd.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherent1($event)" pInputText>
                     </div>
                     <div class="p-field p-col">
-                        <label for="nomAdherent">Nom & prenom bénéficiaire <span class="required">*</span></label>
+                        <label for="nomAdherent">Nom & prenom bénéficiaire<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                         <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" disabled  [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent" pInputText>
                         <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherent" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherent" name="nomAdherent"  pInputText>
                     </div>
@@ -357,24 +358,24 @@
                
                 
                 <div class="p-field p-col">
-                    <label for="groupeAdherent">Numero groupe<span class="required">*</span></label>
+                    <label for="groupeAdherent">Numero groupe<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="groupeAdherent" [(ngModel)]="prestationAdd.numeroGroupe" disabled class="champRouge" type="text" name="numeroGroupe" pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="groupeAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.numeroGroupe" name="numeroGroupe" pInputText>
                 </div>
                 <div class="p-field p-col">
-                    <label for="policeAdherent">Numero police</label>
+                    <label for="policeAdherent">Numero police<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="policeAdherent" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="policeAdherent" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.numeroPolice" name="numeroPolice" pInputText>
                 </div>
 
                 <div class="p-field p-col">
-                    <label for="nomAdherent">Souscripteur<span class="required">*</span></label>
+                    <label for="nomAdherent">Souscripteur<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="souscripteur" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.souscripteur" name="souscripteur"  pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="souscripteur" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.souscripteur" name="souscripteur" pInputText>
                 </div>
 
                 <div class="p-field p-col">
-                    <label for="nomAdherent">Nom & prenom  Assuré Principal <span class="required">*</span></label>
+                    <label for="nomAdherent">Nom & prenom  Assuré Principal <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherentPrincipal" class="champVert" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal" pInputText>
                     <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomAdherentPrincipal" class="champRouge" type="text" disabled [(ngModel)]="prestationAdd.nomAdherentPrincipal" name="nomAdherentPrincipal"  pInputText>
                 </div>
@@ -390,12 +391,12 @@
                
 
             <div class="p-field p-col">
-                <label for="nomAdherent">Nom du groupe<span class="required">*</span></label>
+                <label for="nomAdherent">Nom du groupe<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomGroupe" class="champVert" disabled type="text" [(ngModel)]="prestationAdd.nomGroupe" name="nomGroupe"  pInputText>
                 <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="nomGroupe" class="champRouge" disabled type="text" [(ngModel)]="prestationAdd.nomGroupe" name="nomGroupe" pInputText>
             </div>
             <div *ngIf="adherentSelected?.signeAdherent ==='-'" class="p-field p-col">
-                <label for="dateEffet">Date de retrait <span style="color: red !important;"></span></label>
+                <label for="dateEffet">Date de retrait <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                 <p-calendar id="dateRetrait" class="champRouge" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="prestationAdd.dateRetrait" name="dateRetrait"  appendTo="body"></p-calendar>
             </div>
 
@@ -440,7 +441,7 @@
             </div>
 
             <div class="p-field p-col">
-                <label for="pathologie" id="pathologie">Pathologie<span style="color: red !important;">*</span></label>
+                <label for="pathologie" id="pathologie">Pathologie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
                             showClear="true" [options]="pathologieList" name="pathologie" [disabled]="!prestationAdd.sousActe"
                             [(ngModel)]="prestationAdd.pathologie"
@@ -448,7 +449,7 @@
                             optionLabel="code"></p-dropdown>
             </div>
             <div class="p-field p-col">
-             <label for="prestataire" id="prestataire">Centre Prescripteur<span style="color: red !important;">*</span></label>
+             <label for="prestataire" id="prestataire">Centre Prescripteur<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
              <p-dropdown inputId="prestataire" dataKey="id" [filter]="true" [disabled]="!prestationAdd.pathologie"
                          showClear="true" [options]="prestataireList" name="prestataire" [(ngModel)]="prestationAdd.prestataire"
                           placeholder="Select centre prescripteur"
@@ -459,7 +460,7 @@
              
 
                <div class="p-field p-col">
-                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<span class="required" *ngIf="prestationAdd?.familleActe?.code === 'FP'">*</span>
+                   <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique<span class="required" style="color: red !important; size: 1.4em;" *ngIf="prestationAdd?.familleActe?.code === 'FP'">*</span>
                     <span class="required" *ngIf="prestationAdd?.familleActe?.code !== 'FP'"></span></label>
                   
                    <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
@@ -477,7 +478,7 @@
 
                
             <div class="p-field p-col">
-                <label for="medecin" id="medecin">Medecin<span style="color: red !important;">*</span></label>
+                <label for="medecin" id="medecin">Medecin<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="medecin" dataKey="id" [filter]="true" [disabled]="displayFP"
                             showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
                            placeholder="Select medecin"
@@ -492,7 +493,7 @@
              <p-inputNumber name="coutUnitaire" [disabled]="!prestationAdd.nombreActe"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.coutUnitaire"  mode="decimal" locale="fr-FR" placeholder="cout unitaire" (onBlur)="calculDebours()"></p-inputNumber>
            </div>
            <div class="p-field p-col">
-            <label for="coutUnitaire" id="coutUnitaire">Montant exclu </label>
+            <label for="coutUnitaire" id="coutUnitaire">Montant exclu <span style="color: red !important; size: 1.4em;" class="required"></span></label>
             <p-inputNumber name="montantExclu" [disabled]="!prestationAdd.coutUnitaire"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantExclu"  mode="decimal" locale="fr-FR" placeholder="montant exclu" (onBlur)="calculExclu()"></p-inputNumber>
           </div>
               
@@ -548,7 +549,7 @@
          </div>
 
             <div class="p-field p-col">
-                <label for="observation">Observation</label>
+                <label for="observation">Observation<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                 <textarea pInputTextarea name="observation" [(ngModel)]="prestationAdd.observation"  autoResize="autoResize"></textarea>
             </div>
            </div>
@@ -893,15 +894,16 @@
             </div>
         </ng-template>
     </p-dialog>
-    <p-dialog [(visible)]="showMessage" header="Plafond presque atteint" [modal]="true" styleClass="p-fluid" 
-    [style]="{width: '1000px'}">
+    <p-dialog [(visible)]="showMessage" header="Plafond presque atteint" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+        <ng-template pTemplate="content">
+            <div class="card primeeee">
+            <span class="prime">{{montantReponse.message}} </span><br></div>
+        </ng-template>
+    </p-dialog>
 
-   <ng-template pTemplate="content">
-       <div class="card primeeee">
-
-       <span class="prime">{{montantReponse.message}} </span><br>
-
-
-       </div>
-   </ng-template>
-</p-dialog>
+    <p-dialog [(visible)]="showAlert" header="Attention au montant remboursé" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+        <ng-template pTemplate="content">
+            <div class="card primeeee">
+            <span class="prime">Attention, le montant remboursé est supérieur à celui réclamé de {{prefinancement?.montantReclame - prefinancement?.montantPaye | formatTableValue: 'number':true}} FCFA </span><br></div>
+        </ng-template>
+    </p-dialog>

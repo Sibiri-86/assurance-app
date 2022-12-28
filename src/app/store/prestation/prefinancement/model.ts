@@ -51,6 +51,11 @@ export interface OrdreReglement {
     isPaiement?: Boolean;
     niveauValidation?: Workflow;
     referenceCheque?:string;
+    dateValidationPrestation?: string;
+    dateValidationMedical?: string;
+    dateValidationFinance?: string;
+    dateValidationDirection?: string;
+    montantReclame?: number;
 }
 
 export interface Prefinancement {

@@ -31,6 +31,20 @@ export class StatistiqueParTrancheAgeEffects {
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
         ));
+
+        FetchConsommationParFamille$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.FetchConsommationParFamille),
+            mergeMap((report: Report) =>
+                this.statistiqueTrancheAgeService.$getReport(report).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setReportConsommationParFamille({reportFile: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
     
 
    

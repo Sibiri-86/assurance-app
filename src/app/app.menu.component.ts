@@ -150,6 +150,7 @@ export class AppMenuComponent implements OnInit {
                             {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
                             {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
                             {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/evolution-mensuelle'], visible: true},
+                            {label: 'Fam. Assure', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/famille-assure'], visible: true},
                          ]
                 
                 },

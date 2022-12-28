@@ -174,6 +174,7 @@ export class TierPayantEditionComponent implements OnInit {
     displayFP = false;
     montantReponse: ReponseCheckMontantRestantGarantie;
     showMessage = false;
+    showAlert = false;
 
 
 
@@ -1545,6 +1546,9 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
           this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+          if(this.prefinancement?.montantReclame < this.prefinancement?.montantPaye) {
+            this.showAlert = true;
+          }
           
       }
 
