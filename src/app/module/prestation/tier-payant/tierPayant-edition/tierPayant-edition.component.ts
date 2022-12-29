@@ -61,7 +61,7 @@ import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharm
 import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
 import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
-import {BonPriseEnCharge, CheckPlafond} from '../../../../store/prestation/prefinancement/model';
+import {BonPriseEnCharge, CheckPlafond, ReponseCheckMontantRestantGarantie} from '../../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
@@ -172,6 +172,9 @@ export class TierPayantEditionComponent implements OnInit {
     private successMsg = 'Les 10 dernières prestation sont enregistrées avec succès !';
     private montantRemboursessMsg = 'Le montant remboursé est : ';
     displayFP = false;
+    montantReponse: ReponseCheckMontantRestantGarantie;
+    showMessage = false;
+    showAlert = false;
 
 
 
@@ -962,6 +965,7 @@ export class TierPayantEditionComponent implements OnInit {
                 console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
             }
         }); */
+        this.findMontantTotalConsommeFamille();
     }
 
     changeDisplay() {
@@ -1542,6 +1546,9 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
           this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+          if(this.prefinancement?.montantReclame < this.prefinancement?.montantPaye) {
+            this.showAlert = true;
+          }
           
       }
 
@@ -1693,6 +1700,19 @@ export class TierPayantEditionComponent implements OnInit {
         if(this.prestationAdd.dateSoins  && this.prestationAdd.matriculeAdherent) {
           this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: Number(this.prestationAdd.matriculeAdherent)}));
       
+        }
+      }
+
+      findMontantTotalConsommeFamille() {
+        if(this.adherentSelected.id  && this.adherentSelected.exercice.id && this.prestationAdd.familleActe.id && this.adherentSelected.groupe.id) {
+          this.prefinancementService.checkMontantRestantPlafond(this.adherentSelected.id, this.adherentSelected.exercice.id,  this.prestationAdd.familleActe.id, this.adherentSelected.groupe.id).subscribe((res=>{
+            this.montantReponse = res.checkMontantRestantPlafondGarantie;
+            console.log("===================bien======",this.montantReponse);
+            if(this.montantReponse.message != null) {
+              this.showMessage = true;
+            }
+          }));        
+          
         }
       }
       

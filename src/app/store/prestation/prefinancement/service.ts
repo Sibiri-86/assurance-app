@@ -5,6 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import {  MontantPlafondGarantieResponse, ReponseCheckMontantRestantGarantie } from './model';
 import { CheckPlafond, OrdreReglement, OrdreReglementList, OrdreReglementListDirection, OrdreReglementListFinance, OrdreReglementListMedical, Prefinancement, PrefinancementList, Prestation } from './model';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
@@ -159,6 +160,21 @@ paiementCheque(ordre: OrdreReglement): Observable<any> {
 paiementChequeCaisseDevalider(ordre: OrdreReglement): Observable<any> {
   // @FIXME: post request
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-devalider`, ordre);
+}
+
+checkMontantRestantPlafond(assureId: string, exerciceId: string, familleActeId: string, groupeId: string): Observable<MontantPlafondGarantieResponse> {
+  // @FIXME: post request
+  if (assureId && exerciceId && familleActeId && groupeId) {
+    const adherent : ReponseCheckMontantRestantGarantie = {};
+    adherent.assureId = assureId;
+    adherent.exerciceId = exerciceId;
+    adherent.familleActeId = familleActeId; 
+    adherent.groupeId = groupeId; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/checkMontantRestantPlafond`, adherent).pipe(
+    map((response: MontantPlafondGarantieResponse) => response)
+    //catchError(this.handleError())
+   );
+  }
 }
 
 $getOrdreReglementValideAndWorkFlowMedical(): Observable<OrdreReglementListMedical> {

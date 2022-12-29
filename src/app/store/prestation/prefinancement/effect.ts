@@ -380,6 +380,22 @@ export class PrefinancementEffects {
                                                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                                                     ))
                                                                 ));
+                                                                
+                                                                /**verifier le plafond de la famille d'acte */
+                                                                checkMontantRestantPlafond$ = createEffect(() =>
+                                                                this.actions$.pipe(
+                                                                    ofType(featureActions.checkMontantRestantPlafondGarantie),
+                                                                    mergeMap(({assureId, exerciceId, familleActeId, groupeId}) =>
+                                                                        this.prefinancementService.checkMontantRestantPlafond(assureId, exerciceId, familleActeId, groupeId).pipe(
+                                                                            switchMap(value => [
+                                                                                //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                                                                featureActions.selectedMontantForSearch(value)
+                                                                            ]),
+                                                                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                                                        )
+                                                                    )
+                                                            ) 
+                                                            );
 
                                                                 loadReglementValideMedical$ = createEffect(() =>
                                                                 this.actions$.pipe(

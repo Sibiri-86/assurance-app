@@ -97,6 +97,7 @@ import { FacturePrestatairesComponent } from './module/reporting/prestation/Fact
 import { ConsommationParSexeComponent } from './module/reporting/medical/consommationParSexe/consommationParSexe.component';
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
+import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
 
 @NgModule({
     imports: [
@@ -203,6 +204,8 @@ import { EvolutionMensuelleComponent } from './module/reporting/production/evolu
                     {path: 'reporting/reporting-cheque-non-valide', component: ReportingChequeNonValideComponent},
                     {path: 'reporting/reporting-cheque-valide', component: ReportingChequeValideComponent},
                     {path: 'prestation/Workflow/ordre-reglement-workflow', component: OrdreReglementWorkflowComponent},
+                    {path: 'reporting/famille-assure', component: FamilleAssureComponent},
+                    
                     
                     
                     

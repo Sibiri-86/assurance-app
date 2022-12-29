@@ -1,4 +1,4 @@
-import { CheckPlafondResponse, CheckPrefinancementResult, OrdreReglement, Prefinancement } from './model';
+import {  CheckPrefinancementResult, MontantPlafondGarantieResponse, OrdreReglement, Prefinancement, ReponseCheckMontantRestantGarantie } from './model';
 
 export interface PrefinancementState {
     prefinancementList: Array<Prefinancement>;
@@ -6,6 +6,7 @@ export interface PrefinancementState {
     reportFile: ArrayBuffer;
     checkPrefinancementReponse: Array<CheckPrefinancementResult>;
     montantPlafondSousActe: number;
+    selectedMontantResearch: ReponseCheckMontantRestantGarantie;
     ordreReglementListMedical: Array<OrdreReglement>;
     ordreReglementListFinance: Array<OrdreReglement>;
     ordreReglementListDirection: Array<OrdreReglement>;

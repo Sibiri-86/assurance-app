@@ -24,6 +24,24 @@ export interface Recapitulatif {
     garantId?: string;
 }
 
+export interface ConsommationParFamille {
+    /* matriculeAdherentP?: number;
+    montantReclameFamille?: number;
+    montantRembourseFamille?: number;
+    montantNonRembourseFamille?: number;
+    PopulationActive?: number;
+    PopulationTraitee?: number;
+    totalMontantReclame?: number;
+    totalMontantRembourse?: number;
+    coutMoyenFamille?: number;
+    coutMoyenTotal?: number; */
+    garantId?: string;
+    policeId?: string;
+    groupeId?: string;
+    dateDebut?: Date;
+    dateFin?: Date;
+}
+
 
 export interface RecapitulatifList {
     recapitulatif: Array<Recapitulatif>;

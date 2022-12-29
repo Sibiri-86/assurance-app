@@ -1,7 +1,8 @@
 
 <div >
     <p-tabView (onChange)="onTabChange($event)">
-        <p-tabPanel header="Service Prestations" leftIcon="pi pi-sign-in" tooltip="Service Prestations" [style]="{'width': '100%'}">
+        <p-tabPanel header="Service Prestations" leftIcon="pi pi-sign-in" tooltip="Service Prestations" [style]="{'width': '100%'}"
+         *ngIf="role1">
         <span >
             <div class="p-col-12">
                 <p-toast></p-toast>
@@ -31,38 +32,40 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
+                                <!-- <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
-                                <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                                <th pSortableColumn="nom" style="min-width:200px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
-                                <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="etat" style="min-width:200px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                                <th style="min-width:150px"></th>
+                                </th> -->
+                                <th pSortableColumn="etat" style="min-width:150px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant réclamé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant payé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="nom" style="min-width:150px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
+                                <th pSortableColumn="taux" style="min-width:150px">Moment Validation<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="min-width:250px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th style="min-width:200px"></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-ordre>
                             <tr>
-                                <td>
+                                <!-- <td>
                                     <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                                </td> -->
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.montantReclame}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.montantPaye}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numero}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numeroBordereau}}</span>
                                 </td>
-        
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.validationPrestation | formatTableValue : 'date'}}</span>
                                 </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.nom}}</span>
                                 </td>
                                 
                                 <td style="min-width:150px">
                                 <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)"></button>
+                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)" *ngIf="role_sm_workflow_prefinancement_prestation_devalider"></button>
                                 <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info  p-mr-2" (click)="imprimer(ordre)"></button>
-                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour le Médical" class="p-button-rounded p-button-success" (click)="validerOrdreReglementMedical(ordre)"></button>
+                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour le Médical" class="p-button-rounded p-button-success" (click)="validerOrdreReglementMedical(ordre)" *ngIf="role_sm_workflow_prefinancement_prestation_valider"></button>
                                 </td>
                                 
                                 <!--
@@ -159,7 +162,7 @@
 
         </span>
         </p-tabPanel>
-        <p-tabPanel header="Département Médical" leftIcon="pi pi-sign-in" tooltip="Département Médical" [style]="{'width': '100%'}">
+        <p-tabPanel header="Département Médical" leftIcon="pi pi-sign-in" tooltip="Département Médical" [style]="{'width': '100%'}" *ngIf="role2">
             <div class="p-col-12">
                 <p-toast></p-toast>
                 <div class="card">
@@ -188,38 +191,40 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
+                                <!-- <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
-                                <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                                <th pSortableColumn="nom" style="min-width:200px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
-                                <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="etat" style="min-width:200px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                                <th style="min-width:150px"></th>
+                                </th> -->
+                                <th pSortableColumn="etat" style="min-width:150px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant réclamé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant payé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="nom" style="min-width:150px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
+                                <th pSortableColumn="taux" style="min-width:100px">Moment validation<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="min-width:250px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th style="min-width:200px"></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-ordre>
                             <tr>
-                                <td>
+                                <!-- <td>
                                     <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                                </td> -->
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.montantReclame}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.montantPaye}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numero}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numeroBordereau}}</span>
                                 </td>
-        
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.validationMedical | formatTableValue : 'date'}}</span>
                                 </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.nom}}</span>
                                 </td>
                                 
                                 <td style="min-width:150px">
                                 <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)"></button>
+                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)" *ngIf="role_sm_workflow_prefinancement_Medical_devalider"></button>
                                 <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)"></button>
-                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour la Finance" class="p-button-rounded p-button-success" (click)="validerOrdreReglementFinance(ordre)"></button>
+                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour la Finance" class="p-button-rounded p-button-success" (click)="validerOrdreReglementFinance(ordre)" *ngIf="role_sm_workflow_prefinancement_Medical_valider"></button>
                                 </td>
                                 
                                 <!--
@@ -314,7 +319,7 @@
         
             </div>
         </p-tabPanel>
-        <p-tabPanel header="Département Financier et Comptable" leftIcon="pi pi-sign-in" tooltip="Département Financier et Comptable" [style]="{'width': '100%'}">
+        <p-tabPanel header="Département Financier et Comptable" leftIcon="pi pi-sign-in" tooltip="Département Financier et Comptable" [style]="{'width': '100%'}" *ngIf="role3">
             <div class="p-col-12">
                 <p-toast></p-toast>
                 <div class="card">
@@ -343,38 +348,40 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
+                                <!-- <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
-                                <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                                <th pSortableColumn="nom" style="min-width:200px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
-                                <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="etat" style="min-width:200px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                                <th style="min-width:150px"></th>
+                                </th> -->
+                                <th pSortableColumn="etat" style="min-width:150px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant réclamé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant payé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="nom" style="min-width:150px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
+                                <th pSortableColumn="taux" style="min-width:150px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="min-width:250px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th style="min-width:200px"></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-ordre>
                             <tr>
-                                <td>
+                                <!-- <td>
                                     <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                                </td> -->
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.montantReclame}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.montantPaye}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numero}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numeroBordereau}}</span>
                                 </td>
-        
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.numero}}</span>
                                 </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.nom}}</span>
                                 </td>
                                 
                                 <td style="min-width:150px">
                                 <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)"></button>
+                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)" *ngIf="role_sm_workflow_prefinancement_finance_devalider"></button>
                                 <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)"></button>
-                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour la Direction" class="p-button-rounded p-button-success" (click)="validerOrdreReglementDirection(ordre)"></button>
+                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour la Direction" class="p-button-rounded p-button-success" (click)="validerOrdreReglementDirection(ordre)" *ngIf="role_sm_workflow_prefinancement_finance_valider"></button>
                                 </td>
                                 
                                 <!--
@@ -469,7 +476,7 @@
         
             </div>
         </p-tabPanel>
-        <p-tabPanel header="Direction Générale Adjointe" leftIcon="pi pi-sign-in" tooltip="Direction Générale Adjointe" [style]="{'width': '100%'}">
+        <p-tabPanel header="Direction Générale Adjointe" leftIcon="pi pi-sign-in" tooltip="Direction Générale Adjointe" [style]="{'width': '100%'}" *ngIf="role4">
             <div class="p-col-12">
                 <p-toast></p-toast>
                 <div class="card">
@@ -498,38 +505,40 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
+                                <!-- <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
-                                <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                                <th pSortableColumn="nom" style="min-width:200px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
-                                <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="etat" style="min-width:200px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                                <th style="min-width:150px"></th>
+                                </th> -->
+                                <th pSortableColumn="etat" style="min-width:150px">Assuré(e) principal(e)<p-sortIcon field="etat"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant réclamé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Montant payé<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="min-width:100px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="nom" style="min-width:100px">Numero bordereau<p-sortIcon field="nom"></p-sortIcon></th>
+                                <th pSortableColumn="taux" style="min-width:150px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="territorialite" style="min-width:250px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th style="min-width:200px"></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-ordre>
                             <tr>
-                                <td>
+                                <!-- <td>
                                     <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                                </td> -->
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre?.montantReclame}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.montantPaye}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numero}}</span></td>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.numeroBordereau}}</span>
                                 </td>
-        
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.numero}}</span>
                                 </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
-                                </td>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre?.assurePrinc?.nom}} {{ordre?.assurePrinc?.prenom}}</span>
-                                <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
+                                <td><span class="p-column-title" style="min-width:150px">{{ordre.police.nom}}</span>
                                 </td>
                                 
                                 <td style="min-width:150px">
                                 <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)"></button>
+                                <button pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderOrdreReglement(ordre)" *ngIf="role_sm_workflow_prefinancement_direction_devalider"></button>
                                 <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)"></button>
-                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour paiement à la Caisse" class="p-button-rounded p-button-success" (click)="validerOrdreReglementCaisse(ordre)"></button>
+                                <button pButton pRipple icon="pi pi-check" pTooltip="Valider pour paiement à la Caisse" class="p-button-rounded p-button-success" (click)="validerOrdreReglementCaisse(ordre)" *ngIf="role_sm_workflow_prefinancement_direction_valider"></button>
                                 </td>
                                 
                                 <!--

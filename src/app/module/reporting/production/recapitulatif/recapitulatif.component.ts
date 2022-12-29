@@ -43,9 +43,7 @@ import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/action
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
-import {groupeList} from 'src/app/store/contrat/groupe/selector';
-
-
+import { groupeList } from 'src/app/store/contrat/groupe/selector';
 
 @Component({
   selector: 'app-recapitulatif',
@@ -122,7 +120,8 @@ export class RecapitulatifComponent implements OnInit, OnDestroy {
   policeList$: Observable<Array<Police>>;
   policeList = [];
   groupeList$: Observable<Array<Groupe>>;
-  groupeList: [];
+  groupeList: Array<Groupe>;
+
   groupePolicy: Array<Groupe>;
 
 
@@ -208,8 +207,23 @@ ngOnInit(): void {
           }
       });
 
+    
+    
+
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
+
+}
+
+loadGroupeList() {
+  this.groupeList$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(loadGroupe({policeId: this.appelFondForm.get('police').value?.id}));
+    this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.groupeList = value.slice();
+        console.log("-------------->",this.groupeList);
+      }
+    });
 
 }
 
