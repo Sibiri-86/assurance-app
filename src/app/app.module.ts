@@ -308,6 +308,7 @@ import { ReportingChequeNonValideComponent } from './module/reporting/prestation
 import { ReportingChequeValideComponent } from './module/reporting/prestation/reporting-cheque-valide/reporting-cheque-valide.component';
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
+import { AlerteEffects } from './store/parametrage/Alerte/effect';
 
 @NgModule({
     imports: [
@@ -418,7 +419,7 @@ import { EvolutionMensuelleComponent } from './module/reporting/production/evolu
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

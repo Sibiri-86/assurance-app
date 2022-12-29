@@ -109,6 +109,8 @@ import { typeJournauxList } from 'src/app/store/parametrage/typeJournaux/selecto
 import * as typeJournauxActions from '../../store/parametrage/typeJournaux/actions';
 import { compteList } from 'src/app/store/comptabilite/compte/selector';
 import * as compteActions from '../../store/comptabilite/compte/actions';
+import { alerteList } from 'src/app/store/parametrage/Alerte/selector';
+import * as alerteActions from '../../store/parametrage/Alerte/actions';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -117,6 +119,7 @@ export const DATA_TYPE = [
   {label: 'Acte', value: 'Acte'},
   {label: 'Genre', value: 'Genre'},
   {label: 'Banque', value: 'Banque'},
+  {label: 'Alerte', value: 'Alerte'},
   {label: 'Taux de commission intermediaire', value: 'TauxDeCommissionIntermediaire'},
   {label: 'Taux', value: 'Taux'},
   {label: 'Dimension periode', value: 'DimensionPeriode'},
@@ -303,6 +306,56 @@ export const DATA_DEFINITION = [
       importAction: banqueActions.importBanque
     }
   },
+
+  {
+    entity: 'Alerte',
+    cols: [
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: alerteList,
+      fetchAction: alerteActions.loadAlerte(),
+      createAction: alerteActions.createAlerte,
+      updateAction: alerteActions.updateAlerte,
+      deleteAction: alerteActions.deleteAlerte,
+      importAction: alerteActions.importAlerte
+    }
+  },
+
   
   {
     entity: 'Acte',

@@ -19,6 +19,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/parametrage/banque`,
         mock: `assets/mock/parametrage/banque.mock.json`
     };
+    static readonly PARAMETRAGE_ALERTE = {
+        prod: `${SERVICE_PREFIX}/parametrage/alerte`,
+        mock: `assets/mock/parametrage/alerte.mock.json`
+    };
 
     static readonly PARAMETRAGE_SECTEUR_ACTIVITE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeSecteurActivite`,
