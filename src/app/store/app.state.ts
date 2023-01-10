@@ -66,6 +66,7 @@ import { RepartitionDepenseStatutState } from './reporting/production/repartitio
 import { StatistiqueTrancheAgeState } from './reporting/production/statistiqueParTrancheAge/state';
 import { FacturePrestatairesState } from './reporting/prestation/facturePrestataires/state';
 import { ConsommationParSexeState } from './reporting/medical/consommationParSexe/state';
+import { AlerteState } from './parametrage/Alerte/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -110,6 +111,7 @@ export interface AppState {
   secteurState: SecteurState;
   historiqueAvenantState: HistoriqueAvenantState;
   banqueState: BanqueState;
+  alerteState: AlerteState;
   tauxCommissionIntermediaireState: TauxCommissionIntermediaireState;
   prefinancementState: PrefinancementState;
   tierPayantState: SinistreTierPayantState;

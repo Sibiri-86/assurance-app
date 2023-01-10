@@ -2567,15 +2567,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenantPrimes.forEach(hap => {
       if (hap.primeNet) {
         hap.primeNet = removeBlanks(hap.primeNet + '');
+        hap.primeTotal  = hap.primeNet + hap.fraisAccessoir + hap.fraisBadge;
       }
       if (hap.primeTotal) {
         hap.primeTotal = removeBlanks(hap.primeTotal + '');
+        hap.primeTotal  = hap.primeTotal + hap.fraisAccessoir + hap.fraisBadge;
       }
       if (!hap.groupe) {
         hap.primeNet = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
             .map(elem => elem.primeNet).reduce((a, b) => a + b);
         hap.primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
             .map(elem => elem.primeTotal).reduce((a, b) => a + b);
+            hap.primeTotal  = hap.primeTotal + hap.fraisAccessoir + hap.fraisBadge;
       }
     });
   }

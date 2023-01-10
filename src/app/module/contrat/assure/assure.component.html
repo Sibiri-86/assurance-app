@@ -25,14 +25,17 @@
                     </div>
                 </ng-template>
             </p-toolbar>
-            <p-table #dt [value]="adherentListFilter"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+            <p-table #dt [value]="adherentListFilter"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom', 'prenom','libelle','description','duree','territorialite.libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
-                        <span class="p-input-icon-left"></span>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
                     </div>
                 </ng-template>
 
