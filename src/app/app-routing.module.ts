@@ -105,12 +105,12 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
             {
                 
 
-                path: 'admin', component: AppMainComponent,
+                path: '', component: AppMainComponent,
                 data: {
                     authorities: ['sm_police']
                   },
                 children: [
-                    {path: 'admin', component: DashboardDemoComponent},
+                    {path: '', component: DashboardDemoComponent},
                     {path: 'prestataire-cartographie', component: PrestataireCartographieComponent},
                     {path: 'parametrage', component: ParametrageComponent},
                     {path: 'contrat/affaire-nouvelle', component: AffaireNouvelleComponent,

@@ -1536,11 +1536,14 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     loadPlafondConfigBygroupe2(groupe : Groupe){
+        console.log('this.lastExerciceForm======>',this.lastExerciceForm.get('id').value);
         console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", groupe.id);
-             this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
+             this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(groupe.id, this.lastExerciceForm.get('id').value).subscribe(
                 (res) => {
                     this.plafondFamilleActePlafongConfig = res.body;
                     console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
+                    console.log("kdc,ksk,skc,sk,c", this.exerciceForm.get('debut').value);
+                    this.plafondFamilleActePlafongConfig.forEach(p=>p.dateEffet = this.exerciceForm.get('debut').value)
                 }
             );
             this.groupeListeFinale = [];
