@@ -122,6 +122,7 @@ import * as historiqueAvenantState from '../contrat/historiqueAvenant/state';
 import * as prefinancementReducer from '../prestation/prefinancement/reducer';
 import * as prefinancementState from '../prestation/prefinancement/state';
 import * as banqueReducer from '../parametrage/Banques/reducer';
+import * as alerteReducer from '../parametrage/Alerte/reducer';
 import * as banqueState from '../parametrage/Banques/state';
 import * as tauxCommissionIntermediaireReducer from '../parametrage/taux-commission-intermediaire/reducer';
 import * as tauxCommissionIntermediaireState from '../parametrage/taux-commission-intermediaire/state';
@@ -160,6 +161,7 @@ export const reducers: ActionReducerMap<AppState> = {
     globalState: globaleStateReducer.reducer,
     acteState: acteReducer.reducer,
     banqueState: banqueReducer.reducer,
+    alerteState: alerteReducer.reducer,
     tauxCommissionIntermediaireState: tauxCommissionIntermediaireReducer.reducer,
     sousActeState: sousActeReducer.reducer,
     tauxState: tauxReducer.reducer,

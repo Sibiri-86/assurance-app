@@ -103,9 +103,14 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
     imports: [
         RouterModule.forRoot([
             {
-                path: '', component: AppMainComponent,
+                
+
+                path: 'admin', component: AppMainComponent,
+                data: {
+                    authorities: ['sm_police']
+                  },
                 children: [
-                    {path: '', component: DashboardDemoComponent},
+                    {path: 'admin', component: DashboardDemoComponent},
                     {path: 'prestataire-cartographie', component: PrestataireCartographieComponent},
                     {path: 'parametrage', component: ParametrageComponent},
                     {path: 'contrat/affaire-nouvelle', component: AffaireNouvelleComponent,
@@ -212,6 +217,13 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
                     
                 ]
             },
+           /*  {
+                path: 'admin',
+                data: {
+                  authorities: []
+                },
+              
+              }, */
             {path: 'error', component: AppErrorComponent},
             {path: 'access', component: AppAccessdeniedComponent},
             {path: 'notfound', component: AppNotfoundComponent},

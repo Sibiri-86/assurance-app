@@ -1285,6 +1285,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         
         
         this.historiqueAvenant.id = this.avenantArrivedId;
+        this.historiqueAvenant.exercice = this.exerciceRevenu;
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
         this.historiqueAvenant.isTerminer = false;
         // this.objet.historiqueAvenant.numero = this.avenantNumero;
