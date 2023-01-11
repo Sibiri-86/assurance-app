@@ -212,10 +212,6 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
                     
                 ]
             },
-            {
-                path: 'portail',
-                loadChildren: () => import('./portail/portail.module').then(m => m.PortailModule)
-              },
             {path: 'error', component: AppErrorComponent},
             {path: 'access', component: AppAccessdeniedComponent},
             {path: 'notfound', component: AppNotfoundComponent},
