@@ -1303,12 +1303,13 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     createAvenantPlafond(): void {
+        this.enleverEspace();
         this.objet.plafondGroupeActes = this.acteListFinal;
         this.objet.plafondFamilleActes = this.familleActeListFinal;
         this.objet.plafondGroupeSousActes = this.sousActeListFinal;
 
         this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-    
+        
         this.historiqueAvenant.id = this.avenantArrivedId;
         console.log('*********************this.avenantArrivedId*******', this.avenantArrivedId);
         this.objet.historiqueAvenant.numero = this.avenantNumero;
@@ -1324,7 +1325,54 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.objet.groupe = this.groupeListeFinale[0];
         console.log('*********************this.objet*******', this.objet);
         //this.eventEmitterM.emit(this.objet);
+
         this.store.dispatch(historiqueAvenantAction.createAvenantPlafond(this.objet));
+    }
+
+    enleverEspace() {
+        this.acteListFinal.forEach(pa => {
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+        });
+        this.familleActeListFinal.forEach(pa => {
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+        });
+        this.sousActeListFinal.forEach(pa => {
+            pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+            // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+        });
+        this.plafondFamilleActePlafongConfig.forEach(pfa => {
+            if (pfa.montantPlafond) {
+                pfa.montantPlafond = removeBlanks(pfa.montantPlafond + '');
+                // parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+            }
+            if (pfa.nombre) {
+                pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
+            }
+            if (pfa.listeActe) {
+                pfa.listeActe.forEach(pa => {
+                    if (pa.nombre) {
+                        pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
+                    }
+                    if (pa.montantPlafond) {
+                        pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+                        // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+                    }
+                    if (pa.listeSousActe) {
+                        pa.listeSousActe.forEach(psa => {
+                            if (psa.nombre) {
+                                psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
+                            }
+                            if (psa.montantPlafond) {
+                                psa.montantPlafond = removeBlanks(psa.montantPlafond + '');
+                                // parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     createAvenantIncorporation(event: HistoriqueAvenant): void {
@@ -1536,9 +1584,9 @@ export class AvenantRenouvellementComponent implements OnInit {
     }
 
     loadPlafondConfigBygroupe2(groupe : Groupe){
-        console.log('this.lastExerciceForm======>',this.lastExerciceForm.get('id').value);
+        console.log('this.exerciceRevenu.id======>',this.exerciceRevenu.id);
         console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", groupe.id);
-             this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(groupe.id, this.lastExerciceForm.get('id').value).subscribe(
+             this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(groupe.id, this.exerciceRevenu.id).subscribe(
                 (res) => {
                     this.plafondFamilleActePlafongConfig = res.body;
                     console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
@@ -2206,6 +2254,7 @@ export class AvenantRenouvellementComponent implements OnInit {
       loadIncorpAndRetrait() {
         this.historiqueAvenantService.getsHistoriqueAvenantIncorpAndRetrait(this.avenantId).subscribe(
             (res: Avenant) => {
+                console.log("incorp && retrait", res.historiqueAvenantAdherants);
                 this.historiqueAveantAdherantIncorp = res.historiqueAvenantAdherants.filter(p => p.singe ==='+');
                 this.historiqueAveantAdherantRetr = res.historiqueAvenantAdherants.filter(p => p.singe ==='-');
                 console.log("jhgjklkhjgfhjklhgfhjklm", this.historiqueAveantAdherantIncorp);
