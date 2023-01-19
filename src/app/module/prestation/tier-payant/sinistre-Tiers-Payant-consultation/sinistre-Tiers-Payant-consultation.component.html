@@ -236,7 +236,7 @@
     
 </div> 
 </div>
-<p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestaion" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
+<p-dialog [maximizable]="true"  [(visible)]="displaySinistreDetail" header="Prestation" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
     <ng-template pTemplate="content">
         <div class="card">
 
@@ -322,8 +322,8 @@
          </div>
                <div class="p-field p-col-3">
                    <label for="produitPharmaceutique" id="produitPharmaceutique">Produit pharmaceutique</label>
-                   <span **ngFor="let item of prestationDetail?.produitPharmaceutique"></span>
-                   &nbsp;&nbsp;&nbsp;&nbsp;{{item?.libelle}}
+                   <span *ngFor="let item of prestationDetail?.produitPharmaceutique">&nbsp;&nbsp;&nbsp;&nbsp;{{item?.libelle}}</span>
+                   
                   
                </div>
 

@@ -1416,7 +1416,7 @@ export class AvenantModificationComponent implements OnInit {
   appliquerConfiguration(): void {}
 
   loadPlafondConfigBygroupe() {
-    this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
+    /* this.plafondService.getPlafondGroupeFamilleActeByGroupe(this.groupePlafongConfig?.id).subscribe(
             (res) => {
               this.plafondFamilleActePlafongConfig = res.body;
               console.log("*************getPlafondGroupeFamilleActeByGroupe***************", res);
@@ -1441,7 +1441,15 @@ export class AvenantModificationComponent implements OnInit {
             pfapc.listeActe = this.plafondActePlafongConfig.filter(e => e.acte.idTypeGarantie === pfapc.garantie.id);
           });
         }
-    );
+    ); */
+    this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(this.groupePlafongConfig?.id, this.curentExercice.id).subscribe(
+      (res) => {
+          this.plafondFamilleActePlafongConfig = res.body;
+          console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
+          console.log("kdc,ksk,skc,sk,c", this.exerciceForm.get('debut').value);
+          this.plafondFamilleActePlafongConfig.forEach(p=>p.dateEffet = this.exerciceForm.get('debut').value)
+      }
+  );
   }
 
 

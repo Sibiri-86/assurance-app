@@ -113,6 +113,7 @@ import { LoginComponent } from './login.component';
                         children:[]
                       },
                       {path: 'login', component: LoginComponent},
+
                     {path: '', component: DashboardDemoComponent},
                     {path: 'prestataire-cartographie', component: PrestataireCartographieComponent},
                     {path: 'parametrage', component: ParametrageComponent},
