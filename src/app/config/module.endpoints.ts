@@ -451,6 +451,10 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/reporting/production`,
             mock: `assets/mock/reporting/production.mock.json`
         };
+        static readonly PORTAIL= {
+            prod: `${SERVICE_PREFIX}/portail`,
+            mock: `assets/mock/portail.mock.json`
+        };
 
         
 

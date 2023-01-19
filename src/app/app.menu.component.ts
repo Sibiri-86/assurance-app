@@ -203,7 +203,15 @@ export class AppMenuComponent implements OnInit {
                     
                     
                                     ]
-            }
+            },
+
+            {
+                label: 'Portail', icon: 'pi pi-fw pi-compass', routerLink: ['/portail'],
+                visible: true,
+                items: [
+                    {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: true}
+                ]
+            },
             /*
             {
                 label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],

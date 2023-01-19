@@ -310,6 +310,7 @@ import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-regle
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
 import { AlerteEffects } from './store/parametrage/Alerte/effect';
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
+import { AssureConsommationComponent } from './module/portail/assureConsommation/assureConsommation.component';
 
 @NgModule({
     imports: [
@@ -563,8 +564,8 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
         ReportingChequeValideComponent,
         OrdreReglementWorkflowComponent,
         EvolutionMensuelleComponent,
-        FamilleAssureComponent
-
+        FamilleAssureComponent,
+        AssureConsommationComponent
     ],
     providers: [
         {
