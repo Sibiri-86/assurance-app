@@ -311,6 +311,7 @@ import { EvolutionMensuelleComponent } from './module/reporting/production/evolu
 import { AlerteEffects } from './store/parametrage/Alerte/effect';
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
 import { AssureConsommationComponent } from './module/portail/assureConsommation/assureConsommation.component';
+import { LoginComponent } from './login.component';
 
 @NgModule({
     imports: [
@@ -565,7 +566,9 @@ import { AssureConsommationComponent } from './module/portail/assureConsommation
         OrdreReglementWorkflowComponent,
         EvolutionMensuelleComponent,
         FamilleAssureComponent,
-        AssureConsommationComponent
+        AssureConsommationComponent,
+        LoginComponent,
+
     ],
     providers: [
         {

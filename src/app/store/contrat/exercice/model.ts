@@ -13,3 +13,13 @@ export interface Exercice {
 	nomExo?:string,
 	numero?: number
 }
+
+
+
+export interface User {
+	userName?: string;
+    emailId?: string;
+    password?: string;
+    firstname?: string;
+    lastName?: string;
+}

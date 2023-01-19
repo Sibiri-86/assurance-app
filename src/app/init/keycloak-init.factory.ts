@@ -3,7 +3,17 @@ import { environment } from 'src/environments/environment';
 
 export function initializeKeycloak(
   keycloak: KeycloakService
-  ) {
+  ) { /*
+   initOptions: {
+          onLoad: 'check-sso',
+          checkLoginIframe: false
+        },
+        enableBearerInterceptor: true,
+        bearerPrefix: 'Bearer',
+        bearerExcludedUrls: [
+            '/assets',
+            '/clients/public']
+            */
     return () =>
       keycloak.init({
         config: {
