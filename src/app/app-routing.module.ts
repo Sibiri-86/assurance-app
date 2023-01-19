@@ -98,6 +98,7 @@ import { ConsommationParSexeComponent } from './module/reporting/medical/consomm
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
+import { LoginComponent } from './login.component';
 
 @NgModule({
     imports: [
@@ -105,12 +106,14 @@ import { FamilleAssureComponent } from './module/reporting/production/famille-as
             {
                 
 
-                path: 'admin', component: AppMainComponent,
-                data: {
-                    authorities: ['sm_police']
-                  },
+                path: '', component: AppMainComponent,
                 children: [
-                    {path: 'admin', component: DashboardDemoComponent},
+                    {
+                        path: 'portail',  component: DashboardDemoComponent,
+                        children:[]
+                      },
+                      {path: 'login', component: LoginComponent},
+                    {path: '', component: DashboardDemoComponent},
                     {path: 'prestataire-cartographie', component: PrestataireCartographieComponent},
                     {path: 'parametrage', component: ParametrageComponent},
                     {path: 'contrat/affaire-nouvelle', component: AffaireNouvelleComponent,

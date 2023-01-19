@@ -4,7 +4,7 @@ import {Observable, throwError} from 'rxjs';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {catchError, map} from 'rxjs/operators';
-import {Exercice} from './model';
+import {Exercice, User} from './model';
 import {createRequestOption} from '../../../module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
@@ -28,6 +28,16 @@ export class ExerciceService {
 		// catchError(this.handleError())
 	);
 }
+
+createUser(user: User): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.KEYCLOAK_USER)}`, user);
+  }
+
+  login(user: User): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.KEYCLOAK_USER)}`, user);
+  }
 
 $findAllExercices(): Observable<Array<Exercice>> {
 	// @FIXME: post request

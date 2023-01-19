@@ -1,0 +1,61 @@
+<div class="pages-body login-page p-d-flex p-flex-column">
+    <div class="topbar p-p-3 p-d-flex p-jc-between p-flex-row p-ai-center">
+        <div class="topbar-left p-ml-3 p-d-flex" routerLink="/">
+            <div class="logo">
+                <img src="assets/layout/images/logo2x.png" alt=""/>
+            </div>
+        </div>
+        <div class="topbar-right p-mr-3 p-d-flex">
+            <button pButton pRipple type="button" label="DASHBOARD" [routerLink]="['/']"
+                    class="p-button-text p-button-plain topbar-button"></button>
+        </div>
+    </div>
+    <div class="p-as-center p-mt-auto p-mb-auto">
+        <form name="loginForm" #loginForm="ngForm"  id="userForm">
+            <div class="pages-panel card p-d-flex p-flex-column">
+                <div class="pages-header p-px-3 p-py-1">
+                    <h2>CONNEXION LTIFC-SFD</h2>
+                </div>
+
+                <div class="pages-detail p-mb-6 p-px-6 font-weight-bold p-mt-3">
+                    Merci de saisir vos identifiants de connexion
+                </div>
+
+                <div class="input-panel p-d-flex p-flex-column p-px-3">
+                    <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-user"></i>
+                    </span>
+                        <span class="p-float-label">
+                        <input type="text" id="userName" pInputText [(ngModel)]="credentials.userName"
+                               required name="userName">
+                        <label for="userName" class="font-weight-bold">Nom d'utilisateur</label>
+                    </span>
+                    </div>
+
+                    <div class="p-inputgroup p-mt-3 p-mb-6">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-lock"></i>
+                    </span>
+                        <span class="p-float-label">
+                        <input [type]="passvisible? 'text':'password'" id="password" pInputText
+                               [(ngModel)]="credentials.password" required name="userPassword">
+                        <label for="password" class="font-weight-bold">Mot de passe</label>
+                    </span>
+                        <button type="button" class="border border-secondary"
+                                (click)="handleVisibility()" [disabled]="!credentials.password">
+                            <i class="pi pi-eye" *ngIf="!passvisible"></i>
+                            <i class="pi pi-eye-slash" *ngIf="passvisible"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <p-button class="login-button p-mb-6 p-px-3 font-weight-bold" label="Se connecter"
+                          (onClick)="login()" [disabled]="loginForm.form.invalid">
+                </p-button>
+
+            </div>
+        </form>
+    </div>
+</div>

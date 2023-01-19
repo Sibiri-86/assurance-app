@@ -12,6 +12,7 @@ export class AppMenuComponent implements OnInit {
     constructor(public app: AppMainComponent, private keycloak: KeycloakService) {}
     ngOnInit() {
         this.model = [
+            {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: true},
             {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage'],
             visible: this.keycloak.isUserInRole(Function.sm_parametrage)},

@@ -54,6 +54,8 @@ import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/s
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
+import { User } from 'src/app/store/contrat/exercice/model';
+import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 
 
 
@@ -112,12 +114,13 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   displayExcel = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
-
+  user: User = {};
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private operationService: OperationService,
                private compteService: CompteService,
+               private exerciceService: ExerciceService,
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
@@ -431,16 +434,19 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
   findOperationGrandLivre() {
-    this.check.garantId = this.check.garant.id;
+   /* this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
     this.check.adherentPrincipalId = this.check?.adherent?.id;
     this.check.display = this.displayExcel;
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
-    console.log("=====================",this.report)
+    console.log("=====================",this.report)*/
+    this.exerciceService.createUser(this.user).subscribe((res=>{
+      console.log("==========res===========",res);
+    }))
 
-    this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    // this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     // this.displayExcel= false;
     // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 

@@ -452,6 +452,9 @@ export class Endpoints {
             mock: `assets/mock/reporting/production.mock.json`
         };
 
-        
+        static readonly KEYCLOAK_USER = {
+            prod: `${SERVICE_PREFIX}/keycloak/user`,
+            mock: `assets/mock/keycloak/user.mock.json`
+        }; 
 
 }
