@@ -30,8 +30,8 @@
             <tr [ngClass]="{'colorZone': !adherent.adherentPrincipal}">
                 <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
                 <td><span class="p-column-title">{{adherent.numero}}</span></td>
-                <td><span class="p-column-title">{{adherent.nom | upercase}}</span></td>
-                <td><span class="p-column-title">{{adherent.prenom | beginLowerCase}}</span></td>
+                <td><span class="p-column-title">{{adherent.nom }}</span></td>
+                <td><span class="p-column-title">{{adherent.prenom}}</span></td>
                 <td><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
                 <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
                 <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->

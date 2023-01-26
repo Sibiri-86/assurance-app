@@ -56,6 +56,10 @@ import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { User } from 'src/app/store/contrat/exercice/model';
 import { ExerciceService } from 'src/app/store/contrat/exercice/service';
+import { KeycloakService } from 'keycloak-angular';
+import { environment } from 'src/environments/environment';
+import * as Keycloak from 'keycloak-js';
+import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 
 
@@ -115,12 +119,14 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
   user: User = {};
+  displayuser = false;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private operationService: OperationService,
                private compteService: CompteService,
                private exerciceService: ExerciceService,
+               private keycloakService: KeycloakService,
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
@@ -433,7 +439,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
-  findOperationGrandLivre() {
+  async findOperationGrandLivre() {
    /* this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
     this.check.adherentPrincipalId = this.check?.adherent?.id;
@@ -444,7 +450,24 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     console.log("=====================",this.report)*/
     this.exerciceService.createUser(this.user).subscribe((res=>{
       console.log("==========res===========",res);
-    }))
+    })) 
+ 
+   /* const kcAdminClient = new KeycloakAdminClient({
+      baseUrl: environment.keycloakConfig.url,
+      realmName: environment.keycloakConfig.realm,
+    });
+    */
+/* await kcAdminClient.auth({
+  username: this.user.userName,
+  password: this.user.password,
+  grantType: "password",
+  clientId: environment.keycloakConfig.clientId,
+});*/
+
+
+
+    // const login =   this.keycloakService.login().catch((e) => console.error(e));;
+    // console.log("==========login===========",login);
 
     // this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     // this.displayExcel= false;
