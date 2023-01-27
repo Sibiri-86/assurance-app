@@ -100,6 +100,8 @@ import { EvolutionMensuelleComponent } from './module/reporting/production/evolu
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
 import { AssureConsommationComponent } from './module/portail/assureConsommation/assureConsommation.component';
 import { LoginComponent } from './login.component';
+import { RegisterChooseComponent } from './module/portail/registerChoose/registerChoose.component';
+import { RegisterComponent } from './module/portail/register/register.component';
 
 @NgModule({
     imports: [
@@ -216,6 +218,8 @@ import { LoginComponent } from './login.component';
                     {path: 'prestation/Workflow/ordre-reglement-workflow', component: OrdreReglementWorkflowComponent},
                     {path: 'reporting/famille-assure', component: FamilleAssureComponent},
                     {path: 'portail/assureConsommation', component: AssureConsommationComponent},
+                    {path: 'portail/registerChoose', component: RegisterChooseComponent},
+                    {path: 'portail/register', component: RegisterComponent},
                     
                     
                     

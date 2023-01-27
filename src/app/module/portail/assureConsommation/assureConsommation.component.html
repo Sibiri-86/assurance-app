@@ -50,11 +50,11 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-garant>
 					<tr>
-						<td><span class="p-column-title" >{{garant?.adherent.numero}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.adherent.nom}} {{garant?.adherent.prenom}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.adherent.groupe.police.nom}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.adherent.genre.code}}</span></td>
+						<td><span class="p-column-title" >{{garant?.adherent?.numero}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.adherent?.groupe?.police?.nom}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.adherent?.genre?.code}}</span></td>
 						<td><span class="p-column-title" >{{garant?.adherent?.qualiteAssure?.code}}</span></td>
                         <td><span class="p-column-title" >{{garant?.totalMontantReclame | formatTableValue: 'number':true}}</span></td>
 						<td><span class="p-column-title" >{{garant?.totalMontantRembourse | formatTableValue: 'number':true}}</span></td>
@@ -442,22 +442,24 @@
                     <div class="p-fluid p-formgrid p-grid">
                         
                         <div class="p-field p-col">
-                            <label for="lastname2" style="font-size: 18px !important;"> Sous acte:</label>
+                            <label for="lastname2" style="font-size: 15px !important;"> Sous acte:</label>
                             <br>
                             <p-tag *ngIf="prestation.sort == 'ACCORDE'" styleClass="p-mr-2" severity="success">{{prestation?.sousActe?.libelle}}</p-tag>
                             <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sousActe?.libelle}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col">
-                            <label for="sousActe" style="font-size: 18px !important;">Pathologie:</label>
+                            <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.pathologie?.libelle}}</p-tag>   
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.pathologie?.libelle}}</p-tag>   
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger"> {{prestation?.pathologie?.libelle}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col">
-                            <label for="produit" style="font-size: 18px !important;">Produit pharmaceutique:</label>
+                            <label for="produit" style="font-size: 15px !important;">Produit pharmaceutique:</label>
                             <br>
-                            <span *ngFor="let p of prestation.produitPharmaceutique"> <p-tag styleClass="p-mr-2" severity="success">  {{p?.libelle}}</p-tag></span> 
+                            <span *ngFor="let p of prestation.produitPharmaceutique"> <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">  {{p?.libelle}}</p-tag>
+                                <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger"> {{p?.libelle}}</p-tag></span> 
                         </div>
                     </div>
                         
@@ -465,42 +467,48 @@
                         
                         
                         <div class="p-field p-col">
-                            <label for="dateEffet" style="font-size: 18px !important;">Date de soins:</label>
+                            <label for="dateEffet" style="font-size: 15px !important;">Date de soins:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.dateSoins  | formatTableValue : 'date'}}</p-tag> 
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.dateSoins  | formatTableValue : 'date'}}</p-tag> 
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger"> {{prestation?.dateSoins  | formatTableValue : 'date'}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col">
-                            <label for="centre" style="font-size: 18px !important;">Type de prestation:</label>
+                            <label for="centre" style="font-size: 15px !important;">Type de prestation:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.typePrestation}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.typePrestation}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">  {{prestation?.typePrestation}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col">
-                            <label for="medecin" style="font-size: 18px !important;">Centre Prescripteur:</label>
+                            <label for="medecin" style="font-size: 15px !important;">Centre Prescripteur:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.prestataire?.libelle}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.prestataire?.libelle}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">  {{prestation?.prestataire?.libelle}}</p-tag>
                         </div>
                         
                        </div>
                        
                        <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="medecin" style="font-size: 18px !important;">Medecin:</label>
+                            <label for="medecin" style="font-size: 15px !important;">Medecin:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col">
-                            <label for="nombreActe" style="font-size: 18px !important;">Nombre Acte:</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Nombre Acte:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.nombreActe | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.nombreActe | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.nombreActe | formatTableValue: 'number':true}}</p-tag>
                         </div>
                            
                         <div class="p-field p-col">
-                            <label for="nombreActe" style="font-size: 18px !important;">Cout unitaire:</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Cout unitaire:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.coutUnitaire | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.coutUnitaire | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.coutUnitaire | formatTableValue: 'number':true}}</p-tag>
                         </div>
                            
                        </div>
@@ -508,20 +516,23 @@
                        
                        <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="nombreActe" style="font-size: 18px !important;">Debours:</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Debours:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.debours | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.debours | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.debours | formatTableValue: 'number':true}}</p-tag>
                         </div>
                         <div class="p-field p-col">
-                            <label for="nombreActe" style="font-size: 18px !important;">Base remboursement:</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Base remboursement:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.baseRemboursement | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.baseRemboursement | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.baseRemboursement | formatTableValue: 'number':true}}</p-tag>
                         </div>
                            
                         <div class="p-field p-col-4">
-                            <label for="sousActe" style="font-size: 18px !important;">Taux:</label>
+                            <label for="sousActe" style="font-size: 15px !important;">Taux:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success"> {{prestation?.taux?.taux}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success"> {{prestation?.taux?.taux}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.taux?.taux}}</p-tag>
                         </div>
                        </div>
                        
@@ -529,39 +540,36 @@
                        <div class="p-fluid p-formgrid p-grid">
                            
                         <div class="p-field p-col-4">
-                            <label for="nombreActe" style="font-size: 18px !important;">Montant remboursé:</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Montant remboursé:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success">{{prestation?.montantRembourse | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.montantRembourse | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.montantRembourse | formatTableValue: 'number':true}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col-4">
-                            <label for="nombreActe" style="font-size: 18px !important;">Montant supporté par l'assuré(e):</label>
+                            <label for="nombreActe" style="font-size: 15px !important;">Montant supporté par l'assuré(e):</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE' && prestation.typePrestation =='PREFINANCEMENT'" severity="success">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE' && prestation.typePrestation =='PREFINANCEMENT'" styleClass="p-mr-2" severity="danger">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE' && prestation.typePrestation =='TIERSPAYANT'" severity="success">{{prestation?.baseRemboursement - prestation?.montantRembourse | formatTableValue: 'number':true}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE' && prestation.typePrestation =='TIERSPAYANT'" styleClass="p-mr-2" severity="danger">{{prestation?.baseRemboursement - prestation?.montantRembourse | formatTableValue: 'number':true}}</p-tag>
                         </div>
                         
                         <div class="p-field p-col-4">
-                            <label for="sousActe" style="font-size: 18px !important;">Decision:</label>
+                            <label for="sousActe" style="font-size: 15px !important;">Decision:</label>
                             <br>
-                            <p-tag styleClass="p-mr-2" severity="success">{{prestation?.sort}}</p-tag>
+                            <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.sort}}</p-tag>
+                            <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sort}}</p-tag>
                         </div>
                         
-                        <!--
-                        <div class="p-field p-col-4">
-                            <label for="sousActe">Sort <sup style="color: red !important; size: 1.4em;">*</sup></label>
-                            <p-dropdown inputId="sort"  [filter]="true"
-                                        showClear="true" [options]="typeSort"
-                                        formControlName="sort"></p-dropdown>
-                        </div>
-                        -->
-                           
                        </div>
                        
                        <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-4">
-                        <label for="observation" style="font-size: 18px !important;">Observation:</label>
+                        <label for="observation" style="font-size: 15px !important;">Observation:</label>
                         <br>
-                        <p-tag styleClass="p-mr-2" severity="success">{{prestation?.observation}}</p-tag>
+                        <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.observation}}</p-tag>
+                        <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.observation}}</p-tag>
                         </div>
                        </div> 
                 </p-fieldset>

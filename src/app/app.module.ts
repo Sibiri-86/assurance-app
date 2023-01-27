@@ -312,6 +312,8 @@ import { AlerteEffects } from './store/parametrage/Alerte/effect';
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
 import { AssureConsommationComponent } from './module/portail/assureConsommation/assureConsommation.component';
 import { LoginComponent } from './login.component';
+import { RegisterChooseComponent } from './module/portail/registerChoose/registerChoose.component';
+import { RegisterComponent } from './module/portail/register/register.component';
 
 @NgModule({
     imports: [
@@ -568,6 +570,8 @@ import { LoginComponent } from './login.component';
         FamilleAssureComponent,
         AssureConsommationComponent,
         LoginComponent,
+        RegisterChooseComponent,
+        RegisterComponent
 
     ],
     providers: [

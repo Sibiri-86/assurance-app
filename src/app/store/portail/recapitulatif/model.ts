@@ -78,7 +78,7 @@ export interface DepenseFamille {
     boolGeneral?:boolean;
     informationPrincipal?:boolean;
     boolPrincipal?:boolean;
-    adherentId?:string;
+    adherentId?:number;
     dateDebut?: Date;
     dateFin?: Date;
 }

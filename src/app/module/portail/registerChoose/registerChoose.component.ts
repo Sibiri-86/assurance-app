@@ -31,14 +31,15 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { DepenseFamille } from 'src/app/store/portail/recapitulatif/model';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-assureConsommation',
-  templateUrl: './assureConsommation.component.html',
-  styleUrls: ['./assureConsommation.component.scss']
+  selector: 'app-registerChoose',
+  templateUrl: './registerChoose.component.html',
+  styleUrls: ['./registerChoose.component.scss']
 })
-export class AssureConsommationComponent implements OnInit, OnDestroy {
+export class RegisterChooseComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   cols: any[];
   arrondissementList$: Observable<Array<Arrondissement>>;
@@ -89,6 +90,8 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   selectedGarants: Array<Recapitulatif>;
   prestationDetail: DepenseFamille;
   displaySinistreDetail= false;
+  descTitle = '';
+  descType = '';
 
 
   
@@ -109,7 +112,8 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
               private recaptulatifService: RecapitulatifService,
-              private portailService: PortailService) {
+              private portailService: PortailService,
+              private router: Router,) {
 
       this.depenseFamilleForm = this.formBuilder.group({
         dateFin: new FormControl('', [Validators.required]),
@@ -118,7 +122,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
     });
 
       this.breadcrumbService.setItems([
-        {label: 'Consommation(s) d\'assuré(es)'}
+        {label: ''}
     ]);
     }
 
@@ -352,7 +356,21 @@ loadData() {
   console.log('prestation recuperer=============>', prestation.prestationList);
   this.prestationDetail = prestation;
   this.displaySinistreDetail = true;
-} 
+}
+
+
+getDecrption(title, type) {
+  this.descTitle = title;
+  this.descType = type;
+}
+resetvalue() {
+  this.descTitle = '';
+  this.descType = '';
+}
+
+register2(){
+  this.router.navigate(['/portail/register']);
+}
 }
 
 

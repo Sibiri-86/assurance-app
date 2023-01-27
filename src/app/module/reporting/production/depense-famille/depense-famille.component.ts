@@ -439,15 +439,16 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   loadGroupeByPolice(){
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
-  async findOperationGrandLivre() {
-   /* this.check.garantId = this.check.garant.id;
+
+  findOperationGrandLivre() {
+   this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
     this.check.adherentPrincipalId = this.check?.adherent?.id;
     this.check.display = this.displayExcel;
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
-    console.log("=====================",this.report)*/
+    console.log("=====================",this.report)
     this.exerciceService.createUser(this.user).subscribe((res=>{
       console.log("==========res===========",res);
     })) 
@@ -469,6 +470,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     // const login =   this.keycloakService.login().catch((e) => console.error(e));;
     // console.log("==========login===========",login);
 
+    console.log("=====================",this.report)
     // this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     // this.displayExcel= false;
     // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
