@@ -128,6 +128,7 @@ export interface Prestation {
     montantExclu?: number;
     typePrestation?: TypePrestation;
     garantie?: Garantie;
+    bonPriseEnCharge?: BonPriseEnCharge;
     /*ajout information pour bon de prise en charge*/
 }
 

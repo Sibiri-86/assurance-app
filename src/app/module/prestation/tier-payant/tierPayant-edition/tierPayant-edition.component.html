@@ -226,13 +226,21 @@
                                 </div>
                             </div>
 
+
                             <div class="p-field p-col-2"></div>
+                            <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-2">
                                 <button pButton  [disabled]="!prefinancement.montantReclame"
                                         pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" label="Ajouter prestation"
                                         class="p-button-success" type="button" (click)="addItemPrestation()"></button>
                             </div>
 
+                            <div class="p-field p-col-2">
+                                <button pButton  [disabled]="!prefinancement.montantReclame"
+                                        pRipple icon="pi pi-plus" pTooltip="Rattacher un bon" label="Rattacher un bon"
+                                        class="p-button-success" type="button" (click)="addBon()"></button>
+                            </div>
+                        </div>
                         </p-fieldset>
 
                         <hr/>
@@ -318,6 +326,49 @@
 
 </div>
 </div>
+
+<p-dialog [(visible)]="displayPrestationbon"  header="Veuillez rattaché un bon de prise en charge"  [modal]="true" styleClass="p-fluid">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+        <form>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12">
+                    <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationBon.dateSoins">
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <input id="matriculeAdherent" [disabled]="!prestationBon.dateSoins" type="text"  [(ngModel)]="prestationBon.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherentBon($event)" pInputText>
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                    <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                                showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationBon.matriculeAdherent"
+                                [(ngModel)]="prestationBon.bonPriseEnCharge"
+                                 [autoDisplayFirst]="false"  name="bonPriseEnCharge"
+                                optionLabel="numeros">
+                            </p-dropdown>
+                </div>
+            </div>
+        </form>
+        <div class="p-grid p-justify-between">
+            <div>
+            </div>
+            <div>
+                <button pButton  [disabled]="!prefinancement.montantReclame"
+                pRipple icon="pi pi-plus" pTooltip="Ajouter bon" label="Ajouter"
+                class="p-button-success" type="button" (click)="saveBon()"></button>
+            </div>
+        </div>
+        
+        </div>
+
+
+         
+        
+     </ng-template>
+</p-dialog>
 <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation"  [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="header">
         <Span style="font-weight: bold">Montant reclamé: {{prefinancement?.montantReclame | formatTableValue: 'number':true}}</Span>
@@ -400,7 +451,7 @@
                 <p-calendar id="dateRetrait" class="champRouge" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" disabled [(ngModel)]="prestationAdd.dateRetrait" name="dateRetrait"  appendTo="body"></p-calendar>
             </div>
 
-              <div class="p-field p-col">
+              <!-- <div class="p-field p-col">
                <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
                <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                            showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationAdd.matriculeAdherent"
@@ -409,7 +460,7 @@
                            optionLabel="numeros" (onChange)="onRowSelectBon($event)">
                        </p-dropdown>
            </div>
-
+ -->
           
     
            <div class="p-field p-col">
@@ -426,19 +477,19 @@
                                [options]="acteListFilter"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
                </div>
 
-              
-
-           </div>
-
-           <div class="p-fluid p-formgrid p-grid">
-
-            <div class="p-field p-col">
+               <div class="p-field p-col">
                 <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
                             showClear="true" [options]="sousActeListFilter" name="sousActe"
                             [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
                             optionLabel="libelle" (onChange)="selectDateSoins(); findMontantConsomme(); findMontantPlafond();  findTaux()"></p-dropdown>
             </div>
+
+           </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+
+            
 
             <div class="p-field p-col">
                 <label for="pathologie" id="pathologie">Pathologie<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -470,20 +521,20 @@
                    </p-multiSelect>
                </div>
 
-              
-
-           </div>
-
-           <div class="p-fluid p-formgrid p-grid">
-
-               
-            <div class="p-field p-col">
+               <div class="p-field p-col">
                 <label for="medecin" id="medecin">Medecin<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="medecin" dataKey="id" [filter]="true" [disabled]="displayFP"
                             showClear="true" [options]="medecinList"  name="medecin"  [(ngModel)]="prestationAdd.medecin"
                            placeholder="Select medecin"
                             optionLabel="nom"></p-dropdown>
             </div>
+
+           </div>
+
+           <div class="p-fluid p-formgrid p-grid">
+
+               
+            
             <div class="p-field p-col">
                 <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.medecin" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
@@ -497,17 +548,17 @@
             <p-inputNumber name="montantExclu" [disabled]="!prestationAdd.coutUnitaire"  [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantExclu"  mode="decimal" locale="fr-FR" placeholder="montant exclu" (onBlur)="calculExclu()"></p-inputNumber>
           </div>
               
-              
+          <div class="p-field p-col">
+            <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+            <p-inputNumber name="debours" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
+        </div> 
 
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
 
                
-            <div class="p-field p-col">
-                <label for="debours">Debours <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="debours" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.debours" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
-            </div>
+           
               
             <div class="p-field p-col">
                 <label for="baseRemboursement" id="baseRemboursement">Base remboursement<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
@@ -526,24 +577,24 @@
              <label for="montantRembourse" id="montantRembourse">Montant remboursé<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
              <p-inputNumber name="montantRembourse" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRembourse"  [disabled]="true" mode="decimal" locale="fr-FR" ></p-inputNumber>
          </div>
-              
+         <div class="p-field p-col">
+            <label for="nombreActe">Montant supporté<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+            <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
+        </div> 
 
             
            </div>
 
            <div class="p-fluid p-formgrid p-grid">
-            <div class="p-field p-col">
-                <label for="nombreActe">Montant supporté<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber  name="montantRestant" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantRestant" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
-            </div>
-            <div class="p-field p-col">
+            
+            <div class="p-field p-col-3">
                 <label for="sousActe">Decision <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="decision" [filter]="true"
                             showClear="true" [options]="typeSort"
                             name="sort" [(ngModel)]="prestationAdd.sort"
                             [autoDisplayFirst]="false" [disabled]="true"></p-dropdown>
             </div>
-            <div class="p-field p-col">
+            <div class="p-field p-col-3">
              <label for="nombreActe">Montant Plafond<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
              <p-inputNumber  name="montantPlafond" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.montantPlafond" [disabled]="true" mode="decimal" locale="fr-FR"></p-inputNumber>
          </div>

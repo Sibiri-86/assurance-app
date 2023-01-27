@@ -133,6 +133,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   montantConsomme:number = 0;
   montantPlafond1:number = 0;
   displayPrestationpop = false;
+  displayPrestationbon = false;
   prestationsList: Prestation[]= [];
   prestationsList1: Prestation[]= [];
   compteur: number = null;
@@ -142,6 +143,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   montantReponse$: Observable<ReponseCheckMontantRestantGarantie>;
   montantReponse: ReponseCheckMontantRestantGarantie;
   showMessage = false;
+  prestationBon: Prestation = {};
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -164,7 +166,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.displayPrestationpop = true;
     
   }
-
+  addBon(): void {
+    this.displayPrestationbon = true;
+ 
+}
    deleteItemPrestation(i: number) {
     for (const f of this.tab){
       if (f === i) {
@@ -696,7 +701,18 @@ findMontantPlafond(event){
       }
     this.displayFormPrefinancement = true;
   }
-
+  saveBon() {
+    
+    if(this.prestationBon.bonPriseEnCharge) {
+        for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
+            
+            this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
+        }
+        
+    }
+    this.prestationBon = {};
+    this.displayPrestationbon = false;
+  }
   editerPrestation(pref: Prefinancement) {
     console.log("=====================");
     console.log(pref);
@@ -1147,7 +1163,35 @@ rechercheAdherentDateSoin(event) {
 
   }
 }
-
+rechercherAdherentBon(event) {
+  if (event.target.value !== '') {
+  console.log(event.target.value);
+   this.adherentSelected = null;
+   this.prestationPopForm.get('nomAdherent').setValue("");
+   
+    this.prestationPopForm.get('numeroGroupe').setValue("");
+    this.prestationPopForm.get('numeroPolice').setValue("");
+    this.prestationPopForm.get('souscripteur').setValue("");
+    this.prestationPopForm.get('nomGroupeAdherent').setValue("");
+    
+      this.prestationPopForm.get('prenomAdherent').setValue("");
+ 
+      this.prestationPopForm.get('prenomAdherent').setValue("");
+      this.prestationPopForm.get('sort').setValue("");
+      this.prestationPopForm.get('observation').setValue("");
+  
+  this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));
+  }
+}
+verifieDateSoinsBon(event){
+  if( new Date(this.prestationBon.dateSoins).getTime() > new Date().getTime()) {
+    this.addMessage('error', 'Date de soins invalide',
+                'La date de soins ne peut pas être supérieure à celle du jour');
+                //this.prestationForm.get('dateSoins').setValue("");
+                this.prestationBon.dateSoins = null;
+                //this.adherentSelected = null;
+}
+}
 verifieDateSoins(event){
   if( new Date(this.prestationPopForm.get('dateSoins').value).getTime() > new Date().getTime()) {
     this.addMessage('error', 'Date de soins invalide',

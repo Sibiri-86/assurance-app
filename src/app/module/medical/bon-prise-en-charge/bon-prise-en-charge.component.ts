@@ -1244,7 +1244,8 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   console.log("5555555555555555555555555",prestation);
   console.log("6666666666666666666666666",rowIndex);
   this.compteur = rowIndex;
-  this.prestationPopForm?.patchValue(prestation);
+  this.prestationPopForm = this.createItem();
+  this.prestationPopForm.patchValue(prestation);
   this.prestationPopForm?.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
   this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);

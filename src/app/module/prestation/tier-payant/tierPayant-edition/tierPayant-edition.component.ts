@@ -157,6 +157,7 @@ export class TierPayantEditionComponent implements OnInit {
     prestationsList1: Prestation[]= [];
     prestationDetail:Prestation = {};
     prestationAdd: Prestation = {};
+    prestationBon: Prestation = {};
     displayPrestationpop = false;
     compteur: number = null;
     baseAnterieur: number = null;
@@ -175,6 +176,7 @@ export class TierPayantEditionComponent implements OnInit {
     montantReponse: ReponseCheckMontantRestantGarantie;
     showMessage = false;
     showAlert = false;
+    displayPrestationbon = false;
 
 
 
@@ -690,6 +692,43 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationList[ri].debours = data.coutUnitaire * Number(data.nombreActe);
         this.prestationList[ri].baseRemboursement = this.prestationList[ri].debours;
         this.prestationList[ri].montantRembourse = this.prestationList[ri].baseRemboursement * (this.prestationList[ri].taux.taux / 100);
+    }
+    rechercherAdherentBon(event) {
+
+        // this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
+        this.adherentSelected = null;
+        this.prestationAdd.matriculeAdherent = "";
+        this.prestationAdd.nomAdherent = "";
+        
+        this.prestationAdd.prenomAdherent = "";
+
+    
+                
+                this.prestationAdd.numeroGroupe = "";
+                this.prestationAdd.numeroPolice = "";
+                this.prestationAdd.souscripteur =  "";
+                this.prestationAdd.nomGroupe = "";
+                this.prestationAdd.adherent = this.adherentSelected;
+            
+               
+                  
+                    this.prestationAdd.nomAdherentPrincipal = "";
+                    this.prestationAdd.prenomAdherentPrincipal = "";
+                
+                    this.prestationAdd.nomAdherentPrincipal = "";
+                    this.prestationAdd.prenomAdherentPrincipal = "";
+                    this.prestationAdd.sort = null;
+                    this.prestationAdd.observation = "";
+                
+        
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
+      /*   this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            console.log(value);
+            if (value) {
+                this.prestationAdd.adherent = value;
+                console.log(this.prestationAdd.adherent);
+            }
+        }); */
     }
 
     rechercherAdherent1(event) {
@@ -1338,6 +1377,11 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestation.push(formPrestation);
     }
 
+    addBon(): void {
+        this.displayPrestationbon = true;
+     
+    }
+
     deleteItemPrestation(i: number) {
         this.prestation.removeAt(i);
     }
@@ -1701,6 +1745,29 @@ export class TierPayantEditionComponent implements OnInit {
           this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: Number(this.prestationAdd.matriculeAdherent)}));
       
         }
+      }
+      
+
+      saveBon() {
+        if(this.prefinancement.montantRestant == null) {
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame;
+
+        }
+        if(this.prefinancement.montantPaye == null) {
+            this.prefinancement.montantRestant = 0;
+
+        }
+        if(this.prestationBon.bonPriseEnCharge) {
+            for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationBon.bonPriseEnCharge.prestation[i].montantRembourse;
+                this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
+         
+                this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
+            }
+            
+        }
+        this.prestationBon = {};
+        this.displayPrestationbon = false;
       }
 
       findMontantTotalConsommeFamille() {
