@@ -703,6 +703,7 @@ findMontantPlafond(event){
     this.adherentSelected = pref.adherent;
     this.adherentSelectedfinal = pref.adherent;
     this.prestationsList = pref.prestation; 
+    this.prestationForm.get('id').setValue(pref.id);
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
@@ -1216,11 +1217,16 @@ verifieDateSoins(event){
    console.log('creation prefinancement');
    this.prefinancementList = [];
    this.prefinancementModel = this.prestationForm.value;
+   console.log("===========this.prefinancementModel1==================", this.prestationForm.value);
 
    this.prefinancementModel.dateSaisie = new Date();
    // this.prefinancementModel.dateSoins = 
    this.prefinancementModel.adherent = this.adherentSelected;
    this.prefinancementModel.prestation = this.prestationsList;
+   if(this.prestationForm.get('id').value != null) {
+    this.prefinancementModel.id = this.prestationForm.get('id').value;
+   }
+   console.log("===========this.prefinancementModel2==================", this.prefinancementModel);
    this.prefinancementList.push(this.prefinancementModel);
    console.log(this.prefinancementList);
    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));

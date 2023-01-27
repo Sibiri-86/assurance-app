@@ -106,7 +106,7 @@
         
       
         
-        <p-dialog [maximizable]="true" [(visible)]="displayuser" header="Dépense  d'une famille" [modal]="true" styleClass="p-fluid" 
+        <p-dialog [maximizable]="true" [(visible)]="display" header="Dépense  d'une famille" [modal]="true" styleClass="p-fluid" 
         [style]="{width: '10 00px'}">
 
         <ng-template pTemplate="content">
@@ -169,67 +169,6 @@
                                 
                                 <input  type="date" pInputText [(ngModel)]="check.dateFin" name="dateFin">
                             </div>
-    
-                        </div>
-    
-                        
-
-
-                        <div class="p-grid p-justify-between">
-                            <div>
-                                <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
-                            </div>
-                            <div>
-                                <button pButton pRipple    (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
-                            </div>
-                        </div>
-                    
-                </form>
-            </div>
-        </ng-template>
-        </p-dialog>
-
-
-        <p-dialog [maximizable]="true" [(visible)]="display" header="Creation user" [modal]="true" styleClass="p-fluid" 
-        [style]="{width: '10 00px'}">
-
-        <ng-template pTemplate="content">
-            <div class="card">
-
-               
-                <form>
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label class="espace1" for="numCompte">username <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <input  type="text" pInputText [(ngModel)]="user.userName" name="userName">
-    
-                        </div>
-    
-                        <div class="p-field p-col-4">
-                            <label class="espace1" for="numCompte2"> email <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <input  type="text" pInputText [(ngModel)]="user.emailId" name="emailId">
-
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label  class="espace1" for="numCompte2"> Password <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <input  type="text" pInputText [(ngModel)]="user.password" name="password">
-                        </div>
-                            
-                        </div>
-
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col-4">
-                                <label  class="espace1" for="numCompte2"> firstname <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                                <input  type="text" pInputText [(ngModel)]="user.firstname" name="firstname">
-
-                            </div> 
-                            <div class="p-field p-col-4">
-                                <label class="espace1" for="journal">lastName <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                                <input  type="text" pInputText [(ngModel)]="user.lastName" name="lastName">
-                                
-                    
-                            </div>
-                            
     
                         </div>
     

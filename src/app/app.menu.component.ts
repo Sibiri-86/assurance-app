@@ -12,7 +12,7 @@ export class AppMenuComponent implements OnInit {
     constructor(public app: AppMainComponent, private keycloak: KeycloakService) {}
     ngOnInit() {
         this.model = [
-            {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
+            
             {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: true},
             {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage'],
             visible: this.keycloak.isUserInRole(Function.sm_parametrage)},
@@ -210,7 +210,10 @@ export class AppMenuComponent implements OnInit {
                 label: 'Portail', icon: 'pi pi-fw pi-compass', routerLink: ['/portail'],
                 visible: true,
                 items: [
-                    {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: true}
+                    {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: true},
+                    {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
+                    {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
+                    {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true},
                 ]
             },
             /*

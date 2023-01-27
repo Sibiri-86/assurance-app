@@ -98,11 +98,10 @@ import { ConsommationParSexeComponent } from './module/reporting/medical/consomm
 import { OrdreReglementWorkflowComponent } from './module/prestation/ordre-reglement/ordre-reglement-workflow/ordre-reglement-workflow.component';
 import { EvolutionMensuelleComponent } from './module/reporting/production/evolution-mensuelle/evolution-mensuelle.component';
 import { FamilleAssureComponent } from './module/reporting/production/famille-assure/famille-assure.component';
-<<<<<<< HEAD
 import { AssureConsommationComponent } from './module/portail/assureConsommation/assureConsommation.component';
-=======
 import { LoginComponent } from './login.component';
->>>>>>> feature_button_policy_validation
+import { RegisterChooseComponent } from './module/portail/registerChoose/registerChoose.component';
+import { RegisterComponent } from './module/portail/register/register.component';
 
 @NgModule({
     imports: [
@@ -219,6 +218,8 @@ import { LoginComponent } from './login.component';
                     {path: 'prestation/Workflow/ordre-reglement-workflow', component: OrdreReglementWorkflowComponent},
                     {path: 'reporting/famille-assure', component: FamilleAssureComponent},
                     {path: 'portail/assureConsommation', component: AssureConsommationComponent},
+                    {path: 'portail/registerChoose', component: RegisterChooseComponent},
+                    {path: 'portail/register', component: RegisterComponent},
                     
                     
                     

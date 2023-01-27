@@ -84,4 +84,13 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroy$.unsubscribe();
     }
 
+    register() {
+        //this.activeModal.dismiss('to state register');
+        this.router.navigate(['/portail/registerChoose']);
+      }
+
+      /* navigateSinistre() {
+        this.router.navigateByUrl('/prestation/prefinancement/valide');
+      } */
+
 }

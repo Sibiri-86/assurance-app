@@ -114,7 +114,6 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   displayExcel = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
-  user: User = {};
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -434,18 +433,14 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.store.dispatch(groupefeatureAction.loadGroupe({policeId: this.check.police.id}));
   }
   findOperationGrandLivre() {
-   /* this.check.garantId = this.check.garant.id;
+   this.check.garantId = this.check.garant.id;
     this.check.policeId = this.check?.police?.id;
     this.check.adherentPrincipalId = this.check?.adherent?.id;
     this.check.display = this.displayExcel;
    
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
-    console.log("=====================",this.report)*/
-    this.exerciceService.createUser(this.user).subscribe((res=>{
-      console.log("==========res===========",res);
-    }))
-
+    console.log("=====================",this.report)
     // this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
     // this.displayExcel= false;
     // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));

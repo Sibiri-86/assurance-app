@@ -1,20 +1,16 @@
 <div class="pages-body login-page p-d-flex p-flex-column">
     <div class="topbar p-p-3 p-d-flex p-jc-between p-flex-row p-ai-center">
-        <div class="topbar-left p-ml-3 p-d-flex" routerLink="/">
+        <div class="topbar-middle p-ml-3 p-d-flex" routerLink="/">
             <div class="logo">
-                <img src="assets/layout/images/logo2x.png" alt=""/>
+                <img src="assets/layout/images/favicon" alt=""/>
             </div>
-        </div>
-        <div class="topbar-right p-mr-3 p-d-flex">
-            <button pButton pRipple type="button" label="DASHBOARD" [routerLink]="['/']"
-                    class="p-button-text p-button-plain topbar-button"></button>
         </div>
     </div>
     <div class="p-as-center p-mt-auto p-mb-auto">
         <form name="loginForm" #loginForm="ngForm"  id="userForm">
             <div class="pages-panel card p-d-flex p-flex-column">
                 <div class="pages-header p-px-3 p-py-1">
-                    <h2>CONNEXION LTIFC-SFD</h2>
+                    <h2>CONNEXION SOLMAVI</h2>
                 </div>
 
                 <div class="pages-detail p-mb-6 p-px-6 font-weight-bold p-mt-3">
@@ -50,10 +46,27 @@
                     </div>
 
                 </div>
-
-                <p-button class="login-button p-mb-6 p-px-3 font-weight-bold" label="Se connecter"
+                <div class="p-grid">
+                    <div class="p-col-5">
+                        <p-button class="login-button p-mb-6 p-px-3 font-weight-bold" label="Se connecter"
                           (onClick)="login()" [disabled]="loginForm.form.invalid">
-                </p-button>
+                        </p-button>
+                    </div>
+                    <div class="p-col-7">
+                        <p-button class="login-button p-mb-6 p-px-3 font-weight-bold" styleClass="p-button-warning" label="Mot de passe oublié ?"
+                          (onClick)="login()">
+                        </p-button>
+                    </div>
+
+                </div>
+                <br>
+                <div class="alert alert-warning">
+                        <span class="p-ml-3">Vous n'avez pas de compte ? </span>
+                             <a class="alert-link" (click)="register()">Enregistrez vous</a> 
+                </div>
+                
+
+                
 
             </div>
         </form>
