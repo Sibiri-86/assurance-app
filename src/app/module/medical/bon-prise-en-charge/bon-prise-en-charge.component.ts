@@ -1274,6 +1274,7 @@ editerPrestation(pref: BonPriseEnCharge) {
   this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
   this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
   this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom); */
+  this.prestationForm.get('id').setValue(pref?.id);
   this.prestationForm.get('typeBon').setValue(pref?.typeBon);
   this.prestationForm.get('prestataire').setValue(pref?.prestataire);
   // this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
