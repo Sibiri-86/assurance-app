@@ -705,7 +705,7 @@ findMontantPlafond(event){
     
     if(this.prestationBon.bonPriseEnCharge) {
         for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
-            
+          this.prestationBon.bonPriseEnCharge.prestation[i].id = null;
             this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
         }
         

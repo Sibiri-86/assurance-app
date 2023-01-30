@@ -1759,6 +1759,7 @@ export class TierPayantEditionComponent implements OnInit {
         }
         if(this.prestationBon.bonPriseEnCharge) {
             for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
+                this.prestationBon.bonPriseEnCharge.prestation[i].id = null;
                 this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationBon.bonPriseEnCharge.prestation[i].montantRembourse;
                 this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
          
