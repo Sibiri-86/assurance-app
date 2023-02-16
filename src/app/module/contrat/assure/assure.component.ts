@@ -45,7 +45,7 @@ export class AssureComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
-    this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: '', idPolice: ''}));
+    //this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: '', idPolice: ''}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.adherentList = value.slice();
