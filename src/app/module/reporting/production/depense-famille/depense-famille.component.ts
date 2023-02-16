@@ -59,7 +59,7 @@ import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 import { KeycloakService } from 'keycloak-angular';
 import { environment } from 'src/environments/environment';
 import * as Keycloak from 'keycloak-js';
-import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
+//import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 
 

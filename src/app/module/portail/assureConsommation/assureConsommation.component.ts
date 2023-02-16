@@ -31,6 +31,7 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { DepenseFamille } from 'src/app/store/portail/recapitulatif/model';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -89,6 +90,8 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   selectedGarants: Array<Recapitulatif>;
   prestationDetail: DepenseFamille;
   displaySinistreDetail= false;
+  name = '';
+  role = '';
 
 
   
@@ -109,7 +112,17 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
               private recaptulatifService: RecapitulatifService,
-              private portailService: PortailService) {
+              private portailService: PortailService,
+              private keycloak: KeycloakService) {
+
+              this.breadcrumbService.setItems([{ label: 'Validation des ordres de paiement' }]);
+              console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
+                this.keycloak.loadUserProfile().then(profile => {
+                  this.name = profile.firstName + ' ' + profile.lastName;
+                  if (profile['attributes'].role.length != 0){
+                  this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+                  }
+                })
 
       this.depenseFamilleForm = this.formBuilder.group({
         dateFin: new FormControl('', [Validators.required]),
