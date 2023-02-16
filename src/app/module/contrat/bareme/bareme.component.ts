@@ -380,10 +380,17 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
+    console.log("=======================vrai====");
     
     for ( let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+      this.countfamilleActe++;
       /** verifier si la garantie existe deja, juste le modifier */
-      if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id) {
+      if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id && 
+        this.plafondFamilleActeConstruct[i].domaine === rowData.domaine) {
+        console.log("=======================vrai====");
+        console.log(this.plafondFamilleActeConstruct[i].domaine);
+        console.log(rowData.domaine);
+        console.log("=======================vrai====");
         console.log('oui');
         this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
         this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
@@ -399,7 +406,8 @@ export class BaremeComponent implements OnInit, OnDestroy {
   
     /** si la garantie n'est pas encore ajouté, ajouter */
     this.plafondFamilleActeConstruct.forEach( async (element, index) => {
-    if (element.garantie.id === rowData.garantie.id) {
+    if (element.garantie.id === rowData.garantie.id && 
+      element.domaine === rowData.domaine) {
     console.log('oui');
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];

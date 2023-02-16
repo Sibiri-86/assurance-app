@@ -319,7 +319,7 @@ export class AvenantRetraitComponent implements OnInit {
 
   compareDate(): void {
     if (this.myForm.get('dateAvenant').value !== null) {
-      this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.exercice.debut).subscribe(
+      this.historiqueAvenantService.compareDate(this.myForm.get('dateAvenant').value, this.curentExercice.debut).subscribe(
           (res) => {
             if (res) {
               this.addMessage('error', 'Date d\'effet invalide',
