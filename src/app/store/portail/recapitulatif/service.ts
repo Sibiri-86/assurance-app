@@ -42,6 +42,23 @@ fetchfactureInitieByMatricule$(numero: string): Observable<any> {
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/suivi-facture`, numero);
 }
 
+fetchFactureEnCoursByMatriculeAndOrdreEnCours$(numero: string): Observable<any> {
+    // @FIXME: post request+
+    console.log('========Recapitulatif=========>', numero);
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/suivi-facture-en-cours`, numero);
+}
+
+fetchFactureEnCoursByMatriculeAndOrdreValid$(numero: string): Observable<any> {
+    // @FIXME: post request+
+    console.log('========Recapitulatif=========>', numero);
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/suivi-facture-valid`, numero);
+}
+
+fetchFactureEnCoursByMatriculeAndOrdreValidAndPaiementValid$(numero: string): Observable<any> {
+    // @FIXME: post request+
+    console.log('========Recapitulatif=========>', numero);
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/suivi-facture-valid-paiement-valid`, numero);
+}
 
 
 }

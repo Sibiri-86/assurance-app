@@ -137,7 +137,7 @@
                        <ng-template pTemplate="right">
                     </ng-template>
                    </p-toolbar>
-                   <p-table #dt [value]="rembourssements" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                   <p-table #dt [value]="rembourssementEnCours" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                             [rowHover]="true" dataKey="id"
                             styleClass="p-datatable-customers"
                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -151,36 +151,36 @@
                            </div>
                        </ng-template>
                        <ng-template pTemplate="header">
-                           <tr>
-                               
-                               <th pSortableColumn="numero" >Date de Saisie<p-sortIcon field="numero"></p-sortIcon></th>
-                               <th pSortableColumn="etat" >Assuré(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                               <th pSortableColumn="etat" >Date de Naissance<p-sortIcon field="etat"></p-sortIcon></th>
-                               <th pSortableColumn="nom" >Qualité Assuré(e)<p-sortIcon field="nom"></p-sortIcon></th>
-                               <th pSortableColumn="numero" >Numéro Sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                               <th pSortableColumn="numero" >Type Paiement<p-sortIcon field="numero"></p-sortIcon></th>
-                               <th ></th>
-                           </tr>
-                       </ng-template>
-                       <ng-template pTemplate="body" let-ordre>
-                           <tr>
-                               
-                               <td><span class="p-column-title" >{{ordre?.dateSaisie  | formatTableValue : 'date'}}</span></td>
-                               <td><span class="p-column-title" >{{ordre?.adherent?.nom}} {{ordre?.adherent?.prenom}}</span></td>
-                               <td><span class="p-column-title" >{{ordre?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
-                               <td><span class="p-column-title" >{{ordre?.adherent?.qualiteAssure?.code}}</span>
-                               </td>
-                               <td><span class="p-column-title" >{{ordre.numeroSinistre}}</span></td>
-                               <td><span class="p-column-title" >{{ordre.typePaiement}}</span></td>
-                               <td >
-                               <button pButton  pRipple icon="pi pi-eye" pTooltip="voir les prestations" class="p-button-rounded p-button-warning p-mr-2" (click)="voirSinistre(ordre)"></button>
-                               </td>
-                               
-                           </tr>
-                       </ng-template>
+                        <tr>
+                            
+                            <th pSortableColumn="numero" >Date de Saisie<p-sortIcon field="numero"></p-sortIcon></th>
+                            <th pSortableColumn="numero" >Numéro Facture<p-sortIcon field="numero"></p-sortIcon></th>
+                            <th pSortableColumn="numero" >Numéro Sinistre<p-sortIcon field="numero"></p-sortIcon></th>
+                            <th pSortableColumn="etat" >Prestataire<p-sortIcon field="etat"></p-sortIcon></th>
+                            <th pSortableColumn="etat" >Montant Réclamé<p-sortIcon field="etat"></p-sortIcon></th>
+                            <th pSortableColumn="etat" >Montant Payé<p-sortIcon field="etat"></p-sortIcon></th>
+                            <th ></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-ordre>
+                        <tr>
+                            
+                            <td><span class="p-column-title" >{{ordre?.dateSaisie  | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >{{ordre.numeroFacture}}</span></td>
+                            <td><span class="p-column-title" >{{ordre.numeroSinistre}}</span></td>
+                            <td><span class="p-column-title" >{{ordre?.prestataire?.libelle}}</span></td>
+                            <td><span class="p-column-title" >{{ordre?.montantReclame | formatTableValue : 'number'}}</span></td>
+                            <td><span class="p-column-title" >{{ordre?.montantPaye | formatTableValue : 'number'}}</span>
+                            </td>
+                            <td >
+                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir les prestations" class="p-button-rounded p-button-warning p-mr-2" (click)="voirSinistre(ordre)"></button>
+                            </td>
+                            
+                        </tr>
+                    </ng-template>
                        <ng-template pTemplate="summary">
                            <div class="p-d-flex p-ai-center p-jc-between">
-                               {{rembourssements ? rembourssements.length : 0 }} Facture(s) initié(s).
+                               {{rembourssementEnCours ? rembourssementEnCours.length : 0 }} Facture(s) en cours de traitement.
                            </div>
                        </ng-template>
                    </p-table>
@@ -279,11 +279,11 @@
                                 <tr>
                                     
                                     <th pSortableColumn="numero" >Date de Saisie<p-sortIcon field="numero"></p-sortIcon></th>
-                                    <th pSortableColumn="etat" >Assuré(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                    <th pSortableColumn="etat" >Date de Naissance<p-sortIcon field="etat"></p-sortIcon></th>
-                                    <th pSortableColumn="nom" >Qualité Assuré(e)<p-sortIcon field="nom"></p-sortIcon></th>
+                                    <th pSortableColumn="numero" >Numéro Facture<p-sortIcon field="numero"></p-sortIcon></th>
                                     <th pSortableColumn="numero" >Numéro Sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                                    <th pSortableColumn="numero" >Type Paiement<p-sortIcon field="numero"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Prestataire<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Montant Réclamé<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Montant Payé<p-sortIcon field="etat"></p-sortIcon></th>
                                     <th ></th>
                                 </tr>
                             </ng-template>
@@ -291,12 +291,12 @@
                                 <tr>
                                     
                                     <td><span class="p-column-title" >{{ordre?.dateSaisie  | formatTableValue : 'date'}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.nom}} {{ordre?.adherent?.prenom}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.qualiteAssure?.code}}</span>
-                                    </td>
+                                    <td><span class="p-column-title" >{{ordre.numeroFacture}}</span></td>
                                     <td><span class="p-column-title" >{{ordre.numeroSinistre}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre.typePaiement}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.prestataire?.libelle}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.montantReclame | formatTableValue : 'number'}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.montantPaye | formatTableValue : 'number'}}</span>
+                                    </td>
                                     <td >
                                     <button pButton  pRipple icon="pi pi-eye" pTooltip="voir les prestations" class="p-button-rounded p-button-warning p-mr-2" (click)="voirSinistre(ordre)"></button>
                                     </td>
@@ -404,11 +404,11 @@
                                 <tr>
                                     
                                     <th pSortableColumn="numero" >Date de Saisie<p-sortIcon field="numero"></p-sortIcon></th>
-                                    <th pSortableColumn="etat" >Assuré(e)<p-sortIcon field="etat"></p-sortIcon></th>
-                                    <th pSortableColumn="etat" >Date de Naissance<p-sortIcon field="etat"></p-sortIcon></th>
-                                    <th pSortableColumn="nom" >Qualité Assuré(e)<p-sortIcon field="nom"></p-sortIcon></th>
+                                    <th pSortableColumn="numero" >Numéro Facture<p-sortIcon field="numero"></p-sortIcon></th>
                                     <th pSortableColumn="numero" >Numéro Sinistre<p-sortIcon field="numero"></p-sortIcon></th>
-                                    <th pSortableColumn="numero" >Type Paiement<p-sortIcon field="numero"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Prestataire<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Montant Réclamé<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="etat" >Montant Payé<p-sortIcon field="etat"></p-sortIcon></th>
                                     <th ></th>
                                 </tr>
                             </ng-template>
@@ -416,12 +416,12 @@
                                 <tr>
                                     
                                     <td><span class="p-column-title" >{{ordre?.dateSaisie  | formatTableValue : 'date'}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.nom}} {{ordre?.adherent?.prenom}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre?.adherent?.qualiteAssure?.code}}</span>
-                                    </td>
+                                    <td><span class="p-column-title" >{{ordre.numeroFacture}}</span></td>
                                     <td><span class="p-column-title" >{{ordre.numeroSinistre}}</span></td>
-                                    <td><span class="p-column-title" >{{ordre.typePaiement}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.prestataire?.libelle}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.montantReclame | formatTableValue : 'number'}}</span></td>
+                                    <td><span class="p-column-title" >{{ordre?.montantPaye | formatTableValue : 'number'}}</span>
+                                    </td>
                                     <td >
                                     <button pButton  pRipple icon="pi pi-eye" pTooltip="voir les prestations" class="p-button-rounded p-button-warning p-mr-2" (click)="voirSinistre(ordre)"></button>
                                     </td>

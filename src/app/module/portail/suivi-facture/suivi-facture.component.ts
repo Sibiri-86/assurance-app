@@ -96,8 +96,9 @@ export class SuiviFactureComponent implements OnInit {
   role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
   role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
   rembourssements: Array<SinistreTierPayant>;
-  rembourssementValid: Array<Prefinancement>;
-  rembourssementValidAndPaiementValid: Array<Prefinancement>;
+  rembourssementValid: Array<SinistreTierPayant>;
+  rembourssementEnCours: Array<SinistreTierPayant>;
+  rembourssementValidAndPaiementValid: Array<SinistreTierPayant>;
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
@@ -314,10 +315,14 @@ export class SuiviFactureComponent implements OnInit {
         break;
       }
       case 1: {
-        this.loadRembourssementValid();
+        this.loadRembourssementEnCours();
         break;
       }
       case 2: {
+        this.loadRembourssementOrdreValid();
+        break;
+      }
+      case 3: {
         this.loadRembourssementValidAndPaiementValid();
         break;
       }
@@ -336,7 +341,8 @@ export class SuiviFactureComponent implements OnInit {
   loadRembourssements(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-    this.portailService.fetchfactureInitieByMatricule$("PHJAB").subscribe(
+      /* "PHJAB" */
+    this.portailService.fetchfactureInitieByMatricule$(profile.username).subscribe(
       (res) => {
           console.log('..............rembourssements..............   ', res);
           this.rembourssements = res;
@@ -346,10 +352,23 @@ export class SuiviFactureComponent implements OnInit {
     
   }
 
-  loadRembourssementValid(){
+  loadRembourssementEnCours(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValid$(parseInt(profile.username)).subscribe(
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreEnCours$(profile.username).subscribe(
+        (res) => {
+            console.log('..............rembourssementEnCours..............   ', res);
+            this.rembourssementEnCours = res;
+        }
+    );
+    })
+    
+  }
+
+  loadRembourssementOrdreValid(){
+    this.keycloak.loadUserProfile().then(profile => {
+      this.name = profile.firstName + ' ' + profile.lastName;
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValid$(profile.username).subscribe(
         (res) => {
             console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValid = res;
@@ -362,9 +381,9 @@ export class SuiviFactureComponent implements OnInit {
   loadRembourssementValidAndPaiementValid(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValidAndPaiementValid$(parseInt(profile.username)).subscribe(
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValidAndPaiementValid$(profile.username).subscribe(
         (res) => {
-            console.log('..............rembourssementValid..............   ', res);
+            console.log('..............rembourssementValidAndPaiementValid..............   ', res);
             this.rembourssementValidAndPaiementValid = res;
         }
     );
