@@ -40,7 +40,10 @@ export const Function = {
     sm_workflow_prefinancement_prestation_devalider: 'sm_workflow_prefinancement_prestation_devalider',
     sm_workflow_prefinancement_Medical_devalider: 'sm_workflow_prefinancement_Medical_devalider',
     sm_workflow_prefinancement_finance_devalider: 'sm_workflow_prefinancement_finance_devalider',
-    sm_workflow_prefinancement_direction_devalider: 'sm_workflow_prefinancement_direction_devalider'
+    sm_workflow_prefinancement_direction_devalider: 'sm_workflow_prefinancement_direction_devalider',
+    VUE_ASSURE: 'VUE_ASSURE',
+    VUE_PRESTATAIRE: 'VUE_PRESTATAIRE',
+    sm_portail: 'sm_portail'
 };
 
 export const UsersRoles = {
@@ -55,5 +58,6 @@ export const UsersRoles = {
     Function.sm_workflow, Function.sm_workflow_prefinancement, Function.sm_workflow_prefinancement_prestation, Function.sm_workflow_prefinancement_Medical, 
     Function.sm_workflow_prefinancement_finance, Function.sm_workflow_prefinancement_direction, Function.sm_workflow_prefinancement_prestation_valider, Function.sm_workflow_prefinancement_Medical_valider, 
     Function.sm_workflow_prefinancement_finance_valider, Function.sm_workflow_prefinancement_direction_valider, Function.sm_workflow_prefinancement_prestation_devalider, Function.sm_workflow_prefinancement_Medical_devalider, 
-    Function.sm_workflow_prefinancement_finance_devalider, Function.sm_workflow_prefinancement_direction_devalider]
+    Function.sm_workflow_prefinancement_finance_devalider, Function.sm_workflow_prefinancement_direction_devalider, 
+    Function.VUE_ASSURE, Function.sm_portail]
 };

@@ -314,6 +314,8 @@ import { AssureConsommationComponent } from './module/portail/assureConsommation
 import { LoginComponent } from './login.component';
 import { RegisterChooseComponent } from './module/portail/registerChoose/registerChoose.component';
 import { RegisterComponent } from './module/portail/register/register.component';
+import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
+import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
 
 @NgModule({
     imports: [
@@ -571,7 +573,9 @@ import { RegisterComponent } from './module/portail/register/register.component'
         AssureConsommationComponent,
         LoginComponent,
         RegisterChooseComponent,
-        RegisterComponent
+        RegisterComponent,
+        SuiviRembourssementComponent,
+        SuiviFactureComponent
 
     ],
     providers: [

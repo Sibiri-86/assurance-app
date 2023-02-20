@@ -116,12 +116,28 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private keycloak: KeycloakService) {
 
               this.breadcrumbService.setItems([{ label: 'Validation des ordres de paiement' }]);
-              console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
+              console.log('les roles du user est dans le workflow '+ this.keycloak.getUserRoles());
                 this.keycloak.loadUserProfile().then(profile => {
                   this.name = profile.firstName + ' ' + profile.lastName;
+                  console.log('le nom '+ this.name);
+                  console.log('le username '+ profile.username);
+                  
+                  /* Recuperation des consommations de l'assuré connecté */
+                  this.depenseFamille = {};
+                  this.depenseFamille.adherentId = parseInt(profile.username);
+                  this.depenseFamille.dateDebut = this.depenseFamilleForm.get('dateDebut').value;
+                  this.depenseFamille.dateFin = this.depenseFamilleForm.get('dateFin').value;
+                  console.log('this.depenseFamille=============>', this.depenseFamille);
+                  this.portailService.fetchDepenseFamille$(this.depenseFamille).subscribe(
+                    (res) => {
+                        console.log('..............RES..............   ', res);
+                        this.depenseFamilles = res;
+                    }
+                );
+
                   if (profile['attributes'].role.length != 0){
                   this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
-                  }
+                }
                 })
 
       this.depenseFamilleForm = this.formBuilder.group({
@@ -136,7 +152,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
     }
 
 ngOnInit(): void {
-  this.loadData();
+  // this.loadData();
   this.compteList = [];
   // this.loading = true;
 

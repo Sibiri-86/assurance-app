@@ -208,12 +208,14 @@ export class AppMenuComponent implements OnInit {
 
             {
                 label: 'Portail', icon: 'pi pi-fw pi-compass', routerLink: ['/portail'],
-                visible: true,
+                visible: this.keycloak.isUserInRole(Function.sm_portail),
                 items: [
-                    {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: true},
-                    {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
+                    {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
+                    {label: 'Suivi Remb.', icon: '', routerLink: ['/portail/suivi-rembourssement'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
+                    {label: 'Suivi Facture', icon: '', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)}
+                    /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
-                    {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true},
+                    {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */
                 ]
             },
             /*
