@@ -104,6 +104,8 @@ import { RegisterChooseComponent } from './module/portail/registerChoose/registe
 import { RegisterComponent } from './module/portail/register/register.component';
 import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
+import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-exclu.component';
+import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
 
 @NgModule({
     imports: [
@@ -223,7 +225,9 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
                     {path: 'portail/registerChoose', component: RegisterChooseComponent},
                     {path: 'portail/register', component: RegisterComponent},
                     {path: 'portail/suivi-rembourssement', component: SuiviRembourssementComponent},
-                    {path: 'portail/suivi-facture', component: SuiviFactureComponent}
+                    {path: 'portail/suivi-facture', component: SuiviFactureComponent},
+                    {path: 'portail/produit-exclu', component: ProduitExcluComponent},
+                    {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent}
                     
                     
                     

@@ -111,6 +111,8 @@ import { compteList } from 'src/app/store/comptabilite/compte/selector';
 import * as compteActions from '../../store/comptabilite/compte/actions';
 import { alerteList } from 'src/app/store/parametrage/Alerte/selector';
 import * as alerteActions from '../../store/parametrage/Alerte/actions';
+import * as produitPharmaceutiqueExcluActions from '../../store/parametrage/produit-pharmaceutique-exclu/actions';
+import {produitPharmaceutiqueExcluList} from 'src/app/store/parametrage/produit-pharmaceutique-exclu/selector';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -143,7 +145,8 @@ export const DATA_TYPE = [
   {label: 'Nature prestataire', value: 'NaturePrestataire'},
   {label: 'Medecin', value: 'Medecin'},
   {label: 'Qualité medecin', value: 'QualiteMedecin'},
-  {label: 'Produit pharmaceutiques', value: 'ProduitPharmaceutique'},
+  {label: 'Produits pharmaceutiques', value: 'ProduitPharmaceutique'},
+  {label: 'Produits pharmaceutiques exclus', value: 'ProduitPharmaceutiqueExclu'},
   {label: 'Pathologie', value: 'Pathologie'},
   {label: 'Type Avenant', value: 'TypeAvenant'},
   {label: 'Type Affaire', value: 'TypeAffaire'},
@@ -1629,6 +1632,62 @@ export const DATA_DEFINITION = [
       updateAction: produitPharmaceutiqueActions.updateProduitPharmaceutique,
       deleteAction: produitPharmaceutiqueActions.deleteProduitPharmaceutique,
       importAction: produitPharmaceutiqueActions.importProduitPharmaceutique
+    }
+  },
+  {
+    entity: 'ProduitPharmaceutiqueExclu',
+    cols: [
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'typeProduit', header: 'Type de Produit', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'isExclu', header: 'Exclusion', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: produitPharmaceutiqueExcluList,
+      fetchAction: produitPharmaceutiqueExcluActions.loadProduitPharmaceutiqueExclu(),
+      createAction: produitPharmaceutiqueExcluActions.createProduitPharmaceutiqueExclu,
+      updateAction: produitPharmaceutiqueExcluActions.updateProduitPharmaceutiqueExclu,
+      deleteAction: produitPharmaceutiqueExcluActions.deleteProduitPharmaceutiqueExclu,
+      importAction: produitPharmaceutiqueExcluActions.importProduitPharmaceutiqueExclu
     }
   },
   {

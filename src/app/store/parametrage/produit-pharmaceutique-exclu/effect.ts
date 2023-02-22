@@ -2,29 +2,29 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
-import { ProduitPharmaceutiqueService } from './service';
+import { ProduitPharmaceutiqueExcluService } from './service';
 import * as featureActions from './actions';
-import {ProduitPharmaceutique} from './model';
-import {GlobalConfig} from '../../../../app/config/global.config';
+import {ProduitPharmaceutiqueExclu} from './model';
+import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
 @Injectable()
-export class ProduitPharmaceutiqueEffects {
+export class ProduitPharmaceutiqueExcluEffects {
     private successMsg = 'Opération reussie !';
     constructor(
         private actions$: Actions,
-        private ProduitPharmaceutiqueService: ProduitPharmaceutiqueService
+        private ProduitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService
     ) {
     }
 
     createProduitPharmaceutique$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.createProduitPharmaceutique),
-        mergeMap((ProduitPharmaceutique: ProduitPharmaceutique) =>
-            this.ProduitPharmaceutiqueService.posProduitPharmaceutique(ProduitPharmaceutique).pipe(
+        ofType(featureActions.createProduitPharmaceutiqueExclu),
+        mergeMap((ProduitPharmaceutique: ProduitPharmaceutiqueExclu) =>
+            this.ProduitPharmaceutiqueExcluService.posProduitPharmaceutiqueExclu(ProduitPharmaceutique).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadProduitPharmaceutique()
+                    featureActions.loadProduitPharmaceutiqueExclu()
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -33,12 +33,12 @@ export class ProduitPharmaceutiqueEffects {
 
      updateProduitPharmaceutique$ = createEffect(() =>
         this.actions$.pipe(
-            ofType(featureActions.updateProduitPharmaceutique),
-            mergeMap((ProduitPharmaceutique: ProduitPharmaceutique) =>
-                this.ProduitPharmaceutiqueService.updateProduitPharmaceutique(ProduitPharmaceutique).pipe(
+            ofType(featureActions.updateProduitPharmaceutiqueExclu),
+            mergeMap((ProduitPharmaceutique: ProduitPharmaceutiqueExclu) =>
+                this.ProduitPharmaceutiqueExcluService.updateProduitPharmaceutiqueExclu(ProduitPharmaceutique).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadProduitPharmaceutique()
+                        featureActions.loadProduitPharmaceutiqueExclu()
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -47,12 +47,12 @@ export class ProduitPharmaceutiqueEffects {
 
             deleteProduitPharmaceutique$ = createEffect(() =>
             this.actions$.pipe(
-                ofType(featureActions.deleteProduitPharmaceutique),
-                mergeMap((ProduitPharmaceutique: ProduitPharmaceutique) =>
-                    this.ProduitPharmaceutiqueService.deleteProduitPharmaceutique(ProduitPharmaceutique).pipe(
+                ofType(featureActions.deleteProduitPharmaceutiqueExclu),
+                mergeMap((ProduitPharmaceutique: ProduitPharmaceutiqueExclu) =>
+                    this.ProduitPharmaceutiqueExcluService.deleteProduitPharmaceutiqueExclu(ProduitPharmaceutique).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.loadProduitPharmaceutique()
+                            featureActions.loadProduitPharmaceutiqueExclu()
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -61,12 +61,12 @@ export class ProduitPharmaceutiqueEffects {
 
     fetchProduitPharmaceutique$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadProduitPharmaceutique),
+        ofType(featureActions.loadProduitPharmaceutiqueExclu),
         mergeMap(() =>
-            this.ProduitPharmaceutiqueService.$getProduitPharmaceutiques().pipe(
+            this.ProduitPharmaceutiqueExcluService.$getProduitPharmaceutiquesExclu().pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.setProduitPharmaceutique(value)
+                    featureActions.setProduitPharmaceutiqueExclu(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             )
@@ -77,12 +77,12 @@ export class ProduitPharmaceutiqueEffects {
     
 import$ = createEffect(() =>
 this.actions$.pipe(
-    ofType(featureActions.importProduitPharmaceutique),
+    ofType(featureActions.importProduitPharmaceutiqueExclu),
     mergeMap(({file}) =>
-        this.ProduitPharmaceutiqueService.pushFileToStorage(file).pipe(
+        this.ProduitPharmaceutiqueExcluService.pushFileToStorage(file).pipe(
             switchMap(value => [
                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                featureActions.loadProduitPharmaceutique()
+                featureActions.loadProduitPharmaceutiqueExclu()
             ]),
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )

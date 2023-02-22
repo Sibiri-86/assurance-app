@@ -461,4 +461,9 @@ export class Endpoints {
             mock: `assets/mock/keycloak/user.mock.json`
         }; 
 
+        static readonly PARAMETRAGE_TYPE_PRODUIT_PHARMACEUTIQUE_EXCLU = {
+            prod: `${SERVICE_PREFIX}/parametrage/produitPharmaceutiqueExclu`,
+            mock: `assets/mock/parametrage/typeProduitPharmaceutiqueExclu.mock.json`
+        };
+
 }

@@ -153,6 +153,9 @@ import * as statistiqueParTrancheAgeReducer from '../reporting/production/statis
 import * as facturePrestatairesState from '../reporting/prestation/facturePrestataires/reducer';
 import * as consommationParSexeState from '../reporting/medical/consommationParSexe/reducer';
 
+import * as produitPharmaceutiqueExcluState from '../parametrage/produit-pharmaceutique-exclu/state';
+import * as produitPharmaceutiqueExcluReducer from '../parametrage/produit-pharmaceutique-exclu/reducer';
+
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -221,7 +224,8 @@ export const reducers: ActionReducerMap<AppState> = {
     repartitionDepenseStatutState: repartitionDepenseStatutReducer.reducer,
     statistiqueTrancheAgeState: statistiqueParTrancheAgeReducer.reducer,
     facturePrestatairesState: facturePrestatairesState.reducer,
-    consommationParSexeState: consommationParSexeState.reducer
+    consommationParSexeState: consommationParSexeState.reducer,
+    produitPharmaceutiqueExcluState: produitPharmaceutiqueExcluReducer.reducer,
 
 
 };
