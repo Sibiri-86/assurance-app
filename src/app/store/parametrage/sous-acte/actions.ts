@@ -1,8 +1,12 @@
 import {props, createAction} from '@ngrx/store';
 import { SousActe, SousActeList } from './model';
 export const createSousActe = createAction('[App Init] Create SousActe', props<SousActe>());
+export const deleteEntente = createAction('[App Init] Create delete entente', props<SousActe>());
+export const createEntente = createAction('[App Init] Create entente', props<SousActeList>());
 export const updateSousActe = createAction('[App Init] update SousActe', props<SousActe>());
 export const deleteSousActe = createAction('[App Init] delete SousActe', props<SousActe>());
 export const loadSousActe = createAction('[App Init] load SousActe');
+export const loadEntente = createAction('[App Init] load Entente');
+export const loadEntenteExclu = createAction('[App Init] load Entente exclus');
 export const setSousActe = createAction('[App Init] set SousActe',  props<SousActeList>());
 export const importSousActe = createAction('[App Init] import SousActe',  props<{file: File}>());

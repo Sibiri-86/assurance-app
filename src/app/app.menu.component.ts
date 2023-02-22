@@ -87,6 +87,8 @@ export class AppMenuComponent implements OnInit {
                     {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
                     {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
                     {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
+                    {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: true},
+
                 ]
             },
 
@@ -212,7 +214,10 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Assuré Consom.', icon: '', routerLink: ['/portail/assureConsommation'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
                     {label: 'Suivi Remb.', icon: '', routerLink: ['/portail/suivi-rembourssement'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
-                    {label: 'Suivi Facture', icon: '', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)}
+                    {label: 'Suivi Facture', icon: '', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
+                    {label: 'Entente', icon: '', routerLink: ['/portail/entente'], visible: true},
+                    
+
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
                     {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */

@@ -316,6 +316,9 @@ import { RegisterChooseComponent } from './module/portail/registerChoose/registe
 import { RegisterComponent } from './module/portail/register/register.component';
 import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
+import { EntenteComponent } from './module/portail/entente/entente.component';
+import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
+import { QuartierEffects } from './store/parametrage/quartier/effect';
 
 @NgModule({
     imports: [
@@ -426,7 +429,7 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, QuartierEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -575,7 +578,9 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
         RegisterChooseComponent,
         RegisterComponent,
         SuiviRembourssementComponent,
-        SuiviFactureComponent
+        SuiviFactureComponent,
+        EntenteComponent,
+        EntenteBonComponent,
 
     ],
     providers: [

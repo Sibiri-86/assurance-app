@@ -1,0 +1,118 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<!-- <button pButton pRipple label="Entente" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+                            (click)="creerEntente()" ></button> -->
+				</ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            <p-table #dt [value]="sousActeList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
+                    >
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        
+                        <th pSortableColumn="code">Code<p-sortIcon field="duree"></p-sortIcon></th>
+                       
+                        <th pSortableColumn="libelle">Libelle<p-sortIcon field="libelle"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-sousActe>
+                    <tr [pSelectableRow]="sousActe">
+                        
+                        <td> <span class="p-column-title" style="font-weight: bold;" >{{sousActe.code}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{sousActe.libelle}}</span>
+                        </td>
+                        
+
+                        
+                       
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{sousActeList ? sousActeList.length : 0 }} sousActe(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        
+        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Entente" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <form>
+                    <p-table #dt [value]="sousActeFinalList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectsousActe"
+                    >
+                    <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="code" >Code<p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="libelle" >Libelle<p-sortIcon field="libelle"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-sous>
+                    <tr>
+
+                        <tr [pSelectableRow]="sous">
+                            <td>
+                        <td><span class="p-column-title">{{sous.code}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{sous.libelle}}</span>
+                        </td>
+                       
+                       
+                        <td style="text-align:center">    
+                            </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{sousActeFinalList ? sousActeFinalList.length : 0 }} sousActe(s).
+                    </div>
+                </ng-template>
+            </p-table>
+             <div>
+             </div>
+                <div class="p-grid p-justify-between">
+                    <div>
+                    </div>
+                    <div>
+                        <button pButton pRipple [disabled]="!selectsousActe.length"   (click)="enregistre()"  label="Ajouter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                    </div>
+                </div>
+                </form>
+            </div>
+            </ng-template>
+        </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

@@ -24,6 +24,32 @@ posSousActe(sousacte: SousActe): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}`, sousacte);
   }
 
+  createEntente(sousactes: SousActeList): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}/entente`, sousactes.typeSousActeDtoList);
+  }
+
+  deleteEntente(sousacte: SousActe): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}/entente-delete`, sousacte);
+  }
+
+  $getEntente(): Observable<SousActeList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}/entente`).pipe(
+      map((response: SousActeList) => response),
+      catchError(this.handleError())
+    );
+  }
+
+  $getEntenteExclus(): Observable<SousActeList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}/entente-exclus`).pipe(
+      map((response: SousActeList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 updateSousActe(sousacte: SousActe): Observable<any> {
     // @FIXME: post request
     return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_TYPE_SOUSACTE)}/${sousacte.id}`, sousacte);

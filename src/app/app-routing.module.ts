@@ -104,6 +104,8 @@ import { RegisterChooseComponent } from './module/portail/registerChoose/registe
 import { RegisterComponent } from './module/portail/register/register.component';
 import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
+import { EntenteComponent } from './module/portail/entente/entente.component';
+import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 
 @NgModule({
     imports: [
@@ -223,7 +225,9 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
                     {path: 'portail/registerChoose', component: RegisterChooseComponent},
                     {path: 'portail/register', component: RegisterComponent},
                     {path: 'portail/suivi-rembourssement', component: SuiviRembourssementComponent},
-                    {path: 'portail/suivi-facture', component: SuiviFactureComponent}
+                    {path: 'portail/suivi-facture', component: SuiviFactureComponent},
+                    {path: 'portail/entente', component: EntenteComponent},
+                    {path: 'medical/entente-bon', component: EntenteBonComponent}
                     
                     
                     

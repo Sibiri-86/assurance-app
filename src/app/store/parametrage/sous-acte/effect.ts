@@ -4,7 +4,7 @@ import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import { SousActeService } from './service';
 import * as featureActions from './actions';
-import {SousActe} from './model';
+import {SousActe, SousActeList} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
@@ -31,6 +31,31 @@ export class SousActeEffects {
             ))
         ));
 
+    createEntente$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createEntente),
+        mergeMap((sousActes: SousActeList) =>
+            this.sousActeService.createEntente(sousActes).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadEntente()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        )); 
+
+        deleteEntente$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteEntente),
+            mergeMap((sousActe: SousActe) =>
+                this.sousActeService.deleteEntente(sousActe).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadEntente()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            )); 
      updateSousActe$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.updateSousActe),
@@ -66,6 +91,34 @@ export class SousActeEffects {
             this.sousActeService.$getSousActes().pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setSousActe(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
+    fetchEntente$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadEntente),
+        mergeMap(() =>
+            this.sousActeService.$getEntente().pipe(
+                switchMap(value => [
+                    featureActions.setSousActe(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
+    fetchEntenteExclu$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadEntenteExclu),
+        mergeMap(() =>
+            this.sousActeService.$getEntenteExclus().pipe(
+                switchMap(value => [
                     featureActions.setSousActe(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

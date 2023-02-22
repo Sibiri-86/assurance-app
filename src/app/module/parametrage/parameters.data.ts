@@ -5,6 +5,7 @@ import {acteList} from '../../store/parametrage/acte/selector';
 import {sousacteList} from '../../store/parametrage/sous-acte/selector';
 import {secteurActiviteList} from '../../store/parametrage/secteur-activite/selector';
 import * as garantieActions from '../../store/parametrage/garantie/actions';
+import * as quartierActions from '../../store/parametrage/quartier/actions';
 import * as secteurActiviteActions from '../../store/parametrage/secteur-activite/actions';
 import * as categorieSocioProfessionnelActions from '../../store/parametrage/categorie-socio-professionnel/actions';
 import { categorieSocioProfessionnelList } from 'src/app/store/parametrage/categorie-socio-professionnel/selector';
@@ -111,6 +112,7 @@ import { compteList } from 'src/app/store/comptabilite/compte/selector';
 import * as compteActions from '../../store/comptabilite/compte/actions';
 import { alerteList } from 'src/app/store/parametrage/Alerte/selector';
 import * as alerteActions from '../../store/parametrage/Alerte/actions';
+import { quartierDtoList } from 'src/app/store/parametrage/quartier/selector';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -151,7 +153,8 @@ export const DATA_TYPE = [
   {label: 'Mode de paiement', value: 'ModePaiement'},
   {label: 'type de journal', value: 'TypeJournaux'},
   {label: 'Type intermediaire', value: 'TypeIntermediaire'},
-  {label: 'Compte', value: 'Compte'}
+  {label: 'Compte', value: 'Compte'},
+  {label: 'Quartier', value: 'Quartier'},
 ];
 
 const dropdownEntriesObj: Array<SelectItem> = [
@@ -210,6 +213,57 @@ export const DATA_DEFINITION = [
       importAction: garantieActions.importGarantie
     }
   },
+
+
+  {
+    entity: 'Quartier',
+    cols: [
+      {
+        field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'libelle',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'description',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: quartierDtoList,
+      fetchAction: quartierActions.loadQuartier(),
+      createAction: quartierActions.createQuartier,
+      updateAction: quartierActions.updateQuartier,
+      deleteAction: quartierActions.deleteQuartier,
+      importAction: quartierActions.importQuartier
+    }
+  },
+
   {
     entity: 'TypeIntermediaire',
     cols: [

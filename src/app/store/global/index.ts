@@ -152,6 +152,7 @@ import * as repartitionDepenseStatutReducer from '../reporting/production/repart
 import * as statistiqueParTrancheAgeReducer from '../reporting/production/statistiqueParTrancheAge/reducer';
 import * as facturePrestatairesState from '../reporting/prestation/facturePrestataires/reducer';
 import * as consommationParSexeState from '../reporting/medical/consommationParSexe/reducer';
+import * as quartierReducer from '../parametrage/quartier/reducer';
 
 
 
@@ -221,7 +222,8 @@ export const reducers: ActionReducerMap<AppState> = {
     repartitionDepenseStatutState: repartitionDepenseStatutReducer.reducer,
     statistiqueTrancheAgeState: statistiqueParTrancheAgeReducer.reducer,
     facturePrestatairesState: facturePrestatairesState.reducer,
-    consommationParSexeState: consommationParSexeState.reducer
+    consommationParSexeState: consommationParSexeState.reducer,
+    quartierState: quartierReducer.reducer,
 
 
 };
