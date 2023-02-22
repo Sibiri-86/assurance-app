@@ -68,6 +68,7 @@ import { FacturePrestatairesState } from './reporting/prestation/facturePrestata
 import { ConsommationParSexeState } from './reporting/medical/consommationParSexe/state';
 import { AlerteState } from './parametrage/Alerte/state';
 import { ProduitPharmaceutiqueExcluState } from './parametrage/produit-pharmaceutique-exclu/state';
+import { QuartierState } from './parametrage/quartier/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -137,5 +138,6 @@ export interface AppState {
   facturePrestatairesState: FacturePrestatairesState,
   consommationParSexeState: ConsommationParSexeState,
   produitPharmaceutiqueExcluState: ProduitPharmaceutiqueExcluState;
+  quartierState: QuartierState
 
 }

@@ -106,6 +106,8 @@ import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssem
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
 import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-exclu.component';
 import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
+import { EntenteComponent } from './module/portail/entente/entente.component';
+import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 
 @NgModule({
     imports: [
@@ -227,7 +229,9 @@ import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-upda
                     {path: 'portail/suivi-rembourssement', component: SuiviRembourssementComponent},
                     {path: 'portail/suivi-facture', component: SuiviFactureComponent},
                     {path: 'portail/produit-exclu', component: ProduitExcluComponent},
-                    {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent}
+                    {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent},
+                    {path: 'portail/entente', component: EntenteComponent},
+                    {path: 'medical/entente-bon', component: EntenteBonComponent}
                     
                     
                     

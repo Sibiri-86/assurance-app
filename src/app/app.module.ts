@@ -319,6 +319,9 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
 import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-exclu.component';
 import { ProduitPharmaceutiqueExcluEffects } from './store/parametrage/produit-pharmaceutique-exclu/effect';
 import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
+import { EntenteComponent } from './module/portail/entente/entente.component';
+import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
+import { QuartierEffects } from './store/parametrage/quartier/effect';
 
 @NgModule({
     imports: [
@@ -429,7 +432,7 @@ import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-upda
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -580,7 +583,9 @@ import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-upda
         SuiviRembourssementComponent,
         SuiviFactureComponent,
         ProduitExcluComponent,
-        ProduitExcluUpdateComponent
+        ProduitExcluUpdateComponent,
+        EntenteComponent,
+        EntenteBonComponent,
 
     ],
     providers: [

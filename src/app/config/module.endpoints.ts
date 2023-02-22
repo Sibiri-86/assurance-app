@@ -6,6 +6,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/parametrage/typeGarantie`,
         mock: `assets/mock/parametrage/typegarantie.mock.json`
     };
+    static readonly PARAMETRAGE_QUARTIER = {
+        prod: `${SERVICE_PREFIX}/parametrage/quartier`,
+        mock: `assets/mock/parametrage/quartier.mock.json`
+    };
     static readonly PARAMETRAGE_TYPE_ACTE = {
         prod: `${SERVICE_PREFIX}/parametrage/typeActe`,
         mock: `assets/mock/parametrage/typeActe.mock.json`
