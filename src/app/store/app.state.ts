@@ -68,6 +68,7 @@ import { FacturePrestatairesState } from './reporting/prestation/facturePrestata
 import { ConsommationParSexeState } from './reporting/medical/consommationParSexe/state';
 import { AlerteState } from './parametrage/Alerte/state';
 import { QuartierState } from './parametrage/quartier/state';
+import { QuartierPrestataireGarantState } from './parametrage/quartier-prestataire-garant/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -136,6 +137,7 @@ export interface AppState {
   statistiqueTrancheAgeState: StatistiqueTrancheAgeState,
   facturePrestatairesState: FacturePrestatairesState,
   consommationParSexeState: ConsommationParSexeState,
-  quartierState: QuartierState
+  quartierState: QuartierState,
+  quartierPrestataireGarantState: QuartierPrestataireGarantState,
 
 }

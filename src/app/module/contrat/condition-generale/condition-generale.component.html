@@ -1,0 +1,70 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                      <div class="p-mr-2 p-mb-2">
+                        <button pButton pRipple label="condition générale" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+                        (click)="creerEntente()" ></button>                  
+                      </div>
+                   
+                </ng-template>
+                
+               
+                
+            </p-toolbar>
+            
+            <span *ngFor="let condition of conditionGeneralesList">
+            <p-panel header={{condition.titre}} [toggleable]="true">
+                <ng-template pTemplate="icons">
+                        <button pButton class="p-panel-header-icon p-link" icon="pi pi-cog" (click)="menu.toggle($event); toggle(condition)">
+                        </button>
+                        <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+                </ng-template>
+                <p>{{condition.resume}}</p>
+            </p-panel>
+
+        </span>
+            
+        </div>
+        
+      
+
+      
+        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Ajouter une condition générale" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <form>
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col-12">
+                                <label for="titre" id="titre">Titre<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                <input id="titre" type="text"  name="titre" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="conditionGenerale.titre" placeholder="titre" pInputText>
+
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="garant" id="garant">Description<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                <textarea rows="5" cols="30"  name="resume" pInputTextarea [autoResize]="true" [(ngModel)]="conditionGenerale.resume"></textarea>
+                            </div>
+                        </div>
+
+                 
+             <div>
+             </div>
+                <div class="p-grid p-justify-between">
+                    <div>
+                    </div>
+                    <div>
+                        <button pButton pRipple  (click)="enregistre()"  label="Ajouter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                    </div>
+                </div>
+                </form>
+            </div>
+            </ng-template>
+        </p-dialog>
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

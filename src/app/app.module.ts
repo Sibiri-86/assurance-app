@@ -319,6 +319,11 @@ import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-fact
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 import { QuartierEffects } from './store/parametrage/quartier/effect';
+import { QuartierPrestataireGarantEffects } from './store/parametrage/quartier-prestataire-garant/effect';
+import { QuartierPrestataireGarantComponent } from './module/medical/prestataire-garant-quartier/prestataire-garant-quartier.component';
+import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
+import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
+import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
 
 @NgModule({
     imports: [
@@ -429,7 +434,7 @@ import { QuartierEffects } from './store/parametrage/quartier/effect';
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, QuartierEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, QuartierEffects, QuartierPrestataireGarantEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -581,6 +586,10 @@ import { QuartierEffects } from './store/parametrage/quartier/effect';
         SuiviFactureComponent,
         EntenteComponent,
         EntenteBonComponent,
+        QuartierPrestataireGarantComponent,
+        PrestataireCartographieQuartierComponent,
+        ConditionGeneraleComponent,
+        ConditionGeneraleParticuliereComponent,
 
     ],
     providers: [

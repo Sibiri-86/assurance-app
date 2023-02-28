@@ -106,6 +106,10 @@ import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssem
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
+import { QuartierPrestataireGarantComponent } from './module/medical/prestataire-garant-quartier/prestataire-garant-quartier.component';
+import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
+import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
+import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
 
 @NgModule({
     imports: [
@@ -137,6 +141,7 @@ import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.co
                     {path: 'contrat/bareme', component: BaremeComponent},
                     {path: 'contrat/exercice', component: ExerciceComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
+                    {path: 'contrat/condition-generale', component: ConditionGeneraleComponent},
                     {path: 'prestation/prefinancement', component: PrefinancementEditionComponent},
                     {path: 'prestation/prefinancement/valide', component: PrefinancementValideComponent},
                     {path: 'prestation/prefinancement/consultation', component: ConsultationSinistreComponent},
@@ -227,7 +232,10 @@ import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.co
                     {path: 'portail/suivi-rembourssement', component: SuiviRembourssementComponent},
                     {path: 'portail/suivi-facture', component: SuiviFactureComponent},
                     {path: 'portail/entente', component: EntenteComponent},
-                    {path: 'medical/entente-bon', component: EntenteBonComponent}
+                    {path: 'portail/prestataire-cartographie-quartier', component: PrestataireCartographieQuartierComponent},
+                    {path: 'medical/entente-bon', component: EntenteBonComponent},
+                    {path: 'medical/quartier-prestataire-garant', component: QuartierPrestataireGarantComponent},
+                    {path: 'portail/condition-generale-particuliere', component: ConditionGeneraleParticuliereComponent},
                     
                     
                     

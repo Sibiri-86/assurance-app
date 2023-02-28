@@ -1,0 +1,188 @@
+<p-tabView>
+    <p-tabPanel header="Condition générale">
+        <div class="p-grid" >
+            <div class="p-col-12" >
+                <p-toast></p-toast>
+                <div class="card">
+                    
+                    <span *ngFor="let condition of conditionGeneralesList">
+                    <p-panel header={{condition.titre}} [toggleable]="true">
+                        
+                        <p>{{condition.resume}}</p>
+                    </p-panel>
+        
+                </span>
+                    
+                </div>
+                
+                    
+        </div>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Condition particulière" icon="pi pi-fw pi-calendar">
+        <div class="p-grid" >
+            <div class="p-col-12" >
+                <p-toast></p-toast>
+                <div class="card">
+                    
+                    <p-table #dtConfigurationPlafond [value]="avenantModif1.plafondFamilleActes" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th></th>
+                                <th>Famille acte</th>
+                                <th>Montant plafonné / acte</th>
+                                <th>Montant plafonné / periode</th>
+                                <th>Periode</th>
+                                <th>Nombre acte</th>
+                                <th>Taux de couverture</th>
+                                <th>Domaine</th>
+                                <th>Date effet</th>
+                                <th>Status</th>
+                               <!--  <th>Famille acte</th>
+                                <th>Prime</th>
+                                <th>Taux</th>
+                                <th>Date effet</th> -->
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-plafond let-editing="editing" let-ri="rowIndex" let-expanded="expanded" >
+                            <tr  class="colorZone">
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="plafond" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td>{{plafond.garantie?.libelle}}</td>
+                                <!--
+                                <td>{{plafond.montantPlafond}}</td>
+                                -->
+                                <td>
+                                </td>
+    
+                                <td>{{plafond.montantPlafond | formatTableValue: 'number':true}}</td>
+    
+                                <td>{{plafond?.dimensionPeriode?.libelle}}</td>
+    
+                                <td>{{plafond.nombre | formatTableValue: 'number':true}}</td>
+    
+                                <td>{{plafond?.taux?.taux}} </td>
+    
+                                <td><span *ngFor="let d of plafond.domaine">
+                                    {{d.libelle}}
+                                </span></td>
+    
+                                <td>{{plafond.dateEffet | formatTableValue : 'date'}}</td>
+    
+                                <td>{{plafond?.etat}} </td>
+    
+                            
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-plafond>
+                             <tr >
+                                <td colspan="10">
+                                    <div class="">
+                                        <p-table [value]="plafond.listeActe" dataKey="acte.id" editMode="row">
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                            </tr>
+                                            <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                                <tr  class="colorZoneActe">
+                    
+                                                    <td> <button type="button" pButton pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
+                                                    <td>{{acte?.acte?.libelle}}</td>
+                                                    
+                                                    <td></td>
+                                        
+                                                    <td> {{acte.montantPlafond | formatTableValue: 'number':true}}</td>
+                                                    
+                                                    <td>{{acte?.dimensionPeriode?.libelle}}</td>
+                                                    
+                                                    <td>{{acte.nombre | formatTableValue: 'number':true}}</td>
+                                                    
+                                                    
+                    
+                                                    <td>{{acte?.taux?.taux}} </td>
+                    
+                                                    <td><span *ngFor="let d of acte.domaine"> {{d.libelle}} </span></td>
+                    
+                                                    <td>{{acte.dateEffet | formatTableValue : 'date'}} </td>
+                    
+                                                    <td>{{acte?.etat}}</td>
+                                                    
+                    
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="rowexpansion" let-acte>
+                                                <tr>
+                                                    <td colspan="10">
+                                                        <div class="">
+                                                            <p-table [value]="acte.listeSousActe" dataKey="id" editMode="row">
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    
+                                                    
+                                                </tr>
+                                                <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
+                                                    <tr  class="colorZoneSousActe">
+                                                        
+                                                        <td></td>
+                                                        <td>{{sousActe?.sousActe?.libelle}}</td>
+                                                        <td>{{sousActe?.montantPlafondParActe | formatTableValue: 'number':true}}</td>
+                                                        <td> {{sousActe.montantPlafond | formatTableValue: 'number':true}}</td>
+                                                        <td>{{sousActe?.dimensionPeriode?.libelle}} </td>
+                                                        <td>{{sousActe.nombre | formatTableValue: 'number':true}}</td>
+                                                        <td>{{sousActe?.taux?.taux}} </td>
+                                                        <td><span *ngFor="let d of sousActe.domaine"> {{d.libelle}} </span> </td>
+                                                        <td>{{sousActe.dateEffet | formatTableValue : 'date'}} </td>
+                                                        <td>{{sousActe?.etat}} </td>
+                    
+                                    
+                                                    </tr>
+                                                </ng-template>
+                    
+                    
+                                        </p-table>
+                                    </div>
+                                </td>
+                            </tr>
+                       </ng-template>
+                    </p-table>
+                                        
+                        </div>
+                      </td>
+                     </tr>
+                    
+                    </ng-template>
+                    </p-table>
+                    
+                </div>
+                
+                    
+        </div>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+
+

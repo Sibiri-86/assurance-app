@@ -1,5 +1,5 @@
 import {props, createAction} from '@ngrx/store';
-import { AdherentFamille, AdherentResearchReponse } from './model';
+import { AdherentFamille, AdherentResearchReponse, ConditionGenerale, ConditionGeneraleList } from './model';
 import { Adherent, AdherentList } from './model';
 export const createAdherent = createAction('[App Init] Create Adherent', props<Adherent>());
 export const updateAdherent = createAction('[App Init] update Adherent', props<Adherent>());
@@ -27,3 +27,10 @@ export const searchAssureAndFamilleActe = createAction('[App Init] search Assure
 export const loadAdherentByExercice = createAction('[App Init] load Adherent by exercice', props<{idGroupe: string, exerciceId: string}>());
 export const searchAdherentByDateSoinsAndMatricule = createAction('[App Init] search Adherent By DateSoins And Matricule',  props<{dateSoins: Date, matricule: number}>());
 export const loadListeFamille = createAction('[App Init] load liste famille', props<{adherentId: string}>());
+export const createConditionGenerale = createAction('[App Init] Create condition generale', props<ConditionGenerale>());
+export const setConditionGenerale = createAction('[App Init] set condition generale',  props<ConditionGeneraleList>());
+export const deleteConditionGenerale = createAction('[App Init] delete condition generale', props<ConditionGenerale>());
+export const loadConditionGenerale = createAction('[App Init] load Condition Generale');
+export const importCondition = createAction('[App Init] import condition',  props<{file: File}>());
+
+

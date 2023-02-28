@@ -1,0 +1,31 @@
+<!-- <div class="map-wrapper">
+    <div class="map-border">
+        <div class="">
+            <div id="frugalmap"> </div>
+        </div>
+    </div>
+</div> -->
+
+        <div class="p-grid">
+            <div class="p-field p-col-3 de">
+                <div class="card d" >
+                    <label for="lastname2" style="font-weight: bold;">Quartier</label><br>
+                    <p-dropdown  [filter]="true" showClear="true" 
+                                [options]="quartierList"  [(ngModel)]="selectedQuartier" 
+                                (onChange)="onQuartierChange(selectedQuartier)"
+                                placeholder="Selectionner un quartier" optionLabel="libelle">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-field p-col-9">
+                <div class="map-container">
+                    <div class="map-frame">
+                    <div id="frugalmap"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+

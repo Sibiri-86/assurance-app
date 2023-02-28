@@ -20,6 +20,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Production', icon: 'pi pi-fw pi-compass', routerLink: ['/contrat'],
                  visible: this.keycloak.isUserInRole(Function.sm_production),
                 items: [
+                    {label: 'Condition générale', icon: '', routerLink: ['/contrat/condition-generale'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
                     {label: 'Garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
                     {label: 'Intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
                     visible: this.keycloak.isUserInRole(Function.sm_intermediaire)},
@@ -88,6 +89,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
                     {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
                     {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: true},
+                    {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: true},
 
                 ]
             },
@@ -216,6 +218,10 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Suivi Remb.', icon: '', routerLink: ['/portail/suivi-rembourssement'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
                     {label: 'Suivi Facture', icon: '', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
                     {label: 'Entente', icon: '', routerLink: ['/portail/entente'], visible: true},
+                    {label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], visible: true},
+                    {label: 'Condition générale et particulière', icon: '', routerLink: ['/portail/condition-generale-particuliere'], visible: true},
+
+
                     
 
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},

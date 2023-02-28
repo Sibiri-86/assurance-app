@@ -16,6 +16,9 @@ export interface Prestataire {
     codeDepartement?: string;
     longitude?: number;
     latitude?: number;
+    codeQuartier?: string;
+    libelleQuartier?: string;
+    idQuartier?: string;
 
 }
 export interface PrestataireList {

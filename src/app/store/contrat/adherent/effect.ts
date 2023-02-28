@@ -5,7 +5,7 @@ import {of} from 'rxjs';
 import { AdherentService } from './service';
 import * as featureActions from './actions';
 import * as featureActionsPolice from '../police/actions';
-import {Adherent, AdherentFamille} from './model';
+import {Adherent, AdherentFamille, ConditionGenerale} from './model';
 import {GlobalConfig} from '../../../../app/config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
@@ -32,6 +32,49 @@ export class AdherentEffects {
             ))
         ));
 
+  createConditionGenerale$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createConditionGenerale),
+        mergeMap((conditionGenerale: ConditionGenerale) =>
+            this.AdherentService.posConditionGenerale(conditionGenerale).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadConditionGenerale()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
+
+        deleteConditionGenerale$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteConditionGenerale),
+            mergeMap((conditionGenerale: ConditionGenerale) =>
+                this.AdherentService.deleteConditionGenerale(conditionGenerale).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadConditionGenerale()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            ));
+
+            fetchAllConditionGenerale$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadConditionGenerale),
+                mergeMap(() =>
+                    this.AdherentService.getCondition().pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setConditionGenerale(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+            );
         createAdherentWithFamille$ = createEffect(() =>
         this.actions$.pipe(
         ofType(featureActions.createAdherentwithFamille),
@@ -186,6 +229,20 @@ this.actions$.pipe(
             switchMap(value => [
                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.loadAdherent({idGroupe: idGroupe})
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
+importCondition$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.importCondition),
+    mergeMap(({file}) =>
+        this.AdherentService.pushCondition(file).pipe(
+            switchMap(value => [
+                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
             ]),
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )
