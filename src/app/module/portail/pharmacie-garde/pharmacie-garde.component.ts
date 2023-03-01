@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import {
   ControlContainer,
   FormBuilder,
@@ -48,7 +48,7 @@ import { Status } from 'src/app/store/global-config/model';
 import { status } from 'src/app/store/global-config/selector';
 import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { printPdfFile } from 'src/app/module/util/common-util';
-import { Police, Report } from 'src/app/store/contrat/police/model';
+import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
@@ -58,27 +58,21 @@ import { AppMainComponent } from 'src/app/app.main.component';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { ProduitPharmaceutiqueService } from 'src/app/store/parametrage/produit-pharmaceutique/service';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
-import { ProduitPharmaceutiqueExclu, ProduitPharmaceutiqueExcluEntite, ProduitPharmaceutiqueExcluEntiteList } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
+import { ProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
 import { loadProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/actions';
 import * as produitPharmaceutiqueExcluSelector from 'src/app/store/parametrage/produit-pharmaceutique-exclu/selector';
-import { policeList } from 'src/app/store/contrat/police/selector';
-import {loadPoliceByAffaireNouvelle} from 'src/app/store/contrat/police/actions';
-import { Groupe } from 'src/app/store/contrat/groupe/model';
-import { groupeList } from 'src/app/store/contrat/groupe/selector';
-import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
-import * as featureActionProduitExclu from '../../../store/portail/recapitulatif/action';
-
-
+import { ProduitPharmaceutiqueExcluService } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/service';
+import { PharmacieGarde } from 'src/app/store/parametrage/pharmacie-garde/model';
 
 
 
 
 @Component({
-  selector: 'app-produit-exclu-update',
-  templateUrl: './produit-exclu-update.component.html',
-  styleUrls: ['./produit-exclu-update.component.scss']
+  selector: 'app-pharmacie-garde',
+  templateUrl: './pharmacie-garde.component.html',
+  styleUrls: ['./pharmacie-garde.component.scss']
 })
-export class ProduitExcluUpdateComponent implements OnInit {
+export class PharmacieGardeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
@@ -95,6 +89,7 @@ export class ProduitExcluUpdateComponent implements OnInit {
   ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
   name = '';
   role = '';
+  pharmaciesGarde: Array<PharmacieGarde>;
   role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
   role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
   role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
@@ -112,29 +107,13 @@ export class ProduitExcluUpdateComponent implements OnInit {
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
   produitPharmaceutiqueExcluList$: Observable<Array<ProduitPharmaceutiqueExclu>>;
   produitPharmaceutiqueExcluList: Array<ProduitPharmaceutiqueExclu>;
-  produitPharmaceutiqueExcluList1: Array<ProduitPharmaceutiqueExclu>;
-  produitPharmaceutiqueExcluList2: Array<ProduitPharmaceutiqueExclu>;
-  displayDialogFormGarant = false;
-  displayDialogFormGarant1 = false;
-  exclusionForm: FormGroup;
-  policeList$: Observable<Array<Police>>;
-  policeList1$: Subscription;
-  policeList: Police[];
-  groupeList$: Observable<Array<Groupe>>;
-  groupeList: Array<Groupe>;
-  selectExclu: ProduitPharmaceutiqueExclu[] = [];
-  selectExcluListSave: ProduitPharmaceutiqueExcluEntite = {};
-  selectedMaj: Array<ProduitPharmaceutiqueExclu>;
-  search: ProduitPharmaceutiqueExcluEntite = {};
-  updateProduit: ProduitPharmaceutiqueExcluEntite = {};
-  police: Police;
-  groupe: Groupe;
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,
-               private produitPharmaceutiqueService: ProduitPharmaceutiqueService,) {
-     this.breadcrumbService.setItems([{ label: 'Gestion des exclusions' }]);
+               private produitPharmaceutiqueService: ProduitPharmaceutiqueService,
+               private produitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService,) {
+     this.breadcrumbService.setItems([{ label: 'Liste des pharmacies de garde' }]);
      console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
@@ -146,16 +125,8 @@ export class ProduitExcluUpdateComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.exclusionForm = this.formBuilder.group({
-      id: new FormControl(),
-      produitExclu: new FormControl('', Validators.required),
-      souscripteur: new FormControl(),
-      groupe: new FormControl()
-    });
 
-    this.loadPoliceListe();
-
-    this.produitPharmaceutiqueExcluList$ = this.store.pipe(select(produitPharmaceutiqueExcluSelector.produitPharmaceutiqueExcluList));
+    /* this.produitPharmaceutiqueExcluList$ = this.store.pipe(select(produitPharmaceutiqueExcluSelector.produitPharmaceutiqueExcluList));
     this.store.dispatch(loadProduitPharmaceutiqueExclu());
     this.produitPharmaceutiqueExcluList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log("rrrrrrrrrrrrrrrrrrrrrrrr>",value);
@@ -174,46 +145,9 @@ export class ProduitExcluUpdateComponent implements OnInit {
 
     this.m();
 
-    this.loadRembourssements();
-    
+    this.loadRembourssements(); */
+    this.loadPharmacieGarde();
 
-  }
-
-  loadPoliceListe() {
-    this.policeList$ = this.store.pipe(select(policeList));
-    this.store.dispatch(loadPoliceByAffaireNouvelle());
-    this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
-        this.policeList = value.slice();
-        console.log('................this.policeList............................');
-        console.log(this.policeList);
-      }
-    });
-  }
-
-  loadGroupeList() {
-    this.groupeList$ = this.store.pipe(select(groupeList));
-      this.store.dispatch(loadGroupe({policeId: this.police?.id}));
-      this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-        if (value) {
-          this.groupeList = value.slice();
-          console.log("-------------->",this.groupeList);
-        }
-      });
-  
-  }
-
-  loadGroupeList1() {
-    console.log("------this.police?.id-------->",this.police?.id);
-    this.groupeList$ = this.store.pipe(select(groupeList));
-      this.store.dispatch(loadGroupe({policeId: this.police?.id}));
-      this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-        if (value) {
-          this.groupeList = value.slice();
-          console.log("-------------->",this.groupeList);
-        }
-      });
-  
   }
 
   m() {
@@ -432,83 +366,14 @@ export class ProduitExcluUpdateComponent implements OnInit {
     })
     
   }
-
-  addGarant() {
-    this.displayDialogFormGarant = true;
-    this.loadFindRacheteInExcluList();
-  }
-
-  addGarant1() {
-    this.displayDialogFormGarant1 = true;
-    this.loadFindRacheteInExcluList();
+  loadPharmacieGarde() {
+    this.produitPharmaceutiqueExcluService.$getTodayPharmacieGarde().subscribe(
+      (res) => {
+          console.log('..............pharmaciesGarde..............   ', res);
+          this.pharmaciesGarde = res;
+      }
+  );
   }
   
-  annulerSaisie() {
-    this.displayDialogFormGarant = false;
-    this.selectExclu = [];
-    /* this.groupe = {};
-    this.police = {}; */
-  }
-
-  onCreate(){
-    if(this.selectExclu) {
-      this.selectExcluListSave = {};
-      this.selectExcluListSave.groupe = this.groupe;
-      this.selectExcluListSave.souscripteur = this.police;
-      this.selectExcluListSave.produitExclus = this.selectExclu;
-      console.log('======selectExcluListSave=======>', this.selectExcluListSave);
-      this.store.dispatch(featureActionProduitExclu.createProduitPharmaceutiqueExclu(this.selectExcluListSave));
-      this.loadProduitExcluBySourcripteurAndGroupe();
-      this.selectExcluListSave = {};
-      this.displayDialogFormGarant = false;
-    }
-  }
-
-  loadProduitExcluBySourcripteurAndGroupe(){
-    this.search.groupe = this.groupe;
-    this.search.souscripteur = this.police;
-    console.log('..............this.search..............   ', this.search);
-      this.portailService.getProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(this.search).subscribe(
-        (res) => {
-            console.log('..............groupe not null..............   ', res);
-            this.produitPharmaceutiqueExcluList1 = res;
-        }
-    );
-  }
-
-  loadFindRacheteInExcluList(){
-    this.search.groupe = this.groupe;
-    this.search.souscripteur = this.police;
-    console.log('..............this.search..............   ', this.search);
-      this.portailService.findRacheteInExcluList(this.search).subscribe(
-        (res) => {
-            console.log('..............produitPharmaceutiqueExcluList2..............   ', res);
-            this.produitPharmaceutiqueExcluList2 = res;
-        }
-    );
-  }
-
-  UpdateRachat(){
-    /* this.updateProduit.groupe = this.groupe;
-    this.updateProduit.souscripteur = this.police;
-    this.updateProduit.produitExclus = this.selectedMaj;
-    console.log('..............this.search..............   ', this.search); */
-    this.confirmationService.confirm({
-      message: 'voulez-vous exclure le produit',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        console.log('..............this.selectedMaj..............   ', this.selectedMaj);
-        this.portailService.updateRachatExclusion(this.selectedMaj).subscribe(
-          (res) => {
-              console.log('..............produitPharmaceutiqueExcluList2..............   ', res);
-              this.produitPharmaceutiqueExcluList2 = res;
-              this.loadProduitExcluBySourcripteurAndGroupe();
-          }
-      );
-      }
-  });
-  }
 
 }
-

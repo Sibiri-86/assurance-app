@@ -218,6 +218,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
                     {label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
                     {label: 'Entente', icon: '', routerLink: ['/portail/entente'], visible: true},
+                    {label: 'Pharmacie de garde', icon: '', routerLink: ['/portail/pharmacie-garde'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
                     {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */

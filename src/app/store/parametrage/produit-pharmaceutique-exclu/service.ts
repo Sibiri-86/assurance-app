@@ -6,6 +6,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import { PharmacieGarde } from "../pharmacie-garde/model";
 
 @Injectable({providedIn: 'root'})
 export class ProduitPharmaceutiqueExcluService {
@@ -41,6 +42,14 @@ deleteProduitPharmaceutiqueExclu(ProduitPharmaceutique: ProduitPharmaceutiqueExc
     catchError(this.handleError())
   );
 } */
+
+$getTodayPharmacieGarde(): Observable<Array<PharmacieGarde>> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/getTodayPharmacieGarde`).pipe(
+    map((response: Array<PharmacieGarde>) => response),
+    catchError(this.handleError())
+  );
+}
 
 
 

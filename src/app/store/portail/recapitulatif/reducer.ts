@@ -1,24 +1,26 @@
 import * as featureActions from './action';
 import { Action, createReducer, on } from '@ngrx/store';
-import { ReportFile } from '../../../contrat/bulletin-adhesion/model';
-import { RecapitulatifState } from './state';
+import { PortailState} from './state';
+import { ProduitPharmaceutiqueExcluEntiteList } from '../../parametrage/produit-pharmaceutique-exclu/model';
+import { ReportFile } from '../../contrat/bulletin-adhesion/model';
 
-const initialState: RecapitulatifState = {
+const initialState: PortailState = {
     reportFile: null,
+    produitPharmaceutiqueExcluEntiteList: null
     
   };
 
 const featureReducer = createReducer(
     initialState,
    
-    /* on(featureActions.setDepenseFamille, (state, payload: DepenseFamilleList) => ({
-        ...state, depenseFamilleList: payload.depenseFamilles
-      })), */
+     on(featureActions.setProduitPharmaceutiqueExclu, (state, payload: ProduitPharmaceutiqueExcluEntiteList) => ({
+        ...state, produitPharmaceutiqueExcluEntiteList: payload.pharmaceutiqueExcluEntiteDtos
+      })),
     on(featureActions.setReportRecapitulatif, (state, payload: ReportFile) => ({
         ...state, reportFile: payload.reportFile
     })),
    
   );
-export function reducer(state: RecapitulatifState | undefined, action: Action) {
+export function reducer(state: PortailState | undefined, action: Action) {
     return featureReducer(state, action);
   }

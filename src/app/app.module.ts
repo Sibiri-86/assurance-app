@@ -322,6 +322,10 @@ import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-upda
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 import { QuartierEffects } from './store/parametrage/quartier/effect';
+import { PortailEffects } from './store/portail/recapitulatif/effect';
+import { DateGardeEffects } from './store/parametrage/date-garde/effect';
+import { PharmacieGardeEffects } from './store/parametrage/pharmacie-garde/effect';
+import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
 
 @NgModule({
     imports: [
@@ -420,19 +424,20 @@ import { QuartierEffects } from './store/parametrage/quartier/effect';
               strictStateImmutability: false,
               strictActionImmutability: false,
             }}),
-        EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
+            EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
              TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, 
              QualiteMedecinEffects, PathologieEffects, ProduitPharmaceutiqueEffects,
-            RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
+             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects, PortailEffects,
+             DateGardeEffects, PharmacieGardeEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -586,6 +591,7 @@ import { QuartierEffects } from './store/parametrage/quartier/effect';
         ProduitExcluUpdateComponent,
         EntenteComponent,
         EntenteBonComponent,
+        PharmacieGardeComponent
 
     ],
     providers: [

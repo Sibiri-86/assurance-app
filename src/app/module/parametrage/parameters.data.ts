@@ -115,6 +115,10 @@ import * as alerteActions from '../../store/parametrage/Alerte/actions';
 import * as produitPharmaceutiqueExcluActions from '../../store/parametrage/produit-pharmaceutique-exclu/actions';
 import {produitPharmaceutiqueExcluList} from 'src/app/store/parametrage/produit-pharmaceutique-exclu/selector';
 import { quartierDtoList } from 'src/app/store/parametrage/quartier/selector';
+import * as dateGardeActions from '../../store/parametrage/date-garde/actions';
+import { dateGardeList } from 'src/app/store/parametrage/date-garde/selector';
+import { pharmacieGardeList } from 'src/app/store/parametrage/pharmacie-garde/selector';
+import * as pharmacieGardeActions from '../../store/parametrage/pharmacie-garde/actions';
 
 // Definition des type de paramettres
 export const DATA_TYPE = [
@@ -158,6 +162,8 @@ export const DATA_TYPE = [
   {label: 'Type intermediaire', value: 'TypeIntermediaire'},
   {label: 'Compte', value: 'Compte'},
   {label: 'Quartier', value: 'Quartier'},
+  {label: 'Date de Garde', value: 'DateGarde'},
+  {label: 'Pharmacie de Garde', value: 'PharmacieGarde'}
 ];
 
 const dropdownEntriesObj: Array<SelectItem> = [
@@ -2359,6 +2365,126 @@ export const DATA_DEFINITION = [
       updateAction: typeJournauxActions.updateTypeJournaux,
       deleteAction: typeJournauxActions.deleteTypeJournaux,
       importAction: typeJournauxActions.importTypeJournaux
+    }
+  },
+  {
+    entity: 'DateGarde',
+    cols: [
+      {
+        field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'dateDebutD', header: 'Date de Debut', type: 'date', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'dateFinF', header: 'Date de Fin', type: 'date', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'moisGarde', header: 'Mois de Garde', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'annee', header: 'Annee de garde', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      {
+        field: 'dateDebut',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'dateDebut',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      }
+    ],
+    store: {
+      select: dateGardeList,
+      fetchAction: dateGardeActions.loadDateGarde(),
+      createAction: dateGardeActions.createDateGarde,
+      updateAction: dateGardeActions.updateDateGarde,
+      deleteAction: dateGardeActions.deleteDateGarde,
+      importAction: dateGardeActions.importDateGarde
+    }
+  },
+  {
+    entity: 'PharmacieGarde',
+    cols: [
+      {
+        field: 'codePharmacie', header: 'Code', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'nom', header: 'Nom', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'telephone', header: 'Téléphone', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'responsable', header: 'Responsable', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'longitude', header: 'Longitude', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'latitude', header: 'Latitude', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'isAffilie', header: 'Affiliation ?', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      }
+    ],
+    entityValidations: [
+      /* {
+        field: 'dateDebut',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'maxlength', validMessage: 'Ce champs requiert 50 caractères maximum'}
+        ]
+      },
+      {
+        field: 'code',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      },
+      {
+        field: 'dateDebut',
+        validations: [
+          {validName: 'required', validMessage: 'Ce champs est obligatoire'},
+          {validName: 'pattern', validMessage: 'Ce champs requiert des chiffres'}
+        ]
+      } */
+    ],
+    store: {
+      select: pharmacieGardeList,
+      fetchAction: pharmacieGardeActions.loadPharmacieGarde(),
+      createAction: pharmacieGardeActions.createPharmacieGarde,
+      updateAction: pharmacieGardeActions.updatePharmacieGarde,
+      deleteAction: pharmacieGardeActions.deletePharmacieGarde,
+      importAction: pharmacieGardeActions.importPharmacieGarde
     }
   }
 

@@ -32,6 +32,8 @@ import { DepenseFamille } from 'src/app/store/portail/recapitulatif/model';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { KeycloakService } from 'keycloak-angular';
+import { PharmacieGarde } from 'src/app/store/parametrage/pharmacie-garde/model';
+import { ProduitPharmaceutiqueExcluService } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/service';
 
 
 @Component({
@@ -92,6 +94,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   displaySinistreDetail= false;
   name = '';
   role = '';
+  pharmaciesGarde: Array<PharmacieGarde>;
 
 
   
@@ -113,6 +116,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private appelFondService: AppelFondService, 
               private recaptulatifService: RecapitulatifService,
               private portailService: PortailService,
+              private produitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService,
               private keycloak: KeycloakService) {
 
               this.breadcrumbService.setItems([{ label: 'Validation des ordres de paiement' }]);
@@ -174,7 +178,7 @@ ngOnInit(): void {
 
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
-
+  this.loadPharmacieGarde();
 }
 
 loadGroupeList() {
@@ -382,6 +386,15 @@ loadData() {
   this.prestationDetail = prestation;
   this.displaySinistreDetail = true;
 } 
+
+loadPharmacieGarde() {
+  this.produitPharmaceutiqueExcluService.$getTodayPharmacieGarde().subscribe(
+    (res) => {
+        console.log('..............pharmaciesGarde..............   ', res);
+        this.pharmaciesGarde = res;
+    }
+);
+}
 }
 
 

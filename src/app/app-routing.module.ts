@@ -108,6 +108,7 @@ import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-ex
 import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
+import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
 
 @NgModule({
     imports: [
@@ -231,7 +232,8 @@ import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.co
                     {path: 'portail/produit-exclu', component: ProduitExcluComponent},
                     {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent},
                     {path: 'portail/entente', component: EntenteComponent},
-                    {path: 'medical/entente-bon', component: EntenteBonComponent}
+                    {path: 'medical/entente-bon', component: EntenteBonComponent},
+                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent}
                     
                     
                     

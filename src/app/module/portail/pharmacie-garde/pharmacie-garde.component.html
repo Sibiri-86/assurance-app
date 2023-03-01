@@ -1,0 +1,60 @@
+<div class="p-grid">
+	<div class="p-col-12">
+
+		<p-toast></p-toast>
+
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+                
+			</p-toolbar>
+
+			<p-table #dt [value]="pharmaciesGarde" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom']"
+					 [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="contact" >Nom des pharmacies<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Responsable<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Téléphone<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Dans le réseau de prestataire ?<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="code">Période de Garde <p-sortIcon field="code"></p-sortIcon></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr [ngClass]="{'colorZonePharmacie': garant.isAffilie == true}">
+						<td><span class="p-column-title" >{{garant?.nom}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.responsable}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.telephone}}</span></td>
+                        <td>
+							<span *ngIf="garant.isAffilie == true" class="p-badge p-badge-success" pTooltip="Prestataire se trouvant dans nos réseaux">Oui</span>
+							<span *ngIf="garant.isAffilie  == false" class="p-badge p-badge-danger" pTooltip="Prestataire se trouvant hors de nos réseaux">Non</span>
+						</td>
+                        <td><span class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{pharmaciesGarde ? pharmaciesGarde.length : 0 }} pharmacie(s) de garde trouvée(s).
+					</div>
+				</ng-template>
+			</p-table>
+		</div>
+
+
+            <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+	</div>
+
+    
+</div>

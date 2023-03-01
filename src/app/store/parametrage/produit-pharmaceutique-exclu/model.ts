@@ -14,16 +14,16 @@ export interface ProduitPharmaceutiqueExclu {
 
 export interface ProduitPharmaceutiqueExcluEntite {
     id?: string;
-    code?: string;
-    libelle?: string;
-    description?: string;
-    typeProduit?: string;
-    isExclu?: boolean;
-    police?: Police;
+    produitExclus?: Array<ProduitPharmaceutiqueExclu>;
+    souscripteur?: Police;
     groupe?: Groupe;
-    /**ajout pour bon de prise en charge */
-    idProduitPharmaceutique?: string;
+    produitExclu?: ProduitPharmaceutiqueExclu;
 }
 export interface ProduitPharmaceutiqueExcluList {
     produitPharmaceutiqueExcluDtoList?: Array<ProduitPharmaceutiqueExclu>;
 }
+
+export interface ProduitPharmaceutiqueExcluEntiteList{
+    pharmaceutiqueExcluEntiteDtos?: Array<ProduitPharmaceutiqueExcluEntite>;
+}
+
