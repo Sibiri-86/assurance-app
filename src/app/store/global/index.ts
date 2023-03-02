@@ -155,6 +155,13 @@ import * as consommationParSexeState from '../reporting/medical/consommationParS
 import * as quartierReducer from '../parametrage/quartier/reducer';
 import * as quartierPrestataireGarantReducer from '../parametrage/quartier-prestataire-garant/reducer';
 
+import * as produitPharmaceutiqueExcluState from '../parametrage/produit-pharmaceutique-exclu/state';
+import * as produitPharmaceutiqueExcluReducer from '../parametrage/produit-pharmaceutique-exclu/reducer';
+import * as portailReducer from '../portail/recapitulatif/reducer';
+import * as dateGardeReducer from '../parametrage/date-garde/reducer';
+import * as PharmacieGardeReducer from '../parametrage/pharmacie-garde/reducer';
+
+
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -224,8 +231,12 @@ export const reducers: ActionReducerMap<AppState> = {
     statistiqueTrancheAgeState: statistiqueParTrancheAgeReducer.reducer,
     facturePrestatairesState: facturePrestatairesState.reducer,
     consommationParSexeState: consommationParSexeState.reducer,
+    produitPharmaceutiqueExcluState: produitPharmaceutiqueExcluReducer.reducer,
     quartierState: quartierReducer.reducer,
     quartierPrestataireGarantState: quartierPrestataireGarantReducer.reducer,
+    portailState: portailReducer.reducer,
+    dateGardeState: dateGardeReducer.reducer,
+    pharmacieGardeState: PharmacieGardeReducer.reducer
 
 
 };

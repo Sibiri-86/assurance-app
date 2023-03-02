@@ -2,22 +2,21 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
-import { ProduitPharmaceutiqueService } from './service';
+import { DateGardeService } from './service';
 import * as featureActions from './actions';
-import {ProduitPharmaceutique} from './model';
-import {GlobalConfig} from '../../../../app/config/global.config';
+import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
 
 @Injectable()
-export class ProduitPharmaceutiqueEffects {
+export class DateGardeEffects {
     private successMsg = 'Opération reussie !';
     constructor(
         private actions$: Actions,
-        private ProduitPharmaceutiqueService: ProduitPharmaceutiqueService
+        private DateGardeService: DateGardeService
     ) {
     }
 
-    createProduitPharmaceutique$ = createEffect(() =>
+    /* createProduitPharmaceutique$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createProduitPharmaceutique),
         mergeMap((ProduitPharmaceutique: ProduitPharmaceutique) =>
@@ -57,16 +56,16 @@ export class ProduitPharmaceutiqueEffects {
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
-                ));    
+                ));  */   
 
-    fetchProduitPharmaceutique$ = createEffect(() =>
+    fetchDateGarde$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadProduitPharmaceutique),
+        ofType(featureActions.loadDateGarde),
         mergeMap(() =>
-            this.ProduitPharmaceutiqueService.$getProduitPharmaceutiques().pipe(
+            this.DateGardeService.$getDateGardes().pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.setProduitPharmaceutique(value)
+                    featureActions.setDateGarde(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             )
@@ -77,12 +76,12 @@ export class ProduitPharmaceutiqueEffects {
     
 import$ = createEffect(() =>
 this.actions$.pipe(
-    ofType(featureActions.importProduitPharmaceutique),
+    ofType(featureActions.importDateGarde),
     mergeMap(({file}) =>
-        this.ProduitPharmaceutiqueService.pushFileToStorage(file).pipe(
+        this.DateGardeService.pushFileToStorage(file).pipe(
             switchMap(value => [
                 GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                featureActions.loadProduitPharmaceutique()
+                featureActions.loadDateGarde()
             ]),
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )

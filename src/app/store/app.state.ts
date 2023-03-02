@@ -67,8 +67,12 @@ import { StatistiqueTrancheAgeState } from './reporting/production/statistiquePa
 import { FacturePrestatairesState } from './reporting/prestation/facturePrestataires/state';
 import { ConsommationParSexeState } from './reporting/medical/consommationParSexe/state';
 import { AlerteState } from './parametrage/Alerte/state';
+import { ProduitPharmaceutiqueExcluState } from './parametrage/produit-pharmaceutique-exclu/state';
 import { QuartierState } from './parametrage/quartier/state';
 import { QuartierPrestataireGarantState } from './parametrage/quartier-prestataire-garant/state';
+import { PortailState } from './portail/recapitulatif/state';
+import { DateGardeState } from './parametrage/date-garde/state';
+import { PharmacieGardeState } from './parametrage/pharmacie-garde/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -137,7 +141,11 @@ export interface AppState {
   statistiqueTrancheAgeState: StatistiqueTrancheAgeState,
   facturePrestatairesState: FacturePrestatairesState,
   consommationParSexeState: ConsommationParSexeState,
-  quartierState: QuartierState,
   quartierPrestataireGarantState: QuartierPrestataireGarantState,
+  produitPharmaceutiqueExcluState: ProduitPharmaceutiqueExcluState,
+  quartierState: QuartierState,
+  portailState: PortailState,
+  dateGardeState: DateGardeState,
+  pharmacieGardeState: PharmacieGardeState
 
 }

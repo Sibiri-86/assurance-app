@@ -1,0 +1,256 @@
+<div class="p-grid">
+	<div class="p-col-12">
+
+		<p-toast></p-toast>
+
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Rachat d'exclusions" icon="pi pi-plus" [disabled]="!this.police" pTooltip="Racheté les exclusions" class="p-button-success p-mr-2 p-mb-2" (click)="addGarant()"></button>
+					<!-- <button pButton pRipple label="Supprimer" [disabled]="selectedPrefinancement?.length<1" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrefinancement()"></button> -->
+				</ng-template>	
+				<ng-template pTemplate="right">
+					<button pButton pRipple label="Définir exclusions" [disabled]="!selectedMaj" icon="pi pi-times" pTooltip="Rachéter les exclusions" class="p-button-danger p-mr-2 p-mb-2" (click)="UpdateRachat()"></button>
+				</ng-template>	
+                
+			</p-toolbar>
+			
+			<div class="p-fluid p-formgrid p-grid">
+
+				<div class="p-field p-col">
+					<label for="firstname2">Souscripteur <span style="color: red !important; font-size: 1.4em"></span></label>
+					<p-dropdown inputId="decision1" [filter]="true" optionLabel="nom"
+											showClear="true" [options]="policeList"
+											[(ngModel)]="police"
+											[autoDisplayFirst]="false" (onChange)="loadGroupeList1(); loadProduitExcluBySourcripteurAndGroupe()">
+					</p-dropdown>
+					
+				</div>
+
+				<div class="p-field p-col">
+					<label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
+					<p-dropdown inputId="groupe1" [filter]="true" optionLabel="libelle"
+											showClear="true" [options]="groupeList" 
+											[(ngModel)]="groupe"
+											[autoDisplayFirst]="false" (onChange)="loadProduitExcluBySourcripteurAndGroupe()">
+					</p-dropdown>
+				</div>
+			</div>
+			<p-table #dt [value]="produitPharmaceutiqueExcluList1" selectionMode="multiple" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+					 [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers" [(selection)]="selectedMaj"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th>
+						<!-- <th pSortableColumn="code" style="width: 100px"> </th> -->
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr [pSelectableRow]="garant">
+						<td><span class="p-column-title" >{{garant?.produitExclu?.code}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.produitExclu?.libelle}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.produitExclu?.description}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.produitExclu?.typeProduit}}</span></td>
+                        <td><span class="p-badge p-badge-success">Racheté</span></td>
+						<!-- <td>
+							<button pButton icon="pi pi-trash" pTooltip="Annuler le rachat" class="p-button-rounded p-button-danger p-ml-2" (click)="UpdateRachat()"></button>
+						</td> -->
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{produitPharmaceutiqueExcluList1 ? produitPharmaceutiqueExcluList1.length : 0 }} produit(s) racheté(s) trouvé(s).
+					</div>
+				</ng-template>
+			</p-table>
+		</div>
+
+		<p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Définir les exclusions pour un souscripteur ou un groupe" [style]="{width: '1200px'}" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()">
+            <ng-template pTemplate="content">
+            <form (ngSubmit)="onCreate()"  [formGroup]="exclusionForm">
+                <div class="card">
+                <!-- <div class="p-fluid p-formgrid p-grid">
+
+						<div class="p-field p-col">
+							<label for="firstname2">Souscripteur <span style="color: red !important; font-size: 1.4em"></span></label>
+							<p-dropdown inputId="decision" [filter]="true" optionLabel="nom"
+													showClear="true" [options]="policeList"
+													formControlName="souscripteur" [formGroup]="exclusionForm"
+													[autoDisplayFirst]="false" (onChange)="loadGroupeList()">
+							</p-dropdown>
+							
+						</div>
+
+                        <div class="p-field p-col">
+							<label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
+							<p-dropdown inputId="groupe" [filter]="true" optionLabel="libelle"
+													showClear="true" [options]="groupeList" 
+													formControlName="groupe"
+													[autoDisplayFirst]="false" [formGroup]="exclusionForm">
+							</p-dropdown>
+						</div>
+
+                </div> -->
+				<p-table #dt [value]="produitPharmaceutiqueExcluList2" selectionMode="multiple" [autoLayout]="true" [loading]="false" [columns]="cols" [rows]="5" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+					 [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectExclu">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+						<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr [pSelectableRow]="garant">
+						<td>
+                            <p-tableCheckbox [value]="garant"></p-tableCheckbox>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.code}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.libelle}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.description}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typeProduit}}</span></td>
+                        <td><span class="p-badge p-badge-danger">Exclu</span></td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{produitPharmaceutiqueExcluList2 ? produitPharmaceutiqueExcluList2.length : 0 }} produit(s) exclu(s) trouvé(s).
+					</div>
+				</ng-template>
+			</p-table>
+                    </div>
+
+                <div class="p-grid p-justify-between">
+                    <div>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
+                    </div>
+                    <div>
+                    <button  [disabled]="!selectExclu.length" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    </div>
+                </div>
+                </form>                     
+             </ng-template>
+        </p-dialog>
+
+		<p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant1" header="Définir les exclusions pour un souscripteur ou un groupe" [style]="{width: '1200px'}" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <!-- <div class="p-fluid p-formgrid p-grid">
+
+						<div class="p-field p-col">
+							<label for="firstname2">Souscripteur <span style="color: red !important; font-size: 1.4em"></span></label>
+							<p-dropdown inputId="decision" [filter]="true" optionLabel="nom"
+													showClear="true" [options]="policeList"
+													formControlName="souscripteur" [formGroup]="exclusionForm"
+													[autoDisplayFirst]="false" (onChange)="loadGroupeList()">
+							</p-dropdown>
+							
+						</div>
+
+                        <div class="p-field p-col">
+							<label for="firstname2">Groupe<span style="color: red !important; font-size: 1.4em"></span></label>
+							<p-dropdown inputId="groupe" [filter]="true" optionLabel="libelle"
+													showClear="true" [options]="groupeList" 
+													formControlName="groupe"
+													[autoDisplayFirst]="false" [formGroup]="exclusionForm">
+							</p-dropdown>
+						</div>
+
+                </div> -->
+				<p-table #dt [value]="produitPharmaceutiqueExcluList2" selectionMode="multiple" [autoLayout]="true" [loading]="false" [columns]="cols" [rows]="5" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+					 [rowHover]="true" dataKey="id"
+					 styleClass="p-datatable-customers"
+					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectExclu">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+						<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant>
+					<tr [pSelectableRow]="garant">
+						<td>
+                            <p-tableCheckbox [value]="garant"></p-tableCheckbox>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.code}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.libelle}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.description}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typeProduit}}</span></td>
+                        <td><span class="p-badge p-badge-danger">Exclu</span></td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{produitPharmaceutiqueExcluList2 ? produitPharmaceutiqueExcluList2.length : 0 }} produit(s) exclu(s) trouvé(s).
+					</div>
+				</ng-template>
+			</p-table>
+                    </div>
+
+                <div class="p-grid p-justify-between">
+                    <div>
+                    <button type="button" pButton label="Quitter" icon="pi pi-times"  (click)="annulerSaisie()"></button>
+                    </div>
+                    <div>
+                    <button  [disabled]="!selectExclu.length" pButton pRipple label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    </div>
+                </div>                    
+             </ng-template>
+        </p-dialog>
+
+            <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+	</div>
+
+    
+</div>

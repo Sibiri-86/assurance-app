@@ -56,17 +56,23 @@ import { KeycloakService } from 'keycloak-angular';
 import { Function } from 'src/app/module/common/config/role.user';
 import { AppMainComponent } from 'src/app/app.main.component';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
-import { SinistreTierPayant } from 'src/app/store/prestation/tierPayant/model';
+import { ProduitPharmaceutiqueService } from 'src/app/store/parametrage/produit-pharmaceutique/service';
+import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
+import { ProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
+import { loadProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/actions';
+import * as produitPharmaceutiqueExcluSelector from 'src/app/store/parametrage/produit-pharmaceutique-exclu/selector';
+import { ProduitPharmaceutiqueExcluService } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/service';
+import { PharmacieGarde } from 'src/app/store/parametrage/pharmacie-garde/model';
 
 
 
 
 @Component({
-  selector: 'app-suivi-facture',
-  templateUrl: './suivi-facture.component.html',
-  styleUrls: ['./suivi-facture.component.scss']
+  selector: 'app-pharmacie-garde',
+  templateUrl: './pharmacie-garde.component.html',
+  styleUrls: ['./pharmacie-garde.component.scss']
 })
-export class SuiviFactureComponent implements OnInit {
+export class PharmacieGardeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
@@ -83,6 +89,7 @@ export class SuiviFactureComponent implements OnInit {
   ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
   name = '';
   role = '';
+  pharmaciesGarde: Array<PharmacieGarde>;
   role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
   role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
   role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
@@ -95,15 +102,18 @@ export class SuiviFactureComponent implements OnInit {
   role_sm_workflow_prefinancement_Medical_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_devalider);
   role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
   role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
-  rembourssements: Array<SinistreTierPayant>;
-  rembourssementValid: Array<SinistreTierPayant>;
-  rembourssementEnCours: Array<SinistreTierPayant>;
-  rembourssementValidAndPaiementValid: Array<SinistreTierPayant>;
+  rembourssements: Array<ProduitPharmaceutique>;
+  rembourssementValid: Array<Prefinancement>;
+  rembourssementValidAndPaiementValid: Array<Prefinancement>;
+  produitPharmaceutiqueExcluList$: Observable<Array<ProduitPharmaceutiqueExclu>>;
+  produitPharmaceutiqueExcluList: Array<ProduitPharmaceutiqueExclu>;
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,) {
-     this.breadcrumbService.setItems([{ label: 'Suivi des factures' }]);
+               private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,
+               private produitPharmaceutiqueService: ProduitPharmaceutiqueService,
+               private produitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService,) {
+     this.breadcrumbService.setItems([{ label: 'Liste des pharmacies de garde' }]);
      console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
@@ -116,6 +126,15 @@ export class SuiviFactureComponent implements OnInit {
 
   ngOnInit(): void {
 
+    /* this.produitPharmaceutiqueExcluList$ = this.store.pipe(select(produitPharmaceutiqueExcluSelector.produitPharmaceutiqueExcluList));
+    this.store.dispatch(loadProduitPharmaceutiqueExclu());
+    this.produitPharmaceutiqueExcluList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log("rrrrrrrrrrrrrrrrrrrrrrrr>",value);
+      if (value) {
+        this.produitPharmaceutiqueExcluList = value.slice();
+      }
+    });
+
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -124,31 +143,10 @@ export class SuiviFactureComponent implements OnInit {
         }
     });
 
-    /* this.ordreReglementListMedical$ = this.store.pipe(select(prefinancementSelector.ordreReglementListMedical));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideMedical());
-    this.ordreReglementListMedical$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log("============>",value);
-      if (value) {
-        this.ordreReglementListMedical = value.slice();
-    }
-    }); */
-
-    /* this.ordreReglementListFinance$ = this.store.pipe(select(prefinancementSelector.ordreReglementListFinance));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideFinance());
-    this.ordreReglementListFinance$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log("============>",value);
-      if (value) {
-        this.ordreReglementListFinance = value.slice();
-    }
-    }); */
-    /* this.loadOrdreReglement();
-    this.loadOrdreReglementFinance();
-    this.loadOrdreReglementMedical();
-    this.loadOrdreReglementDirection(); */
     this.m();
 
-    this.loadRembourssements();
-    
+    this.loadRembourssements(); */
+    this.loadPharmacieGarde();
 
   }
 
@@ -315,14 +313,10 @@ export class SuiviFactureComponent implements OnInit {
         break;
       }
       case 1: {
-        this.loadRembourssementEnCours();
+        this.loadRembourssementValid();
         break;
       }
       case 2: {
-        this.loadRembourssementOrdreValid();
-        break;
-      }
-      case 3: {
         this.loadRembourssementValidAndPaiementValid();
         break;
       }
@@ -339,36 +333,18 @@ export class SuiviFactureComponent implements OnInit {
   }
 
   loadRembourssements(){
-    this.keycloak.loadUserProfile().then(profile => {
-      this.name = profile.firstName + ' ' + profile.lastName;
-      /* "PHJAB" */
-    this.portailService.fetchfactureInitieByMatricule$(profile.username).subscribe(
+    /* this.produitPharmaceutiqueService.$getProduitPharmaceutiquesExclu().subscribe(
       (res) => {
-          console.log('..............rembourssements..............   ', res);
+          console.log('..............produitExclus..............   ', res);
           this.rembourssements = res;
       }
-  );
-    })
-    
-  }
+  ); */
+     }
 
-  loadRembourssementEnCours(){
+  loadRembourssementValid(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreEnCours$(profile.username).subscribe(
-        (res) => {
-            console.log('..............rembourssementEnCours..............   ', res);
-            this.rembourssementEnCours = res;
-        }
-    );
-    })
-    
-  }
-
-  loadRembourssementOrdreValid(){
-    this.keycloak.loadUserProfile().then(profile => {
-      this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValid$(profile.username).subscribe(
+      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValid$(parseInt(profile.username)).subscribe(
         (res) => {
             console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValid = res;
@@ -381,16 +357,23 @@ export class SuiviFactureComponent implements OnInit {
   loadRembourssementValidAndPaiementValid(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValidAndPaiementValid$(profile.username).subscribe(
+      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValidAndPaiementValid$(parseInt(profile.username)).subscribe(
         (res) => {
-            console.log('..............rembourssementValidAndPaiementValid..............   ', res);
+            console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValidAndPaiementValid = res;
         }
     );
     })
     
   }
-  
+  loadPharmacieGarde() {
+    this.produitPharmaceutiqueExcluService.$getTodayPharmacieGarde().subscribe(
+      (res) => {
+          console.log('..............pharmaciesGarde..............   ', res);
+          this.pharmaciesGarde = res;
+      }
+  );
+  }
   
 
 }

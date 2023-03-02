@@ -104,12 +104,15 @@ import { RegisterChooseComponent } from './module/portail/registerChoose/registe
 import { RegisterComponent } from './module/portail/register/register.component';
 import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
+import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-exclu.component';
+import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 import { QuartierPrestataireGarantComponent } from './module/medical/prestataire-garant-quartier/prestataire-garant-quartier.component';
 import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
 import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
 import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
+import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
 
 @NgModule({
     imports: [
@@ -231,11 +234,15 @@ import { ConditionGeneraleParticuliereComponent } from './module/portail/conditi
                     {path: 'portail/register', component: RegisterComponent},
                     {path: 'portail/suivi-rembourssement', component: SuiviRembourssementComponent},
                     {path: 'portail/suivi-facture', component: SuiviFactureComponent},
+                    {path: 'portail/produit-exclu', component: ProduitExcluComponent},
+                    {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent},
                     {path: 'portail/entente', component: EntenteComponent},
                     {path: 'portail/prestataire-cartographie-quartier', component: PrestataireCartographieQuartierComponent},
                     {path: 'medical/entente-bon', component: EntenteBonComponent},
                     {path: 'medical/quartier-prestataire-garant', component: QuartierPrestataireGarantComponent},
                     {path: 'portail/condition-generale-particuliere', component: ConditionGeneraleParticuliereComponent},
+                    {path: 'medical/entente-bon', component: EntenteBonComponent},
+                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent}
                     
                     
                     

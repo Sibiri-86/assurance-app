@@ -471,4 +471,19 @@ export class Endpoints {
             mock: `assets/mock/keycloak/user.mock.json`
         }; 
 
+        static readonly PARAMETRAGE_TYPE_PRODUIT_PHARMACEUTIQUE_EXCLU = {
+            prod: `${SERVICE_PREFIX}/parametrage/produitPharmaceutiqueExclu`,
+            mock: `assets/mock/parametrage/typeProduitPharmaceutiqueExclu.mock.json`
+        };
+
+        static readonly PARAMETRAGE_DATE_GARDE = {
+            prod: `${SERVICE_PREFIX}/parametrage/date-garde`,
+            mock: `assets/mock/parametrage/date-garde.mock.json`
+        };
+
+        static readonly PARAMETRAGE_PHARMACIE_GARDE = {
+            prod: `${SERVICE_PREFIX}/parametrage/pharmacie-garde`,
+            mock: `assets/mock/parametrage/pharmacie-garde.mock.json`
+        };
+
 }

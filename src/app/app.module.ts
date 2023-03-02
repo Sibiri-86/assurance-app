@@ -316,6 +316,9 @@ import { RegisterChooseComponent } from './module/portail/registerChoose/registe
 import { RegisterComponent } from './module/portail/register/register.component';
 import { SuiviRembourssementComponent } from './module/portail/suivi-rembourssement/suivi-rembourssement.component';
 import { SuiviFactureComponent } from './module/portail/suivi-facture/suivi-facture.component';
+import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-exclu.component';
+import { ProduitPharmaceutiqueExcluEffects } from './store/parametrage/produit-pharmaceutique-exclu/effect';
+import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 import { QuartierEffects } from './store/parametrage/quartier/effect';
@@ -324,6 +327,10 @@ import { QuartierPrestataireGarantComponent } from './module/medical/prestataire
 import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
 import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
 import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
+import { PortailEffects } from './store/portail/recapitulatif/effect';
+import { DateGardeEffects } from './store/parametrage/date-garde/effect';
+import { PharmacieGardeEffects } from './store/parametrage/pharmacie-garde/effect';
+import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
 
 @NgModule({
     imports: [
@@ -422,19 +429,20 @@ import { ConditionGeneraleParticuliereComponent } from './module/portail/conditi
               strictStateImmutability: false,
               strictActionImmutability: false,
             }}),
-        EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
+            EffectsModule.forRoot([GarantieEffects, ActeEffects, HistoriqueAvenantEffects,
              SecteurActiviteEffects, SousActeEffects, CategorieSocioProfessionnelEffects, TauxEffects,
              DimensionPeriodeEffects, TerritorialiteEffects, TypeGarantEffects, QualiteAssureEffects, 
              TypeAffaireEffects, ProfessionEffects, TypePrimeEffects, ModePaiementEffects, StatusEffects,PrestataireEffects, 
              TypeAvenantEffects, TypePrestataireEffects, GenreEffects, MedecinEffects, NaturePrestataireEffects, 
              QualiteMedecinEffects, PathologieEffects, ProduitPharmaceutiqueEffects,
-            RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
+             RegionEffects, PlafondEffects, AdherentEffects, PrefinancementEffects,
              TypeIntermediaireEffects, GroupeEffects, PoliceEffects, BanqueEffects, TauxCommissionIntermediaireEffects, 
              DepartementEffects, VilleEffects, CommuneEffects, PaysEffects, ZonePaysEffects, GarantEffects, IntermediaireEffects,
              SecteurEffects, ArrondissementEffects, ConventionEffects, TierPayantEffects,
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
-             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, QuartierEffects, QuartierPrestataireGarantEffects])
+             StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects, PortailEffects,
+             DateGardeEffects, PharmacieGardeEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -584,12 +592,15 @@ import { ConditionGeneraleParticuliereComponent } from './module/portail/conditi
         RegisterComponent,
         SuiviRembourssementComponent,
         SuiviFactureComponent,
+        ProduitExcluComponent,
+        ProduitExcluUpdateComponent,
         EntenteComponent,
         EntenteBonComponent,
         QuartierPrestataireGarantComponent,
         PrestataireCartographieQuartierComponent,
         ConditionGeneraleComponent,
         ConditionGeneraleParticuliereComponent,
+        PharmacieGardeComponent
 
     ],
     providers: [
