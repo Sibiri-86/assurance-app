@@ -32,7 +32,7 @@
                 </ng-template>
             </p-toolbar>
             
-            <p-table #dt [value]="quartierPrestatataireList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+            <p-table #dt [value]="quartierPrestatataireList" selectionMode="multiple" [autoLayout]="true" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
