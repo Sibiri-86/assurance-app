@@ -1,31 +1,87 @@
-<!-- <div class="map-wrapper">
-    <div class="map-border">
-        <div class="">
-            <div id="frugalmap"> </div>
-        </div>
-    </div>
-</div> -->
-
-        <div class="p-grid">
-            <div class="p-field p-col-3 de">
-                <div class="card d" >
-                    <label for="lastname2" style="font-weight: bold;">Quartier</label><br>
-                    <p-dropdown  [filter]="true" showClear="true" 
-                                [options]="quartierList"  [(ngModel)]="selectedQuartier" 
-                                (onChange)="onQuartierChange(selectedQuartier)"
-                                placeholder="Selectionner un quartier" optionLabel="libelle">
-                    </p-dropdown>
-                </div>
-            </div>
-            <div class="p-field p-col-9">
-                <div class="map-container">
-                    <div class="map-frame">
-                    <div id="frugalmap"></div>
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <!--
+                    <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
+                    <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()"></button>
+                    -->
+                    <div>
+                        <label for="lastname2" style="font-weight: bold;">Quartier</label><br>
+                        <p-dropdown  [filter]="true" showClear="true" 
+                                    [options]="quartierList"  [(ngModel)]="selectedQuartier" 
+                                    (onChange)="onQuartierChange(selectedQuartier)"
+                                    placeholder="Selectionner un quartier" optionLabel="libelle">
+                        </p-dropdown>
+                                        
+                    <p-dropdown inputId="selectedTypePrestataire" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="typePrestataireList"
+                                        [autoDisplayFirst]="false"
+                                        placeholder="Selectionnez le type prestataire"
+                                        optionLabel="libelle" class="p-mr-2" [(ngModel)]="selectedTypePrestataire"  (onChange)="onQuartierChangeAndTpePrestataire(selectedQuartier, selectedTypePrestataire)"></p-dropdown>
+                    
+<!--                     <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
+ -->                    </div>
+                </ng-template>
+            </p-toolbar>
+            
+            <p-table #dt [value]="prestataireList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
+                    >
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
                     </div>
-                </div>
-            </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
+                        -->
+                        <th pSortableColumn="libelle">Nom<p-sortIcon field="libelle"></p-sortIcon></th>
+                          <th style="width:175px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestataire>
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="prestataire"></p-tableCheckbox>
+                        </td>
+                        <td> <span class="p-column-title" style="font-weight: bold;" >{{prestataire.code}}</span>
+                        </td> -->
+                        <td><span class="p-column-title pi pi-bars"> {{prestataire.libelle}}</span>
+                        </td>
+                        
+                        
+                        <td style="width:175px">
+                    </td>
+                        
+                       
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{prestataireList ? prestataireList.length : 0 }} prestataire(s).
+                    </div>
+                </ng-template>
+            </p-table>
         </div>
+        
 
-
+            
+</div>
+</div>
 
 

@@ -10,12 +10,16 @@ import { AppState } from 'src/app/store/app.state';
 import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 import { loadPrestataire} from '../../../store/parametrage/prestataire/actions';
 import * as prestataireSelector from '../../../store/parametrage/prestataire/selector';
+
+import * as typePrestataireSelector from '../../../store/parametrage/type-prestataire/selector';
 import { Departement } from 'src/app/store/parametrage/departement/model';
 import * as quartierSelector from "../../../store/parametrage/quartier/selector";
 import { loadDepartement } from 'src/app/store/parametrage/departement/actions';
 import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
 import { Quartier } from 'src/app/store/parametrage/quartier/model';
 import { loadQuartier } from 'src/app/store/parametrage/quartier/actions';
+import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
+import { loadTypePrestataire } from 'src/app/store/parametrage/type-prestataire/actions';
 
 @Component({
     selector: 'app-prestataire-cartographie-quartier',
@@ -29,8 +33,11 @@ export class PrestataireCartographieQuartierComponent implements OnInit, AfterVi
     private marker: any;
     prestataireList$: Observable<Array<Prestataire>>;
     prestataireList: Array<Prestataire>;
+    typePrestataireList$: Observable<Array<TypePrestataire>>;
+    typePrestataireList: Array<TypePrestataire>;
     destroy$ = new Subject<boolean>();
     selectedQuartier: Quartier = {};
+    selectedTypePrestataire: TypePrestataire = {};
     markersClsuters: any[] = [];
     quartierList$: Observable<Array<Quartier>>;
     quartierList: Array<Quartier>;
@@ -59,42 +66,32 @@ export class PrestataireCartographieQuartierComponent implements OnInit, AfterVi
               this.quartierList = value.slice();
             }
           });
+          this.typePrestataireList$ = this.store.pipe(
+            select(typePrestataireSelector.typePrestataireList)
+          );
+          this.store.dispatch(loadTypePrestataire());
+          this.typePrestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+              this.typePrestataireList = value.slice();
+            }
+          });
     }
 
     onQuartierChange(selectedQuartier: Quartier) {
-        this.prestataireList = [];
-       // this.marker = null;
-        console.log('*******this.markersClsuters********>', this.markersClsuters);
-        if (this.markersClsuters?.length > 0) {
-            this.markersClsuters.forEach(m=> {
-                console.log('*******m********>', m);
-                this.mapCart?.removeLayer(m);
-            });
-            
-        }
+       
         this.prestataireService.getPrestataireByQuartierId(selectedQuartier.id).subscribe( (res) => {
             this.prestataireList = res;
-            this.prestataireList.forEach(prest => {
-                const myIcon = L.icon({
-                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                    iconSize: [15, 30],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
-                    shadowSize: [20, 35]
-                });
-                this.marker = L?.marker([prest.latitude, prest.longitude], {icon: myIcon});
-                this.marker?.addTo(this.mapCart);
-                this.marker?.bindTooltip('<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-home"></i> ' + prest.libelle + '<br>' +
-                    '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-user"></i> ' + prest.responsable  + '<br>' +
-                    '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-phone"></i> ' + prest.telephone);
-
-                // this.markersClsuter.addTo(this.mapCart);
-                this.markersClsuters?.push(this.marker);
-                
-            });
             
-            console.log('historiquePlafondActePlafongConfig ==============  ', this.prestataireList);
+            
+        });
+    }
+
+    onQuartierChangeAndTpePrestataire(selectedQuartier: Quartier, selectedTypePrestataire: TypePrestataire) {
+       
+        this.prestataireService.getPrestataireByQuartierIdType(selectedQuartier.id, selectedTypePrestataire.id).subscribe( (res) => {
+            this.prestataireList = res;
+            
+            
         });
     }
 
@@ -105,25 +102,7 @@ export class PrestataireCartographieQuartierComponent implements OnInit, AfterVi
             if (value) {
                 this.prestataireList = value.slice();
                 console.log('**************>', this.prestataireList);
-                this.prestataireList.forEach(prest => {
-                    const myIcon = L.icon({
-                        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [15, 30],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34],
-                        shadowSize: [20, 35]
-                    });
-                    this.marker = L?.marker([prest.latitude, prest.longitude], {icon: myIcon});
-                    this.marker?.addTo(this.mapCart);
-                    this.marker?.bindTooltip('<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-home"></i> ' + prest.libelle + '<br>' +
-                        '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-user"></i> ' + prest.responsable  + '<br>' +
-                        '<i class="layout-menuitem-icon ng-tns-c25-9 pi pi-fw pi-phone"></i> ' + prest.telephone);
-
-                    // this.markersClsuter.addTo(this.mapCart);
-                    this.markersClsuters?.push(this.marker);
-                    
-                });
+               
             }
         });
     }

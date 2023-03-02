@@ -90,7 +90,7 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
   
   ngOnInit(): void {
     console.log("this.keycloakService.getUsername()");
-    this.plafondService.findBaremeByUserConnect("600").subscribe(
+    this.plafondService.findBaremeByUserConnect(this.keycloakService.getUsername()).subscribe(
       (res) => {
         this.avenantModif1.plafondFamilleActes = res.body;
       }

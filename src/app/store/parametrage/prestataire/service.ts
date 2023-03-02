@@ -61,6 +61,13 @@ getPrestataireByQuartierId(idQt: string): Observable<Prestataire[]> {
   );
 }
 
+getPrestataireByQuartierIdType(idQt: string, typeId: string): Observable<Prestataire[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_PRESTATAIRE)}/quartierList/${idQt}/${typeId}`).pipe(
+      map((response: Prestataire[]) => response),
+      catchError(this.handleError())
+  );
+}
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');
