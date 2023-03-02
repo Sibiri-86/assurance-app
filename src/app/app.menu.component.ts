@@ -13,7 +13,8 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             
-            {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: this.keycloak.isUserInRole(Function.sm_parametrage),},
+
+            {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], visible: this.keycloak.isUserInRole(Function.sm_dashboard)},
             {label: 'Parametrage', icon: 'pi pi-fw pi-home', routerLink: ['/parametrage'],
             visible: this.keycloak.isUserInRole(Function.sm_parametrage)},
             {
@@ -142,7 +143,8 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
-                visible: this.keycloak.isUserInRole(Function.sm_medical),
+                
+                visible: this.keycloak.isUserInRole(Function.sm_reporting), 
                 items: [
                       
                     {label: 'Production', icon: 'pi pi-align-justify', routerLink: ['/reporting'], visible: true,
@@ -219,14 +221,14 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
                     {label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
                     {label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
-                    {label: 'Entente', icon: '', routerLink: ['/portail/entente'], visible: true},
                     {label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], visible: true},
                     {label: 'Condition générale et particulière', icon: '', routerLink: ['/portail/condition-generale-particuliere'], visible: true},
 
 
                     
 
-                    {label: 'Pharmacie de garde', icon: '', routerLink: ['/portail/pharmacie-garde'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
+                    {label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], visible: true},
+                    {label: 'Pharmacie de garde', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'], visible: this.keycloak.isUserInRole(Function.sm_portail)},
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
                     {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */
