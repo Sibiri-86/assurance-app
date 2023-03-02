@@ -5,7 +5,7 @@
 
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
-                
+                <span style="font-size: 18px !important; font-weight: bold !important;">Les pharmacies de garde en couleur verte representent celles se trouvant dans notre réseau de prestataires.</span>
 			</p-toolbar>
 
 			<p-table #dt [value]="pharmaciesGarde" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom']"
@@ -24,23 +24,23 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th pSortableColumn="contact" >Nom des pharmacies<p-sortIcon field="contact"></p-sortIcon></th>
-                        <th pSortableColumn="contact" >Responsable<p-sortIcon field="contact"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="contact" >Responsable<p-sortIcon field="contact"></p-sortIcon></th> -->
                         <th pSortableColumn="contact" >Téléphone<p-sortIcon field="contact"></p-sortIcon></th>
-                        <th pSortableColumn="contact">Dans le réseau de prestataire ?<p-sortIcon field="contact"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="contact">Dans le réseau de prestataire ?<p-sortIcon field="contact"></p-sortIcon></th> -->
                         <th pSortableColumn="code">Période de Garde <p-sortIcon field="code"></p-sortIcon></th>
                         
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-garant>
 					<tr [ngClass]="{'colorZonePharmacie': garant.isAffilie == true}">
-						<td><span class="p-column-title" >{{garant?.nom}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.responsable}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.telephone}}</span></td>
-                        <td>
+						<td><span style="font-weight: bold !important;" class="p-column-title" >{{garant?.nom}}</span></td>
+                        <!-- <td><span class="p-column-title" >{{garant?.responsable}}</span></td> -->
+                        <td><span style="font-weight: bold !important;" class="p-column-title" >{{garant?.telephone}}</span></td>
+                        <!-- <td>
 							<span *ngIf="garant.isAffilie == true" class="p-badge p-badge-success" pTooltip="Prestataire se trouvant dans nos réseaux">Oui</span>
 							<span *ngIf="garant.isAffilie  == false" class="p-badge p-badge-danger" pTooltip="Prestataire se trouvant hors de nos réseaux">Non</span>
-						</td>
-                        <td><span class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>
+						</td> -->
+                        <td><span style="font-weight: bold !important;" class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>
             
 					</tr>
 				</ng-template>

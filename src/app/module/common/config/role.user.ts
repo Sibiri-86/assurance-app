@@ -43,7 +43,9 @@ export const Function = {
     sm_workflow_prefinancement_direction_devalider: 'sm_workflow_prefinancement_direction_devalider',
     VUE_ASSURE: 'VUE_ASSURE',
     VUE_PRESTATAIRE: 'VUE_PRESTATAIRE',
-    sm_portail: 'sm_portail'
+    sm_portail: 'sm_portail',
+    sm_reporting: 'sm_reporting',
+    sm_dashboard: 'sm_dashboard'
 };
 
 export const UsersRoles = {
