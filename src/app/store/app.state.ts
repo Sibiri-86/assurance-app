@@ -69,6 +69,7 @@ import { ConsommationParSexeState } from './reporting/medical/consommationParSex
 import { AlerteState } from './parametrage/Alerte/state';
 import { ProduitPharmaceutiqueExcluState } from './parametrage/produit-pharmaceutique-exclu/state';
 import { QuartierState } from './parametrage/quartier/state';
+import { QuartierPrestataireGarantState } from './parametrage/quartier-prestataire-garant/state';
 import { PortailState } from './portail/recapitulatif/state';
 import { DateGardeState } from './parametrage/date-garde/state';
 import { PharmacieGardeState } from './parametrage/pharmacie-garde/state';
@@ -140,6 +141,7 @@ export interface AppState {
   statistiqueTrancheAgeState: StatistiqueTrancheAgeState,
   facturePrestatairesState: FacturePrestatairesState,
   consommationParSexeState: ConsommationParSexeState,
+  quartierPrestataireGarantState: QuartierPrestataireGarantState,
   produitPharmaceutiqueExcluState: ProduitPharmaceutiqueExcluState,
   quartierState: QuartierState,
   portailState: PortailState,

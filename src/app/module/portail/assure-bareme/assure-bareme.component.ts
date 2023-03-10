@@ -16,22 +16,28 @@ import { Garantie } from 'src/app/store/parametrage/garantie/model';
 import { element } from 'protractor';
 import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 import { Medecin } from 'src/app/store/parametrage/medecin/model';
-import { ConfirmationService, MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { loadEntente, loadEntenteExclu } from 'src/app/store/parametrage/sous-acte/actions';
+import { loadEntente, loadEntenteExclu, loadNewBareme } from 'src/app/store/parametrage/sous-acte/actions';
 import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector";
 import { SousActeService } from 'src/app/store/parametrage/sous-acte/service';
 import * as featureActionsousActe from '../../../store/parametrage/sous-acte/actions';
+import { PlafondService } from 'src/app/store/contrat/plafond/service';
+import { KeycloakService } from 'keycloak-angular';
+import { PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
+import { Adherent } from 'src/app/store/contrat/adherent/model';
+import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
+import * as adherentSelector from '../../../store/contrat/adherent/selector';
 
 
 
 
 @Component({
-  selector: 'app-entente',
-  templateUrl: './entente.component.html',
-  styleUrls: ['./entente.component.scss']
+  selector: 'app-assure-bareme',
+  templateUrl: './assure-bareme.component.html',
+  styleUrls: ['./assure-bareme.component.scss']
 })
-export class EntenteComponent implements OnInit {
+export class AssureBaremeComponent implements OnInit {
   displayFormPrefinancement = false;
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
@@ -41,42 +47,60 @@ export class EntenteComponent implements OnInit {
   isDetail: boolean;
   selectsousActe: SousActe[] = [];
   sousActeListSave: SousActeList = {};
-
-  gfg: MenuItem[] = [];
+  sousActeListPlafond: PlafondSousActe[]= [];
+  adherent: Adherent = {};
+  adherentSelected$: Observable<Adherent>;
+  images: any[];
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private sousActeService: SousActeService,
+               private keycloakService: KeycloakService,
+               private plafondService: PlafondService,
                private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([{ label: 'Liste des actes qui néccesitent une entente préalable' }]);
+    this.breadcrumbService.setItems([{ label: 'Barème ' }]);
   }
 
   
   ngOnInit(): void {
-   
-
-    this.gfg = [
-     
-     
-      {
-         icon: 'pi pi-whatsapp',
-      }
-  ];
-
-    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
-    this.store.dispatch(loadEntente());
+   //console.log(this.keycloakService.getUsername());
+   this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    this.store.dispatch(loadNewBareme());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
       }
     });
-    this.sousActeService.$getEntenteExclus().subscribe((rest)=>{
+
+    this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:new Date(), matricule: 2}));;
+
+    this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        console.log(value);
+        if (value) {
+          this.adherent = value;
+          this.images.push(this.adherent.urlPhoto);
+          console.log(this.adherent);
+
+        }
+      })
+    this.plafondService.findBaremeByUserConnect("2").subscribe(
+      (res) => {
+        this.sousActeListPlafond = res.body;
+      }
+    );
+    console.log(this.keycloakService.loadUserProfile());
+    
+    
+    this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
       if (rest) {
         this.sousActeFinalList = rest.typeSousActeDtoList;
       }
     });
+    
+
   }
 
   onRowUnselectSinistre(event){
@@ -95,7 +119,7 @@ export class EntenteComponent implements OnInit {
   }
   creerEntente() {
     this.displayFormPrefinancement = true;
-    this.sousActeService.$getEntenteExclus().subscribe((rest)=>{
+    this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
       if (rest) {
         this.sousActeFinalList = rest.typeSousActeDtoList;
       }
@@ -106,7 +130,7 @@ export class EntenteComponent implements OnInit {
   enregistre() {
     if(this.selectsousActe) {
       this.sousActeListSave.typeSousActeDtoList = this.selectsousActe;
-      this.store.dispatch(featureActionsousActe.createEntente(this.sousActeListSave));
+      this.store.dispatch(featureActionsousActe.createNewBareme(this.sousActeListSave));
       this.selectsousActe = [];
       this.displayFormPrefinancement = false;
     }

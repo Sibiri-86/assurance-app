@@ -4,7 +4,7 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-					<button pButton pRipple label="Entente" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+					<button pButton pRipple label="Sous acte" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
                             (click)="creerEntente()" ></button>
 				</ng-template>
                
@@ -35,7 +35,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-sousActe>
-                    <tr [pSelectableRow]="sousActe">
+                    <tr>
                         <td>
                             <p-tableCheckbox [value]="sousActe"></p-tableCheckbox>
                         </td>

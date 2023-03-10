@@ -1,5 +1,5 @@
 
-import {Adherent, AdherentList, AdherentResearchReponse} from './model';
+import {Adherent, AdherentList, AdherentResearchReponse, ConditionGenerale, ConditionGeneraleList} from './model';
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -48,6 +48,13 @@ $getAdherentsDistinct(idGarantie: string, idPolice: string): Observable<Adherent
   );
 }
 
+getCondition(): Observable<ConditionGeneraleList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/condition`).pipe(
+    map((response: ConditionGeneraleList) => response),
+    catchError(this.handleError())
+  );
+}
 $getAdherentsDistinctGroupe(idGarantie: string, idPolice: string, idGroupe: string): Observable<AdherentList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/distinct-groupe`, {params: createRequestOption({idGarantie,
@@ -60,6 +67,16 @@ $getAdherentsDistinctGroupe(idGarantie: string, idPolice: string, idGroupe: stri
 posAdherent(Adherent: Adherent): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, Adherent);
+  }
+
+  posConditionGenerale(conditionGenerale: ConditionGenerale): Observable<any> {
+    // @FIXME: post request
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/condition-generale`, conditionGenerale);
+  }
+
+  deleteConditionGenerale(conditionGenerale: ConditionGenerale): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/condition-generale`, conditionGenerale);
   }
 
   posAdherentWithFamille(adherentFamille: AdherentFamille): Observable<any> {
@@ -76,6 +93,15 @@ posAdherent(Adherent: Adherent): Observable<any> {
     headers.append('Content-Type', 'multipart/form-data');
     headers.set('Accept', 'application/json');
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload`, data, { headers });
+  }
+
+  pushCondition(file: File): Observable<any> {
+    const data: FormData = new FormData();
+    data.append('file', file);
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.set('Accept', 'application/json');
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload-condition`, data, { headers });
   }
   
   

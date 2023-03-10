@@ -322,10 +322,17 @@ import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-upda
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
 import { QuartierEffects } from './store/parametrage/quartier/effect';
+import { QuartierPrestataireGarantEffects } from './store/parametrage/quartier-prestataire-garant/effect';
+import { QuartierPrestataireGarantComponent } from './module/medical/prestataire-garant-quartier/prestataire-garant-quartier.component';
+import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
+import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
+import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
 import { PortailEffects } from './store/portail/recapitulatif/effect';
 import { DateGardeEffects } from './store/parametrage/date-garde/effect';
 import { PharmacieGardeEffects } from './store/parametrage/pharmacie-garde/effect';
 import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
+import { NouveauBaremeComponent } from './module/medical/nouveau-bareme/nouveau-bareme.component';
+import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bareme.component';
 
 @NgModule({
     imports: [
@@ -591,7 +598,13 @@ import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharma
         ProduitExcluUpdateComponent,
         EntenteComponent,
         EntenteBonComponent,
-        PharmacieGardeComponent
+        QuartierPrestataireGarantComponent,
+        PrestataireCartographieQuartierComponent,
+        ConditionGeneraleComponent,
+        ConditionGeneraleParticuliereComponent,
+        PharmacieGardeComponent,
+        NouveauBaremeComponent,
+        AssureBaremeComponent,
 
     ],
     providers: [

@@ -108,7 +108,13 @@ import { ProduitExcluComponent } from './module/portail/produit-exclu/produit-ex
 import { ProduitExcluUpdateComponent } from './module/medical/produit-exclu-update/produit-exclu-update.component';
 import { EntenteComponent } from './module/portail/entente/entente.component';
 import { EntenteBonComponent } from './module/medical/entente-bon/entente-bon.component';
+import { QuartierPrestataireGarantComponent } from './module/medical/prestataire-garant-quartier/prestataire-garant-quartier.component';
+import { PrestataireCartographieQuartierComponent } from './module/portail/prestataire-cartographie-quartier/prestataire-cartographie-quartier.component';
+import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
+import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
 import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
+import { NouveauBaremeComponent } from './module/medical/nouveau-bareme/nouveau-bareme.component';
+import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bareme.component';
 
 @NgModule({
     imports: [
@@ -140,6 +146,7 @@ import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharma
                     {path: 'contrat/bareme', component: BaremeComponent},
                     {path: 'contrat/exercice', component: ExerciceComponent},
                     {path: 'contrat/avenant', component: AvenantComponent},
+                    {path: 'contrat/condition-generale', component: ConditionGeneraleComponent},
                     {path: 'prestation/prefinancement', component: PrefinancementEditionComponent},
                     {path: 'prestation/prefinancement/valide', component: PrefinancementValideComponent},
                     {path: 'prestation/prefinancement/consultation', component: ConsultationSinistreComponent},
@@ -232,8 +239,15 @@ import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharma
                     {path: 'portail/produit-exclu', component: ProduitExcluComponent},
                     {path: 'medical/produit-exclu', component: ProduitExcluUpdateComponent},
                     {path: 'portail/entente', component: EntenteComponent},
+                    {path: 'portail/prestataire-cartographie-quartier', component: PrestataireCartographieQuartierComponent},
                     {path: 'medical/entente-bon', component: EntenteBonComponent},
-                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent}
+                    {path: 'medical/quartier-prestataire-garant', component: QuartierPrestataireGarantComponent},
+                    {path: 'portail/condition-generale-particuliere', component: ConditionGeneraleParticuliereComponent},
+                    {path: 'medical/entente-bon', component: EntenteBonComponent},
+                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent},
+                    {path: 'medical/new-bareme', component: NouveauBaremeComponent},
+                    {path: 'portail/bareme', component: AssureBaremeComponent},
+                    
                     
                     
                     

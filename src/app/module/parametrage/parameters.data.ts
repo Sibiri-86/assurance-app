@@ -1352,6 +1352,16 @@ export const DATA_DEFINITION = [
           field: 'idNaturePrestataire',
           optionLabel: 'libelle'
         }
+      },
+      {
+        field: 'idQuartier', header: 'Quartier', width: 1, label: 'libelleQuartier', text_center: false,
+          validators: [Validators.required], type: 'dropdown', dropObj: {
+            action: quartierActions.loadQuartier(),
+            selector: quartierDtoList,
+            key: 'id',
+            field: 'idQuartier',
+            optionLabel: 'libelle'
+          }
       }
     ],
     entityValidations: [

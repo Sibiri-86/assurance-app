@@ -1,13 +1,14 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import * as featureActions from './actions';
 
-import { Adherent, AdherentList, AdherentResearchReponse } from './model';
+import { Adherent, AdherentList, AdherentResearchReponse, ConditionGeneraleList } from './model';
 import {AdherentState} from './state';
 
 const initialState : AdherentState = {
   adherentList: null,
   selectedAdherentResearch: null,
-  listeActualisee: null
+  listeActualisee: null,
+  conditionGeneraleDtoList: null
 };
 
 // @ts-ignore
@@ -21,7 +22,11 @@ const featureReducer = createReducer(
   })),
   on(featureActions.setListeActualisee, (state, payload) => ({
     ...state, listeActualisee: payload.listeActualisee
-  }))
+  })),
+  on(featureActions.setConditionGenerale, (state, payload: ConditionGeneraleList) => ({
+    ...state, conditionGeneraleDtoList: payload.conditionGeneraleDtoList
+  })),
+  
 );
 
 export function reducer(state: AdherentState | undefined, action: Action) {

@@ -4,12 +4,35 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-					<button pButton pRipple label="Entente" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+					<button pButton pRipple label="Prestataire" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
                             (click)="creerEntente()" ></button>
 				</ng-template>
                
 			</p-toolbar>
-            <p-table #dt [value]="sousActeList" selectionMode="multiple" [autoLayout]="true"  [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <!--
+                    <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addGroupe()"></button>
+                    <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="deleteSelectedPolice()"></button>
+                    -->
+                    <div>
+                        <p-dropdown inputId="quartier1" dataKey="id" [filter]="true"
+                        showClear="true" [options]="quartierList"
+                        name="quartier" [(ngModel)]="quartier" placeholder="Selectionner un  quartier"
+                        optionLabel="libelle"></p-dropdown>
+                                        
+                    <p-dropdown inputId="garant" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="garantList"
+                                        [autoDisplayFirst]="false"
+                                        placeholder="Selectionnez le garant"
+                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="garant"></p-dropdown>
+                    
+                    <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+            
+            <p-table #dt [value]="quartierPrestatataireList" selectionMode="multiple" [autoLayout]="true" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
@@ -34,19 +57,19 @@
                           <th style="width:175px"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-sousActe>
-                    <tr [pSelectableRow]="sousActe">
+                <ng-template pTemplate="body" let-quartierPrestatataire>
+                    <tr [pSelectableRow]="quartierPrestatataire">
                         <td>
-                            <p-tableCheckbox [value]="sousActe"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="quartierPrestatataire"></p-tableCheckbox>
                         </td>
-                        <td> <span class="p-column-title" style="font-weight: bold;" >{{sousActe.code}}</span>
+                        <td> <span class="p-column-title" style="font-weight: bold;" >{{quartierPrestatataire?.prestataire?.code}}</span>
                         </td>
-                        <td><span class="p-column-title">{{sousActe.libelle}}</span>
+                        <td><span class="p-column-title">{{quartierPrestatataire?.prestataire?.libelle}}</span>
                         </td>
                         
                         
                         <td style="width:175px">
-                            <button pButton icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(sousActe)"></button>
+                            <button pButton icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(quartierPrestatataire)"></button>
                     </td>
                         
                        
@@ -55,20 +78,39 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{sousActeList ? sousActeList.length : 0 }} sousActe(s).
+                        {{quartierPrestatataireList ? quartierPrestatataireList.length : 0 }} prestataire(s).
                     </div>
                 </ng-template>
             </p-table>
         </div>
         
-        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Entente" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
+        <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Définir les prestataire par garant et leur quartier" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
                     <form>
-                    <p-table #dt [value]="sousActeFinalList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+                        <div class="p-fluid p-formgrid p-grid">
+
+                            <div class="p-field p-col">
+                                <label for="prestataire" id="prestataire">Quartier<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                <p-dropdown inputId="quartier" dataKey="id" [filter]="true"
+                                            showClear="true" [options]="quartierList"
+                                            name="quartier" [(ngModel)]="quartierPrestataire.quartier" placeholder="Select quartier"
+                                            optionLabel="libelle"></p-dropdown>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="garant" id="garant">Garant<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                                <p-dropdown inputId="garant" dataKey="id" [filter]="true"
+                                            showClear="true" [options]="garantList" [disabled]="!quartierPrestataire.quartier"
+                                            name="garant" [(ngModel)]="quartierPrestataire.garant" placeholder="Select garant"
+                                            optionLabel="nom" ></p-dropdown>
+                            </div>
+                        </div>
+
+                    <p-table #dt [value]="prestatataireList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
-                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectsousActe"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectPrestataire"
                     >
                     <ng-template pTemplate="caption">
                         <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -119,7 +161,7 @@
                     <div>
                     </div>
                     <div>
-                        <button pButton pRipple [disabled]="!selectsousActe.length"   (click)="enregistre()"  label="Ajouter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                        <button pButton pRipple [disabled]="!selectPrestataire.length"   (click)="enregistre()"  label="Ajouter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
                     </div>
                 </div>
                 </form>

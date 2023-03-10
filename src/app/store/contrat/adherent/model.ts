@@ -42,6 +42,15 @@ export interface Adherent{
     question?: Questionnaire;
     numeroWhap?: string;
     compteBancaire?: string;
+    groupeSanguin?: string;
+    reshus?: string;
+}
+
+export interface ConditionGenerale {
+    id?: string;
+    titre?: string;
+    resume?: string; 
+  
 }
 
 export interface AdherentResearchReponse {
@@ -56,4 +65,8 @@ export interface AdherentFamille {
 export interface AdherentList{
     adherentDtoList: Array<Adherent>;
     listeActualisee: Array<Adherent>;
+}
+
+export interface ConditionGeneraleList{
+    conditionGeneraleDtoList: Array<ConditionGenerale>;
 }

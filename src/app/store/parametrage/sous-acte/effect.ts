@@ -42,8 +42,31 @@ export class SousActeEffects {
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
-        )); 
-
+        ));
+    createNewBareme$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.createNewBareme),
+        mergeMap((sousActes: SousActeList) =>
+            this.sousActeService.createNewBareme(sousActes).pipe(
+                switchMap(value => [
+                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.loadNewBareme()
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));  
+        deleteNewBareme$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deleteNewBareme),
+            mergeMap((sousActe: SousActe) =>
+                this.sousActeService.deleteEntente(sousActe).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadNewBareme()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+            )); 
         deleteEntente$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.deleteEntente),
@@ -113,11 +136,39 @@ export class SousActeEffects {
     )
     );
 
+    fetchNewBareme$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadNewBareme),
+        mergeMap(() =>
+            this.sousActeService.$getNewBareme().pipe(
+                switchMap(value => [
+                    featureActions.setSousActe(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
     fetchEntenteExclu$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadEntenteExclu),
         mergeMap(() =>
             this.sousActeService.$getEntenteExclus().pipe(
+                switchMap(value => [
+                    featureActions.setSousActe(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
+
+    loadNewBaremeExclu$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadNewBaremeExclu),
+        mergeMap(() =>
+            this.sousActeService.$getNewBaremeExclus().pipe(
                 switchMap(value => [
                     featureActions.setSousActe(value)
                 ]),
