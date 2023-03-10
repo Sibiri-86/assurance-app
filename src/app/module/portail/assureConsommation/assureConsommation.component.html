@@ -4,22 +4,25 @@
 
 	<div class="p-col-12">
 		<p-toast></p-toast>
-
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
-                <!-- <ng-template pTemplate="left">
-                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir le récapitulatif" label="Récapitulatif " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
+                <ng-template pTemplate="left">
+                    <span style="font-weight:bold !important;  font-size: 15px !important;">
+                        Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
+                        </span>
                 </ng-template>
                 <ng-template pTemplate="right">
                     
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col p-mt-5">
                                 
-                                <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                                <span style="font-weight:bold !important;  font-size: 15px !important;">
+                                    Total montant remboursé des sinistres: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
+                                </span>
                                
                             </div>
                         </div>
-                </ng-template> -->
+                </ng-template>
 				
 			</p-toolbar>
 
@@ -38,7 +41,9 @@
 				<ng-template pTemplate="header">
 					<tr>
                         <th>Assuré(e)</th>
-						<th pSortableColumn="id" >Date de saisie<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
@@ -52,11 +57,27 @@
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
-						<td><span class="p-column-title" >{{garant?.dateSaisie | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{montantTotalReclame | formatTableValue: 'number':true}}</span>
+                            <!-- <p-tag styleClass="p-mr-2" severity="warning">{{montantTotalReclame | formatTableValue: 'number':true}}</p-tag> -->
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{montantTotalRembourse | formatTableValue: 'number':true}}</span>
+                            <!-- <p-tag styleClass="p-mr-2" severity="success">{{montantTotalRembourse | formatTableValue: 'number':true}}</p-tag> -->
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.montantTotalReclame | formatTableValue: 'number':true}}</span>
+                            <!-- <p-tag styleClass="p-mr-2" severity="warning">{{garant?.montantTotalReclame | formatTableValue: 'number':true}}</p-tag> -->
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.montantTotalRembourse | formatTableValue: 'number':true}}</span>
+                            <!-- <p-tag styleClass="p-mr-2" severity="success">{{garant?.montantTotalRembourse | formatTableValue: 'number':true}}</p-tag> -->
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
                         <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.ordreReglement?.montantReclame | formatTableValue: 'number':true}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.ordreReglement?.montantPaye | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
                         <td>
                             <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
                             (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-success p-mr-2">
@@ -79,7 +100,7 @@
 
 
             <!-- Essai du dropdown -->
-            <br>
+<!--             <br>
             <span style="font-size: 25px !important; color: brown;"> Autre présentation</span>
             <br>
             <br>
@@ -140,8 +161,7 @@
                                             <th style="width: 4rem"></th>
                                         </tr>
                                     </ng-template>
-<!--                                     <ng-template pTemplate="body" let-sousActe let-expanded="expanded" let-ri="rowIndex" let-editing="editing"></ng-template>
- -->                                    <ng-template pTemplate="body" let-sinsitre let-expanded="expanded" let-ri="rowIndex">
+                                 <ng-template pTemplate="body" let-sinsitre let-expanded="expanded" let-ri="rowIndex">
                                         <tr>
                                     <td><span class="p-column-title" >{{sinsitre?.dateSaisie | formatTableValue : 'date'}}</span></td>
                                     <td><span class="p-column-title" >{{sinsitre?.numeroSinistre}}</span></td>
@@ -160,17 +180,12 @@
                                             {{garant.sinistreList ? garant.sinistreList.length : 0 }} sinistre(s) trouvé(s).
                                         </div>
                                     </ng-template>
-                                    <!-- <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td colspan="6">There are no order for this product yet.</td>
-                                        </tr>
-                                    </ng-template> -->
                                 </p-table>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
-            </p-table>
+            </p-table> -->
 		</div>
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 	    </div>

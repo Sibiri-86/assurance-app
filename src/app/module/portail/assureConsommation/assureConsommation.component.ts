@@ -105,7 +105,11 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   rowGroupMetadata: any;
   consoSinistreFamilles: Array<PrefinancementPortail>;
   consoSinistreTiersPayantFamilles: Array<TiersPayantPortail>;
-
+  montantTotalReclame: number;
+  montantTotalRembourse: number;
+  montantTotalReclameFamille: number;
+  montantTotalRembourseFamille: number;
+  result: number;
   
 
 
@@ -162,6 +166,16 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                 (res) => {
                     console.log('..............consoSinistreFamilles..............   ', res);
                     this.consoSinistreFamilles = res;
+                    if(res){
+                      this.montantTotalReclameFamille = 0;
+                      this.montantTotalRembourseFamille = 0;
+                      for(let i = 0; i < this.consoSinistreFamilles.length; i++) {
+                        this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreFamilles[i].montantReclame;
+                        this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreFamilles[i].montantRembourse;
+                      }
+                      console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+                      console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+                    }
                     this.updateRowGroupMetaData();
                     /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
                     console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
@@ -488,6 +502,8 @@ voirSinistreDetail(sinistre: any) {
 
   updateRowGroupMetaData() {
     this.rowGroupMetadata = {};
+    this.montantTotalReclame = 0;
+    this.montantTotalRembourse = 0;
 
     if (this.consoSinistreFamilles) {
       //console.log("***************", this.consoSinistreFamilles);
@@ -503,9 +519,13 @@ voirSinistreDetail(sinistre: any) {
                 let previousRowData = this.consoSinistreFamilles[i - 1];
                 console.log("*******previousRowData********", previousRowData);
                 let previousRowGroup = previousRowData.adherent.prenom;
+                this.montantTotalReclame = previousRowData.montantTotalReclame;
+                console.log("*******this.montantTotalReclame********", this.montantTotalReclame);
+                this.montantTotalRembourse = previousRowData.montantTotalRembourse;
+                console.log("*******this.montantTotalRembourse********", this.montantTotalRembourse);
                 if (representativeName === previousRowGroup) {
                   this.rowGroupMetadata[representativeName].size++;
-                  //console.log("*******case 1********", this.rowGroupMetadata[representativeName].size);
+                  console.log("*******case 1********", this.rowGroupMetadata[representativeName]);
                 }
                 else{
                   this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
