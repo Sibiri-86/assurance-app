@@ -1,15 +1,15 @@
 <div class="layout-topbar">
-    <div href="#" class="layout-topbar-logo">
-        <a href="#">
+    <div class="layout-topbar-logo">
+        <a>
             <img class="logo" src="assets/layout/images/logo.jpg" alt="prestige-layout"/>
         </a>
     </div>
-    <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
+    <!-- <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
         <i class="pi pi-bars"></i>
-    </a>
+    </a> -->
 
     <ul class="layout-topbar-menu" role="menu">
-        <li #settings class="layout-topbar-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+        <!-- <li #settings class="layout-topbar-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
             <a href="#" class="layout-topbar-icon first" (click)="app.onTopbarItemClick($event,settings)">
                 <i class="topbar-icon pi pi-cog"></i>
             </a>
@@ -42,7 +42,7 @@
                     </div>
                 </li>
             </ul>
-        </li>
+        </li> -->
         <!--
         <li #calendar class="layout-topbar-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === calendar}">
             <a href="#" class="layout-topbar-icon first" (click)="app.onTopbarItemClick($event,calendar)">
@@ -90,8 +90,8 @@
                             <span class="user-profile-name">{{name}}</span>
                             <span class="user-profile-role">{{role}}</span>
                         </div>
-                        <a href="#" class="profile-detail-icon" (click)="app.onTopbarSubItemClick($event)">
-                            <i class="pi pi-sign-out"></i>
+                        <a class="profile-detail-icon" >
+                            <i (click)="lagout()" class="pi pi-sign-out"></i>
                         </a>
                     </div>
                 </li>

@@ -7,7 +7,9 @@
 			<p-toolbar styleClass="p-mb-4">
                 <span style="font-size: 18px !important; font-weight: bold !important;">Les pharmacies de garde en couleur verte representent celles se trouvant dans notre réseau de prestataires.</span>
 			</p-toolbar>
-
+			<div style="text-align: center !important;">
+				<span style="font-weight: bold !important; font-size: 18px !important;" class="p-column-title" class="p-badge p-badge-warning">Période du {{pharmaciesGardePeriode?.dateDebutD | formatTableValue : 'date'}} au {{pharmaciesGardePeriode?.dateFinF | formatTableValue : 'date'}}</span>
+			</div>
 			<p-table #dt [value]="pharmaciesGarde" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom']"
 					 [rowHover]="true" dataKey="id"
 					 styleClass="p-datatable-customers"
@@ -22,12 +24,13 @@
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">
+					
 					<tr>
 						<th pSortableColumn="contact" >Nom des pharmacies<p-sortIcon field="contact"></p-sortIcon></th>
                         <!-- <th pSortableColumn="contact" >Responsable<p-sortIcon field="contact"></p-sortIcon></th> -->
                         <th pSortableColumn="contact" >Téléphone<p-sortIcon field="contact"></p-sortIcon></th>
                         <!-- <th pSortableColumn="contact">Dans le réseau de prestataire ?<p-sortIcon field="contact"></p-sortIcon></th> -->
-                        <th pSortableColumn="code">Période de Garde <p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="code">Localisation<p-sortIcon field="code"></p-sortIcon></th>
                         
 					</tr>
 				</ng-template>
@@ -40,8 +43,8 @@
 							<span *ngIf="garant.isAffilie == true" class="p-badge p-badge-success" pTooltip="Prestataire se trouvant dans nos réseaux">Oui</span>
 							<span *ngIf="garant.isAffilie  == false" class="p-badge p-badge-danger" pTooltip="Prestataire se trouvant hors de nos réseaux">Non</span>
 						</td> -->
-                        <td><span style="font-weight: bold !important;" class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>
-            
+						<td><button pButton  pRipple icon="pi pi-map-marker" pTooltip="voir l'emplacement du prestataire" class="p-button-rounded p-button-success p-mr-2"></button></td>
+<!--                         <td><span style="font-weight: bold !important;" class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>-->            
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="summary">

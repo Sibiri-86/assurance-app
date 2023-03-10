@@ -5,7 +5,9 @@ import { catchError, map } from 'rxjs/operators';
 import { GlobalConfig } from 'src/app/config/global.config';
 import { Endpoints } from 'src/app/config/module.endpoints';
 import { ProduitPharmaceutiqueExclu, ProduitPharmaceutiqueExcluEntite, ProduitPharmaceutiqueExcluEntiteList } from '../../parametrage/produit-pharmaceutique-exclu/model';
-import { DepenseFamille} from './model';
+import { Prefinancement } from '../../prestation/prefinancement/model';
+import { Sinistre } from '../../prestation/tierPayant/model';
+import { ConsommationPortail, DepenseFamille, PrefinancementPortail, TiersPayantPortail} from './model';
 
 @Injectable({providedIn: 'root'})
 export class PortailService {
@@ -96,6 +98,24 @@ updateRachatExclusion(produitPharmaceutiqueExclu: Array<ProduitPharmaceutiqueExc
       map((response: any) => response),
       catchError(this.handleError())
   );
+}
+
+fetchDepenseAndFamille$(depenseFamille: ConsommationPortail): Observable<any> {
+  // @FIXME: post request+
+  console.log('========Recapitulatif=========>', depenseFamille);
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assureConsommation-and-famille`, depenseFamille);
+}
+
+fetchDepenseSinistreAndFamille$(depenseFamille: PrefinancementPortail): Observable<any> {
+  // @FIXME: post request+
+  console.log('========Recapitulatif=========>', depenseFamille);
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assureConsommation-sinistre-and-famille`, depenseFamille);
+}
+
+fetchDepenseSinistreTiersPayantAndFamille$(depenseFamille: TiersPayantPortail): Observable<any> {
+  // @FIXME: post request+
+  console.log('========Recapitulatif=========>', depenseFamille);
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assureConsommation-sinistre-tiers-payant-and-famille`, depenseFamille);
 }
 
   private handleError<T>() {

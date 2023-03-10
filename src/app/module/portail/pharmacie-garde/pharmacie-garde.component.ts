@@ -81,27 +81,10 @@ export class PharmacieGardeComponent implements OnInit {
   prefinancement: Array<Prefinancement>;
   prestations: Array<Prestation>;
   report: Report = {};
-  ordreReglementListMedical: Array<OrdreReglement>;
-  ordreReglementListMedical$: Observable<Array<OrdreReglement>>;
-  ordreReglementListFinance: Array<OrdreReglement>;
-  ordreReglementListFinance$: Observable<Array<OrdreReglement>>;
-  ordreReglementListDirection: Array<OrdreReglement>;
-  ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
   name = '';
   role = '';
   pharmaciesGarde: Array<PharmacieGarde>;
-  role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
-  role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
-  role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
-  role4 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction);
-  role_sm_workflow_prefinancement_prestation_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_valider);
-  role_sm_workflow_prefinancement_Medical_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_valider);
-  role_sm_workflow_prefinancement_finance_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_valider);
-  role_sm_workflow_prefinancement_direction_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_valider);
-  role_sm_workflow_prefinancement_prestation_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_devalider);
-  role_sm_workflow_prefinancement_Medical_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_devalider);
-  role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
-  role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
+  pharmaciesGardePeriode: PharmacieGarde;
   rembourssements: Array<ProduitPharmaceutique>;
   rembourssementValid: Array<Prefinancement>;
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
@@ -150,32 +133,7 @@ export class PharmacieGardeComponent implements OnInit {
 
   }
 
-  m() {
-    if(this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation)){
-      this.role1 = true;
-    }
-  }
-
-  loadOrdreReglementFinance() {
-    this.ordreReglementListFinance$ = this.store.pipe(select(prefinancementSelector.ordreReglementListFinance));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideFinance());
-    this.ordreReglementListFinance$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log("============>",value);
-      if (value) {
-        this.ordreReglementListFinance = value.slice();
-    }
-    });
-  }
-  loadOrdreReglementMedical() {
-    this.ordreReglementListMedical$ = this.store.pipe(select(prefinancementSelector.ordreReglementListMedical));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideMedical());
-    this.ordreReglementListMedical$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log("============>",value);
-      if (value) {
-        this.ordreReglementListMedical = value.slice();
-    }
-    });
-  }
+  
   loadOrdreReglement() {
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
     this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValide());
@@ -189,16 +147,6 @@ export class PharmacieGardeComponent implements OnInit {
 
   loadRembInitie() {
     
-  }
-  loadOrdreReglementDirection() {
-    this.ordreReglementListDirection$ = this.store.pipe(select(prefinancementSelector.ordreReglementListDirection));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideDirection());
-    this.ordreReglementListDirection$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log(value);
-      if (value) {
-        this.ordreReglementListDirection = value.slice();
-    }
-    });
   }
 
   addMessage(severite: string, resume: string, detaile: string): void {
@@ -218,7 +166,6 @@ export class PharmacieGardeComponent implements OnInit {
       },
     }); */
         this.store.dispatch(featureActionPrefinancement.validerOrdreReglementWorkflow({ordre, etat: TypeEtatOrdreReglement.VALIDE, w: Workflow.FINANCE}));
-        this.loadOrdreReglementMedical();
         this.addMessage('success', 'Opération reussie', 'Ordre de paiement envoyé à la finance');
   }
 
@@ -232,7 +179,6 @@ export class PharmacieGardeComponent implements OnInit {
       accept: () => {
         //this.store.dispatch(featureActionPrefinancement.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.VALIDE, w: Workflow.PRESTATION}));
         this.store.dispatch(featureActionPrefinancement.validerOrdreReglementWorkflow({ordre, etat: TypeEtatOrdreReglement.VALIDE, w: Workflow.PRESTATION}));
-        this.loadOrdreReglementMedical();
         this.addMessage('success', 'Opération reussie', 'Ordre de paiement rétrograder à la prestation pour correction');
       },
     });
@@ -251,7 +197,6 @@ export class PharmacieGardeComponent implements OnInit {
       },
     }); */
         this.store.dispatch(featureActionPrefinancement.validerOrdreReglementWorkflow({ordre, etat: TypeEtatOrdreReglement.VALIDE, w: Workflow.DIRECTION}));
-        this.loadOrdreReglementFinance();
         this.addMessage('success', 'Opération reussie', 'Ordre de paiement envoyé à la direction');
   }
 
@@ -268,7 +213,6 @@ export class PharmacieGardeComponent implements OnInit {
       },
     }); */
         this.store.dispatch(featureActionPrefinancement.validerOrdreReglementWorkflow({ordre, etat: TypeEtatOrdreReglement.VALIDE, w: Workflow.CAISSE}));
-        this.loadOrdreReglementDirection();
         this.addMessage('success', 'Opération reussie', 'Ordre de paiement envoyé à la caisse');
   }
 
@@ -371,6 +315,7 @@ export class PharmacieGardeComponent implements OnInit {
       (res) => {
           console.log('..............pharmaciesGarde..............   ', res);
           this.pharmaciesGarde = res;
+          this.pharmaciesGardePeriode = res[0];
       }
   );
   }

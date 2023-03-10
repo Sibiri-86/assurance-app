@@ -1,10 +1,14 @@
+import { TypeEtatSinistre } from "src/app/module/common/models/enum.etat.sinistre";
 import { Groupe } from "src/app/store/contrat/groupe/model";
 import { Garant } from "src/app/store/parametrage/garant/model";
 import { Adherent } from "../../contrat/adherent/model";
+import { Police } from "../../contrat/police/model";
 import { Garantie } from "../../parametrage/garantie/model";
 import { Pathologie } from "../../parametrage/pathologie/model";
 import { Prestataire } from "../../parametrage/prestataire/model";
-import { Prestation } from "../../prestation/prefinancement/model";
+import { TypePrestataire } from "../../parametrage/type-prestataire/model";
+import { Prestation, TypePaiement } from "../../prestation/prefinancement/model";
+import { Sinistre, SinistreTierPayant } from "../../prestation/tierPayant/model";
 
 
 export interface Recapitulatif {
@@ -81,4 +85,56 @@ export interface DepenseFamille {
     adherentId?:number;
     dateDebut?: Date;
     dateFin?: Date;
+}
+
+export interface ConsommationPortail {
+    adherent?: Adherent;
+    totalMontantReclameSinistre?: number;
+    totalMontantRembourseSinistre?: number;
+    totalMontantReclameSinistreTiersPayant?: number;
+    totalMontantRembourseSinistreTiersPayant?: number;
+    coutMoyen?: number;
+    totalMontantReclameFamille?: number;
+    totalMontantRembourseFamille?: number;
+    dateDebut?: Date;
+    dateFin?: Date;
+    SinistreList?: Array<Sinistre>;
+    SinistreTierPayantList?: Array<SinistreTierPayant>;
+}
+
+export interface PrefinancementPortail {
+    id?: string;
+    police?: Police;
+    dateDeclaration?:Date;
+    numeroSinistre?: string;
+    // private OrdreReglementDto ordreReglement;
+    prestation?: Array<Prestation>;
+    adherent?: Adherent;
+    dateSaisie?:Date;
+    etat?: TypeEtatSinistre;
+    typePaiement?: TypePaiement;
+    nomBenefiniciaire?: string;
+    numeroOrange?: string;
+    numeroMobicash?: string;
+    numeroVirement?: string;
+    dateSoins?:Date;
+}
+
+export interface TiersPayantPortail{
+    id?: string;
+    police?: Police;
+    dateDeclaration?: string;
+    numeroSinistre?: string;
+    numeroFacture?: string;
+    adherent?: Adherent;
+    prestation?: Array<Prestation>;
+    dateSaisie?:Date;
+    dateFacture?:Date;
+    prestataire?: Prestataire;
+    etat?: TypeEtatSinistre;
+    montantReclame?:number;
+    montantPaye?:number;
+    montantRestant?:number;
+    montantPlafond?:number;
+    typePrestataire?:TypePrestataire;
 }

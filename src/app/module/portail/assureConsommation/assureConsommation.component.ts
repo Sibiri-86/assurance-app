@@ -28,9 +28,9 @@ import { groupeList } from 'src/app/store/contrat/groupe/selector';
 import { Status } from 'src/app/store/global-config/model';
 import {status} from '../../../store/global-config/selector';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { DepenseFamille } from 'src/app/store/portail/recapitulatif/model';
+import { ConsommationPortail, DepenseFamille, PrefinancementPortail, TiersPayantPortail } from 'src/app/store/portail/recapitulatif/model';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
-import { Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { Prestation, Sinistre } from 'src/app/store/prestation/prefinancement/model';
 import { KeycloakService } from 'keycloak-angular';
 import { PharmacieGarde } from 'src/app/store/parametrage/pharmacie-garde/model';
 import { ProduitPharmaceutiqueExcluService } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/service';
@@ -90,12 +90,21 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   depenseFamille: DepenseFamille;
   depenseFamilles: Array<DepenseFamille>;
   selectedGarants: Array<Recapitulatif>;
-  prestationDetail: DepenseFamille;
+  prestationDetail: Prestation[];
+  sinistreDetailList: Array<Sinistre>;
   displaySinistreDetail= false;
+  displaySinistreDetail1 = false;
+  displayPrefinancementPrestationDetail= false;
   name = '';
   role = '';
   pharmaciesGarde: Array<PharmacieGarde>;
-
+  consoFamilles: Array<ConsommationPortail>;
+  consoFamillesSinistre: Array<ConsommationPortail>;
+  consoFamillesSinistreTiersPayant: Array<ConsommationPortail>;
+  consoFamillesSinistreFiltrer:Sinistre[] = [];
+  rowGroupMetadata: any;
+  consoSinistreFamilles: Array<PrefinancementPortail>;
+  consoSinistreTiersPayantFamilles: Array<TiersPayantPortail>;
 
   
 
@@ -119,7 +128,6 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private produitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService,
               private keycloak: KeycloakService) {
 
-              this.breadcrumbService.setItems([{ label: 'Validation des ordres de paiement' }]);
               console.log('les roles du user est dans le workflow '+ this.keycloak.getUserRoles());
                 this.keycloak.loadUserProfile().then(profile => {
                   this.name = profile.firstName + ' ' + profile.lastName;
@@ -137,7 +145,44 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                         console.log('..............RES..............   ', res);
                         this.depenseFamilles = res;
                     }
-                );
+                ); 
+
+                this.portailService.fetchDepenseAndFamille$(this.depenseFamille).subscribe(
+                  (res) => {
+                      console.log('..............RES..............   ', res);
+                      this.consoFamilles = res;
+                      this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
+                      console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
+                      this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
+                      console.log('.............consoFamillesSinistreTiersPayant..............   ', this.consoFamillesSinistreTiersPayant);
+                      //this.updateRowGroupMetaData();
+                    }
+              )
+              this.portailService.fetchDepenseSinistreAndFamille$(this.depenseFamille).subscribe(
+                (res) => {
+                    console.log('..............consoSinistreFamilles..............   ', res);
+                    this.consoSinistreFamilles = res;
+                    this.updateRowGroupMetaData();
+                    /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
+                    console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
+                    this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
+                    console.log('.............consoFamillesSinistreTiersPayant..............   ', this.consoFamillesSinistreTiersPayant);
+                    */
+                  }
+            );
+
+            this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamille).subscribe(
+              (res) => {
+                  console.log('..............consoSinistreTiersPayantFamilles..............   ', res);
+                  this.consoSinistreTiersPayantFamilles = res;
+                  this.updateRowGroupMetaData();
+                  /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
+                  console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
+                  this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
+                  console.log('.............consoFamillesSinistreTiersPayant..............   ', this.consoFamillesSinistreTiersPayant);
+                  */
+                }
+          );
 
                   if (profile['attributes'].role.length != 0){
                   this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
@@ -149,10 +194,11 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
         dateDebut: new FormControl('', [Validators.required]),
         adherentId: new FormControl()
     });
-
-      this.breadcrumbService.setItems([
-        {label: 'Consommation(s) d\'assuré(es)'}
-    ]);
+      /* if(this.consoFamilles.values.length <= 1) {
+        this.breadcrumbService.setItems([{label: 'Consommation(s) d\'assuré(es)'}]);
+      } */
+        this.breadcrumbService.setItems([{ label: 'Consommations de l\'assuré(e) et de ses membres de famille' }]);
+      
     }
 
 ngOnInit(): void {
@@ -178,7 +224,7 @@ ngOnInit(): void {
 
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
-  this.loadPharmacieGarde();
+  // this.loadPharmacieGarde();
 }
 
 loadGroupeList() {
@@ -380,21 +426,102 @@ loadData() {
 );
 }
 
- voirPrestationDetail(prestation: DepenseFamille) {
+ voirPrestationDetail(p: PrefinancementPortail) {
+  console.log('this.depenseFamille recuperer=============>', p);
+  console.log('prestation recuperer=============>', p.prestation); 
+  this.prestationDetail = p.prestation;
+  //this.displaySinistreDetail1 = true;
+  this.displayPrefinancementPrestationDetail = true;
+}
+
+voirPrestationTiersDetail(prestation: any) {
   console.log('this.depenseFamille recuperer=============>', prestation);
-  console.log('prestation recuperer=============>', prestation.prestationList);
+  console.log('prestation recuperer=============>', prestation.prestation);
   this.prestationDetail = prestation;
+  //this.displaySinistreDetail1 = true;
+  this.displayPrefinancementPrestationDetail = true;
+}
+
+voirSinistreDetail(sinistre: any) {
+  console.log('sinistre=============>', sinistre);
+  this.sinistreDetailList = sinistre.sinistreList;
+  console.log('sinistre.sinistreList=============>', sinistre.sinistreList);
   this.displaySinistreDetail = true;
 } 
 
-loadPharmacieGarde() {
-  this.produitPharmaceutiqueExcluService.$getTodayPharmacieGarde().subscribe(
-    (res) => {
-        console.log('..............pharmaciesGarde..............   ', res);
-        this.pharmaciesGarde = res;
+  /* loadPharmacieGarde() {
+    this.produitPharmaceutiqueExcluService.$getTodayPharmacieGarde().subscribe(
+      (res) => {
+          console.log('..............pharmaciesGarde..............   ', res);
+          this.pharmaciesGarde = res;
+      }
+  );
+  } */
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        //this.loadRembourssements();
+        break;
+      }
+      case 1: {
+        //this.loadRembourssementEnCours();
+        break;
+      }
+      case 2: {
+        //this.loadRembourssementOrdreValid();
+        break;
+      }
+      case 3: {
+        //this.loadRembourssementValidAndPaiementValid();
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
     }
-);
-}
+    
+  }
+
+  updateRowGroupMetaData() {
+    this.rowGroupMetadata = {};
+
+    if (this.consoSinistreFamilles) {
+      //console.log("***************", this.consoSinistreFamilles);
+        for (let i = 0; i < this.consoSinistreFamilles.length; i++) {
+            let rowData = this.consoSinistreFamilles[i];
+            //console.log("*******rowData********", rowData);
+            let representativeName = rowData?.adherent?.prenom;
+            
+            if (i == 0) {
+                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+            }
+            else {
+                let previousRowData = this.consoSinistreFamilles[i - 1];
+                console.log("*******previousRowData********", previousRowData);
+                let previousRowGroup = previousRowData.adherent.prenom;
+                if (representativeName === previousRowGroup) {
+                  this.rowGroupMetadata[representativeName].size++;
+                  //console.log("*******case 1********", this.rowGroupMetadata[representativeName].size);
+                }
+                else{
+                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+                  //console.log("*******case2********", this.rowGroupMetadata[representativeName]);
+                }
+            }
+        }
+      }
+    }
+
+    onSort() {
+      this.updateRowGroupMetaData();
+  }
+        
+    
+
 }
 
 
