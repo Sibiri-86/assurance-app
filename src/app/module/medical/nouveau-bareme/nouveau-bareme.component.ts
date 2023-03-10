@@ -16,22 +16,23 @@ import { Garantie } from 'src/app/store/parametrage/garantie/model';
 import { element } from 'protractor';
 import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 import { Medecin } from 'src/app/store/parametrage/medecin/model';
-import { ConfirmationService, MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { loadEntente, loadEntenteExclu } from 'src/app/store/parametrage/sous-acte/actions';
+import { loadEntente, loadEntenteExclu, loadNewBareme } from 'src/app/store/parametrage/sous-acte/actions';
 import * as sousActeSelector from "../../../store/parametrage/sous-acte/selector";
 import { SousActeService } from 'src/app/store/parametrage/sous-acte/service';
 import * as featureActionsousActe from '../../../store/parametrage/sous-acte/actions';
+import { Adherent } from 'src/app/store/contrat/adherent/model';
 
 
 
 
 @Component({
-  selector: 'app-entente',
-  templateUrl: './entente.component.html',
-  styleUrls: ['./entente.component.scss']
+  selector: 'app-nouveau-bareme',
+  templateUrl: './nouveau-bareme.component.html',
+  styleUrls: ['./nouveau-bareme.component.scss']
 })
-export class EntenteComponent implements OnInit {
+export class NouveauBaremeComponent implements OnInit {
   displayFormPrefinancement = false;
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
@@ -41,38 +42,31 @@ export class EntenteComponent implements OnInit {
   isDetail: boolean;
   selectsousActe: SousActe[] = [];
   sousActeListSave: SousActeList = {};
+  
 
-  gfg: MenuItem[] = [];
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private sousActeService: SousActeService,
                private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([{ label: 'Liste des actes qui néccesitent une entente préalable' }]);
+    this.breadcrumbService.setItems([{ label: 'Nooveau barème des assurés' }]);
   }
 
   
   ngOnInit(): void {
    
-
-    this.gfg = [
-     
-     
-      {
-         icon: 'pi pi-whatsapp',
-      }
-  ];
-
-    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
-    this.store.dispatch(loadEntente());
+   this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    this.store.dispatch(loadNewBareme());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
       }
     });
-    this.sousActeService.$getEntenteExclus().subscribe((rest)=>{
+
+    
+    this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
       if (rest) {
         this.sousActeFinalList = rest.typeSousActeDtoList;
       }
@@ -95,7 +89,7 @@ export class EntenteComponent implements OnInit {
   }
   creerEntente() {
     this.displayFormPrefinancement = true;
-    this.sousActeService.$getEntenteExclus().subscribe((rest)=>{
+    this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
       if (rest) {
         this.sousActeFinalList = rest.typeSousActeDtoList;
       }
@@ -106,7 +100,7 @@ export class EntenteComponent implements OnInit {
   enregistre() {
     if(this.selectsousActe) {
       this.sousActeListSave.typeSousActeDtoList = this.selectsousActe;
-      this.store.dispatch(featureActionsousActe.createEntente(this.sousActeListSave));
+      this.store.dispatch(featureActionsousActe.createNewBareme(this.sousActeListSave));
       this.selectsousActe = [];
       this.displayFormPrefinancement = false;
     }

@@ -95,7 +95,6 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
         this.avenantModif1.plafondFamilleActes = res.body;
       }
     );
-    console.log(this.keycloakService.loadUserProfile());
     this.conditionGeneraleList$ = this.store.pipe(select(adherentSelector.conditionGeneraleList));
     this.store.dispatch(loadConditionGenerale());
     this.conditionGeneraleList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

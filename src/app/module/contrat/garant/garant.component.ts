@@ -114,8 +114,8 @@ export class GarantComponent implements OnInit, OnDestroy {
               private store: Store<AppState>, private messageService: MessageService,
               private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService) {
       this.garantForm = this.formBuilder.group({
-        id: new FormControl(''),
-        code: new FormControl(''),
+        id: new FormControl(),
+        code: new FormControl(),
         nom: new FormControl('', [Validators.required]),
         contact: new FormControl('', [Validators.required]),
         adresseEmail: new FormControl(null, [Validators.required, Validators.email]),
@@ -139,7 +139,7 @@ export class GarantComponent implements OnInit, OnDestroy {
         typeGarant: new FormControl('', [Validators.required]),
         commune: new FormControl('', [Validators.required]),
         banque1: new FormControl('', [Validators.required]),
-        banque2: new FormControl(''),
+        banque2: new FormControl(),
         secteur: new FormControl('', [Validators.required]),
         commissionPrime: new FormControl('', [Validators.required]),
         commissionAccessoire: new FormControl('', [Validators.required])

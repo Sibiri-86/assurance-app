@@ -169,8 +169,8 @@ private handleError<T>() {
         {params: createRequestOption({idExo,idGroupe}), observe: 'response'});
 }
 
-findBaremeByUserConnect(username: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
-  return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/username-connect`,
+findBaremeByUserConnect(username: string): Observable<HttpResponse<PlafondSousActe[]>> {
+  return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/username-connect`,
       {params: createRequestOption({username}), observe: 'response'});
 }
 

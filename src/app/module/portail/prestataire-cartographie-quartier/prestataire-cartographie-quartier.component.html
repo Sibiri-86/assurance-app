@@ -50,7 +50,8 @@
                         <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
                         -->
                         <th pSortableColumn="libelle">Nom<p-sortIcon field="libelle"></p-sortIcon></th>
-                          <th style="width:175px"></th>
+                        <th pSortableColumn="libelle">Téléphone<p-sortIcon field="libelle"></p-sortIcon></th>
+                        <th style="width:175px">Localisation</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prestataire>
@@ -62,9 +63,15 @@
                         </td> -->
                         <td><span class="p-column-title pi pi-bars"> {{prestataire.libelle}}</span>
                         </td>
+                        <td><span class="p-column-title"  > {{prestataire.telephone}} </span>
+                        </td>
                         
                         
                         <td style="width:175px">
+                            
+                            <a href="https://maps.google.com/?q={{prestataire.latitude}},{{prestataire.longitude}}&z=8"><span  style="color: rgb(5, 221, 16);font-size: 2rem;" class="pi pi-map-marker"></span></a>
+                            
+                           
                     </td>
                         
                        

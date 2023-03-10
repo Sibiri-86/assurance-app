@@ -3,26 +3,13 @@
 		<p-toast></p-toast>
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
-                <ng-template pTemplate="right">
-                    <h5>Nous vous assisterons <span class="pi pi-whatsapp" style="font-size: 2rem">70 63 32 86</span></h5>
-                    
-					<!-- <button pButton pRipple label="Entente" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
-                            (click)="creerEntente()" ></button> -->
+                <ng-template pTemplate="left">
+					<button pButton pRipple label="Sous acte" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
+                            (click)="creerEntente()" ></button>
 				</ng-template>
-                <!--
-				<ng-template pTemplate="right">
-					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
-				</ng-template>
-                -->
+               
 			</p-toolbar>
-            <p-accordion *ngFor="let item of sousActeList">
-                <p-accordionTab header={{item.libelle}}>
-                    <p>{{item.description}} </p>
-                </p-accordionTab>
-                
-            </p-accordion>
-           <!--  <p-table #dt [value]="sousActeList" selectionMode="multiple" [autoLayout]="true"  [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+            <p-table #dt [value]="sousActeList" selectionMode="multiple" [autoLayout]="true"  [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
@@ -38,21 +25,29 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
                         <th pSortableColumn="code">Code<p-sortIcon field="duree"></p-sortIcon></th>
                        
-                        <th pSortableColumn="libelle">Descritption<p-sortIcon field="libelle"></p-sortIcon></th>
+                        <th pSortableColumn="libelle">Libelle<p-sortIcon field="libelle"></p-sortIcon></th>
+                          <th style="width:175px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-sousActe>
-                    <tr >
-                        
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="sousActe"></p-tableCheckbox>
+                        </td>
                         <td> <span class="p-column-title" style="font-weight: bold;" >{{sousActe.code}}</span>
                         </td>
-                        <td><span class="p-column-title" style="font-weight: bold;">{{sousActe.libelle}}</span>
+                        <td><span class="p-column-title">{{sousActe.libelle}}</span>
                         </td>
                         
-
+                        
+                        <td style="width:175px">
+                            <button pButton icon="pi pi-trash" pTooltip="Supprimer" class="p-button-rounded p-button-danger p-ml-2" (click)="annulerPrestation(sousActe)"></button>
+                    </td>
                         
                        
                         
@@ -60,21 +55,30 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{sousActeList ? sousActeList.length : 0 }} actes(s).
+                        {{sousActeList ? sousActeList.length : 0 }} sousActe(s).
                     </div>
                 </ng-template>
-            </p-table> -->
+            </p-table>
         </div>
         
         <p-dialog [maximizable]="true" [(visible)]="displayFormPrefinancement" header="Entente" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
             <ng-template pTemplate="content">
                 <div class="card">
                     <form>
-                    <p-table #dt [value]="sousActeFinalList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                    <p-table #dt [value]="sousActeFinalList" selectionMode="multiple" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectsousActe"
                     >
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <h5 class="p-m-0"></h5>
+                            <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                            </span>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
@@ -89,7 +93,10 @@
                     <tr>
 
                         <tr [pSelectableRow]="sous">
-                            <td>
+                           
+                         <td>
+                             <p-tableCheckbox [value]="sous"></p-tableCheckbox>
+                        </td>
                         <td><span class="p-column-title">{{sous.code}}</span>
                         </td>
                         <td><span class="p-column-title">{{sous.libelle}}</span>

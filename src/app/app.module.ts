@@ -331,6 +331,8 @@ import { PortailEffects } from './store/portail/recapitulatif/effect';
 import { DateGardeEffects } from './store/parametrage/date-garde/effect';
 import { PharmacieGardeEffects } from './store/parametrage/pharmacie-garde/effect';
 import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
+import { NouveauBaremeComponent } from './module/medical/nouveau-bareme/nouveau-bareme.component';
+import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bareme.component';
 
 @NgModule({
     imports: [
@@ -600,7 +602,9 @@ import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharma
         PrestataireCartographieQuartierComponent,
         ConditionGeneraleComponent,
         ConditionGeneraleParticuliereComponent,
-        PharmacieGardeComponent
+        PharmacieGardeComponent,
+        NouveauBaremeComponent,
+        AssureBaremeComponent,
 
     ],
     providers: [

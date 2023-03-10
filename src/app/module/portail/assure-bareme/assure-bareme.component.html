@@ -1,0 +1,159 @@
+<div class="card">
+    <p-splitter [style]="{'height': '400px'}" styleClass="mb-5">
+        <!-- <ng-template pTemplate>
+            <div class="col flex align-items-center justify-content-center">
+                Panel 1
+            </div>
+        </ng-template> -->
+
+        <ng-template pTemplate>
+           
+            
+            
+     <div class="p-grid" style="background-color: #9ae77f;">
+        <div class="p-col-4"></div>         
+        <div class="p-col-8 flex align-items-center justify-content-center"><h5 style="font-weight: bold;">PASSEPORT SANTE</h5></div>   
+        <div class="p-col-12"><h6>{{adherent?.groupe?.police?.garant?.nom}}</h6></div>
+                
+        <div class="p-col-9">
+            <div class="p-fluid p-formgrid p-grid ">
+                <div class="p-field p-col-12">
+                    <label for="lastname2" style="font-weight: bold;">Souscripteur:&nbsp;&nbsp;&nbsp; </label> <span style="color: rgb(235, 8, 8);">{{adherent?.groupe?.police?.nom}}</span>
+                    
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="lastname2" style="font-weight: bold;">N° Police:&nbsp;&nbsp;&nbsp; </label><span>{{adherent?.groupe?.police?.numero}}</span>
+                   
+                </div>
+                <div class="p-field p-col-6">
+                    <label for="lastname2" style="font-weight: bold;">Taux: &nbsp;&nbsp;&nbsp;</label> <span style="color: rgb(235, 8, 8);">{{adherent?.groupe?.taux?.taux}}%</span>
+                   
+                </div>
+                <div class="p-field p-col-6">
+                    <label for="lastname2" style="font-weight: bold;">N° Assuré: &nbsp;&nbsp;&nbsp;</label> <span>{{adherent.numero}}</span>
+                    
+                </div>
+
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-6">
+                    <label for="lastname2" style="font-weight: bold;">Effet: &nbsp;&nbsp;&nbsp;</label>
+                    <span *ngIf="adherent.dateIncorporation !==null">{{adherent.dateIncorporation | formatTableValue: 'date'}}</span>
+
+                    <span *ngIf="adherent.dateIncorporation ===null">{{adherent?.groupe?.dateEffet | formatTableValue: 'date'}}</span>
+          
+                    
+                </div>
+
+                <div class="p-field p-col-6">
+                    <label for="lastname2" style="font-weight: bold;">Echéance:&nbsp;&nbsp;&nbsp;</label>
+                    <span>{{adherent?.groupe?.dateEcheance | formatTableValue: 'date'}}</span>
+                    
+                </div>
+
+                <div class="p-field p-col-12">
+                    <label for="lastname2" style="font-weight: bold;">Assuré:&nbsp;&nbsp;&nbsp;</label>
+                    <span *ngIf="adherent.adherentPrincipal !==null" style="color: rgb(235, 8, 8);">{{adherent?.adherentPrincipal?.nom }} {{adherent?.adherentPrincipal?.prenom}}</span>
+                    <span *ngIf="adherent.adherentPrincipal ===null" style="color: rgb(235, 8, 8);">{{adherent.nom }} {{adherent.prenom}}</span>
+               
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="lastname2" style="font-weight: bold;">Bénéficiaire:&nbsp;&nbsp;&nbsp;</label>
+                    <span>{{adherent.nom }} {{adherent.prenom}}</span>
+                </div>
+
+                
+
+            </div>
+
+            
+
+            
+           
+            <!--
+            <div class="p-grid p-justify-center">
+            <div *ngIf="adherent.urlPhoto" class="">
+                <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="200" height="200" class="p-shadow-4" /> 
+            </div>
+           </div>
+            -->
+        </div>
+        <div class="p-col-3">
+              <div class="p-field p-col-3">
+                  <div *ngIf="adherent.urlPhoto" class="">
+                    
+                         <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="150" height="150" class="p-shadow-4" />  
+                 </div> 
+             </div> 
+     </div>
+         
+    </div> 
+    
+        </ng-template>
+        <ng-template pTemplate>
+            <div class="p-col-2"></div>
+            <!-- <div class="col flex align-items-center justify-content-center"> -->
+                <p-table #dt [value]="sousActeListPlafond" selectionMode="multiple" [autoLayout]="true"  [rows]="10" [paginator]="true" [globalFilterFields]="['code','libelle']"
+                [rowHover]="true" dataKey="id"
+                styleClass="p-datatable-customers"
+                currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true"
+               >
+           <!-- <ng-template pTemplate="caption">
+               <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                   <h5 class="p-m-0"></h5>
+                   <span class="p-input-icon-left">
+                   <i class="pi pi-search"></i>
+                   <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                   </span>
+               </div>
+           </ng-template> -->
+           <ng-template pTemplate="header">
+               <tr>
+                   <!-- <th style="width: 3rem">
+                       <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                   </th> -->
+                   
+                  
+                   <th>ACTES</th>
+                   <th></th>
+                   <th>TAUX</th>
+                   <th></th>
+                   <th >PLAFOND</th>
+               </tr>
+           </ng-template>
+           <ng-template pTemplate="body" let-plafondSousActe>
+               <tr>
+                  <!--  <td>
+                       <p-tableCheckbox [value]="sousActe"></p-tableCheckbox>
+                   </td> -->
+                   <td> <span class="p-column-title" style="font-weight: bold;" >{{plafondSousActe?.sousActe?.libelle}}</span>
+                   </td>
+                   <td></td>
+                   <td><span class="p-column-title">{{plafondSousActe.taux?.taux}}%</span>
+                   </td>
+                   <td></td>
+                   <td><span class="p-column-title" *ngIf="plafondSousActe.montantPlafond ">{{plafondSousActe.montantPlafond | formatTableValue: 'number':true}}</span>
+                    <span class="p-column-title" *ngIf="!plafondSousActe.montantPlafond ">Frais réels</span>
+                   </td>
+                   
+                  
+                   
+                  
+                   
+               </tr>
+           </ng-template>
+           <ng-template pTemplate="summary">
+               <div class="p-d-flex p-ai-center p-jc-between">
+                   {{sousActeListPlafond ? sousActeListPlafond.length : 0 }} acte(s).
+               </div>
+           </ng-template>
+       </p-table>           
+     <!-- </div> -->
+        </ng-template>
+    </p-splitter>
+</div>
+
+
+

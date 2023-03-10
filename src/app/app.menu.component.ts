@@ -92,6 +92,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Produit Exclu', icon: 'pi pi-fw pi-times', routerLink: ['/medical/produit-exclu'], visible: true},
                     {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: true},
                     {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: true},
+                    {label: 'New barème', icon: '', routerLink: ['/medical/new-bareme'], visible: true},
 
                 ]
             },
@@ -229,6 +230,8 @@ export class AppMenuComponent implements OnInit {
 
                     {label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], visible: true},
                     {label: 'Pharmacie de garde', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'], visible: this.keycloak.isUserInRole(Function.sm_portail)},
+                    {label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], visible: true},
+
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
                     {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */

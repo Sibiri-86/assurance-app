@@ -113,6 +113,8 @@ import { PrestataireCartographieQuartierComponent } from './module/portail/prest
 import { ConditionGeneraleComponent } from './module/contrat/condition-generale/condition-generale.component';
 import { ConditionGeneraleParticuliereComponent } from './module/portail/condition-generale-particuliere/condition-generale-particuliere.component';
 import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
+import { NouveauBaremeComponent } from './module/medical/nouveau-bareme/nouveau-bareme.component';
+import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bareme.component';
 
 @NgModule({
     imports: [
@@ -242,7 +244,10 @@ import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharma
                     {path: 'medical/quartier-prestataire-garant', component: QuartierPrestataireGarantComponent},
                     {path: 'portail/condition-generale-particuliere', component: ConditionGeneraleParticuliereComponent},
                     {path: 'medical/entente-bon', component: EntenteBonComponent},
-                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent}
+                    {path: 'portail/pharmacie-garde', component: PharmacieGardeComponent},
+                    {path: 'medical/new-bareme', component: NouveauBaremeComponent},
+                    {path: 'portail/bareme', component: AssureBaremeComponent},
+                    
                     
                     
                     
