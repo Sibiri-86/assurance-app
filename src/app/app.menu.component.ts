@@ -214,7 +214,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
             },
 
-            {
+             {
                 label: 'Portail', icon: 'pi pi-fw pi-compass', routerLink: ['/portail'],
                 visible: this.keycloak.isUserInRole(Function.sm_portail),
                 items: [
@@ -235,8 +235,33 @@ export class AppMenuComponent implements OnInit {
                     /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
                     {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */
+
                 ]
             },
+            {
+                label: 'Assuré Consom.', icon: ' pi pi-fw pi-wallet', routerLink: ['/portail/assureConsommation'],
+                visible: this.keycloak.isUserInRole(Function.sm_portail),
+            },
+            {
+                label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'],
+                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], 
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'],
+                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], 
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Pharmacie de garde', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'],
+                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+            }
             /*
             {
                 label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],

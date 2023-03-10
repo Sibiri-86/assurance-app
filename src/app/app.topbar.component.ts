@@ -12,6 +12,7 @@ export class AppTopBarComponent {
     constructor(public app: AppMainComponent, public keycloak: KeycloakService) {
       console.log('les roles du user est'+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
+        console.log("===========profile===========>", profile['attributes'].role);
         this.name = profile.firstName + ' ' + profile.lastName;
         if (profile['attributes'].role.length != 0){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
