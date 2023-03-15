@@ -58,7 +58,7 @@ import { AppMainComponent } from 'src/app/app.main.component';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { ProduitPharmaceutiqueService } from 'src/app/store/parametrage/produit-pharmaceutique/service';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
-import { ProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
+import { ProduitPharmaceutiqueExclu, ProduitPharmaceutiqueExcluEntite } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
 import { loadProduitPharmaceutiqueExclu } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/actions';
 import * as produitPharmaceutiqueExcluSelector from 'src/app/store/parametrage/produit-pharmaceutique-exclu/selector';
 
@@ -104,20 +104,36 @@ export class ProduitExcluComponent implements OnInit {
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
   produitPharmaceutiqueExcluList$: Observable<Array<ProduitPharmaceutiqueExclu>>;
   produitPharmaceutiqueExcluList: Array<ProduitPharmaceutiqueExclu>;
+  produitPharmaceutiqueExcluList2: Array<ProduitPharmaceutiqueExclu>;
+  produitPharmaceutiqueExcluList3: Array<ProduitPharmaceutiqueExcluEntite>;
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,
                private produitPharmaceutiqueService: ProduitPharmaceutiqueService,) {
-     this.breadcrumbService.setItems([{ label: 'Liste des exclusions' }]);
+     this.breadcrumbService.setItems([{ label: 'EXCLUSIONS' }]);
      console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
-        //this.profile = profile.username;
+        
+          this.portailService.findAssureRacheteInExcluList(parseInt(profile.username)).subscribe(
+            (res) => {
+                console.log('..............produitPharmaceutiqueExcluList333333..............   ', res);
+                this.produitPharmaceutiqueExcluList2 = res;
+            }
+    );
+
+    this.portailService.getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(parseInt(profile.username)).subscribe(
+      (res) => {
+          console.log('..............produitPharmaceutiqueExcluList44444444..............   ', res);
+          this.produitPharmaceutiqueExcluList3 = res;
+      }
+);
+
         if (profile['attributes'].role.length != 0){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
         }
-      })
+      });
 }
 
   ngOnInit(): void {
@@ -144,6 +160,10 @@ export class ProduitExcluComponent implements OnInit {
     this.loadRembourssements();
     
 
+  }
+
+  loadFindRacheteInExcluList(){
+    
   }
 
   m() {
@@ -305,15 +325,15 @@ export class ProduitExcluComponent implements OnInit {
     console.log('****index****', index);
     switch (index) {
       case 0: {
-        this.loadRembourssements();
+        
         break;
       }
       case 1: {
-        this.loadRembourssementValid();
+        
         break;
       }
       case 2: {
-        this.loadRembourssementValidAndPaiementValid();
+        
         break;
       }
       default: {

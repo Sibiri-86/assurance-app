@@ -1,9 +1,38 @@
 <div class="layout-topbar">
-    <div class="layout-topbar-logo">
-        <a>
-            <img class="logo" src="assets/layout/images/logo.jpg" alt="prestige-layout"/>
+    <div *ngIf="role === 'ASSURE' || role === 'PRESTATAIRE' || role === 'GARANT';then contenu_bon else contenu_pas_bon">Le contenu saisi ici sera ignoré.</div>
+    <ng-template #contenu_bon>
+        <div class="layout-topbar-logo">
+            <a href="/solmavi/portail/registerChoose">
+                <img class="logo" src="assets/layout/images/favicon.ico" alt="SOLMAVI-PORTAIL"/>
+            </a>
+            <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
+                <i class="pi pi-bars"></i>
+            </a>
+        </div>
+    </ng-template>
+    <ng-template #contenu_pas_bon>
+        <div class="layout-topbar-logo">
+            <a href="/">
+                <img class="logo" src="assets/layout/images/logo.jpg" alt="SOLMAVI-APPLICATION"/>
+            </a>
+            <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
+                <i class="pi pi-bars"></i>
+            </a>
+        </div>
+    </ng-template>
+
+
+    <!-- <div *ngIf="role === 'ASSURE' || role === 'PRESTATAIRE' || role === 'GARANT'" class="layout-topbar-logo">
+        <a href="/">
+            <img class="logo" src="assets/layout/images/favicon.ico" alt="SOLMAVI-PORTAIL"/>
         </a>
     </div>
+
+    <div *ngIf="role !== 'ASSURE' || role !== 'GARANT'||  role !== 'PRESTATAIRE' " class="layout-topbar-logo">
+        <a>
+            <img class="logo" src="assets/layout/images/logo.jpg" alt="SOLMAVI-APPLICATION"/>
+        </a>
+    </div> -->
     <!-- <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)">
         <i class="pi pi-bars"></i>
     </a> -->

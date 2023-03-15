@@ -214,41 +214,17 @@ export class AppMenuComponent implements OnInit {
                                     ]
             },
 
-             {
-                label: 'Portail', icon: 'pi pi-fw pi-compass', routerLink: ['/portail'],
-                visible: this.keycloak.isUserInRole(Function.sm_portail),
-                items: [
-                    {label: 'Assuré Consom.', icon: ' pi pi-fw pi-wallet', routerLink: ['/portail/assureConsommation'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
-                    {label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'], visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
-                    {label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
-                    {label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
-                    {label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], visible: true},
-                    {label: 'Condition générale et particulière', icon: '', routerLink: ['/portail/condition-generale-particuliere'], visible: true},
-
-
-                    
-
-                    {label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], visible: true},
-                    {label: 'Pharmacie de garde', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'], visible: this.keycloak.isUserInRole(Function.sm_portail)},
-                    {label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], visible: true},
-
-                    /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
-                    {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
-                    {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */
-
-                ]
-            },
             {
                 label: 'Assuré Consom.', icon: ' pi pi-fw pi-wallet', routerLink: ['/portail/assureConsommation'],
-                visible: this.keycloak.isUserInRole(Function.sm_portail),
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], 
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
+                visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
             {
                 label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'],
@@ -259,9 +235,25 @@ export class AppMenuComponent implements OnInit {
                 visible: this.keycloak.isUserInRole(Function.sm_portail)
             },
             {
-                label: 'Pharmacie de garde', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'],
+                label: 'Pharmacies', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'],
                  visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], 
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Condition gle et parti.', icon: '', routerLink: ['/portail/condition-generale-particuliere'],
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
+            {
+                label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], 
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
             }
+
+            /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
+                    {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
+                    {label: 'register', icon: 'pi pi-fw pi-home', routerLink: ['/portail/register'], visible: true}, */
             /*
             {
                 label: 'UI Kit', icon: 'pi pi-fw pi-star', routerLink: ['/uikit'],

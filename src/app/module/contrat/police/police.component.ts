@@ -1332,6 +1332,30 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.displayDialogFormAddGroupe = false;
     // this.getGroupeByPolice2();
   }
+  
+/** cette methode permet de creer un groupe avec des informations basiques apres enregistrement de quelques assurés*/
+  onCreateGroupe2(){
+    console.log('******************************this.groupe********************************', this.groupe);
+    this.groupe.adherentFamille = this.adherentFamille;
+    console.log(this.groupe);
+    this.groupeListPolice$ = this.store.pipe(select(groupeList));
+    this.store.dispatch(featureActionGroupe.createGroupe(this.groupe));
+    this.store.dispatch(featureActionGroupe.loadGroupe({policeId: this.police.id}));
+    this.groupeListPolice$.pipe(takeUntil(this.destroy$)).subscribe(
+        (res) => {
+          if (res) {
+            this.groupeListPolice = res;
+            this.police.listGroupe = res;
+            this.getStatistique(this.police);
+          }
+        }
+    );
+    this.adherentFamille = [];
+    this.FamilyListToImport = [];
+    this.groupe = {};
+    this.afficheDetail = false;
+    this.displayDialogFormAddGroupe = false;
+  }
 
   validerForm() {
     /*

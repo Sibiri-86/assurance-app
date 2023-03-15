@@ -1,12 +1,37 @@
 <div class="p-grid">
     <p-tabView (onChange)="onTabChange($event)">
-        <p-tabPanel header="Préfinancement(s)" leftIcon="pi pi-pencil" tooltip="Facture(s) préfinancée(s)" [style]="{'width': '100%'}"> 
+        <p-tabPanel header="Préfinancement(s)" leftIcon="pi pi-list" tooltip="Facture(s) préfinancée(s)" [style]="{'width': '100%'}"> 
 
 	<div class="p-col-12">
 		<p-toast></p-toast>
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
+                    <div class="p-grid">
+                        <div class="p-col-4">
+
+                        </div>
+                        <div class="p-col-12">
+
+                        </div>
+                    </div>
+                    <form (ngSubmit)="onCreate()"  [formGroup]="depenseFamilleForm">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col p-mb-3">
+                                <label for="compteParent">Date de dépôt<span style="color: red !important; font-size: 1.4em"></span></label>
+                                <input id="dateAppel" type="date" formControlName="dateDebut" pInputText>
+                            </div>
+                            <div class="p-field p-col p-mt-5">
+                                
+                                <button  [disabled]="!this.depenseFamilleForm.get('dateDebut').value" pButton pRipple pTooltip="Rechercher" icon="pi pi-search" type="submit"></button>                               
+                            </div>
+                            <div class="p-field p-col p-mt-5 p-mr-5">
+                                
+                                <button  [disabled]="!this.depenseFamilleForm.get('dateDebut').value" pButton pRipple pTooltip="Rechercher" class="p-button-warning" icon="pi pi-refresh" (click)="actualiser()"></button>
+                               
+                            </div>
+                        </div>
+                    </form>
                     <span style="font-weight:bold !important;  font-size: 15px !important;">
                         Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
                         </span>
@@ -57,21 +82,21 @@
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{montantTotalReclame | formatTableValue: 'number':true}}</span>
-                            <!-- <p-tag styleClass="p-mr-2" severity="warning">{{montantTotalReclame | formatTableValue: 'number':true}}</p-tag> -->
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{montantTotalRembourse | formatTableValue: 'number':true}}</span>
-                            <!-- <p-tag styleClass="p-mr-2" severity="success">{{montantTotalRembourse | formatTableValue: 'number':true}}</p-tag> -->
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.montantTotalReclame | formatTableValue: 'number':true}}</span>
-                            <!-- <p-tag styleClass="p-mr-2" severity="warning">{{garant?.montantTotalReclame | formatTableValue: 'number':true}}</p-tag> -->
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.montantTotalRembourse | formatTableValue: 'number':true}}</span>
-                            <!-- <p-tag styleClass="p-mr-2" severity="success">{{garant?.montantTotalRembourse | formatTableValue: 'number':true}}</p-tag> -->
                         </td>
 						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
@@ -80,7 +105,7 @@
                         <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
                         <td>
                             <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
-                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-success p-mr-2">
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
                             </button>
                         </td>
                         <!-- <td>
@@ -377,31 +402,60 @@
             </ng-template>    
         </p-dialog>
     </p-tabPanel>
-    <p-tabPanel header="Tiers Payant(s)" leftIcon="pi pi-pencil" tooltip="Facture(s) Tiers Payant(s)" [style]="{'width': '100%'}">
+    <p-tabPanel header="Tiers Payant(s)" leftIcon="pi pi-list" tooltip="Facture(s) Tiers Payant(s)" [style]="{'width': '100%'}">
         <div class="p-col-12">
             <p-toast></p-toast>
     
             <div class="card">
                 <p-toolbar styleClass="p-mb-4">
-                    <!-- <ng-template pTemplate="left">
-                        <button pButton pRipple icon="pi pi-pencil" pTooltip="Voir le récapitulatif" label="Récapitulatif " class=" p-button-warning" (click)="imprimerFormulaire()"></button>
+                    <ng-template pTemplate="left">
+                        <div class="p-grid">
+                            <div class="p-col-4">
+    
+                            </div>
+                            <div class="p-col-12">
+    
+                            </div>
+                        </div>
+                        <form (ngSubmit)="onCreateTiers()"  [formGroup]="depenseFamilleForm">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col p-mb-3">
+                                    <label for="compteParent">Date de dépôt<span style="color: red !important; font-size: 1.4em"></span></label>
+                                    <input id="dateAppel" type="date" formControlName="dateDebut" pInputText>
+                                </div>
+                                <div class="p-field p-col p-mt-5">
+                                    
+                                    <button  [disabled]="!this.depenseFamilleForm.get('dateDebut').value" pButton pRipple pTooltip="Rechercher" icon="pi pi-search" type="submit"></button>                               
+                                </div>
+                                <div class="p-field p-col p-mt-5 p-mr-5">
+                                    
+                                    <button  [disabled]="!this.depenseFamilleForm.get('dateDebut').value" pButton pRipple pTooltip="Rechercher" class="p-button-warning" icon="pi pi-refresh" (click)="actualiserTiers()"></button>
+                                   
+                                </div>
+                            </div>
+                        </form>
+                        <!-- <span style="font-weight:bold !important;  font-size: 15px !important;">
+                            Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
+                            </span> -->
                     </ng-template>
                     <ng-template pTemplate="right">
                         
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col p-mt-5">
                                     
-                                    <button class="p-button-info" pTooltip="Imprimer le récap" [disabled]="appelFondForm?.invalid" pButton pRipple label="Imprimer" icon="pi pi-print" (click)="imprimerRecap()"></button>
+                                    <!-- <span style="font-weight:bold !important;  font-size: 15px !important;">
+                                        Total montant remboursé des sinistres: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
+                                    </span> -->
                                    
                                 </div>
                             </div>
-                    </ng-template> -->
+                    </ng-template>
                     
                 </p-toolbar>
     
                 <p-table [value]="consoSinistreTiersPayantFamilles"
                 rowGroupMode="rowspan"
-           sortField="adherent.prenom" sortMode="single" (onSort)="onSort()" styleClass="p-datatable-striped" [scrollable]="true">
+           sortField="adherent.prenom" sortMode="single" (onSort)="onSortTiersPayant()" styleClass="p-datatable-striped" [scrollable]="true">
            <ng-template pTemplate="caption">
                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                    <h5 class="p-m-0"></h5>
@@ -414,7 +468,7 @@
            <ng-template pTemplate="header">
                <tr>
                    <th>Assuré(e)</th>
-                    <th>Date de saisie</th>
+                    <th>Date de déclaration</th>
                     <th>Numéro de facture</th>
                     <th>Numéro de sinistre</th>
                     <th>Souscripteur</th>
@@ -423,19 +477,35 @@
                    
                </tr>
            </ng-template>
-           <ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+           <ng-template pTemplate="body" let-garant1 let-rowIndex="rowIndex">
                <tr>
-                   <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                       <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
-                   </td>
-                   <td>{{garant?.dateSaisie | formatTableValue: 'date'}}</td>
-                   <td>{{garant?.numeroFacture }}</td>
-                   <td>{{garant?.numeroSinistre }}</td>
-                   <td>{{garant?.adherent?.groupe?.police?.nom}}  </td>
-                    <td>{{garant?.prestataire.libelle}}</td>
+                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                    <span class="p-text-bold p-ml-2">{{garant1?.adherent?.nom}} {{garant1?.adherent?.prenom}}</span>
+                </td>
+                <!-- <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size !== 1" 
+                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                    <span class="p-text-bold p-ml-2">{{montantTotalReclame | formatTableValue: 'number':true}}</span>
+                </td>
+                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size !== 1" 
+                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                    <span class="p-text-bold p-ml-2">{{montantTotalRembourse | formatTableValue: 'number':true}}</span>
+                </td>
+                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size === 1" 
+                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                    <span class="p-text-bold p-ml-2">{{garant1?.montantTotalReclame | formatTableValue: 'number':true}}</span>
+                </td>
+                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size === 1" 
+                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                    <span class="p-text-bold p-ml-2">{{garant1?.montantTotalRembourse | formatTableValue: 'number':true}}</span>
+                </td> -->
+                   <td>{{garant1?.dateDeclaration | formatTableValue: 'date'}}</td>
+                   <td>{{garant1?.numeroFacture }}</td>
+                   <td>{{garant1?.numeroSinistre }}</td>
+                   <td>{{garant1?.adherent?.groupe?.police?.nom}}  </td>
+                    <td>{{garant1?.prestataire.libelle}}</td>
                    <td>
                        <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
-                       (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-success p-mr-2">
+                       (click)="voirPrestationDetail(garant1)" class="p-button-rounded p-button-warning p-mr-2">
                        </button>
                    </td>
                    <!-- <td>
@@ -452,7 +522,7 @@
                </div>
            </ng-template>
        </p-table>
-
+<!-- 
             <br>
             <span style="font-size: 25px !important; color: brown;"> Autre présentation</span>
             <br>
@@ -538,7 +608,7 @@
                             </td>
                         </tr>
                     </ng-template>
-                </p-table>
+                </p-table> -->
             </div>
             <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
             </div>

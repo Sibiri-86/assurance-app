@@ -1,57 +1,117 @@
 <div class="p-grid">
-	<div class="p-col-12">
+	<p-tabView (onChange)="onTabChange($event)">
+        <p-tabPanel header="Produit(s) Exclu(s)" leftIcon="pi pi-list" tooltip="Facture(s) préfinancée(s)" [style]="{'width': '100%'}">
+			<div class="p-col-12">
 
-		<p-toast></p-toast>
+				<p-toast></p-toast>
+		
+				<div class="card">
+					<p-toolbar styleClass="p-mb-4">
+						
+					</p-toolbar>
+		
+					<p-table #dt [value]="produitPharmaceutiqueExcluList2" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+							 [rowHover]="true" dataKey="id"
+							 styleClass="p-datatable-customers"
+							 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+						<ng-template pTemplate="caption">
+							<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+								<h5 class="p-m-0"></h5>
+								<span class="p-input-icon-left">
+								<i class="pi pi-search"></i>
+								<input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+							</span>
+							</div>
+						</ng-template>
+						<ng-template pTemplate="header">
+							<tr>
+								<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+								<!-- <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th> -->
+								
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-garant>
+							<tr>
+								<td><span class="p-column-title" >{{garant?.code}}</span></td>
+								<td><span class="p-column-title" >{{garant?.libelle}}</span></td>
+								<td><span class="p-column-title" >{{garant?.description}}</span></td>
+								<td><span class="p-column-title" >{{garant?.typeProduit}}</span></td>
+								<!-- <td><span class="p-badge p-badge-danger">Exclu</span></td> -->
+					
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="summary">
+							<div class="p-d-flex p-ai-center p-jc-between">
+								{{produitPharmaceutiqueExcluList2 ? produitPharmaceutiqueExcluList2.length : 0 }} produit(s) exclu(s) trouvé(s).
+							</div>
+						</ng-template>
+					</p-table>
+				</div>
+		
+		
+					<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+			</div>
+		</p-tabPanel>
 
-		<div class="card">
-			<p-toolbar styleClass="p-mb-4">
-                
-			</p-toolbar>
+		<p-tabPanel header="Produit(s) Rachété(s)" leftIcon="pi pi-list" tooltip="Facture(s) préfinancée(s)" [style]="{'width': '100%'}">
+			<div class="p-col-12">
 
-			<p-table #dt [value]="produitPharmaceutiqueExcluList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
-					 [rowHover]="true" dataKey="id"
-					 styleClass="p-datatable-customers"
-					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
-				<ng-template pTemplate="caption">
-					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-						<h5 class="p-m-0"></h5>
-						<span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
-                    </span>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
-                        <th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
-                        <th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
-                        <th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
-                        <!-- <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th> -->
-                        
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-garant>
-					<tr>
-						<td><span class="p-column-title" >{{garant?.code}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.libelle}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.description}}</span></td>
-                        <td><span class="p-column-title" >{{garant?.typeProduit}}</span></td>
-                        <!-- <td><span class="p-badge p-badge-danger">Exclu</span></td> -->
-            
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="summary">
-					<div class="p-d-flex p-ai-center p-jc-between">
-						{{produitPharmaceutiqueExcluList ? produitPharmaceutiqueExcluList.length : 0 }} produit(s) exclu(s) trouvé(s).
-					</div>
-				</ng-template>
-			</p-table>
-		</div>
-
-
-            <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
-	</div>
+				<p-toast></p-toast>
+		
+				<div class="card">
+					<p-toolbar styleClass="p-mb-4">
+						
+					</p-toolbar>
+		
+					<p-table #dt [value]="produitPharmaceutiqueExcluList3" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+							 [rowHover]="true" dataKey="id"
+							 styleClass="p-datatable-customers"
+							 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+						<ng-template pTemplate="caption">
+							<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+								<h5 class="p-m-0"></h5>
+								<span class="p-input-icon-left">
+								<i class="pi pi-search"></i>
+								<input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+							</span>
+							</div>
+						</ng-template>
+						<ng-template pTemplate="header">
+							<tr>
+								<th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+								<th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+								<!-- <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th> -->
+								
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-garant>
+							<tr>
+								<td><span class="p-column-title" >{{garant?.produitExclu?.code}}</span></td>
+								<td><span class="p-column-title" >{{garant?.produitExclu?.libelle}}</span></td>
+								<td><span class="p-column-title" >{{garant?.produitExclu?.description}}</span></td>
+								<td><span class="p-column-title" >{{garant?.produitExclu?.typeProduit}}</span></td>
+								<!-- <td><span class="p-badge p-badge-danger">Exclu</span></td> -->
+					
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="summary">
+							<div class="p-d-flex p-ai-center p-jc-between">
+								{{produitPharmaceutiqueExcluList3 ? produitPharmaceutiqueExcluList3.length : 0 }} produit(s) rachété(s) trouvé(s).
+							</div>
+						</ng-template>
+					</p-table>
+				</div>
+		
+		
+					<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+			</div>
+		</p-tabPanel>
+	</p-tabView>
 
     
 </div>

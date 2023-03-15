@@ -118,6 +118,22 @@ fetchDepenseSinistreTiersPayantAndFamille$(depenseFamille: TiersPayantPortail): 
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assureConsommation-sinistre-tiers-payant-and-famille`, depenseFamille);
 }
 
+findAssureRacheteInExcluList(numero: number): Observable<any> {
+  // @FIXME: get request
+  return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-assure-rachat-by-sous-groupe`, numero).pipe(
+      map((response: any) => response),
+      catchError(this.handleError())
+  );
+}
+
+getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(numero: number): Observable<any> {
+  // @FIXME: get request
+  return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assure-ProduitPharmaceutiqueExclu-sous-groupe`, numero).pipe(
+      map((response: any) => response),
+      catchError(this.handleError())
+  );
+}
+
   private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');
