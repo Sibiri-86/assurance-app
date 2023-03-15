@@ -174,6 +174,11 @@ findBaremeByUserConnect(username: string): Observable<HttpResponse<PlafondSousAc
       {params: createRequestOption({username}), observe: 'response'});
 }
 
+findGarantieByUserConnect(username: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
+  return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/garantie/username-connect`,
+      {params: createRequestOption({username}), observe: 'response'});
+}
+
 getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(idGroupe: string, idExercice: string): Observable<HttpResponse<PlafondFamilleActe[]>> {
   return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/famille-acte-groupe-byGroupe-and-Exercice-Renouv`,
       {params: createRequestOption({idGroupe, idExercice}), observe: 'response'});

@@ -486,4 +486,9 @@ export class Endpoints {
             mock: `assets/mock/parametrage/pharmacie-garde.mock.json`
         };
 
+        static readonly PARAMETRAGE_FOIRE = {
+            prod: `${SERVICE_PREFIX}/parametrage/foire`,
+            mock: `assets/mock/parametrage/foire.mock.json`
+        };
+
 }

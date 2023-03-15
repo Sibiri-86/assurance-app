@@ -5,7 +5,10 @@
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
 					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addConvention()"></button>
-					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerConvention()"></button>
+					<button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mr-2 p-mb-2" (click)="supprimerConvention()"></button>
+                    <div class="p-mr-2 p-mb-2">
+                        <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="convention" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept="application/pdf" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form2)"></p-fileUpload>
+                    </div>
 				</ng-template>
                 <!--
 				<ng-template pTemplate="right">
@@ -66,6 +69,8 @@
                             <button pButton pRipple icon="pi pi-eye" pTooltip="détail" class="p-button-rounded p-button-success p-mr-2" (click)="detail(convention)"></button>
 
                             <button pButton pRipple icon="pi pi-trash" pTooltip="supprimer" class="p-button-rounded p-button-info" (click)="supprimer(convention)"></button>
+                            <img [src]="adherent.urlPhoto" [alt]="adherent.nom" width="150" height="150" class="p-shadow-4" />  
+
                         </td>
                     </tr>
                 </ng-template>

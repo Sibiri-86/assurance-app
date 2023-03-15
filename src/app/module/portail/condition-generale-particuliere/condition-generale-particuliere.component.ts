@@ -42,6 +42,7 @@ import { loadConditionGenerale } from '../../../store/contrat/adherent/actions';
 import { KeycloakService } from 'keycloak-angular';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { Avenant } from 'src/app/store/contrat/historiqueAvenant/model';
+import { PlafondFamilleActe } from 'src/app/store/parametrage/plafond/model';
 
 
 
@@ -76,6 +77,8 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
   activeItem: MenuItem;
   activeItem2: MenuItem ;
   avenantModif1: Avenant = {};
+  plafonds: PlafondFamilleActe = {};
+  garanties: PlafondFamilleActe[] = [];
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
@@ -90,9 +93,18 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
   
   ngOnInit(): void {
     console.log("this.keycloakService.getUsername()");
-    this.plafondService.findBaremeByUserConnect(this.keycloakService.getUsername()).subscribe(
+    this.plafondService.findBaremeByUserConnect("1").subscribe(
       (res) => {
         this.avenantModif1.plafondFamilleActes = res.body;
+        
+      }
+    );
+    this.plafondService.findGarantieByUserConnect("1").subscribe(
+      (res) => {
+        this.garanties = res.body;
+        this.plafonds = this.garanties[0];
+        console.log("======plafonds===========");
+        console.log("======plafonds===========");
       }
     );
     this.conditionGeneraleList$ = this.store.pipe(select(adherentSelector.conditionGeneraleList));

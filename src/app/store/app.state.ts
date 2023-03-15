@@ -73,6 +73,7 @@ import { QuartierPrestataireGarantState } from './parametrage/quartier-prestatai
 import { PortailState } from './portail/recapitulatif/state';
 import { DateGardeState } from './parametrage/date-garde/state';
 import { PharmacieGardeState } from './parametrage/pharmacie-garde/state';
+import { FoireState } from './contrat/foire/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -146,6 +147,7 @@ export interface AppState {
   quartierState: QuartierState,
   portailState: PortailState,
   dateGardeState: DateGardeState,
-  pharmacieGardeState: PharmacieGardeState
+  pharmacieGardeState: PharmacieGardeState,
+  foireState: FoireState;
 
 }
