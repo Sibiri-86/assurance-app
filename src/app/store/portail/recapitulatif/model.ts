@@ -118,6 +118,10 @@ export interface PrefinancementPortail {
     numeroMobicash?: string;
     numeroVirement?: string;
     dateSoins?:Date;
+    montantReclame?: number;
+    montantRembourse?: number;
+    montantTotalReclame?: number;
+    montantTotalRembourse?: number;
 }
 
 export interface TiersPayantPortail{
@@ -132,9 +136,11 @@ export interface TiersPayantPortail{
     dateFacture?:Date;
     prestataire?: Prestataire;
     etat?: TypeEtatSinistre;
-    montantReclame?:number;
-    montantPaye?:number;
     montantRestant?:number;
     montantPlafond?:number;
     typePrestataire?:TypePrestataire;
+    montantReclame?:number;
+    montantPaye?:number;
+    montantTotalReclame?: number;
+    montantTotalRembourse?: number;
 }

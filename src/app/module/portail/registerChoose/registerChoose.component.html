@@ -2,7 +2,8 @@
 <section class="mb-5 p-grid pr-3" style="margin-top: 0.1em;">
     <!-- <div class="row-bg">  -->
             <div class="p-col-12">
-                <h4 class="text-primary text-uppercase container p-1 text-center" style="box-shadow: 0 2px 3px 1px; text-align: center !important;">Avec quel profil souhaitez-vous créer votre compte ?</h4>
+                <h4 class="text-primary text-uppercase container p-1 text-center" style="box-shadow: 0 2px 3px 1px #33f802; text-align: center !important; text-transform: uppercase !important;">
+                    Bienvenue sur le portail de SOLMAVI</h4>
                 <hr>
             </div>
             <div class="p-col" id="dashbord">
@@ -22,11 +23,11 @@
                                 </div>
                             </div>
                             <p-footer>
-                                <a target="_blank">
+                                <!-- <a target="_blank">
                                     <button pButton type="button" label="Visiter" icon="pi pi-check"
                                             class="ui-button-secondary font-weight-bold"
                                             style="margin-right: .25em" (click)="register2()"></button>
-                                </a>
+                                </a> -->
                             </p-footer>
                         </p-card>
                     </div>
@@ -45,11 +46,11 @@
                                 </div>
                             </div>
                             <p-footer>
-                                <a target="_blank">
+                                <!-- <a target="_blank">
                                     <button pButton type="button" label="Visiter" icon="pi pi-check"
                                             class="ui-button-secondary font-weight-bold" (click)="register2()"
                                             style="margin-right: .25em"></button>
-                                </a>
+                                </a> -->
                                 <!--<button pButton type="button" label="Info" icon="pi pi-info"
                                         class="ui-button-secondary"></button-->
                             </p-footer>
@@ -61,20 +62,20 @@
                 <i class="fa fa-angle-double-right fa-3x"></i>
             </div>
             <div class="p-col pt-1 pb-1 r-panel" style="border: outset;">
-                <div class="ui-card p-2"><h4 class="font-weight-bold text-primary text-center">Description du profil
-                    <span *ngIf="descTitle.length > 0">: {{descTitle}}</span></h4></div>
+                <div class="ui-card p-2"><h5 class="font-weight-bold text-primary text-center">Description du profil
+                    <span *ngIf="descTitle.length > 0">: {{descTitle}}</span></h5></div>
                 <div class="border border-primary p-2 mt-2" *ngIf="descType === 'user'">
                     <div class="justify-content-center myCardre">
-                        <h4 class="font-weight-bold">Ce profil offre la possibilité à l'assuré(e) d'avoir accès
-                            aux données qui lui sont propres.</h4><br>
+                        <h5 class="font-weight-bold">Ce profil offre la possibilité à l'assuré(e) d'avoir accès
+                            aux données qui lui sont propres.</h5><br>
                         <div class="font-weight-bold ml-3" style="font-size: medium">
                             <h5>Cela consiste à :</h5>
                             <ul>
                                 <li>Avoir accès à ses consommations</li>
                                 <li>Avoir accès à la liste des prestataires du réseau</li>
                                 <li>Pouvoir voir les conditions générales de VIMSO et les conditions particulières au contrat</li>
-                                <li>Activer/Désactiver un compte utilisateur</li>
-                                <li>Changer le profil d'un compte utilisateur</li>
+                                <li>Avoir accès à la liste des pharmacies de garde de la semaine</li>
+                                <li>Avoir des données sur son barème</li>
                             </ul>
                         </div>
                         <br>
@@ -93,24 +94,22 @@
                 <!--DESCRIPTION POUR LE BUTTON GESTION DES PERFORMENCESS-->
                 <div class="border border-primary p-2 mt-2" *ngIf="descType === 'indic'">
                     <div class="justify-content-center myCardre">
-                        <h4 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h4><br>
+                        <h5 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h5><br>
                         <div class="font-weight-bold ml-3" style="font-size: medium">
-                            <h5>Cela consiste à :</h5>
-                            <h4 class="font-weight-bold">Demande de remboursement</h4>
+                            <h5 class="font-weight-bold">Demande de remboursement</h5>
                             <ul>
                                 <li>Créer une demande de remboursement via la plateforme</li>
                                 <li>Suivre l'évolution de sa demande</li>
                             </ul>
-                            <h4 class="font-weight-bold">Demande de Bon de prise en charge</h4>
+                            <h5 class="font-weight-bold">Demande de Bon de prise en charge</h5>
                             <ul>
                                 <li>Demande de creation de bon de prise en charge</li>
                             </ul>
-                            <h4 class="font-weight-bold">Accès aux listes importantes</h4>
+                            <h5 class="font-weight-bold">Accès aux listes importantes</h5>
                             <ul>
                                 <li>Liste des actes nécéssitant une entente préalable </li>
                                 <li>Liste des exclusions</li>
                                 <li>Réseau de soin</li>
-                                <li>gerer les valeurs modalités</li>
                             </ul>
                         </div>
                     </div>

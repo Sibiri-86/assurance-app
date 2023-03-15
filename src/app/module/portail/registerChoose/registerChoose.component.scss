@@ -5,9 +5,14 @@
   }
 
   h4{
+    box-shadow: 0 2px 3px 1px #33f802; 
+    text-align: center !important;
+    color: black;
+  }
+  h5{
     box-shadow: 0 2px 3px 1px; 
     text-align: center !important;
-    color: rgb(2, 95, 36);
+    color: black;
   }
   
   .updiv {
@@ -19,6 +24,9 @@
   .myCardre {
     max-height: 349px;
     overflow-y: scroll;
+    //background: url(../../../../assets/layout/images/fond.jpg) center;
+    background-color: rgb(199, 199, 6) !important;
+    border-radius: 25px !important;
   }
   
   .updiv_login {

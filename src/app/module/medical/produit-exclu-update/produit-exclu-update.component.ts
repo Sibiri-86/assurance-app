@@ -482,7 +482,7 @@ export class ProduitExcluUpdateComponent implements OnInit {
     console.log('..............this.search..............   ', this.search);
       this.portailService.findRacheteInExcluList(this.search).subscribe(
         (res) => {
-            console.log('..............produitPharmaceutiqueExcluList2..............   ', res);
+            console.log('..............produitPharmaceutiqueExcluList2222222..............   ', res);
             this.produitPharmaceutiqueExcluList2 = res;
         }
     );

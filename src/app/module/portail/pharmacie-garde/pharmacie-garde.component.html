@@ -43,7 +43,12 @@
 							<span *ngIf="garant.isAffilie == true" class="p-badge p-badge-success" pTooltip="Prestataire se trouvant dans nos réseaux">Oui</span>
 							<span *ngIf="garant.isAffilie  == false" class="p-badge p-badge-danger" pTooltip="Prestataire se trouvant hors de nos réseaux">Non</span>
 						</td> -->
-						<td><button pButton  pRipple icon="pi pi-map-marker" pTooltip="voir l'emplacement du prestataire" class="p-button-rounded p-button-success p-mr-2"></button></td>
+						<td *ngIf="garant?.latitude === 'xx'">
+							<a><span  style="color: rgb(234, 38, 28);font-size: 2rem;" class="pi pi-map-marker"></span></a>
+						</td>
+						<td *ngIf="garant?.latitude !== 'xx'">
+							<a href="https://maps.google.com/?q={{garant?.latitude}},{{garant?.longitude}}&z=8" target="_blank"><span  style="color: rgb(6, 117, 11);font-size: 2rem;" class="pi pi-map-marker"></span></a>
+						</td>
 <!--                         <td><span style="font-weight: bold !important;" class="p-column-title" class="p-badge p-badge-warning">{{garant?.dateDebutD | formatTableValue : 'date'}} - {{garant?.dateFinF | formatTableValue : 'date'}}</span></td>-->            
 					</tr>
 				</ng-template>

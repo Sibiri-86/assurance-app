@@ -88,6 +88,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   statusObject$: Observable<Status>;
   depenseFamilleForm: FormGroup;
   depenseFamille: DepenseFamille;
+  depenseFamilleDate: DepenseFamille;
   depenseFamilles: Array<DepenseFamille>;
   selectedGarants: Array<Recapitulatif>;
   prestationDetail: Prestation[];
@@ -103,9 +104,14 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   consoFamillesSinistreTiersPayant: Array<ConsommationPortail>;
   consoFamillesSinistreFiltrer:Sinistre[] = [];
   rowGroupMetadata: any;
+  rowGroupMetadataTiersPayant: any;
   consoSinistreFamilles: Array<PrefinancementPortail>;
   consoSinistreTiersPayantFamilles: Array<TiersPayantPortail>;
-
+  montantTotalReclame: number;
+  montantTotalRembourse: number;
+  montantTotalReclameFamille: number;
+  montantTotalRembourseFamille: number;
+  result: number;
   
 
 
@@ -137,8 +143,8 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                   /* Recuperation des consommations de l'assuré connecté */
                   this.depenseFamille = {};
                   this.depenseFamille.adherentId = parseInt(profile.username);
-                  this.depenseFamille.dateDebut = this.depenseFamilleForm.get('dateDebut').value;
-                  this.depenseFamille.dateFin = this.depenseFamilleForm.get('dateFin').value;
+                  //this.depenseFamille.dateDebut = this.depenseFamilleForm.get('dateDebut').value;
+                  //this.depenseFamille.dateFin = this.depenseFamilleForm.get('dateFin').value;
                   console.log('this.depenseFamille=============>', this.depenseFamille);
                   this.portailService.fetchDepenseFamille$(this.depenseFamille).subscribe(
                     (res) => {
@@ -162,6 +168,16 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                 (res) => {
                     console.log('..............consoSinistreFamilles..............   ', res);
                     this.consoSinistreFamilles = res;
+                    if(res){
+                      this.montantTotalReclameFamille = 0;
+                      this.montantTotalRembourseFamille = 0;
+                      for(let i = 0; i < this.consoSinistreFamilles.length; i++) {
+                        this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreFamilles[i].montantReclame;
+                        this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreFamilles[i].montantRembourse;
+                      }
+                      console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+                      console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+                    }
                     this.updateRowGroupMetaData();
                     /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
                     console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
@@ -175,7 +191,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               (res) => {
                   console.log('..............consoSinistreTiersPayantFamilles..............   ', res);
                   this.consoSinistreTiersPayantFamilles = res;
-                  this.updateRowGroupMetaData();
+                  this.updateRowGroupMetaDataTiersPayant();
                   /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
                   console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
                   this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
@@ -368,16 +384,109 @@ imprimerAppelFond(appelFondPrint: AppelFond) {
 }
 
 onCreate() {
-  this.recapitulatif = {};
-  console.log('===========================================>', this.appelFondForm.get('idGarant').value);
-  this.recapitulatif.idGarant = this.appelFondForm.get('idGarant').value;
+  this.depenseFamilleDate = {};
+  this.consoSinistreFamilles = [];
+  this.depenseFamilleDate.adherentId = this.depenseFamille.adherentId;
+  this.depenseFamilleDate.dateDebut = this.depenseFamilleForm.get('dateDebut').value;
 
-  this.recapitulatif.datePrime = this.appelFondForm.get('datePrime').value;
-  console.log('===========================================>', this.recapitulatif);
-  this.recaptulatifService.fetchRecap$(this.recapitulatif).subscribe((res) => {
-    this.recapitulatifs = res;
-    console.log("this.recapitulatifs", res);
-  });
+  console.log('====================this.depenseFamilleDate=======================>', this.depenseFamilleDate);
+  this.portailService.fetchDepenseSinistreAndFamille$(this.depenseFamilleDate).subscribe(
+    (res) => {
+        console.log('..............consoSinistreFamilles..............   ', res);
+        this.consoSinistreFamilles = res;
+        if(res){
+          this.montantTotalReclameFamille = 0;
+          this.montantTotalRembourseFamille = 0;
+          for(let i = 0; i < this.consoSinistreFamilles.length; i++) {
+            this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreFamilles[i].montantReclame;
+            this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreFamilles[i].montantRembourse;
+          }
+          console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+          console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+        }
+        this.updateRowGroupMetaData();
+      }
+);
+}
+
+onCreateTiers() {
+  this.depenseFamilleDate = {};
+  this.consoSinistreTiersPayantFamilles = [];
+  this.depenseFamilleDate.adherentId = this.depenseFamille.adherentId;
+  this.depenseFamilleDate.dateDebut = this.depenseFamilleForm.get('dateDebut').value;
+
+  console.log('====================this.depenseFamilleDate=======================>', this.depenseFamilleDate);
+  this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamilleDate).subscribe(
+    (res) => {
+        console.log('..............consoSinistreTiersPayantFamilles..............   ', res);
+        this.consoSinistreTiersPayantFamilles = res;
+        if(res){
+          this.montantTotalReclameFamille = 0;
+          this.montantTotalRembourseFamille = 0;
+          for(let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
+            this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreTiersPayantFamilles[i].montantReclame;
+            //this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreTiersPayantFamilles[i].montantRembourse;
+          }
+          console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+          console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+        }
+        this.updateRowGroupMetaDataTiersPayant();
+      }
+);
+}
+
+actualiser() {
+  this.depenseFamilleDate = {};
+  this.consoSinistreFamilles = [];
+  this.depenseFamilleDate.adherentId = this.depenseFamille.adherentId;
+  this.depenseFamilleForm.get('dateDebut').setValue(null);
+  this.depenseFamilleDate.dateDebut = null ;
+
+  console.log('====================this.depenseFamilleDate=======================>', this.depenseFamilleDate);
+  this.portailService.fetchDepenseSinistreAndFamille$(this.depenseFamilleDate).subscribe(
+    (res) => {
+        console.log('..............consoSinistreFamilles..............   ', res);
+        this.consoSinistreFamilles = res;
+        if(res){
+          this.montantTotalReclameFamille = 0;
+          this.montantTotalRembourseFamille = 0;
+          for(let i = 0; i < this.consoSinistreFamilles.length; i++) {
+            this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreFamilles[i].montantReclame;
+            this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreFamilles[i].montantRembourse;
+          }
+          console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+          console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+        }
+        this.updateRowGroupMetaData();
+      }
+);
+}
+
+actualiserTiers() {
+  this.depenseFamilleDate = {};
+  this.consoSinistreTiersPayantFamilles = [];
+  this.depenseFamilleDate.adherentId = this.depenseFamille.adherentId;
+  this.depenseFamilleForm.get('dateDebut').setValue(null);
+  this.depenseFamilleDate.dateDebut = null ;
+
+  console.log('====================this.depenseFamilleDate=======================>', this.depenseFamilleDate);
+  this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamilleDate).subscribe(
+    (res) => {
+        console.log('..............consoSinistreFamilles..............   ', res);
+        this.consoSinistreTiersPayantFamilles = res;
+        if(res){
+          this.montantTotalReclameFamille = 0;
+          this.montantTotalRembourseFamille = 0;
+          for(let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
+            this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreTiersPayantFamilles[i].montantReclame;
+           // this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreTiersPayantFamilles[i].montantRembourse;
+          }
+          console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
+          console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
+        }
+        this.updateRowGroupMetaDataTiersPayant();
+      }
+);
 }
 
 imprimerFormulaire() {
@@ -488,13 +597,16 @@ voirSinistreDetail(sinistre: any) {
 
   updateRowGroupMetaData() {
     this.rowGroupMetadata = {};
+    this.montantTotalReclame = 0;
+    this.montantTotalRembourse = 0;
 
     if (this.consoSinistreFamilles) {
       //console.log("***************", this.consoSinistreFamilles);
         for (let i = 0; i < this.consoSinistreFamilles.length; i++) {
             let rowData = this.consoSinistreFamilles[i];
-            //console.log("*******rowData********", rowData);
+            console.log("*******i********", i);
             let representativeName = rowData?.adherent?.prenom;
+            console.log("*******representativeName********", representativeName);
             
             if (i == 0) {
                 this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
@@ -503,9 +615,12 @@ voirSinistreDetail(sinistre: any) {
                 let previousRowData = this.consoSinistreFamilles[i - 1];
                 console.log("*******previousRowData********", previousRowData);
                 let previousRowGroup = previousRowData.adherent.prenom;
+                this.montantTotalReclame = previousRowData.montantTotalReclame;
+                console.log("*******this.montantTotalReclame********", this.montantTotalReclame);
+                this.montantTotalRembourse = previousRowData.montantTotalRembourse;
+                console.log("*******this.montantTotalRembourse********", this.montantTotalRembourse);
                 if (representativeName === previousRowGroup) {
                   this.rowGroupMetadata[representativeName].size++;
-                  //console.log("*******case 1********", this.rowGroupMetadata[representativeName].size);
                 }
                 else{
                   this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
@@ -514,11 +629,51 @@ voirSinistreDetail(sinistre: any) {
             }
         }
       }
-    }
+  }
+
+  updateRowGroupMetaDataTiersPayant() {
+    this.rowGroupMetadataTiersPayant = {};
+    this.montantTotalReclame = 0;
+    this.montantTotalRembourse = 0;
+
+    if (this.consoSinistreTiersPayantFamilles) {
+      //console.log("***************", this.consoSinistreFamilles);
+        for (let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
+            let rowData = this.consoSinistreTiersPayantFamilles[i];
+            //console.log("*******rowData********", rowData);
+            let representativeNameTiers = rowData?.adherent?.prenom;
+            
+            if (i == 0) {
+                this.rowGroupMetadataTiersPayant[representativeNameTiers] = { index: 0, size: 1 };
+            }
+            else {
+                let previousRowDataTiers = this.consoSinistreTiersPayantFamilles[i - 1];
+                console.log("*******previousRowDataTiersPayant********", previousRowDataTiers);
+                let previousRowGroupTiers = previousRowDataTiers.adherent.prenom;
+                //this.montantTotalReclame = previousRowData.montantTotalReclame;
+                //console.log("*******this.montantTotalReclame********", this.montantTotalReclame);
+                //this.montantTotalRembourse = previousRowData.montantTotalRembourse;
+                //console.log("*******this.montantTotalRembourse********", this.montantTotalRembourse);
+                if (representativeNameTiers === previousRowGroupTiers) {
+                  this.rowGroupMetadataTiersPayant[representativeNameTiers].size++;
+                  console.log("*******case 1********", this.rowGroupMetadataTiersPayant[representativeNameTiers]);
+                }
+                else{
+                  this.rowGroupMetadataTiersPayant[representativeNameTiers] = { index: i, size: 1 };
+                  //console.log("*******case2********", this.rowGroupMetadata[representativeName]);
+                }
+            }
+        }
+      }
+  }
 
     onSort() {
-      this.updateRowGroupMetaData();
+      //this.updateRowGroupMetaData();
   }
+
+  onSortTiersPayant() {
+    this.updateRowGroupMetaDataTiersPayant();
+}
         
     
 
