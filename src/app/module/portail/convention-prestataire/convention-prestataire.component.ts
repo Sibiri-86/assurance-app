@@ -63,14 +63,15 @@ import { Convention } from 'src/app/store/medical/convention/model';
 import * as conventionSelector from 'src/app/store/medical/convention/selector';
 import * as conventionAction from 'src/app/store/medical/convention/actions';
 import { GarantieService } from 'src/app/store/parametrage/garantie/service';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
-  selector: 'app-convention',
-  templateUrl: './convention.component.html',
-  styleUrls: ['./convention.component.scss']
+  selector: 'app-convention-prestataire',
+  templateUrl: './convention-prestataire.component.html',
+  styleUrls: ['./convention-prestataire.component.scss']
 })
-export class ConventionComponent implements OnInit, OnDestroy {
+export class ConventionPrestataireComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
@@ -110,12 +111,14 @@ export class ConventionComponent implements OnInit, OnDestroy {
   sousA: SousActe = {};
   conventionDetail: Convention = {};
   displayFDetailConvention = false;
+  dure: number = 0;
 
 
   constructor( private store: Store<AppState>,
                private confirmation: ConfirmationService,
                private formBuilder: FormBuilder,
                private messageService: MessageService,
+               private keyCloakService: KeycloakService,
                private garantieService: GarantieService,
                private breadcrumbService: BreadcrumbService) {
      this.breadcrumbService.setItems([{ label: 'Convention' }]);
@@ -134,10 +137,11 @@ export class ConventionComponent implements OnInit, OnDestroy {
     });
 
     this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
-    this.store.dispatch(conventionAction.loadConvention());
+    this.store.dispatch(conventionAction.loadConventionPrestataire({code: "OPTIPLUS"}));
     this.conventionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.conventionList = value.slice();
+        this.dure = this.conventionList[0].delai;
         this.conventionListFilter = this.conventionList;
       }
     });
@@ -293,24 +297,6 @@ export class ConventionComponent implements OnInit, OnDestroy {
       },
     });
 
-  }
-
-  onBasicUpload(event, form) {
-    console.log("===============", this.conventionListFilter)
-    if(!this.conventionListFilter || this.conventionListFilter.length >= 2){
-      this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
-   } else {
-  this.confirmation.confirm({
-      message: 'Etes vous sur d\'importer le fichier de convention',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        console.log(event.files[0]);
-        this.store.dispatch(conventionAction.importCondition({file:event.files[0], idConvention:this.conventionListFilter[0].id}));
-        form.clear();
-      },
-    });
-   }
   }
 
   supprimerConvention(){

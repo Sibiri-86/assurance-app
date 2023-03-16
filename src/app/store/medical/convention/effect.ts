@@ -71,4 +71,36 @@ export class ConventionEffects {
             )
         )
         );
+
+        fetchConventionPrestataire$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadConventionPrestataire),
+            mergeMap(({code}) =>
+                this.conventionService.$getConventionPrestataire(code).pipe(
+                    switchMap(value => [
+                        //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setConvention(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                )
+            )
+        )
+ 
+        );
+
+        importPhotosConvention$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.importCondition),
+                mergeMap(({file, idConvention}) =>
+                    this.conventionService.pushPhotosConvention(file, idConvention).pipe(
+                        switchMap(value => [
+                            GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.loadConvention()
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+        );
+        
 }

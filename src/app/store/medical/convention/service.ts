@@ -32,11 +32,29 @@ $getConvention(): Observable<ConventionList> {
     );
   }
 
+  $getConventionPrestataire(code: string): Observable<ConventionList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}/prestataire`,{params :
+      this.createRequestOption({code})}).pipe(
+      map((response: ConventionList) => response),
+      catchError(this.handleError())
+    );
+  }
   $findMontantConvention(sousActeId: string): Observable<any> {
     // @FIXME: get request
     return this.http.get(`${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}/find-montant`, {params :
       this.createRequestOption({sousActeId})});
    
+  }
+
+  pushPhotosConvention(file: File, idConvention: string): Observable<any> {
+    const data: FormData = new FormData();
+    data.append('file', file);
+    data.append('idConvention', idConvention);
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.set('Accept', 'application/json');
+    return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.CONVENTION)}/upload`, data, { headers });
   }
 
   private createRequestOption = (req?: any): HttpParams => {

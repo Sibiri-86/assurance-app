@@ -333,6 +333,11 @@ import { PharmacieGardeEffects } from './store/parametrage/pharmacie-garde/effec
 import { PharmacieGardeComponent } from './module/portail/pharmacie-garde/pharmacie-garde.component';
 import { NouveauBaremeComponent } from './module/medical/nouveau-bareme/nouveau-bareme.component';
 import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bareme.component';
+import { ConventionPrestataireComponent } from './module/portail/convention-prestataire/convention-prestataire.component';
+import { FoireEffects } from './store/contrat/foire/effect';
+import { FoireComponent } from './module/contrat/foire/foire.component';
+import { FoireQuestionComponent } from './module/portail/foire-question/foire-question.component';
+import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme-prestataire/assure-bareme-prestataire.component';
 
 @NgModule({
     imports: [
@@ -444,7 +449,7 @@ import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bar
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
              StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects, PortailEffects,
-             DateGardeEffects, PharmacieGardeEffects])
+             DateGardeEffects, PharmacieGardeEffects, FoireEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -605,6 +610,10 @@ import { AssureBaremeComponent } from './module/portail/assure-bareme/assure-bar
         PharmacieGardeComponent,
         NouveauBaremeComponent,
         AssureBaremeComponent,
+        ConventionPrestataireComponent,
+        FoireComponent,
+        FoireQuestionComponent,
+        AssureBaremePrestataireComponent,
 
     ],
     providers: [

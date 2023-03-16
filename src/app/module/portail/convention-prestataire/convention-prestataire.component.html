@@ -1,0 +1,69 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+            
+            <p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <div class="col flex align-items-center justify-content-center" style="font-size: 2em;">
+                        Le délai de paiement est de <span style="font-weight: bold">{{dure | formatTableValue: 'number':true}}</span> jour(s)
+                    </div>	
+                </ng-template>
+                <!--
+				<ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
+					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
+				</ng-template>
+                -->
+			</p-toolbar>
+            <p-table #dt [value]="conventionListFilter" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['sousActe.libelle']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                   
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        
+                        <th pSortableColumn="duree">Acte<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="duree">Date d'effet<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="numero">Tarif<p-sortIcon field="numero"></p-sortIcon></th>
+                       
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-convention>
+                    <tr>
+                       
+                        <td><span class="p-column-title" >{{convention?.sousActe?.libelle}}</span></td>
+                        <td><span class="p-column-title" >{{convention.dateEffet  | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title"  style="font-weight: bold">{{convention.montant | formatTableValue: 'number':true}}</span></td>
+                        
+    
+                       
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{conventionList ? conventionList.length : 0 }} convention(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div> 
+        
+
+
+       
+
+      
+       
+        <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+    </div>
+</div>

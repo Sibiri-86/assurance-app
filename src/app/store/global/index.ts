@@ -160,6 +160,7 @@ import * as produitPharmaceutiqueExcluReducer from '../parametrage/produit-pharm
 import * as portailReducer from '../portail/recapitulatif/reducer';
 import * as dateGardeReducer from '../parametrage/date-garde/reducer';
 import * as PharmacieGardeReducer from '../parametrage/pharmacie-garde/reducer';
+import * as FoireReducer from '../contrat/foire/reducer';
 
 
 
@@ -236,7 +237,8 @@ export const reducers: ActionReducerMap<AppState> = {
     quartierPrestataireGarantState: quartierPrestataireGarantReducer.reducer,
     portailState: portailReducer.reducer,
     dateGardeState: dateGardeReducer.reducer,
-    pharmacieGardeState: PharmacieGardeReducer.reducer
+    pharmacieGardeState: PharmacieGardeReducer.reducer,
+    foireState: FoireReducer.reducer
 
 
 };
