@@ -87,18 +87,9 @@ export class ProduitExcluComponent implements OnInit {
   ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
   name = '';
   role = '';
-  role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
-  role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
-  role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
-  role4 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction);
-  role_sm_workflow_prefinancement_prestation_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_valider);
-  role_sm_workflow_prefinancement_Medical_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_valider);
-  role_sm_workflow_prefinancement_finance_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_valider);
-  role_sm_workflow_prefinancement_direction_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_valider);
-  role_sm_workflow_prefinancement_prestation_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_devalider);
-  role_sm_workflow_prefinancement_Medical_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_devalider);
-  role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
-  role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
+  role1 = this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE);
+  role2 = this.keycloak.isUserInRole(Function.VUE_ASSURE);
+  
   rembourssements: Array<ProduitPharmaceutique>;
   rembourssementValid: Array<Prefinancement>;
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
@@ -115,7 +106,7 @@ export class ProduitExcluComponent implements OnInit {
      console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
-        
+        if(this.role2) {
           this.portailService.findAssureRacheteInExcluList(parseInt(profile.username)).subscribe(
             (res) => {
                 console.log('..............produitPharmaceutiqueExcluList333333..............   ', res);
@@ -129,6 +120,7 @@ export class ProduitExcluComponent implements OnInit {
           this.produitPharmaceutiqueExcluList3 = res;
       }
 );
+        }
 
         if (profile['attributes'].role.length != 0){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
@@ -137,15 +129,17 @@ export class ProduitExcluComponent implements OnInit {
 }
 
   ngOnInit(): void {
-
-    this.produitPharmaceutiqueExcluList$ = this.store.pipe(select(produitPharmaceutiqueExcluSelector.produitPharmaceutiqueExcluList));
+    if(this.role1) {
+      this.produitPharmaceutiqueExcluList$ = this.store.pipe(select(produitPharmaceutiqueExcluSelector.produitPharmaceutiqueExcluList));
     this.store.dispatch(loadProduitPharmaceutiqueExclu());
     this.produitPharmaceutiqueExcluList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log("rrrrrrrrrrrrrrrrrrrrrrrr>",value);
       if (value) {
-        this.produitPharmaceutiqueExcluList = value.slice();
+        this.produitPharmaceutiqueExcluList2 = value.slice();
       }
     });
+    }
+    
 
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))

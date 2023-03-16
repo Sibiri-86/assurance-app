@@ -76,23 +76,25 @@
                              <ng-template pTemplate="header">
                             <tr>
                                 
-                                <th pSortableColumn="numero">Date soins<p-sortIcon field="numero"></p-sortIcon></th>
-                                <th pSortableColumn="territorialite" >Nom & Prénom(s)<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Acte<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Pathologie<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Produits pharmaceutiques<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Nombre d'acte<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Coût Unitaire<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Montant Remboursé<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                                <th pSortableColumn="taux">Part Assuré(e)<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="nomPrenom" >Nom & Prénom(s)<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                                <th pSortableColumn="dateSoins">Date soins<p-sortIcon field="dateSoins"></p-sortIcon></th>
+                                <th pSortableColumn="acte">Acte<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="pathologie">Pathologie<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="produitPharmaceutique">Produits pharmaceutiques<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="nombreActe">Nombre d'acte<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="coutActe">Coût Unitaire<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="montantRembourse">Montant Remboursé<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="partAssure">Part Assuré(e)<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                <th pSortableColumn="decision" >Décision<p-sortIcon field="etat"></p-sortIcon></th>
+                                <th pSortableColumn="decision" >Commentaire<p-sortIcon field="etat"></p-sortIcon></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-prefinance>
                             <tr>
                 
-                                <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
-                                </td>
                                 <td><span class="p-column-title">{{prefinance.adherent.nom}} {{prefinance.adherent.prenom}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{prefinance.dateSoins | formatTableValue : 'date'}}</span>
                                 </td>
                                 <td><span class="p-column-title">{{prefinance.sousActe.libelle}}</span>
                                 </td>
@@ -107,6 +109,10 @@
                                 <td><span class="p-column-title">{{prefinance.montantRembourse | formatTableValue : 'number'}}</span>
                                 </td>
                                 <td><span class="p-column-title">{{prefinance.montantRestant | formatTableValue : 'number'}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{prefinance.sort}}</span>
+                                </td>
+                                <td><span class="p-column-title">{{prefinance.observation}}</span>
                                 </td>
                             </tr>
                         </ng-template>
@@ -211,6 +217,8 @@
                                <th pSortableColumn="taux">Coût Unitaire<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                <th pSortableColumn="taux">Montant Remboursé<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                <th pSortableColumn="taux">Part Assuré(e)<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                               <th pSortableColumn="decision" >Décision<p-sortIcon field="etat"></p-sortIcon></th>
+                               <th pSortableColumn="decision" >Commentaire<p-sortIcon field="etat"></p-sortIcon></th>
                            </tr>
                        </ng-template>
                        <ng-template pTemplate="body" let-prefinance>
@@ -233,6 +241,10 @@
                                <td><span class="p-column-title">{{prefinance.montantRembourse | formatTableValue : 'number'}}</span>
                                </td>
                                <td><span class="p-column-title">{{prefinance.montantRestant | formatTableValue : 'number'}}</span>
+                               </td>
+                               <td><span class="p-column-title">{{prefinance.sort }}</span>
+                               </td>
+                               <td><span class="p-column-title">{{prefinance.observation}}</span>
                                </td>
                            </tr>
                        </ng-template>
@@ -336,6 +348,8 @@
                                     <th pSortableColumn="taux">Coût Unitaire<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                     <th pSortableColumn="taux">Montant Remboursé<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                     <th pSortableColumn="taux">Part Assuré(e)<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                    <th pSortableColumn="decision" >Décision<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="decision" >Commentaire<p-sortIcon field="etat"></p-sortIcon></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-prefinance>
@@ -358,6 +372,10 @@
                                     <td><span class="p-column-title">{{prefinance.montantRembourse | formatTableValue : 'number'}}</span>
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.montantRestant | formatTableValue : 'number'}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{prefinance.sort }}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{prefinance.observation}}</span>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -461,6 +479,8 @@
                                     <th pSortableColumn="taux">Coût Unitaire<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                     <th pSortableColumn="taux">Montant Remboursé<p-sortIcon field="taux.taux"></p-sortIcon></th>
                                     <th pSortableColumn="taux">Part Assuré(e)<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                                    <th pSortableColumn="decision" >Décision<p-sortIcon field="etat"></p-sortIcon></th>
+                                    <th pSortableColumn="decision" >Commentaire<p-sortIcon field="etat"></p-sortIcon></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-prefinance>
@@ -483,6 +503,10 @@
                                     <td><span class="p-column-title">{{prefinance.montantRembourse | formatTableValue : 'number'}}</span>
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.montantRestant | formatTableValue : 'number'}}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{prefinance.sort }}</span>
+                                    </td>
+                                    <td><span class="p-column-title">{{prefinance.observation}}</span>
                                     </td>
                                 </tr>
                             </ng-template>
