@@ -43,6 +43,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { Avenant } from 'src/app/store/contrat/historiqueAvenant/model';
 import { PlafondFamilleActe } from 'src/app/store/parametrage/plafond/model';
+import { PortailService } from 'src/app/store/portail/recapitulatif/service';
+import { ProduitPharmaceutiqueExcluEntite } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
 
 
 
@@ -79,34 +81,46 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
   avenantModif1: Avenant = {};
   plafonds: PlafondFamilleActe = {};
   garanties: PlafondFamilleActe[] = [];
-
-
+  produitPharmaceutiqueExcluList3: Array<ProduitPharmaceutiqueExcluEntite>;
+  username:any = null;
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private adherentService: AdherentService,
                private keycloakService: KeycloakService,
                private plafondService: PlafondService,
+               private portailService: PortailService,
                private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([{ label: 'Condition générale et particulière' }]);
   }
 
   
   ngOnInit(): void {
-    console.log("this.keycloakService.getUsername()");
-    this.plafondService.findBaremeByUserConnect("1").subscribe(
-      (res) => {
-        this.avenantModif1.plafondFamilleActes = res.body;
-        
-      }
-    );
-    this.plafondService.findGarantieByUserConnect("1").subscribe(
-      (res) => {
-        this.garanties = res.body;
-        this.plafonds = this.garanties[0];
-        console.log("======plafonds===========");
-        console.log("======plafonds===========");
-      }
-    );
+    this.keycloakService.loadUserProfile().then(profile => {
+      this.plafondService.findBaremeByUserConnect(profile.username).subscribe(
+        (res) => {
+          this.avenantModif1.plafondFamilleActes = res.body;
+          
+        }
+      );
+      this.plafondService.findGarantieByUserConnect(profile.username).subscribe(
+        (res) => {
+          this.garanties = res.body;
+          this.plafonds = this.garanties[0];
+          console.log("======plafonds===========");
+          console.log("======plafonds===========");
+        }
+      );
+      this.portailService.getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(parseInt(profile.username)).subscribe(
+        (res) => {
+            console.log('..............produitPharmaceutiqueExcluList44444444..............   ', res);
+            this.produitPharmaceutiqueExcluList3 = res;
+        }
+  );
+  
+
+    });
+    
+    
     this.conditionGeneraleList$ = this.store.pipe(select(adherentSelector.conditionGeneraleList));
     this.store.dispatch(loadConditionGenerale());
     this.conditionGeneraleList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -115,7 +129,6 @@ export class ConditionGeneraleParticuliereComponent implements OnInit {
       }
     });
     
-
 
   }
 

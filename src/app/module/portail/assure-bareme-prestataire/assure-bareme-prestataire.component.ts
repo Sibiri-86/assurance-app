@@ -54,7 +54,7 @@ export class AssureBaremePrestataireComponent implements OnInit {
   images: any[];
   prestationAdd: Prestation = {};
   display: boolean = false;
-
+  username: any;
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
@@ -68,6 +68,9 @@ export class AssureBaremePrestataireComponent implements OnInit {
   
   ngOnInit(): void {
    //console.log(this.keycloakService.getUsername());
+   this.keycloakService.loadUserProfile().then(profile => {
+    this.username = profile.username;
+  });
    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
     this.store.dispatch(loadNewBareme());
     this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {

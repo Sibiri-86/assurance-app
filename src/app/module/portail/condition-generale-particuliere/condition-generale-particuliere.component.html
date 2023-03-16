@@ -24,117 +24,170 @@
             <div class="p-col-12" >
                 <p-toast></p-toast>
                 <div class="card">
-                    <p-fieldset legend="Information de la police" toggleable="true">
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col-3">
-                                <label for="lastname2">N° Police</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.police?.numero}}</span>
-                                </div>
-                            </div>
+                 <p-splitter [style]="{'height': '100%'}">
+                        <ng-template pTemplate  >
                             
-
-                            <div class="p-field p-col-3">
-                                <label for="lastname2"> Garant</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.police?.garant?.nom}}</span>
-                                </div>
-                            </div>
-
-                            <div class="p-field p-col-3">
-                                <label for="lastname2"> Souscripteur</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.police?.nom}}</span>
-                                </div>
-                            </div>
-
-                            <div class="p-field p-col-3">
-                                <label for="lastname2"> Adresse Souscripteur</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.police?.adressePostale}}</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="p-fluid p-formgrid p-grid">
-                            
-                            <div class="p-field p-col-3">
-                            <label for="lastname2"> Tel Souscripteur</label>
-                            <div>
-                                <span>{{plafonds?.groupe?.police?.contact}}</span>
-                            </div>
-                          </div>
-                            <div class="p-field p-col-3">
-                                <label for="lastname2"> Date d'effet</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.dateEffet | formatTableValue: 'date'}}</span>
-                                </div>
-                            </div>
-
-                            <div class="p-field p-col-3">
-                                <label for="lastname2"> Date d'écheance</label>
-                                <div>
-                                    <span>{{plafonds?.groupe?.dateEcheance | formatTableValue: 'date'}}</span>
-                                </div>
-                            </div>
-
-                            <div class="p-field p-col">
-                                <div>
-                                <p-table [value]="plafonds?.groupe?.police?.territorialite" [tableStyle]="{'min-width': '50rem'}">
-                                    <ng-template pTemplate="caption">
-                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                            <h5 class="p-m-0"></h5>
-                                            <span class="p-input-icon-left">
-                                            
-                                            Territorialité
-                                        </span>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-product>
-                                        <tr>
-                                            <td>{{product.code}}</td>
-                                            <td>{{product.description}}</td>
-                                          
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                               
-                                </div>
-                            </div>
-
                            
-
-                        </div>
-
-
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col">
-                                <div>
-                                <p-table [value]="garanties" [tableStyle]="{'min-width': '50rem'}">
-                                    <ng-template pTemplate="caption">
-                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                            <h5 class="p-m-0"></h5>
-                                            <span class="p-input-icon-left">
+                                    <p-fieldset legend="Information de la police" toggleable="true">
+                                        
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2">N° Police</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.police?.numero}}</span>
+                                                </div>
+                                            </div>
                                             
-                                            Garanties souscrits
-                                        </span>
-                                        </div>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-garantie>
-                                        <tr>
-                                            <td>{{garantie?.garantie?.libelle}}</td>
-                                          
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                               
-                                </div>
-                            </div>
-                        </div>
 
-                        
-                    </p-fieldset>
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2"> Garant</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.police?.garant?.nom}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2"> Souscripteur</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.police?.nom}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2"> Adresse Souscripteur</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.police?.adressePostale}}</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            
+                                            <div class="p-field p-col-3">
+                                            <label for="lastname2"> Tel Souscripteur</label>
+                                            <div>
+                                                <span>{{plafonds?.groupe?.police?.contact}}</span>
+                                            </div>
+                                        </div>
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2"> Date d'effet</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.dateEffet | formatTableValue: 'date'}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-field p-col-3">
+                                                <label for="lastname2"> Date d'écheance</label>
+                                                <div>
+                                                    <span>{{plafonds?.groupe?.dateEcheance | formatTableValue: 'date'}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-field p-col">
+                                                <div>
+                                                <p-table [value]="plafonds?.groupe?.police?.territorialite" [tableStyle]="{'min-width': '50rem'}">
+                                                    <ng-template pTemplate="caption">
+                                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                                            <h5 class="p-m-0"></h5>
+                                                            <span class="p-input-icon-left">
+                                                            
+                                                            Territorialité
+                                                        </span>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-product>
+                                                        <tr>
+                                                            <td>{{product.code}}</td>
+                                                            <td>{{product.description}}</td>
+                                                        
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            
+                                                </div>
+                                            </div>
+
+                                        
+
+                                        </div>
+
+
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            <div class="p-field p-col">
+                                                <div>
+                                                <p-table [value]="garanties" [tableStyle]="{'min-width': '50rem'}">
+                                                    <ng-template pTemplate="caption">
+                                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                                            <h5 class="p-m-0"></h5>
+                                                            <span class="p-input-icon-left">
+                                                            
+                                                            Garanties souscrits
+                                                        </span>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-garantie>
+                                                        <tr>
+                                                            <td>{{garantie?.garantie?.libelle}}</td>
+                                                        
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                    </p-fieldset>
+                        </ng-template>
+                        <ng-template pTemplate>
+                           
+                                    <p-fieldset legend="Produits rachétés" toggleable="true">
+                                        <p-table #dt [value]="produitPharmaceutiqueExcluList3" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['typeProduit','description','libelle']"
+                                            [rowHover]="true" dataKey="id"
+                                            styleClass="p-datatable-customers"
+                                            currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                                        <ng-template pTemplate="caption">
+                                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                                <h5 class="p-m-0"></h5>
+                                                <span class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                                            </span>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th pSortableColumn="contact" >Code<p-sortIcon field="contact"></p-sortIcon></th>
+                                                <th pSortableColumn="contact" >Dénomination<p-sortIcon field="contact"></p-sortIcon></th>
+                                                <th pSortableColumn="contact" >Autre Info<p-sortIcon field="contact"></p-sortIcon></th>
+                                                <th pSortableColumn="contact">Type de Produit<p-sortIcon field="contact"></p-sortIcon></th>
+                                                <!-- <th pSortableColumn="code" >Exclusion? <p-sortIcon field="code"></p-sortIcon></th> -->
+                                                
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-garant>
+                                            <tr>
+                                                <td><span class="p-column-title" >{{garant?.produitExclu?.code}}</span></td>
+                                                <td><span class="p-column-title" >{{garant?.produitExclu?.libelle}}</span></td>
+                                                <td><span class="p-column-title" >{{garant?.produitExclu?.description}}</span></td>
+                                                <td><span class="p-column-title" >{{garant?.produitExclu?.typeProduit}}</span></td>
+                                                <!-- <td><span class="p-badge p-badge-danger">Exclu</span></td> -->
+                                    
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary">
+                                            <div class="p-d-flex p-ai-center p-jc-between">
+                                                {{produitPharmaceutiqueExcluList3 ? produitPharmaceutiqueExcluList3.length : 0 }} produit(s) rachété(s) trouvé(s).
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                    </p-fieldset>
+                        </ng-template>
+                    </p-splitter>
+                    
+                    
                     
                     
                     <!-- <p-table #dtConfigurationPlafond [value]="avenantModif1.plafondFamilleActes" dataKey="garantie.id" editMode="row" responsiveLayout="scroll">

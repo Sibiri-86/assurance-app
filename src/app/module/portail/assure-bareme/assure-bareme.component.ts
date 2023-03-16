@@ -86,12 +86,14 @@ export class AssureBaremeComponent implements OnInit {
 
         }
       })
-    this.plafondService.findBaremeByUserConnect("2").subscribe(
-      (res) => {
-        this.sousActeListPlafond = res.body;
-      }
-    );
-    console.log(this.keycloakService.loadUserProfile());
+      this.keycloakService.loadUserProfile().then(profile => {
+        this.plafondService.findBaremeByUserConnect(profile.username).subscribe(
+          (res) => {
+            this.sousActeListPlafond = res.body;
+          }
+        );
+      });
+   
     
     
     this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
