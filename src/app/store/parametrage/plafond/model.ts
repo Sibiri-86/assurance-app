@@ -20,6 +20,7 @@ export interface PlafondFamilleActe {
     domaine?: Array<QualiteAssure>;
     etat?: Status;
     groupe?: Groupe;
+    checked?: boolean;
   }
 
 export interface PlafondActe {

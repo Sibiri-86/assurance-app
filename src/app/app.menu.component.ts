@@ -268,7 +268,6 @@ export class AppMenuComponent implements OnInit {
                 label: 'Convention', icon: 'pi pi-fw pi-list', routerLink: ['/portail/convention'],
                  visible: this.keycloak.isUserInRole(Function.sm_portail)
             },
-            {label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], visible: this.keycloak.isUserInRole(Function.sm_portail)},
             {
                 label: 'FAQ', icon: 'pi pi-fw pi-list', routerLink: ['/portail/foire-question'],
                  visible: this.keycloak.isUserInRole(Function.sm_portail)
