@@ -202,6 +202,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   plafondFamilleActeConstruct: Array<PlafondFamilleActe> = [];
   plafondFamilleActeConstrutRecap: Array<PlafondFamilleActe> = [];
   plafondActuelleConfiguration: Array<PlafondFamilleActe> = [];
+  plafondFamilleActeArrives: Array<PlafondFamilleActe> = [];
+  plafondActuelleConfigurationFinal: Array<PlafondFamilleActe> = [];
   plafondActe: Array<PlafondActe>;
   plafondSousActe: Array<PlafondSousActe>;
   typePrimeList: Array<TypePrime>;
@@ -795,6 +797,69 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.baremeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.plafondActuelleConfiguration = value.slice();
+        console.log("***************",this.plafondActuelleConfiguration);
+        this.loadPlafondByGroupe(this.groupe);
+        if(this.importer) {
+          this.plafondActuelleConfiguration = this.plafondActuelleConfiguration.filter(plafond=>plafond.etat === Etat.ACTIF);
+          console.log("*******his.groupe********",this.groupe);
+          console.log("*******this.plafondFamilleActeArrives********",this.plafondFamilleActeArrives);
+          if(this.plafondFamilleActeArrives) {
+                /* for (var z = 0; z < this.plafondFamilleActeArrives.length; z++){
+                  for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
+                    if(this.plafondFamilleActeArrives[z]['garantie.code'] === this.plafondActuelleConfiguration[i]['garantie.code']){
+                      this.plafondActuelleConfiguration.push(this.plafondActuelleConfiguration[i]);
+                      console.log("*******222********",this.plafondActuelleConfiguration);
+                    }
+              }
+            } */
+            let result = this.plafondActuelleConfiguration.filter(o1 => !this.plafondFamilleActeArrives.some(o2 => o1.garantie.code === o2.garantie.code));
+            console.log("*******result********", result);
+            this.plafondActuelleConfiguration = [];
+            this.plafondActuelleConfiguration = result;
+           
+            //this.plafondActuelleConfigurationFinal = this.plafondActuelleConfiguration;
+            //console.log("*******sortie********",this.plafondActuelleConfigurationFinal.length);
+            //this.plafondActuelleConfiguration = [];
+            for (var i = 0; i < this.plafondActuelleConfigurationFinal.length; i++){
+              this.plafondActuelleConfigurationFinal[i].dateEffet = new Date(this.groupe.dateEffet);
+              this.plafondActuelleConfigurationFinal[i].taux = this.groupe.taux;
+              this.plafondActuelleConfigurationFinal[i].listeActe = this.plafondActuelleConfigurationFinal[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
+              for (var j = 0; j < this.plafondActuelleConfigurationFinal[i].listeActe.length; j++){
+                this.plafondActuelleConfigurationFinal[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
+                this.plafondActuelleConfigurationFinal[i].listeActe[j].taux = this.groupe.taux;
+                this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe = this.plafondActuelleConfigurationFinal[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
+                for (var k = 0; k < this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe.length; k++){
+                  this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
+                  this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
+                }
+              }
+            }
+            //this.plafondActuelleConfiguration = this.plafondActuelleConfigurationFinal;
+            console.log("*******last********", this.plafondActuelleConfiguration);
+            } else {
+              console.log("*******entré else********");
+              for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
+                    this.plafondActuelleConfiguration[i].dateEffet = new Date(this.groupe.dateEffet);
+                    this.plafondActuelleConfiguration[i].taux = this.groupe.taux;
+                    this.plafondActuelleConfiguration[i].listeActe = this.plafondActuelleConfiguration[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
+                    for (var j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
+                      this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
+                      this.plafondActuelleConfiguration[i].listeActe[j].taux = this.groupe.taux;
+                      this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe = this.plafondActuelleConfiguration[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
+                      for (var k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++){
+                        this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
+                        this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
+                      }
+                    }
+              }
+            }
+        this.importer = false;
+        }
+        console.log(this.plafondActuelleConfiguration);
+      }
+
+      /* if (value) {
+        this.plafondActuelleConfiguration = value.slice();
         if(this.importer) {
           this.plafondActuelleConfiguration =  this.plafondActuelleConfiguration.filter(plafond=>plafond.etat === Etat.ACTIF);
         for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
@@ -814,7 +879,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         this.importer = false;
         }
         console.log(this.plafondActuelleConfiguration);
-      }
+      } */
     });
 
     /** dispatch action pour imprimer le pdf */
@@ -2716,6 +2781,7 @@ changeGarantie(garantie, indexLigne: number) {
     this.plafondService.getPlafondGroupeFamilleActeByGroupe(groupe.id).subscribe(
             (res) => {
               this.avenantModif1.plafondFamilleActes = res.body;
+              this.plafondFamilleActeArrives = res.body;
               if(this.avenantModif1.plafondFamilleActes) {
                 this.avenantModif1.plafondFamilleActes.forEach(pla=>{
                   pla.dateEffet = groupe.dateEffet;
