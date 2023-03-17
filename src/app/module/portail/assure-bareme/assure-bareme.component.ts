@@ -75,8 +75,6 @@ export class AssureBaremeComponent implements OnInit {
     });
 
     this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
-        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:new Date(), matricule: 2}));;
-
     this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         console.log(value);
         if (value) {
@@ -87,6 +85,7 @@ export class AssureBaremeComponent implements OnInit {
         }
       })
       this.keycloakService.loadUserProfile().then(profile => {
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:new Date(), matricule: parseInt(profile.username)}));;
         this.plafondService.findBaremeByUserConnect(profile.username).subscribe(
           (res) => {
             this.sousActeListPlafond = res.body;

@@ -120,6 +120,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   groupeList$: Observable<Array<Groupe>>;
   user: User = {};
   displayuser = false;
+  dysplayGarant = false;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -138,7 +139,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
 
   
   ngOnInit(): void {
-   
+    
     this.exerciceComptableOperationList = [];
 
     this.garantList$ = this.store.pipe(select(garantListSelector.garantList));
@@ -146,8 +147,21 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+          
+         });
         
-        this.garantList = value.slice();
         
        
       }
