@@ -254,37 +254,37 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], 
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Pharmacies', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Convention', icon: 'pi pi-fw pi-list', routerLink: ['/portail/convention'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                 visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
             {
                 label: 'FAQ', icon: 'pi pi-fw pi-list', routerLink: ['/portail/foire-question'],
                  visible: this.keycloak.isUserInRole(Function.sm_portail)
             },
-            {label: 'Infos assuré', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme-prestataire'], visible: this.keycloak.isUserInRole(Function.sm_portail)},
+            {label: 'Infos assuré', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme-prestataire'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
 
             {
                 label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], 
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Condition gle et parti.', icon: '', routerLink: ['/portail/condition-generale-particuliere'],
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
                 label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], 
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             }
 
             /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},

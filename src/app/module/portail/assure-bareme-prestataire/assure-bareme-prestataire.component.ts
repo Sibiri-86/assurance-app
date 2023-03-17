@@ -29,6 +29,8 @@ import * as featureActionAdherent from '../../../store/contrat/adherent/actions'
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
 import { Adherent } from '../../../store/contrat/adherent/model';
 import { Prestation } from 'src/app/store/prestation/tierPayant/model';
+import { PortailService } from 'src/app/store/portail/recapitulatif/service';
+import { ProduitPharmaceutiqueExcluEntite } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/model';
 
 
 
@@ -55,12 +57,13 @@ export class AssureBaremePrestataireComponent implements OnInit {
   prestationAdd: Prestation = {};
   display: boolean = false;
   username: any;
-
+  produitPharmaceutiqueExcluList3: Array<ProduitPharmaceutiqueExcluEntite>;
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private sousActeService: SousActeService,
                private keycloakService: KeycloakService,
                private plafondService: PlafondService,
+               private portailService: PortailService,
                private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([{ label: 'Carte et  barème de l\'assuré ' }]);
   }
@@ -68,6 +71,7 @@ export class AssureBaremePrestataireComponent implements OnInit {
   
   ngOnInit(): void {
    //console.log(this.keycloakService.getUsername());
+   this.display = false;
    this.keycloakService.loadUserProfile().then(profile => {
     this.username = profile.username;
   });
@@ -92,7 +96,6 @@ export class AssureBaremePrestataireComponent implements OnInit {
         }
       })
    
-    console.log(this.keycloakService.loadUserProfile());
     
     
     this.sousActeService.$getNewBaremeExclus().subscribe((rest)=>{
@@ -114,6 +117,13 @@ export class AssureBaremePrestataireComponent implements OnInit {
           this.sousActeListPlafond = res.body;
         }
       );
+      this.portailService.getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(parseInt(this.prestationAdd.matriculeAdherent)).subscribe(
+        (res) => {
+            console.log('..............produitPharmaceutiqueExcluList44444444..............   ', res);
+            this.produitPharmaceutiqueExcluList3 = res;
+        }
+  );
+  
 
     }
   }
