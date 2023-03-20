@@ -58,6 +58,7 @@ import { Prestation } from 'src/app/store/prestation/tierPayant/model';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -125,6 +126,7 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Depense par famille de prestation'}]);
@@ -153,8 +155,22 @@ export class DepenseFamilleActeComponent implements OnInit, OnDestroy {
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+          
+         });
         
-        this.garantList = value.slice();
+     //   this.garantList = value.slice();
         
        
       }

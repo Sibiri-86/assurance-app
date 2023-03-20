@@ -276,7 +276,7 @@ export class AppMenuComponent implements OnInit {
 
             {
                 label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], 
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                visible: this.keycloak.isUserInRole(Function.sm_portail)
             },
             {
                 label: 'Condition gle et parti.', icon: '', routerLink: ['/portail/condition-generale-particuliere'],

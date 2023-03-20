@@ -62,6 +62,7 @@ import * as pahologieSlector from '../../../../store/parametrage/pathologie/sele
 import * as pahologiefeatureAction from '../../../../store/parametrage/pathologie/actions';
 import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
 import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -131,6 +132,7 @@ export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Affectation'}]);
@@ -158,8 +160,21 @@ export class DepenseFamillePathologieComponent implements OnInit, OnDestroy {
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
-        
-        this.garantList = value.slice();
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+          
+         });
+      //  this.garantList = value.slice();
         
        
       }

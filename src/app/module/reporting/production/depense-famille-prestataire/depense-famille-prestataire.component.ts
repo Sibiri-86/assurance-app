@@ -61,6 +61,7 @@ import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
 import * as typePrestataireSlector from '../../../../store/parametrage/type-prestataire/selector';
 import * as typePrestatairefeatureAction from '../../../../store/parametrage/type-prestataire/actions';
 import { TypePrestataire } from 'src/app/store/parametrage/type-prestataire/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -130,6 +131,7 @@ export class DepenseFamillePrestataireComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Depense des prescripteur'}]);
@@ -157,8 +159,21 @@ export class DepenseFamillePrestataireComponent implements OnInit, OnDestroy {
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {
-        
-        this.garantList = value.slice();
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+          
+         });
+       // this.garantList = value.slice();
         
        
       }

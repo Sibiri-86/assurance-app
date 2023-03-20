@@ -57,6 +57,7 @@ import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { ConsommationParFamille } from 'src/app/store/reporting/production/recapitulatif/model';
 import * as statistiqueParTrancheAgeAction from 'src/app/store/reporting/production/statistiqueParTrancheAge/action';
 import * as statistiqueParTrancheAgeSelector from '../../../../store/reporting/production/statistiqueParTrancheAge/selector';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -124,6 +125,7 @@ export class FamilleAssureComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Famille d\'assuré'}]);
@@ -158,7 +160,21 @@ export class FamilleAssureComponent implements OnInit, OnDestroy {
       
       if (value) {
         
-        this.garantList = value.slice();
+
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+        });
+       // this.garantList = value.slice();
         
        
       }

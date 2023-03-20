@@ -45,6 +45,7 @@ import {groupeList} from 'src/app/store/contrat/groupe/selector';
 import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -139,6 +140,7 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
               private confirmationService: ConfirmationService, 
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
+              private keycloakService: KeycloakService,
               private recaptulatifService: RecapitulatifService) {
 
       this.appelFondForm = this.formBuilder.group({
@@ -208,7 +210,21 @@ ngOnInit(): void {
     this.store.dispatch(loadGarant());
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        this.garantList = value.slice();
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.appelFondForm.get('garant').setValue(this.garantList[0]);
+                  //.check.garant = this.garantList[0];
+                //  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+        });
+       // this.garantList = value.slice();
         console.log("garantListe", this.garantList);
       }
     });

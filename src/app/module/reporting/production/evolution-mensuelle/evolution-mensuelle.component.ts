@@ -54,6 +54,7 @@ import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/s
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as groupefeatureAction from '../../../../store/contrat/groupe/actions';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -119,6 +120,7 @@ export class EvolutionMensuelleComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Evolution  mensuelle'}]);
@@ -138,7 +140,22 @@ export class EvolutionMensuelleComponent implements OnInit, OnDestroy {
       
       if (value) {
         
-        this.garantList = value.slice();
+
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+        });
+
+       // this.garantList = value.slice();
         
        
       }

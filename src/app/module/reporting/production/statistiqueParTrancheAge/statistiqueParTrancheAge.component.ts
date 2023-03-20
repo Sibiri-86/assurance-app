@@ -44,6 +44,7 @@ import * as statistiqueParTrancheAgeAction from 'src/app/store/reporting/product
 import * as statistiqueParTrancheAgeSelector from '../../../../store/reporting/production/statistiqueParTrancheAge/selector';
 import { StatistiqueTrancheAgeService } from 'src/app/store/reporting/production/statistiqueParTrancheAge/service';
 import { StatistiqueParTrancheAge } from 'src/app/store/reporting/production/statistiqueParTrancheAge/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -131,6 +132,7 @@ export class StatistiqueParTrancheAgeComponent implements OnInit, OnDestroy {
               private confirmationService: ConfirmationService, 
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
+              private keycloakService: KeycloakService,
               private statistiqueParTrancheAgeService: StatistiqueTrancheAgeService) {
 
       this.appelFondForm = this.formBuilder.group({
@@ -171,7 +173,21 @@ ngOnInit(): void {
     this.store.dispatch(loadGarant());
     this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        this.garantList = value.slice();
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  this.appelFondForm.get('garant').setValue(this.garantList[0]);
+                  //.check.garant = this.garantList[0];
+                //  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+        });
+        // this.garantList = value.slice();
         console.log("garantListe", this.garantList);
       }
     });

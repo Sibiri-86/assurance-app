@@ -58,6 +58,7 @@ import * as garantieSelector from '../../../../store/parametrage/garantie/select
 import * as garantieAction from '../../../../store/parametrage/garantie/actions';
 
 import { Garantie } from 'src/app/store/parametrage/garantie/model';
+import { KeycloakService } from 'keycloak-angular';
 
 
 
@@ -127,6 +128,7 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private depenseService: DepenseFamilleService,
+               private keycloakService: KeycloakService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Factures impayées par prestataire'}]);
@@ -155,7 +157,21 @@ export class ReportingChequeNonValideComponent implements OnInit, OnDestroy {
       
       if (value) {
         
-        this.garantList = value.slice();
+        this.keycloakService.loadUserProfile().then(profile => {
+         
+          if(profile['attributes']) {
+                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                if(this.garantList) {
+                  //this.appelFondForm.get('garant').setValue(this.garantList[0]);
+                  this.check.garant = this.garantList[0];
+                  this.loadPoliceByGarant();
+                }
+                
+          } else {
+            this.garantList = value.slice();
+          }
+        });
+       // this.garantList = value.slice();
         
        
       }
