@@ -7,14 +7,7 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-                    <div class="p-grid">
-                        <div class="p-col-4">
-
-                        </div>
-                        <div class="p-col-12">
-
-                        </div>
-                    </div>
+                
                     <form (ngSubmit)="onCreate()"  [formGroup]="depenseFamilleForm">
                         <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col p-mb-3">
@@ -32,22 +25,38 @@
                             </div>
                         </div>
                     </form>
-                    <span style="font-weight:bold !important;  font-size: 15px !important;">
-                        Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
+                    <!-- <div>
+                        <span style="font-weight:bold !important;  font-size: 15px !important;">
+                            Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
                         </span>
+                    </div>
+                    <br>
+                    <div>
+                        <span style="font-weight:bold !important;  font-size: 15px !important;">
+                            Total montant remboursé des sinistres: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
+                        </span>
+                    </div> -->
+                       
                 </ng-template>
-                <ng-template pTemplate="right">
-                    
-                        <div class="p-fluid p-formgrid p-grid">
-                            <div class="p-field p-col p-mt-5">
+                <div>
+                        <div >
+                            
                                 
                                 <span style="font-weight:bold !important;  font-size: 15px !important;">
-                                    Total montant remboursé des sinistres: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
+                                    Total montant réclamé des sinistres préfinancés de la famille: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
+                                </span>
+                            
+                        </div>
+                        <br/>
+                        <div >
+                            
+                                
+                                <span style="font-weight:bold !important;  font-size: 15px !important;">
+                                    Total montant remboursé des sinistres préfinancés de la famille: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
                                 </span>
                                
-                            </div>
                         </div>
-                </ng-template>
+                    </div>
 				
 			</p-toolbar>
 
@@ -82,21 +91,13 @@
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" 
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
                         [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{montantTotalReclame | formatTableValue: 'number':true}}</span>
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size !== 1" 
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
                         [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{montantTotalRembourse | formatTableValue: 'number':true}}</span>
-                        </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{garant?.montantTotalReclame | formatTableValue: 'number':true}}</span>
-                        </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex && rowGroupMetadata[garant?.adherent?.prenom].size === 1" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{garant?.montantTotalRembourse | formatTableValue: 'number':true}}</span>
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
                         </td>
 						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
@@ -108,109 +109,16 @@
                             (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
                             </button>
                         </td>
-                        <!-- <td>
-                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" (click)="voirSinistreDetail(garant)"
-                                  class="p-button-rounded p-button-success p-mr-2">
-                            </button>
-                        </td> -->
             
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="summary">
 					<div class="p-d-flex p-ai-center p-jc-between">
-						{{consoSinistreFamilles ? consoSinistreFamilles.length : 0 }} prestation(s) trouvé(es).
+						{{consoSinistreFamilles ? consoSinistreFamilles.length : 0 }} sinistre(s) trouvé(es).
 					</div>
 				</ng-template>
 			</p-table>
 
-
-            <!-- Essai du dropdown -->
-<!--             <br>
-            <span style="font-size: 25px !important; color: brown;"> Autre présentation</span>
-            <br>
-            <br>
-
-            <p-table #dt [value]="consoFamillesSinistre" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['compte','poste','libelle']"
-            [rowHover]="true" dataKey="name"
-            styleClass="p-datatable-customers"
-            currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
-            <ng-template pTemplate="caption">
-                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                    <h5 class="p-m-0"></h5>
-                    <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
-                </span>
-                </div>
-            </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem"></th>
-                        <th pSortableColumn="name">Assuré(e) <p-sortIcon field="name"></p-sortIcon></th>
-                        <th>Souscripteur</th>
-                        <th pSortableColumn="price">Montant réclamé <p-sortIcon field="price"></p-sortIcon></th>
-                        <th pSortableColumn="category">Montant Remboursé <p-sortIcon field="category"></p-sortIcon></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-garant let-expanded="expanded">
-                    <tr>
-                        <td>
-                            <button type="button" pButton pRipple [pRowToggler]="garant" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        </td>
-                        <td>{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</td>
-                        <td>{{garant?.adherent?.groupe?.police?.nom}}   </td>
-                        <td>{{garant?.totalMontantReclameSinistre | formatTableValue: 'number':true}}</td>
-                        <td>{{garant?.totalMontantRembourseSinistre | formatTableValue: 'number':true}}</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="summary">
-					<div class="p-d-flex p-ai-center p-jc-between">
-						{{consoFamillesSinistre ? consoFamillesSinistre.length : 0 }} assuré(es) trouvé(es).
-					</div>
-				</ng-template>
-                <ng-template pTemplate="rowexpansion" let-garant>
-                    <tr>
-                        <td colspan="5">
-                            <div class="p-p-3">
-                                <div style="text-align: center !important;">
-                                    <span style="font-weight: bold !important; font-size: 18px !important;" class="p-column-title" class="p-badge p-badge-warning">Sinistre(s)</span>
-                                </div>
-                                <p-table [value]="garant.sinistreList" dataKey="id" rowExpandMode="single">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th pSortableColumn="id" >Date de saisie<p-sortIcon field="contact"></p-sortIcon></th>
-                                            <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
-                                            <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
-                                            <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
-                                            <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
-                                            <th style="width: 4rem"></th>
-                                        </tr>
-                                    </ng-template>
-                                 <ng-template pTemplate="body" let-sinsitre let-expanded="expanded" let-ri="rowIndex">
-                                        <tr>
-                                    <td><span class="p-column-title" >{{sinsitre?.dateSaisie | formatTableValue : 'date'}}</span></td>
-                                    <td><span class="p-column-title" >{{sinsitre?.numeroSinistre}}</span></td>
-                                    <td><span class="p-column-title" >{{sinsitre?.typePaiement}}</span></td>
-                                    <td><span class="p-column-title" >{{sinsitre?.ordreReglement?.montantReclame | formatTableValue: 'number':true}}</span></td>
-                                    <td><span class="p-column-title" >{{sinsitre?.ordreReglement?.montantPaye | formatTableValue: 'number':true}}</span></td>
-                                    <td>
-                                        <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" (click)="voirPrestationDetail(sinsitre)"
-                                            class="p-button-rounded p-button-success p-mr-2">
-                                        </button>
-                                    </td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="summary">
-                                        <div class="p-d-flex p-ai-center p-jc-between">
-                                            {{garant.sinistreList ? garant.sinistreList.length : 0 }} sinistre(s) trouvé(s).
-                                        </div>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table> -->
 		</div>
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 	    </div>
@@ -434,28 +342,25 @@
                                 </div>
                             </div>
                         </form>
-                        <!-- <span style="font-weight:bold !important;  font-size: 15px !important;">
-                            Total montant réclamé des sinistres: {{montantTotalReclameFamille | formatTableValue: 'number':true}}
-                            </span> -->
                     </ng-template>
-                    <ng-template pTemplate="right">
-                        
-                            <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col p-mt-5">
-                                    
-                                    <!-- <span style="font-weight:bold !important;  font-size: 15px !important;">
-                                        Total montant remboursé des sinistres: {{montantTotalRembourseFamille | formatTableValue: 'number':true}}
-                                    </span> -->
-                                   
-                                </div>
-                            </div>
-                    </ng-template>
+                    <div>
+                        <div>
+                            <span style="font-weight:bold !important;  font-size: 15px !important;">
+                                    Total montant réclamé des sinistres tiers payés de la famille: {{montantSinistreTiersPayantTotalReclameFamille | formatTableValue: 'number':true}}
+                            </span>
+                        </div>
+                        <br>
+                        <div>
+                            <span style="font-weight:bold !important;  font-size: 15px !important;">
+                                    Total montant remboursé des sinistres tiers payés de la famille: {{montantSinistreTiersPayantTotalRembourseFamille | formatTableValue: 'number':true}}
+                            </span>
+                        </div>
+                    </div>
                     
                 </p-toolbar>
     
-                <p-table [value]="consoSinistreTiersPayantFamilles"
-                rowGroupMode="rowspan"
-           sortField="adherent.prenom" sortMode="single" (onSort)="onSortTiersPayant()" styleClass="p-datatable-striped" [scrollable]="true">
+    <p-table [value]="consoSinistreTiersPayantFamilles"rowGroupMode="rowspan"sortField="adherent.prenom" sortMode="single" (onSort)="onSortTiersPayant()" 
+    styleClass="p-datatable-striped" [scrollable]="true">
            <ng-template pTemplate="caption">
                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                    <h5 class="p-m-0"></h5>
@@ -468,12 +373,18 @@
            <ng-template pTemplate="header">
                <tr>
                    <th>Assuré(e)</th>
-                    <th>Date de déclaration</th>
-                    <th>Numéro de facture</th>
-                    <th>Numéro de sinistre</th>
-                    <th>Souscripteur</th>
-                    <th pSortableColumn="price">Prestataire <p-sortIcon field="price"></p-sortIcon></th>
-                   <th></th>
+                   <th>Montant réclamé</th>
+                    <th >Montant Remboursé</th>
+                    <th>Date de soins</th>
+                    <th>Acte</th>
+                    <th>Numéro d'acte</th>
+                    <th>Coût unitaire</th>
+                    <th>Montant Réclamé</th>
+                    <th>Montant Remboursé</th>
+                    <th>Taux</th>
+                    <th>Centre Prestataire </th>
+                    <th>Centre Exécutant </th>
+                   <!-- <th></th> -->
                    
                </tr>
            </ng-template>
@@ -482,32 +393,28 @@
                 <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
                     <span class="p-text-bold p-ml-2">{{garant1?.adherent?.nom}} {{garant1?.adherent?.prenom}}</span>
                 </td>
-                <!-- <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size !== 1" 
-                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
-                    <span class="p-text-bold p-ml-2">{{montantTotalReclame | formatTableValue: 'number':true}}</span>
-                </td>
-                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size !== 1" 
-                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
-                    <span class="p-text-bold p-ml-2">{{montantTotalRembourse | formatTableValue: 'number':true}}</span>
-                </td>
-                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size === 1" 
-                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
-                    <span class="p-text-bold p-ml-2">{{garant1?.montantTotalReclame | formatTableValue: 'number':true}}</span>
-                </td>
-                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex && rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size === 1" 
-                [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
-                    <span class="p-text-bold p-ml-2">{{garant1?.montantTotalRembourse | formatTableValue: 'number':true}}</span>
-                </td> -->
-                   <td>{{garant1?.dateDeclaration | formatTableValue: 'date'}}</td>
-                   <td>{{garant1?.numeroFacture }}</td>
-                   <td>{{garant1?.numeroSinistre }}</td>
-                   <td>{{garant1?.adherent?.groupe?.police?.nom}}  </td>
+                <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant1?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataTiersPayant[garant1?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant1?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+                   <td>{{garant1?.dateSoins | formatTableValue: 'date'}}</td>
+                   <td>{{garant1?.sousActe?.libelle }}</td>
+                   <td>{{garant1?.nombreActe }}</td>
+                   <td>{{garant1?.coutUnitaire  | formatTableValue: 'number':true }}</td>
+                   <td>{{garant1?.baseRemboursement | formatTableValue: 'number':true }}</td>
+                   <td>{{garant1?.montantRembourse  | formatTableValue: 'number':true }}</td>
+                   <td>{{garant1?.taux?.taux}}</td>
                     <td>{{garant1?.prestataire.libelle}}</td>
-                   <td>
+                    <td>{{garant1?.centreExecutant}}</td>
+                   <!-- <td>
                        <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
                        (click)="voirPrestationDetail(garant1)" class="p-button-rounded p-button-warning p-mr-2">
                        </button>
-                   </td>
+                   </td> -->
                    <!-- <td>
                        <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" (click)="voirSinistreDetail(garant)"
                              class="p-button-rounded p-button-success p-mr-2">

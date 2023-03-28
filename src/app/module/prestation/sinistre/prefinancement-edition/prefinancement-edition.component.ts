@@ -151,7 +151,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                private tierPayantService: TierPayantService,
                private prefinancementService: PrefinancementService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router) {
+               private router: Router ) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
 

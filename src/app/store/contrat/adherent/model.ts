@@ -44,6 +44,8 @@ export interface Adherent{
     compteBancaire?: string;
     groupeSanguin?: string;
     reshus?: string;
+    totalMontantReclame?: number;
+    totalMontantRembourse?: number;
 }
 
 export interface ConditionGenerale {
