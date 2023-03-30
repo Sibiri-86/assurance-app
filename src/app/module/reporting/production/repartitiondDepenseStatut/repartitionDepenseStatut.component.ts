@@ -46,6 +46,7 @@ import { loadGroupe } from 'src/app/store/contrat/groupe/actions';
 import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { KeycloakService } from 'keycloak-angular';
+import * as featureActionPolice from '../../../../store/contrat/police/actions';
 
 
 
@@ -214,10 +215,12 @@ ngOnInit(): void {
          
           if(profile['attributes']) {
                 this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                console.log("profile.username.toLocaleUpperCase()", profile.username.toLocaleUpperCase());
+                console.log("value.slice()", value.slice());
                 if(this.garantList) {
                   this.appelFondForm.get('garant').setValue(this.garantList[0]);
                   //.check.garant = this.garantList[0];
-                //  this.loadPoliceByGarant();
+                 this.loadPoliceByGarant();
                 }
                 
           } else {
@@ -276,6 +279,11 @@ addGarant() {
   this.compte = {};
   this.displayDialogFormGarant = true;
   // this.garantForm.get('pays').setValue(this.paysList?.find(pay=>pay.code ==="BUR"));
+}
+
+loadPoliceByGarant() {
+  this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.appelFondForm.get('garant').value.id}));
+
 }
 
 voirDetail(appelFond: AppelFond) {

@@ -463,31 +463,10 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
     this.report.check = this.check;
     console.log("=====================",this.report)
-    this.exerciceService.createUser(this.user).subscribe((res=>{
-      console.log("==========res===========",res);
-    })) 
- 
-   /* const kcAdminClient = new KeycloakAdminClient({
-      baseUrl: environment.keycloakConfig.url,
-      realmName: environment.keycloakConfig.realm,
-    });
-    */
-/* await kcAdminClient.auth({
-  username: this.user.userName,
-  password: this.user.password,
-  grantType: "password",
-  clientId: environment.keycloakConfig.clientId,
-});*/
-
-
-
-    // const login =   this.keycloakService.login().catch((e) => console.error(e));;
-    // console.log("==========login===========",login);
-
-    console.log("=====================",this.report)
-    // this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
-    // this.displayExcel= false;
-    // this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
+ console.log("=====================",this.report)
+     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    this.displayExcel= false;
+    //this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 
   }
 

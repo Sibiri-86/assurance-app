@@ -198,13 +198,12 @@ ngOnInit(): void {
       if (value) {
         this.keycloakService.loadUserProfile().then(profile => {
          
-          if(profile['attributes']) {
-                this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
-                if(this.garantList) {
+          if(profile['attributes']?.role === 'ASSURE' || profile['attributes']?.role === 'PRESTATAIRE' 
+          || profile['attributes']?.role === 'GARANT') {
+            this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
+                /* if(this.garantList) {
                   this.appelFondForm.get('garant').setValue(this.garantList[0]);
-                  //.check.garant = this.garantList[0];
-                //  this.loadPoliceByGarant();
-                }
+                } */
                 
           } else {
             this.garantList = value.slice();

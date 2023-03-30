@@ -145,13 +145,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
             },
             {
-                label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
+                label: 'Production', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
                 
                 visible: this.keycloak.isUserInRole(Function.sm_reporting), 
                 items: [
                       
-                    {label: 'Production', icon: 'pi pi-align-justify', routerLink: ['/reporting'], visible: true,
-                         items: [
                             {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/recapitulatif'], visible: true},
                             {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille'], visible: true},
                             {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-acte'], visible: true},
@@ -162,58 +160,33 @@ export class AppMenuComponent implements OnInit {
                             {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
                             {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/evolution-mensuelle'], visible: true},
                             {label: 'Fam. Assure', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/famille-assure'], visible: true},
-                         ]
-                
-                },
-                {
-                    label: 'Prestation', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
-                    items: [
-                        {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
-                        {label: 'Statistique ',  icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/reporting-operateur'], visible: true},
-                        {label: 'Statistique des opérateurs de saisie', routerLink: ['/reporting/reporting-operateur'], visible: true},
-                        {label: 'Statistique des factures impayées par prestataire', routerLink: ['/reporting/reporting-cheque-non-valide'], visible: true},
-                        {label: 'Statistique des factures payées par prestataire', routerLink: ['/reporting/reporting-cheque-valide'], visible: true},
-                        /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
-                        {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
-                        {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
-                        {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
-                        {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
-                        {label: 'Arreté journalier', routerLink: ['/comptabilite/arrete-journaux'], visible: true},
-                        {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true}, */
-
-                    ]
-                },
-                {
-                    label: 'Médical', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
-                    items: [
-                        {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
-                        {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
-                        /* {label: 'Ordre de paiment instance', icon: 'pi pi-fw pi-home', routerLink: ['/comptabilite/ordre-paiment-instance'], visible: true},
-                        {label: 'Ordre de paiment par chèque instance', routerLink: ['/comptabilite/ordre-paiment-instance-cheque'], visible: true},
-                        {label: 'Facture en instance', routerLink: ['/comptabilite/paiement-facture'], visible: true},
-                        {label: 'Facture  payé', routerLink: ['/comptabilite/facture-paye'], visible: true},
-                        {label: 'Remboursement effectué', routerLink: ['/comptabilite/remboursement-effectue'], visible: true},
-                        {label: 'Arreté journalier', routerLink: ['/comptabilite/arrete-journaux'], visible: true},
-                        {label: 'Grand livre', routerLink: ['/comptabilite/grand-livre-general'], visible: true}, */
-
-                    ]
-                },
-                
-                /* {
-                    label: 'Etat', icon: 'pi pi-print', routerLink: ['/comptabilite'], visible: true,
-                    items: [
-                        {label: 'Balance', icon: 'pi pi-print', routerLink: ['/comptabilite/balance'], visible: true},
-                        {label: 'Tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/tiers'], visible: true},
-                        {label: 'Grand livre auxiliaire', routerLink: ['/comptabilite/grand-livre-auxiliaire'], visible: true},
-
-                        {label: 'Balance tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/balance-tiers'], visible: true},
-                    ]
-                } */
-                    
-                    
-                    
                     
                                     ]
+            },
+
+            {
+                label: 'Prestation', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
+                
+                visible: this.keycloak.isUserInRole(Function.sm_reporting), 
+                items: [
+                      
+                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                    {label: 'Statistique des opérateurs de saisie', routerLink: ['/reporting/reporting-operateur'], visible: true},
+                    {label: 'Statistique des factures impayées par prestataire', routerLink: ['/reporting/reporting-cheque-non-valide'], visible: true},
+                    {label: 'Statistique des factures payées par prestataire', routerLink: ['/reporting/reporting-cheque-valide'], visible: true},
+                    
+                    ]
+            },
+            {
+                label: 'Médical', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],
+                
+                visible: this.keycloak.isUserInRole(Function.sm_reporting), 
+                items: [
+                      
+                    {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
+                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                    
+                    ]
             },
 
              /*{
