@@ -59,6 +59,7 @@ postBareme(bareme: Bareme): Observable<any> {
 
 updateBareme(bareme: Bareme): Observable<any> {
   // @FIXME: post request
+  console.log("=================bareme=============", bareme)
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
 }
 

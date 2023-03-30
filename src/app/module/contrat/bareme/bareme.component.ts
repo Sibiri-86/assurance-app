@@ -42,6 +42,7 @@ import { Taux } from 'src/app/store/parametrage/taux/model';
 import { QualiteAssure } from 'src/app/store/parametrage/qualite-assure/model';
 import {status} from '../../../store/global-config/selector';
 import { TypeEtat } from 'src/app/store/contrat/historiqueAvenant/model';
+import { count } from 'console';
 @Component({
   selector: 'app-bareme',
   templateUrl: './bareme.component.html',
@@ -54,6 +55,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
   plafondFamilleActe: Array<PlafondFamilleActe>;
   plafondFamilleActeTemp: PlafondFamilleActe;
   plafondFamilleActeConstruct: Array<PlafondFamilleActe> = [];
+  plafondFamilleActeConstructEnregistrement: Array<PlafondFamilleActe> = [];
   plafondActuelleConfiguration: Array<PlafondFamilleActe> = [];
   plafondActe: Array<PlafondActe>;
   plafondSousActe: Array<PlafondSousActe>;
@@ -92,7 +94,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
   dateEffetSousActe: Date = new Date();
   plafondFamilleActeControle: PlafondFamilleActe = {};
   plafondActeControle: PlafondActe = {};
-
+  plafondFamilleActeConstructConstant: Array<PlafondFamilleActe> = [];
+  boAdul = false;
+  boMembre = false;
   constructor(private breadcrumbService: BreadcrumbService, private messageService: MessageService,
               private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
               private store: Store<AppState>) {
@@ -298,18 +302,32 @@ export class BaremeComponent implements OnInit, OnDestroy {
   validerPlafond() {
     this.dispplayDialogueBareme = false;
     this.bareme = this.baremeForm.value;
-    for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
-      this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
-      for (let j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
-        this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
-        for (let k = 0; k < this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe.length; k++){
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafond + '');
-          this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
+    for (let i = 0; i < this.plafondFamilleActeConstructEnregistrement.length; i++){
+      this.plafondFamilleActeConstructEnregistrement[i].plafondFamilles = [];
+      if(this.plafondFamilleActeConstructEnregistrement[i]?.montantPlafond) {
+        this.plafondFamilleActeConstructEnregistrement[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstructEnregistrement[i].montantPlafond + '');
+
+      }
+      for (let j = 0; j < this.plafondFamilleActeConstructEnregistrement[i].listeActe.length; j++){
+        if(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j]?.montantPlafond) {
+          this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].montantPlafond + '');
+  
+        }
+        for (let k = 0; k < this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe.length; k++){
+          if(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k]?.montantPlafond ) {
+            this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k].montantPlafond =  removeBlanks(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k].montantPlafond + '');
+    
+          }
+          if(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k]?.montantPlafondParActe) {
+            this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k].montantPlafondParActe =  removeBlanks(this.plafondFamilleActeConstructEnregistrement[i].listeActe[j].listeSousActe[k].montantPlafondParActe + '');
+
+          }
         }
       }
     }
-    this.bareme.baremeFamilleActe = this.plafondFamilleActeConstruct;
+    this.bareme.baremeFamilleActe = this.plafondFamilleActeConstructEnregistrement;
     console.log(this.bareme);
+    console.log("================================",this.plafondFamilleActeConstructEnregistrement);
     if (!this.baremeForm.value.id){
     this.store.dispatch(featureActionsPlafond.createBareme(this.bareme));
     } else {
@@ -319,6 +337,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
     this.plafondFamilleActe = [{garantie: {}}];
     this.plafondActe = [];
     this.plafondFamilleActeConstruct = [];
+    this.plafondFamilleActeConstructEnregistrement = [];
     this.countfamilleActe = 0;
     this.baremeForm.reset();
   }
@@ -338,6 +357,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
     
     this.baremeForm.patchValue(bareme);
     this.plafondFamilleActeConstruct = bareme.baremeFamilleActe.filter(famille=> famille?.etat === "ACTIF");
+    
+    this.plafondFamilleActeConstructEnregistrement = bareme.baremeFamilleActe.filter(famille=> famille?.etat === "ACTIF");;
+    console.log("=========================vrai===length======vrai======", this.plafondFamilleActeConstructEnregistrement);
     // changer les dates effet à la date du jour
     for (let i = 0; i < this.plafondFamilleActeConstruct.length; i++) {
       this.plafondFamilleActeConstruct[i].dateEffet = new Date();
@@ -349,6 +371,78 @@ export class BaremeComponent implements OnInit, OnDestroy {
           this.plafondFamilleActeConstruct[i].listeActe[j].listeSousActe[k].dateEffet =  new Date();
         }
       }
+      console.log("=========================vrai===length======vrai===1===", this.plafondFamilleActeConstruct);
+
+
+             this.plafondFamilleActeConstructConstant = this.plafondFamilleActeConstruct.filter(plafo=>plafo.garantie.id === this.plafondFamilleActeConstruct[i].garantie.id);
+             console.log("=========================vrai===length======vrai= vari=====", this.plafondFamilleActeConstructConstant);
+             if(this.plafondFamilleActeConstructConstant && this.plafondFamilleActeConstructConstant.length >1) {
+
+              if(this.plafondFamilleActeConstructConstant.length == 3) {
+                for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+                  if(!this.plafondFamilleActeConstructConstant[t].domaine) {
+                    this.plafondFamilleActeConstructConstant[t].membre = "ADHERENT";
+                  }else {
+
+                    if(this.plafondFamilleActeConstructConstant[t].domaine  ) {
+                      this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+
+                    }
+                  }
+                }
+              }else {
+                for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+                  if(!this.plafondFamilleActeConstructConstant[t].domaine ) {
+                    
+                    for(let t1=0; t1<this.plafondFamilleActeConstructConstant.length; t1++) {
+
+                      if(this.plafondFamilleActeConstructConstant[t1].domaine && 
+                        this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="ENFANT") {
+                          this.boAdul = true;
+                      
+                        }
+                        if(this.plafondFamilleActeConstructConstant[t1].domaine  && 
+                          this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="CONJOINT") {
+                            this.boMembre = true;
+                        
+                          }
+                    }
+                    if(this.boAdul && !this.boMembre) {
+                      this.plafondFamilleActeConstructConstant[t].membre = "ADULTE";
+                    }
+
+                    if(!this.boAdul && this.boMembre) {
+                      this.plafondFamilleActeConstructConstant[t].membre = "MEMBRE";
+                    }
+                    if(this.boAdul && this.boMembre) {
+                      this.plafondFamilleActeConstructConstant[t].membre= "ADHERENT";
+                    }
+                    this.boAdul = false;
+                    this.boMembre =false
+                    
+                  }if(this.plafondFamilleActeConstructConstant[t].domaine) {
+                    this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+                  }
+                }
+              }
+              this.plafondFamilleActeConstruct[i].plafondFamilles = this.plafondFamilleActeConstructConstant;
+              
+              if(i+1 < this.plafondFamilleActeConstruct.length) {
+                for(let x = i+1; x<this.plafondFamilleActeConstruct.length ; x++){
+                  if(this.plafondFamilleActeConstruct[i].garantie.id === this.plafondFamilleActeConstruct[x].garantie.id) {
+                    
+                    this.plafondFamilleActeConstruct.splice(x,2);
+                   // console.log("=========================vrai=====2==========",this.plafondFamilleActeConstruct.length);
+                  }
+                }
+              }
+             
+              
+             }
+             console.log("=========================vrai===length======vrai==5====", this.plafondFamilleActeConstruct);
+             console.log("=========================vrai=========3======",i);
+             this.plafondFamilleActeConstructConstant = [];
+      
     }
     this.dispplayDialogueBareme = true;
 }
@@ -377,13 +471,13 @@ export class BaremeComponent implements OnInit, OnDestroy {
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-
+        console.log("=================bien======vrai====");
     console.log(rowData);
     console.log(this.plafondFamilleActeConstruct);
     console.log("=======================vrai====");
     
     for ( let i = 0; i < this.plafondFamilleActeConstruct.length; i++){
-      this.countfamilleActe++;
+      
       /** verifier si la garantie existe deja, juste le modifier */
       if (this.plafondFamilleActeConstruct[i].garantie.id === rowData.garantie.id && 
         this.plafondFamilleActeConstruct[i].domaine === rowData.domaine) {
@@ -398,31 +492,53 @@ export class BaremeComponent implements OnInit, OnDestroy {
         console.log(i);
         /** enregistrer */
         this.plafondFamilleActeConstruct[i] = this.plafondFamilleActeTemp;
+        for ( let j = 0; j < this.plafondFamilleActeConstructEnregistrement.length; j++) {
+          if (this.plafondFamilleActeConstructEnregistrement[j].garantie.id === rowData.garantie.id && 
+            this.plafondFamilleActeConstructEnregistrement[j].domaine === rowData.domaine) {
+              this.plafondFamilleActeConstructEnregistrement[j] = this.plafondFamilleActeTemp;
+            }
+        }
         delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
         return;
         }
     }
-   
+    this.countfamilleActe = this.plafondFamilleActeConstruct.length;
+    const countFinal =  this.plafondFamilleActeConstructEnregistrement.length;
+    console.log("========countFinal====================", this.plafondFamilleActeConstructEnregistrement.length);
   
     /** si la garantie n'est pas encore ajouté, ajouter */
     this.plafondFamilleActeConstruct.forEach( async (element, index) => {
     if (element.garantie.id === rowData.garantie.id && 
       element.domaine === rowData.domaine) {
     console.log('oui');
+    console.log("========oui====================");
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
     console.log(index);
     this.plafondFamilleActeConstruct[index] = this.plafondFamilleActeTemp;
+    for ( let j = 0; j < this.plafondFamilleActeConstructEnregistrement.length; j++) {
+      if (this.plafondFamilleActeConstructEnregistrement[j].garantie.id === rowData.garantie.id && 
+        this.plafondFamilleActeConstructEnregistrement[j].domaine === rowData.domaine) {
+          this.plafondFamilleActeConstructEnregistrement[j] = this.plafondFamilleActeTemp;
+        }
+    }
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     return;
     }
     });
+    console.log("========non====================");
+    console.log("========rowData====================", rowData);
     this.clonedPlafondFamilleActeTemp[rowData.garantie.id] = { ...rowData };
+    console.log("========this.clonedPlafondFamilleActeTemp[rowData.garantie.id]====================", this.clonedPlafondFamilleActeTemp[rowData.garantie.id]);
     console.log(this.clonedPlafondFamilleActeTemp);
     this.plafondFamilleActeTemp = this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     this.plafondFamilleActeTemp.listeActe = this.plafondActe;
     this.plafondFamilleActeConstruct[this.countfamilleActe] = this.plafondFamilleActeTemp;
+    this.plafondFamilleActeConstructEnregistrement[countFinal] = this.plafondFamilleActeTemp;
+    console.log("compteur========1======",this.plafondFamilleActeConstructEnregistrement.length);
+    console.log("compteur========1======",this.plafondFamilleActeConstructEnregistrement);
+    console.log("compteur==============",this.plafondFamilleActeConstruct[this.countfamilleActe]);
     delete this.clonedPlafondFamilleActeTemp[rowData.garantie.id];
     console.log(this.countfamilleActe);
     this.countfamilleActe++;

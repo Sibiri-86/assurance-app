@@ -366,6 +366,37 @@ isSaving = false;
             this.bulletinForm.get('lieuNaissance').setValue(this.adherentSelected.lieuNaissance);
             this.bulletinForm.get('raisonSociale').setValue(this.adherentSelected.groupe?.police?.nom);
             this.sexe = this.adherentSelected.genre.code;
+            
+
+            if(this.bulletinAdhesionList) {
+              this.bulletinAdhesion = this.bulletinAdhesionList.find(bull=>bull.matriculeAdherent === this.adherentSelected?.numero.toString())
+              
+              if(this.bulletinAdhesion) {
+                this.quuestionAssures = [];
+                this.questionEpoux = [];
+               
+                console.log("================bulletinAdhesion========1==========",this.bulletinAdhesion);
+
+                this.bulletinForm.get('dateSaisie').setValue(new Date(this.bulletinAdhesion.dateSaisie));
+                this.bulletinForm.get('id').setValue(this.bulletinAdhesion.id);
+
+               
+                console.log("================bulletinAdhesion==================",this.bulletinAdhesion);
+                this.quuestionAssures.push(this.bulletinAdhesion.question);
+                this.epouses = this.bulletinAdhesion.epouses;
+           
+                this.enfants = this.bulletinAdhesion.enfants;
+                
+                if(this.bulletinAdhesion.situationFamiliale == 'MARIE') {
+                  this.marie = true;
+                }
+                this.bulletinForm.get('dateEntreeService').setValue(new Date(this.bulletinAdhesion.dateEntreeService));
+               // this.bulletinForm.patchValue(this.bulletinAdhesion);
+              }
+            }
+            
+           
+           
 
         }
     });
@@ -447,7 +478,7 @@ isSaving = false;
     if(this.displayQuestionAssurer) {
       this.quuestionAssures = [];
       this.bulletinForm.value.question  = this.question;
-      console.log(this.bulletinAdhesion.question);
+      console.log(this.bulletinAdhesion?.question);
       this.quuestionAssures.push(this.question);
       this.displayQuestionAssurer = false;
      
