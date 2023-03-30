@@ -21,6 +21,8 @@ export interface PlafondFamilleActe {
     etat?: Status;
     groupe?: Groupe;
     checked?: boolean;
+    plafondFamilles?: Array<PlafondFamilleActe>;
+    membre?: string;
   }
 
 export interface PlafondActe {

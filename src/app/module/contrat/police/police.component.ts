@@ -202,6 +202,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   plafondFamilleActeConstruct: Array<PlafondFamilleActe> = [];
   plafondFamilleActeConstrutRecap: Array<PlafondFamilleActe> = [];
   plafondActuelleConfiguration: Array<PlafondFamilleActe> = [];
+  plafondActuelleConfigurationSave: Array<PlafondFamilleActe> = [];
   plafondFamilleActeArrives: Array<PlafondFamilleActe> = [];
   plafondActuelleConfigurationFinal: Array<PlafondFamilleActe> = [];
   plafondActe: Array<PlafondActe>;
@@ -292,7 +293,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   avenantModif1: Avenant = {};
   displayBareme: boolean = false;
   stat: Rapport;
-
+  plafondFamilleActeConstructConstant: Array<PlafondFamilleActe> = [];
+  boAdul = false;
+  boMembre = false;
 
 
   constructor(
@@ -804,35 +807,96 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log("*******his.groupe********",this.groupe);
           console.log("*******this.plafondFamilleActeArrives********",this.plafondFamilleActeArrives);
           if(this.plafondFamilleActeArrives) {
-                /* for (var z = 0; z < this.plafondFamilleActeArrives.length; z++){
-                  for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
-                    if(this.plafondFamilleActeArrives[z]['garantie.code'] === this.plafondActuelleConfiguration[i]['garantie.code']){
-                      this.plafondActuelleConfiguration.push(this.plafondActuelleConfiguration[i]);
-                      console.log("*******222********",this.plafondActuelleConfiguration);
-                    }
-              }
-            } */
+               
             let result = this.plafondActuelleConfiguration.filter(o1 => !this.plafondFamilleActeArrives.some(o2 => o1.garantie.code === o2.garantie.code));
             console.log("*******result********", result);
             this.plafondActuelleConfiguration = [];
             this.plafondActuelleConfiguration = result;
            
-            //this.plafondActuelleConfigurationFinal = this.plafondActuelleConfiguration;
-            //console.log("*******sortie********",this.plafondActuelleConfigurationFinal.length);
-            //this.plafondActuelleConfiguration = [];
-            for (var i = 0; i < this.plafondActuelleConfigurationFinal.length; i++){
-              this.plafondActuelleConfigurationFinal[i].dateEffet = new Date(this.groupe.dateEffet);
-              this.plafondActuelleConfigurationFinal[i].taux = this.groupe.taux;
-              this.plafondActuelleConfigurationFinal[i].listeActe = this.plafondActuelleConfigurationFinal[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
-              for (var j = 0; j < this.plafondActuelleConfigurationFinal[i].listeActe.length; j++){
-                this.plafondActuelleConfigurationFinal[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
-                this.plafondActuelleConfigurationFinal[i].listeActe[j].taux = this.groupe.taux;
-                this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe = this.plafondActuelleConfigurationFinal[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
-                for (var k = 0; k < this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe.length; k++){
-                  this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
-                  this.plafondActuelleConfigurationFinal[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
+            
+            for (var i = 0; i < this.plafondActuelleConfiguration.length; i++){
+              this.plafondActuelleConfiguration[i].dateEffet = new Date(this.groupe.dateEffet);
+              this.plafondActuelleConfiguration[i].taux = this.groupe.taux;
+              this.plafondActuelleConfiguration[i].listeActe = this.plafondActuelleConfiguration[i].listeActe?.filter(acte=>acte.etat === Etat.ACTIF);
+              for (var j = 0; j < this.plafondActuelleConfiguration[i].listeActe.length; j++){
+                this.plafondActuelleConfiguration[i].listeActe[j].dateEffet = new Date(this.groupe.dateEffet);
+                this.plafondActuelleConfiguration[i].listeActe[j].taux = this.groupe.taux;
+                this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe = this.plafondActuelleConfiguration[i].listeActe[j]?.listeSousActe.filter(sous=>sous.etat === Etat.ACTIF);
+                for (var k = 0; k < this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe.length; k++){
+                  this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].dateEffet = new Date(this.groupe.dateEffet);
+                  this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
                 }
               }
+
+
+              
+          console.log("=========================vrai=====2=3=========",this.plafondFamilleActeConstruct.length);
+          this.plafondFamilleActeConstructConstant = this.plafondActuelleConfiguration.filter(plafo=>plafo.garantie.id === this.plafondActuelleConfiguration[i].garantie.id);
+          console.log("=========================vrai=====2=3=========",this.plafondFamilleActeConstructConstant.length);
+          if(this.plafondFamilleActeConstructConstant && this.plafondFamilleActeConstructConstant.length >1) {
+
+           if(this.plafondFamilleActeConstructConstant.length == 3) {
+             for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = "ADHERENT";
+               }else {
+
+                 if(this.plafondFamilleActeConstructConstant[t].domaine  ) {
+                   this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+
+                 }
+               }
+             }
+           }else {
+             for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine ) {
+                 
+                 for(let t1=0; t1<this.plafondFamilleActeConstructConstant.length; t1++) {
+
+                   if(this.plafondFamilleActeConstructConstant[t1].domaine && 
+                     this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="ENFANT") {
+                       this.boAdul = true;
+                   
+                     }
+                     if(this.plafondFamilleActeConstructConstant[t1].domaine  && 
+                       this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="CONJOINT") {
+                         this.boMembre = true;
+                     
+                       }
+                 }
+                 if(this.boAdul && !this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "ADULTE";
+                 }
+
+                 if(!this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "MEMBRE";
+                 }
+                 if(this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre= "ADHERENT";
+                 }
+                 this.boAdul = false;
+                 this.boMembre =false
+                 
+               }if(this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+               }
+             }
+           }
+           this.plafondActuelleConfiguration[i].plafondFamilles = this.plafondFamilleActeConstructConstant;
+           
+           if(i+1 < this.plafondActuelleConfiguration.length) {
+             for(let x = i+1; x<this.plafondActuelleConfiguration.length ; x++){
+               if(this.plafondActuelleConfiguration[i].garantie.id === this.plafondActuelleConfiguration[x].garantie.id) {
+                 
+                 this.plafondActuelleConfiguration.splice(x,2);
+               console.log("=========================vrai=====2==========",this.plafondActuelleConfiguration.length);
+               }
+             }
+           }
+          
+           
+          }
+
             }
             //this.plafondActuelleConfiguration = this.plafondActuelleConfigurationFinal;
             console.log("*******last********", this.plafondActuelleConfiguration);
@@ -851,8 +915,80 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
                       }
                     }
+
+
+
+
+                    
+          console.log("=========================vrai=====2=3=========",this.plafondFamilleActeConstruct.length);
+          this.plafondFamilleActeConstructConstant = this.plafondActuelleConfiguration.filter(plafo=>plafo.garantie.id === this.plafondActuelleConfiguration[i].garantie.id);
+          console.log("=========================vrai=====2=3=========",this.plafondFamilleActeConstructConstant.length);
+          if(this.plafondFamilleActeConstructConstant && this.plafondFamilleActeConstructConstant.length >1) {
+
+           if(this.plafondFamilleActeConstructConstant.length == 3) {
+             for(let t=0; t< this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = "ADHERENT";
+               }else {
+
+                 if(this.plafondFamilleActeConstructConstant[t].domaine  ) {
+                   this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+
+                 }
+               }
+             }
+           }else {
+             for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine ) {
+                 
+                 for(let t1=0; t1<this.plafondFamilleActeConstructConstant.length; t1++) {
+
+                   if(this.plafondFamilleActeConstructConstant[t1].domaine && 
+                     this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="ENFANT") {
+                       this.boAdul = true;
+                   
+                     }
+                     if(this.plafondFamilleActeConstructConstant[t1].domaine  && 
+                       this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="CONJOINT") {
+                         this.boMembre = true;
+                     
+                       }
+                 }
+                 if(this.boAdul && !this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "ADULTE";
+                 }
+
+                 if(!this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "MEMBRE";
+                 }
+                 if(this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre= "ADHERENT";
+                 }
+                 this.boAdul = false;
+                 this.boMembre =false
+                 
+               }if(this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+               }
+             }
+           }
+           this.plafondActuelleConfiguration[i].plafondFamilles = this.plafondFamilleActeConstructConstant;
+           
+           if(i+1 < this.plafondActuelleConfiguration.length) {
+             for(let x = i+1; x<this.plafondActuelleConfiguration.length ; x++){
+               if(this.plafondActuelleConfiguration[i].garantie.id === this.plafondActuelleConfiguration[x].garantie.id) {
+                 
+                 this.plafondActuelleConfiguration.splice(x,2);
+               console.log("=========================vrai=====2==========",this.plafondActuelleConfiguration.length);
+               }
+             }
+           }
+          
+           
+          }
               }
             }
+            
         this.importer = false;
         }
         console.log(this.plafondActuelleConfiguration);
@@ -875,6 +1011,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
               this.plafondActuelleConfiguration[i].listeActe[j].listeSousActe[k].taux = this.groupe.taux;
             }
           }
+
+
         }
         this.importer = false;
         }
@@ -2161,10 +2299,23 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
             })
           });
         });*/
-        this.plafondFamilleActeConstruct = this.plafondActuelleConfiguration;
+        if(this.plafondActuelleConfiguration) {
+          for(let i=0 ; i<this.plafondActuelleConfiguration.length; i++){
+            if(this.plafondActuelleConfiguration[i].plafondFamilles) {
+              for(let j=0 ; j<this.plafondActuelleConfiguration[i].plafondFamilles.length; j++) {
+                this.plafondActuelleConfigurationSave.push(this.plafondActuelleConfiguration[i].plafondFamilles[j]);
+              }
+            } else {
+              this.plafondActuelleConfiguration[i].plafondFamilles = [];
+              this.plafondActuelleConfigurationSave.push(this.plafondActuelleConfiguration[i]);
+            }
+          }
+        }
+        this.plafondFamilleActeConstruct = this.plafondActuelleConfigurationSave;
         this.bareme = null
         this.displayConfigurationPlafond = false;
         this.plafondActuelleConfiguration = [];
+        this.plafondActuelleConfigurationSave = [];
         this.bareme = null;
       }
     });
@@ -2180,6 +2331,7 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
     this.plafond.plafondGlobalEvacuationSanitaire = removeBlanks(this.plafond.plafondGlobalEvacuationSanitaire + '');
 
     for (var i = 0; i < this.plafondFamilleActeConstruct.length; i++){
+      this.plafondFamilleActeConstruct[i].plafondFamilles = [];
       this.plafondFamilleActeConstruct[i].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].montantPlafond + '');
       for (var j = 0; j < this.plafondFamilleActeConstruct[i].listeActe.length; j++){
         this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond = removeBlanks(this.plafondFamilleActeConstruct[i].listeActe[j].montantPlafond + '');
@@ -2783,10 +2935,87 @@ changeGarantie(garantie, indexLigne: number) {
               this.avenantModif1.plafondFamilleActes = res.body;
               this.plafondFamilleActeArrives = res.body;
               if(this.avenantModif1.plafondFamilleActes) {
-                this.avenantModif1.plafondFamilleActes.forEach(pla=>{
-                  pla.dateEffet = groupe.dateEffet;
-                  if(pla.listeActe) {
-                    pla.listeActe.forEach(act=>{
+                for(let i=0 ; i<this.avenantModif1.plafondFamilleActes.length; i++) {
+                  
+               // this.avenantModif1.plafondFamilleActes.forEach(pla=>{
+
+
+
+          this.plafondFamilleActeConstructConstant = this.avenantModif1.plafondFamilleActes.filter(plafo=>plafo.garantie.id === this.avenantModif1.plafondFamilleActes[i].garantie.id);
+          console.log("=========================vrai=====2=3=========",this.plafondFamilleActeConstructConstant.length);
+          if(this.plafondFamilleActeConstructConstant && this.plafondFamilleActeConstructConstant.length >1) {
+
+           if(this.plafondFamilleActeConstructConstant.length == 3) {
+             for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = "ADHERENT";
+                 console.log("=========================ADHERENT=====1=========");
+
+               }else {
+
+                 if(this.plafondFamilleActeConstructConstant[t].domaine  ) {
+                   this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+
+                 }
+               }
+             }
+           }else {
+             for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
+               if(!this.plafondFamilleActeConstructConstant[t].domaine ) {
+                 
+                 for(let t1=0; t1<this.plafondFamilleActeConstructConstant.length; t1++) {
+
+                   if(this.plafondFamilleActeConstructConstant[t1].domaine && 
+                     this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="ENFANT") {
+                       this.boAdul = true;
+                   
+                     }
+                     if(this.plafondFamilleActeConstructConstant[t1].domaine  && 
+                       this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="CONJOINT") {
+                         this.boMembre = true;
+                     
+                       }
+                 }
+                 if(this.boAdul && !this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "ADULTE";
+                 }
+
+                 if(!this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre = "MEMBRE";
+                 }
+                 if(this.boAdul && this.boMembre) {
+                   this.plafondFamilleActeConstructConstant[t].membre= "ADHERENT";
+                   console.log("=========================ADHERENT=====2=========");
+
+                 }
+                 this.boAdul = false;
+                 this.boMembre =false
+                 console.log("=========================ADHERENT=====3=========");
+                 
+               }if(this.plafondFamilleActeConstructConstant[t].domaine) {
+                 this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
+               }
+             }
+           }
+           this.avenantModif1.plafondFamilleActes[i].plafondFamilles = this.plafondFamilleActeConstructConstant;
+           
+           if(i+1 < this.avenantModif1.plafondFamilleActes.length) {
+             for(let x = i+1; x<this.avenantModif1.plafondFamilleActes.length ; x++){
+               if(this.avenantModif1.plafondFamilleActes[i].garantie.id === this.avenantModif1.plafondFamilleActes[x].garantie.id) {
+                 
+                this.avenantModif1.plafondFamilleActes.splice(x,2);
+              // console.log("=========================vrai=====2==========",this.plafondActuelleConfiguration.length);
+               }
+             }
+           }
+          
+           
+          }
+          console.log("=========================ADHERENT=====3=========");
+
+          this.avenantModif1.plafondFamilleActes[i].dateEffet = groupe.dateEffet;
+                  if(this.avenantModif1.plafondFamilleActes[i].listeActe) {
+                    this.avenantModif1.plafondFamilleActes[i].listeActe.forEach(act=>{
 
                       act.dateEffet = groupe.dateEffet;
                       if(act.listeSousActe) {
@@ -2796,7 +3025,8 @@ changeGarantie(garantie, indexLigne: number) {
                       }
                     });
                   }
-                });
+                //});
+                }
               }
               console.log('******plafondFamilleActes*******', this.avenantModif1.plafondFamilleActes);
             }
