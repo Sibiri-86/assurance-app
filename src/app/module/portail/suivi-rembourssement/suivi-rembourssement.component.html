@@ -11,7 +11,7 @@
                         <ng-template pTemplate="right">
                      </ng-template>
                     </p-toolbar>
-                    <p-table #dt [value]="rembourssements" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                    <!-- <p-table #dt [value]="rembourssements" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                              [rowHover]="true" dataKey="id"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -58,6 +58,68 @@
                             </div>
                         </ng-template>
                     </p-table>
+ -->
+                    <!-- adaptation du code à celui de la visualisation des consommations -->
+                    <p-table [value]="rembourssements"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssements ? rembourssements.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
+
+
                 </div>
                 
                 
@@ -139,7 +201,7 @@
                             <ng-template pTemplate="right">
                          </ng-template>
                         </p-toolbar>
-                        <p-table #dt [value]="rembourssementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                       <!--  <p-table #dt [value]="rembourssementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                                  [rowHover]="true" dataKey="id"
                                  styleClass="p-datatable-customers"
                                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -185,7 +247,67 @@
                                     {{rembourssementValid ? rembourssementValid.length : 0 }} rembourssement(s) validé(s).
                                 </div>
                             </ng-template>
-                        </p-table>
+                        </p-table> -->
+
+
+                <p-table [value]="rembourssementValid"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssementValid ? rembourssementValid.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
                     </div>
                     
                     
@@ -267,7 +389,7 @@
                             <ng-template pTemplate="right">
                          </ng-template>
                         </p-toolbar>
-                        <p-table #dt [value]="rembourssementValidAndPaiementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                      <!--   <p-table #dt [value]="rembourssementValidAndPaiementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                                  [rowHover]="true" dataKey="id"
                                  styleClass="p-datatable-customers"
                                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -313,7 +435,66 @@
                                     {{rembourssementValidAndPaiementValid ? rembourssementValidAndPaiementValid.length : 0 }} rembourssement(s) payé(s).
                                 </div>
                             </ng-template>
-                        </p-table>
+                        </p-table> -->
+
+                        <p-table [value]="rembourssementValidAndPaiementValid"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssementValidAndPaiementValid ? rembourssementValidAndPaiementValid.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
                     </div>
                     
                     

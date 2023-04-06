@@ -119,6 +119,7 @@ import { ConventionPrestataireComponent } from './module/portail/convention-pres
 import { FoireComponent } from './module/contrat/foire/foire.component';
 import { FoireQuestionComponent } from './module/portail/foire-question/foire-question.component';
 import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme-prestataire/assure-bareme-prestataire.component';
+import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mouvement/souscripteur-mouvement.component';
 
 @NgModule({
     imports: [
@@ -255,6 +256,8 @@ import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme
                     {path: 'contrat/foire', component: FoireComponent},
                     {path: 'portail/foire-question', component: FoireQuestionComponent},
                     {path: 'portail/bareme-prestataire', component: AssureBaremePrestataireComponent},
+                    {path: 'portail/mouvement-souscripteur', component: SouscripteurMouvementComponent},
+                    
 
                     
                     

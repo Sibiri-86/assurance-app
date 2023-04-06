@@ -145,11 +145,11 @@
                                     <span >{{prestation?.pathologie?.libelle}}</span>
                                 </div>
                                 
-                                <div class="p-field p-col">
+                                <!-- <div class="p-field p-col">
                                     <label for="produit" style="font-size: 15px !important;">Produit pharmaceutique:</label>
                                     <br>
                                     <span *ngFor="let p of prestation.produitPharmaceutique" >{{p?.libelle}}</span>
-                                </div>
+                                </div> -->
                             </div>
                                 
                             <div class="p-fluid p-formgrid p-grid">
@@ -238,18 +238,35 @@
                                     <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.sort}}</p-tag>
                                     <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sort}}</p-tag>
                                 </div>
+
+                                <div class="p-field p-col-4">
+                                    <label for="observation" style="font-size: 15px !important;">Observation:</label>
+                                    <br>
+                                    <span >{{prestation?.observation}}</span>
+                                </div>
                                 
                             </div>
-                            
-                            <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col-4">
-                                <label for="observation" style="font-size: 15px !important;">Observation:</label>
-                                <br>
-                                <span >{{prestation?.observation}}</span>
-                                </div>
-                            </div> 
+                            <hr style="color:gray !important">
+                            <div class="card">
+                                <p-table [value]="prestation.produitPharmaceutique" dataKey="id" 
+                                [columns]="cols" [rows]="2" [paginator]="true" [globalFilterFields]="['libelle', 'observation']">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Produits</th>
+                                            <th>Observation</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-product>
+                                        <tr>
+                                            <td>{{product.libelle}}</td>
+                                            <td><span *ngIf="product.observation" class="p-badge p-badge-danger">{{product.observation}}</span>
+                                                <span *ngIf="!product.observation" class="p-badge p-badge-success">Produit Accepté</span></td>                                            
+                                            
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>  
                         </p-fieldset>
-                            
                         
                         
                 </div>
@@ -639,15 +656,16 @@
                                     <span >{{prestation?.observation}}</span>
                                     </div>
                                 </div> 
-                                <div class="p-fluid p-formgrid p-grid">
+                                <!-- <div class="p-fluid p-formgrid p-grid">
                                     <div class="p-field p-col">
                                         <label for="produit" style="font-size: 15px !important;">Produit pharmaceutique:</label>
                                         <br>
                                         <span *ngFor="let p of prestation.produitPharmaceutique" >{{p?.libelle}}</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 
                             </p-fieldset>
+
                                 
                             
                             

@@ -246,7 +246,7 @@
                             </div>
     
     
-                            <div class="p-field p-col">
+                            <div class="p-field p-col-4">
                                 <label for="souscripteur">Souscripteur <span class="required">*</span></label>
                                 <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="souscripteur" class="champVert" type="text" formControlName="souscripteur" pInputText>
                                 <input *ngIf="adherentSelected?.signeAdherent ==='-'" id="souscripteur" class="champRouge" type="text" formControlName="souscripteur" pInputText>
@@ -311,6 +311,23 @@
                                                     optionLabel="libelle"></p-multiSelect> 
                                                    
                                     </div>
+
+                                    <div *ngIf="prestationPopForm?.value?.familleActe?.code === 'FP'" class="p-field p-col">
+                                        <label for="produit">Produit(s) Non Pris en charge</label>
+                                        <button [disabled]="!produitPharmaceutiqueSelected" pButton pRipple label="Non Pris en charge" type="button"
+                                        (click)="addProduitExclu('right')" icon="pi pi-list" class="p-button-secondary"></button>
+                                                   
+                                    </div>
+
+                                    <!-- <div *ngIf="prestationPopForm?.value?.familleActe?.code === 'FP'" class="p-field p-col">
+                                        <label for="produit">Produit(s) à exclure <span class="required" >*</span>
+                                            <span class="required" *ngIf="prestationPopForm?.value?.familleActe?.code !== 'FP'"></span></label>
+                                        <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="produitPharmaceutiqueListExclu"
+                                                    formControlName="produitPharmaceutiqueExclu"  [autoDisplayFirst]="false"
+                                                    optionLabel="libelle"></p-multiSelect> 
+                                                   
+                                    </div> -->
                                 
                                     <div class="p-field p-col">
                                         <label for="medecin">Centre prescripteur<span class="required">*</span></label>
@@ -433,6 +450,61 @@
                 </div>
             </ng-template>
      </p-dialog>
+
+     <p-dialog header="Ajouter des observations au(x) produit(s) non pris en charge" styleClass="p-datatable-striped" [position]="position" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+     [draggable]="false" [resizable]="false" [(visible)]="displayProduitExclus">
+     <div class="card">
+        <!-- <h5>Cell Editing</h5> -->
+        <p-table [value]="produitPharmaceutiqueListExclu" dataKey="id">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Produits</th>
+                    <th>Observation</th>
+                    <th>Montant</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <!-- <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="product.libelle" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{product.libelle}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td> -->
+                    <td>{{product.libelle}}</td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText [(ngModel)]="product.observation">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{product.observation}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="number" [(ngModel)]="product.prix">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{product.prix}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+            <ng-template pTemplate="footer">
+                <p-button icon="pi pi-check" (click)="addProduitExcluToSaveList()" label="Ok" styleClass="p-button-text"></p-button>
+            </ng-template>
+    </p-dialog>
+
         <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
             <ng-template pTemplate="content">
                 <div class="card">

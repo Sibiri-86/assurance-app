@@ -258,7 +258,13 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], 
                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+            },
+            {
+                label: 'Souscripteur Mouvement', icon: 'pi pi-fw pi-sort-alt', routerLink: ['/portail/mouvement-souscripteur'], 
+                visible: this.keycloak.isUserInRole(Function.VUE_SOUSCRIPTEUR) 
             }
+
+            
 
             /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},

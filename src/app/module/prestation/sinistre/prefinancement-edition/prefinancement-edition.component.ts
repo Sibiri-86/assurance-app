@@ -100,6 +100,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   pathologieList: Array<Pathologie>;
   produitPharmaceutiqueList$: Observable<Array<ProduitPharmaceutique>>;
   produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
+  produitPharmaceutiqueListExclu: Array<ProduitPharmaceutique>;
   acteListFilter: Array<Acte>;
   garanties: Array<Garantie>;
   garantieList$: Observable<Array<Garantie>>;
@@ -144,6 +145,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   montantReponse: ReponseCheckMontantRestantGarantie;
   showMessage = false;
   prestationBon: Prestation = {};
+  displayProduitExclus = false;
+  position: string;
+  produitPharmaceutiqueSelected : Array<ProduitPharmaceutique>;
+  montantExclu1: number;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -220,6 +225,7 @@ findMontantPlafond(event){
       prestataire: new FormControl(null, [Validators.required]),
       centreExecutant: new FormControl(),
       produitPharmaceutique: new FormControl(),
+      produitPharmaceutiqueExclu: new FormControl(),
       pathologie: new FormControl(null, [Validators.required]),
       dateSoins: new FormControl(null, Validators.required),
       acte: new FormControl(null, [Validators.required]),
@@ -1325,12 +1331,29 @@ verifieDateSoins(event){
   changeDisplay() {
     if(this.prestationPopForm.value?.produitPharmaceutique) {
       this.displayFP = false;
+      console.log("111111111111111111111111111111111", this.prestationPopForm.value?.produitPharmaceutique);
+        this.produitPharmaceutiqueSelected = this.prestationPopForm.value?.produitPharmaceutique;
+        this.produitPharmaceutiqueListExclu = this.prestationPopForm.value?.produitPharmaceutique;
     } else {
       if(this.prestationPopForm.value?.familleActe?.code == "FP") {
         this.displayFP = true;
       } 
     }
   }
+
+  /* changeDisplayProduitExclu() {
+    if(this.prestationPopForm.value?.produitPharmaceutique) {
+      this.displayFP = false;
+      console.log("3333333333333333333333333333333", this.prestationPopForm.value?.produitPharmaceutique);
+        this.produitPharmaceutiqueListExclu = this.prestationPopForm.value?.produitPharmaceutique;
+    } else {
+      if(this.prestationPopForm.value?.familleActe?.code == "FP") {
+        this.displayFP = true;
+        console.log("4444444444444444444444444444", this.prestationPopForm.value?.produitPharmaceutique);
+        this.produitPharmaceutiqueListExclu = this.prestationPopForm.value?.produitPharmaceutique;
+      } 
+    }
+  } */
   
   showDialogPlafondMaximized(dialog: Dialog) {
     dialog.maximized = true;
@@ -1401,7 +1424,7 @@ verifieDateSoins(event){
   } else {
       this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
   }
-    console.log( this.prestationsList);
+    console.log( "999999999999999", this.prestationsList);
     
    
     
@@ -1481,6 +1504,26 @@ findMontantTotalConsommeFamille() {
     }));        
     
   }
+}
+
+addProduitExclu(position: string){
+  this.displayProduitExclus = true;
+  this.position = position;
+}
+
+addProduitExcluToSaveList() {
+  if(this.produitPharmaceutiqueListExclu){
+    this.prestationPopForm.get('produitPharmaceutique').setValue(this.produitPharmaceutiqueListExclu);
+    this.montantExclu1 = 0;
+    for(let i = 0; i < this.produitPharmaceutiqueListExclu.length; i++) {
+      this.montantExclu1 = this.montantExclu1 + this.produitPharmaceutiqueListExclu[i].prix;
+    }
+    this.prestationPopForm.get('montantExclu').setValue(this.montantExclu1);
+    console.log("montant des produits exclus", this.prestationPopForm.get('montantExclu').value);
+    console.log("montant des produits exclus1111111111", this.montantExclu1);
+    console.log("apres la mise a jour des produits exclus", this.prestationPopForm.get('produitPharmaceutique').value);
+  }
+  this.displayProduitExclus = false;
 }
 
 }
