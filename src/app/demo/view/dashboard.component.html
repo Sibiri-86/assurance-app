@@ -1,5 +1,5 @@
 <div class="p-grid dashboard">
-	<div *ngIf="role === 'ASSURE' || role === 'PRESTATAIRE' || role === 'GARANT';then contenu_bon else contenu_pas_bon"></div>
+	<div *ngIf="role === 'ASSURE' || role === 'PRESTATAIRE' || role === 'GARANT' || role === 'SOUSCRIPTEUR';then contenu_bon else contenu_pas_bon"></div>
         <ng-template #contenu_bon>
             <section class="mb-5 p-grid pr-3" style="margin-top: 0.1em;">
 				<!-- <div class="row-bg">  -->
@@ -58,6 +58,43 @@
 										</p-footer>
 									</p-card>
 								</div>
+
+								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+									 (mouseover)="getDecrption('Garant', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'GARANT'">
+									<br>
+									<p-card id="cardre1" header="Garant" 
+											styleClass="ui-card-shadow">
+										<p-header>
+											<div></div>
+										</p-header>
+										<div class="p-grid">
+											<div class="p-col p-col-align-center">
+												<i class="fa fa-user fa-4x"></i>
+												<i class="fa fa-cogs fa-3x"></i>
+											</div>
+										</div>
+										<p-footer>
+										</p-footer>
+									</p-card>
+								</div>
+								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+									 (mouseover)="getDecrption('Souscripteur', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'SOUSCRIPTEUR'">
+									<br>
+									<p-card id="cardre1" header="souscripteur" 
+											styleClass="ui-card-shadow">
+										<p-header>
+											<div></div>
+										</p-header>
+										<div class="p-grid">
+											<div class="p-col p-col-align-center">
+												<i class="fa fa-user fa-4x"></i>
+												<i class="fa fa-cogs fa-3x"></i>
+											</div>
+										</div>
+										<p-footer>
+										</p-footer>
+									</p-card>
+								</div>
 							</div>
 						</div>
 						<div class="p-col-1 text-right r-panel" style="margin-top: 12% !important;">
@@ -96,22 +133,39 @@
 							<!--DESCRIPTION POUR LE BUTTON GESTION DES PERFORMENCESS-->
 							<div class="border border-primary p-2 mt-2" *ngIf="role === 'PRESTATAIRE'">
 								<div class="justify-content-center">
-									<h4 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h4><br>
+									<h5 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h5><br>
 									<div class="font-weight-bold ml-3" style="font-size: medium">
-										<h5 class="font-weight-bold">Demande de remboursement</h5>
 										<ul>
 											<li>Créer une demande de remboursement via la plateforme</li>
 											<li>Suivre l'évolution de sa demande</li>
-										</ul>
-										<h5 class="font-weight-bold">Demande de Bon de prise en charge</h5>
-										<ul>
 											<li>Demande de creation de bon de prise en charge</li>
-										</ul>
-										<h5 class="font-weight-bold">Accès aux listes importantes</h5>
-										<ul>
 											<li>Liste des actes nécéssitant une entente préalable </li>
 											<li>Liste des exclusions</li>
 											<li>Réseau de soin</li>
+											<li>Pouvoir voir les conditions générales de VIMSO et les conditions particulières du contrat d'un assuré</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<!--DESCRIPTION POUR LE PROFIL GARANT-->
+							<div class="border border-primary p-2 mt-2" *ngIf="role === 'GARANT'">
+								<div class="justify-content-center">
+									<h5 class="font-weight-bold">Ce profil offre la possibilité au garant d'acceder aux reportings.</h5><br>
+									<div class="font-weight-bold ml-3" style="font-size: medium">
+										<ul>
+											<li>Extraire les données de reporting qui le concerne</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!--DESCRIPTION POUR LE PROFIL SOUSCRIPTEUR-->
+							<div class="border border-primary p-2 mt-2" *ngIf="role === 'SOUSCRIPTEUR'">
+								<div class="justify-content-center">
+									<h5 class="font-weight-bold">Ce profil offre la possibilité au souscripteur de voir les mouvements effectués sur sa police.</h5><br>
+									<div class="font-weight-bold ml-3" style="font-size: medium">
+										<ul>
+											<li>Voir les mouvements éffectués sur sa police</li>
 										</ul>
 									</div>
 								</div>
@@ -119,6 +173,26 @@
 			<!--             </div>
 			 -->        </div>
 					</section>
+					 <!-- view du popup de message de bienvenu -->
+
+					 <p-dialog header=""  [position]="position" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+					 [draggable]="false" [resizable]="true" [(visible)]="viewMessage" (onHide)="explorer()">
+					 <div class="card message">
+						 <a href="/">
+							 <img class="logo" src="assets/layout/images/favicon.ico" alt="SOLMAVI-PORTAIL"/>
+						 </a>
+						 <br>
+						<h3><span>Bienvenu(e) sur la plateforme en ligne de VIMSO <br><mark>{{name}}</mark></span></h3>
+						<h5><span>Vous êtes connecté(e) avec le profil {{role}}</span></h5>
+						
+					</div>
+			 
+					<marquee behavior="alternate"><mark><span>VIMSO c'est innover, encore innover, toujours innover !</span></mark></marquee>
+			 
+							<ng-template pTemplate="footer">
+								<p-button icon="pi pi-arrow-circle-right" (click)="explorer()" label="Explorer" styleClass="p-button-text"></p-button>
+							</ng-template>
+					</p-dialog>
         </ng-template>
         <ng-template #contenu_pas_bon>
             <div class="p-col-12 p-md-6 p-lg-3">

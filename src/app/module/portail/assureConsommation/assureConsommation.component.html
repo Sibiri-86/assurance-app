@@ -276,25 +276,7 @@
             </ng-template>    
         </p-dialog>
 
-        <!-- view du popup de message de bienvenu -->
-
-        <p-dialog header=""  [position]="position" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
-        [draggable]="false" [resizable]="true" [(visible)]="viewMessage" (onHide)="explorer()">
-        <div class="card message">
-            <a href="/solmavi/portail/registerChoose">
-                <img class="logo" src="assets/layout/images/favicon.ico" alt="SOLMAVI-PORTAIL"/>
-            </a>
-           <h3><span>Bienvenu(e) sur la plateforme en ligne de VIMSO <br><mark>{{name}}</mark></span></h3>
-           <h5><span>Vous êtes connecté(e) avec le profile {{role}}</span></h5>
-           
-       </div>
-
-       <marquee behavior="alternate"><mark><span>VIMSO c'est innover, encore innover, toujours innover !</span></mark></marquee>
-
-               <ng-template pTemplate="footer">
-                   <p-button icon="pi pi-arrow-circle-right" (click)="explorer()" label="Explorer" styleClass="p-button-text"></p-button>
-               </ng-template>
-       </p-dialog>
+       
 
         <p-dialog [maximizable]="true" #dialStudent [(visible)]="displaySinistreDetail" header="Sinistre(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}">
             <ng-template pTemplate="content">

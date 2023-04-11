@@ -153,9 +153,6 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                 this.portailService.findMessageBienvenuByNumeroLong(profile.username).subscribe(
                   (res) => {
                     console.log('..............RESULT..............   ', res);
-                    if(res.body == false){
-                      //this.viewMessage = true;
-                    }
                   }
                 );
 
@@ -665,9 +662,7 @@ voirSinistreDetail(sinistre: any) {
     this.updateRowGroupMetaDataTiersPayant();
 }
   
-explorer() {
-  this.router.navigateByUrl('/portail/registerChoose');
-}
+
     
 
 }

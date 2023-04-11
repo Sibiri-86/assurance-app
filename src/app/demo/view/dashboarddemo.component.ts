@@ -34,6 +34,8 @@ export class DashboardDemoComponent implements OnInit {
     role = '';
     descTitle = '';
     descType = '';
+    viewMessage = false;
+    position = '';
 
     constructor(private productService: ProductService, 
         private breadcrumbService: BreadcrumbService, 
@@ -50,6 +52,8 @@ export class DashboardDemoComponent implements OnInit {
         this.name = profile.firstName + ' ' + profile.lastName;
         if (profile['attributes'].role.length != 0){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+            this.viewMessage = true;
+            this.position = 'top';
         }
         /* if(this.role === 'ASSURE' || this.role === 'PRESTATAIRE' || this.role === 'GARANT'){
             this.router.navigate(['/portail/registerChoose']);
@@ -137,5 +141,8 @@ export class DashboardDemoComponent implements OnInit {
         this.descTitle = '';
         this.descType = '';
       }
-    
+      explorer() {
+        this.viewMessage = false;
+        //this.router.navigateByUrl('/');
+      }
 }
