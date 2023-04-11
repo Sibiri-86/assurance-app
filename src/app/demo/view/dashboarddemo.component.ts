@@ -10,9 +10,12 @@ import { Statistique } from 'src/app/store/contrat/police/model';
 import { select, Store } from "@ngrx/store";
 import { AppState } from "src/app/store/app.state";
 import { takeUntil } from "rxjs/operators";
+import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
-    templateUrl: './dashboard.component.html'
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['dashboard.component.scss']
 })
 export class DashboardDemoComponent implements OnInit {
     destroy$ = new Subject<boolean>();
@@ -27,14 +30,39 @@ export class DashboardDemoComponent implements OnInit {
     state$: Observable<Statistique>;
     state: Statistique;
 
-    constructor(private productService: ProductService, private breadcrumbService: BreadcrumbService, private store: Store<AppState>) {
+    name = '';
+    role = '';
+    descTitle = '';
+    descType = '';
+    viewMessage = false;
+    position = '';
+
+    constructor(private productService: ProductService, 
+        private breadcrumbService: BreadcrumbService, 
+        private store: Store<AppState>, 
+        private router: Router,
+        public keycloak: KeycloakService) {
         this.breadcrumbService.setItems([
             { label: 'Dashboard', routerLink: [''] }
         ]);
+
+        console.log('les roles du user est'+this.keycloak.getUserRoles());
+        this.keycloak.loadUserProfile().then(profile => {
+        console.log("===========profile===========>", profile['attributes'].role);
+        this.name = profile.firstName + ' ' + profile.lastName;
+        if (profile['attributes'].role.length != 0){
+        this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+            this.viewMessage = true;
+            this.position = 'top';
+        }
+        /* if(this.role === 'ASSURE' || this.role === 'PRESTATAIRE' || this.role === 'GARANT'){
+            this.router.navigate(['/portail/registerChoose']);
+        } */
+      }) 
+        
     }
 
-    ngOnInit() {
-
+    ngOnInit() {       
         this.state$=this.store.pipe(select(statistique));
         this.store.dispatch(loadStatistique());
         this.state$.pipe(takeUntil(this.destroy$))
@@ -104,5 +132,17 @@ export class DashboardDemoComponent implements OnInit {
         ];
         */
     }
-    
+
+    etDecrption(title, type) {
+        this.descTitle = title;
+        this.descType = type;
+      }
+      resetvalue() {
+        this.descTitle = '';
+        this.descType = '';
+      }
+      explorer() {
+        this.viewMessage = false;
+        //this.router.navigateByUrl('/');
+      }
 }

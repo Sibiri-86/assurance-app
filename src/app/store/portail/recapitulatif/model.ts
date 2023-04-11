@@ -144,3 +144,17 @@ export interface TiersPayantPortail{
     montantTotalReclame?: number;
     montantTotalRembourse?: number;
 }
+
+export interface PrefinancementChart {
+    labels?: Personne;
+    label?: string;
+    datas?: Data;
+}
+
+export interface Personne {
+    prenom?: Array<string>;
+}
+
+export interface Data {
+    data?: Array<number>;
+}

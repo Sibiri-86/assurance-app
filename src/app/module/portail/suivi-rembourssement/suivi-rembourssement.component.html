@@ -11,7 +11,7 @@
                         <ng-template pTemplate="right">
                      </ng-template>
                     </p-toolbar>
-                    <p-table #dt [value]="rembourssements" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                    <!-- <p-table #dt [value]="rembourssements" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                              [rowHover]="true" dataKey="id"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -58,6 +58,216 @@
                             </div>
                         </ng-template>
                     </p-table>
+ -->
+                    <!-- adaptation du code à celui de la visualisation des consommations -->
+                    <p-table [value]="rembourssements"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssements ? rembourssements.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
+
+            <!-- Visualisation des prestations -->
+            <p-dialog [maximizable]="true" #dialStudent [(visible)]="displayPrefinancementPrestationDetail" header="Prestations" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+                <ng-template pTemplate="content">
+                    <div class="card">
+                    
+                        <div *ngFor="let prestation of prestationDetail;let i = index;">
+                            <div>
+                            <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="lastname2" style="font-size: 15px !important;"> Sous acte:</label>
+                                        <br>
+                                        <span >{{prestation?.sousActe?.libelle}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
+                                        <br>
+                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                    </div>
+                                </div>
+                                    
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="dateEffet" style="font-size: 15px !important;">Date de soins:</label>
+                                        <br>
+                                        <span >{{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="centre" style="font-size: 15px !important;">Type de prestation:</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation">{{prestation?.typePrestation}}</span>
+                                        <span *ngIf="!prestation.typePrestation">PREFINANCEMENT</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Centre Prescripteur:</label>
+                                        <br>
+                                        <span >{{prestation?.prestataire?.libelle}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Medecin:</label>
+                                        <br>
+                                        <span >{{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Nombre Acte:</label>
+                                        <br>
+                                        <span >{{prestation?.nombreActe | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Cout unitaire:</label>
+                                        <br>
+                                        <span >{{prestation?.coutUnitaire | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Debours:</label>
+                                        <br>
+                                        <span >{{prestation?.debours | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Base remboursement:</label>
+                                        <br>
+                                        <span >{{prestation?.baseRemboursement | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Taux:</label>
+                                        <br>
+                                        <span >{{prestation?.taux?.taux}}</span>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant remboursé:</label>
+                                        <br>
+                                        <span >{{prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant supporté par l'assuré(e):</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation =='PREFINANCEMENT'">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</span>
+                                        <span *ngIf="prestation.typePrestation =='TIERSPAYANT'">{{prestation?.baseRemboursement - prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Decision:</label>
+                                        <br>
+                                        <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.sort}}</p-tag>
+                                        <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sort}}</p-tag>
+                                    </div>
+    
+                                    <div class="p-field p-col-4">
+                                        <label for="observation" style="font-size: 15px !important;">Observation:</label>
+                                        <br>
+                                        <span >{{prestation?.observation}}</span>
+                                    </div>
+                                    
+                                </div>
+                                <hr style="color:gray !important" *ngIf="prestation.produitPharmaceutique">
+                                <div class="card" *ngIf="prestation.produitPharmaceutique">
+                                    <p-table [value]="prestation.produitPharmaceutique" dataKey="id" 
+                                    [columns]="cols" [rows]="2" [paginator]="true" [globalFilterFields]="['libelle', 'observation']">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Produits</th>
+                                                <th>Observation</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-product>
+                                            <tr>
+                                                <td>{{product.libelle}}</td>
+                                                <td><span *ngIf="product.observation" class="p-badge p-badge-danger">{{product.observation}}</span>
+                                                    <span *ngIf="!product.observation" class="p-badge p-badge-success">Produit Accepté</span></td>                                            
+                                                
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>  
+                            </p-fieldset>
+                            
+                            
+                    </div>
+                
+                </div>   
+                </div>    
+                </ng-template>    
+            </p-dialog>
+
                 </div>
                 
                 
@@ -139,7 +349,7 @@
                             <ng-template pTemplate="right">
                          </ng-template>
                         </p-toolbar>
-                        <p-table #dt [value]="rembourssementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                       <!--  <p-table #dt [value]="rembourssementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                                  [rowHover]="true" dataKey="id"
                                  styleClass="p-datatable-customers"
                                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -185,8 +395,218 @@
                                     {{rembourssementValid ? rembourssementValid.length : 0 }} rembourssement(s) validé(s).
                                 </div>
                             </ng-template>
-                        </p-table>
+                        </p-table> -->
+
+
+                <p-table [value]="rembourssementValid"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssementValid ? rembourssementValid.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
                     </div>
+
+                    <!-- Visualisation des prestations -->
+            <p-dialog [maximizable]="true" #dialStudent [(visible)]="displayPrefinancementPrestationDetail" header="Prestations" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+                <ng-template pTemplate="content">
+                    <div class="card">
+                    
+                        <div *ngFor="let prestation of prestationDetail;let i = index;">
+                            <div>
+                            <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="lastname2" style="font-size: 15px !important;"> Sous acte:</label>
+                                        <br>
+                                        <span >{{prestation?.sousActe?.libelle}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
+                                        <br>
+                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                    </div>
+                                </div>
+                                    
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="dateEffet" style="font-size: 15px !important;">Date de soins:</label>
+                                        <br>
+                                        <span >{{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="centre" style="font-size: 15px !important;">Type de prestation:</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation">{{prestation?.typePrestation}}</span>
+                                        <span *ngIf="!prestation.typePrestation">PREFINANCEMENT</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Centre Prescripteur:</label>
+                                        <br>
+                                        <span >{{prestation?.prestataire?.libelle}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Medecin:</label>
+                                        <br>
+                                        <span >{{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Nombre Acte:</label>
+                                        <br>
+                                        <span >{{prestation?.nombreActe | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Cout unitaire:</label>
+                                        <br>
+                                        <span >{{prestation?.coutUnitaire | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Debours:</label>
+                                        <br>
+                                        <span >{{prestation?.debours | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Base remboursement:</label>
+                                        <br>
+                                        <span >{{prestation?.baseRemboursement | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Taux:</label>
+                                        <br>
+                                        <span >{{prestation?.taux?.taux}}</span>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant remboursé:</label>
+                                        <br>
+                                        <span >{{prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant supporté par l'assuré(e):</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation =='PREFINANCEMENT'">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</span>
+                                        <span *ngIf="prestation.typePrestation =='TIERSPAYANT'">{{prestation?.baseRemboursement - prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Decision:</label>
+                                        <br>
+                                        <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.sort}}</p-tag>
+                                        <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sort}}</p-tag>
+                                    </div>
+    
+                                    <div class="p-field p-col-4">
+                                        <label for="observation" style="font-size: 15px !important;">Observation:</label>
+                                        <br>
+                                        <span >{{prestation?.observation}}</span>
+                                    </div>
+                                    
+                                </div>
+                                <hr style="color:gray !important" *ngIf="prestation.produitPharmaceutique">
+                                <div class="card" *ngIf="prestation.produitPharmaceutique">
+                                    <p-table [value]="prestation.produitPharmaceutique" dataKey="id" 
+                                    [columns]="cols" [rows]="2" [paginator]="true" [globalFilterFields]="['libelle', 'observation']">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Produits</th>
+                                                <th>Observation</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-product>
+                                            <tr>
+                                                <td>{{product.libelle}}</td>
+                                                <td><span *ngIf="product.observation" class="p-badge p-badge-danger">{{product.observation}}</span>
+                                                    <span *ngIf="!product.observation" class="p-badge p-badge-success">Produit Accepté</span></td>                                            
+                                                
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>  
+                            </p-fieldset>
+                            
+                            
+                    </div>
+                
+                </div>   
+                </div>    
+                </ng-template>    
+            </p-dialog>
+
                     
                     
                     
@@ -267,7 +687,7 @@
                             <ng-template pTemplate="right">
                          </ng-template>
                         </p-toolbar>
-                        <p-table #dt [value]="rembourssementValidAndPaiementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                      <!--   <p-table #dt [value]="rembourssementValidAndPaiementValid" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                                  [rowHover]="true" dataKey="id"
                                  styleClass="p-datatable-customers"
                                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -313,11 +733,217 @@
                                     {{rembourssementValidAndPaiementValid ? rembourssementValidAndPaiementValid.length : 0 }} rembourssement(s) payé(s).
                                 </div>
                             </ng-template>
-                        </p-table>
+                        </p-table> -->
+
+                        <p-table [value]="rembourssementValidAndPaiementValid"
+                     rowGroupMode="rowspan"
+                sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
+				<ng-template pTemplate="caption">
+					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+						<h5 class="p-m-0"></h5>
+						<span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    </span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+                        <th>Assuré(e)</th>
+                        <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >Numéro<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact">Type de paiement<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="personneRessource">Montant réclamé<p-sortIcon field="personneRessource"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCompteBancaire1" >Montant Remboursé <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
+                        <th></th>
+                        
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
+					<tr>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                        </td>
+						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.typePaiement}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantReclame | formatTableValue: 'number':true}}</span></td>
+                        <td><span class="p-column-title" >{{garant?.montantRembourse | formatTableValue: 'number':true}}</span></td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-eye" pTooltip="Voir les détails" 
+                            (click)="voirPrestationDetail(garant)" class="p-button-rounded p-button-warning p-mr-2">
+                            </button>
+                        </td>
+            
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						{{rembourssementValidAndPaiementValid ? rembourssementValidAndPaiementValid.length : 0 }} sinistre(s) trouvé(es).
+					</div>
+				</ng-template>
+			</p-table>
                     </div>
                     
                     
+                      <!-- Visualisation des prestations -->
+            <p-dialog [maximizable]="true" #dialStudent [(visible)]="displayPrefinancementPrestationDetail" header="Prestations" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
+                <ng-template pTemplate="content">
+                    <div class="card">
                     
+                        <div *ngFor="let prestation of prestationDetail;let i = index;">
+                            <div>
+                            <p-fieldset [legend]="'Prestation '+(i+1)" toggleable="true">
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="lastname2" style="font-size: 15px !important;"> Sous acte:</label>
+                                        <br>
+                                        <span >{{prestation?.sousActe?.libelle}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
+                                        <br>
+                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                    </div>
+                                </div>
+                                    
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="dateEffet" style="font-size: 15px !important;">Date de soins:</label>
+                                        <br>
+                                        <span >{{prestation?.dateSoins  | formatTableValue : 'date'}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="centre" style="font-size: 15px !important;">Type de prestation:</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation">{{prestation?.typePrestation}}</span>
+                                        <span *ngIf="!prestation.typePrestation">PREFINANCEMENT</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Centre Prescripteur:</label>
+                                        <br>
+                                        <span >{{prestation?.prestataire?.libelle}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="medecin" style="font-size: 15px !important;">Medecin:</label>
+                                        <br>
+                                        <span >{{prestation?.medecin?.nom}} {{prestation?.medecin?.premon}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Nombre Acte:</label>
+                                        <br>
+                                        <span >{{prestation?.nombreActe | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Cout unitaire:</label>
+                                        <br>
+                                        <span >{{prestation?.coutUnitaire | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Debours:</label>
+                                        <br>
+                                        <span >{{prestation?.debours | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Base remboursement:</label>
+                                        <br>
+                                        <span >{{prestation?.baseRemboursement | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Taux:</label>
+                                        <br>
+                                        <span >{{prestation?.taux?.taux}}</span>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant remboursé:</label>
+                                        <br>
+                                        <span >{{prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe" style="font-size: 15px !important;">Montant supporté par l'assuré(e):</label>
+                                        <br>
+                                        <span *ngIf="prestation.typePrestation =='PREFINANCEMENT'">{{prestation?.montantSupporte | formatTableValue: 'number':true}}</span>
+                                        <span *ngIf="prestation.typePrestation =='TIERSPAYANT'">{{prestation?.baseRemboursement - prestation?.montantRembourse | formatTableValue: 'number':true}}</span>
+                                    </div>
+                                    
+                                    <div class="p-field p-col-4">
+                                        <label for="sousActe" style="font-size: 15px !important;">Decision:</label>
+                                        <br>
+                                        <p-tag styleClass="p-mr-2" *ngIf="prestation.sort == 'ACCORDE'" severity="success">{{prestation?.sort}}</p-tag>
+                                        <p-tag *ngIf="prestation.sort == 'REJETE'" styleClass="p-mr-2" severity="danger">{{prestation?.sort}}</p-tag>
+                                    </div>
+    
+                                    <div class="p-field p-col-4">
+                                        <label for="observation" style="font-size: 15px !important;">Observation:</label>
+                                        <br>
+                                        <span >{{prestation?.observation}}</span>
+                                    </div>
+                                    
+                                </div>
+                                <hr style="color:gray !important" *ngIf="prestation.produitPharmaceutique">
+                                <div class="card" *ngIf="prestation.produitPharmaceutique">
+                                    <p-table [value]="prestation.produitPharmaceutique" dataKey="id" 
+                                    [columns]="cols" [rows]="2" [paginator]="true" [globalFilterFields]="['libelle', 'observation']">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Produits</th>
+                                                <th>Observation</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-product>
+                                            <tr>
+                                                <td>{{product.libelle}}</td>
+                                                <td><span *ngIf="product.observation" class="p-badge p-badge-danger">{{product.observation}}</span>
+                                                    <span *ngIf="!product.observation" class="p-badge p-badge-success">Produit Accepté</span></td>                                            
+                                                
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>  
+                            </p-fieldset>
+                            
+                            
+                    </div>
+                
+                </div>   
+                </div>    
+                </ng-template>    
+            </p-dialog>
                     
                     
                     <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Prestations" [modal]="true" styleClass="p-fluid" [style]="{width: '1400px'}"> 

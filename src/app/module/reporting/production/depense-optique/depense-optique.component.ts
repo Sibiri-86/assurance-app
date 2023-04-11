@@ -461,7 +461,7 @@ export class DepenseOptiqueComponent implements OnInit, OnDestroy {
     this.check.policeId = this.check?.police?.id;
     this.check.tranches = this.trancheList;
     // this.check.adherentPrincipalId = this.check?.adherent?.id;
-   
+   this.check.display = false;
     this.report.typeReporting = TypeReport.DEPENSE_OPTIQUE;
     this.report.check = this.check;
     console.log("=====================",this.report)

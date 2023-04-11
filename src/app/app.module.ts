@@ -344,6 +344,7 @@ import { RemboursementInstanceComponent } from './module/prestation/remboursemen
 import { RemboursementEntenteComponent } from './module/medical/remboursement-entente/remboursement-entente.component';
 import { BonPrestataireComponent } from './module/portail/bon-prestataire/bon-prestataire.component';
 import { BonPrestataireEffects } from './store/portail/bon-prestataire/effect';
+import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mouvement/souscripteur-mouvement.component';
 
 @NgModule({
     imports: [
@@ -624,7 +625,7 @@ import { BonPrestataireEffects } from './store/portail/bon-prestataire/effect';
         RemboursementInstanceComponent,
         RemboursementEntenteComponent,
         BonPrestataireComponent,
-
+        SouscripteurMouvementComponent
     ],
     providers: [
         {

@@ -295,7 +295,7 @@
                         <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em">*</span></label>
                         <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
                                                 showClear="true" [options]="garantList"
-                                                [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="searchAppelFond()">
+                                                [autoDisplayFirst]="false" [(ngModel)]="garant" (onchange)="loadPoliceByGarant()">
                         </p-dropdown>
                     </div>
                     <div class="p-field p-col-3">

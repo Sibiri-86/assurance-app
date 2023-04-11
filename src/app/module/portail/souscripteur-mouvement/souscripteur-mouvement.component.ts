@@ -48,7 +48,7 @@ import { Status } from 'src/app/store/global-config/model';
 import { status } from 'src/app/store/global-config/selector';
 import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { printPdfFile } from 'src/app/module/util/common-util';
-import { Report } from 'src/app/store/contrat/police/model';
+import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
@@ -56,17 +56,27 @@ import { KeycloakService } from 'keycloak-angular';
 import { Function } from 'src/app/module/common/config/role.user';
 import { AppMainComponent } from 'src/app/app.main.component';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
-import { PrefinancementPortail } from 'src/app/store/portail/recapitulatif/model';
-
+import { SinistreTierPayant } from 'src/app/store/prestation/tierPayant/model';
+import { Avenant, HistoriqueAvenant, HistoriqueAvenantAdherant, HistoriqueAvenantPrime, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
+import * as featureActionHistoriqueAdherant from '../../../store/contrat/historiqueAvenant/actions';
+import * as historiqueAvenantSelector from '../../../store/contrat/historiqueAvenant/selector';
+import * as historiqueAvenantAction from '../../../store/contrat/historiqueAvenant/actions';
+import * as groupeSlector from '../../../store/contrat/groupe/selector';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
+import { Exercice } from 'src/app/store/contrat/exercice/model';
+import * as exerciceSelector from '../../../store/contrat/exercice/selector';
+import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
+import { ExerciceService } from 'src/app/store/contrat/exercice/service';
+import { HistoriqueAvenantAdherentService } from 'src/app/store/contrat/historiqueAvenantAdherent/service';
 
 
 
 @Component({
-  selector: 'app-suivi-rembourssement',
-  templateUrl: './suivi-rembourssement.component.html',
-  styleUrls: ['./suivi-rembourssement.component.scss']
+  selector: 'app-souscripteur-mouvement',
+  templateUrl: './souscripteur-mouvement.component.html',
+  styleUrls: ['./souscripteur-mouvement.component.scss']
 })
-export class SuiviRembourssementComponent implements OnInit {
+export class SouscripteurMouvementComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
@@ -83,41 +93,55 @@ export class SuiviRembourssementComponent implements OnInit {
   ordreReglementListDirection$: Observable<Array<OrdreReglement>>;
   name = '';
   role = '';
-  role1 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation);
-  role2 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical);
-  role3 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance);
-  role4 = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction);
-  role_sm_workflow_prefinancement_prestation_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_valider);
-  role_sm_workflow_prefinancement_Medical_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_valider);
-  role_sm_workflow_prefinancement_finance_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_valider);
-  role_sm_workflow_prefinancement_direction_valider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_valider);
-  role_sm_workflow_prefinancement_prestation_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation_devalider);
-  role_sm_workflow_prefinancement_Medical_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_Medical_devalider);
-  role_sm_workflow_prefinancement_finance_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_finance_devalider);
-  role_sm_workflow_prefinancement_direction_devalider = this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_direction_devalider);
-  rembourssements: Array<Prefinancement>;
-  rembourssementValid: Array<Prefinancement>;
-  rembourssementValidAndPaiementValid: Array<Prefinancement>;
-  rowGroupMetadata: any;
-  prestationDetail: Prestation[];
-  displayPrefinancementPrestationDetail=false;
+  rembourssements: Array<SinistreTierPayant>;
+  rembourssementValid: Array<SinistreTierPayant>;
+  rembourssementEnCours: Array<SinistreTierPayant>;
+  rembourssementValidAndPaiementValid: Array<SinistreTierPayant>;
+  police: Police;
+  historiqueAvenant: HistoriqueAvenant;
+  infosPolice = false;
+  historiqueAvenants1$: Observable<any>;
+  historiqueAvenants1: Array<HistoriqueAvenant>;
+  historiqueAvenantPrime: HistoriqueAvenantPrime = {};
+  exerciceList$: Observable<Array<Exercice>>;
+  exerciceList: Array<Exercice>;
+  exercices: Array<Exercice>;
+  curentExercice: Exercice = {};
+  primeExercice: number;
+  exoNumber: number;
+  historiqueAvenantAdherents: Array<HistoriqueAvenantAdherant>;
+  displayDialogFormAdherent = false;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,) {
-     this.breadcrumbService.setItems([{ label: 'Suivi des rembourssements' }]);
-     console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
+               private router: Router, private keycloak: KeycloakService, public app: AppMainComponent, private portailService: PortailService,
+               private historiqueAvenantService: HistoriqueAvenantService, private exerciceService: ExerciceService,
+               private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService) {
+     this.breadcrumbService.setItems([{ label: 'Mouvement de la police' }]);
+     
+}
+
+  ngOnInit(): void {
+    console.log('les roles du user est dans le workflow '+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         this.name = profile.firstName + ' ' + profile.lastName;
+        if (profile.username) {
+          this.exerciceService.$getExercicesPortail(profile.username).subscribe(
+              (res) => {
+                this.exercices = res;
+                console.log("==this.exercices ========>", this.exercices);
+                //console.log(this.historiqueAvenantPrime );
+                // this.historiqueAveantAdherantsByExerciceTMP = res;
+              }
+          );
+        }
         //this.profile = profile.username;
         if (profile['attributes'].role.length != 0){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
         }
-      })
-}
+      });
 
-  ngOnInit(): void {
 
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -144,23 +168,11 @@ export class SuiviRembourssementComponent implements OnInit {
         this.ordreReglementListFinance = value.slice();
     }
     }); */
-    /* this.loadOrdreReglement();
-    this.loadOrdreReglementFinance();
-    this.loadOrdreReglementMedical();
-    this.loadOrdreReglementDirection(); */
-    this.m();
 
     this.loadRembourssements();
     
 
   }
-
-  m() {
-    if(this.keycloak.isUserInRole(Function.sm_workflow_prefinancement_prestation)){
-      this.role1 = true;
-    }
-  }
-
   loadOrdreReglementFinance() {
     this.ordreReglementListFinance$ = this.store.pipe(select(prefinancementSelector.ordreReglementListFinance));
     this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValideFinance());
@@ -318,10 +330,14 @@ export class SuiviRembourssementComponent implements OnInit {
         break;
       }
       case 1: {
-        this.loadRembourssementValid();
+        this.loadRembourssementEnCours();
         break;
       }
       case 2: {
+        this.loadRembourssementOrdreValid();
+        break;
+      }
+      case 3: {
         this.loadRembourssementValidAndPaiementValid();
         break;
       }
@@ -340,25 +356,37 @@ export class SuiviRembourssementComponent implements OnInit {
   loadRembourssements(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-    this.portailService.fetchDepenseAssureByMatricule$(parseInt(profile.username)).subscribe(
+      /* "PHJAB" */
+    this.portailService.fetchfactureInitieByMatricule$(profile.username).subscribe(
       (res) => {
           console.log('..............rembourssements..............   ', res);
           this.rembourssements = res;
-          this.updateRowGroupMetaData();
       }
   );
     })
     
   }
 
-  loadRembourssementValid(){
+  loadRembourssementEnCours(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValid$(parseInt(profile.username)).subscribe(
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreEnCours$(profile.username).subscribe(
+        (res) => {
+            console.log('..............rembourssementEnCours..............   ', res);
+            this.rembourssementEnCours = res;
+        }
+    );
+    })
+    
+  }
+
+  loadRembourssementOrdreValid(){
+    this.keycloak.loadUserProfile().then(profile => {
+      this.name = profile.firstName + ' ' + profile.lastName;
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValid$(profile.username).subscribe(
         (res) => {
             console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValid = res;
-            this.updateRowGroupMetaDataValid();
         }
     );
     })
@@ -368,96 +396,183 @@ export class SuiviRembourssementComponent implements OnInit {
   loadRembourssementValidAndPaiementValid(){
     this.keycloak.loadUserProfile().then(profile => {
       this.name = profile.firstName + ' ' + profile.lastName;
-      this.portailService.fetchDepenseAssureByMatriculeAndOrdreValidAndPaiementValid$(parseInt(profile.username)).subscribe(
+      this.portailService.fetchFactureEnCoursByMatriculeAndOrdreValidAndPaiementValid$(profile.username).subscribe(
         (res) => {
-            console.log('..............rembourssementValid..............   ', res);
+            console.log('..............rembourssementValidAndPaiementValid..............   ', res);
             this.rembourssementValidAndPaiementValid = res;
-            this.updateRowGroupMetaDataValidAndPaiement();
         }
     );
     })
     
   }
-
-  updateRowGroupMetaData() {
-    this.rowGroupMetadata = {};
-
-    if (this.rembourssements) {
-        for (let i = 0; i < this.rembourssements.length; i++) {
-            let rowData = this.rembourssements[i];
-            let representativeName = rowData?.adherent?.prenom;
-            if (i == 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-            }
-            else {
-                let previousRowData = this.rembourssements[i - 1];
-                let previousRowGroup = previousRowData.adherent.prenom;
-                if (representativeName === previousRowGroup) {
-                  this.rowGroupMetadata[representativeName].size++;
-                }
-                else{
-                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                }
-            }
-        }
-    }
-  }
-
-  updateRowGroupMetaDataValid() {
-    this.rowGroupMetadata = {};
-
-    if (this.rembourssementValid) {
-        for (let i = 0; i < this.rembourssementValid.length; i++) {
-            let rowData = this.rembourssementValid[i];
-            let representativeName = rowData?.adherent?.prenom;
-            if (i == 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-            }
-            else {
-                let previousRowData = this.rembourssementValid[i - 1];
-                let previousRowGroup = previousRowData.adherent.prenom;
-                if (representativeName === previousRowGroup) {
-                  this.rowGroupMetadata[representativeName].size++;
-                }
-                else{
-                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                }
-            }
-        }
-    }
-  }
-
-  updateRowGroupMetaDataValidAndPaiement() {
-    this.rowGroupMetadata = {};
-
-    if (this.rembourssementValidAndPaiementValid) {
-        for (let i = 0; i < this.rembourssementValidAndPaiementValid.length; i++) {
-            let rowData = this.rembourssementValidAndPaiementValid[i];
-            let representativeName = rowData?.adherent?.prenom;
-            if (i == 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-            }
-            else {
-                let previousRowData = this.rembourssementValidAndPaiementValid[i - 1];
-                let previousRowGroup = previousRowData.adherent.prenom;
-                if (representativeName === previousRowGroup) {
-                  this.rowGroupMetadata[representativeName].size++;
-                }
-                else{
-                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                }
-            }
-        }
-    }
-  }
   
-  voirPrestationDetail(p: PrefinancementPortail) {
-    console.log('this.depenseFamille recuperer=============>', p);
-    console.log('prestation recuperer=============>', p.prestation); 
-    this.prestationDetail = p.prestation;
-    //this.displaySinistreDetail1 = true;
-    this.displayPrefinancementPrestationDetail = true;
+
+  getPrimeTotalByPoliceId() {
+    if (this.police.id) {
+      this.historiqueAvenantService.getPrimeTotalByPoliceId(this.police.id).subscribe(
+          (res) => {
+            this.historiqueAvenantPrime = res;
+            console.log("=============================this.historiqueAvenantPrime =============");
+            console.log(this.historiqueAvenantPrime );
+            // this.historiqueAveantAdherantsByExerciceTMP = res;
+          }
+      );
+    }
   }
-  
+
+  onExerciceChange(): void {
+    console.log('curent exo === ');
+    console.log(this.curentExercice);
+    if (this.curentExercice ) {
+      this.historiqueAvenantService.findHistoriqueAvenantByExercice(this.curentExercice.id).subscribe((res) => {
+        this.historiqueAvenants1 = res.body;
+          console.log('....historiqueAvenants1.....', this.historiqueAvenants1);
+        this.historiqueAvenants1.forEach(p => {
+          this.primeExercice = p.historiqueAvenantPrime?.primeTotalCalcul;
+          this.exoNumber = p.exercice?.numero;
+        })
+      })
+    } 
+  }
+
+  onRowSelectAvenant(avenant: HistoriqueAvenant) {
+    this.historiqueAvenant = avenant;
+    this.historiqueAvenant.dateAvenant = avenant.dateAvenant
+  switch (avenant.typeHistoriqueAvenant) {
+    case TypeHistoriqueAvenant.INCORPORATION: {
+    }
+    case TypeHistoriqueAvenant.RETRAIT: {
+      this.viewAvenantRetrait(avenant);
+      break;
+    }
+    case TypeHistoriqueAvenant.RENOUVELLEMENT: {
+      this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
+      break;
+    }
+
+    case TypeHistoriqueAvenant.PROROGATION: {
+      
+      break;
+    }
+    case TypeHistoriqueAvenant.AFAIRE_NOUVELLE: {
+      this.viewAvenantAffaireNouvelle(avenant, avenant.typeHistoriqueAvenant);
+      break;
+    }
+    case TypeHistoriqueAvenant.RESILIATION: {
+      this.viewAvenantResiliation(avenant, avenant.typeHistoriqueAvenant);
+      break;
+    }
+    case TypeHistoriqueAvenant.SUSPENSION: {
+     this.viewAvenantSuspension(avenant, avenant.typeHistoriqueAvenant);
+      break;
+    }
+    case TypeHistoriqueAvenant.MODIFICATION: {
+      this.viewAvenantModification(avenant, avenant.typeHistoriqueAvenant);
+      break;
+    }
+    default: {
+      return null;
+    }
+  }
+}
+
+
+viewAvenantIncorp(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+      this.historiqueAvenant.id).subscribe(
+      (res: Array<HistoriqueAvenantAdherant>) => {
+        this.historiqueAvenantAdherents = [];
+        this.historiqueAvenantAdherents = res;
+        console.log('=====================res=============', res);
+      }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantRetrait(avenant: HistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueId(avenant.id).subscribe(
+      (res: Array<HistoriqueAvenantAdherant>) => {
+        console.log('=====================res=============', res);
+        this.historiqueAvenantAdherents = [];
+        this.historiqueAvenantAdherents = res;
+        console.log('=====================historiqueAvenantAdherent1s=============', this.historiqueAvenantAdherents);
+      }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantAffaireNouvelle(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
+      avenant.id).subscribe(
+      (res: Array<HistoriqueAvenantAdherant>) => {
+        this.historiqueAvenantAdherents = [];
+        this.historiqueAvenantAdherents = res;
+      console.log('=====================historiqueAvenantAdherent1s=============', res);
+         /* this.historiqueAvenantAdherents3 = this.historiqueAvenantAdherent1s
+            .filter(doc => doc.avenant.typeHistoriqueAvenant === typeHistoriqueAvenant);*/
+        console.log('=====================typeHistoriqueAvenant=============', typeHistoriqueAvenant);
+      }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantResiliation(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id)
+      .subscribe((res: Array<HistoriqueAvenantAdherant>) => {
+        this.historiqueAvenantAdherents = [];
+        this.historiqueAvenantAdherents = res;
+        console.log('=====================res=============', res);
+      }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantSuspension(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id)
+      .subscribe((res: Array<HistoriqueAvenantAdherant>) => {
+        this.historiqueAvenantAdherents = [];
+        this.historiqueAvenantAdherents = res;
+        console.log('=====================res=============', res);
+      }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantRenouvellement(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  console.log('++++++++++++++++++++avenant.id+++++++++++++++++++++++', avenant.id);
+  console.log('++++++++++++++++++++avenant.police.id+++++++++++++++++++++++', avenant.police.id);
+  this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id)
+  .subscribe((res: Array<HistoriqueAvenantAdherant>) => {
+    this.historiqueAvenantAdherents = [];
+    this.historiqueAvenantAdherents = res;
+    console.log('=====================res=============', res);
+  }
+  );
+  this.displayDialogFormAdherent = true;
+}
+
+viewAvenantModification(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
+  this.historiqueAvenant = {...avenant};
+  console.log(typeof typeHistoriqueAvenant);
+  this.historiqueAvenantAdherentService.findHistoriqueAvenantAdherentByHistoriqueAvenantIdAndActifIsFalse(avenant.id)
+  .subscribe((res: Array<HistoriqueAvenantAdherant>) => {
+    this.historiqueAvenantAdherents = [];
+    this.historiqueAvenantAdherents = res;
+    console.log('=====================res=============', res);
+  }
+  );
+  this.displayDialogFormAdherent = true;
+}
 
 }

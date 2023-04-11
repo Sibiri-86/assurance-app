@@ -28,10 +28,11 @@ import { groupeList } from 'src/app/store/contrat/groupe/selector';
 import { Status } from 'src/app/store/global-config/model';
 import {status} from '../../../store/global-config/selector';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { DepenseFamille } from 'src/app/store/portail/recapitulatif/model';
+import { ConsommationPortail, DepenseFamille, Personne, PrefinancementChart, PrefinancementPortail } from 'src/app/store/portail/recapitulatif/model';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
 import { Prestation } from 'src/app/store/prestation/prefinancement/model';
 import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -92,10 +93,21 @@ export class RegisterChooseComponent implements OnInit, OnDestroy {
   displaySinistreDetail= false;
   descTitle = '';
   descType = '';
-
-
-  
-
+  name = '';
+  role = '';
+  consoFamilles: Array<ConsommationPortail>;
+  consoFamillesSinistre: Array<ConsommationPortail>;
+  consoFamillesSinistreTiersPayant: Array<ConsommationPortail>;
+  prefinancementChart : PrefinancementChart;
+  consoSinistreFamilles: Array<PrefinancementPortail>;
+  basicData: any;
+  personnes: string[] = [];
+  montantTotalReclameFamille: number;
+  montantTotalRembourseFamille: number;
+  montantSinistreTiersPayantTotalReclameFamille: number;
+  montantSinistreTiersPayantTotalRembourseFamille: number;
+  consoSinistreTiersPayantFamilles: Array<Prestation>;
+  data1:  any[] = [];
 
   groupePolicy: Array<Groupe>;
 
@@ -113,7 +125,8 @@ export class RegisterChooseComponent implements OnInit, OnDestroy {
               private appelFondService: AppelFondService, 
               private recaptulatifService: RecapitulatifService,
               private portailService: PortailService,
-              private router: Router,) {
+              private router: Router,
+              private keycloak: KeycloakService) {
 
       this.depenseFamilleForm = this.formBuilder.group({
         dateFin: new FormControl('', [Validators.required]),
@@ -124,6 +137,94 @@ export class RegisterChooseComponent implements OnInit, OnDestroy {
       this.breadcrumbService.setItems([
         {label: ''}
     ]);
+    console.log('les roles du user est'+this.keycloak.getUserRoles());
+      this.keycloak.loadUserProfile().then(profile => {
+        console.log("===========profile===========>", profile['attributes'].role);
+        this.name = profile.firstName + ' ' + profile.lastName;
+        if (profile['attributes'].role.length != 0){
+        this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+        }
+        console.log("oooooooooooothis.keycloak.getToken 12", this.keycloak.getToken());
+        this.portailService.fetchDepenseSinistreAndFamille$(this.depenseFamille).subscribe(
+          (res) => {
+              console.log('..............consoSinistreFamilles222222..............   ', res);
+              this.consoSinistreFamilles = res;
+              this.personnes = [];
+              this.consoSinistreFamilles.forEach(value =>{
+                this.personnes.push(value.adherent.prenom)
+              });
+
+              
+              /* this.consoSinistreFamilles.forEach(value =>{
+                this.personnes.push(value.adherent.prenom)
+              });
+              indicat.scores.forEach(score => {
+                if (score.score) {
+                  indicaScore.push(this.truncateNumber(score.score));
+                } else {
+                  indicaScore.push(score.score);
+                }
+              }); */
+              console.log('....this.personnes..............   ', this.personnes);
+              if(res){
+                
+              }
+            }
+      );
+
+      this.portailService.fetchDepenseSinistreAndFamille$(this.depenseFamille).subscribe(
+        (res) => {
+            console.log('..............consoSinistreFamilles222222..............   ', res);
+            this.consoSinistreFamilles = res;
+            if(res){
+              this.montantTotalReclameFamille = 0;
+              this.montantTotalRembourseFamille = 0;
+              for(let i = 0; i < this.consoSinistreFamilles.length; i++) {
+                this.montantTotalReclameFamille = this.montantTotalReclameFamille + this.consoSinistreFamilles[i].montantReclame;
+                this.montantTotalRembourseFamille = this.montantTotalRembourseFamille + this.consoSinistreFamilles[i].montantRembourse;
+              }
+              this.data1.push(this.montantTotalReclameFamille);
+              console.log('..............this.montantTotalReclameFamille..............   ', this.truncateNumber(this.montantTotalReclameFamille));
+              console.log('..............this.montantTotalRembourseFamille..............   ', this.truncateNumber(this.montantTotalRembourseFamille));
+            }
+          }
+    );
+    
+    this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamille).subscribe(
+      (res) => {
+          console.log('..............consoSinistreTiersPayantFamilles55555555555..............   ', res);
+          this.consoSinistreTiersPayantFamilles = res;
+          if(res){
+            this.montantSinistreTiersPayantTotalReclameFamille = 0;
+            this.montantSinistreTiersPayantTotalRembourseFamille = 0;
+            for(let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
+              this.montantSinistreTiersPayantTotalReclameFamille = this.montantSinistreTiersPayantTotalReclameFamille + this.consoSinistreTiersPayantFamilles[i].baseRemboursement;
+              this.montantSinistreTiersPayantTotalRembourseFamille = this.montantSinistreTiersPayantTotalRembourseFamille + this.consoSinistreTiersPayantFamilles[i].montantRembourse;
+            }
+            this.data1.push(this.montantSinistreTiersPayantTotalReclameFamille);
+            console.log('ffffffffff', this.data1);
+          }
+        }
+  );
+
+  this.basicData = {
+    labels: ['Préfinancement', 'Tiers-Payant'],
+    datasets: [
+        {
+            label: 'Montant Réclamé',
+            backgroundColor: '#42A5F5',
+            data: [this.data1]
+        },
+        {
+            label: 'Montant Remboursé',
+            backgroundColor: '#FFA726',
+            data: [this.montantTotalRembourseFamille, this.montantSinistreTiersPayantTotalRembourseFamille]
+        }
+    ]
+};
+
+    
+      })
     }
 
 ngOnInit(): void {
@@ -142,7 +243,6 @@ ngOnInit(): void {
         console.log(this.policeList);
       }
     });
-
   
     
     
@@ -150,6 +250,10 @@ ngOnInit(): void {
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
 
+}
+
+truncateNumber(a: number) {
+  return Math.floor(a * 1000) / 1000;
 }
 
 loadGroupeList() {
@@ -371,6 +475,39 @@ resetvalue() {
 register2(){
   this.router.navigate(['/portail/register']);
 }
+/* grapgOfByIndicateur(conso: ConsommationPortail): any {
+  let myData: any;
+  let consoFamille: ConsommationPortail = conso;
+  if (conso !== null) {
+    consoFamille = conso;
+  }
+  this.selectIndicate = indicat;
+  if (indicat !== null) {
+    const indicaScore: any[] = [];
+
+    indicat.scores.forEach(score => {
+      if (score.score) {
+        indicaScore.push(this.truncateNumber(score.score));
+      } else {
+        indicaScore.push(score.score);
+      }
+    });
+    myData = {
+      labels: this.annees,
+      datasets: [
+        {
+          label: '',
+          data: indicaScore,
+          fill: false,
+          borderColor: '#4bc0c0',
+          backgroundColor: '#9CCC65'
+        }
+      ]
+    };
+  }
+  return myData;
+} */
+
 }
 
 

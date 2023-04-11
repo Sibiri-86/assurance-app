@@ -68,6 +68,17 @@ cloture(exercice: Exercice): Observable<Exercice> {
 		return throwError(error.message || 'Something went wrong');
 	};
   }
+
+
+  $getExercicesPortail(policeId: string): Observable<Array<Exercice>> {
+	console.log('police ID === ' + policeId);
+return this.http.get<Array<Exercice>>( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE)}/portail-exercice`,
+	{params: createRequestOption({policeId})}).pipe(
+  map((response: Array<Exercice>) => response),
+	catchError(this.handleError())
+);
+}
+
 }
 
 

@@ -9,7 +9,7 @@
             <div class="p-col" id="dashbord">
                 <div class="p-grid  pr-3 pl-3">
                     <div class="p-col-12 p-md-12 col-sm-6 sup-center"
-                         (mouseover)="getDecrption('Assuré(e)', 'user')" (mouseleave)="resetvalue()">
+                         (mouseover)="getDecrption('Assuré(e)', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'ASSURE'">
                         <br>
                         <p-card id="cardre1" header="Assuré(e)" 
                                 styleClass="ui-card-shadow">
@@ -23,16 +23,16 @@
                                 </div>
                             </div>
                             <p-footer>
-                                <!-- <a target="_blank">
-                                    <button pButton type="button" label="Visiter" icon="pi pi-check"
-                                            class="ui-button-secondary font-weight-bold"
-                                            style="margin-right: .25em" (click)="register2()"></button>
-                                </a> -->
                             </p-footer>
                         </p-card>
                     </div>
+
+                    <!-- <div class="card p-col-12 p-md-12 col-sm-6 sup-center" *ngIf="role === 'ASSURE'">
+                        <h4>Vertical</h4>
+                        <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+                    </div> -->
                     <div class="p-col-12 p-md-12 p-sm-6 sup-center"
-                         (mouseover)="getDecrption('Prestataire', 'indic')">
+                         (mouseover)="getDecrption('Prestataire', 'indic')" *ngIf="role === 'PRESTATAIRE'">
                         <br>
                         <p-card id="cardre2" header="Prestataire" 
                                 styleClass="ui-card-shadow">
@@ -62,18 +62,18 @@
                 <i class="fa fa-angle-double-right fa-3x"></i>
             </div>
             <div class="p-col pt-1 pb-1 r-panel" style="border: outset;">
-                <div class="ui-card p-2"><h5 class="font-weight-bold text-primary text-center">Description du profil
-                    <span *ngIf="descTitle.length > 0">: {{descTitle}}</span></h5></div>
-                <div class="border border-primary p-2 mt-2" *ngIf="descType === 'user'">
-                    <div class="justify-content-center myCardre">
+                <div class="ui-card p-2"><h4 class="font-weight-bold text-primary text-center">Description du profil
+                    <span *ngIf="descTitle.length > 0">: {{descTitle}}</span></h4></div>
+                <div class="border border-primary p-2 mt-2" *ngIf="role === 'ASSURE'">
+                    <div class="justify-content-center">
                         <h5 class="font-weight-bold">Ce profil offre la possibilité à l'assuré(e) d'avoir accès
-                            aux données qui lui sont propres.</h5><br>
+                            aux données qui lui sont propres. Cela consiste à :</h5><br>
                         <div class="font-weight-bold ml-3" style="font-size: medium">
-                            <h5>Cela consiste à :</h5>
                             <ul>
                                 <li>Avoir accès à ses consommations</li>
+                                <li>Pouvoir suivre la progression de ses demandes de remboursement</li>
                                 <li>Avoir accès à la liste des prestataires du réseau</li>
-                                <li>Pouvoir voir les conditions générales de VIMSO et les conditions particulières au contrat</li>
+                                <li>Pouvoir voir les conditions générales de VIMSO et les conditions particulières du contrat</li>
                                 <li>Avoir accès à la liste des pharmacies de garde de la semaine</li>
                                 <li>Avoir des données sur son barème</li>
                             </ul>
@@ -92,9 +92,9 @@
                     </div>
                 </div>
                 <!--DESCRIPTION POUR LE BUTTON GESTION DES PERFORMENCESS-->
-                <div class="border border-primary p-2 mt-2" *ngIf="descType === 'indic'">
-                    <div class="justify-content-center myCardre">
-                        <h5 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h5><br>
+                <div class="border border-primary p-2 mt-2" *ngIf="role === 'PRESTATAIRE'">
+                    <div class="justify-content-center">
+                        <h4 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h4><br>
                         <div class="font-weight-bold ml-3" style="font-size: medium">
                             <h5 class="font-weight-bold">Demande de remboursement</h5>
                             <ul>

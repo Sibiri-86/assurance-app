@@ -45,7 +45,8 @@ export const Function = {
     VUE_PRESTATAIRE: 'VUE_PRESTATAIRE',
     sm_portail: 'sm_portail',
     sm_reporting: 'sm_reporting',
-    sm_dashboard: 'sm_dashboard'
+    sm_dashboard: 'sm_dashboard',
+    VUE_SOUSCRIPTEUR: 'VUE_SOUSCRIPTEUR'
 };
 
 export const UsersRoles = {
