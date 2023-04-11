@@ -56,6 +56,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { Function } from 'src/app/module/common/config/role.user';
 import { AppMainComponent } from 'src/app/app.main.component';
 import { PortailService } from 'src/app/store/portail/recapitulatif/service';
+import { PrefinancementPortail } from 'src/app/store/portail/recapitulatif/model';
 
 
 
@@ -98,6 +99,9 @@ export class SuiviRembourssementComponent implements OnInit {
   rembourssementValid: Array<Prefinancement>;
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
   rowGroupMetadata: any;
+  prestationDetail: Prestation[];
+  displayPrefinancementPrestationDetail=false;
+
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
@@ -447,6 +451,13 @@ export class SuiviRembourssementComponent implements OnInit {
     }
   }
   
+  voirPrestationDetail(p: PrefinancementPortail) {
+    console.log('this.depenseFamille recuperer=============>', p);
+    console.log('prestation recuperer=============>', p.prestation); 
+    this.prestationDetail = p.prestation;
+    //this.displaySinistreDetail1 = true;
+    this.displayPrefinancementPrestationDetail = true;
+  }
   
 
 }

@@ -34,6 +34,7 @@ import { Prestation, Sinistre } from 'src/app/store/prestation/prefinancement/mo
 import { KeycloakService } from 'keycloak-angular';
 import { PharmacieGarde } from 'src/app/store/parametrage/pharmacie-garde/model';
 import { ProduitPharmaceutiqueExcluService } from 'src/app/store/parametrage/produit-pharmaceutique-exclu/service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -112,16 +113,11 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
   montantSinistreTiersPayantTotalReclameFamille: number;
   montantSinistreTiersPayantTotalRembourseFamille: number;
   result: number;
-  
-
-
   groupePolicy: Array<Groupe>;
-
-
-
   recapitulatif: Recapitulatif;
   recapitulatifs: Array<Recapitulatif>;
-
+  viewMessage = false;
+  position: string;
 
   constructor(private formBuilder: FormBuilder,
               private store: Store<AppState>, 
@@ -132,7 +128,8 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
               private recaptulatifService: RecapitulatifService,
               private portailService: PortailService,
               private produitPharmaceutiqueExcluService: ProduitPharmaceutiqueExcluService,
-              private keycloak: KeycloakService) {
+              private keycloak: KeycloakService,
+              private router: Router) {
 
               console.log('les roles du user est dans le workflow '+ this.keycloak.getUserRoles());
                 this.keycloak.loadUserProfile().then(profile => {
@@ -152,6 +149,15 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                         this.depenseFamilles = res;
                     }
                 ); 
+
+                this.portailService.findMessageBienvenuByNumeroLong(profile.username).subscribe(
+                  (res) => {
+                    console.log('..............RESULT..............   ', res);
+                    if(res.body == false){
+                      //this.viewMessage = true;
+                    }
+                  }
+                );
 
                 this.portailService.fetchDepenseAndFamille$(this.depenseFamille).subscribe(
                   (res) => {
@@ -658,7 +664,10 @@ voirSinistreDetail(sinistre: any) {
   onSortTiersPayant() {
     this.updateRowGroupMetaDataTiersPayant();
 }
-        
+  
+explorer() {
+  this.router.navigateByUrl('/portail/registerChoose');
+}
     
 
 }

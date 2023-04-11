@@ -14,7 +14,8 @@ import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 @Component({
-    templateUrl: './dashboard.component.html'
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['dashboard.component.scss']
 })
 export class DashboardDemoComponent implements OnInit {
     destroy$ = new Subject<boolean>();
@@ -31,6 +32,8 @@ export class DashboardDemoComponent implements OnInit {
 
     name = '';
     role = '';
+    descTitle = '';
+    descType = '';
 
     constructor(private productService: ProductService, 
         private breadcrumbService: BreadcrumbService, 
@@ -125,5 +128,14 @@ export class DashboardDemoComponent implements OnInit {
         ];
         */
     }
+
+    etDecrption(title, type) {
+        this.descTitle = title;
+        this.descType = type;
+      }
+      resetvalue() {
+        this.descTitle = '';
+        this.descType = '';
+      }
     
 }

@@ -1,678 +1,801 @@
 <div class="p-grid dashboard">
-	<div class="p-col-12 p-md-6 p-lg-3">
-		<div class="overview-box  box-sales">
-			<div class="overview-box-icon">
-				<i class="pi pi-bars"></i>
+	<div *ngIf="role === 'ASSURE' || role === 'PRESTATAIRE' || role === 'GARANT';then contenu_bon else contenu_pas_bon"></div>
+        <ng-template #contenu_bon>
+            <section class="mb-5 p-grid pr-3" style="margin-top: 0.1em;">
+				<!-- <div class="row-bg">  -->
+						<div class="p-col-12">
+							<h4 class="text-primary text-uppercase container p-1 text-center" style="box-shadow: 0 2px 3px 1px #33f802; text-align: center !important; text-transform: uppercase !important;">
+								Bienvenue sur le portail de SOLMAVI</h4>
+							<hr>
+						</div>
+						<div class="p-col" id="dashbord">
+							<div class="p-grid  pr-3 pl-3">
+								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+									 (mouseover)="getDecrption('Assuré(e)', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'ASSURE'">
+									<br>
+									<p-card id="cardre1" header="Assuré(e)" 
+											styleClass="ui-card-shadow">
+										<p-header>
+											<div></div>
+										</p-header>
+										<div class="p-grid">
+											<div class="p-col p-col-align-center">
+												<i class="fa fa-user fa-4x"></i>
+												<i class="fa fa-cogs fa-3x"></i>
+											</div>
+										</div>
+										<p-footer>
+										</p-footer>
+									</p-card>
+								</div>
+			
+								<!-- <div class="card p-col-12 p-md-12 col-sm-6 sup-center" *ngIf="role === 'ASSURE'">
+									<h4>Vertical</h4>
+									<p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+								</div> -->
+								<div class="p-col-12 p-md-12 p-sm-6 sup-center"
+									 (mouseover)="getDecrption('Prestataire', 'indic')" *ngIf="role === 'PRESTATAIRE'">
+									<br>
+									<p-card id="cardre2" header="Prestataire" 
+											styleClass="ui-card-shadow">
+										<p-header>
+											<div></div>
+										</p-header>
+										<div class="p-grid">
+											<div class="p-col p-col-align-center">
+												<i class="fa fa-line-chart fa-4x"></i>
+												<i class="fa fa-cogs fa-3x"></i>
+											</div>
+										</div>
+										<p-footer>
+											<!-- <a target="_blank">
+												<button pButton type="button" label="Visiter" icon="pi pi-check"
+														class="ui-button-secondary font-weight-bold" (click)="register2()"
+														style="margin-right: .25em"></button>
+											</a> -->
+											<!--<button pButton type="button" label="Info" icon="pi pi-info"
+													class="ui-button-secondary"></button-->
+										</p-footer>
+									</p-card>
+								</div>
+							</div>
+						</div>
+						<div class="p-col-1 text-right r-panel" style="margin-top: 12% !important;">
+							<i class="fa fa-angle-double-right fa-3x"></i>
+						</div>
+						<div class="p-col pt-1 pb-1 r-panel" style="border: outset;">
+							<div class="ui-card p-2"><h4 class="font-weight-bold text-primary text-center">Description du profil
+								<span *ngIf="descTitle.length > 0">: {{descTitle}}</span></h4></div>
+							<div class="border border-primary p-2 mt-2" *ngIf="role === 'ASSURE'">
+								<div class="justify-content-center">
+									<h5 class="font-weight-bold">Ce profil offre la possibilité à l'assuré(e) d'avoir accès
+										aux données qui lui sont propres. Cela consiste à :</h5><br>
+									<div class="font-weight-bold ml-3" style="font-size: medium">
+										<ul>
+											<li>Avoir accès à ses consommations</li>
+											<li>Pouvoir suivre la progression de ses demandes de remboursement</li>
+											<li>Avoir accès à la liste des prestataires du réseau</li>
+											<li>Pouvoir voir les conditions générales de VIMSO et les conditions particulières du contrat</li>
+											<li>Avoir accès à la liste des pharmacies de garde de la semaine</li>
+											<li>Avoir des données sur son barème</li>
+										</ul>
+									</div>
+									<br>
+									<!-- <h4 class="font-weight-bold">Il permet également à l'utilisateur d'apporter certaines modifications à son compte.</h4><br>
+									<div class="font-weight-bold ml-3" style="font-size: medium">
+										<h5>Les actions possibles sont :</h5>
+										<ul>
+											<li>Demander une réinitilisation du mot de passe</li>
+											<li>Se conecter à la plateforme</li>
+											<li>Modifier ses informations personnelles</li>
+											<li>Modifier son mot de passe</li>
+										</ul>
+									</div> -->
+								</div>
+							</div>
+							<!--DESCRIPTION POUR LE BUTTON GESTION DES PERFORMENCESS-->
+							<div class="border border-primary p-2 mt-2" *ngIf="role === 'PRESTATAIRE'">
+								<div class="justify-content-center">
+									<h4 class="font-weight-bold">Ce module offre la possibilité au prestataire d'acceder aux infos qui le concerne.</h4><br>
+									<div class="font-weight-bold ml-3" style="font-size: medium">
+										<h5 class="font-weight-bold">Demande de remboursement</h5>
+										<ul>
+											<li>Créer une demande de remboursement via la plateforme</li>
+											<li>Suivre l'évolution de sa demande</li>
+										</ul>
+										<h5 class="font-weight-bold">Demande de Bon de prise en charge</h5>
+										<ul>
+											<li>Demande de creation de bon de prise en charge</li>
+										</ul>
+										<h5 class="font-weight-bold">Accès aux listes importantes</h5>
+										<ul>
+											<li>Liste des actes nécéssitant une entente préalable </li>
+											<li>Liste des exclusions</li>
+											<li>Réseau de soin</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+			<!--             </div>
+			 -->        </div>
+					</section>
+        </ng-template>
+        <ng-template #contenu_pas_bon>
+            <div class="p-col-12 p-md-6 p-lg-3">
+				<div class="overview-box  box-sales">
+					<div class="overview-box-icon">
+						<i class="pi pi-bars"></i>
+					</div>
+					<div class="overview-box-title">Souscripteur</div>
+					<div class="overview-box-value">{{state?.nombreSouscripteur}}</div>
+				</div>
 			</div>
-			<div class="overview-box-title">Souscripteur</div>
-			<div class="overview-box-value">{{state?.nombreSouscripteur}}</div>
-		</div>
-	</div>
-	<!--
-	<div class="p-col-12 p-md-6 p-lg-3">
-		<div class="overview-box  box-views">
-			<div class="overview-box-icon">
-				<i class="pi pi-envelope"></i>
+			<!--
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<div class="overview-box  box-views">
+					<div class="overview-box-icon">
+						<i class="pi pi-envelope"></i>
+					</div>
+					<div class="overview-box-title">Police</div>
+					<div class="overview-box-value">{{state?.nombrePolice}}</div>
+				</div>
 			</div>
-			<div class="overview-box-title">Police</div>
-			<div class="overview-box-value">{{state?.nombrePolice}}</div>
-		</div>
-	</div>
-	-->
-
-	<div class="p-col-12 p-md-6 p-lg-3">
-		<div class="overview-box  box-users">
-			<div class="overview-box-icon">
-				<i class="pi pi-microsoft"></i>
-			</div>
-			<div class="overview-box-title">Garant</div>
-			<div class="overview-box-value">{{state?.nombreGarant}}</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-3">
-		<div class="overview-box  box-checkins">
-			<div class="overview-box-icon">
-				<i class="pi pi-compass"></i>
-			</div>
-			<div class="overview-box-title">Intermediaire</div>
-			<div class="overview-box-value">{{state?.nombreIntermediaire}}</div>
-			<!--   
-			<div class="overview-box-status"><b>3%</b> more than yesterday</div>
 			-->
-		</div>
-	</div>
-	<div class="p-col-12 p-md-6 p-lg-3">
 		
-
-			<div class="overview-box  box-checkins">
-				<div class="overview-box-icon">
-					<i class="pi pi-user"></i>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<div class="overview-box  box-users">
+					<div class="overview-box-icon">
+						<i class="pi pi-microsoft"></i>
+					</div>
+					<div class="overview-box-title">Garant</div>
+					<div class="overview-box-value">{{state?.nombreGarant}}</div>
 				</div>
-				<div class="overview-box-title">Assuré</div>
-				<div class="overview-box-value">{{state?.nombreAssure}}</div>
-				<!--   
-				<div class="overview-box-status"><b>3%</b> more than yesterday</div>
-				-->
 			</div>
-
 		
-	</div>
-
-
-	<!--
-	<div class="p-col-12 p-lg-4">
-		<div class="card donut ">
-			<h5 style="margin-top:0">Income Statistics</h5>
-			<div class="container">
-				<div class="donut-chart">
-					<p>%48</p>
-					<p>%16</p>
-					<p>%33</p>
-					<p>%6</p>
-					<div class="part1 portion-block">
-						<div class="circle"></div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				<div class="overview-box  box-checkins">
+					<div class="overview-box-icon">
+						<i class="pi pi-compass"></i>
 					</div>
-					<div class="part2 portion-block">
-						<div class="circle"></div>
-					</div>
-					<div class="part3 portion-block">
-						<div class="circle"></div>
-					</div>
-					<div class="part4 portion-block">
-						<div class="circle"></div>
-					</div>
-					<div class="part5 portion-block">
-						<div class="circle"></div>
-					</div>
-					<p class="center">$23,904<span>Total</span></p>
-				</div>
-				<div class="donut-chart-titles">
-					<div class="detail1 title">
-						<div class="color-code"></div>
-						<p>Detail 1</p>
-					</div>
-					<div class="detail2 title">
-						<div class="color-code"></div>
-						<p>Detail 2</p>
-					</div>
-					<div class="detail3 title">
-						<div class="color-code"></div>
-						<p>Detail 3</p>
-					</div>
-					<div class="detail4 title">
-						<div class="color-code"></div>
-						<p>Detail 4</p>
-					</div>
+					<div class="overview-box-title">Intermediaire</div>
+					<div class="overview-box-value">{{state?.nombreIntermediaire}}</div>
+					<!--   
+					<div class="overview-box-status"><b>3%</b> more than yesterday</div>
+					-->
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-4">
-		<div class="card progress-card">
-			<h5 style="margin-top:0">Great News!</h5>
-			<p>Podcasting operational change management inside of workflows to establish a framework. Collaboratively
-				administrate empowered markets via plug-and-play networks.</p>
-			<div class="progressbars">
-				<ul>
-					<li class="p-grid">
-						<label class="p-col-fixed">Sapphire</label>
-						<div class="progressbar p-col-fixed">
-							<div class="progress" style="width:70%;"></div>
+			<div class="p-col-12 p-md-6 p-lg-3">
+				
+		
+					<div class="overview-box  box-checkins">
+						<div class="overview-box-icon">
+							<i class="pi pi-user"></i>
 						</div>
-					</li>
-					<li class="p-grid">
-						<label class="p-col-fixed">Roma</label>
-						<div class="progressbar p-col-fixed">
-							<div class="progress" style="width:60%;"></div>
-						</div>
-					</li>
-					<li class="p-grid">
-						<label class="p-col-fixed">Ultima</label>
-						<div class="progressbar p-col-fixed">
-							<div class="progress" style="width:65%;"></div>
-						</div>
-					</li>
-					<li class="p-grid">
-						<label class="p-col-fixed">Barcelona</label>
-						<div class="progressbar p-col-fixed">
-							<div class="progress" style="width:30%;"></div>
-						</div>
-					</li>
-					<li class="p-grid">
-						<label class="p-col-fixed">Prestige</label>
-						<div class="progressbar p-col-fixed">
-							<div class="progress" style="width:85%;"></div>
-						</div>
-					</li>
-				</ul>
+						<div class="overview-box-title">Assuré</div>
+						<div class="overview-box-value">{{state?.nombreAssure}}</div>
+						<!--   
+						<div class="overview-box-status"><b>3%</b> more than yesterday</div>
+						-->
+					</div>
+		
+				
 			</div>
-			<div class="month-buttons">
-				<a><i class="pi pi-angle-left"></i> Previous Month</a>
-				<a>Next Month <i class="pi pi-angle-right"></i></a>
-			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-4">
-		<div class="card statistics p-grid p-nogutter p-dir-col p-justify-between">
-			<ul>
-				<li>
-					<img src="assets/layout/images/dashboard/bmw.jpg" alt="prestige-layout"/>
-					<div class="car-box">
-						<span class="car-info">BMW | 2018, Black</span>
-						<span class="car-id">#156122641</span>
-					</div>
-					<div class="percentage">
-						+%44
-					</div>
-				</li>
-				<li>
-					<img src="assets/layout/images/dashboard/honda.jpg" alt="prestige-layout"/>
-					<div class="car-box">
-						<span class="car-info">Honda | 2019, White</span>
-						<span class="car-id">#995123552</span>
-					</div>
-					<div class="percentage">
-						+%44
-					</div>
-				</li>
-				<li>
-					<img src="assets/layout/images/dashboard/volkswagen.jpg" alt="prestige-layout"/>
-					<div class="car-box">
-						<span class="car-info">Volkswagen | 2000, Red</span>
-						<span class="car-id">#480016380</span>
-					</div>
-					<div class="percentage">
-						+%44
-					</div>
-				</li>
-			</ul>
-			<img styleClass="statistic" src="assets/layout/images/dashboard/graph@2x.png" alt="prestige-layout"/>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-lg-8">
-		<div class="card chart">
-			<h5 style="margin-top:0">Quarter Reports</h5>
-			<p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-lg-4">
-		<div class="card chat">
-			<h5 style="margin-top:0">Chat</h5>
-			<ul>
-				<li class="message-from">
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<img src="assets/layout/images/avatar/avatar-kate.jpg" alt="prestige-layout"/>
+		
+		
+			<!--
+			<div class="p-col-12 p-lg-4">
+				<div class="card donut ">
+					<h5 style="margin-top:0">Income Statistics</h5>
+					<div class="container">
+						<div class="donut-chart">
+							<p>%48</p>
+							<p>%16</p>
+							<p>%33</p>
+							<p>%6</p>
+							<div class="part1 portion-block">
+								<div class="circle"></div>
+							</div>
+							<div class="part2 portion-block">
+								<div class="circle"></div>
+							</div>
+							<div class="part3 portion-block">
+								<div class="circle"></div>
+							</div>
+							<div class="part4 portion-block">
+								<div class="circle"></div>
+							</div>
+							<div class="part5 portion-block">
+								<div class="circle"></div>
+							</div>
+							<p class="center">$23,904<span>Total</span></p>
 						</div>
-						<div class="p-col">
-							<div class="chat-profile-info">
-								<span class="chat-profile">Kate</span>
-								<span class="chat-profile-job">Managment</span>
+						<div class="donut-chart-titles">
+							<div class="detail1 title">
+								<div class="color-code"></div>
+								<p>Detail 1</p>
 							</div>
-							<div class="chat-message">Hey Yeniffer And Micheal, I heard there is a task
-								about unexpected event occured near San Mateo recently. Can you guys handle
-								today?
+							<div class="detail2 title">
+								<div class="color-code"></div>
+								<p>Detail 2</p>
 							</div>
-							<div class="message-time">
-								22 mins ago
+							<div class="detail3 title">
+								<div class="color-code"></div>
+								<p>Detail 3</p>
+							</div>
+							<div class="detail4 title">
+								<div class="color-code"></div>
+								<p>Detail 4</p>
 							</div>
 						</div>
-					</div>
-				</li>
-				<li class="message-to">
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<img src="assets/layout/images/avatar/avatar-yeniffer.jpg"
-								 alt="prestige-layout"/>
-						</div>
-						<div class="p-col">
-							<div class="chat-profile-info">
-								<span class="chat-profile">Yeniffer</span>
-								<span class="chat-profile-job">Development</span>
-							</div>
-							<div class="chat-message">I’m busy today but we can work on it on Sunday
-								afternoon. Does that sounds good for you Micheal?
-							</div>
-							<div class="message-time">
-								12 mins ago
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="message-from">
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<img src="assets/layout/images/avatar/avatar-micheal.jpg"
-								 alt="prestige-layout"/>
-						</div>
-						<div class="p-col">
-							<div class="chat-profile-info">
-								<span class="chat-profile">Micheal</span>
-								<span class="chat-profile-job">Design</span>
-							</div>
-							<div class="chat-message">Sounds good for me.</div>
-							<div class="message-time">
-								2 mins ago
-							</div>
-						</div>
-					</div>
-				</li>
-				<li class="message-to">
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<img src="assets/layout/images/avatar/avatar-yeniffer.jpg"
-								 alt="prestige-layout"/>
-						</div>
-						<div class="p-col">
-							<div class="chat-profile-info">
-								<span class="chat-profile">Yeniffer</span>
-								<span class="chat-profile-job">Development</span>
-							</div>
-							<div class="chat-message">Great! See you on Sunday. Don't forget the bring coffee :)</div>
-							<div class="message-time">
-								12 mins ago
-							</div>
-						</div>
-					</div>
-				</li>
-			</ul>
-			<div class="new-message">
-				<div class="p-grid p-nogutter">
-					<div class="p-col">
-						<input placeholder="Write your message.."/>
-					</div>
-					<div class="p-col-fixed">
-						<button><i class="pi pi-paperclip"></i></button>
-						<button><i class="pi pi-upload"></i></button>
-						<button><i class="pi pi-save"></i></button>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-4">
-		<div class="card tasks">
-			<h5 style="margin-top:0">Tasks</h5>
-			<ul>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>Sales Reports</span>
-					<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
-				</li>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>Pay Invoices</span>
-					<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
-				</li>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>Birthday Party</span>
-					<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
-				</li>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>Client Meeting</span>
-					<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
-				</li>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>New Themes</span>
-					<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
-				</li>
-				<li>
-					<p-checkbox binary="true"></p-checkbox>
-					<span>Flight Ticket</span>
-					<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-4">
-		<div class="card resolution-center">
-			<h5 style="margin-top:0">Resolution Center</h5>
-			<div class="p-inputgroup">
-				<span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-				<input type="text" pInputText placeholder="Name">
+		
+			<div class="p-col-12 p-md-6 p-lg-4">
+				<div class="card progress-card">
+					<h5 style="margin-top:0">Great News!</h5>
+					<p>Podcasting operational change management inside of workflows to establish a framework. Collaboratively
+						administrate empowered markets via plug-and-play networks.</p>
+					<div class="progressbars">
+						<ul>
+							<li class="p-grid">
+								<label class="p-col-fixed">Sapphire</label>
+								<div class="progressbar p-col-fixed">
+									<div class="progress" style="width:70%;"></div>
+								</div>
+							</li>
+							<li class="p-grid">
+								<label class="p-col-fixed">Roma</label>
+								<div class="progressbar p-col-fixed">
+									<div class="progress" style="width:60%;"></div>
+								</div>
+							</li>
+							<li class="p-grid">
+								<label class="p-col-fixed">Ultima</label>
+								<div class="progressbar p-col-fixed">
+									<div class="progress" style="width:65%;"></div>
+								</div>
+							</li>
+							<li class="p-grid">
+								<label class="p-col-fixed">Barcelona</label>
+								<div class="progressbar p-col-fixed">
+									<div class="progress" style="width:30%;"></div>
+								</div>
+							</li>
+							<li class="p-grid">
+								<label class="p-col-fixed">Prestige</label>
+								<div class="progressbar p-col-fixed">
+									<div class="progress" style="width:85%;"></div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="month-buttons">
+						<a><i class="pi pi-angle-left"></i> Previous Month</a>
+						<a>Next Month <i class="pi pi-angle-right"></i></a>
+					</div>
+				</div>
 			</div>
-
-			<div class="p-inputgroup">
-				<span class="p-inputgroup-addon"><i class="pi pi-envelope"></i></span>
-				<input type="text" pInputText placeholder="E-Mail">
-			</div>
-
-			<textarea type="text" [rows]="9" [autoResize]="false" pInputTextarea placeholder="Your Message"></textarea>
-
-			<div class="resolution-button-bar">
-				<button type="button" label="Send Message" pButton></button>
-				<a>View old messages</a>
-			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-lg-4">
-		<div class="card team">
-			<h5 style="margin-top:0">Team Members</h5>
-			<ul>
-				<li>
-					<img src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout"/>
-					<div class="team-box">
-                                    <span class="team-member">
-                                        <div class="team-member-status"></div>Pedro Anorim
-                                    </span>
-						<span class="team-member-job">Development</span>
-					</div>
-					<button type="button" label="Add" pButton></button>
-				</li>
-				<li>
-					<img src="assets/layout/images/avatar/avatar-daisy.jpg" alt="prestige-layout"/>
-					<div class="team-box">
-                                    <span class="team-member">
-                                        <div class="team-member-status"></div>Daisy Murphy
-                                    </span>
-						<span class="team-member-job">Design</span>
-					</div>
-					<button type="button" label="Add" pButton></button>
-				</li>
-				<li>
-					<img src="assets/layout/images/avatar/avatar-mbah.jpg" alt="prestige-layout"/>
-					<div class="team-box">
-                                    <span class="team-member">
-                                        <div class="team-member-status"></div>Mbah ENow
-                                    </span>
-						<span class="team-member-job">Management</span>
-					</div>
-					<button type="button" label="Add" pButton></button>
-				</li>
-				<li>
-					<img src="assets/layout/images/avatar/avatar-qin.jpg" alt="prestige-layout"/>
-					<div class="team-box">
-                                    <span class="team-member">
-                                        <div class="team-member-status"></div>Qin Shi
-                                    </span>
-						<span class="team-member-job">Management</span>
-					</div>
-					<button type="button" label="Add" pButton></button>
-				</li>
-			</ul>
-			<div class="all-members-link">
-				<a>See all team members</a>
-			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-lg-8">
-		<div class="card timeline">
-			<h5 style="margin-top:0">Timeline</h5>
-			<ul>
-				<li>
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<div class="timeline-icon">
-								<i class="pi pi-inbox"></i>
-							</div>
-						</div>
-						<div class="p-col">
-							<div class="time-line-event">
-								<span class="timeline-event-title">Message Recived</span>
-								<div class="timeline-event-message">Unexpected event happened near San Mateo
-								</div>
-								<div class="timeline-event-time">
-									2 mins ago
-								</div>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<div class="timeline-icon">
-								<i class="pi pi-wifi"></i>
-							</div>
-						</div>
-						<div class="p-col">
-							<div class="time-line-event">
-								<span class="timeline-event-title">Network Issue</span>
-								<div class="timeline-event-message">Unexpected problem on mail service
-								</div>
-								<div class="timeline-event-time">
-									22 mins ago
-								</div>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<div class="timeline-icon">
-								<i class="pi pi-inbox"></i>
-							</div>
-						</div>
-						<div class="p-col">
-							<div class="time-line-event">
-								<span class="timeline-event-title">Message Recived</span>
-								<div class="timeline-event-message">Warren Shaw finished Task #21</div>
-								<div class="timeline-event-time">
-									24 mins ago
-								</div>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<div class="timeline-icon">
-								<i class="pi pi-video"></i>
-							</div>
-						</div>
-						<div class="p-col">
-							<div class="time-line-event">
-								<span class="timeline-event-title">Video Recorded</span>
-								<div class="timeline-event-message">Brenda Soto recorded unexpected event
-									that happen near Santa Rosa
-								</div>
-								<div class="timeline-event-time">
-									34 mins ago
-								</div>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li>
-					<div class="p-grid">
-						<div class="p-col-fixed">
-							<div class="timeline-icon">
-								<i class="pi pi-map-marker"></i>
-							</div>
-						</div>
-						<div class="p-col">
-							<div class="time-line-event">
-								<span class="timeline-event-title">Location Shared</span>
-								<div class="timeline-event-message">John Swisher shared new location on
-									Vallejo
-								</div>
-								<div class="timeline-event-time">
-									42 mins ago
-								</div>
-							</div>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6 p-lg-4">
-		<div class="card weather">
-			<h5 style="margin-top:0">Weather</h5>
-			<div class="weather-wrapper">
-				<div class="weather-days">
-					<div class="city">Antalya</div>
-					<div class="weather-today">
-						<div class="today">
-							<div class="day">Mon</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>18°</b></div>
-								<div class="weather-type">Rain</div>
-							</div>
-						</div>
-
-						<img src="assets/layout/images/dashboard/icon-rain.svg" alt="prestige-layout"/>
-					</div>
+		
+			<div class="p-col-12 p-md-6 p-lg-4">
+				<div class="card statistics p-grid p-nogutter p-dir-col p-justify-between">
 					<ul>
 						<li>
-							<div class="day">Tue</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>24°</b></div>
-								<div class="weather-type">Cloudy</div>
+							<img src="assets/layout/images/dashboard/bmw.jpg" alt="prestige-layout"/>
+							<div class="car-box">
+								<span class="car-info">BMW | 2018, Black</span>
+								<span class="car-id">#156122641</span>
+							</div>
+							<div class="percentage">
+								+%44
 							</div>
 						</li>
 						<li>
-							<div class="day">Wed</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>18°</b></div>
-								<div class="weather-type">Cloudy</div>
+							<img src="assets/layout/images/dashboard/honda.jpg" alt="prestige-layout"/>
+							<div class="car-box">
+								<span class="car-info">Honda | 2019, White</span>
+								<span class="car-id">#995123552</span>
+							</div>
+							<div class="percentage">
+								+%44
 							</div>
 						</li>
 						<li>
-							<div class="day">Thu</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>19°</b></div>
-								<div class="weather-type">Cloudy</div>
+							<img src="assets/layout/images/dashboard/volkswagen.jpg" alt="prestige-layout"/>
+							<div class="car-box">
+								<span class="car-info">Volkswagen | 2000, Red</span>
+								<span class="car-id">#480016380</span>
 							</div>
-						</li>
-						<li>
-							<div class="day">Fri</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>22°</b></div>
-								<div class="weather-type">Rain</div>
-							</div>
-						</li>
-						<li>
-							<div class="day">Sat</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>22°</b></div>
-								<div class="weather-type">Rain</div>
-							</div>
-						</li>
-						<li>
-							<div class="day">Sun</div>
-							<div class="weather-info">
-								<div class="weather-value"><b>27°</b></div>
-								<div class="weather-type">Clear</div>
+							<div class="percentage">
+								+%44
 							</div>
 						</li>
 					</ul>
+					<img styleClass="statistic" src="assets/layout/images/dashboard/graph@2x.png" alt="prestige-layout"/>
 				</div>
 			</div>
-			<div class="change-city-link">
-				<a>Change City</a>
-			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-md-6  p-lg-4">
-		<div class="user-card card">
-			<div class="user-card-header">
-				<img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout"/>
-			</div>
-			<div class="user-card-content">
-				<img src="assets/layout/images/avatar/avatar-igor.jpg" alt="prestige-layout"/>
-				<p-menu #menu popup="popup" [model]="items" appendTo="body"></p-menu>
-				<button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"></button>
-
-				<div class="user-card-name">
-					<span>Igor Antonovich</span>
+		
+			<div class="p-col-12 p-lg-8">
+				<div class="card chart">
+					<h5 style="margin-top:0">Quarter Reports</h5>
+					<p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
 				</div>
-				<div class="user-card-status">
-					<span>Administrator</span>
-				</div>
-				<div class="user-detail">
+			</div>
+		
+			<div class="p-col-12 p-lg-4">
+				<div class="card chat">
+					<h5 style="margin-top:0">Chat</h5>
 					<ul>
-						<li>
-							Followers
-							<div class="value">1098 <i class="pi pi-arrow-circle-right"></i>
-							</div>
-						</li>
-						<li>
-							Following
-							<div class="value">22,681 <i class="pi pi-arrow-circle-right"></i>
-							</div>
-						</li>
-						<li>
-							Likes
-							<div class="value">880 <i class="pi pi-arrow-circle-right"></i></div>
-						</li>
-						<li>
-							Views
-							<div class="value">1298 <i class="pi pi-arrow-circle-right"></i></div>
-						</li>
-
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="p-col-12 p-lg-8">
-		<div class="card table">
-			<h5 style="margin-top:0">Inventory</h5>
-			<p-table [value]="products" [paginator]="true" [rows]="5">
-				<ng-template pTemplate="header">
-					<tr>
-						<th>Logo</th>
-						<th pSortableColumn="code">Code
-							<p-sortIcon field="code"></p-sortIcon>
-						</th>
-						<th pSortableColumn="name">Name
-							<p-sortIcon field="name"></p-sortIcon>
-						</th>
-						<th pSortableColumn="category">Category
-							<p-sortIcon field="category"></p-sortIcon>
-						</th>
-						<th pSortableColumn="price">Price
-							<p-sortIcon field="price"></p-sortIcon>
-						</th>
-						<th>View</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-product>
-					<tr>
-						<td>
-							<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" width="50"/>
-						</td>
-						<td>{{product.code}}</td>
-						<td>{{product.name}}</td>
-						<td>{{product.category}}</td>
-						<td>{{product.price | currency:'USD'}}</td>
-						<td style="text-align: center">
+						<li class="message-from">
 							<div class="p-grid">
-								<div class="p-col-6">
-									<button pButton type="button" icon="pi pi-search"></button>
+								<div class="p-col-fixed">
+									<img src="assets/layout/images/avatar/avatar-kate.jpg" alt="prestige-layout"/>
 								</div>
-								<div class="p-col-6">
-									<button pButton type="button" icon="pi pi-times" class="p-button-danger"></button>
+								<div class="p-col">
+									<div class="chat-profile-info">
+										<span class="chat-profile">Kate</span>
+										<span class="chat-profile-job">Managment</span>
+									</div>
+									<div class="chat-message">Hey Yeniffer And Micheal, I heard there is a task
+										about unexpected event occured near San Mateo recently. Can you guys handle
+										today?
+									</div>
+									<div class="message-time">
+										22 mins ago
+									</div>
 								</div>
 							</div>
-						</td>
-					</tr>
-				</ng-template>
-			</p-table>
-		</div>
-	</div>
-
-
--->
-
+						</li>
+						<li class="message-to">
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<img src="assets/layout/images/avatar/avatar-yeniffer.jpg"
+										 alt="prestige-layout"/>
+								</div>
+								<div class="p-col">
+									<div class="chat-profile-info">
+										<span class="chat-profile">Yeniffer</span>
+										<span class="chat-profile-job">Development</span>
+									</div>
+									<div class="chat-message">I’m busy today but we can work on it on Sunday
+										afternoon. Does that sounds good for you Micheal?
+									</div>
+									<div class="message-time">
+										12 mins ago
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="message-from">
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<img src="assets/layout/images/avatar/avatar-micheal.jpg"
+										 alt="prestige-layout"/>
+								</div>
+								<div class="p-col">
+									<div class="chat-profile-info">
+										<span class="chat-profile">Micheal</span>
+										<span class="chat-profile-job">Design</span>
+									</div>
+									<div class="chat-message">Sounds good for me.</div>
+									<div class="message-time">
+										2 mins ago
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="message-to">
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<img src="assets/layout/images/avatar/avatar-yeniffer.jpg"
+										 alt="prestige-layout"/>
+								</div>
+								<div class="p-col">
+									<div class="chat-profile-info">
+										<span class="chat-profile">Yeniffer</span>
+										<span class="chat-profile-job">Development</span>
+									</div>
+									<div class="chat-message">Great! See you on Sunday. Don't forget the bring coffee :)</div>
+									<div class="message-time">
+										12 mins ago
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="new-message">
+						<div class="p-grid p-nogutter">
+							<div class="p-col">
+								<input placeholder="Write your message.."/>
+							</div>
+							<div class="p-col-fixed">
+								<button><i class="pi pi-paperclip"></i></button>
+								<button><i class="pi pi-upload"></i></button>
+								<button><i class="pi pi-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-md-6 p-lg-4">
+				<div class="card tasks">
+					<h5 style="margin-top:0">Tasks</h5>
+					<ul>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>Sales Reports</span>
+							<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
+						</li>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>Pay Invoices</span>
+							<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
+						</li>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>Birthday Party</span>
+							<span class="task-badge-open">Open<i class="pi pi-circle-on"></i></span>
+						</li>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>Client Meeting</span>
+							<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
+						</li>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>New Themes</span>
+							<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
+						</li>
+						<li>
+							<p-checkbox binary="true"></p-checkbox>
+							<span>Flight Ticket</span>
+							<span class="task-badge-closed">Closed<i class="pi pi-circle-on"></i></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-md-6 p-lg-4">
+				<div class="card resolution-center">
+					<h5 style="margin-top:0">Resolution Center</h5>
+					<div class="p-inputgroup">
+						<span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+						<input type="text" pInputText placeholder="Name">
+					</div>
+		
+					<div class="p-inputgroup">
+						<span class="p-inputgroup-addon"><i class="pi pi-envelope"></i></span>
+						<input type="text" pInputText placeholder="E-Mail">
+					</div>
+		
+					<textarea type="text" [rows]="9" [autoResize]="false" pInputTextarea placeholder="Your Message"></textarea>
+		
+					<div class="resolution-button-bar">
+						<button type="button" label="Send Message" pButton></button>
+						<a>View old messages</a>
+					</div>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-lg-4">
+				<div class="card team">
+					<h5 style="margin-top:0">Team Members</h5>
+					<ul>
+						<li>
+							<img src="assets/layout/images/avatar/avatar-pedro.jpg" alt="prestige-layout"/>
+							<div class="team-box">
+											<span class="team-member">
+												<div class="team-member-status"></div>Pedro Anorim
+											</span>
+								<span class="team-member-job">Development</span>
+							</div>
+							<button type="button" label="Add" pButton></button>
+						</li>
+						<li>
+							<img src="assets/layout/images/avatar/avatar-daisy.jpg" alt="prestige-layout"/>
+							<div class="team-box">
+											<span class="team-member">
+												<div class="team-member-status"></div>Daisy Murphy
+											</span>
+								<span class="team-member-job">Design</span>
+							</div>
+							<button type="button" label="Add" pButton></button>
+						</li>
+						<li>
+							<img src="assets/layout/images/avatar/avatar-mbah.jpg" alt="prestige-layout"/>
+							<div class="team-box">
+											<span class="team-member">
+												<div class="team-member-status"></div>Mbah ENow
+											</span>
+								<span class="team-member-job">Management</span>
+							</div>
+							<button type="button" label="Add" pButton></button>
+						</li>
+						<li>
+							<img src="assets/layout/images/avatar/avatar-qin.jpg" alt="prestige-layout"/>
+							<div class="team-box">
+											<span class="team-member">
+												<div class="team-member-status"></div>Qin Shi
+											</span>
+								<span class="team-member-job">Management</span>
+							</div>
+							<button type="button" label="Add" pButton></button>
+						</li>
+					</ul>
+					<div class="all-members-link">
+						<a>See all team members</a>
+					</div>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-lg-8">
+				<div class="card timeline">
+					<h5 style="margin-top:0">Timeline</h5>
+					<ul>
+						<li>
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<div class="timeline-icon">
+										<i class="pi pi-inbox"></i>
+									</div>
+								</div>
+								<div class="p-col">
+									<div class="time-line-event">
+										<span class="timeline-event-title">Message Recived</span>
+										<div class="timeline-event-message">Unexpected event happened near San Mateo
+										</div>
+										<div class="timeline-event-time">
+											2 mins ago
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<div class="timeline-icon">
+										<i class="pi pi-wifi"></i>
+									</div>
+								</div>
+								<div class="p-col">
+									<div class="time-line-event">
+										<span class="timeline-event-title">Network Issue</span>
+										<div class="timeline-event-message">Unexpected problem on mail service
+										</div>
+										<div class="timeline-event-time">
+											22 mins ago
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<div class="timeline-icon">
+										<i class="pi pi-inbox"></i>
+									</div>
+								</div>
+								<div class="p-col">
+									<div class="time-line-event">
+										<span class="timeline-event-title">Message Recived</span>
+										<div class="timeline-event-message">Warren Shaw finished Task #21</div>
+										<div class="timeline-event-time">
+											24 mins ago
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<div class="timeline-icon">
+										<i class="pi pi-video"></i>
+									</div>
+								</div>
+								<div class="p-col">
+									<div class="time-line-event">
+										<span class="timeline-event-title">Video Recorded</span>
+										<div class="timeline-event-message">Brenda Soto recorded unexpected event
+											that happen near Santa Rosa
+										</div>
+										<div class="timeline-event-time">
+											34 mins ago
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="p-grid">
+								<div class="p-col-fixed">
+									<div class="timeline-icon">
+										<i class="pi pi-map-marker"></i>
+									</div>
+								</div>
+								<div class="p-col">
+									<div class="time-line-event">
+										<span class="timeline-event-title">Location Shared</span>
+										<div class="timeline-event-message">John Swisher shared new location on
+											Vallejo
+										</div>
+										<div class="timeline-event-time">
+											42 mins ago
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-md-6 p-lg-4">
+				<div class="card weather">
+					<h5 style="margin-top:0">Weather</h5>
+					<div class="weather-wrapper">
+						<div class="weather-days">
+							<div class="city">Antalya</div>
+							<div class="weather-today">
+								<div class="today">
+									<div class="day">Mon</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>18°</b></div>
+										<div class="weather-type">Rain</div>
+									</div>
+								</div>
+		
+								<img src="assets/layout/images/dashboard/icon-rain.svg" alt="prestige-layout"/>
+							</div>
+							<ul>
+								<li>
+									<div class="day">Tue</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>24°</b></div>
+										<div class="weather-type">Cloudy</div>
+									</div>
+								</li>
+								<li>
+									<div class="day">Wed</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>18°</b></div>
+										<div class="weather-type">Cloudy</div>
+									</div>
+								</li>
+								<li>
+									<div class="day">Thu</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>19°</b></div>
+										<div class="weather-type">Cloudy</div>
+									</div>
+								</li>
+								<li>
+									<div class="day">Fri</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>22°</b></div>
+										<div class="weather-type">Rain</div>
+									</div>
+								</li>
+								<li>
+									<div class="day">Sat</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>22°</b></div>
+										<div class="weather-type">Rain</div>
+									</div>
+								</li>
+								<li>
+									<div class="day">Sun</div>
+									<div class="weather-info">
+										<div class="weather-value"><b>27°</b></div>
+										<div class="weather-type">Clear</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="change-city-link">
+						<a>Change City</a>
+					</div>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-md-6  p-lg-4">
+				<div class="user-card card">
+					<div class="user-card-header">
+						<img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout"/>
+					</div>
+					<div class="user-card-content">
+						<img src="assets/layout/images/avatar/avatar-igor.jpg" alt="prestige-layout"/>
+						<p-menu #menu popup="popup" [model]="items" appendTo="body"></p-menu>
+						<button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"></button>
+		
+						<div class="user-card-name">
+							<span>Igor Antonovich</span>
+						</div>
+						<div class="user-card-status">
+							<span>Administrator</span>
+						</div>
+						<div class="user-detail">
+							<ul>
+								<li>
+									Followers
+									<div class="value">1098 <i class="pi pi-arrow-circle-right"></i>
+									</div>
+								</li>
+								<li>
+									Following
+									<div class="value">22,681 <i class="pi pi-arrow-circle-right"></i>
+									</div>
+								</li>
+								<li>
+									Likes
+									<div class="value">880 <i class="pi pi-arrow-circle-right"></i></div>
+								</li>
+								<li>
+									Views
+									<div class="value">1298 <i class="pi pi-arrow-circle-right"></i></div>
+								</li>
+		
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="p-col-12 p-lg-8">
+				<div class="card table">
+					<h5 style="margin-top:0">Inventory</h5>
+					<p-table [value]="products" [paginator]="true" [rows]="5">
+						<ng-template pTemplate="header">
+							<tr>
+								<th>Logo</th>
+								<th pSortableColumn="code">Code
+									<p-sortIcon field="code"></p-sortIcon>
+								</th>
+								<th pSortableColumn="name">Name
+									<p-sortIcon field="name"></p-sortIcon>
+								</th>
+								<th pSortableColumn="category">Category
+									<p-sortIcon field="category"></p-sortIcon>
+								</th>
+								<th pSortableColumn="price">Price
+									<p-sortIcon field="price"></p-sortIcon>
+								</th>
+								<th>View</th>
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-product>
+							<tr>
+								<td>
+									<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" width="50"/>
+								</td>
+								<td>{{product.code}}</td>
+								<td>{{product.name}}</td>
+								<td>{{product.category}}</td>
+								<td>{{product.price | currency:'USD'}}</td>
+								<td style="text-align: center">
+									<div class="p-grid">
+										<div class="p-col-6">
+											<button pButton type="button" icon="pi pi-search"></button>
+										</div>
+										<div class="p-col-6">
+											<button pButton type="button" icon="pi pi-times" class="p-button-danger"></button>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</ng-template>
+					</p-table>
+				</div>
+			</div>
+		
+		
+		-->
+		
+        </ng-template>
 
 
 </div>

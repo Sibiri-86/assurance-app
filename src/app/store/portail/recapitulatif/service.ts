@@ -8,6 +8,7 @@ import { ProduitPharmaceutiqueExclu, ProduitPharmaceutiqueExcluEntite, ProduitPh
 import { Prefinancement } from '../../prestation/prefinancement/model';
 import { Sinistre } from '../../prestation/tierPayant/model';
 import { ConsommationPortail, DepenseFamille, PrefinancementPortail, TiersPayantPortail} from './model';
+import { createRequestOption } from 'src/app/module/util/loader-util';
 
 @Injectable({providedIn: 'root'})
 export class PortailService {
@@ -132,6 +133,20 @@ getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(numero: numb
       map((response: any) => response),
       catchError(this.handleError())
   );
+}
+
+findMessageBienvenuByNumero(numero: string): Observable<any> {
+  // @FIXME: get request
+  return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-message-string`, numero).pipe(
+      map((response: any) => response),
+      catchError(this.handleError())
+  );
+}
+
+findMessageBienvenuByNumeroLong(numero: string): Observable<any> {
+  // @FIXME: get request
+  return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-message-long`, numero,
+  {params: createRequestOption({numero}), observe: 'response'});
 }
 
   private handleError<T>() {

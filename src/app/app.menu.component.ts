@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppMainComponent } from './app.main.component';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 import { Function } from './module/common/config/role.user';
+import { AuthGuard } from './auth/user-route-access-service';
 
 @Component({
     selector: 'app-menu',
@@ -215,7 +216,7 @@ export class AppMenuComponent implements OnInit {
             },*/
             {
                 label: 'Assuré Consom.', icon: ' pi pi-fw pi-wallet', routerLink: ['/portail/assureConsommation'],
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE),
             },
             {
                 label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'],
