@@ -119,6 +119,10 @@ import { ConventionPrestataireComponent } from './module/portail/convention-pres
 import { FoireComponent } from './module/contrat/foire/foire.component';
 import { FoireQuestionComponent } from './module/portail/foire-question/foire-question.component';
 import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme-prestataire/assure-bareme-prestataire.component';
+import { RemboursementInitieComponent } from './module/portail/remboursement-initie/remboursement-initie.component';
+import { RemboursementInstanceComponent } from './module/prestation/remboursement-instance/remboursement-instance.component';
+import { RemboursementEntenteComponent } from './module/medical/remboursement-entente/remboursement-entente.component';
+import { BonPrestataireComponent } from './module/portail/bon-prestataire/bon-prestataire.component';
 
 @NgModule({
     imports: [
@@ -255,6 +259,10 @@ import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme
                     {path: 'contrat/foire', component: FoireComponent},
                     {path: 'portail/foire-question', component: FoireQuestionComponent},
                     {path: 'portail/bareme-prestataire', component: AssureBaremePrestataireComponent},
+                    {path: 'portail/remboursement-initie', component: RemboursementInitieComponent},
+                    {path: 'prestation/remboursement-instance', component: RemboursementInstanceComponent},
+                    {path: 'medical/remboursement-entente', component: RemboursementEntenteComponent},
+                    {path: 'portail/bon-prestataire', component: BonPrestataireComponent},
 
                     
                     

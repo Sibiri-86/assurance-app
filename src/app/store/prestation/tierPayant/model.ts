@@ -74,6 +74,7 @@ export interface Prestation {
     medecin?: Medecin;
     dateSoins?: Date;
     produitPharmaceutique?: Array<ProduitPharmaceutique>;
+    produit?: ProduitPharmaceutique;
     familleActe?: PlafondFamilleActe;
     acte?: PlafondActe;
     centreExecutant?: Prestataire;

@@ -1,0 +1,10 @@
+import { createAction, props } from '@ngrx/store';
+import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/emum.etat.ordre-reglement';
+import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
+import { Report } from '../../contrat/police/model';
+import { TypePaiement } from '../../prestation/prefinancement/model';
+import { BonPrestataire, BonPrestataireList } from './model';
+export const createBonPrestataire = createAction('[App Init] Create bon for prestataire', props<BonPrestataire>());
+export const setBonPrestataire = createAction('[App Init] set bon for prestataire',  props<BonPrestataireList>());
+export const loadBonPrestataire = createAction('[App Init] load bon for prestataire');
+export const setReportBonPrestataire = createAction('[set Report] set Report Bon Prestataire', props<{reportFile: ArrayBuffer}>());

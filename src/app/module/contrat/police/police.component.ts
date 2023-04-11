@@ -972,12 +972,25 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
                }
              }
            }
+
+           /* this.plafondFamilleActeConstructConstant.forEach(pla=> {
+            pla.dateEffet = new Date(this.groupe.dateEffet);
+            if(pla.listeActe) {
+              pla.listeActe.forEach(ac=>{
+                ac.dateEffet = new Date(this.groupe.dateEffet);
+                if(ac.listeSousActe) {
+                  ac.listeSousActe.forEach(sou=>{
+                    sou.dateEffet = new Date(this.groupe.dateEffet);
+                  });
+                }
+              });
+            }
+           }); */
            this.plafondActuelleConfiguration[i].plafondFamilles = this.plafondFamilleActeConstructConstant;
            
            if(i+1 < this.plafondActuelleConfiguration.length) {
              for(let x = i+1; x<this.plafondActuelleConfiguration.length ; x++){
                if(this.plafondActuelleConfiguration[i].garantie.id === this.plafondActuelleConfiguration[x].garantie.id) {
-                 
                  this.plafondActuelleConfiguration.splice(x,2);
                console.log("=========================vrai=====2==========",this.plafondActuelleConfiguration.length);
                }

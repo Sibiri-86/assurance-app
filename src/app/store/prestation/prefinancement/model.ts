@@ -129,6 +129,11 @@ export interface Prestation {
     typePrestation?: TypePrestation;
     garantie?: Garantie;
     bonPriseEnCharge?: BonPriseEnCharge;
+    produit?: ProduitPharmaceutique;
+    valider?: Boolean;
+    isPrestaSimple?: Boolean;
+    isPrestaProduit?: Boolean;
+
     /*ajout information pour bon de prise en charge*/
 }
 

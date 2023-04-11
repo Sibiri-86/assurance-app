@@ -1,0 +1,622 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addPrefinancement()"></button>
+					<button pButton pRipple label="Supprimer" [disabled]="selectedPrefinancement?.length<1" icon="pi pi-trash" class="p-button-danger p-mr-2 p-mb-2" (click)="supprimerPrefinancement()"></button>
+
+                </ng-template>
+                
+                
+			</p-toolbar>
+            
+                    <div class="card">
+                        <div class="p-col-6">
+                            
+                        </div>
+                        <div class="p-col-6">
+
+                        </div>
+                    </div>
+
+                    <p-table #dt [value]="bonPrestataireList" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols"  
+                    [rowHover]="true"  styleClass="p-datatable-customers"
+                    currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
+                    
+
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                            
+                            
+                                <th>Date déclaré</th>
+                                <th>Numéro</th>
+                                <th>Patient</th>
+                                <th>Assuré Principal</th>
+                                <th>Payé</th>
+                                <th style="width:8rem"></th>
+                                
+                            </tr>
+                        </ng-template>
+            
+                        <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                            <tr>
+                        
+                                <td > {{rowData.dateSaisie | formatTableValue : 'date'}}</td>
+                                <td> {{rowData.adherent?.numero}}</td>
+                                <td> {{rowData.adherent?.nom}} {{rowData.adherent?.prenom}}</td>
+                                <td> <span *ngIf="rowData.adherent?.adherentPrincipal">{{rowData.adherent?.adherentPrincipal?.nom}} {{rowData.adherent?.adherentPrincipal?.prenom}}</span>
+                                    <span *ngIf="!rowData.adherent?.adherentPrincipal">{{rowData.adherent?.nom}} {{rowData.adherent?.prenom}}</span>
+                                </td>
+                                
+                                <td>
+                                    <button pButton pRipple type="button"   icon="pi pi-eye" class="p-button-info p-mb-2" (click)="payer(rowData)"></button>
+                                </td>
+
+                                <td style="text-align:center">
+                                    <button pButton pRipple type="button"   icon="pi pi-pencil" class="p-button-warning p-mb-2" (click)="modifier(rowData)"></button>
+                                </td>
+                        
+                            </tr>
+                        </ng-template>
+                    </p-table>
+            
+
+
+            <!-- <p-tree [value]="fileTree"  selectionMode="multiple" [(selection)]="selectedNodes2">
+                <ng-template let-node pTemplate="url">
+                <b >{{node.label}}</b> 
+          
+                </ng-template>
+                <ng-template let-node pTemplate="default">
+                    
+                    <b><a [href]="node.data">{{node.label}} </a> </b>
+                    
+                    
+                    
+                </ng-template>
+               
+                
+            </p-tree>  -->
+
+
+        </div> 
+        
+        
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Initié un remboursement" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">  
+                    <p-toolbar styleClass="p-mb-4">
+                        <ng-template pTemplate="left">
+                           
+                            <div>
+                                <label for="lastname2" style="font-weight: bold;">Matricule assuré</label><br>
+                                <input id="matriculeAdherent"  type="text" formControlName="matriculeAdherent" pInputText  (blur)="rechercherAdherent($event)">                                                
+                            </div>
+                        </ng-template>
+                    </p-toolbar>
+                    <p-splitter [style]="{'height': '400px'}" styleClass="mb-5" >
+                       
+                        
+                <ng-template  pTemplate>
+                    <p-fieldset legend="Assuré" toggleable="true">
+                        <div class="p-grid" style="background-color: #e7e7e3;" *ngIf="adherentSelected">
+                            <div class="p-col-4"></div>         
+                            <div class="p-col-8 flex align-items-center justify-content-center"><h5 style="font-weight: bold;">PASSEPORT SANTE</h5></div>   
+                            <div class="p-col-12"><h6>{{adherentSelected?.groupe?.police?.garant?.nom}}</h6></div>
+                                    
+                            <div class="p-col-9" >
+                                <div class="p-fluid p-formgrid p-grid ">
+                                    <div class="p-field p-col-12">
+                                        <label for="lastname2" style="font-weight: bold;">Souscripteur:&nbsp;&nbsp;&nbsp; </label> <span style="color: rgb(235, 8, 8);">{{adherentSelected?.groupe?.police?.nom}}</span>
+                                        
+                                    </div>
+                                    <div class="p-field p-col-12">
+                                        <label for="lastname2" style="font-weight: bold;">N° Police:&nbsp;&nbsp;&nbsp; </label><span>{{adherentSelected?.groupe?.police?.numero}}</span>
+                                       
+                                    </div>
+                                    <div class="p-field p-col-6">
+                                        <label for="lastname2" style="font-weight: bold;">Taux: &nbsp;&nbsp;&nbsp;</label> <span style="color: rgb(235, 8, 8);">{{adherentSelected?.groupe?.taux?.taux | formatTableValue: 'number':true}} %</span>
+                                       
+                                    </div>
+                                    <div class="p-field p-col-6">
+                                        <label for="lastname2" style="font-weight: bold;">N° Assuré: &nbsp;&nbsp;&nbsp;</label> <span>{{adherentSelected.numero | formatTableValue: 'number':true}}</span>
+                                        
+                                    </div>
+                    
+                                </div>
+                    
+                                <div class="p-fluid p-formgrid p-grid">
+                    
+                                    <div class="p-field p-col-6">
+                                        <label for="lastname2" style="font-weight: bold;">Effet: &nbsp;&nbsp;&nbsp;</label>
+                                        <span *ngIf="adherentSelected.dateIncorporation !==null">{{adherentSelected.dateIncorporation | formatTableValue: 'date'}}</span>
+                    
+                                        <span *ngIf="adherentSelected.dateIncorporation ===null">{{adherentSelected?.groupe?.dateEffet | formatTableValue: 'date'}}</span>
+                              
+                                        
+                                    </div>
+                    
+                                    <div class="p-field p-col-6">
+                                        <label for="lastname2" style="font-weight: bold;">Echéance:&nbsp;&nbsp;&nbsp;</label>
+                                        <span>{{adherentSelected?.groupe?.dateEcheance | formatTableValue: 'date'}}</span>
+                                        
+                                    </div>
+                    
+                                    <div class="p-field p-col-12">
+                                        <label for="lastname2" style="font-weight: bold;">Assuré:&nbsp;&nbsp;&nbsp;</label>
+                                        <span *ngIf="adherentSelected.adherentPrincipal !==null" style="color: rgb(235, 8, 8);">{{adherentSelected?.adherentPrincipal?.nom }} {{adherentSelected?.adherentPrincipal?.prenom}}</span>
+                                        <span *ngIf="adherentSelected.adherentPrincipal ===null" style="color: rgb(235, 8, 8);">{{adherentSelected.nom }} {{adherentSelected.prenom}}</span>
+                                   
+                                    </div>
+                                    <div class="p-field p-col-12">
+                                        <label for="lastname2" style="font-weight: bold;">Patient:&nbsp;&nbsp;&nbsp;</label>
+                                        <span>{{adherentSelected.nom }} {{adherentSelected.prenom}}</span>
+                                    </div>
+                    
+                                    
+                    
+                                </div>
+                    
+                            </div>
+                            <div class="p-col-3">
+                                  <div class="p-field">
+                                      <div *ngIf="adherentSelected.urlPhoto" class="">
+                                        
+                                             <img [src]="adherentSelected.urlPhoto" [alt]="adherentSelected.nom" width="150" height="150" class="p-shadow-4" />  
+                                     </div> 
+                                 </div> 
+                         </div>
+                             
+                        </div> 
+    
+    
+                    
+                    
+                        
+                                       
+                        
+                    </p-fieldset>
+                </ng-template> 
+                <ng-template pTemplate>
+                    <p-fieldset legend="Actes et honoraires des praticiens" toggleable="true">
+                                        
+                        <div class="p-field p-col-2"></div>
+                            <div class="p-fluid p-formgrid p-grid">
+                            <!-- <div class="p-mr-2 p-mb-2">
+                                <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
+                            </div> -->
+                            <div class="p-mr-2 p-mb-2">
+                                <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter prestation" [disabled]="!adherentSelected" 
+                                label="Ajouter prestation"
+                                        class="p-button-success" type="button" (click)="addItemPrestation()"></button>
+                            </div>
+                        
+                        </div>
+                        <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
+                        'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [autoLayout]="true" [columns]="cols" 
+                        [rowHover]="true"  styleClass="p-datatable-customers"
+                        currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="2" [paginator]="true" [showCurrentPageReport]="true">
+                           
+
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                    <h5 class="p-m-0"></h5>
+                                    <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                
+                                   
+                                   <!--  <th style="width:8rem">N° Sinistre</th> -->
+                                    <th>Date de soins</th>
+                                    <th>Famille acte</th>
+                                    <th>Acte</th>
+                                    <th>Sous Acte</th>
+                                    <th>Montant total</th>
+                                    <th>Taux</th>
+                                    <th>Part assure</th>
+                                    <th style="width:8rem"></th>
+                                    
+                                </tr>
+                            </ng-template>
+                
+                            <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                <tr>
+                            
+                                   <!--  <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td> -->
+                                    <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
+                                    <td>{{rowData.familleActe?.libelle}}</td>
+                                    <td>{{rowData.acte?.libelle}}</td>
+                
+                                    <td> {{rowData.sousActe?.libelle}}</td>
+                                    <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
+                                    <td style="font-weight: bold"> {{rowData.taux?.taux}}</td>
+                                    <td style="font-weight: bold"> {{rowData.montantRestant  | formatTableValue: 'number':true}}</td>
+                                    
+                                    <td style="text-align:center">
+                                        <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                        <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+
+                
+                                        </td>
+                            
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-fieldset>
+                </ng-template>
+            </p-splitter>
+                
+                
+               <hr/>
+
+                        <p-fieldset legend="Execution des ordonnances" toggleable="true">
+                                        
+                            <div class="p-field p-col-2"></div>
+                                <div class="p-fluid p-formgrid p-grid">
+                               
+                                <div class="p-mr-2 p-mb-2">
+                                    <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter produit" [disabled]="!adherentSelected" 
+                                    label="Ajouter Produit"
+                                            class="p-button-success" type="button" (click)="addItemProduit()"></button>
+                                </div>
+                            
+                            </div>
+                            <p-table #dt [value]="prestationsProduitList" dataKey="id" editMode="row"  [globalFilterFields]="['acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [autoLayout]="true" [columns]="cols" 
+                            [rowHover]="true"  styleClass="p-datatable-customers"
+                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="2" [paginator]="true" [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                        <th>Produit</th>
+                                        <th>Quantité</th>
+                                        <!-- <th>Coût unitaire</th>
+                                        <th>Montant total</th>
+                                        <th>Part assure</th> -->
+                                        <!-- <th>Servis</th> -->
+                                        <th style="width:8rem"></th>
+                                    </tr>
+                                </ng-template>
+                    
+                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" let-editing="editing" >
+                                    <tr [pEditableRow]="rowData">
+                                
+                                       
+                                        <td>{{rowData?.produit?.libelle}}</td>
+                                        <td style="font-weight: bold"> {{rowData.nombreActe | formatTableValue: 'number':true}}</td>
+                                        <td style="font-weight: bold">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-inputNumber [(ngModel)]="rowData.coutUnitaire" name="coutUnitaire" mode="decimal" locale="fr-FR" placeholder="coût unitaire" (change)="calculDeboursProduit(rowData)"></p-inputNumber>
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{rowData.coutUnitaire  | formatTableValue: 'number':true}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                             
+                                            </td>
+                                           <!--  <td style="font-weight: bold">                                                    
+                                                        {{rowData.baseRemboursement  | formatTableValue: 'number':true}}
+                                                </td>
+                                        
+                                        <td style="font-weight: bold"> {{rowData.montantRestant  | formatTableValue: 'number':true}}</td> -->
+                                       <!--  <td style="text-align:center">
+                                            <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-check" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(rowData)"></button>
+                                            <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(rowData)"></button>
+                                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(rowData, ri, ri1)"></button>
+                                        </td> -->
+                                        <td style="text-align:center">
+                                            <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+
+                    
+                                            </td>
+                                
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
+                        <br/>
+                        <div class="p-grid p-justify-between">
+                            <div>
+                                <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                            <div>
+                                <button  pButton  pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                        </div>
+               </form>
+               </div>    
+               </ng-template>      
+            </p-dialog>
+
+            <p-dialog [(visible)]="displayProduit"  header="Paiement" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
+                <ng-template pTemplate="content"> 
+                    <div class="card">
+
+                        <p-table #dt [value]="prestProduitList" dataKey="id" editMode="row"  [globalFilterFields]="['acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [autoLayout]="true" [columns]="cols" 
+                            [rowHover]="true"  styleClass="p-datatable-customers"
+                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="2" [paginator]="true" [showCurrentPageReport]="true">
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                        <th>Produit</th>
+                                        <th>Quantité</th>
+                                        <th>Coût unitaire</th>
+                                        <th>Montant total</th>
+                                        <th>Part assure</th> 
+                                        <th>Servis</th>
+                                        <th>Validé</th>
+                                    </tr>
+                                </ng-template>
+                    
+                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" let-editing="editing" >
+                                    <tr [pEditableRow]="rowData">
+                                
+                                       
+                                        <td>{{rowData?.produit?.libelle}}</td>
+                                        <td style="font-weight: bold"> {{rowData.nombreActe | formatTableValue: 'number':true}}</td>
+                                        <td style="font-weight: bold">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <p-inputNumber [(ngModel)]="rowData.coutUnitaire" name="coutUnitaire" mode="decimal" locale="fr-FR" placeholder="coût unitaire" (onBlur)="calculDeboursProduit(rowData, ri)"></p-inputNumber>
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{rowData.coutUnitaire  | formatTableValue: 'number':true}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                             
+                                            </td>
+                                             <td style="font-weight: bold">                                                    
+                                                        {{rowData.baseRemboursement  | formatTableValue: 'number':true}}
+                                                </td>
+                                        
+                                        <td style="font-weight: bold"> {{rowData.montantSupporte  | formatTableValue: 'number':true}}</td> 
+                                       <td style="text-align:center">
+                                            <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-eye" class="ui-button-info" (click)="onRowEditInitPlafondConfigurationSousActe(rowData)"></button>
+                                            <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfigurationSousActe(rowData)"></button>
+                                            <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfigurationSousActe(rowData, ri, ri1)"></button>
+                                        </td>
+                                        
+                                        <td style="text-align:center">
+                                            <button *ngIf="!rowData.valider"  pButton type="button"  icon="pi pi-pi-check" class="p-button-info" (click)="validerProduit(rowData, i)"></button>
+                                        </td>
+                                        
+                                
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                    </div>
+                </ng-template>
+            </p-dialog>
+
+
+            <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
+    
+                <ng-template pTemplate="content"> 
+                    <div class="card">
+    
+                        <form (ngSubmit)="addPrestation1()"  [formGroup]="prestationPopForm">
+                            
+                            
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <label for="dateSoins">Date de soins <span class="required">*</span></label>
+                                    <input type="date" name="dateSoins" id="dateSoins" pInputText formControlName="dateSoins">
+                                </div>
+                                
+                               
+                                <div class="p-field p-col">
+                                    <label for="lastname2">Famille acte <span class="required">*</span></label>
+                                    <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                                </div>
+                               
+
+                                <div class="p-field p-col">
+                                    <label for="lastname2">Acte <span class="required">*</span></label>
+                                    <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="acteListFilter" formControlName="acte" optionLabel="libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
+                                </div> 
+                                
+                            </div>
+    
+    
+                            
+                              
+    
+                               
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                   
+                                    
+                                    <div class="p-field p-col">
+                                        <label for="sousActe">SousActe <span class="required">*</span></label>
+                                        <p-dropdown  [filter]="true"
+                                                    showClear="true" [options]="sousActeListFilter"
+                                                    formControlName="sousActe"  [autoDisplayFirst]="false"
+                                                    optionLabel="libelle" (onChange)="selectDateSoinsSousActe(); findMontantConsomme($event); findTaux()"></p-dropdown>      
+                                    </div>
+    
+                                    <div class="p-field p-col">
+                                        <label for="medecin">Medecin<span class="required">*</span></label>
+                                        <p-dropdown inputId="medecin" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="medecinList"
+                                                    formControlName="medecin"  [autoDisplayFirst]="false"
+                                                    optionLabel="nom">
+                                                    <ng-template let-medecin pTemplate="item">
+                                                            <span>{{medecin.nom}}  </span>
+                                                            <span>{{medecin.prenom}}</span>
+                                                    </ng-template>
+                                        </p-dropdown>
+                                    </div>
+
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe">Quantité <span class="required">*</span></label>
+                                        <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}" formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
+                                    </div>
+
+                                   <!--  <div class="p-field p-col">
+                                        <label for="sousActe">Pathologie<span class="required">*</span></label>
+                                        <p-dropdown inputId="pathologie" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="pathologieList"
+                                                    formControlName="pathologie"  [autoDisplayFirst]="false"
+                                                    optionLabel="code"></p-dropdown>        
+                                    </div>
+
+                                    <div class="p-field p-col">
+                                        <label for="produit">Produit pharmaceutique <span class="required" *ngIf="prestationPopForm?.value?.familleActe?.code === 'FP'">*</span>
+                                            <span class="required" *ngIf="prestationPopForm?.value?.familleActe?.code !== 'FP'"></span></label>
+                                        <p-multiSelect inputId="produitPharmaceutique" dataKey="id" [filter]="true"
+                                                    showClear="true" [options]="produitPharmaceutiqueList"
+                                                    formControlName="produitPharmaceutique"  [autoDisplayFirst]="false" (onChange)="changeDisplay()"
+                                                    optionLabel="libelle"></p-multiSelect> 
+                                                   
+                                    </div>
+ -->
+                                </div>
+                                    
+                                <div class="p-fluid p-formgrid p-grid">
+                                    
+                                       
+                                    
+                                        
+                                    
+                                        <!-- <div class="p-field p-col">
+                                            <label for="medecin">Centre prescripteur<span class="required">*</span></label>
+                                            <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
+                                                        showClear="true" [options]="prestatairePrescripteur"
+                                                        formControlName="prestataire"  [autoDisplayFirst]="false"
+                                                        optionLabel="libelle"></p-dropdown>
+                                        </div> -->
+                                    
+                                        
+                                   </div>
+                                   
+                                   <div class="p-fluid p-formgrid p-grid">
+                                
+                                       
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe">Cout unitaire <span class="required">*</span></label>
+                                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="coutUnitaire" mode="decimal" locale="fr-FR" (onBlur)="calculDebours1()"></p-inputNumber>  
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <label for="nombreActe">Total <span class="required">*</span></label>
+                                        <p-inputNumber [inputStyle]="{'font-weight': 'bold'}" formControlName="debours" [disabled]="true" mode="decimal" locale="fr-FR" class="champ"></p-inputNumber>  
+                                    </div>
+
+                                    <div class="p-field p-col-4">
+                                        <label for="nombreActe">Part de l'assuré(e)<span class="required">*</span></label>
+                                        <p-inputNumber formControlName="montantSupporte" mode="decimal" locale="fr-FR" [disabled]="true"></p-inputNumber>  
+                                    </div>
+
+                                   </div>
+                                   
+                                   
+                                   
+                                   
+                                   
+                                   
+                                   
+                                   
+                                
+                                    
+                                    
+                            
+                                <br/>
+                                <div class="p-grid p-justify-between">
+                                    <div>
+                                     
+                                        <button pButton pRipple label="Quitter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" (click)="fermerPrestation()"></button>
+                                    </div>
+                                    <div>
+                                        <button  pButton  pRipple  label="Ajouter"[disabled]="!adherentSelected || prestationPopForm.invalid"  icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                    </div>
+                                </div>
+    
+                        </form>
+                    </div>
+                </ng-template>
+         </p-dialog>
+            
+         <p-dialog [(visible)]="displayPrestationProduit"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
+    
+            <ng-template pTemplate="content"> 
+                <div class="card">
+
+                    <form (ngSubmit)="addProduit()"  [formGroup]="prestationPopForm">
+                        
+                     
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <label for="produit">Produit pharmaceutique
+                                        </label>
+                                    <p-dropdown inputId="produit" dataKey="id" [filter]="true"
+                                                showClear="true" [options]="produitPharmaceutiqueList"
+                                                formControlName="produit"  [autoDisplayFirst]="false" 
+                                                optionLabel="libelle"></p-dropdown> 
+                                               
+                                </div>
+                                <div class="p-field p-col-12">
+                                    <label for="nombreActe">Quantité <span class="required">*</span></label>
+                                    <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}" formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
+                                </div>
+                                
+                                
+
+                                
+
+                            </div>
+                                    
+                                
+                        
+                            <br/>
+                            <div class="p-grid p-justify-between">
+                                <div>
+                                 
+                                    <button pButton pRipple label="Quitter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" (click)="fermerPrestation()"></button>
+                                </div>
+                                <div>
+                                    <button  pButton  pRipple  label="Ajouter"[disabled]="!adherentSelected"  icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                </div>
+                            </div>
+
+                    </form>
+                </div>
+            </ng-template>
+     </p-dialog>
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

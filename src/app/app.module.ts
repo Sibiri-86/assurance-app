@@ -338,6 +338,12 @@ import { FoireEffects } from './store/contrat/foire/effect';
 import { FoireComponent } from './module/contrat/foire/foire.component';
 import { FoireQuestionComponent } from './module/portail/foire-question/foire-question.component';
 import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme-prestataire/assure-bareme-prestataire.component';
+import { RemboursementInitieComponent } from './module/portail/remboursement-initie/remboursement-initie.component';
+import { RemboursementEffects } from './store/portail/remboursemnt-initie/effect';
+import { RemboursementInstanceComponent } from './module/prestation/remboursement-instance/remboursement-instance.component';
+import { RemboursementEntenteComponent } from './module/medical/remboursement-entente/remboursement-entente.component';
+import { BonPrestataireComponent } from './module/portail/bon-prestataire/bon-prestataire.component';
+import { BonPrestataireEffects } from './store/portail/bon-prestataire/effect';
 
 @NgModule({
     imports: [
@@ -449,7 +455,7 @@ import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
              StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects, PortailEffects,
-             DateGardeEffects, PharmacieGardeEffects, FoireEffects])
+             DateGardeEffects, PharmacieGardeEffects, FoireEffects, RemboursementEffects,BonPrestataireEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -614,6 +620,10 @@ import { AssureBaremePrestataireComponent } from './module/portail/assure-bareme
         FoireComponent,
         FoireQuestionComponent,
         AssureBaremePrestataireComponent,
+        RemboursementInitieComponent,
+        RemboursementInstanceComponent,
+        RemboursementEntenteComponent,
+        BonPrestataireComponent,
 
     ],
     providers: [

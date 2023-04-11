@@ -1,0 +1,249 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addPrefinancement()"></button>
+					<button pButton pRipple label="Supprimer" [disabled]="selectedPrefinancement?.length<1" icon="pi pi-trash" class="p-button-danger p-mr-2 p-mb-2" (click)="supprimerPrefinancement()"></button>
+
+                </ng-template>
+                
+                
+			</p-toolbar>
+            
+                    <div class="card">
+                        <div class="p-col-6">
+                            
+                        </div>
+                        <div class="p-col-6">
+
+                        </div>
+                    </div>
+
+            <p-splitter [style]="{'height': '400px'}"  styleClass="mb-5">
+                    <ng-template  pTemplate>
+                            
+                                <p-table #dt [value]="remboursementList" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols"  
+                                            [rowHover]="true"  styleClass="p-datatable-customers"
+                                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
+                                            
+
+                                                <ng-template pTemplate="caption">
+                                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                                        <h5 class="p-m-0"></h5>
+                                                        <span class="p-input-icon-left">
+                                                        <i class="pi pi-search"></i>
+                                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                    
+                                                    
+                                                        <th>Date</th>
+                                                        <th>Type paiement</th>
+                                                        <th>Numero</th>
+                                                        <th>Bénéficiare</th>
+                                                    
+                                                        <th style="width:8rem"></th>
+                                                        
+                                                    </tr>
+                                                </ng-template>
+                                    
+                                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                                    <tr>
+                                                
+                                                        <td > {{rowData.dateSaisie}}</td>
+                                                        <td> {{rowData.typePaiement}}</td>
+                                                        <td> <span *ngIf="rowData.numeroOrange ">{{rowData.numeroOrange}}</span>
+                                                            <span *ngIf="rowData.numeroMobicash">{{rowData.numeroMobicash}}</span>
+                                                        </td>
+                                                        <td > {{rowData.nomBenefiniciaire}}</td>
+                                                        <td style="text-align:center">
+                                                            <button pButton pRipple type="button"   icon="pi pi-pencil" class="p-button-warning p-mb-2" (click)="modifier(rowData)"></button>
+
+                                    
+                                                            </td>
+                                                
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                       
+                            
+                        </ng-template> 
+                        <ng-template  pTemplate>
+                        
+                            <p-tree [value]="fileTree"  selectionMode="multiple" [(selection)]="selectedNodes2" >
+                                <ng-template let-node pTemplate="url">
+                                <b >{{node.label}}</b> 
+                          
+                                </ng-template>
+                                <ng-template let-node pTemplate="default">
+                                    
+                                    <b><a [href]="node.data">{{node.label}} </a> </b>
+                                    
+                                    
+                                    
+                                </ng-template>
+                               
+                                
+                            </p-tree>
+                        
+                    </ng-template>
+            </p-splitter>
+            
+
+
+            <!-- <p-tree [value]="fileTree"  selectionMode="multiple" [(selection)]="selectedNodes2">
+                <ng-template let-node pTemplate="url">
+                <b >{{node.label}}</b> 
+          
+                </ng-template>
+                <ng-template let-node pTemplate="default">
+                    
+                    <b><a [href]="node.data">{{node.label}} </a> </b>
+                    
+                    
+                    
+                </ng-template>
+               
+                
+            </p-tree>  -->
+
+
+        </div> 
+        
+        
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Initié un remboursement" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="card">
+                <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">    
+                <p-fieldset legend="Sinistre" toggleable="true">
+                        
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="dateEffet">Date de saisie <span class="required">*</span></label>
+                        <p-calendar id="dateSaisie" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateSaisie" appendTo="body"></p-calendar>
+                    </div>
+                    
+                    
+                    <div class="p-field p-col">
+                        <label for="typePaiement">Type de paiement <span class="required">*</span></label>
+                        <p-dropdown inputId="typePaiement" [filter]="true"
+                                                showClear="true" [options]="typePaiement2"
+                                                formControlName="typePaiement"
+                                                 [autoDisplayFirst]="false" (onChange)="changeType(prestationForm.value.typePaiement)"></p-dropdown>
+                    </div>
+                 
+                
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Numero Orange Money<span class="required">*</span></label>
+                        <input type="tel" name="numeroOrange" id="numeroOrange" pInputText formControlName="numeroOrange" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Numero Moov Money <span class="required">*</span></label>
+                        <input type="text" name="numeroMobicash" id="numeroMobicash" pInputText formControlName="numeroMobicash" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY' || prestationForm.value.typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Nom et prenom du bénéficiaire <span class="required">*</span></label>
+                        <input type="text" name="nomBenefiniciaire" id="nomBenefiniciaire" pInputText formControlName="nomBenefiniciaire" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'VIREMENT'" class="p-field p-col">
+                        <label for="dateEffet">Numero Virement <span class="required">*</span></label>
+                        <input type="text" name="numeroVirement" id="numeroVirement" pInputText formControlName="numeroVirement" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                </div>
+                
+                    
+                                   
+                    <div class="p-field p-col-2"></div>
+                    <div class="p-fluid p-formgrid p-grid">
+                    <!-- <div class="p-mr-2 p-mb-2">
+                        <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
+                    </div> -->
+                    <div class="p-mr-2 p-mb-2">
+                        <p-fileUpload #form2 mode="basic" [disabled]=" !prestationForm.value.typePaiement" customUpload="true" chooseLabel="joindre les factures" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+                    </div>
+                   
+                </div>
+                </p-fieldset>
+                
+                <hr/>  
+                        
+              
+                        <p-fieldset legend="Liste des factures" toggleable="true">
+                            <p-table #dt [value]="files" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols" 
+                            [rowHover]="true"  styleClass="p-datatable-customers"
+                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
+                               
+    
+                                <ng-template pTemplate="caption">
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                        <h5 class="p-m-0"></h5>
+                                        <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                    
+                                       
+                                        <th>Fichier</th>
+                                       
+                                        <th style="width:8rem"></th>
+                                        
+                                    </tr>
+                                </ng-template>
+                    
+                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                    <tr>
+                                
+                                        <td > <i class="pi pi-file-pdf">{{rowData?.name}}</i></td>
+                                       
+                                        <td style="text-align:center">
+                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+
+                    
+                                            </td>
+                                
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
+                        
+                        <br/>
+                        <div class="p-grid p-justify-between">
+                            <div>
+                                <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                            <div>
+                                <button  pButton [disabled]="!files.length || !prestationForm.value.typePaiement" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                            </div>
+                        </div>
+               </form>
+               </div>    
+               </ng-template>      
+            </p-dialog>
+
+            <p-dialog [(visible)]="showMessage" header="Plafond presque atteint" [modal]="true" styleClass="p-fluid" 
+                 [style]="{width: '1000px'}">
+
+                <ng-template pTemplate="content">
+                    <div class="card primeeee">
+
+                    <span class="prime">{{montantReponse.message}} </span><br>
+
+
+                    </div>
+                </ng-template>
+            </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

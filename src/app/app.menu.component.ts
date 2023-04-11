@@ -45,6 +45,10 @@ export class AppMenuComponent implements OnInit {
                                 items: [
                                     {label: 'sinistre | Edition', icon: '', routerLink: ['/prestation/prefinancement'], visible: 
                                     this.keycloak.isUserInRole(Function.sm_sinistre_edition)},
+                                    {
+                                        label: 'Remboursement en instance', icon: 'pi pi-fw ', routerLink: ['/prestation/remboursement-instance'], 
+                                        visible: this.keycloak.isUserInRole(Function.sm_sinistre_edition)
+                                    },
                                     {label: 'sinistre | valide', icon: '', routerLink: ['/prestation/prefinancement/valide'],
                                      visible: this.keycloak.isUserInRole(Function.sm_sinistre_valide)},
                                     {label: 'sinistre | consultation', icon: '', routerLink: ['/prestation/prefinancement/consultation'],
@@ -95,7 +99,8 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: true},
                     {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: true},
                     {label: 'New barème', icon: '', routerLink: ['/medical/new-bareme'], visible: true},
-
+                    {label: 'Remboursement en entente de validation', icon: '', routerLink: ['/medical/remboursement-entente'], visible: true},
+                    
                 ]
             },
 
@@ -284,6 +289,14 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], 
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+            },
+            {
+                label: 'Initié remboursement', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/remboursement-initie'], 
+                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+            },
+            {
+                label: 'Bon', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bon-prestataion'], 
                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             }
 

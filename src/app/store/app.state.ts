@@ -74,6 +74,8 @@ import { PortailState } from './portail/recapitulatif/state';
 import { DateGardeState } from './parametrage/date-garde/state';
 import { PharmacieGardeState } from './parametrage/pharmacie-garde/state';
 import { FoireState } from './contrat/foire/state';
+import { RemboursementState } from './portail/remboursemnt-initie/state';
+import { BonPrestataireState } from './portail/bon-prestataire/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -149,5 +151,7 @@ export interface AppState {
   dateGardeState: DateGardeState,
   pharmacieGardeState: PharmacieGardeState,
   foireState: FoireState;
+  remboursementState: RemboursementState;
+  bonPrestataireState: BonPrestataireState;
 
 }

@@ -1,0 +1,127 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+
+            
+                  
+                            
+                                <p-table #dt [value]="remboursementList" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols"  
+                                            [rowHover]="true"  styleClass="p-datatable-customers" selectionMode="multiple" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectRemboursement"
+                                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
+                                            
+
+                                                <ng-template pTemplate="caption">
+                                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                                        <h5 class="p-m-0"></h5>
+                                                        <span class="p-input-icon-left">
+                                                        <i class="pi pi-search"></i>
+                                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                    
+                                                    
+                                                        <th>Date Saisie</th>
+                                                        <th>Numéro</th>
+                                                        <th>Assuré</th>
+                                                        <th>Type paiement</th>
+                                                        <th>Tel</th>
+                                                        <th>Bénéficiare</th>
+                                                    
+                                                        <th style="width:8rem"></th>
+                                                        
+                                                    </tr>
+                                                </ng-template>
+                                    
+                                                <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
+                                                    <tr [pSelectableRow]="rowData">
+                                                
+                                                        <td > {{rowData.dateSaisie}}</td>
+                                                        <td> {{rowData?.adherent?.numero}}</td>
+                                                        <td> {{rowData?.adherent?.nom}} {{rowData?.adherent?.prenom}}</td>
+                                                        <td> {{rowData.typePaiement}}</td>
+                                                        <td> <span *ngIf="rowData.numeroOrange ">{{rowData.numeroOrange}}</span>
+                                                            <span *ngIf="rowData.numeroMobicash">{{rowData.numeroMobicash}}</span>
+                                                        </td>
+                                                        <td > {{rowData.nomBenefiniciaire}}</td>
+                                                        <td style="text-align:center">
+                                                            <button pButton pRipple type="button"   icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" (click)="valider(rowData)"></button>
+
+                                                            <button pButton pRipple type="button"   icon="pi pi-file-pdf" class="p-button-warning p-mb-2" (click)="modifier(rowData)"></button>
+
+                                    
+                                                            </td>
+                                                
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                       
+                        
+                            
+            
+
+
+            <!-- <p-tree [value]="fileTree"  selectionMode="multiple" [(selection)]="selectedNodes2">
+                <ng-template let-node pTemplate="url">
+                <b >{{node.label}}</b> 
+          
+                </ng-template>
+                <ng-template let-node pTemplate="default">
+                    
+                    <b><a [href]="node.data">{{node.label}} </a> </b>
+                    
+                    
+                    
+                </ng-template>
+               
+                
+            </p-tree>  -->
+
+
+        </div> 
+        
+        
+        <p-dialog [maximizable]="true"  [(visible)]="displayFormPrefinancement" header="Voir les fichiers" [modal]="true" styleClass="p-fluid" [style]="{'width':'1300px'}">
+
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <p-tree [value]="fileTree"  selectionMode="multiple">
+                        <ng-template let-node pTemplate="url">
+                        <b >{{node.label}}</b> 
+                  
+                        </ng-template>
+                        <ng-template let-node pTemplate="default">
+                            
+                            <b><a [href]="node.data" target="_blank">{{node.label}} </a> </b>
+                            
+                            
+                            
+                        </ng-template>
+                       
+                        
+                    </p-tree>
+                    
+               </div>    
+               </ng-template>      
+            </p-dialog>
+
+            <p-dialog [(visible)]="showMessage" header="Plafond presque atteint" [modal]="true" styleClass="p-fluid" 
+                 [style]="{width: '1000px'}">
+
+                <ng-template pTemplate="content">
+                    <div class="card primeeee">
+
+                    <span class="prime">{{montantReponse.message}} </span><br>
+
+
+                    </div>
+                </ng-template>
+            </p-dialog>
+
+            
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>
