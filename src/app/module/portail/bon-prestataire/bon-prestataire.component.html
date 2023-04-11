@@ -93,7 +93,7 @@
         </div> 
         
         
-        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Initié un remboursement" [modal]="true" styleClass="p-fluid">
+        <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Initié un bon" [modal]="true" styleClass="p-fluid">
             <ng-template pTemplate="content">
                 <div class="card">
                 <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">  
@@ -102,16 +102,22 @@
                            
                             <div>
                                 <label for="lastname2" style="font-weight: bold;">Matricule assuré</label><br>
-                                <input id="matriculeAdherent"  type="text" formControlName="matriculeAdherent" pInputText  (blur)="rechercherAdherent($event)">                                                
+                                <input id="matriculeAdherent"  type="text" formControlName="matriculeAdherent" pInputText  (blur)="rechercherAdherent($event)">  
+                                
+                                
+                        
+                            
+
+
                             </div>
                         </ng-template>
                     </p-toolbar>
-                    <p-splitter [style]="{'height': '400px'}" styleClass="mb-5" >
+                    <p-splitter [style]="{'height': '400px'}" styleClass="mb-5" *ngIf="display">
                        
                         
-                <ng-template  pTemplate>
-                    <p-fieldset legend="Assuré" toggleable="true">
-                        <div class="p-grid" style="background-color: #e7e7e3;" *ngIf="adherentSelected">
+                <ng-template  pTemplate >
+                    <p-fieldset legend="Assuré" toggleable="true" >
+                        <div class="p-grid" style="background-color: #e7e7e3;">
                             <div class="p-col-4"></div>         
                             <div class="p-col-8 flex align-items-center justify-content-center"><h5 style="font-weight: bold;">PASSEPORT SANTE</h5></div>   
                             <div class="p-col-12"><h6>{{adherentSelected?.groupe?.police?.garant?.nom}}</h6></div>
@@ -189,7 +195,7 @@
                         
                     </p-fieldset>
                 </ng-template> 
-                <ng-template pTemplate>
+                <ng-template pTemplate >
                     <p-fieldset legend="Actes et honoraires des praticiens" toggleable="true">
                                         
                         <div class="p-field p-col-2"></div>
@@ -266,13 +272,13 @@
                 
                <hr/>
 
-                        <p-fieldset legend="Execution des ordonnances" toggleable="true">
+                        <p-fieldset legend="Execution des ordonnances" toggleable="true" *ngIf="display">
                                         
                             <div class="p-field p-col-2"></div>
                                 <div class="p-fluid p-formgrid p-grid">
                                
                                 <div class="p-mr-2 p-mb-2">
-                                    <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter produit" [disabled]="!adherentSelected" 
+                                    <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter produit" 
                                     label="Ajouter Produit"
                                             class="p-button-success" type="button" (click)="addItemProduit()"></button>
                                 </div>
@@ -509,11 +515,14 @@
                                 </div>
                                     
                                 <div class="p-fluid p-formgrid p-grid">
-                                    
-                                       
-                                    
-                                        
-                                    
+                                  <!--   <div class="p-field-radiobutton">
+                                        <p-radioButton  formControlName="paiement"  inputId="city1"></p-radioButton>
+                                        <label for="city1">Payé</label>
+                                    </div>
+                                    <div class="p-field-radiobutton">
+                                        <p-radioButton formControlName="noPaiement" inputId="city2"></p-radioButton>
+                                        <label for="city2">Non payé</label>
+                                    </div> -->
                                         <!-- <div class="p-field p-col">
                                             <label for="medecin">Centre prescripteur<span class="required">*</span></label>
                                             <p-dropdown inputId="prestataire" dataKey="id" [filter]="true"
@@ -571,7 +580,7 @@
                 </ng-template>
          </p-dialog>
             
-         <p-dialog [(visible)]="displayPrestationProduit"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
+         <p-dialog [(visible)]="displayPrestationProduit"  header="Veuillez ajouter produit" [modal]="true" styleClass="p-fluid" [style]="{width: '800px'}"  (onHide)="fermerPrestation()">
     
             <ng-template pTemplate="content"> 
                 <div class="card">

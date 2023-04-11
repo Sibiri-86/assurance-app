@@ -145,6 +145,7 @@ export class BonPrestataireComponent implements OnInit, OnDestroy {
   montantPlafond1:number = 0;
   i: number = 0;
   displayPrestationpop = false;
+  display: boolean = false;
   displayPrestationProduit = false;
   displayPrestationbon = false;
   prestationsList: Prestation[]= [];
@@ -168,7 +169,8 @@ export class BonPrestataireComponent implements OnInit, OnDestroy {
   children: TreeNode = {};
   selectedNodes2: TreeNode[] = [];
   clonedPrestation: { [s: string]: Prestation } = {};
-
+  prestataireConnect: Prestataire = {};
+  taux: Taux = {};
 
 
   constructor( private store: Store<AppState>,
@@ -180,7 +182,7 @@ export class BonPrestataireComponent implements OnInit, OnDestroy {
                private keycloakService: KeycloakService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router) {
-                this.breadcrumbService.setItems([{ label: 'Remboursements initiés' }]);
+                this.breadcrumbService.setItems([{ label: 'Bon' }]);
    }
 
    get prestation() {
@@ -284,7 +286,8 @@ findMontantPlafond(event){
       nomGroupeAdherent: new FormControl(),
       produit: new FormControl(),
       montantExclu: new FormControl(),
-      dateRetrait: new FormControl({value: '', disabled: true})
+      dateRetrait: new FormControl({value: '', disabled: true}),
+      
     });
   }
 
@@ -333,7 +336,8 @@ findMontantPlafond(event){
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
     if (value) {
-        
+      
+     
         if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
           console.log(this.prestationsList.length);
           console.log("====adherentSelected2021=======");
@@ -480,6 +484,7 @@ findMontantPlafond(event){
               
           } 
           }
+          
         }
        
        
@@ -531,6 +536,10 @@ findMontantPlafond(event){
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
         this.sousActeListFilter = this.sousActeList;
+        this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.sousActeList.find(sous=>sous.code ==="FRPHARMA").id, this.adherentSelected.id).subscribe((rest)=>{
+          console.log("============tauuuuxxxxx==========", rest);
+          this.taux =rest;
+        });
       }
     });
 
@@ -550,10 +559,19 @@ findMontantPlafond(event){
       if (value) {
         this.prestataireList = value.slice();
        // this.prestataireList.filter(ele => console.log('***************' + ele.libelleTypePrestataire.toUpperCase()));
-        this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire &&
-           ele.libelleTypePrestataire.toUpperCase() !== 'PHARMACIE');
+        /* this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire &&
+           ele.libelleTypePrestataire.toUpperCase() !== 'PHARMACIE'); */
         console.log(this.prestatairePrescripteur);
         this.prestataireExecutant = this.prestataireList;
+        this.keycloakService.loadUserProfile().then(profile => {
+          console.log("============this.prestataireConnect==========", profile.username);
+          this.prestataireConnect=  this.prestataireExecutant.find(pres=>pres.code === profile.username.toUpperCase());
+          console.log("============this.prestataireConnect==========", this.prestataireConnect);
+              
+         
+       
+       
+      });
       }
     });
 
@@ -586,6 +604,7 @@ findMontantPlafond(event){
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+   
   }
   findTaux() {
     console.log("=========================tauw==========",this.prestationPopForm.get('taux').value )
@@ -637,7 +656,31 @@ findMontantPlafond(event){
   
 
   
+  modifier(bon: BonPrestataire) {
+    console.log("=====================");
+    this.adherentSelected = bon.adherent;
+    this.adherentSelectedfinal = bon.adherent;
+    this.prestationsList = bon.prestations; 
+    this.prestationsProduitList = bon.prestationProduits; 
+    this.display = true;
+    this.prestationForm.get('id').setValue(bon.id);
+    this.prestationForm.get('matriculeAdherent').setValue(bon.adherent.numero);
+    this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    if (this.adherentSelected.adherentPrincipal != null) {
+      this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+  } else {
+      this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+  }
+    this.prestationForm.get('numeroGroupe').setValue(bon.adherent.groupe.numeroGroupe);
+    this.prestationForm.get('numeroPolice').setValue(bon.adherent.groupe.police.numero);
+    this.prestationForm.get('souscripteur').setValue(bon.adherent.groupe.police.nom);
+    this.prestationForm.get('nomGroupeAdherent').setValue(bon.adherent.groupe.libelle);
+    //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
+    this.prestationForm.get('dateSaisie').setValue(new Date(bon.dateSaisie));
+    
+    this.displayFormPrefinancement = true;
   
+  }
 
 
  
@@ -713,7 +756,7 @@ findMontantPlafond(event){
  
 
   calculDebours1() {
-    this.prestationPopForm.get('taux').setValue(this.tauxList[0]);
+    // this.prestationPopForm.get('taux').setValue(this.tauxList[0]);
     console.log("=================this.prestationPopForm=============");
     console.log(this.prestationPopForm.get('taux').value);
     console.log("==============this.prestationPopForm================");
@@ -937,9 +980,16 @@ findMontantPlafond(event){
   this.prestProduitList[i] = prestation;
   }
   validerProduit(prestat: Prestation, i: number) {
+    prestat.valider = true;
+    this.prestProduitList[i] = prestat;
+    this.keycloakService.loadUserProfile().then(profile => {
+      prestat.centreExecutant =  this.prestataireExecutant.find(pres=>pres.code === profile.username);
+    
+   
     this.bonPrestataireService.validerPrestation(prestat).subscribe((rest)=>{
       this.prestProduitList[i] = rest;
     });
+  });
   }
 rechercheAdherentDateSoin(event) {
   this.prestationPopForm.get('sort').setValue("");
@@ -953,7 +1003,7 @@ rechercherAdherentBon(event) {
   if (event.target.value !== '') {
   console.log(event.target.value);
    this.adherentSelected = null;
-  
+   
   this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));
   }
 }
@@ -980,7 +1030,7 @@ verifieDateSoins(event){
     if (event.target.value !== '') {
     console.log(event.target.value);
      this.adherentSelected = null;
-     
+     this.display= true;
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:new Date(), matricule: event.target.value}));
     }
   }
@@ -1162,7 +1212,13 @@ verifieDateSoins(event){
   addPrestation1() {
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
-    prestat.prestataire = this.prestataireList[0];
+    
+      prestat.centreExecutant =  this.prestataireConnect;
+      prestat.prestataire = this.prestataireConnect;
+   
+   
+ 
+    
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
@@ -1208,11 +1264,10 @@ onRowEditCancelPlafondConfigurationSousActe(prestation: Prestation, index: numbe
 }
 
 addProduit() {
-  this.prestationPopForm.get('taux').setValue(this.tauxList[0]);
+  this.prestationPopForm.get('taux').setValue(this.taux);
   const prestat = this.prestationPopForm.value as Prestation;
   prestat.adherent = this.adherentSelected;
-  
-  prestat.prestataire = this.prestataireList[0];
+  prestat.prestataire = this.prestataireConnect;
   if(this.compteur !==null) {
     this.prestationsProduitList[this.compteur] = prestat;
     this.compteur = null;

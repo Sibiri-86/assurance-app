@@ -137,7 +137,10 @@ export class ConventionPrestataireComponent implements OnInit, OnDestroy {
     });
 
     this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
-    this.store.dispatch(conventionAction.loadConventionPrestataire({code: "OPTIPLUS"}));
+    this.keyCloakService.loadUserProfile().then(profile => {
+      this.store.dispatch(conventionAction.loadConventionPrestataire({code: profile.username.toUpperCase()}));
+    });
+    
     this.conventionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.conventionList = value.slice();

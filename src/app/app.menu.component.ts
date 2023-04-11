@@ -274,9 +274,10 @@ export class AppMenuComponent implements OnInit {
                  visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
             {
-                label: 'FAQ', icon: 'pi pi-fw pi-list', routerLink: ['/portail/foire-question'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                label: 'Bon', icon: 'pi pi-fw pi-list', routerLink: ['/portail/bon-prestataire'], 
+                visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
+            
             {label: 'Infos assuré', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme-prestataire'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
 
             {
@@ -296,9 +297,9 @@ export class AppMenuComponent implements OnInit {
                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
             },
             {
-                label: 'Bon', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bon-prestataion'], 
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
-            }
+                label: 'FAQ', icon: 'pi pi-fw pi-list', routerLink: ['/portail/foire-question'],
+                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+            },
 
             /* {label: 'login', icon: 'pi pi-fw pi-home', routerLink: ['/login'], visible: true},
                     {label: 'registerChoose', icon: 'pi pi-fw pi-home', routerLink: ['/portail/registerChoose'], visible: true},
