@@ -329,6 +329,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   primeExercice: number;
   exoNumber: number;
   displayModif = false;
+  displayPhotos: Boolean = false;
+  pictureUrl='';
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2891,5 +2893,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
                 // console.log(this.groupeListes);
             }
         });
+  }
+  voirPhotos(ad:Adherent) {
+    //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
+    console.log(ad.urlPhoto);
+    this.pictureUrl =ad.urlPhoto;
+    this.displayPhotos = true;
   }
 }

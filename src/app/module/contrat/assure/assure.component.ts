@@ -36,6 +36,8 @@ export class AssureComponent implements OnInit, OnDestroy {
   police: Police;
   garant: Garant;
   infosAdherent: boolean = false;
+  displayPhotos: Boolean = false;
+  pictureUrl='';
 
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
@@ -95,6 +97,13 @@ export class AssureComponent implements OnInit, OnDestroy {
   voirAssure(adherent: Adherent){
     this.adherent = {...adherent};
     this.infosAdherent = true;
+  }
+
+  voirPhotos(ad:Adherent) {
+    //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
+    console.log(ad.urlPhoto);
+    this.pictureUrl =ad.urlPhoto;
+    this.displayPhotos = true;
   }
 
 }

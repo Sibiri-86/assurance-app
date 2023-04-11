@@ -2701,6 +2701,7 @@
                                 <th pSortableColumn="qla" style="width: 10rem">Qualité Assuré
                                     <p-sortIcon field="qla"></p-sortIcon>
                                 </th>
+                                <th></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-adherentHis>
@@ -2723,6 +2724,12 @@
                                 </td>
                                 <td><span
                                         class="p-column-title">{{adherentHis?.adherent?.qualiteAssure?.libelle}}</span>
+                                </td>
+                                <td>
+                                <button *ngIf="adherentHis.adherent.urlPhoto" pButton pRipple icon="pi pi-search" 
+                                    pTooltip="voir photos" class="p-button-rounded p-button-warning" 
+                                    (click)="voirPhotos(adherent)">
+                                </button>
                                 </td>
                             </tr>
                         </ng-template>
