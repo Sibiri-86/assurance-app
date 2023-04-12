@@ -253,7 +253,7 @@
                                     <td> {{rowData.sousActe?.libelle}}</td>
                                     <td style="font-weight: bold"> {{rowData.baseRemboursement  | formatTableValue: 'number':true}}</td>
                                     <td style="font-weight: bold"> {{rowData.taux?.taux}}</td>
-                                    <td style="font-weight: bold"> {{rowData.montantRestant  | formatTableValue: 'number':true}}</td>
+                                    <td style="font-weight: bold"> {{rowData.montantSupporte  | formatTableValue: 'number':true}}</td>
                                     
                                     <td style="text-align:center">
                                         <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
@@ -419,7 +419,7 @@
                                         </td>
                                         
                                         <td style="text-align:center">
-                                            <button *ngIf="!rowData.valider"  pButton type="button"  icon="pi pi-pi-check" class="p-button-info" (click)="validerProduit(rowData, i)"></button>
+                                            <button *ngIf="!rowData.valider"  pButton type="button"  icon="pi pi-check" class="p-button-info" (click)="validerProduit(rowData, i)"></button>
                                         </td>
                                         
                                 
