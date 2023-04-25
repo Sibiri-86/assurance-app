@@ -491,4 +491,9 @@ export class Endpoints {
             mock: `assets/mock/parametrage/foire.mock.json`
         };
 
+        static readonly CONTRAT_ASSURANCE_VOYAGE = {
+            prod: `${SERVICE_PREFIX}/contrat/assurance-voyage`,
+            mock: `assets/mock/contrat/assurance-voyage.mock.json`
+        };
+
 }

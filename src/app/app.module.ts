@@ -345,6 +345,8 @@ import { RemboursementEntenteComponent } from './module/medical/remboursement-en
 import { BonPrestataireComponent } from './module/portail/bon-prestataire/bon-prestataire.component';
 import { BonPrestataireEffects } from './store/portail/bon-prestataire/effect';
 import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mouvement/souscripteur-mouvement.component';
+import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assurance-voyage.component';
+import { AssuranceVoyageEffects } from './store/contrat/assurance-voyage/effect';
 
 @NgModule({
     imports: [
@@ -456,7 +458,7 @@ import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mo
              ExerciceEffects, BonPriseEnChargeEffects, OrdonnanceMedicaleEffects, BulletinAdhesionEffects, CompteEffects, ExerciceComptableEffects, ExerciceComptableOperationEffects,
              TypeJournauxEffects, JournauxEffects,OperationEffects,AppelFondEffects, TiersEffects, DepenseFamilleEffects, RecapitulatifEffects, RepartitionDepenseStatutEffects,
              StatistiqueParTrancheAgeEffects, FacturePrestatairesEffects, ConsommationParSexeEffects, AlerteEffects, ProduitPharmaceutiqueExcluEffects, QuartierEffects, PortailEffects,
-             DateGardeEffects, PharmacieGardeEffects, FoireEffects, RemboursementEffects,BonPrestataireEffects])
+             DateGardeEffects, PharmacieGardeEffects, FoireEffects, RemboursementEffects,BonPrestataireEffects, AssuranceVoyageEffects])
 
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -625,7 +627,8 @@ import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mo
         RemboursementInstanceComponent,
         RemboursementEntenteComponent,
         BonPrestataireComponent,
-        SouscripteurMouvementComponent
+        SouscripteurMouvementComponent,
+        AssuranceVoyageComponent
     ],
     providers: [
         {

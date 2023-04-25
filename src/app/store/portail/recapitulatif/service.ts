@@ -121,18 +121,14 @@ fetchDepenseSinistreTiersPayantAndFamille$(depenseFamille: TiersPayantPortail): 
 
 findAssureRacheteInExcluList(numero: number): Observable<any> {
   // @FIXME: get request
-  return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-assure-rachat-by-sous-groupe`, numero).pipe(
-      map((response: any) => response),
-      catchError(this.handleError())
-  );
+  return this.http.get<any>( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-assure-rachat-by-sous-groupe`,
+  {params: createRequestOption({numero})});
 }
 
 getAssureProduitPharmaceutiqueExcluEntiteDtoBySourcripteurAndGroupe(numero: number): Observable<any> {
   // @FIXME: get request
-  return this.http.put( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assure-ProduitPharmaceutiqueExclu-sous-groupe`, numero).pipe(
-      map((response: any) => response),
-      catchError(this.handleError())
-  );
+  return this.http.get<any>( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/assure-ProduitPharmaceutiqueExclu-sous-groupe`,
+  {params: createRequestOption({numero})});
 }
 
 findMessageBienvenuByNumero(numero: string): Observable<any> {

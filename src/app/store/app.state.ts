@@ -76,6 +76,7 @@ import { PharmacieGardeState } from './parametrage/pharmacie-garde/state';
 import { FoireState } from './contrat/foire/state';
 import { RemboursementState } from './portail/remboursemnt-initie/state';
 import { BonPrestataireState } from './portail/bon-prestataire/state';
+import { AssuranceVoyageState } from './contrat/assurance-voyage/state';
 
 export interface AppState {
   garantieState: GarantieState;
@@ -153,5 +154,6 @@ export interface AppState {
   foireState: FoireState;
   remboursementState: RemboursementState;
   bonPrestataireState: BonPrestataireState;
+  assuranceVoyageState: AssuranceVoyageState;
 
 }

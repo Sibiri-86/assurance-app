@@ -33,7 +33,8 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Avenant', icon: '', routerLink: ['/contrat/avenant'],
                     visible: this.keycloak.isUserInRole(Function.sm_avenant)},
                     {label: 'Clôture d\'exercice', icon: '', routerLink: ['/contrat/exercice'], visible: this.keycloak.isUserInRole(Function.sm_exercice)},
-                    {label: 'FAQ', icon: '', routerLink: ['/contrat/foire'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
+                    {label: 'FAQ', icon: '', routerLink: ['/contrat/foire'], visible: this.keycloak.isUserInRole(Function.sm_production)},
+                    {label: 'Assurance Voyage', icon: '', routerLink: ['/contrat/assurance-voyage'], visible: this.keycloak.isUserInRole(Function.sm_production)},
 
                 ]
             },

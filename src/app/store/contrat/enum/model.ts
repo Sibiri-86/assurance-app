@@ -94,3 +94,9 @@ export enum MaladieProche {
     TUBERCULOSE ='TUBERCULOSE',
     ALIENAtion_MENTALE   ='ALIENAtion_MENTALE'
 }
+
+export enum EspaceAsuranceVoyage {
+    AFRIQUE_OUEST = 'AFRIQUE DE L\'OUEST',
+    AFRIQUE_NORD_SCHENGEN ='AFRIQUE DU NORD ET SCHENGEN',
+    MONDE_ENTIER  ='MONDE ENTIER'
+}

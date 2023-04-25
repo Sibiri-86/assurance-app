@@ -125,6 +125,7 @@ import { RemboursementEntenteComponent } from './module/medical/remboursement-en
 import { BonPrestataireComponent } from './module/portail/bon-prestataire/bon-prestataire.component';
 import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mouvement/souscripteur-mouvement.component';
 import { AuthGuard } from './auth/user-route-access-service';
+import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assurance-voyage.component';
 
 @NgModule({
     imports: [
@@ -416,7 +417,7 @@ import { AuthGuard } from './auth/user-route-access-service';
                     data: { roles: ['VUE_PRESTATAIRE']}},
                     {path: 'contrat/foire', component: FoireComponent,
                     canActivate: [AuthGuard],
-                    data: { roles: ['VUE_ASSURE', 'VUE_PRESTATAIRE']}},
+                    data: { roles: ['sm_production']}},
                     {path: 'portail/foire-question', component: FoireQuestionComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_portail']}},
@@ -438,6 +439,10 @@ import { AuthGuard } from './auth/user-route-access-service';
                     {path: 'portail/bon-prestataire', component: BonPrestataireComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['VUE_PRESTATAIRE']}},
+                    {path: 'contrat/assurance-voyage', 
+                    canActivate: [AuthGuard],
+                    component: AssuranceVoyageComponent,    
+                    data: { roles: ['sm_production']}},
                     
 
                     

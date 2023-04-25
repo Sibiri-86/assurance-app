@@ -163,6 +163,7 @@ import * as PharmacieGardeReducer from '../parametrage/pharmacie-garde/reducer';
 import * as FoireReducer from '../contrat/foire/reducer';
 import * as RemboursementReducer from '../portail/remboursemnt-initie/reducer';
 import * as BonPrestataireReducer from '../portail/bon-prestataire/reducer';
+import * as AssuranceVoyageReducer from '../contrat/assurance-voyage/reducer';
 
 
 
@@ -243,6 +244,7 @@ export const reducers: ActionReducerMap<AppState> = {
     foireState: FoireReducer.reducer,
     remboursementState: RemboursementReducer.reducer,
     bonPrestataireState: BonPrestataireReducer.reducer,
+    assuranceVoyageState: AssuranceVoyageReducer.reducer
 
 
 };
