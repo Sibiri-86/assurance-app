@@ -40,6 +40,8 @@ posRemboursement(idAdherent: string, typePaiement: TypePaiement, numeroOrange: s
     console.log("=====data===========", data);
     headers.append('Content-Type', 'multipart/form-data');
     headers.set('Accept', 'application/json');
+    console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+    console.log(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/createRemboursement`, data, { headers });
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/createRemboursement`, data, { headers });
     
   }
