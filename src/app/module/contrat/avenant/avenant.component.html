@@ -2728,7 +2728,7 @@
                                 <td>
                                 <button *ngIf="adherentHis.adherent.urlPhoto" pButton pRipple icon="pi pi-search" 
                                     pTooltip="voir photos" class="p-button-rounded p-button-warning" 
-                                    (click)="voirPhotos(adherentHis)">
+                                    (click)="voirPhotos(adherentHis.adherent)">
                                 </button>
                                 </td>
                             </tr>
@@ -2740,6 +2740,14 @@
                         </ng-template>
                     </p-table>
                 </div>
+            </div>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="displayPhotos" header="Photos" [modal]="true" styleClass="p-fluid" [style]="{width: '300px'}">
+        <ng-template pTemplate="content">
+            <div class="card">
+            <img [src]="pictureUrl" [alt]="" class="p-shadow-4"  width="200" height="200" />
             </div>
         </ng-template>
     </p-dialog>
