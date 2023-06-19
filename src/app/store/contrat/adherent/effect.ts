@@ -190,6 +190,19 @@ export class AdherentEffects {
     )
     );
 
+    fetchListeAcutaliseeByExercice$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadListeActualiseeByExercice),
+        mergeMap(({exerciceId}) =>
+            this.AdherentService.getListeActualiseeFinal(exerciceId).pipe(
+                switchMap(value => [
+                    featureActions.setListeActualisee({listeActualisee: value})
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
    
 
      fetchAdherentGroupe$ = createEffect(() =>
@@ -305,6 +318,21 @@ this.actions$.pipe(
             switchMap(value => [
               //  GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                 featureActions.loadAdherent({idGroupe: idGroupe})
+            ]),
+            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+        )
+    )
+)
+);
+
+importCarteAdherentLot$ = createEffect(() =>
+this.actions$.pipe(
+    ofType(featureActions.importCarteAdherentLot),
+    mergeMap(({file, idExercice}) =>
+        this.AdherentService.pushcarteAdherentLot(file,idExercice).pipe(
+            switchMap(value => [
+              //  GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+            //    featureActions.loadAdherentByExercice(idExercice)
             ]),
             catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
         )

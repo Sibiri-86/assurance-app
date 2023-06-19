@@ -110,10 +110,23 @@ posAdherent(Adherent: Adherent): Observable<any> {
     for (let i = 0; i < filesList.length; i++) {
       data.append('fileArray', filesList[i], filesList[i].name);
     }
+   
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.set('Accept', 'application/json');
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/lot`, data, { headers });
+  }
+
+  pushcarteAdherentLot(filesList: File[], idExercice:string): Observable<any> {
+    const data: FormData = new FormData();
+    for (let i = 0; i < filesList.length; i++) {
+      data.append('fileArray', filesList[i], filesList[i].name);
+    }
+    data.append('idExercice', idExercice);
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.set('Accept', 'application/json');
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/upload/carte/lot`, data, { headers });
   }
 
   updateAdherent(Adherent: Adherent): Observable<any> {
@@ -226,6 +239,16 @@ private handleError<T>() {
           catchError(this.handleError())
       );
   }
+
+  getListeActualiseeFinal(exerciceId: string): Observable<Array<Adherent>> {
+    // @FIXME: get request
+    // adherent/liste-actualisee
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/liste-actualisee-by-exercice-final`
+    , {params: createRequestOption({exerciceId})}).pipe(
+        map((response: Adherent[]) => response),
+        catchError(this.handleError())
+    );
+}
 
   findFamilleByAdherent(adherentId: string, dateSoins: Date): Observable<Array<Adherent>> {
     // @FIXME: get request

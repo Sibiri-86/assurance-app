@@ -621,6 +621,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     
         if(this.etat!=='CREATE') {
             this.charge();
+          
         }
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         console.log('this.adherentPrincipauxTMP======>',this.adherentPrincipauxTMP);
@@ -790,16 +791,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                 this.historiqueAveantAdherantsTMP = res;
             }
         );
-
-        this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
-        this.store.dispatch(loadListeActualisee.loadListeActualisee({policeId: this.curentPolice.id}));
-        this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
-            .subscribe((value1) => {
-                if (value1) {
-                    this.adherantPoliceListActualisee = value1.slice();
-                    console.log('liste actualisée == ' + this.adherantPoliceListActualisee.length);
-                }
-            });
+       
 
            //  this.loadExerciceByPolice(this.police);
 
@@ -839,6 +831,19 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             );
 
+
+
+            console.log('====curentExercice===== ' ,this.exerciceRevenu.id);
+
+            this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
+            this.store.dispatch(loadListeActualisee.loadListeActualiseeByExercice({exerciceId: this.exerciceRevenu.id}));
+            this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
+                .subscribe((value1) => {
+                    if (value1) {
+                        this.adherantPoliceListActualisee = value1.slice();
+                        console.log('liste actualisée == ' + this.adherantPoliceListActualisee.length);
+                    }
+                });
 
            
 

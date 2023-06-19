@@ -21,6 +21,7 @@ export const createAdherentwithFamille = createAction('[App Init] Create Adheren
 export const importPhotosAdherent = createAction('[App Init] import photos adherent',
  props<{file: File, idAdherent: string, idGroupe: string}>());
 export const importPhotosAdherentLot = createAction('[App Init] import photos adherent lot',  props<{file: File[], idGroupe: string}>());
+export const loadListeActualiseeByExercice = createAction('[App Init] load liste actualisee by exercice final', props<{exerciceId: string}>());
 export const loadListeActualisee = createAction('[App Init] load liste actualisee', props<{policeId: string}>());
 export const setListeActualisee = createAction('[App Init] set Adherent',  props<{listeActualisee: Adherent[]}>());
 export const searchAssureAndFamilleActe = createAction('[App Init] search Assure',  props<{numero: number}>());
@@ -32,5 +33,6 @@ export const setConditionGenerale = createAction('[App Init] set condition gener
 export const deleteConditionGenerale = createAction('[App Init] delete condition generale', props<ConditionGenerale>());
 export const loadConditionGenerale = createAction('[App Init] load Condition Generale');
 export const importCondition = createAction('[App Init] import condition',  props<{file: File}>());
+export const importCarteAdherentLot = createAction('[App Init] import cartes adherent lot',  props<{file: File[], idExercice: string}>());
 
 

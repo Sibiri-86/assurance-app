@@ -46,6 +46,7 @@ export interface Adherent{
     reshus?: string;
     totalMontantReclame?: number;
     totalMontantRembourse?: number;
+    urlCarte?: string;
 }
 
 export interface ConditionGenerale {

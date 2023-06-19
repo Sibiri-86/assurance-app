@@ -7,7 +7,7 @@
                   
                             
                                 <p-table #dt [value]="remboursementList" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols"  
-                                            [rowHover]="true"  styleClass="p-datatable-customers" selectionMode="multiple" (onRowSelect)="onRowSelectSinistre($event)" (onRowUnselect)="onRowUnselectSinistre($event)" [(selection)]="selectRemboursement"
+                                            [rowHover]="true"  styleClass="p-datatable-customers" 
                                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
                                             
 
