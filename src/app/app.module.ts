@@ -347,6 +347,7 @@ import { BonPrestataireEffects } from './store/portail/bon-prestataire/effect';
 import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mouvement/souscripteur-mouvement.component';
 import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assurance-voyage.component';
 import { AssuranceVoyageEffects } from './store/contrat/assurance-voyage/effect';
+import { MajPrestataireComponent } from './module/medical/majPrestataire/majPrestataire.component';
 
 @NgModule({
     imports: [
@@ -628,7 +629,8 @@ import { AssuranceVoyageEffects } from './store/contrat/assurance-voyage/effect'
         RemboursementEntenteComponent,
         BonPrestataireComponent,
         SouscripteurMouvementComponent,
-        AssuranceVoyageComponent
+        AssuranceVoyageComponent,
+        MajPrestataireComponent
     ],
     providers: [
         {

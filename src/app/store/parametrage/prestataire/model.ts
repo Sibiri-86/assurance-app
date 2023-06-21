@@ -1,3 +1,4 @@
+import { Commune } from "../commune/model";
 import { Departement } from "../departement/model";
 
 export interface Prestataire {
@@ -19,8 +20,17 @@ export interface Prestataire {
     codeQuartier?: string;
     libelleQuartier?: string;
     idQuartier?: string;
+    situationGeographique?: string;
+    quartier?: string;
 
 }
 export interface PrestataireList {
     prestataireDtoList?: Array<Prestataire>
+}
+
+export interface MajPrestataireDto {
+    commune?: Commune;
+    quartier?: string;
+    situationGeographique?: string;
+    prestataires?: Array<Prestataire>;
 }
