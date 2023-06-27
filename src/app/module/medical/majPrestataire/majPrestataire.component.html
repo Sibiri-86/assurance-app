@@ -291,6 +291,7 @@
                         <th pSortableColumn="numero" >Code<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="situationGeographique" >Situation géographique<p-sortIcon field="situationGeographique"></p-sortIcon></th>
                         <th pSortableColumn="contact" >Contact<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >2ème contact<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="contact" > <p-sortIcon field="contact"></p-sortIcon></th>
                     </tr>
                 </ng-template>
@@ -337,6 +338,16 @@
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{convention.telephone}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.telephone2">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.telephone2}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>

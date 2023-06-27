@@ -22,6 +22,7 @@ export interface Prestataire {
     idQuartier?: string;
     situationGeographique?: string;
     quartier?: string;
+    telephone2?: string ;
 
 }
 export interface PrestataireList {
