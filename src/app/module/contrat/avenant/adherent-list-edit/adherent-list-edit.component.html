@@ -239,3 +239,11 @@
         </div>
     </ng-template>
 </p-dialog>
+
+<p-dialog [(visible)]="displayCarte" header="Photos" [modal]="true" styleClass="p-fluid" [style]="{width: '500px'}">
+    <ng-template pTemplate="content">
+        <div class="card">
+        <img [src]="pictureUrl" [alt]="" class="p-shadow-4"  width="400" height="400" />
+        </div>
+    </ng-template>
+</p-dialog>

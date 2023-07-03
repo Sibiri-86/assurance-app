@@ -2748,7 +2748,7 @@
                                     (click)="voirPhotos(adherentHis.adherent)">
                                 </button>
 
-                                <button *ngIf="adherentHis.adherent.urlPhoto" pButton pRipple icon="pi pi-search" 
+                                <button *ngIf="adherentHis.adherent.urlCarte" pButton pRipple icon="pi pi-search" 
                                     pTooltip="voir carte" class="p-button-rounded p-button-info" 
                                     (click)="voirCarte(adherentHis.adherent)">
                                 </button>
@@ -2770,6 +2770,14 @@
         <ng-template pTemplate="content">
             <div class="card">
             <img [src]="pictureUrl" [alt]="" class="p-shadow-4"  width="200" height="200" />
+            </div>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="displayCarte" header="Carte" [modal]="true" styleClass="p-fluid" [style]="{width: '500px'}">
+        <ng-template pTemplate="content">
+            <div class="card">
+            <img [src]="pictureUrl" [alt]="" class="p-shadow-4"  width="400" height="400" />
             </div>
         </ng-template>
     </p-dialog>

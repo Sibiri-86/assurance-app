@@ -331,6 +331,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   exoNumber: number;
   displayModif = false;
   displayPhotos: Boolean = false;
+  displayCarte:  Boolean = false;
   pictureUrl='';
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
@@ -2922,6 +2923,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   voirCarte(ad:Adherent) {
     this.pictureUrl =ad.urlCarte;
-    this.displayPhotos = true;
+    this.displayCarte = true;
   }
 }

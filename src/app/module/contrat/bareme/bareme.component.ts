@@ -381,7 +381,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
               if(this.plafondFamilleActeConstructConstant.length == 3) {
                 for(let t=0; t<this.plafondFamilleActeConstructConstant.length; t++) {
                   if(!this.plafondFamilleActeConstructConstant[t].domaine) {
-                    this.plafondFamilleActeConstructConstant[t].membre = "ADHERENT";
+                    this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t].garantie.libelle;
                   }else {
 
                     if(this.plafondFamilleActeConstructConstant[t].domaine  ) {
@@ -406,6 +406,12 @@ export class BaremeComponent implements OnInit, OnDestroy {
                             this.boMembre = true;
                         
                           }
+
+                          if(this.plafondFamilleActeConstructConstant[t1].domaine  && 
+                            this.plafondFamilleActeConstructConstant[t1].domaine [0].code =="ADHERENT") {
+                              this.boMembre = true;
+                          
+                            }
                     }
                     if(this.boAdul && !this.boMembre) {
                       this.plafondFamilleActeConstructConstant[t].membre = "ADULTE";
@@ -421,6 +427,7 @@ export class BaremeComponent implements OnInit, OnDestroy {
                     this.boMembre =false
                     
                   }if(this.plafondFamilleActeConstructConstant[t].domaine) {
+                    console.log("==========================oui=======",)
                     this.plafondFamilleActeConstructConstant[t].membre = this.plafondFamilleActeConstructConstant[t]?.domaine[0]?.code;
                   }
                 }

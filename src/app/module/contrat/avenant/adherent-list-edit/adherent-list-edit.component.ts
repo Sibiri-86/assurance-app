@@ -50,6 +50,7 @@ export class AdherentListEditComponent implements OnInit {
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
   displayPhotos: Boolean = false;
+  displayCarte: Boolean = false;
   pictureUrl='';
 
   constructor(
@@ -278,6 +279,6 @@ export class AdherentListEditComponent implements OnInit {
   }
   voirCarte(ad:Adherent) {
     this.pictureUrl =ad.urlCarte;
-    this.displayPhotos = true;
+    this.displayCarte = true;
   }
 }

@@ -296,6 +296,8 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   plafondFamilleActeConstructConstant: Array<PlafondFamilleActe> = [];
   boAdul = false;
   boMembre = false;
+  policeAllList: Array<Police> = [];
+  policeSelected: Police = {};
 
 
   constructor(
@@ -526,6 +528,9 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.tauxCommissionIntermediaireList = value.slice();
                 }
     });
+
+
+    this.loadPoliceFiltre();
 
     this.plafondGroupe$ = this.store.pipe(select(plafondSelector.plafondGroupe));
     this.store.dispatch(featureActionsPlafond.loadPlafondGroupe(null));
@@ -1637,6 +1642,38 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       );
     }
     // this.onRefreshDateEcheanceForGroupe();
+  }
+
+  onVerifieExistPolice() {
+    if(this.policeAllList) {
+      console.log("=======================oui============oui====",this.policeAllList.length);
+      this.policeSelected = this.policeAllList.find(pol=>pol.nom.toLowerCase() === this.policeForm.get('nom').value.toLowerCase());
+      console.log("=======================oui============oui==1==",this.policeSelected.id);
+      if(this.policeForm.get('garant').value) {
+        console.log("=======================oui============oui=2===",this.policeSelected.garant.id, '========o==',this.policeForm.get('garant').value.id);
+        if(this.policeForm.get('intermediaire').value) {
+          console.log("=======================oui============oui=3===",this.policeSelected.intermediaire.id, '========o==',this.policeForm.get('garant').value.id);
+          if(this.policeForm.get('nom').value) {
+            console.log("=======================oui============oui=5===");
+  
+            if(this.policeSelected.garant.id ==  this.policeForm.get('garant').value.id || 
+            this.policeSelected.intermediaire.id ==  this.policeForm.get('intermediaire').value.id) {
+              console.log("=======================oui============oui=6===");
+              this.policeForm.get('nom').setValue("");
+              this.showToast("error", "INFORMATION", "la police existe déjà avec le même garant et l'intermediaire");
+            }
+          }
+        }
+      } else {
+        if(this.policeSelected) {
+          console.log("=======================oui============oui=7===");
+          this.policeForm.get('nom').setValue("");
+          this.showToast("error", "INFORMATION", "la police existe déjà !!!");
+
+        }
+      }
+    }
+    
   }
 
   onRefreshDateEcheance() {
@@ -2836,6 +2873,16 @@ changeGarantie(garantie, indexLigne: number) {
 
   deleteGroupe(groupe): void {
     this.store.dispatch(featureActionGroupe.deleteGroupe(groupe));
+  }
+
+  loadPoliceFiltre() {
+
+    this.policeService.$getPolicesAll().subscribe((rest)=>{
+
+      if(rest) {
+        this.policeAllList = rest.policeDtoList;
+      }
+    });
   }
 
   loadAllPolice(): void {

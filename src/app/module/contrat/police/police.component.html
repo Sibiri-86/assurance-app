@@ -4198,7 +4198,7 @@
 
                         <div class="p-field p-col-4">
                             <label for="firstname2">Nom du souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
-                            <input id="nom" type="text"  required formControlName="nom"  pInputText>
+                            <input id="nom" type="text"  required formControlName="nom"  (input)="onVerifieExistPolice()" pInputText>
                             <app-entity-validation [entityValidations]="entityValidations"
                                                    [formGroup]="policeForm" [entityField]="'nom'">
                             </app-entity-validation>
