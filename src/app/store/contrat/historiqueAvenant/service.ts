@@ -1,4 +1,5 @@
 import {
+    AddSousActeDto,
     AdherentPermute,
     AdherentPermuteList,
     Avenant,
@@ -380,4 +381,10 @@ private handleError<T>() {
             catchError(this.handleError())
         );;
     } */
+
+    ajoutActe(addSousActeDto: AddSousActeDto): Observable<any> {
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/ajout_nouvel_acte`, addSousActeDto,
+            {observe: 'response'}
+        );
+    }
 }

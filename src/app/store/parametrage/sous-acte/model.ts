@@ -1,3 +1,6 @@
+import { DimensionPeriode } from "../dimension-periode/model";
+import { QualiteAssure } from "../qualite-assure/model";
+
 export interface SousActe {
     id?: string;
     code?: string;
@@ -9,6 +12,9 @@ export interface SousActe {
     idGenre?: string;
     montantConvantion?: number;
     dateEffet?: Date;
+    dimensionPeriode?: DimensionPeriode;
+    domaine?: Array<QualiteAssure>;
+    montantPlafond?: number;
 }
 export interface SousActeList {
     typeSousActeDtoList?: Array<SousActe>;

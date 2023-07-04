@@ -255,7 +255,7 @@
             </div>
 
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe">
+        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe" >
             <div class="p-grid">
                 <!--<div class="p-col-12">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -565,7 +565,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe">
+        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe" >
 
             <ng-template pTemplate="content">
                 <div class="p-grid">
@@ -1008,7 +1008,7 @@
 
 
         </p-tabPanel>
-        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT">
+        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT" >
             <div class="p-grid">
                 <div class="p-col-4">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -1124,7 +1124,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+        <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE" >
           <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
 
@@ -1243,6 +1243,13 @@
 
             </div> -->
         </p-tabPanel>
+
+        <!-- <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-user-edit" tooltip="BASCULER" [disabled]="!avenantId"></p-tabPanel> -->
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-plus" tooltip="BASCULER"  [disabled]="!avenantId">
+
+            <app-ajout_acte [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantId"></app-ajout_acte>
+        </p-tabPanel>
+
     </p-tabView>
     <hr>
     <p-fieldset legend="Enregistrement de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">

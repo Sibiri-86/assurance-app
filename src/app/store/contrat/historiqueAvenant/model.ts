@@ -237,3 +237,14 @@ export enum TypeDemandeur {
 export class VerifyRenouvellementIsOverlapReponse {
     isOverlap: boolean;
 }
+
+export interface AddSousActeDto {
+    id?: string;
+    idTypeActe?: string;
+    groupeId?: string;
+    exerciceId?: string;
+    dimensionPeriode?: DimensionPeriode;
+    domaine?: Array<QualiteAssure>;
+    montantPlafond?: number;
+    avenantId?: string;
+}
