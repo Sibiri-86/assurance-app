@@ -289,6 +289,9 @@ onRowEditSave(sa: SousActe) {
   this.addSousActeDto.idTypeActe =  sa.idTypeActe;
   this.addSousActeDto.exerciceId = this.exerciceRevenu.id;
   this.addSousActeDto.avenantId = this.avenantId;
+  this.addSousActeDto.sousActeId = sa.id;
+  this.addSousActeDto.dateEffet = sa.dateEffet;
+  this.addSousActeDto.montantPrime = sa.montantPrime;
   console.log('ssssssssssssssssssssssss', this.addSousActeDto);
   delete this.clonedSousActe[sa.id];
 }

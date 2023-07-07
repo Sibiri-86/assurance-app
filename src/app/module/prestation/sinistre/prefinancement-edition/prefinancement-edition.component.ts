@@ -1407,7 +1407,13 @@ verifieDateSoins(event){
       this.compteur = null;
       console.log("PREST1", prestat);
     } else {
-      this.prestationsList.push(prestat);
+      for(let i = 0; i < 10; i++) {
+        this.prestationsList.push(prestat);
+        if(this.prestationsList.length >5) {
+          this.updateView();
+        }
+      }
+      //this.prestationsList.push(prestat);
       console.log("PREST2", prestat);
     }
    
@@ -1431,6 +1437,9 @@ verifieDateSoins(event){
     
     
     
+}
+updateView() {
+  this.prestationsList = [...this.prestationsList];
 }
 editerPrestation1(prestation: Prestation, rowIndex: number) {
   console.log("5555555555555555555555555",prestation);

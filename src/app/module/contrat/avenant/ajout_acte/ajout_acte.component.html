@@ -32,11 +32,7 @@
             </p-dropdown>
         </div> -->
 
-        <div class="p-col-4">
-            <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="saveAherentNewGroupe()" ></button>
-        </div>
+        
 
         
         <div class="p-col-12">
@@ -50,12 +46,11 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th> -->
                         <th>acte</th>
-                        <th>Montant plafond</th>
+                        <th>Montant plafond par acte</th>
                         <th>Périodicité</th>
-                        <!-- <th>DATE NAISS.</th>
-                        <th>MAIL</th>
-                        <th>DATE EFFET</th>
-                        <th></th> -->
+                        <th>Montant prime</th>
+                        <th>Date d'effet</th>
+                        
                        
                     </tr>
                 </ng-template>
@@ -85,6 +80,26 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPrime">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.montantPrime}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="date" [(ngModel)]="convention.dateEffet">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.dateEffet | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                         <td style="text-align:center">
                             <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(convention)" class="p-button-rounded p-button-text"></button>
                             <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(convention)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
@@ -100,6 +115,12 @@
                     </div>
                 </ng-template>
             </p-table>
+        </div>
+
+        <div class="p-col-4">
+            <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
+                    (click)="saveAherentNewGroupe()" ></button>
         </div>
 
     </div>

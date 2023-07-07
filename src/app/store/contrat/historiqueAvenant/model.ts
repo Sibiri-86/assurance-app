@@ -247,4 +247,7 @@ export interface AddSousActeDto {
     domaine?: Array<QualiteAssure>;
     montantPlafond?: number;
     avenantId?: string;
+    sousActeId?: string;
+    montantPrime?: number;
+    dateEffet?: Date;
 }

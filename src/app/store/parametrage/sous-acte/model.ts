@@ -15,6 +15,7 @@ export interface SousActe {
     dimensionPeriode?: DimensionPeriode;
     domaine?: Array<QualiteAssure>;
     montantPlafond?: number;
+    montantPrime?: number;
 }
 export interface SousActeList {
     typeSousActeDtoList?: Array<SousActe>;
