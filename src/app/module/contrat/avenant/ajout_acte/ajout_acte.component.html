@@ -1,5 +1,5 @@
 
-    <div class="p-grid">
+    <div class="p-grid p-mb-4">
         <div class="p-col">
             <label class="p-fieldset-content">Choisir le groupe</label>
             <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedPermuter"
@@ -18,12 +18,20 @@
 
         <div class="p-col">
             <label class="p-fieldset-content">Choisir l'acte</label>
-            <p-dropdown [options]="sousActeList" optionLabel="libelle" [(ngModel)]="sousActeNouveau"
-                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un sous acte" [disabled]="!selectedQualiteAssure?.length"
-                       (onChange)="selectSousActe(sousActeNouveau)">
+            <p-dropdown [options]="acteList" optionLabel="libelle" [(ngModel)]="acteNouveau"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un acte" [disabled]="!selectedQualiteAssure?.length"
+                       (onChange)="selectActe(acteNouveau)">
             </p-dropdown>
         </div>
 
+        <div class="p-col">
+            <label class="p-fieldset-content">Choisir le sous acte</label>
+            <p-dropdown [options]="listeSousActeFiltrer" optionLabel="libelle" [(ngModel)]="sousActeNouveau"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un sous acte" [disabled]="!acteNouveau"
+                       (onChange)="selectSousActe(sousActeNouveau)">
+            </p-dropdown>
+        </div>
+    </div>
         <!-- <div class="p-col">
             <label class="p-fieldset-content">Choisir le sous acte</label>
             <p-dropdown [options]="groupeListNouvo" optionLabel="libelle" [(ngModel)]="groupeSelectedNouvo"
@@ -34,8 +42,8 @@
 
         
 
-        
-        <div class="p-col-12">
+        <div class="p-grid">
+        <div class="p-col-10">
             <p-table #dt [value]="listeSousActe" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
             [rowHover]="true" styleClass="p-datatable-customers"
              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
@@ -116,12 +124,12 @@
                 </ng-template>
             </p-table>
         </div>
-
-        <div class="p-col-4">
+        <div class="p-col">
             <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
-                    (click)="saveAherentNewGroupe()" ></button>
+                    (click)="saveAherentNewGroupe()"  [disabled]="!listeSousActe.length"></button>
         </div>
-
     </div>
+
+   
 

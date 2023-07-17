@@ -245,12 +245,12 @@ export class AvenantModificationComponent implements OnInit {
       dateEffet: new FormControl('', [Validators.required]),
       typeDuree: new FormControl(null, [Validators.required]),
       dateEcheance: new FormControl({value: '', disabled: true}, [Validators.required]),
-      commune: new FormControl('', [Validators.required]),
+      commune: new FormControl(null, [Validators.required]),
       numeroGroupe: new FormControl(''),
-      typePrime: new FormControl(''),
+      typePrime: new FormControl(),
       adresse: new FormControl(''),
-      prime: new FormControl(''),
-      police: new FormControl(''),
+      prime: new FormControl(),
+      police: new FormControl(),
       description: new FormControl('', [Validators.required]),
     });
 
@@ -290,7 +290,7 @@ export class AvenantModificationComponent implements OnInit {
       pays: new FormControl(''),
       region: new FormControl(''),
       departement: new FormControl(''),
-      commune: new FormControl(''),
+      commune: new FormControl(),
       referencePolice: new FormControl('', [Validators.required]),
       fraisAccessoire: new FormControl('', [Validators.required]),
       fraisBadge: new FormControl('', [Validators.required])

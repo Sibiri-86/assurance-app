@@ -247,6 +247,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, this.prestationAdd.acte.id).subscribe(rest=>{
 
             this.montantPlafond1 = rest;
+            console.log("mmmmmmmmmmmmmmmtttttttmmmmmmmmmmmmmmmmmmmmmm", this.montantPlafond1);
            
         });
     }
@@ -699,26 +700,18 @@ export class TierPayantEditionComponent implements OnInit {
         this.adherentSelected = null;
         this.prestationAdd.matriculeAdherent = "";
         this.prestationAdd.nomAdherent = "";
-        
         this.prestationAdd.prenomAdherent = "";
-
-    
-                
-                this.prestationAdd.numeroGroupe = "";
-                this.prestationAdd.numeroPolice = "";
-                this.prestationAdd.souscripteur =  "";
-                this.prestationAdd.nomGroupe = "";
-                this.prestationAdd.adherent = this.adherentSelected;
-            
-               
-                  
-                    this.prestationAdd.nomAdherentPrincipal = "";
-                    this.prestationAdd.prenomAdherentPrincipal = "";
-                
-                    this.prestationAdd.nomAdherentPrincipal = "";
-                    this.prestationAdd.prenomAdherentPrincipal = "";
-                    this.prestationAdd.sort = null;
-                    this.prestationAdd.observation = "";
+        this.prestationAdd.numeroGroupe = "";
+        this.prestationAdd.numeroPolice = "";
+        this.prestationAdd.souscripteur =  "";
+        this.prestationAdd.nomGroupe = "";
+        this.prestationAdd.adherent = this.adherentSelected;
+        this.prestationAdd.nomAdherentPrincipal = "";
+        this.prestationAdd.prenomAdherentPrincipal = "";
+        this.prestationAdd.nomAdherentPrincipal = "";
+        this.prestationAdd.prenomAdherentPrincipal = "";
+        this.prestationAdd.sort = null;
+        this.prestationAdd.observation = "";
                 
         
         this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
@@ -1543,8 +1536,6 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       addPrestation() {
-
-        
         if(this.prefinancement.montantRestant == null ) {
             this.prefinancement.montantRestant = 0;
         }
@@ -1557,12 +1548,6 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
           } 
-
-        
-
-        
-            
-        
         if(this.compteur !=null) {
             this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                
@@ -1574,6 +1559,40 @@ export class TierPayantEditionComponent implements OnInit {
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
           
           this.prestationAdd = {};
+          /* this.prestationAdd.acte = null;
+          this.prestationAdd.baseRemboursement = null;
+          this.prestationAdd.bonPriseEnCharge = null;
+          this.prestationAdd.centreExecutant = null;
+          this.prestationAdd.coutUnitaire = null;
+          this.prestationAdd.dateRetrait = null;
+          this.prestationAdd.dateSoins = null;
+          this.prestationAdd.debours = null;
+          this.prestationAdd.familleActe = null;
+          this.prestationAdd.medecin = null;
+          this.prestationAdd.montantExclu = null;
+          this.prestationAdd.montantPaye = null;
+          this.prestationAdd.montantPlafond = null;
+          this.prestationAdd.montantReclame = null;
+          this.prestationAdd.montantRembourse = null;
+          this.prestationAdd.montantRestant = null;
+          this.prestationAdd.numeroBon = null;
+          this.prestationAdd.observation = null;
+          this.prestationAdd.pathologie = null;
+          this.prestationAdd.produitPharmaceutique = null;
+          this.prestationAdd.sort = null;
+          this.prestationAdd.sousActe = null;
+          this.prestationAdd.taux = null;
+          this.prestationAdd.nombreActe = null;
+          this.prestationAdd.prestataire = null;
+          this.montantPlafond1 = null;
+          this.prestationAdd.sousActe.montantPlafond = null; */
+          this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
+          this.prestationAdd.nomAdherent = this.adherentSelected.nom;
+          this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal?.nom +" "+ this.adherentSelected.adherentPrincipal?.prenom;
+          this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
+          this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe.toString();
+          this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
+          this.prestationAdd.souscripteur = this.adherentSelected.groupe.police.nom;
           this.compteur = null;
           if(this.prestationsList?.length%10 == 0){
 

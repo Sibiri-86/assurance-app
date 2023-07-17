@@ -110,7 +110,9 @@ export class AjoutActeComponent implements OnInit {
   qa: QualiteAssure = {};
   selectedQualiteAssure : Array<QualiteAssure>;
   sousActeNouveau : SousActe = {};
+  acteNouveau : Acte = {};
   listeSousActe : SousActe [] = [];
+  listeSousActeFiltrer : SousActe [] = [];
   clonedSousActe: { [s: string]: SousActe } = {};
 
   constructor(
@@ -142,6 +144,14 @@ export class AjoutActeComponent implements OnInit {
       if (value) {
         console.log(this.sousActeList);
         this.sousActeList = value.slice();
+      }
+    });
+
+    this.acteList$ = this.store.pipe(select(acteSelector.acteList));
+    this.store.dispatch(loadActe());
+    this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.acteList = value.slice();
       }
     });
 
@@ -235,14 +245,13 @@ export class AjoutActeComponent implements OnInit {
   }
 
   saveAherentNewGroupe() {
-    this.addAherentNewGroupe();
-    const adherentPermutList1:  AdherentPermuteList = {};
-    adherentPermutList1.adherentPermuteList = this.adherentPermutList;
     this.addSousActeDto.groupeId = this.groupeSelectedPermuter.id;
-    //this.addSousActeDto.idTypeActe = this.
-    
     console.log(this.addSousActeDto);
-    this.store.dispatch(featureActionHistoriqueAdherant.ajoutActe(this.addSousActeDto));
+    if(this.addSousActeDto.montantPlafond != null || this.addSousActeDto.dimensionPeriode != null || this.addSousActeDto.dateEffet != null) {
+      this.store.dispatch(featureActionHistoriqueAdherant.ajoutActe(this.addSousActeDto));
+    } else {
+      this.messageService.add({severity:'error', summary: 'Erreur', detail:'Veuillez Renseigner les informations nécéssaires'});
+    }
    // this.loadHistoriqueAvenantAdherantByPolice();
   }
 
@@ -327,6 +336,11 @@ onRowSelect(event: any) {
   selectSousActe(sa: SousActe) {
     this.listeSousActe.push(sa);
     console.log("this listeSousActe", this.listeSousActe);
+  }
+
+  selectActe(a: Acte) {
+    this.listeSousActeFiltrer = this.sousActeList.filter(s => s.idTypeActe === a.id);
+    console.log(this.listeSousActeFiltrer);
   }
 
 }

@@ -1407,11 +1407,11 @@ verifieDateSoins(event){
       this.compteur = null;
       console.log("PREST1", prestat);
     } else {
-      for(let i = 0; i < 10; i++) {
+      //for(let i = 0; i < 10; i++) {
         this.prestationsList.push(prestat);
         if(this.prestationsList.length >5) {
           this.updateView();
-        }
+        //}
       }
       //this.prestationsList.push(prestat);
       console.log("PREST2", prestat);

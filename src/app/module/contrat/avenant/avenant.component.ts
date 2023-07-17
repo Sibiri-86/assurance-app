@@ -331,6 +331,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayModif = false;
   displayPhotos: Boolean = false;
   pictureUrl='';
+  autofinancementList: Police[];
+  mutuelleList: Police[];
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2900,4 +2902,29 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.pictureUrl =ad.urlPhoto;
     this.displayPhotos = true;
   }
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        this.policeList = this.policeList.filter(g=>g.garant.typeGarant.code == "ASS");
+        break;
+      }
+      case 1: {
+        this.autofinancementList = this.policeList.filter(g=>g.garant.typeGarant.code == "AUTOFI" || g.garant.typeGarant == null);
+        break;
+      }
+      case 2: {
+        this.mutuelleList = this.policeList.filter(g=>g.garant.typeGarant.code == "MUTUEL");
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
+  }
+
 }
