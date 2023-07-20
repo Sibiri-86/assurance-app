@@ -44,6 +44,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     @Input() avenantId: string;
     @Input() etat: string;
     @Output() adherentFamilleEvent = new EventEmitter();
+    @Output() adherentFamilleEventF = new EventEmitter();
     @Input() police: Police;
     //  newgroupe: Groupe;
     lastExerciceForm: FormGroup;
@@ -108,8 +109,10 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             adherent: {},
             famille: []
         };
-
+        this.familys.reset([]);
+        this.adherentSelected = {};
         this.adherentListGroupe = [];
+        this.adherentForm.reset({});
 
         console.log(' *** etat === ' + this.etat);
         if (this.etat !== 'CREATE') {

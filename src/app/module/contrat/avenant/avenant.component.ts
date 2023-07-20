@@ -153,6 +153,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   police: Police;
   historiqueAvenant: HistoriqueAvenant;
   exercice: Exercice;
+  exerciceSelected: Exercice = {};
   selectedPolices: Police[];
   displayDialogFormPolice = false;
   displayDialogFormAddAdherent = false;
@@ -330,6 +331,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   exoNumber: number;
   displayModif = false;
   displayPhotos: Boolean = false;
+  displayCarte:  Boolean = false;
   pictureUrl='';
   autofinancementList: Police[];
   mutuelleList: Police[];
@@ -1725,6 +1727,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
         this.addAvenant();
         this.entete = 'Avenant de renouvellement'.toUpperCase();
         this.etat = 'VIEW';
+        this.exerciceRev = avenant.exercice;
         // this.viewAvenantRenouvellement(avenant, avenant.typeHistoriqueAvenant);
         break;
       }
@@ -1809,6 +1812,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   viewAvenantAffaireNouvelle(avenant: HistoriqueAvenant, typeHistoriqueAvenant: TypeHistoriqueAvenant) {
     this.historiqueAvenant = {...avenant};
     console.log(typeof typeHistoriqueAvenant);
+    this.exerciceSelected = avenant.exercice;
     this.historiqueAvenantAdherentService.getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvenant,
         avenant.id).subscribe(
         (res: Array<HistoriqueAvenantAdherant>) => {
@@ -2178,6 +2182,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     }
   }
+  getFermerRenouvellement(event: boolean)  {
+    console.log('********************Fermer renouvellement************************');
+    console.log(event);
+
+    if(event) {
+      // this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    }
+  }
+
+ 
 
   getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;
@@ -2869,6 +2885,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   }
 
+  onBasicUploadCarteLot(event, form) {
+    console.log(event.files);
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la carte des adherents par lot',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files);
+        this.store.dispatch(featureActionAdherent.importCarteAdherentLot({file:event.files, idExercice: this.exerciceSelected.id}));
+        form.clear();
+      },
+    });
+
+  }
+
   impAssureGroupe(){
     this.displayImpGroupe = true;
     this.getGroupeByPolice2();
@@ -2899,7 +2930,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
     console.log(ad.urlPhoto);
-    this.pictureUrl =ad.urlPhoto;
+    this.pictureUrl = ad.urlPhoto;
     this.displayPhotos = true;
   }
 
@@ -2927,4 +2958,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     
   }
 
+
+  voirCarte(ad:Adherent) {
+    this.pictureUrl =ad.urlCarte;
+    this.displayCarte = true;
+  }
 }

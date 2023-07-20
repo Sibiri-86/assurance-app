@@ -157,6 +157,7 @@ export class TierPayantEditionComponent implements OnInit {
     prestationsList1: Prestation[]= [];
     prestationDetail:Prestation = {};
     prestationAdd: Prestation = {};
+    prestationAddFin: Prestation = {};
     prestationBon: Prestation = {};
     displayPrestationpop = false;
     compteur: number = null;
@@ -189,6 +190,12 @@ export class TierPayantEditionComponent implements OnInit {
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
+
+    fermerPrestation1(){
+       if(this.prestationsList && !this.prefinancement.id) {
+        this.onCreate();
+       }
+      }
 
     onCreate() {
         
@@ -1068,6 +1075,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     calculDebours() {
         console.log("======idGenre=======",this.adherentSelected.qualiteAssure.code);
+        this.prestationAdd.taux = this.adherentSelected.groupe.taux;
         if(this.prestationAdd.sort === Sort.REJETE) {
             this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
             this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
@@ -1557,42 +1565,48 @@ export class TierPayantEditionComponent implements OnInit {
             this.prestationsList.push(this.prestationAdd);
           }
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
-          
-          this.prestationAdd = {};
-          /* this.prestationAdd.acte = null;
-          this.prestationAdd.baseRemboursement = null;
-          this.prestationAdd.bonPriseEnCharge = null;
-          this.prestationAdd.centreExecutant = null;
+         this.prestationAddFin.dateSoins = this.prestationAdd.dateSoins;
+         this.prestationAddFin.numeroBon = this.prestationAdd.numeroBon;
+         this.prestationAdd = {};
+         this.prestationAdd.dateSoins = this.prestationAddFin.dateSoins;
+         this.prestationAdd.numeroBon = this.prestationAddFin.numeroBon;
+         this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
+         this.prestationAdd.nomAdherent = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
+         
+         this.prestationAdd.prenomAdherent = this.adherentSelected.prenom;
+         
+         this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe?.toString();         
+         this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
+         this.prestationAdd.souscripteur =  this.adherentSelected.groupe.police.nom;
+         this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
+         this.prestationAdd.adherent = this.adherentSelected;
+         if (this.adherentSelected.adherentPrincipal != null) {
+               this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal.nom.concat("  ").concat(this.adherentSelected.adherentPrincipal.prenom);
+            this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.adherentPrincipal.prenom;
+        } else {
+              this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
+            this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.prenom;
+        }
+     
+       //  this.prestationAdd. = this.prestationAddFin.dateSoins;
+         /* this.prestationAdd.acte = {};
+          this.prestationAdd.familleActe = {};
+          this.prestationAdd.sousActe = {};
+          this.prestationAdd.pathologie = {};
+          this.prestationAdd.prestataire = {};
+          this.prestationAdd.produitPharmaceutique = [];
+          this.prestationAdd.medecin = {};
+          this.prestationAdd.nombreActe = null;
           this.prestationAdd.coutUnitaire = null;
-          this.prestationAdd.dateRetrait = null;
-          this.prestationAdd.dateSoins = null;
           this.prestationAdd.debours = null;
-          this.prestationAdd.familleActe = null;
-          this.prestationAdd.medecin = null;
-          this.prestationAdd.montantExclu = null;
-          this.prestationAdd.montantPaye = null;
-          this.prestationAdd.montantPlafond = null;
-          this.prestationAdd.montantReclame = null;
           this.prestationAdd.montantRembourse = null;
           this.prestationAdd.montantRestant = null;
-          this.prestationAdd.numeroBon = null;
-          this.prestationAdd.observation = null;
-          this.prestationAdd.pathologie = null;
-          this.prestationAdd.produitPharmaceutique = null;
+          this.prestationAdd.taux = {};
           this.prestationAdd.sort = null;
-          this.prestationAdd.sousActe = null;
-          this.prestationAdd.taux = null;
-          this.prestationAdd.nombreActe = null;
-          this.prestationAdd.prestataire = null;
-          this.montantPlafond1 = null;
-          this.prestationAdd.sousActe.montantPlafond = null; */
-          this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
-          this.prestationAdd.nomAdherent = this.adherentSelected.nom;
-          this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal?.nom +" "+ this.adherentSelected.adherentPrincipal?.prenom;
-          this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
-          this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe.toString();
-          this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
-          this.prestationAdd.souscripteur = this.adherentSelected.groupe.police.nom;
+          this.prestationAdd.baseRemboursement = null;
+          this.prestationAdd.montantPlafond = null;
+          this.prestationAdd.montantExclu = null;
+          this.prestationAdd.observation = null;*/
           this.compteur = null;
           if(this.prestationsList?.length%10 == 0){
 

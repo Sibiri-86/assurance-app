@@ -264,7 +264,7 @@
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerInfo()"></button>
                             <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pTooltip="Enregistrer les infos de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantInfo()"></button>
                         </div>
 
@@ -519,7 +519,7 @@
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
                             <button type="button" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
                         </div>
 
@@ -1883,7 +1883,7 @@
             </div>
             <!-- <app-avenant-incorporation-renouvellement *ngIf="groupeListes?.length === 0" [isRenouv]="true" [adherentPrincipauxTMP]="adherentsListeActuelleByExercice" [police]="police" (adherentFamilleEvent)="addAvenantAdherant($event)"></app-avenant-incorporation-renouvellement> -->
         </p-tabPanel>
-        <p-tabPanel [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'"  header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT">
+        <p-tabPanel   header="RETRAIT" leftIcon="pi pi-user-minus" tooltip="RETRAIT" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'">
             <div *ngIf="etat !=='VIEW'">
                 <app-avenant-retrait-renouvellement [exerciceRevenu]="exerciceRev"  [isRenouv]="true" [police]="police" (adherentFamilleEvent)="createAvenantRetrait($event)"
                 [message]="'Veuiller selectionner les adherents à supprimer'" [avenantDate]="avenantD">
@@ -1901,10 +1901,10 @@
             </div>
         </p-tabPanel>
 
-        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" [disabled]="myForm.invalid || !avenantArrivedId"  header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE">
+        <p-tabPanel [style]="{'width': '100%'}" *ngIf="etat !=='VIEW'" header="AJOUT DE GROUPE" leftIcon="pi pi-cog" tooltip="HISTORIQUE" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'">
             <app-groupe-ajout [police] = "police"  [exerciceRevenu] = "exerciceRevenu"  [avenantIdEnv] = "avenantIdEnv" [groupeListes]="groupeListes"></app-groupe-ajout>
           </p-tabPanel>
-        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER">
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="BASCULER DES ADHERENTS" leftIcon="pi pi-user-edit" tooltip="BASCULER" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'">
 
             <app-adherent-basculer [police] = "police" [exerciceRevenu] = "exerciceRevenu"  [groupeListes]="groupeListes" ></app-adherent-basculer>
 
@@ -1951,9 +1951,9 @@
                         <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
                         <td><span class="p-column-title">{{adherent.numero}}</span></td>
                         <td><span class="p-column-title">{{adherent.groupe?.libelle}}</span></td>
-                        <td><span class="p-column-title">{{adherent.nom | upercase}}</span></td>
-                        <td><span class="p-column-title">{{adherent.prenom | beginLowerCase}}</span></td>
-                        <td><span class="p-column-title">{{adherent.genre?.libelle | upercase}}</span></td>
+                        <td><span class="p-column-title">{{adherent.nom }}</span></td>
+                        <td><span class="p-column-title">{{adherent.prenom }}</span></td>
+                        <td><span class="p-column-title">{{adherent.genre?.libelle }}</span></td>
                         <td><span class="p-column-title">{{adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
                         <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->

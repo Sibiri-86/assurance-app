@@ -116,6 +116,7 @@ export class AvenantProrogationComponent implements OnInit {
     @Input() groupesRev: Array<Groupe>;
     @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
+    @Output() eventEmitterF = new EventEmitter();
     @Input() adherentPrincipauxTMP: Array<Adherent> = [];
     adherentPrincipauxTMPRenouv: Array<Adherent> = [];
     destroy$ = new Subject<boolean>();
@@ -1096,11 +1097,23 @@ export class AvenantProrogationComponent implements OnInit {
     }
 
     annuler(): void {
+       
+            this.myForm.reset({});
+            this.exerciceForm.reset({}); 
+        
+    }
+
+    annulerTotal() {
         this.historiqueAveantAdherants = [];
         this.plafondFamilleActe = [];
         this.acteList = [];
         this.sousActeList = [];
+        console.log('********************Ferme 11111 renouvellement************************');
+
+        this.eventEmitterF.emit(true);
     }
+
+
 
     createAvenantModif(): void {
        /* this.plafondActe.forEach(pa => {

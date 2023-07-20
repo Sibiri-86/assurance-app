@@ -116,6 +116,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() groupesRev: Array<Groupe>;
     @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
+    @Output() eventEmitterF = new EventEmitter();
     @Input() adherentPrincipauxTMP: Array<Adherent> = [];
     adherentPrincipauxTMPRenouv: Array<Adherent> = [];
     destroy$ = new Subject<boolean>();
@@ -190,6 +191,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         plafondFamilleActes: [],
         plafondGroupeSousActes: []
     };
+    display: boolean = false;
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
     typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
     adherentFamilleListe: AdherentFamille[] = [];
@@ -621,6 +623,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     
         if(this.etat!=='CREATE') {
             this.charge();
+          
         }
         this.adherentPrincipaux = this.adherentPrincipauxTMP;
         console.log('this.adherentPrincipauxTMP======>',this.adherentPrincipauxTMP);
@@ -790,16 +793,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                 this.historiqueAveantAdherantsTMP = res;
             }
         );
-
-        this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
-        this.store.dispatch(loadListeActualisee.loadListeActualisee({policeId: this.curentPolice.id}));
-        this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
-            .subscribe((value1) => {
-                if (value1) {
-                    this.adherantPoliceListActualisee = value1.slice();
-                    console.log('liste actualisée == ' + this.adherantPoliceListActualisee.length);
-                }
-            });
+       
 
            //  this.loadExerciceByPolice(this.police);
 
@@ -839,6 +833,19 @@ export class AvenantRenouvellementComponent implements OnInit {
                 }
             );
 
+
+
+            console.log('====curentExercice===== ' ,this.exerciceRevenu.id);
+
+            this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
+            this.store.dispatch(loadListeActualisee.loadListeActualiseeByExercice({exerciceId: this.exerciceRevenu.id}));
+            this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
+                .subscribe((value1) => {
+                    if (value1) {
+                        this.adherantPoliceListActualisee = value1.slice();
+                        console.log('liste actualisée == ' + this.adherantPoliceListActualisee.length);
+                    }
+                });
 
            
 
@@ -1100,6 +1107,9 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.plafondFamilleActe = [];
         this.acteList = [];
         this.sousActeList = [];
+        console.log('********************Ferme 11111 renouvellement************************');
+
+        this.eventEmitterF.emit(true);
     }
 
     createAvenantModif(): void {
@@ -1303,6 +1313,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.groupeListeFinale = [];
     }
 
+  
     createAvenantPlafond(): void {
         this.enleverEspace();
         this.objet.plafondGroupeActes = this.acteListFinal;
@@ -1914,6 +1925,11 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.selectedTypePrime = {} ;
     }
 
+
+    annulerInfo(): void {
+        this.myForm.reset({});
+        this.exerciceForm.reset({}); 
+    }
     validerGroupe(): void {
         /* this.groupeListes.forEach(grp =>  {
             if (grp.id === this.groupeForm.get('id').value) {

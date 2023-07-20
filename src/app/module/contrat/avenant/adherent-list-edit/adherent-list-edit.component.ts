@@ -19,6 +19,8 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
+import { ConfirmationService } from 'primeng/api';
+import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 
 @Component({
   selector: 'app-adherent-list-edit',
@@ -47,10 +49,14 @@ export class AdherentListEditComponent implements OnInit {
   groupePolicy: Array<Groupe> = [];
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
+  displayPhotos: Boolean = false;
+  displayCarte: Boolean = false;
+  pictureUrl='';
 
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
+      private confirmationService: ConfirmationService,
       private adherentService: AdherentService) {
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(0),
@@ -256,5 +262,23 @@ export class AdherentListEditComponent implements OnInit {
           }
       );
     }
+  }
+  onBasicUploadCarteLot(event, form) {
+    console.log(event.files);
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la carte des adherents par lot',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files);
+        this.store.dispatch(featureActionAdherent.importCarteAdherentLot({file:event.files, idExercice: this.historiqueAvenantAdherants[0].avenant.exercice.id}));
+        form.clear();
+      },
+    });
+
+  }
+  voirCarte(ad:Adherent) {
+    this.pictureUrl =ad.urlCarte;
+    this.displayCarte = true;
   }
 }

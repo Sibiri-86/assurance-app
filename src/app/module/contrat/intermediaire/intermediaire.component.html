@@ -17,7 +17,7 @@
                 -->
 			</p-toolbar>
 
-			<p-table #dt [value]="intermediaireList" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu']"
+			<p-table #dt [value]="intermediaireList" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','contact','numeroIfu','personneRessource','numeroCompteBancaire1']"
 					 [(selection)]="selectedIntermediaires" [rowHover]="true" dataKey="id"
 					 styleClass="p-datatable-customers"
 					 currentPageReportTemplate="affichage {first} à {last}  de {totalRecords} enregistrement" [showCurrentPageReport]="true">

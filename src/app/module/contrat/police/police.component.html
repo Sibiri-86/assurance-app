@@ -3533,11 +3533,10 @@
                     </ng-template>
 
                 </p-toolbar>
-                <p-table #dt [value]="groupeList" [columns]="cols" [rows]="10" [paginator]="true"
-                    [globalFilterFields]="['numeroGroupe, libelle','description']" [rowHover]="true" dataKey="id"
-                    styleClass="p-datatable-customers"
-                    currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
-                    [showCurrentPageReport]="true">
+                <p-table #dt [value]="groupeList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','numeroGroupe','description','duree','territorialite.libelle']"
+                         [rowHover]="true" dataKey="id"
+                         styleClass="p-datatable-customers"
+                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
                     <ng-template pTemplate="caption">
                         <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                             <h5 class="p-m-0"></h5>
@@ -4297,9 +4296,8 @@
             <div class="card">
                 <p-toolbar styleClass="p-mb-4">
                     <ng-template pTemplate="left">
-                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2"
-                            (click)="addAdherent(); loadAdherentPrincipalByGroupe(groupe)"></button>
-                        <!-- <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2 p-mr-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button> -->
+                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addAdherent(); loadAdherentPrincipalByGroupe(groupe)"></button>
+                        <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2 p-mr-2" (click)="deleteSelectedAdherent()" [disabled]="!selectedadherent || !selectedadherent.length"></button>
                         <div class="p-mr-2 p-mb-2">
                             <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="un à un"
                                 uploadLabel="Valider" name="demo[]" accept="image/*" maxFileSize="1000000"
@@ -4320,12 +4318,12 @@
                     </ng-template>
 
                 </p-toolbar>
-                <p-table #dt [value]="adherentList" [columns]="cols" [rows]="10" [paginator]="true"
-                    [globalFilterFields]="['numero','matriculeGarant','matriculeSouscripteur',
-                'nom','prenom','numeroTelephone','dateNaissance','dateIncorporation']" [rowHover]="true" dataKey="id"
-                    styleClass="p-datatable-customers"
-                    currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
-                    (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
+                <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','matriculeGarant','matriculeSouscripteur',
+                'nom','prenom','numeroTelephone','dateNaissance','dateIncorporation']"
+                         [rowHover]="true" dataKey="id"
+                         [(selection)]="selectedadherent"
+                         styleClass="p-datatable-customers"
+                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
                     <ng-template pTemplate="caption">
                         <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                             <h5 class="p-m-0"></h5>
@@ -4434,26 +4432,22 @@
                 <div class="p-field p-col">
                     <label for="lastname2">Intermediaire</label>
                     <div>
-                        <span>{{police.intermediaire.nom}}</span>
+                        <span>{{police?.intermediaire?.nom}}</span>
                     </div>
                 </div>
-
-                <div class="p-field p-col">
-                    <label for="lastname2">Taux de couverture</label>
-                    <div>
-                        <span>{{police.taux.taux}}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-fluid p-formgrid p-grid">
 
                 <div class="p-field p-col">
                     <label for="lastname2">Taux de commission en %</label>
                     <div>
-                        <span>{{police.tauxCommissionIntermediaire?.taux}}</span>
+                        <span>{{police?.tauxCommissionIntermediaire?.taux}}</span>
                     </div>
                 </div>
+               
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+               
 
                 <div class="p-field p-col">
                     <label for="firstname2">Territorialité</label>
@@ -4469,15 +4463,16 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col">
                     <label for="lastname2">Date echeance</label>
                     <div>
                         <span>{{police.dateEcheance | formatTableValue : 'date'}}</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                
 
                 <div class="p-field p-col">
                     <label for="firstname2">Nom du souscripteur</label>
@@ -4492,9 +4487,6 @@
                         <span>{{police.contact}}</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="p-fluid p-formgrid p-grid">
 
                 <div class="p-field p-col">
                     <label for="firstname2">Adresse email</label>
@@ -4502,6 +4494,11 @@
                         <span>{{police.adresseEmail}}</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                
 
                 <div class="p-field p-col">
                     <label for="adressePostale">Adresse postale</label>
@@ -4513,18 +4510,20 @@
                 <div class="p-field p-col">
                     <label for="lastname2">Secteur activite</label>
                     <div>
-                        <span>{{police.secteurActivite.libelle}}</span>
+                        <span>{{police?.secteurActivite?.libelle}}</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col">
                     <label for="lastname2">Numero IFU</label>
                     <div>
                         <span>{{police.numeroIfu}}</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                
 
                 <div class="p-field p-col">
                     <label for="lastname2">Personne ressource</label>
@@ -4539,15 +4538,17 @@
                         <span>{{police.contactPersonneRessource}}</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col">
                     <label for="refPolice">Reference police</label>
                     <div>
                         <span>{{police.referencePolice}}</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+               
 
                 <div class="p-field p-col">
                     <label for="lastname2">Rccm</label>
@@ -4562,16 +4563,17 @@
                         <span>{{police.numero}}</span>
                     </div>
                 </div>
+                <div class="p-field p-col">
+                    <label for="lastname2">Secteur</label>
+                    <div>
+                        <span>{{police?.secteur?.libelle}}</span>
+                    </div>
+                </div>
             </div>
 
             <div class="p-fluid p-formgrid p-grid">
 
-                <div class="p-field p-col">
-                    <label for="lastname2">Secteur</label>
-                    <div>
-                        <span>{{police.secteur.libelle}}</span>
-                    </div>
-                </div>
+                
 
                 <div class="p-field p-col-4">
                     <label for="fraisAccessoire">Frais accessoire</label>
@@ -4696,11 +4698,10 @@
                         </div>
 
                         <div class="p-field p-col-4">
-                            <label for="firstname2">Nom du souscripteur <span
-                                    style="color: red !important; font-size: 1.4em">*</span></label>
-                            <input id="nom" type="text" required formControlName="nom" pInputText>
-                            <app-entity-validation [entityValidations]="entityValidations" [formGroup]="policeForm"
-                                [entityField]="'nom'">
+                            <label for="firstname2">Nom du souscripteur <span style="color: red !important; font-size: 1.4em">*</span></label>
+                            <input id="nom" type="text"  required formControlName="nom"  (input)="onVerifieExistPolice()" pInputText>
+                            <app-entity-validation [entityValidations]="entityValidations"
+                                                   [formGroup]="policeForm" [entityField]="'nom'">
                             </app-entity-validation>
                         </div>
 
