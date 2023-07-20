@@ -342,14 +342,14 @@
                         <label for="taux" class="p-sr-only">Taux</label>
                         <p-dropdown dataKey="id" inputId="taux" [filter]="true" showClear="true" [options]="tauxList" placeholder="Select taux" optionLabel="taux" [(ngModel)]="taux"></p-dropdown>
                     </div> -->
-                <div class="p-field" *ngIf="!avenantModif1.plafondFamilleActes">
+                <div class="p-field" >
                     <label for="typeBareme" class="p-sr-only">TypeBareme</label>
                     <p-dropdown dataKey="id" inputId="typeBareme" [filter]="true" showClear="true"
                         [options]="typeBareme" placeholder="Sélectionnez le type-barème"
                         [(ngModel)]="bareme"></p-dropdown>
                 </div>
 
-                <div class="p-field" *ngIf="!avenantModif1.plafondFamilleActes">
+                <div class="p-field" >
                     <button pButton [disabled]="!bareme" pRipple type="button" label="Importer barème standard"
                         (click)="importerBareme()"></button>
                 </div>

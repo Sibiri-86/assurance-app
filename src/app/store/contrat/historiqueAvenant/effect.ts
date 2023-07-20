@@ -269,4 +269,17 @@ export class HistoriqueAvenantEffects {
                             )
                         )
                     ));
+
+                    deleteGroupeHistoriqueAvenant$ = createEffect(() =>
+                    this.actions$.pipe(
+                            ofType(featureActions.deleteGroupeHistoriqueAvenant),
+                            mergeMap(({historiqueAvenantId, groupeId}) =>
+                                this.historiqueAvenantService.deleteGroupeHistoriqueAvenant(historiqueAvenantId, groupeId).pipe(
+                                    switchMap(value => [
+                                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                        //featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                                    ]),
+                                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                ))
+                        ));
 }

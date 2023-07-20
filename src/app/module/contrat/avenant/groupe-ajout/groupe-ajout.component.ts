@@ -111,7 +111,7 @@ import * as adherentSelector from "../../../../store/contrat/adherent/selector";
 import * as groupeSelector from '../../../../store/contrat/groupe/selector';
 import {loadPolice} from "src/app/store/contrat/police/actions";
 import { Exercice } from 'src/app/store/contrat/exercice/model';
-
+import * as historiqueAvenantAction from 'src/app/store/contrat/historiqueAvenant/actions';
 
 
 
@@ -286,6 +286,7 @@ export class GroupeAjoutComponent implements OnInit{
   isPresting =false;
   avenantModif1: Avenant = {};
   displayBareme: boolean = false;
+  groupeId: string;
   stat: Rapport;
     constructor(
         private formBuilder: FormBuilder,
@@ -2059,5 +2060,18 @@ export class GroupeAjoutComponent implements OnInit{
     this.displayPhotos = true;
   }
 
+  deleteGroupe(groupe: Groupe): void {
+    this.groupeId = groupe.id;
+    this.confirmationService.confirm({
+      message: 'Etes-vous sûre de vouloir supprimer ce groupe ? Cette action est irréversible',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.store.dispatch(historiqueAvenantAction.deleteGroupeHistoriqueAvenant({historiqueAvenantId: this.avenantIdEnv, groupeId: this.groupeId}));
+      },
+    });
+    
+    // this.historiqueAvenantList$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+  }
  
 }
