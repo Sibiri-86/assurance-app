@@ -116,6 +116,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     @Input() groupesRev: Array<Groupe>;
     @Input() exerciceRevenu: Exercice;
     @Output() eventEmitterM = new EventEmitter();
+    @Output() eventEmitterF = new EventEmitter();
     @Input() adherentPrincipauxTMP: Array<Adherent> = [];
     adherentPrincipauxTMPRenouv: Array<Adherent> = [];
     destroy$ = new Subject<boolean>();
@@ -190,6 +191,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         plafondFamilleActes: [],
         plafondGroupeSousActes: []
     };
+    display: boolean = false;
     historiqueAvenant: HistoriqueAvenant = {historiqueAvenantAdherants: []};
     typeDuree = [{label: 'Jour', value: TypeDuree.JOUR}, {label: 'Mois', value: TypeDuree.MOIS}, {label: 'Année', value: TypeDuree.ANNEE}];
     adherentFamilleListe: AdherentFamille[] = [];
@@ -1104,6 +1106,9 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.plafondFamilleActe = [];
         this.acteList = [];
         this.sousActeList = [];
+        console.log('********************Ferme 11111 renouvellement************************');
+
+        this.eventEmitterF.emit(true);
     }
 
     createAvenantModif(): void {
@@ -1307,6 +1312,7 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.groupeListeFinale = [];
     }
 
+  
     createAvenantPlafond(): void {
         this.enleverEspace();
         this.objet.plafondGroupeActes = this.acteListFinal;
@@ -1918,6 +1924,11 @@ export class AvenantRenouvellementComponent implements OnInit {
         this.selectedTypePrime = {} ;
     }
 
+
+    annulerInfo(): void {
+        this.myForm.reset({});
+        this.exerciceForm.reset({}); 
+    }
     validerGroupe(): void {
         /* this.groupeListes.forEach(grp =>  {
             if (grp.id === this.groupeForm.get('id').value) {

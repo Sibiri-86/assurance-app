@@ -1999,7 +1999,7 @@
         <div class="p-grid">
             <div class="p-col-4"></div>
                 <div class="p-col-2">
-                    <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                    <button pButton pRipple label="Quitter" class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerTotal()"></button>
                 </div>
                 <div class="p-col-2">
                     <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid || !avenantArrivedId" pButton pRipple label="Enregistrer" pTooltip="Enregistrer tout l'avenant" class="p-button-success" icon="pi pi-check" (click)="createAvenantModif()"></button>

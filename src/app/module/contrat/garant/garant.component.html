@@ -17,7 +17,7 @@
                 -->
 			</p-toolbar>
 
-			<p-table #dt [value]="garantList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu','commissionPrime.taux']"
+			<p-table #dt [value]="garantList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom','code','email','numeroIfu','commissionPrime.taux','personneRessource1','numeroCompteBancaire1']"
 					 [(selection)]="selectedGarants" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rowHover]="true" dataKey="id"
 					 styleClass="p-datatable-customers"
 					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">

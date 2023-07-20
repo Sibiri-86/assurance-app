@@ -1250,7 +1250,8 @@
                                     
         <div class="p-grid p-justify-center">
             <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
-            <button type="button"  pTooltip="Enregistrer l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantModif()" [disabled]="myForm.invalid || etat==='VIEW'"></button>
+            <button type="button"  pTooltip="Enregistrer l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantModif()"
+             [disabled]="myForm.invalid || etat==='VIEW'"></button>
         </div>
 
     </p-fieldset>

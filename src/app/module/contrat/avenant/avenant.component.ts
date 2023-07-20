@@ -2180,6 +2180,18 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     }
   }
+  getFermerRenouvellement(event: boolean)  {
+    console.log('********************Fermer renouvellement************************');
+    console.log(event);
+
+    if(event) {
+      // this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    }
+  }
+
+ 
 
   getAvenantRenouvellement(event: Avenant): void {
     const avenant: Avenant = event;
@@ -2916,7 +2928,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
     console.log(ad.urlPhoto);
-    this.pictureUrl =ad.urlPhoto;
+    this.pictureUrl = ad.urlPhoto;
     this.displayPhotos = true;
   }
 

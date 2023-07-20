@@ -279,6 +279,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   reponse = 0;
   importer : Boolean = false;
   adherentChecked : Adherent;
+  selectedadherent: Adherent[];
   displayPhotos: Boolean = false;
   pictureUrl='';
   indexActeExpand:number;
@@ -1425,6 +1426,10 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   this.store.dispatch(featureActionAdherent.deleteAdherent(adherent));
   }
 
+  deleteSelectedAdherent() {
+    this.store.dispatch(featureActionAdherent.deleteAdherents({adherentList: this.selectedadherent}));
+  }
+
   modifierAdherent(adherent: Adherent){
     this.adherent = {...adherent};
     this.adherent.dateNaissance = this.adherent.dateNaissance;
@@ -2267,7 +2272,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   onRowSelectPolice(police: Police) {
     
     this.police = {...police};
-    console.log("===========" +police); 
+    console.log("===========", this.police); 
     this.infosPolice = true;
     this.policeForm.get('arrondissement').setValue(this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur?.idArrondissement));
     console.log(this.arrondissementList); 

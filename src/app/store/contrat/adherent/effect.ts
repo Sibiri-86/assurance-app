@@ -118,6 +118,19 @@ export class AdherentEffects {
                     ))
                 ));
 
+        deleteAdherentAll$ = createEffect(() =>
+                this.actions$.pipe(
+                        ofType(featureActions.deleteAdherents),
+                        mergeMap(({adherentList}) =>
+                            this.AdherentService.deleteAdherents(adherentList).pipe(
+                                switchMap(value => [
+                                    GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                    featureActions.loadAdherent({idGroupe: adherentList[0].groupe.id})
+                                ]),
+                                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            ))
+                        ));
     fetchAdherentAll$ = createEffect(() =>
                 this.actions$.pipe(
                     ofType(featureActions.loadAdherentAll),

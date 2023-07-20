@@ -1786,12 +1786,12 @@
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantProrogation && policeItem">
                     <app-avenant-prorogation [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id" [groupesRev]="historiqueGroupeRev"
-                    [avenantArrivedId]="historiqueRev?.id" [avenantNumero]="historiqueRev?.numero"  [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)">
+                    [avenantArrivedId]="historiqueRev?.id" [avenantNumero]="historiqueRev?.numero"  [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)" (eventEmitterF)="getFermerRenouvellement($event)">
                 </app-avenant-prorogation>
                 </div>
                 <div class="p-fluid p-grid" *ngIf="isAvenantRenouvellement && policeItem">
                     <app-avenant-renouvellement [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id" [groupesRev]="historiqueGroupeRev"
-                    [avenantArrivedId]="historiqueRev?.id" [avenantNumero]="historiqueRev?.numero"  [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)">
+                    [avenantArrivedId]="historiqueRev?.id" [avenantNumero]="historiqueRev?.numero"  [adherentPrincipauxTMP]="adherentListGroupe" [exerciceRevenu]="exerciceRev" (eventEmitterM)="getAvenantRenouvellement($event)" (eventEmitterF)="getFermerRenouvellement($event)">
                 </app-avenant-renouvellement>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantResiliation">
