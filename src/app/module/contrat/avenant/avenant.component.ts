@@ -2940,10 +2940,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
     switch (index) {
       case 0: {
         this.policeList = this.policeList.filter(g=>g.garant.typeGarant.code == "ASS");
+        console.log('****index****', this.policeList);
         break;
       }
       case 1: {
         this.autofinancementList = this.policeList.filter(g=>g.garant.typeGarant.code == "AUTOFI" || g.garant.typeGarant == null);
+        console.log('****index****', this.autofinancementList);
         break;
       }
       case 2: {

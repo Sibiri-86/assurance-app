@@ -3,7 +3,7 @@
         <p-toast></p-toast>
         <div class="card">
             <p-tabView (onChange)="onTabChange($event)">
-                <p-tabPanel header="Contrat avec Garant" leftIcon="pi pi-sort-numeric-down" tooltip="Service Prestations" [style]="{'width': '100%'}">
+                <p-tabPanel header="Contrat avec Garant" *ngFor="" leftIcon="pi pi-sort-numeric-down" tooltip="Service Prestations" [style]="{'width': '100%'}">
                     <p-toolbar styleClass="p-mb-4">
                         <div class="p-col-12">
                             <p-toast></p-toast>
@@ -104,19 +104,19 @@
                                 </td>
                                 <td>
                                     <button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-pencil"
-                                            pTooltip="editer" class="p-button-rounded p-button-success p-mr-2"
+                                            pTooltip="editer" class="p-button-rounded p-button-success p-mr-1"
                                             (click)="editPolice(police)"></button>
                                     <button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-trash"
-                                            pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-2"
+                                            pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-1"
                                             (click)="deletePolice(police)"></button>
                                     <button *ngIf="typeAvenantSelected==='incorporation'" pButton pRipple icon="pi pi-angle-up"
-                                            pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-2"
+                                            pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-1"
                                             (click)="voirGroupe(police)"></button>
                                     <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
                                             class="p-button-rounded p-button-info" (click)="onRowSelectPolice(police)"></button>
                                     <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
                                     <button pButton pRipple icon="pi pi-reply" pTooltip="Rétrograder"
-                                            class="p-button-rounded p-button-warning p-ml-2 p-mr-2"
+                                            class="p-button-rounded p-button-warning p-ml-1 p-mr-1"
                                             (click)="deValiderPolice(police)"></button>
                                     <!-- <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée" 
                                             class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button> -->
@@ -127,7 +127,7 @@
                                     <!-- <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
                                                    (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
                                     <!-- SPlit sans la fonction setPolice -->
-                                    <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
+                                    <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-1" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
                                         (onDropdownClick)="policeItem = police; setPolice(police)">
                                     </p-splitButton>
         
@@ -2397,7 +2397,7 @@
                                                            [disabled]="!disableAvenant(rowdata)"></p-inputSwitch>
                                         </div>
                                         <div class="p-col-">
-                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
+                                            <button pButton pRipple icon="pi pi-eye" pTooltip="voir détails"
                                                     class="p-button-rounded p-button-info p-mr-2"
                                                     (click)=" avenantItem = rowdata; onRowSelectAvenant(rowdata); getGroupeByPolice(rowdata)">
                                             </button>
@@ -2888,7 +2888,7 @@
 
     <!--Affichage des details des avenants affaire nouvelle -->
     <p-dialog [maximizable]="true" [(visible)]="displayDialogFormAdherentAffaireNouvelle"
-              header="Adhérent(s) et membre(s) de la police Affaire Nouvelle" [modal]="true" styleClass="p-fluid"
+              header="Adhérent(s) et membre(s) de la police en Affaire Nouvelle" [modal]="true" styleClass="p-fluid"
               [style]="{'width':'1400px'}">
         <ng-template pTemplate="content">
             <div class="">

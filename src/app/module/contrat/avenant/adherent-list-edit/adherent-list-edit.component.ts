@@ -19,7 +19,7 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {AdherentService} from '../../../../store/contrat/adherent/service';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 
 @Component({
@@ -52,12 +52,14 @@ export class AdherentListEditComponent implements OnInit {
   displayPhotos: Boolean = false;
   displayCarte: Boolean = false;
   pictureUrl='';
+  adherentHisChecked : HistoriqueAvenantAdherant;
 
   constructor(
       private formBuilder: FormBuilder,
       private store: Store<AppState>,
       private confirmationService: ConfirmationService,
-      private adherentService: AdherentService) {
+      private adherentService: AdherentService,
+      private messageService: MessageService,) {
     this.adherentForm = this.formBuilder.group({
       id: new FormControl(0),
       nom: new FormControl(null, [Validators.required]),
@@ -280,5 +282,34 @@ export class AdherentListEditComponent implements OnInit {
   voirCarte(ad:Adherent) {
     this.pictureUrl =ad.urlCarte;
     this.displayCarte = true;
+  }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  onRowSelect(event) {
+    this.adherentHisChecked = event.data;
+   
+  }
+
+  onBasicUpload(event, form) {
+    console.log("=============================res=============");
+    console.log(this.adherentHisChecked);
+    console.log("=============================res=============");
+    if(!this.adherentHisChecked){
+      this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
+   } else {
+    this.confirmationService.confirm({
+      message: 'Etes vous sur d\'importer la photos de l\'adherent',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files[0]);
+        this.store.dispatch(featureActionAdherent.importPhotosAdherent({file:event.files[0], idAdherent:this.adherentHisChecked.adherent?.id, idGroupe: this.adherentHisChecked.adherent?.groupe?.id}));
+        form.clear();
+      },
+    });
+   }
   }
 }

@@ -41,7 +41,7 @@
            <!--  <div *ngIf="viewListe">
                 <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
             </div> -->
-            <p-fieldset legend="Selection" toggleable="true">
+            <p-fieldset legend="Selection" toggleable="true" *ngIf="etat === 'CREATE' || isRenouv">
                 <div class="p-fluid p-grid">
 
                     <div class="p-field p-col-4" *ngIf="etat === 'CREATE' || isRenouv">
@@ -140,9 +140,7 @@
                     </div>
                 </form>
             </p-fieldset>
-            <div *ngIf="viewListe">
-                <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
-            </div>
+             
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
