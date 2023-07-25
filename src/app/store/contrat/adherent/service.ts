@@ -22,7 +22,7 @@ $getAdherents(idPolice: string): Observable<AdherentList> {
     );
 }
 
-$getAdherentsByExercice(idGroupe: string, exerciceId: string): Observable<AdherentList> {
+$getAdherentsByExerciceAndGroupeId(idGroupe: string, exerciceId: string): Observable<AdherentList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/${idGroupe}/${exerciceId}`).pipe(
     map((response: AdherentList) => response),
@@ -228,6 +228,15 @@ private handleError<T>() {
         );
       
     }
+
+    getAdherentByGroupeAndExercice(idGroupe: string, idExercice: string): Observable<AdherentList> {
+      // @FIXME: get request
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureByGroupeAndExercice/${idGroupe}/${idExercice}`).pipe(
+        map((response: AdherentList) => response),
+        catchError(this.handleError())
+      );
+    
+  }
 
 
     getListeActualisee(policeId: string): Observable<Array<Adherent>> {

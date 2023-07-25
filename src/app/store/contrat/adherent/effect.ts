@@ -232,6 +232,20 @@ export class AdherentEffects {
     )
     ); 
 
+    fetchAdherentGroupeAndExercice$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadAdherentGroupeAndExercice),
+        mergeMap(({idGroupe, idExercice}) =>
+            this.AdherentService.getAdherentByGroupeAndExercice(idGroupe, idExercice).pipe(
+                switchMap(value => [
+                    featureActions.setAdherent(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    ); 
+
 import$ = createEffect(() =>
 this.actions$.pipe(
     ofType(featureActions.importAdherent),
@@ -370,11 +384,11 @@ this.actions$.pipe(
     );
 
 
-    fetchAdherentByExercice$ = createEffect(() =>
+    fetchAdherentsByExerciceAndGroupeId$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadAdherentByExercice),
         mergeMap(({idGroupe, exerciceId}) =>
-            this.AdherentService.$getAdherentsByExercice(idGroupe,exerciceId).pipe(
+            this.AdherentService.$getAdherentsByExerciceAndGroupeId(idGroupe,exerciceId).pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setAdherent(value)

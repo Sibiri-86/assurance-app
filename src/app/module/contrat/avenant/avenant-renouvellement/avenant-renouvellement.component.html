@@ -264,14 +264,14 @@
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerInfo()"></button>
+                            <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerInfo()"></button> -->
                             <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pTooltip="Enregistrer les infos de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantInfo()"></button>
                         </div>
 
                 </p-fieldset>
 
         </p-tabPanel>
-        <p-tabPanel *ngIf="etat ==='CREATE'"   [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond">
+        <p-tabPanel *ngIf="etat ==='CREATE'"   [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond" [disabled]="myForm.invalid || !avenantArrivedId">
             <!-- [disabled]="myForm.invalid || !avenantArrivedId" -->
             <div class="p-grid">
                 <div class="p-col-12">
@@ -519,7 +519,7 @@
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
+                            <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button> -->
                             <button type="button" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
                         </div>
 
@@ -936,7 +936,7 @@
                                     
                                     
                     <div class="p-grid p-justify-center">
-                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button> -->
                         <button type="button" [disabled]="plafondFamilleActePlafongConfig?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
                     </div>
 
@@ -1858,7 +1858,7 @@
                                     
                                     
                     <div class="p-grid p-justify-center">
-                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button> -->
                         <button type="button" [disabled]="plafondFamilleActes?.length === 0 || plafondGroupeActes?.length === 0 || plafondGroupeSousActes?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
                     </div>
 
@@ -1909,6 +1909,10 @@
             <app-adherent-basculer [police] = "police" [exerciceRevenu] = "exerciceRevenu"  [groupeListes]="groupeListes" ></app-adherent-basculer>
 
         </p-tabPanel>
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-plus" tooltip="AJOUT ACTES" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'">
+
+            <app-ajout_acte [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantArrivedId"></app-ajout_acte>
+        </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
             <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
             <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
@@ -1924,7 +1928,8 @@
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
                     </span>
-                    
+                    <span  *ngIf="adherantPoliceListActualisee"> Exercice: </span> <br/>
+                    <span  *ngIf="adherantPoliceListActualisee"> {{adherantPoliceListActualisee[0]?.exercice.debut | formatTableValue : 'date'}} - {{adherantPoliceListActualisee[0]?.exercice.fin | formatTableValue : 'date'}}</span>
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedFilter"
                                     [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" (onChange)="loadAdherentFiltertByGroupe()"
                                    >

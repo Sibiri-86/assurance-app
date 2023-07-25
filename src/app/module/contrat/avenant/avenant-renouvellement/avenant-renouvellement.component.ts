@@ -14,6 +14,7 @@ import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as loadListeActualisee from '../../../../store/contrat/adherent/actions';
+import * as loadAdherentByExercice from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
     HistoriqueAvenant,
@@ -621,7 +622,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     ngOnInit(): void {
     
-        if(this.etat!=='CREATE') {
+        if(this.etat !=='CREATE') {
             this.charge();
           
         }
@@ -867,7 +868,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     loadAdherentFiltertByGroupe() {
         
         this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.adherentList));
-        this.store.dispatch(loadListeActualisee.loadAdherentGroupe({idGroupe: this.groupeSelectedFilter.id}));
+        this.store.dispatch(loadAdherentByExercice.loadAdherentByExercice({idGroupe: this.groupeSelectedFilter.id, exerciceId: this.lastExerciceForm.get('id').value}));
         this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
             .subscribe((value1) => {
                 if (value1) {

@@ -47,6 +47,7 @@ export interface HistoriqueAvenant {
     isTerminer?: boolean;
     primettc?: number;
     primenette?: number;
+    surprime?: number;
     historiqueAvenantPrime?:HistoriqueAvenantPrime;
 }
 
