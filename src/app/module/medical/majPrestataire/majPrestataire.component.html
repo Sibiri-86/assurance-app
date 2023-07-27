@@ -292,6 +292,9 @@
                         <th pSortableColumn="situationGeographique" >Situation géographique<p-sortIcon field="situationGeographique"></p-sortIcon></th>
                         <th pSortableColumn="contact" >Contact<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="contact" >2ème contact<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >latitude<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >logitude<p-sortIcon field="contact"></p-sortIcon></th>
+                        <th pSortableColumn="contact" >quartier<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="contact" > <p-sortIcon field="contact"></p-sortIcon></th>
                     </tr>
                 </ng-template>
@@ -348,6 +351,36 @@
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{convention.telephone2}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.latitude">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.latitude}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.longitude">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.longitude}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.quartier.libelle">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.quartier?.libelle}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>

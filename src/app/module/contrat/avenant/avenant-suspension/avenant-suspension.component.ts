@@ -50,6 +50,7 @@ export class AvenantSuspensionComponent implements OnInit {
   lastExerciceForm: FormGroup;
   historiqueAvenant: HistoriqueAvenant = {};
   @Input() isRenouv: boolean;
+  @Output() eventEmitterF = new EventEmitter();
   private selectedFile: File;
   isImport = 'NON';
   demandeursList: any = [
@@ -401,5 +402,10 @@ annulerSuspension(haa: HistoriqueAvenantAdherant) {
       console.log("effectué");
     }
   )
+}
+
+annuler(): void {
+  this.historiqueAveantAdherantsByExercice = [];
+  this.eventEmitterF.emit(true);
 }
 }

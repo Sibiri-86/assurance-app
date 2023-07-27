@@ -437,13 +437,13 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
 }
 
 onRowEditSave(prestataire: Prestataire) {
-    if (prestataire.telephone != null && prestataire.situationGeographique != null) {
+    if (prestataire.telephone != null) {
         delete this.clonedProducts[prestataire.id];
         this.prestataireToSave.push(prestataire);
         this.messageService.add({severity:'success', summary: 'Success', detail:'info du prestataire mis à jour'});
     }
     else {
-        this.messageService.add({severity:'error', summary: 'Error', detail:'Renseignez le quartier ainsi que le contact'});
+        this.messageService.add({severity:'error', summary: 'Error', detail:'Renseignez le contact'});
     }
 }
 

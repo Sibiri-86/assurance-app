@@ -2360,7 +2360,7 @@
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantSuspension">
                     <app-avenant-suspension [police]="policeItem" [etat]="etat" [avenantId]="historiqueAvenant.id"
-                                                (eventEmitterSuspension)="getAvenantSuspension($event)"></app-avenant-suspension>
+                                                (eventEmitterSuspension)="getAvenantSuspension($event)" (eventEmitterF)="getFermerSuspension($event)"></app-avenant-suspension>
                 </div>
                 <div class="p-fluid p-col-12" *ngIf="isAvenantFacturation">
                     <app-avenant-facturation></app-avenant-facturation>

@@ -2197,6 +2197,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }
   }
 
+  getFermerSuspension(event: boolean)  {
+    console.log('********************Fermer renouvellement************************');
+    console.log(event);
+
+    if(event) {
+      // this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    }
+  }
+
  
 
   getAvenantRenouvellement(event: Avenant): void {
