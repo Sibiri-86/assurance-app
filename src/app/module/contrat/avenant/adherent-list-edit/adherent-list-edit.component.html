@@ -1,18 +1,23 @@
 <div class="p-card">
-    <div class="p-col-2">
-        <span class="p-input-icon-right">
-            <p-fileUpload #form3 mode="basic" customUpload="true" chooseLabel="carte" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept=".png, .jpg, .jpeg" maxFileSize="100000000" (uploadHandler)="onBasicUploadCarteLot($event, form3)"></p-fileUpload>
-
-            
-        </span>
-
-</div>
+    <div class="p-grid">
+                <div class="p-col-4">
+                    <p-fileUpload #form3 mode="basic" customUpload="true" chooseLabel="carte" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept=".png, .jpg, .jpeg" maxFileSize="100000000" (uploadHandler)="onBasicUploadCarteLot($event, form3)"></p-fileUpload>
+                </div>
+                <div class="p-col-4">
+                    <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photo un a un" uploadLabel="Valider" invalidFileSizeMessageDetail="Taille de l'image" accept=".png, .jpg, .jpeg" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
+                </div>
+                <!-- <div class="p-col-4">
+                    <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="photos multiples" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept=".png, .jpg, .jpeg" maxFileSize="100000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+                </div> -->
+                    
+    </div>
     <div class="p-field p-grid p-col-12">
         <p-table #dt [value]="historiqueAvenantAdherants" [rows]="15" [paginator]="true" [globalFilterFields]="['adherent.nom','adherent.prenom', 'adherent.numeroTelephone', 'adherent.numero', 
         'qualiteAssure?.libelle']"
                  [rowHover]="true" dataKey="id"
                  styleClass="p-datatable-customers"
-                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                 currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true"
+                  (onRowSelect)="onRowSelect($event)">
             <ng-template pTemplate="caption">
                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                     <h5 class="p-m-0"></h5>

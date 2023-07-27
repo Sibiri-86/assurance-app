@@ -47,6 +47,7 @@ export interface HistoriqueAvenant {
     isTerminer?: boolean;
     primettc?: number;
     primenette?: number;
+    surprime?: number;
     historiqueAvenantPrime?:HistoriqueAvenantPrime;
 }
 
@@ -236,4 +237,18 @@ export enum TypeDemandeur {
 
 export class VerifyRenouvellementIsOverlapReponse {
     isOverlap: boolean;
+}
+
+export interface AddSousActeDto {
+    id?: string;
+    idTypeActe?: string;
+    groupeId?: string;
+    exerciceId?: string;
+    dimensionPeriode?: DimensionPeriode;
+    domaine?: Array<QualiteAssure>;
+    montantPlafond?: number;
+    avenantId?: string;
+    sousActeId?: string;
+    montantPrime?: number;
+    dateEffet?: Date;
 }

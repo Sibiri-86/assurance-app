@@ -254,6 +254,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, this.prestationAdd.acte.id).subscribe(rest=>{
 
             this.montantPlafond1 = rest;
+            console.log("mmmmmmmmmmmmmmmtttttttmmmmmmmmmmmmmmmmmmmmmm", this.montantPlafond1);
            
         });
     }
@@ -706,26 +707,18 @@ export class TierPayantEditionComponent implements OnInit {
         this.adherentSelected = null;
         this.prestationAdd.matriculeAdherent = "";
         this.prestationAdd.nomAdherent = "";
-        
         this.prestationAdd.prenomAdherent = "";
-
-    
-                
-                this.prestationAdd.numeroGroupe = "";
-                this.prestationAdd.numeroPolice = "";
-                this.prestationAdd.souscripteur =  "";
-                this.prestationAdd.nomGroupe = "";
-                this.prestationAdd.adherent = this.adherentSelected;
-            
-               
-                  
-                    this.prestationAdd.nomAdherentPrincipal = "";
-                    this.prestationAdd.prenomAdherentPrincipal = "";
-                
-                    this.prestationAdd.nomAdherentPrincipal = "";
-                    this.prestationAdd.prenomAdherentPrincipal = "";
-                    this.prestationAdd.sort = null;
-                    this.prestationAdd.observation = "";
+        this.prestationAdd.numeroGroupe = "";
+        this.prestationAdd.numeroPolice = "";
+        this.prestationAdd.souscripteur =  "";
+        this.prestationAdd.nomGroupe = "";
+        this.prestationAdd.adherent = this.adherentSelected;
+        this.prestationAdd.nomAdherentPrincipal = "";
+        this.prestationAdd.prenomAdherentPrincipal = "";
+        this.prestationAdd.nomAdherentPrincipal = "";
+        this.prestationAdd.prenomAdherentPrincipal = "";
+        this.prestationAdd.sort = null;
+        this.prestationAdd.observation = "";
                 
         
         this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
@@ -1551,8 +1544,6 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       addPrestation() {
-
-        
         if(this.prefinancement.montantRestant == null ) {
             this.prefinancement.montantRestant = 0;
         }
@@ -1565,12 +1556,6 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
           } 
-
-        
-
-        
-            
-        
         if(this.compteur !=null) {
             this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                

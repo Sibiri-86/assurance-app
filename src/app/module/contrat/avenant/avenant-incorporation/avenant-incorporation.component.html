@@ -41,7 +41,7 @@
            <!--  <div *ngIf="viewListe">
                 <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
             </div> -->
-            <p-fieldset legend="Selection" toggleable="true">
+            <p-fieldset legend="Selection" toggleable="true" *ngIf="etat === 'CREATE' || isRenouv">
                 <div class="p-fluid p-grid">
 
                     <div class="p-field p-col-4" *ngIf="etat === 'CREATE' || isRenouv">
@@ -140,9 +140,7 @@
                     </div>
                 </form>
             </p-fieldset>
-            <div *ngIf="viewListe">
-                <app-adherent-list [adherentFamilleList]="adherentFamilleListe"></app-adherent-list>
-            </div>
+             
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
@@ -397,11 +395,13 @@
                                     <td><span class="p-column-title">{{adherent?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
                                     <td><span class="p-column-title">{{adherent?.adherent?.qualiteAssure?.libelle}}</span></td>
                                     <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
-                                    <td style="width: 3em">
+                                    <td style="width: 5em">
                                         <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button"
-                                        class="p-button p-button-icon" label="Modifier"  (click)="modifierHistoriqueAvenant1(ri)"
-                                        >
-                                </button>
+                                        class="p-button p-button-icon p-mr-2"  (click)="modifierHistoriqueAvenant1(ri)">
+                                        </button>
+                                        <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" type="button"
+                                        class="p-button-danger p-button-icon"  (click)="supprimerHistoriqueAvenant1(ri)">
+                                        </button>
                                     </td>
                                 </tr>
                             </ng-template>

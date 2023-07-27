@@ -524,6 +524,11 @@ export class AvenantIncorporationComponent implements OnInit{
         console.log('***************-------------------------', this.customForm.get('groupe').value);
     }
 
+    supprimerHistoriqueAvenant1(ri: number): void {
+        console.log(ri);
+        this.familys.removeAt(ri);
+    }
+
     loadAdherentPrincipalInfo() {
         console.log(this.adherentSelected);
         this.obj.group = this.adherentSelected;

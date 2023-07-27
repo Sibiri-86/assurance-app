@@ -142,6 +142,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   policeList$: Observable<Array<Police>>;
   policeList1$: Subscription;
   policeList: Police[];
+  policeListFiltrer: Police[];
   valCheck: string[] = [];
   groupeList$: Observable<Array<Groupe>>;
   groupeList: Array<Groupe>;
@@ -300,6 +301,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiquePlafondList: Array<HistoriquePlafondActe> = [];
   avenantModif: Avenant = {};
   historiqueAvenantPrimes: HistoriqueAvenantPrime[] = [];
+  historiqueAvenantPrimesWithGroupe: HistoriqueAvenantPrime[] = [];
   historiqueAvenantPrime: HistoriqueAvenantPrime = {};
   displayDialogPrime = false;
   avenantModif1: Avenant = {};
@@ -333,6 +335,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayPhotos: Boolean = false;
   displayCarte:  Boolean = false;
   pictureUrl='';
+  autofinancementList: Police[];
+  mutuelleList: Police[];
+  particulierList: Police[];
+  autreList: Police[];
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2191,6 +2197,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     }
   }
 
+  getFermerSuspension(event: boolean)  {
+    console.log('********************Fermer renouvellement************************');
+    console.log(event);
+
+    if(event) {
+      // this.addMessage('success', 'Opération reussie', 'Création de l\'avenant terminée avec succès');
+      this.dissplayavenant = false;
+      this.initDisplayAvenant();
+    }
+  }
+
  
 
   getAvenantRenouvellement(event: Avenant): void {
@@ -2405,6 +2422,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           res.forEach(prime => {
             this.primetotal += prime.primeTTC;
           });
+          this.primetotal = this.primetotal + rowdata.surprime;
+          console.log('****************************rowdata.surprime************************************', rowdata.surprime, 'cvdfvvfvfvfvfv', this.primetotal);
+          /* if(rowdata.surprime != null) {
+            this.historiqueAvenantPrimesWithGroupe = this.historiqueAvenantPrimes.filter(p=>p.groupe != null);
+            this.historiqueAvenantPrimesWithGroupe[0].primeTotal = this.historiqueAvenantPrimesWithGroupe[0].primeTotal + rowdata.surprime;
+          } */
           this.displayDialogPrime = true;
         }
     );
@@ -2576,6 +2599,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (value) {
         this.loading = false;
         this.policeList = value.slice();
+        this.policeListFiltrer = this.policeList.filter(g=>g.garant.typeGarant.code == "ASS");
         console.log('................this.policeList............................');
         console.log(this.policeList);
       }
@@ -2931,6 +2955,45 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log(ad.urlPhoto);
     this.pictureUrl = ad.urlPhoto;
     this.displayPhotos = true;
+  }
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        this.loadPoliceListe();
+        this.policeList = this.policeList.filter(g=>g.garant.typeGarant.code == "ASS");
+        console.log('****index****', this.policeList);
+        break;
+      }
+      case 1: {
+        this.loadPoliceListe();
+        this.autofinancementList = this.policeList.filter(g=>g.garant.typeGarant.code == "AUTOFI" || g.garant.typeGarant == null);
+        console.log('****index****', this.autofinancementList);
+        break;
+      }
+      case 2: {
+        this.loadPoliceListe();
+        this.mutuelleList = this.policeList.filter(g=>g.garant.typeGarant.code == "MUTUEL");
+        break;
+      }
+      case 3: {
+        this.loadPoliceListe();
+        this.particulierList = this.policeList.filter(g=>g.garant.typeGarant.code == "PARTIC");
+        break;
+      }
+      case 4: {
+        this.loadPoliceListe();
+        this.autreList = this.policeList.filter(g=>g.garant.typeGarant.code == "AUTRES");
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
   }
 
 

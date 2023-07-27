@@ -1316,6 +1316,14 @@ export const DATA_DEFINITION = [
         field: 'telephone', header: 'Téléphone', type: 'string', width: 1, text_center: false,
         
       },
+      {
+        field: 'telephone2', header: 'Téléphone2', type: 'string', width: 1, text_center: false,
+        
+      },
+      {
+        field: 'situationGeographique', header: 'Situation Geographique', type: 'string', width: 1, text_center: false,
+        
+      },
 
       {
         field: 'idDepartement', header: 'Province', width: 1, label: 'libelleDepartement', text_center: false,

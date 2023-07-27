@@ -1,6 +1,7 @@
 import {props, createAction} from '@ngrx/store';
-import {AdherentPermute, AdherentPermuteList, Avenant, HistoriqueAvenant, HistoriqueAvenantList, VerifyRenouvellementIsOverlapReponse} from './model';
+import {AddSousActeDto, AdherentPermute, AdherentPermuteList, Avenant, HistoriqueAvenant, HistoriqueAvenantList, VerifyRenouvellementIsOverlapReponse} from './model';
 import {Police} from '../police/model';
+import { Groupe } from '../groupe/model';
 export const createHistoriqueAvenant = createAction('[App Init] Create HistoriqueAvenant', props<HistoriqueAvenant>());
 export const updateHistoriqueAvenant = createAction('[App Init] update HistoriqueAvenant', props<HistoriqueAvenant>());
 export const permuterAherent = createAction('[App Init] ajouter une permutation', props<AdherentPermuteList>());
@@ -36,6 +37,8 @@ export const createAvenantRenouvellementIncorporation = createAction
 ('[App Init] Create Avenant Renouvellement Incorporation', props<Avenant>());
 export const createAvenantRenouvellementRetrait = createAction 
 ('[App Init] Create Avenant Renouvellement Retrait', props<Avenant>());
+export const ajoutActe = createAction('[App Init] ajouter un nouvel acte', props<AddSousActeDto>());
+export const deleteGroupeHistoriqueAvenant = createAction('[App Init] delete Groupe HistoriqueAvenant', props<{historiqueAvenantId: string, groupeId: string}>());
 /*
 export const misAJours = createAction('[App Init] mis a jours HistoriqueAvenant', props<HistoriqueAvenant>());
 */

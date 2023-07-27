@@ -1,22 +1,8 @@
 <div class="card">
     <span style="color: red; font-size: 1.8em; text-align: center">{{message}}</span>
     <div class="p-grid">
-        <!--<div class="p-fluid p-grid">
-
-            <div class="p-field p-col-4" *ngIf="!isNewGroupe">
-                <form [formGroup]="customForm">
-                    <p-dropdown [options]="groupePolicy" formControlName="groupe" optionLabel="libelle"
-                                name="selectedGroup"
-                                [filter]="true" filterBy="libelle" [showClear]="true"
-                                placeholder="Choisir un groupe"
-                                (onChange)="onGroupeChange()">
-                    </p-dropdown>
-                </form>
-            </div>
-
-            <div class="p-field p-col-6"></div>
-        </div>-->
-        <div class="p-field p-col-12" *ngIf="!isRenouv && etat !== 'VIEW'">
+    
+        <!-- <div class="p-field p-col-12" *ngIf="!isRenouv && etat !== 'VIEW'">
             <div class="p-field p-col-7">
                 <div class="p-field-checkbox">
                     <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel ?</label>
@@ -30,7 +16,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
             <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"

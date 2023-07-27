@@ -1,4 +1,5 @@
 import {
+    AddSousActeDto,
     AdherentPermute,
     AdherentPermuteList,
     Avenant,
@@ -20,6 +21,7 @@ import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
 import {Exercice} from '../exercice/model';
+import { Groupe } from '../groupe/model';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantService {
@@ -380,4 +382,17 @@ private handleError<T>() {
             catchError(this.handleError())
         );;
     } */
+
+    ajoutActe(addSousActeDto: AddSousActeDto): Observable<any> {
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/ajout_nouvel_acte`, addSousActeDto,
+            {observe: 'response'}
+        );
+    }
+
+    deleteGroupeHistoriqueAvenant(historiqueAvenantId: string, groupeId: string): Observable<any> {
+        // @FIXME: post request
+        console.clear();
+        console.log('suppression en cours 11111111111....');
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/delete/${historiqueAvenantId}/${groupeId}`);
+    }
 }

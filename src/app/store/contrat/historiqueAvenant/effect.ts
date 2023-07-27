@@ -6,7 +6,7 @@ import { HistoriqueAvenantService} from './service';
 import * as featureActions from './actions';
 import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import {AdherentPermute, AdherentPermuteList, Avenant, HistoriqueAvenant} from "./model";
+import {AddSousActeDto, AdherentPermute, AdherentPermuteList, Avenant, HistoriqueAvenant} from "./model";
 
 @Injectable()
 export class HistoriqueAvenantEffects {
@@ -256,4 +256,30 @@ export class HistoriqueAvenantEffects {
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
             )); 
+
+            ajoutNouvelActe$ = createEffect(() =>
+                this.actions$.pipe(
+                        ofType(featureActions.ajoutActe),
+                        mergeMap((addSousActeDto: AddSousActeDto) =>
+                        this.historiqueAvenantService.ajoutActe(addSousActeDto).pipe(
+                            switchMap(value => [
+                                GlobalConfig.setStatus(StatusEnum.success, this.successMsg)
+                            ]),
+                                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            )
+                        )
+                    ));
+
+                    deleteGroupeHistoriqueAvenant$ = createEffect(() =>
+                    this.actions$.pipe(
+                            ofType(featureActions.deleteGroupeHistoriqueAvenant),
+                            mergeMap(({historiqueAvenantId, groupeId}) =>
+                                this.historiqueAvenantService.deleteGroupeHistoriqueAvenant(historiqueAvenantId, groupeId).pipe(
+                                    switchMap(value => [
+                                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                        //featureActions.loadHistoriqueAvenant({policeId: historiqueAvenant.police.id})
+                                    ]),
+                                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                                ))
+                        ));
 }

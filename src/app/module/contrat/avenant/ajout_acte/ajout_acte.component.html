@@ -1,0 +1,135 @@
+
+    <div class="p-grid p-mb-4">
+        <div class="p-col">
+            <label class="p-fieldset-content">Choisir le groupe</label>
+            <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedPermuter"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                        (onChange)="loadAherantByGroupe1()">
+            </p-dropdown>
+        </div>
+
+        <div class="p-col">
+            <label class="p-fieldset-content">Choisir le(s) domaine(s)</label>
+            <p-multiSelect [options]="qualiteAssureList" optionLabel="libelle" [(ngModel)]="selectedQualiteAssure"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir le(s) domaine(s)" [disabled]="!groupeSelectedPermuter"
+                       >
+            </p-multiSelect>
+        </div>
+
+        <div class="p-col">
+            <label class="p-fieldset-content">Choisir l'acte</label>
+            <p-dropdown [options]="acteList" optionLabel="libelle" [(ngModel)]="acteNouveau"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un acte" [disabled]="!selectedQualiteAssure?.length"
+                       (onChange)="selectActe(acteNouveau)">
+            </p-dropdown>
+        </div>
+
+        <div class="p-col">
+            <label class="p-fieldset-content">Choisir le sous acte</label>
+            <p-dropdown [options]="listeSousActeFiltrer" optionLabel="libelle" [(ngModel)]="sousActeNouveau"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un sous acte" [disabled]="!acteNouveau"
+                       (onChange)="selectSousActe(sousActeNouveau)">
+            </p-dropdown>
+        </div>
+    </div>
+        <!-- <div class="p-col">
+            <label class="p-fieldset-content">Choisir le sous acte</label>
+            <p-dropdown [options]="groupeListNouvo" optionLabel="libelle" [(ngModel)]="groupeSelectedNouvo"
+                        [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" [disabled]="!historiqueAveantAdherantsPermuteSelected?.length"
+                       >
+            </p-dropdown>
+        </div> -->
+
+        
+
+        <div class="p-grid">
+        <div class="p-col-10">
+            <p-table #dt [value]="listeSousActe" [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+            [rowHover]="true" styleClass="p-datatable-customers"
+             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+            [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th>acte</th>
+                        <th>Montant plafond par acte</th>
+                        <th>Périodicité</th>
+                        <th>Montant prime</th>
+                        <th>Date d'effet</th>
+                        
+                       
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-convention let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="convention">
+                        <td>
+                            {{convention.libelle}}
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafond">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.montantPlafond}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="convention.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
+                                                [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention?.dimensionPeriode?.libelle}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPrime">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.montantPrime}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="date" [(ngModel)]="convention.dateEffet">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.dateEffet | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="text-align:center">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(convention)" class="p-button-rounded p-button-text"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(convention)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(convention, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                        </td>
+                        
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{conventionList ? conventionList.length : 0 }} convention(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-col">
+            <label class="p-fieldset-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <button type="button" pButton pRipple label="Valider" class="p-button-success" icon="pi pi-check"
+                    (click)="saveAherentNewGroupe()"  [disabled]="!listeSousActe.length"></button>
+        </div>
+    </div>
+
+   
+

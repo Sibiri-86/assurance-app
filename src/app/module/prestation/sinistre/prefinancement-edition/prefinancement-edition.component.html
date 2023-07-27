@@ -570,12 +570,14 @@
                 <hr/>  
                         
               
-                        <p-fieldset legend="Liste des Prestations" toggleable="true">
+                    <p-fieldset legend="Liste des Prestations" toggleable="true">
+                        <!-- <div *ngIf="prestationsList.length >5" >
+                            <button  pButton pRipple label="Mettre à jour le tableau" type="button"  icon="pi pi-refresh" (click)="updateView()" class="p-button-secondary  p-mr-2"></button>
+                        </div> -->
                             <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [autoLayout]="true" [columns]="cols" 
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [columns]="cols" 
                             [rowHover]="true"  styleClass="p-datatable-customers"
-                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
-                               
+                            currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
     
                                 <ng-template pTemplate="caption">
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">

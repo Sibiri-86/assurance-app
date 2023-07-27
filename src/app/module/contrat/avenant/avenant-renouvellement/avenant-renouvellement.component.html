@@ -10,100 +10,7 @@
                 </div>
             </div> -->
 
-            <p-fieldset legend="Dernier exercice de la police" toggleable="true" [transitionOptions]="'400ms'">
-                <form [formGroup]="lastExerciceForm">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
-                            <label for="debit">Date d'effet de l'exercice</label>
-                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
-                        </div>
-                        <div class="p-field p-col-6">
-                            <label for="fin">Date d'échéance de l'exercice</label>
-                            <input class="exo" id="fin" type="date" formControlName="fin" pInputText disabled="true">
-                        </div>
-                    </div>
-                </form>
-            </p-fieldset>
-
-            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
-                <form [formGroup]="exerciceForm">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-3">
-                            <label for="debut">Date d'effet <sup style="color: red; size: 1.7em">*</sup></label>
-                            <!-- <p-calendar id="debut" [showIcon]="true" formControlName="debut"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar> -->
-                            <input id="debut"   type="date" name="dateSoins" formControlName="debut" pInputText>
-                        </div>
-                        <div class="p-field p-col-3">
-                            <label for="dateIncorparation">Type durée <sup style="color: red; size: 1.7em">*</sup></label>
-                            <p-dropdown inputId="typeDuree" dataKey="id" [filter]="true" showClear="true" id="typeDuree"
-                                        [options]="typeDuree" formControlName="typeDuree" (onChange)="changeTypeDuree()"
-                                        placeholder="Select" optionLabel="label"></p-dropdown>
-                        </div>
-                        <div class="p-field p-col-3">
-                            <label for="nom">Durée <sup style="color: red; size: 1.7em"></sup></label>
-                            <input id="durée" type="text" required formControlName="duree" pInputText (blur)="onRefreshDateEcheanceForGroupe()"/>
-                        </div>
-                        <div class="p-field p-col-3">
-                            <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
-                            <input id="fin" type="date" formControlName="fin" pInputText >
-                           
-                        </div>
-                    </div>
-                </form>
-            </p-fieldset>
-                <form [formGroup]="myForm">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-4">
-                            <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
-                            <input id="numeroGarant" type="number" min="0" formControlName="numeroGarant" pInputText>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label for="dateAvenant">Date de l'avenant <sup></sup></label>
-                            <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
-                            
-                        </div>
-                        <!--<div class="p-field p-col-6">
-                            <label for="dateEffetA">Date d'effet du renouvellement</label>
-                            <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
-                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
-                                        appendTo="body"></p-calendar>
-                        </div>
-                        <div class="p-field p-col-6">
-                            <label for="dateEcheance">Date d'échéance</label>
-                            <p-calendar id="dateEcheance" [showIcon]="true" formControlName="dateEcheance"
-                                        dateFormat="dd/mm/yy" inputId="calendar"
-                                        appendTo="body"></p-calendar>
-                        </div>-->
-                        <div class="p-field p-col-4">
-                            <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
-                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
-                                        [options]="demandeursList" formControlName="demandeur"
-                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label for="nom">Motif <sup></sup></label>
-                            <input id="Observation" type="text" required formControlName="observation" pInputText/>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label for="fraisAccessoires">Total Frais Accessoires <sup></sup></label>
-                            <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label for="fraisBadges">Total Frais Badges <sup></sup></label>
-                            <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
-                        </div>
-                        <div class="p-field p-col-4">
-                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                           
-                            <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
-                        dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
-                        appendTo="body"></p-calendar>  
-                        </div>
-                    </div>
-                </form>
-                <p-fieldset legend="RECAPITULATIF" toggleable="true">
+            <p-fieldset legend="RECAPITULATIF" toggleable="true">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="lastname2">Garant</label>
@@ -257,20 +164,115 @@
                         </div>
                     </div>
                 </div>
-                </p-fieldset>
+            </p-fieldset>
+
+            <p-fieldset legend="Dernier exercice de la police" toggleable="true" [transitionOptions]="'400ms'">
+                <form [formGroup]="lastExerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-6">
+                            <label for="debit">Date d'effet de l'exercice</label>
+                            <input id="debit" class="exo" type="date" formControlName="debut" pInputText disabled="true">
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="fin">Date d'échéance de l'exercice</label>
+                            <input class="exo" id="fin" type="date" formControlName="fin" pInputText disabled="true">
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+
+            <p-fieldset legend="Exercice à renouveller" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                <form [formGroup]="exerciceForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-3">
+                            <label for="debut">Date d'effet <sup style="color: red; size: 1.7em">*</sup></label>
+                            <!-- <p-calendar id="debut" [showIcon]="true" formControlName="debut"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar> -->
+                            <input id="debut"   type="date" name="dateSoins" formControlName="debut" pInputText>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="dateIncorparation">Type durée <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDuree" dataKey="id" [filter]="true" showClear="true" id="typeDuree"
+                                        [options]="typeDuree" formControlName="typeDuree" (onChange)="changeTypeDuree()"
+                                        placeholder="Select" optionLabel="label"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="nom">Durée <sup style="color: red; size: 1.7em"></sup></label>
+                            <input id="durée" type="text" required formControlName="duree" pInputText (blur)="onRefreshDateEcheanceForGroupe()"/>
+                        </div>
+                        <div class="p-field p-col-3">
+                            <label for="fin">Date d'échéance <sup style="color: red; size: 1.7em">*</sup></label>
+                            <input id="fin" type="date" formControlName="fin" pInputText >
+                           
+                        </div>
+                    </div>
+                </form>
+            </p-fieldset>
+                <form [formGroup]="myForm">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-4">
+                            <label for="numero">Numéro de l'avenant chez le garant  <sup></sup></label>
+                            <input id="numeroGarant" type="number" min="0" formControlName="numeroGarant" pInputText>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="dateAvenant">Date de l'avenant <sup></sup></label>
+                            <input id="dateAvenant" type="date" formControlName="dateAvenant" pInputText (change)="compareDateavenant()">
+                            
+                        </div>
+                        <!--<div class="p-field p-col-6">
+                            <label for="dateEffetA">Date d'effet du renouvellement</label>
+                            <p-calendar id="dateEffetA" [showIcon]="true" formControlName="dateEffet"
+                                        dateFormat="dd/mm/yy" inputId="calendar" (onSelect)="compareDate()"
+                                        appendTo="body"></p-calendar>
+                        </div>
+                        <div class="p-field p-col-6">
+                            <label for="dateEcheance">Date d'échéance</label>
+                            <p-calendar id="dateEcheance" [showIcon]="true" formControlName="dateEcheance"
+                                        dateFormat="dd/mm/yy" inputId="calendar"
+                                        appendTo="body"></p-calendar>
+                        </div>-->
+                        <div class="p-field p-col-4">
+                            <label for="dateIncorparation">Initiateur <sup style="color: red; size: 1.7em">*</sup></label>
+                            <p-dropdown inputId="typeDemanteur" dataKey="id" [filter]="true" showClear="true" id="dateIncorparation"
+                                        [options]="demandeursList" formControlName="demandeur"
+                                        placeholder="Select" optionLabel="libelle"></p-dropdown>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Motif <sup></sup></label>
+                            <input id="Observation" type="text" required formControlName="observation" pInputText/>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisAccessoires">Total Frais Accessoires <sup></sup></label>
+                            <p-inputNumber id="fraisAccessoires" inputId="integeronly" formControlName="fraisAccessoires"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="fraisBadges">Total Frais Badges <sup></sup></label>
+                            <p-inputNumber id="fraisBadges" inputId="integeronly" formControlName="fraisBadges"></p-inputNumber>
+                        </div>
+                        <div class="p-field p-col-4">
+                            <label for="nom">Date saisie <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                           
+                            <p-calendar id="dateSaisie" [showIcon]="true" formControlName="dateSaisie"
+                        dateFormat="dd/mm/yy" inputId="calendar"  [disabled]="true"
+                        appendTo="body"></p-calendar>  
+                        </div>
+                    </div>
+                </form>
 
                 <p-fieldset legend="Enregistrement des infos de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerInfo()"></button>
+                            <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerInfo()"></button> -->
                             <button type="button" [disabled]="myForm.invalid || etat==='VIEW' || exerciceForm.invalid" pTooltip="Enregistrer les infos de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantInfo()"></button>
                         </div>
 
                 </p-fieldset>
 
         </p-tabPanel>
-        <p-tabPanel *ngIf="etat ==='CREATE'" [disabled]="myForm.invalid || !avenantArrivedId"  [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond">
+        <p-tabPanel *ngIf="etat ==='CREATE'"   [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe et Plafond" [disabled]="myForm.invalid || !avenantArrivedId">
+            <!-- [disabled]="myForm.invalid || !avenantArrivedId" -->
             <div class="p-grid">
                 <div class="p-col-12">
                     <p-table #dt [value]="groupeListes" [rows]="10" [paginator]="true" [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
@@ -371,7 +373,7 @@
                                 <div class="p-field p-col-4">
                                     <label for="dateEffet">Date effet</label>
                                     <!--<input type="date" class="form-control" formControlName="dateEffet" id="dateEffet" required style="width: 100%">-->
-                                    <input id="dateEffet" type="date" formControlName="dateEffet" pInputText >
+                                    <input id="dateEffet" type="date" formControlName="dateEffet" value="{{ dateEffet | date:'yyyy-MM-dd' }}" pInputText >
                                     
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
@@ -517,7 +519,7 @@
                     
                     
                         <div class="p-grid p-justify-center">
-                            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button>
+                            <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button> -->
                             <button type="button" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
                         </div>
 
@@ -934,7 +936,7 @@
                                     
                                     
                     <div class="p-grid p-justify-center">
-                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button> -->
                         <button type="button" [disabled]="plafondFamilleActePlafongConfig?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
                     </div>
 
@@ -1856,7 +1858,7 @@
                                     
                                     
                     <div class="p-grid p-justify-center">
-                        <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+                        <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button> -->
                         <button type="button" [disabled]="plafondFamilleActes?.length === 0 || plafondGroupeActes?.length === 0 || plafondGroupeSousActes?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
                     </div>
 
@@ -1907,6 +1909,10 @@
             <app-adherent-basculer [police] = "police" [exerciceRevenu] = "exerciceRevenu"  [groupeListes]="groupeListes" ></app-adherent-basculer>
 
         </p-tabPanel>
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-plus" tooltip="AJOUT ACTES" [disabled]="myForm.invalid && etat=='CREATE' || !avenantArrivedId && etat=='CREATE'">
+
+            <app-ajout_acte [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantArrivedId"></app-ajout_acte>
+        </p-tabPanel>
         <p-tabPanel header="LISTE ACTUALISEE" leftIcon="pi pi-list" tooltip="LISTE ACTUALISEE">
             <!--<app-adherent-list *ngIf="adherantPoliceListActualisee" [listeAdherent]="adherantPoliceListActualisee"></app-adherent-list>-->
             <p-table #table [value]="adherantPoliceListActualisee" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 'qualiteAssure?.libelle']"
@@ -1922,7 +1928,8 @@
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
                     </span>
-                    
+                    <span  *ngIf="adherantPoliceListActualisee"> Exercice: </span> <br/>
+                    <span  *ngIf="adherantPoliceListActualisee"> {{adherantPoliceListActualisee[0]?.exercice.debut | formatTableValue : 'date'}} - {{adherantPoliceListActualisee[0]?.exercice.fin | formatTableValue : 'date'}}</span>
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupeSelectedFilter"
                                     [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe" (onChange)="loadAdherentFiltertByGroupe()"
                                    >

@@ -14,6 +14,7 @@ import {loadGroupe} from '../../../../store/contrat/groupe/actions';
 import {Adherent, AdherentFamille} from '../../../../store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as loadListeActualisee from '../../../../store/contrat/adherent/actions';
+import * as loadAdherentByExercice from '../../../../store/contrat/adherent/actions';
 import {
     Avenant,
     HistoriqueAvenant,
@@ -621,7 +622,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
     ngOnInit(): void {
     
-        if(this.etat!=='CREATE') {
+        if(this.etat !=='CREATE') {
             this.charge();
           
         }
@@ -892,7 +893,7 @@ export class AvenantRenouvellementComponent implements OnInit {
                                 this.adherantPoliceListActualisee = [];
                             }
                         });
-                }
+                    }
     }
 
     loadAherantByGroupe(): void {
@@ -945,7 +946,8 @@ export class AvenantRenouvellementComponent implements OnInit {
             taux: group?.taux,
             territorialite: group.territorialite || [],
             duree: group.duree,
-            dateEffet: this.exerciceForm.get('debut').value,
+            //dateEffet: this.exerciceForm.get('debut').value,
+            dateEffet: new Date(group.dateEffet),
             // typeDuree: this.typeDuree.find(e => e.value === group.typeDuree),
             typeDuree: group?.typeDuree,
             dateEcheance: this.exerciceForm.get('fin').value,

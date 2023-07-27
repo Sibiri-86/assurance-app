@@ -1,11 +1,12 @@
 import { from } from "rxjs";
-import {Prestataire, PrestataireList} from "./model";
+import {MajPrestataireDto, Prestataire, PrestataireList} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
+import { Commune } from "../commune/model";
 
 @Injectable({providedIn: 'root'})
 export class PrestataireService {
@@ -66,6 +67,13 @@ getPrestataireByQuartierIdType(idQt: string, typeId: string): Observable<Prestat
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_PRESTATAIRE)}/quartierList/${idQt}/${typeId}`).pipe(
       map((response: Prestataire[]) => response),
       catchError(this.handleError())
+  );
+}
+
+majPrestataires(majPrestataireDto: MajPrestataireDto): Observable<any> {
+  console.log('=============majPrestataireDto 1111============', majPrestataireDto);
+  return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.PARAMETRAGE_PRESTATAIRE)}/misAJourPrestataire`, majPrestataireDto,
+      {observe: 'response'}
   );
 }
 private handleError<T>() {
