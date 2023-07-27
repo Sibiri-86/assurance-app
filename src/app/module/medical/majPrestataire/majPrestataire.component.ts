@@ -265,6 +265,7 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
       this.messageService.add({severity:'success', summary: 'Success', detail:'enregistrement éffectuer avec succès'});
     });
     this.majPrestataireDto = {};
+    this.majPrestataireDto.prestataires = [];
     this.displayFormConvention = false;
   }
   changeGarantie($event) {
