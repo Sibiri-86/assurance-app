@@ -1824,7 +1824,7 @@
         <p-toolbar styleClass="p-mb-4">
             <ng-template pTemplate="left">
                 <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addAdherent(); loadAdherentPrincipalByGroupe(groupe)"></button>
-                <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2 p-mr-2" (click)="deleteSelectedPolice()" [disabled]="!selectedGarants || !selectedGarants.length"></button>
+                <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2 p-mr-2" (click)="deleteSelectedAdhernts()" [disabled]="!selectedAdherents || !selectedAdherents.length"></button>
                 <div class="p-mr-2 p-mb-2">
                     <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" accept="image/*" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
                 </div>
@@ -1843,7 +1843,7 @@
         </p-toolbar>
         <p-table #dt [value]="adherentList"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','matriculeGarant','matriculeSouscripteur',
         'nom','prenom','numeroTelephone','dateNaissance','dateIncorporation']"
-                 [rowHover]="true" dataKey="id"
+                 [rowHover]="true" dataKey="id" [(selection)]="selectedAdherents"
                  styleClass="p-datatable-customers"
                  currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" (onRowSelect)="onRowSelect($event)" [showCurrentPageReport]="true">
             <ng-template pTemplate="caption">
@@ -1905,6 +1905,105 @@
         </ng-template>
     </p-table>
     </div>
+    </div>
+</ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="displayDialogFormUpdateAdherent" header="Modifier adherent" [modal]="true" styleClass="p-fluid" [style]="{'width':'1000px'}" (onHide)="adherentForm.reset()">
+    <ng-template pTemplate="content">
+        <p-fieldset legend="Adhérent" toggleable="true">
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <label for="a">Qualite assuré</label>
+                    <p-dropdown  inputId="a" dataKey="id" [filter]="true" showClear="true"
+                                 [options]="assurerListe" filterBy="nom, prenom, numero, groupe.nom"
+                                 [(ngModel)]="adherantSelected" placeholder="Ex:" optionLabel="nom"></p-dropdown>
+                </div>
+                <div class="p-col-6"></div>
+            </div>
+            <form   [formGroup]="adherentForm">
+                <div class="card">
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                        <label for="firstname2">Nom</label>
+                        <input id="nom" type="text" required formControlName="nom"  pInputText>
+                        </div>
+
+                        <div class="p-field p-col">
+                        <label for="lastname2">Prenom</label>
+                        <input id="lastname2" type="text"  formControlName="prenom" pInputText>
+                        </div>
+
+                        <div class="p-field p-col">
+                            <label for="lastname2">Telephone</label>
+                            <p-inputMask formControlName="numeroTelephone" mask="99 99 99 99"></p-inputMask>
+                        </div>
+                       </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                    <label for="firstname2">Adresse email</label>
+                    <input id="firstname2" type="text"  formControlName="adresseEmail" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                    <label for="lastname2">Adresse</label>
+                    <input id="lastname2" type="text" formControlName="adresse" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                    <label for="lastname2">Reference bancaire</label>
+                    <input id="lastname2" type="text"  formControlName="referenceBancaire" pInputText>
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Date de naissance</label>
+                        <input type="date" name="dateNaissance" id="dateNaissance"  pInputText formControlName="dateNaissance">
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Lieu de naissance</label>
+                        <input id="lastname2" type="text" formControlName="lieuNaissance" pInputText>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Date entrée</label>
+                        <input type="date" name="dateEntree" id="dateEntree"  pInputText formControlName="dateEntree">
+
+                    </div>
+                </div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="lastname2">Genre</label>
+                        <p-dropdown  inputId="genre" dataKey="id" [filter]="true" showClear="true" [options]="genreList" formControlName="genre" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="lastname2">Profession</label>
+                        <p-dropdown  inputId="profession" dataKey="id" [filter]="true" showClear="true" [options]="professionList" formControlName="profession" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col-4">
+                        <label for="lastname2">Qualite assuré</label>
+                        <p-dropdown  inputId="qualiteAssure" dataKey="id" [filter]="true" showClear="true" [options]="qualitePrincipalList" formControlName="qualiteAssure" placeholder="Select" optionLabel="libelle"></p-dropdown>
+                    </div>
+                </div>
+
+                </div>
+               </form>
+            </p-fieldset>
+    <br/>
+    <div class="p-grid p-justify-between">
+        <div>
+        <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
+        </div>
+        <div>
+        <button  [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check" (click)="onCreateAddherent()"></button>
+        </div>
     </div>
 </ng-template>
 </p-dialog>
