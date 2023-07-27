@@ -867,16 +867,32 @@ export class AvenantRenouvellementComponent implements OnInit {
     loadAdherentFiltertByGroupe() {
         
         this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.adherentList));
-        this.store.dispatch(loadListeActualisee.loadAdherentGroupe({idGroupe: this.groupeSelectedFilter.id}));
-        this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
-            .subscribe((value1) => {
-                if (value1) {
-                    this.adherantPoliceListActualisee = value1.slice();
-                    
-                } else{
-                    this.adherantPoliceListActualisee = [];
+      //  this.store.dispatch(loadListeActualisee.loadAdherentGroupe({idGroupe: this.groupeSelectedFilter.id}));
+      if(this.exerciceRevenu.id) {
+
+      
+            this.store.dispatch(loadListeActualisee.loadAdherentByExercice({idGroupe: this.groupeSelectedFilter.id, exerciceId: this.exerciceRevenu.id}))
+                this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
+                    .subscribe((value1) => {
+                        if (value1) {
+                            this.adherantPoliceListActualisee = value1.slice();
+                            
+                        } else{
+                            this.adherantPoliceListActualisee = [];
+                        }
+                    });
+                } else {
+                    this.store.dispatch(loadListeActualisee.loadAdherentByExercice({idGroupe: this.groupeSelectedFilter.id, exerciceId: this.exerciceOfLast.id}))
+                    this.adherantPoliceListActualisee$.pipe(takeUntil(this.destroy$))
+                        .subscribe((value1) => {
+                            if (value1) {
+                                this.adherantPoliceListActualisee = value1.slice();
+                                
+                            } else{
+                                this.adherantPoliceListActualisee = [];
+                            }
+                        });
                 }
-            });
     }
 
     loadAherantByGroupe(): void {

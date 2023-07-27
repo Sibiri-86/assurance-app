@@ -2223,6 +2223,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
               this.initDisplayAvenant();
             }
 
+            
             this.historiqueRev = res.historiqueAvenant;
             this.historiqueGroupeRev = res.groupes;
             console.log('***************this.historiqueRev********************', this.historiqueRev);

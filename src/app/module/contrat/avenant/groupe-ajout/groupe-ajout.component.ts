@@ -287,6 +287,7 @@ export class GroupeAjoutComponent implements OnInit{
   avenantModif1: Avenant = {};
   displayBareme: boolean = false;
   stat: Rapport;
+  selectedAdherents: Array<Adherent>;
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
@@ -1890,6 +1891,10 @@ export class GroupeAjoutComponent implements OnInit{
  
    supprimerAdherent(adherent: Adherent){
    this.store.dispatch(featureActionAdherent.deleteAdherent(adherent));
+   }
+
+   deleteSelectedAdhernts() {
+    this.store.dispatch(featureActionAdherent.deleteAdherents({adherentList: this.selectedAdherents}));
    }
  
    modifierAdherent(adherent: Adherent){

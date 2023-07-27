@@ -73,6 +73,8 @@ export class AvenantIncorporationComponent implements OnInit{
     adherentPrincipaux: Array<Adherent> = [];
     adherentPrincipaux2: Array<Adherent> = [];
     viewListe = false;
+    viewFamille = false;
+    viewControleObligatoire = false;
     selectedFile: File;
     historiqueAvenant1: HistoriqueAvenant = {};
     isImport = 'NON';
@@ -302,6 +304,7 @@ export class AvenantIncorporationComponent implements OnInit{
        
       //   this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
+        
         this.adherentFamilleListe.forEach(af => {
             // af.adherent.groupe = this.curentGroupe;
             af.famille.forEach(f => {
@@ -442,37 +445,64 @@ export class AvenantIncorporationComponent implements OnInit{
    
 
     createHistoriqueAvenant(): void {
-        console.log("============================", this.adherentForm.value);
-        if(this.adherentForm.value.id === null) {
+        console.log("================length============", this.familys.length);
+        
+        if(this.viewFamille && this.familys?.length ===0 || this.familys?.length === null) {
+            this.addMessage('error', 'Famille',
+            'Veuillez ajouter la famille');
+                  
+    } else {
+    
+        if(this.familys.value) {
+            const famil: Array<Adherent> = this.familys.value;
+            famil?.forEach(f => {
+              
+                if(f.nom === null || f.prenom ===null || f.dateNaissance === null || f.genre === null || f.qualiteAssure === null) {
+                    this.addMessage('error', 'Champs obligatoire',
+                    'Veuillez remplir les champs obligatoire');
+                    this.viewControleObligatoire = true;
+                }
+            });
+            if(!this.viewControleObligatoire) {
 
-            this.adherentForm.value.id ="0";
+        
+
+            
+                if(this.adherentForm.value.id === null) {
+
+                    this.adherentForm.value.id ="0";
+                }
+                const adherantFamille: AdherentFamille = {};
+                adherantFamille.adherent = this.adherentForm.value;
+                adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
+                adherantFamille.famille = this.familys.value;
+                adherantFamille.famille.forEach(f => {
+                    f.adherentPrincipal = null;
+                    f.groupe = this.customForm.controls.groupe.value;
+                });
+                if(this.compteur !=null) {
+                    this.adherentFamilleListe[this.compteur] = adherantFamille;
+                } else {
+                    this.adherentFamilleListe.push(adherantFamille);
+                }
+                
+                this.adherentForm.reset();
+                
+                console.log("============id==========",this.adherentForm.value.id);
+                this.familys.reset();
+                this.familys.clear();
+                this.adherentSelected = {};
+                
+                console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
+                console.log(adherantFamille);
+                console.log('***************-------------------------', this.customForm.get('groupe').value);
+                this.compteur = null;
+            }
         }
-        const adherantFamille: AdherentFamille = {};
-        adherantFamille.adherent = this.adherentForm.value;
-        adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
-        adherantFamille.famille = this.familys.value;
-        adherantFamille.famille.forEach(f => {
-            f.adherentPrincipal = null;
-            f.groupe = this.customForm.controls.groupe.value;
-        });
-        if(this.compteur !=null) {
-            this.adherentFamilleListe[this.compteur] = adherantFamille;
-        } else {
-            this.adherentFamilleListe.push(adherantFamille);
-        }
-        
-        this.adherentForm.reset();
-        
-        console.log("============id==========",this.adherentForm.value.id);
-        this.familys.reset();
-        this.familys.clear();
-        this.adherentSelected = {};
-        
-        console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
-        console.log(adherantFamille);
-        console.log('***************-------------------------', this.customForm.get('groupe').value);
-        this.compteur = null;
     }
+    this.viewFamille = false;
+    this.viewControleObligatoire = false;
+  }
 
     modifierHistoriqueAvenant1(ri: number): void {
         
@@ -502,6 +532,7 @@ export class AvenantIncorporationComponent implements OnInit{
         /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
 		console.log('*************this.genre*************', this.genre);*/
         this.setAdherentPrincipal(this.adherentSelected);
+        this.viewFamille = true;
     }
 
     setAdherentPrincipal(adherent: Adherent): void {
