@@ -98,7 +98,8 @@ export class BalanceComponent implements OnInit {
             compteFin: new FormControl('', [Validators.required]),
             codeDebut: new FormControl(''),
             codeFin: new FormControl(''),
-            typeEtatBalance: new FormControl('', [Validators.required])
+            typeEtatBalance: new FormControl('', [Validators.required]),
+            exerciceComptable: new FormControl([Validators.required])
           });
 
      this.breadcrumbService.setItems([{ label: 'Balance' }]);
@@ -112,6 +113,18 @@ export class BalanceComponent implements OnInit {
                 printPdfFile(bytes);
         }
     }); */
+
+    this.exerciceList$ = this.store.pipe(select(exerciceListSelector.exerciceComptableList));
+    this.store.dispatch(featureActionExercice.loadExerciceComptable());
+    this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.exerciceList = value.slice();
+        
+       
+      }
+    });
 
     this.store.dispatch(featureActionJournal.setReportBalanceHuit(null));
     this.store.pipe(select(journauxSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -138,7 +151,7 @@ export class BalanceComponent implements OnInit {
         
         this.exerciceList = value.slice();
         this.exerciceActif = this.exerciceList.find(exercice=>exercice.actived === true);
-        
+        console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", this.exerciceActif);
        
       }
     });
@@ -206,6 +219,15 @@ export class BalanceComponent implements OnInit {
              this.balanceForm.get('dateDebut').setValue('');
       }
     }
+  }
+
+  verifieSiDateEstDansExercice() {
+      if(this.balanceForm.value.exerciceComptable.annee != new Date(this.balanceForm.value.dateDebut).getFullYear()) {
+        this.addMessage('error', 'Date  invalide',
+                'Veuillez choisir une date valide de l\'année '.concat(this.balanceForm.value.exerciceComptable.annee.toString()));
+             
+             this.balanceForm.get('dateDebut').setValue('');
+      }
   }
 
   imprimer(pref: OrdreReglement) {
