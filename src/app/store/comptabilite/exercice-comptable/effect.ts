@@ -27,7 +27,6 @@ export class ExerciceComptableEffects {
                     featureActions.loadExerciceComptable()
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
-                //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
 
