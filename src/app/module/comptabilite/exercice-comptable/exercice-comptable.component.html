@@ -89,6 +89,7 @@
         
         <p-dialog [maximizable]="true" #dialStudent  [(visible)]="displayExercice" header="Exercice comptale" [modal]="true" styleClass="p-fluid" >
             <ng-template pTemplate="content">
+                
                 <div class="card">
                 <form >
                     <div class="card">
@@ -123,7 +124,7 @@
                     <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                 </div>
                 <div>
-                    <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2"(click)="onCreate()" ></button>
+                    <button  pButton  pRipple  label="Enregistrer" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" (click)="onCreate()" ></button>
                 </div>
             </div>
              
