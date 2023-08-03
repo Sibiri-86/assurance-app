@@ -198,25 +198,33 @@ export class BalanceComponent implements OnInit {
   
   verifieDate2() {
     if(this.balanceForm.value.dateFin) {
-      
-      if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateFin).getFullYear()) {
-        console.log("============");
-        this.addMessage('error', 'Date  invalide',
-                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
-                this.balanceForm.get('dateFin').setValue('');
+      if(this.exerciceActif != undefined ) {
+        if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateFin).getFullYear()) {
+          console.log("============");
+          this.addMessage('error', 'Date  invalide',
+                  'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+                  this.balanceForm.get('dateFin').setValue('');
+        }
+      } else {
+        this.addMessage('error', 'Aucun exercice comptable actif',
+                    'Veuillez activé un exercice comptable pour continuer');
       }
     }
   }
 
   verifieDate1() {
     if(this.balanceForm.value.dateDebut) {
-      
-      if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateDebut).getFullYear()) {
-        console.log("============");
-        this.addMessage('error', 'Date  invalide',
-                'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
-             
-             this.balanceForm.get('dateDebut').setValue('');
+      if(this.exerciceActif != undefined ) {
+          if(this.exerciceActif.annee != new Date(this.balanceForm.value.dateDebut).getFullYear()) {
+            console.log("============");
+            this.addMessage('error', 'Date  invalide',
+                    'Veuillez choisir une date valide de l\'année  '.concat(this.exerciceActif.annee.toString()));
+                 
+                 this.balanceForm.get('dateDebut').setValue('');
+          }
+      } else {
+        this.addMessage('error', 'Aucun exercice comptable actif',
+                    'Veuillez activé un exercice comptable pour continuer');
       }
     }
   }
