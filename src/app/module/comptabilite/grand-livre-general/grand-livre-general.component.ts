@@ -40,7 +40,7 @@ import * as exerciceListSelector from '../../../store/comptabilite/exercice-comp
 import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
 import * as featureActioncompte from '../../../store/comptabilite/compte/actions';
 import * as compteSelector from '../../../store/comptabilite/compte/selector';
-
+import {saveAs} from "file-saver";
 
 
 
@@ -102,6 +102,7 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
    
+    this.telechargerBilan();
     this.exerciceComptableOperationList = [];
 
     this.exerciceComptableOperationList$ = this.store.pipe(select(exerciceComptableOperationListSelector.exerciceComptableOperationList));
@@ -171,6 +172,11 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
       }
     });
   
+  }
+
+  telechargerBilan() {
+    this.operationService.downloadFile(2022)
+        .subscribe(blob => saveAs(blob, "compte-resultat.xlsx"));
   }
 
   viderDebit() {

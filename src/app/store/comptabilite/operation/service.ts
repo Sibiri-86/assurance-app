@@ -65,6 +65,15 @@ $getReport(report: Report): Observable<ArrayBuffer> {
   return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
 }
 
+downloadFile(annee: number): Observable<any> {
+  // @FIXME: get request
+  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report-excel`, {
+    responseType: 'blob'
+  });
+}
+
+
+
 findOperationGrandLivre(operation: Operation): Observable<OperationList> {
 
   // @FIXME: post request
