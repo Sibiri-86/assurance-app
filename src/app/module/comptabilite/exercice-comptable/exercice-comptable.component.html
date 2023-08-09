@@ -30,43 +30,45 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="annee" style="min-width:200px">Annee<p-sortIcon field="annee"></p-sortIcon></th>
                         
                         <th>Status</th>
-                        <th>Clôture</th>
+                        <th>Gestion de la clôture</th>
+                        <th>Gestion de l'activation</th>
                         <th></th>
-                        <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-exercice>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="journal"></p-tableCheckbox>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{exercice?.annee}}</span>
+                        </td> -->
+                        <td><span class="p-column-title" style="min-width:200px">{{exercice?.annee}}</span></td>
                         
                              <td>
-                                <span *ngIf="exercice.actived === true" style="color: green; font-weight: bold">ACTIVE</span>
-                                <span *ngIf="exercice.actived === false" style="color: red; font-weight: bold">FERMEE</span>
+                                <span *ngIf="exercice.actived === true" style="color: green; font-weight: bold">ACTIF</span>
+                                <span *ngIf="exercice.actived === false" style="color: red; font-weight: bold">FERME</span>
                             
                             </td>
                             <td>
-                                <span *ngIf="exercice.cloture === true" style="color: red; font-weight: bold">CLÔTURE</span>
+                                <!-- <span *ngIf="exercice.cloture === true" style="color: red; font-weight: bold">CLÔTURE</span>
+                                <span *ngIf="exercice.cloture === false" style="color: green; font-weight: bold">EN COURS</span> -->
+                                <button *ngIf="exercice.cloture === true" pButton pRipple icon="pi pi-times" pTooltip="Cliquez pour activer l'exercice" class="p-button-danger  p-mr-2" label="CLOTURE" (click)="changeFermeture(exercice)" [disabled]="exercice.actived || exercice.cloture"></button>
+                                <button *ngIf="exercice.cloture === false" pButton pRipple icon="pi pi-times" pTooltip="Cliquez pour clôturer l'exercice" class="p-button-success p-mr-2" label="OUVERT" (click)="changeFermeture(exercice)" [disabled]="exercice.actived || exercice.cloture"></button>
                             
                             </td>
                             <td>
                                 <div class="p-col- p-mr-2">
-                                    <p-inputSwitch (onChange)="changeStatus(exercice)"  [(ngModel)]="exercice.actived"
+                                    <p-inputSwitch (onChange)="changeStatus(exercice)"  [(ngModel)]="exercice.actived"  
                                                    ></p-inputSwitch>
                                 </div>
                             </td>
                             
                         
-                        <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-times" pTooltip="clôturer" class="p-button-rounded p-button-success p-mr-2" (click)="changeFermeture(exercice)"></button>
+                        <td>
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editExercice(exercice)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteExercice(exercice)"></button>
 <!--                             <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-warning p-mr-2" (click)="voirJournal(journal)"></button>

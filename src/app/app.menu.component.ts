@@ -142,8 +142,8 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Balance', icon: 'pi pi-print', routerLink: ['/comptabilite/balance'], visible: true},
                         {label: 'Tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/tiers'], visible: true},
                         {label: 'Grand livre auxiliaire', routerLink: ['/comptabilite/grand-livre-auxiliaire'], visible: true},
-
                         {label: 'Balance tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/balance-tiers'], visible: true},
+                        {label: 'Bilan', icon: 'pi pi-print', routerLink: ['/comptabilite/bilan'], visible: true},
                     ]
                 }
                     

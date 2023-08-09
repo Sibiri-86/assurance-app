@@ -6,8 +6,9 @@ import { DepenseFamilleService} from './service';
 import * as featureActions from './action';
 import {GlobalConfig} from '../../../config/global.config';
 import {StatusEnum} from '../../global-config/model';
-import { Check } from './model';
+import { Bilan, Check } from './model';
 import { Report } from '../../contrat/police/model';
+import { ExerciceComptable } from '../../comptabilite/exercice-comptable/model';
 
 @Injectable()
 export class DepenseFamilleEffects {
@@ -52,6 +53,20 @@ export class DepenseFamilleEffects {
             ofType(featureActions.FetchReportDepenseFamille),
             mergeMap((report: Report) =>
                 this.depenseFamilleService.$getReport(report).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setReportDepenseFamille({reportFile: value})
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));getReportBilan
+
+        FetchReportBilan$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.FetchReportBilan),
+            mergeMap((report: ExerciceComptable) =>
+                this.depenseFamilleService.$getReportBilan(report).pipe(
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.setReportDepenseFamille({reportFile: value})

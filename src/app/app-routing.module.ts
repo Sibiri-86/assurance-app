@@ -127,6 +127,7 @@ import { SouscripteurMouvementComponent } from './module/portail/souscripteur-mo
 import { AuthGuard } from './auth/user-route-access-service';
 import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assurance-voyage.component';
 import { MajPrestataireComponent } from './module/medical/majPrestataire/majPrestataire.component';
+import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
 
 @NgModule({
     imports: [
@@ -447,6 +448,9 @@ import { MajPrestataireComponent } from './module/medical/majPrestataire/majPres
                     {path: 'medical/maj-prestataire', component: MajPrestataireComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_medical']}},
+                    {path: 'comptabilite/bilan', component: BilanComponent,
+                    canActivate: [AuthGuard],
+                    data: { roles: ['sm_finance']}},
                     
 
                     

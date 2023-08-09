@@ -7,8 +7,9 @@ import {Endpoints} from '../../../config/module.endpoints';
 import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistre';
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { Report } from '../../contrat/police/model';
-import { Check, DepenseFamilleList } from './model';
+import { Bilan, Check, DepenseFamilleList } from './model';
 import { DepartementList } from '../../parametrage/departement/model';
+import { ExerciceComptable } from '../../comptabilite/exercice-comptable/model';
 
 @Injectable({providedIn: 'root'})
 export class DepenseFamilleService {
@@ -33,6 +34,12 @@ constructor(private http: HttpClient) {
     $getReport(report: Report): Observable<ArrayBuffer> {
         // @FIXME: get request
         return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille/report`,
+            report, {responseType: 'arraybuffer'});
+      }
+
+      $getReportBilan(report: ExerciceComptable): Observable<ArrayBuffer> {
+        // @FIXME: get request
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille/reportBilan`,
             report, {responseType: 'arraybuffer'});
       }
 

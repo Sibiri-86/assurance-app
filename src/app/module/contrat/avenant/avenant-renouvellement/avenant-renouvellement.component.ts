@@ -836,7 +836,7 @@ export class AvenantRenouvellementComponent implements OnInit {
 
 
 
-            console.log('====curentExercice===== ' ,this.exerciceRevenu.id);
+            console.log('====curentExercice122222222===== ' ,this.exerciceRevenu.id);
 
             this.adherantPoliceListActualisee$ = this.store.pipe(select(adherentSelector.listeActualisee));
             this.store.dispatch(loadListeActualisee.loadListeActualiseeByExercice({exerciceId: this.exerciceRevenu.id}));
