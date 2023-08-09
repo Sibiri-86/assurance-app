@@ -19,7 +19,7 @@ import { AppelFond, Balance } from '../../comptabilite/appelFond/model';
 import { Operation } from '../../comptabilite/operation/model';
 import { ConsommationParFamille, Recapitulatif } from '../../reporting/production/recapitulatif/model';
 import { RepartitionDepenseStatut } from '../../reporting/production/repartitionDepenseStatut/model';
-import { Check } from '../../reporting/depense-famille/model';
+import { Bilan, Check } from '../../reporting/depense-famille/model';
 import { StatistiqueParTrancheAge } from '../../reporting/production/statistiqueParTrancheAge/model';
 import { FacturePrestataires } from '../../reporting/prestation/facturePrestataires/model';
 import { ConsommationParSexe } from '../../reporting/medical/consommationParSexe/model';
@@ -104,7 +104,8 @@ export interface Report {
     statistiqueTrancheAge?: StatistiqueParTrancheAge;
     facturePrestataires?: FacturePrestataires;
     consommationParSexe?: ConsommationParSexe;
-    consommationParFamille?: ConsommationParFamille
+    consommationParFamille?: ConsommationParFamille; 
+    bilan? : Bilan;
 }
 
 export interface PoliceList {

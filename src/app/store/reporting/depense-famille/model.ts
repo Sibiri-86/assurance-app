@@ -1,3 +1,4 @@
+import { ExerciceComptable } from '../../comptabilite/exercice-comptable/model';
 import { Adherent } from '../../contrat/adherent/model';
 import { Garant } from '../../contrat/garant/model';
 import { Groupe } from '../../contrat/groupe/model';
@@ -41,7 +42,9 @@ export interface Tranche  {
     age2?: number;
     libelle?: string;
 }
-
+export interface Bilan {
+    exerciceComptable?: ExerciceComptable;
+}
 export interface DepenseFamilleList {
     depenseFamilles: Array<DepenseFamille>;
 }
