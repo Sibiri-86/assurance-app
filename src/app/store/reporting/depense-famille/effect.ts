@@ -60,7 +60,7 @@ export class DepenseFamilleEffects {
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 ))
-        ));getReportBilan
+        ));
 
         FetchReportBilan$ = createEffect(() =>
         this.actions$.pipe(
