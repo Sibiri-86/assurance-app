@@ -59,6 +59,8 @@ import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 import { KeycloakService } from 'keycloak-angular';
 import { environment } from 'src/environments/environment';
 import * as Keycloak from 'keycloak-js';
+import { Sort } from '../../common/models/sort.enum';
+import { EtatFinancier } from '../../common/models/etat-financier.enum';
 //import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 
@@ -124,6 +126,7 @@ export class BilanComponent implements OnInit, OnDestroy {
   bilanForm: FormGroup;
   exerciceComptable: ExerciceComptable = {};
   bilan : Bilan = {};
+  typeEtatFinanciers = Object.keys(EtatFinancier).map(key => ({label: EtatFinancier[key], value: key}));
 
   
   constructor( private store: Store<AppState>,
@@ -145,7 +148,8 @@ export class BilanComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.bilanForm = this.formBuilder.group({
       id: new FormControl(''),
-      exerciceComptable: new FormControl([Validators.required])
+      exerciceComptable: new FormControl('',[Validators.required]),
+      typeEtat: new FormControl('',[Validators.required])
     });
     
     this.exerciceComptableOperationList = [];
@@ -199,6 +203,8 @@ export class BilanComponent implements OnInit, OnDestroy {
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
+
+          console.log("========================bytes===",bytes);
           printExcelfFile(bytes);
           /* if(this.displayExcel) {
             printExcelfFile(bytes);
@@ -209,6 +215,8 @@ export class BilanComponent implements OnInit, OnDestroy {
                 
         }
     });
+
+    
 
     this.policeList$ = this.store.pipe(select(policeListSelector.policeList));
     this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -464,7 +472,24 @@ export class BilanComponent implements OnInit, OnDestroy {
   }
 
   findOperationGrandLivre() {
-     this.store.dispatch(featureActionDepense.FetchReportBilan(this.bilanForm.get('exerciceComptable').value));
+    console.log("======================", this.bilanForm.get('typeEtat').value);
+    console.log("======================", this.bilanForm.get('exerciceComptable').value.annee);
+    if(this.bilanForm.get('typeEtat').value === EtatFinancier.BILAN) {
+      this.store.dispatch(featureActionDepense.FetchReportBilan(this.bilanForm.get('exerciceComptable').value));
+
+    }
+
+    if(this.bilanForm.get('typeEtat').value === EtatFinancier.COMPTERESULTAT) {
+
+      this.report.typeReporting = TypeReport.COMPTE_RESULTAT;
+      this.report.annee = this.bilanForm.get('exerciceComptable').value;
+      this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+
+    }
+
+
+    
+
     this.displayExcel= false;
     //this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 

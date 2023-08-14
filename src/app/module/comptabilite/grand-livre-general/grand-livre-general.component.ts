@@ -102,7 +102,6 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
    
-    this.telechargerBilan();
     this.exerciceComptableOperationList = [];
 
     this.exerciceComptableOperationList$ = this.store.pipe(select(exerciceComptableOperationListSelector.exerciceComptableOperationList));
@@ -174,10 +173,6 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
   
   }
 
-  telechargerBilan() {
-    this.operationService.downloadFile(2022)
-        .subscribe(blob => saveAs(blob, "compte-resultat.xlsx"));
-  }
 
   viderDebit() {
     this.operation.montantDebit = null;

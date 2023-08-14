@@ -556,13 +556,13 @@
 
                                 <div class="p-field p-col">
                                     <label for="dateEffet">Date effet <span style="color: red !important;">*</span></label>
-                                    <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" [disabled]="true" formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
+                                    <p-calendar id="dateEffet"   [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar"  formControlName="dateEffet" appendTo="body" (onSelect)="checkDateEffet()"></p-calendar>
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'dateEffet'">
                                     </app-entity-validation>
                                 </div>
 
-                              <!--   <div class="p-field p-col">
+                                 <div class="p-field p-col">
                                     <label for="typeDuree">Type durée <span style="color: red !important;">*</span></label>
                                     <p-dropdown id="typeDuree" dataKey="id" inputId="typeDuree" [filter]="true" showClear="true" (ngModelChange)="changeTypeDureeGroupe()" [options]="typeDuree" formControlName="typeDuree" placeholder="Select"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
@@ -576,7 +576,13 @@
                                     <app-entity-validation [entityValidations]="entityValidations"
                                                            [formGroup]="groupeForm" [entityField]="'duree'">
                                     </app-entity-validation>
-                                </div> -->
+                                </div> 
+                               
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+                               
+
                                 <div class="p-field p-col">
                                     <label for="dateEcheance">Date écheance</label>
                                     <p-calendar id="dateEcheance" [disabled]="adherentForm" [showIcon]="true" dateFormat="dd/mm/yy" inputId="calendar" formControlName="dateEcheance" appendTo="body"></p-calendar>
@@ -591,10 +597,7 @@
                                                            [formGroup]="groupeForm" [entityField]="'adresse'">
                                     </app-entity-validation>
                                 </div>
-                            </div>
 
-                            <div class="p-fluid p-formgrid p-grid">
-                               
                                 <div class="p-field p-col-4">
                                     <label for="description">Description <span style="color: red !important;">*</span></label>
                                     <input id="description" type="text" formControlName="description"  pInputText>
@@ -602,7 +605,12 @@
                                                            [formGroup]="groupeForm" [entityField]="'description'">
                                     </app-entity-validation>
                                 </div>
-                                <div class="p-field p-col-4">
+                              
+                            </div>
+
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col-12">
                                     <label for="commune">Commune<span style="color: red !important;">*</span></label>
                                     <p-dropdown id="commune" dataKey="id" inputId="commune" [filter]="true" showClear="true" [options]="communeList" formControlName="commune" placeholder="Select" optionLabel="libelle"></p-dropdown>
                                     <app-entity-validation [entityValidations]="entityValidations"
