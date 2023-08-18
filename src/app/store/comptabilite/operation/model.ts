@@ -31,8 +31,45 @@ export interface Operation {
     reportSoldeMois?: number;
     boolTotal?: boolean;
     compteAuxiliaireSelected?: Tiers;
+    isSoldeAnterieur?: boolean;
+   
+}
+
+export interface OperationLeutree {
+    id?: string,
+    numPiece?: number;
+    numFacture?: string;
+    reference?:string;
+    libelle?:string;
+    numCompte?: number;
+    numCompteAuxi?: number;
+    dateSaisieJour?: Date;
+    dateSaisie?: Date;
+    exerciceComptableOperation?: ExerciceComptableOperation;
+    montantDebit?: number;
+    montantCredit?: number;
+    compte?: Compte;
+    compteAuxiliaire?: Tiers;
+    compteSelected?: Compte;
+    journauxId?: string;
+    ordreReglement?: OrdreReglement;
+    ordreReglementTierpayant?: OrdreReglementTierPayant;
+    montantRecette?: number;
+    montantDepense?: number;
+    solde?: number;
+    beneficiaire?: string;
+    dateFin?: Date;
+    reportSoldeMois?: number;
+    boolTotal?: boolean;
+    compteAuxiliaireSelected?: Tiers;
+    isSoldeAnterieur?: boolean;
+    numeroLeutrage?: string;
    
 }
 export interface  OperationList {
     operationList: Array<Operation>
+}
+
+export interface  OperationLeutreeList {
+    operationLeutreeList: Array<OperationLeutree>
 }

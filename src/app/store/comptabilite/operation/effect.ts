@@ -148,6 +148,20 @@ export class OperationEffects {
             )
         )
     )
-    ); 
+    );
+    
+    fetchOperationByExerciceOperationLeutree$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadOperationByExerciceOperationLeutree),
+        mergeMap(({exerciceOperationId}) =>
+            this.operationService.$getOperationByExerciceOperationLeutree(exerciceOperationId).pipe(
+                switchMap(value => [
+                    featureActions.setOperationLeutree(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            )
+        )
+    )
+    );
 
 }
