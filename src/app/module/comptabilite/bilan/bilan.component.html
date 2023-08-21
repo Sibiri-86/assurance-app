@@ -107,7 +107,7 @@
       
         
         <p-dialog [maximizable]="true" [(visible)]="display" header="Etats financiers" [modal]="true" styleClass="p-fluid" 
-        [style]="{width: '10 00px'}">
+        [style]="{'width':'1300px'}">
 
         <ng-template pTemplate="content">
             <div class="card">
@@ -115,16 +115,24 @@
 
                 <form [formGroup]="bilanForm">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-12">
                             <label for="firstname2">Exercice Comptable<span style="color: red !important; font-size: 1.4em"></span></label>
                         </div>
-                        <div class="p-field p-col-6">
+                        <div class="p-field p-col-12">
                             <p-dropdown inputId="exerciceList" [filter]="true"
                                                     showClear="true" [options]="exerciceList"
                                                     formControlName="exerciceComptable" optionLabel="annee"
                                                     [autoDisplayFirst]="false" (onChange)="getExercice()">
                             </p-dropdown>
                         </div>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="typeEtat">Etat financier<span class="required" style="color: red !important; font-size: 1.4em">*</span></label>
+                        <p-dropdown inputId="typeEtat" [filter]="true"
+                                                showClear="true" [options]="typeEtatFinanciers"
+                                                formControlName="typeEtat"
+                                                 [autoDisplayFirst]="false" ></p-dropdown>
                     </div>
 
                  <!--    <div class="p-fluid p-formgrid p-grid">
@@ -193,7 +201,7 @@
                                 <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple    (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple    (click)="findOperationGrandLivre()" [disabled]="bilanForm?.invalid"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     

@@ -23,6 +23,7 @@ import { Bilan, Check } from '../../reporting/depense-famille/model';
 import { StatistiqueParTrancheAge } from '../../reporting/production/statistiqueParTrancheAge/model';
 import { FacturePrestataires } from '../../reporting/prestation/facturePrestataires/model';
 import { ConsommationParSexe } from '../../reporting/medical/consommationParSexe/model';
+import { ExerciceComptable } from '../../comptabilite/exercice-comptable/model';
 
 
 export interface Police{
@@ -106,6 +107,7 @@ export interface Report {
     consommationParSexe?: ConsommationParSexe;
     consommationParFamille?: ConsommationParFamille; 
     bilan? : Bilan;
+    annee?: ExerciceComptable;
 }
 
 export interface PoliceList {
