@@ -58,7 +58,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{exerciceList ? exerciceList.length : 0 }} exercice (s).
+                        {{exerciceComptableOperationList ? exerciceComptableOperationList.length : 0 }} mois.
                     </div>
                 </ng-template>
             </p-table>
@@ -297,8 +297,8 @@
                             </ng-template>
                             <ng-template pTemplate="right" *ngIf="isClasse5">
                                 <div class="p-grid">
-                                    <div class="p-col-5"></div>
-                                    <div class="p-col-7">
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
                                         <div class="p-grid">
                                             <div class="p-col-4">
                                                 Ancien Solde:
@@ -311,8 +311,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="p-col-5"></div>
-                                    <div class="p-col-7">
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
                                         <div class="p-grid">
                                             <div class="p-col-4">
                                                 Mouvements:
@@ -325,8 +325,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="p-col-5"></div>
-                                    <div class="p-col-7">
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
                                         <div class="p-grid">
                                             <div class="p-col-4" >
                                                 Nouveau Solde:
@@ -426,9 +426,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="annee" >Date saisie<p-sortIcon field="annee"></p-sortIcon></th>
 
                         <th pSortableColumn="annee" >Date Pièce<p-sortIcon field="annee"></p-sortIcon></th>
@@ -450,9 +450,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-operation>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                             <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
@@ -493,9 +493,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="annee" >Date saisie<p-sortIcon field="annee"></p-sortIcon></th>
 
                         <th pSortableColumn="annee" >Date Pièce<p-sortIcon field="annee"></p-sortIcon></th>
@@ -518,9 +518,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-operation>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                             <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
