@@ -13,6 +13,7 @@ export interface ExerciceComptableOperation {
     montantCredit?: number;
     solde?: number;
     reportSoldeMois?: number;
+    isPartie?: boolean;
    
 }
 export interface  ExerciceComptableOperationList {
@@ -21,4 +22,13 @@ export interface  ExerciceComptableOperationList {
 
 export interface OperationList {
     operationList: Array<Operation>
+}
+
+export interface OperationSoldeAnterieur {
+    ancienSoldeMontantDebit?: number;
+    ancienSoldeMontantCredit?: number;
+    mouvementsMontantDebit?: number;
+    mouvementsMontantCredit?: number;
+    nouveauSoldeMontantDebit?: number;
+    nouveauSoldeMontantCredit?: number;
 }

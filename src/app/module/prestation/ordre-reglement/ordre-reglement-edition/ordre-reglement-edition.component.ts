@@ -54,6 +54,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
+import { Etat } from 'src/app/module/common/models/model';
 
 
 @Component({
@@ -72,6 +73,7 @@ export class OrdreReglementEditionComponent implements OnInit {
   selectedOrdreReglement: OrdreReglement [];
   ordreReglement: OrdreReglement;
   showDetailOrdreReglement = false;
+  valide: TypeEtatOrdreReglement.VALIDE;
 
 
   constructor( private store: Store<AppState>,

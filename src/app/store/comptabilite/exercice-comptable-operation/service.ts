@@ -5,7 +5,7 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {  ExerciceComptableOperation, ExerciceComptableOperationList,OperationList} from "./model";
+import {  ExerciceComptableOperation, ExerciceComptableOperationList,OperationList, OperationSoldeAnterieur} from "./model";
 
 
 @Injectable({providedIn: 'root'})
@@ -42,6 +42,8 @@ $getExerciceComptableOperation(): Observable<ExerciceComptableOperationList> {
       catchError(this.handleError())
     );
   }
+
+  
 
 
 

@@ -5,8 +5,9 @@ import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
-import {   Operation, OperationList} from "./model";
+import {   Operation, OperationLeutreeList, OperationList} from "./model";
 import { Report } from '../../contrat/police/model';
+import { OperationSoldeAnterieur } from "../exercice-comptable-operation/model";
 
 
 @Injectable({providedIn: 'root'})
@@ -60,6 +61,14 @@ $getOperationByExerciceOperation(exerciceOperationId: string): Observable<Operat
   );
 }
 
+$getOperationByExerciceOperationLeutree(exerciceOperationId: string): Observable<OperationList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/by-exercice-operation-leutree/${exerciceOperationId}`).pipe(
+    map((response: OperationList) => response),
+    catchError(this.handleError())
+  );
+}
+
 $getReport(report: Report): Observable<ArrayBuffer> {
   // @FIXME: get request
   return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
@@ -91,6 +100,14 @@ findOperationGrandLivreAuxiliaire(operation: Operation): Observable<OperationLis
     catchError(this.handleError())
   );
 }
+
+$getSoldeAnterieurByMonth(id: string, b: boolean): Observable<OperationSoldeAnterieur> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/fetchSoldeAnterieurByMonth/${id}/${b}`).pipe(
+    map((response: OperationSoldeAnterieur) => response),
+    catchError(this.handleError())
+    );
+  }
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {

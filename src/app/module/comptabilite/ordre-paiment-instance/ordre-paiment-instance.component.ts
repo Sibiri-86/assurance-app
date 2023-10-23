@@ -82,7 +82,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   paiemrntEspece(ordre: OrdreReglement) {
     this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
-    //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
   }
 
   voirSinistre(ordre: OrdreReglement) {

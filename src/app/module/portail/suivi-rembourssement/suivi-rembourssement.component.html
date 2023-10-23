@@ -61,7 +61,7 @@
  -->
                     <!-- adaptation du code à celui de la visualisation des consommations -->
                     <p-table [value]="rembourssements"
-                     rowGroupMode="rowspan"
+                     rowGroupMode="rowspan" (onSort)="updateRowGroupMetaData()"
                 sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
 				<ng-template pTemplate="caption">
 					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -74,7 +74,7 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-                        <th>Assuré(e)</th>
+                        <th style="width:250px">Assuré(e)</th>
                         <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
@@ -88,7 +88,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
 					<tr>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                        <td style="width:250px" *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
@@ -139,7 +139,7 @@
                                     <div class="p-field p-col">
                                         <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                                         <br>
-                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                        <span >{{prestation?.pathologie?.code}}</span>
                                     </div>
                                 </div>
                                     
@@ -307,7 +307,7 @@
                                 </td>
                                 <td><span class="p-column-title">{{prefinance.sousActe.libelle}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{prefinance.pathologie.libelle}}</span>
+                                <td><span class="p-column-title">{{prefinance.pathologie.code}}</span>
                                 </td>
                                 <td><span class="p-column-title">{{prefinance.prestataire.libelle}}</span>
                                 </td>
@@ -399,7 +399,7 @@
 
 
                 <p-table [value]="rembourssementValid"
-                     rowGroupMode="rowspan"
+                     rowGroupMode="rowspan" (onSort)="updateRowGroupMetaDataValid()"
                 sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
 				<ng-template pTemplate="caption">
 					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -412,7 +412,7 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-                        <th>Assuré(e)</th>
+                        <th style="width:250px">Assuré(e)</th>
                         <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
@@ -426,15 +426,15 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
 					<tr>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                        <td style="width:250px" *ngIf="rowGroupMetadataValid[garant?.adherent?.prenom]?.index === rowIndex" [attr.rowspan]="rowGroupMetadataValid[garant?.adherent?.prenom]?.size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                        <td *ngIf="rowGroupMetadataValid[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataValid[garant?.adherent?.prenom]?.size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom]?.index === rowIndex" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom]?.size" class="vue">
+                        <td *ngIf="rowGroupMetadataValid[garant?.adherent?.prenom]?.index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataValid[garant?.adherent?.prenom]?.size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
                         </td>
 						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
@@ -478,7 +478,7 @@
                                     <div class="p-field p-col">
                                         <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                                         <br>
-                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                        <span >{{prestation?.pathologie?.code}}</span>
                                     </div>
                                 </div>
                                     
@@ -645,7 +645,7 @@
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.sousActe.libelle}}</span>
                                     </td>
-                                    <td><span class="p-column-title">{{prefinance.pathologie.libelle}}</span>
+                                    <td><span class="p-column-title">{{prefinance.pathologie.code}}</span>
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.prestataire.libelle}}</span>
                                     </td>
@@ -736,7 +736,7 @@
                         </p-table> -->
 
                         <p-table [value]="rembourssementValidAndPaiementValid"
-                     rowGroupMode="rowspan"
+                     rowGroupMode="rowspan" (onSort)="updateRowGroupMetaDataValidAndPaiement()"
                 sortField="adherent.prenom" sortMode="single" styleClass="p-datatable-striped" [scrollable]="true">
 				<ng-template pTemplate="caption">
 					<div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -749,7 +749,7 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-                        <th>Assuré(e)</th>
+                        <th style="width:250px">Assuré(e)</th>
                         <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
@@ -763,15 +763,15 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
 					<tr>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td style="width:250px" *ngIf="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
                         </td>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
-                        [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td *ngIf="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].index === rowIndex" 
+                        [attr.rowspan]="rowGroupMetadataValidAndPaiementValid[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
                         </td>
 						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
@@ -816,7 +816,7 @@
                                     <div class="p-field p-col">
                                         <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                                         <br>
-                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                        <span >{{prestation?.pathologie?.code}}</span>
                                     </div>
                                 </div>
                                     
@@ -979,7 +979,7 @@
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.sousActe.libelle}}</span>
                                     </td>
-                                    <td><span class="p-column-title">{{prefinance.pathologie.libelle}}</span>
+                                    <td><span class="p-column-title">{{prefinance.pathologie.code}}</span>
                                     </td>
                                     <td><span class="p-column-title">{{prefinance.prestataire.libelle}}</span>
                                     </td>

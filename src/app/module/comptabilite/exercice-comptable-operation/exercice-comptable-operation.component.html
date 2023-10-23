@@ -58,7 +58,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{exerciceList ? exerciceList.length : 0 }} exercice (s).
+                        {{exerciceComptableOperationList ? exerciceComptableOperationList.length : 0 }} mois.
                     </div>
                 </ng-template>
             </p-table>
@@ -290,14 +290,59 @@
                         </ng-template>
                     </p-toolbar> -->
                 
-                    <p-toolbar styleClass="p-mb-4" *ngIf="exercice.cloture !== true">
-                        <p-toolbar styleClass="mb-4" >
-                            <ng-template pTemplate="left">
-                                 </ng-template>
-                            <ng-template pTemplate="right" >
+                    <p-toolbar >
+                        <!-- <p-toolbar styleClass="mb-4" > -->
+                            <ng-template pTemplate="left" *ngIf="exercice.cloture !== true">
                                 <button pButton pRipple icon="pi pi-plus"  class="p-button-success p-mr-2 p-mb-2"  (click)="onAdd()"></button>
                             </ng-template>
-                        </p-toolbar> 
+                            <ng-template pTemplate="right" *ngIf="isClasse5">
+                                <div class="p-grid">
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
+                                        <div class="p-grid">
+                                            <div class="p-col-4">
+                                                Ancien Solde:
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.ancienSoldeMontantDebit">
+                                                {{operationSoldeAnterieur?.ancienSoldeMontantDebit | formatTableValue: 'number':true}}
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.ancienSoldeMontantCredit">
+                                                {{operationSoldeAnterieur?.ancienSoldeMontantCredit | formatTableValue: 'number':true}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
+                                        <div class="p-grid">
+                                            <div class="p-col-4">
+                                                Mouvements:
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.mouvementsMontantDebit">
+                                                {{operationSoldeAnterieur?.mouvementsMontantDebit | formatTableValue: 'number':true}}
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.mouvementsMontantCredit">
+                                                {{operationSoldeAnterieur?.mouvementsMontantCredit | formatTableValue: 'number':true}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-4"></div>
+                                    <div class="p-col-8">
+                                        <div class="p-grid">
+                                            <div class="p-col-4" >
+                                                Nouveau Solde:
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.nouveauSoldeMontantDebit">
+                                                {{operationSoldeAnterieur?.nouveauSoldeMontantDebit | formatTableValue: 'number':true}}
+                                            </div>
+                                            <div class="p-col-4" *ngIf="operationSoldeAnterieur.nouveauSoldeMontantCredit">
+                                                {{operationSoldeAnterieur?.nouveauSoldeMontantCredit | formatTableValue: 'number':true}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </ng-template>
+                        <!-- </p-toolbar>  -->
                         
                        <!--  <div class="card">
                             <form>
@@ -366,7 +411,7 @@
                     </p-toolbar>
                    
 
-                    <p-table #dt [value]="operationList" [autoLayout]="true" [columns]="cols" [rows]="12" [paginator]="true" [globalFilterFields]="['annee']"
+                    <p-table *ngIf="!isClasse5" #dt [value]="operationList" [autoLayout]="true" [columns]="cols" [rows]="12" [paginator]="true" [globalFilterFields]="['annee']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -381,9 +426,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="annee" >Date saisie<p-sortIcon field="annee"></p-sortIcon></th>
 
                         <th pSortableColumn="annee" >Date Pièce<p-sortIcon field="annee"></p-sortIcon></th>
@@ -399,14 +444,15 @@
                         <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
                         
-                        <th style="min-width:150px"></th>
+                        
+                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-operation>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                             <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
@@ -422,16 +468,81 @@
                              <td><span class="p-column-title" >{{operation?.montantCredit | formatTableValue: 'number':true}}</span></td>
 
                         
-                        <td style="min-width:150px">
-                           <!--  <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editOperation(operation)"></button>
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteOperation(operation)"></button>
- -->
-                        </td>
+                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         {{operationList ? operationList.length : 0 }} opération (s).
+                    </div>
+                </ng-template>
+            </p-table>
+
+            <p-table *ngIf="isClasse5" #dt [value]="operationLeutreeList" [autoLayout]="true" [columns]="cols" [rows]="12" [paginator]="true" [globalFilterFields]="['annee']"
+                     [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="annee" >Date saisie<p-sortIcon field="annee"></p-sortIcon></th>
+
+                        <th pSortableColumn="annee" >Date Pièce<p-sortIcon field="annee"></p-sortIcon></th>
+
+                        <th pSortableColumn="annee" >N° pièce<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >N° facture<p-sortIcon field="annee"></p-sortIcon></th>
+
+                        <th pSortableColumn="annee" >Reférence<p-sortIcon field="annee"></p-sortIcon></th>
+                        
+                        <th pSortableColumn="annee" >N° compte<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >N° compte tier<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Libellé d'écriture<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Leutrage<p-sortIcon field="annee"></p-sortIcon></th>
+                        
+                        
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-operation>
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="operation"></p-tableCheckbox>
+                        </td> -->
+                            <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
+
+                             <td><span class="p-column-title" >{{operation?.numFacture}}</span></td>
+
+                             <td><span class="p-column-title" >{{operation?.reference}}</span></td>
+                             <td><span class="p-column-title" >{{operation.compte.compte | formatTableValue: 'number':true}}</span></td>
+                             <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span>
+                             </td>
+                             <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
+                             <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>
+                             <td><span class="p-column-title" >{{operation?.montantCredit | formatTableValue: 'number':true}}</span></td>
+                             <td><span class="p-column-title" >{{operation?.numeroLeutrage}}</span></td>
+
+                        
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{operationLeutreeList ? operationLeutreeList.length : 0 }} opération(s) leutrée(s).
                     </div>
                 </ng-template>
             </p-table>

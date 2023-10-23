@@ -22,8 +22,8 @@ import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/serv
 import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 import * as featureActionExerciceComptableOperation from '../../../store/comptabilite/exercice-comptable-operation/actions';
 import * as exerciceComptableOperationListSelector from '../../../store/comptabilite/exercice-comptable-operation/selector';
-import { ExerciceComptableOperation } from 'src/app/store/comptabilite/exercice-comptable-operation/model';
-import { Operation, OperationList } from 'src/app/store/comptabilite/operation/model';
+import { ExerciceComptableOperation, OperationSoldeAnterieur } from 'src/app/store/comptabilite/exercice-comptable-operation/model';
+import { Operation, OperationLeutree, OperationList } from 'src/app/store/comptabilite/operation/model';
 import * as featureActionOperation from '../../../store/comptabilite/operation/actions';
 import * as operationListSelector from '../../../store/comptabilite/operation/selector';
 import * as featureActionJournal from '../../../store/comptabilite/journaux/actions';
@@ -66,6 +66,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   exerciceComptableOperationList: Array<ExerciceComptableOperation>;
   operationList:Array<Operation> = [];
   operationList$: Observable<Array<Operation>>;
+  operationLeutreeList:Array<Operation> = [];
+  operationLeutreeList$: Observable<Array<Operation>>;
   operation: Operation = {};
   operation1: Operation = {};
   exerciceComptableOperation: ExerciceComptableOperation = {};
@@ -87,6 +89,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   compteList$: Observable<Array<Compte>>;
   compteList: Array<Compte>;
   exercice: ExerciceComptable = {};
+  operationSoldeAnterieur: OperationSoldeAnterieur = {};
+  isClasse5 =  false;
 
   
   
@@ -142,7 +146,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.tierList = value.slice();
-        
+        console.log("this.tierListtttttttttttttt", this.tierList);
        
       }
     });
@@ -164,6 +168,17 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.operationList = value.slice();
+        
+       
+      }
+    });
+
+    this.operationLeutreeList$ = this.store.pipe(select(operationListSelector.operationList));
+    this.operationLeutreeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      
+      if (value) {
+        
+        this.operationLeutreeList = value.slice();
         
        
       }
@@ -210,6 +225,22 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     });
     
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
+    this.store.dispatch(featureActionOperation.loadOperationByExerciceOperationLeutree({exerciceOperationId: exerciceComptableOperation.id}));
+    console.log("=========1========= ",this.exerciceComptableOperationList[0].isPartie, "=========2========= ",exerciceComptableOperation.id);
+    this.isClasse5 = false;
+    if(this.exerciceComptableOperationList[0].isPartie) {
+      this.isClasse5 = true;
+      this.store.dispatch(featureActionOperation.loadOperationByExerciceOperationLeutree({exerciceOperationId: exerciceComptableOperation.id}));
+      console.log("========operationLeutreeList==========",this.operationLeutreeList);
+      this.operationService.$getSoldeAnterieurByMonth(exerciceComptableOperation.id, this.exerciceComptableOperationList[0].isPartie).subscribe((res)=>{
+        if(res) {
+          console.log("==================",res);
+          this.operationSoldeAnterieur = res;
+        }
+  
+      });
+    }
+    
 
     this.displayOperation = true;
     this.operation.dateSaisieJour = new Date();

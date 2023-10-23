@@ -109,12 +109,14 @@
                     <span class="user-profile-name">{{name}}</span>
                     <span class="user-profile-role">{{role}}</span>
                 </div>
-                <img class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
+                <img *ngIf="!adherent.urlPhoto" class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
+                <img *ngIf="adherent.urlPhoto" [src]="adherent.urlPhoto" [alt]="adherent.nom" width="150" height="150" class="p-shadow-4" />
             </a>
             <ul class="fadeInDown">
                 <li class="profile-detail">
                     <div class="user-profile-info">
-                        <img class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
+                        <img *ngIf="!adherent.urlPhoto" class="logo" src="assets/layout/images/avatar/avatar.jpg" alt="prestige-layout" />
+                        <img *ngIf="adherent.urlPhoto" [src]="adherent.urlPhoto" [alt]="adherent.nom" width="150" height="150" class="p-shadow-4" />
                         <div class="profile-info">
                             <span class="user-profile-name">{{name}}</span>
                             <span class="user-profile-role">{{role}}</span>

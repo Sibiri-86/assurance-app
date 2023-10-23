@@ -31,7 +31,7 @@
                         </th>
                         <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:200px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -48,7 +48,7 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{ordre.assurePrinc.nom }} {{ordre.assurePrinc.prenom}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
