@@ -61,10 +61,10 @@ $getOperationByExerciceOperation(exerciceOperationId: string): Observable<Operat
   );
 }
 
-$getOperationByExerciceOperationLeutree(exerciceOperationId: string): Observable<OperationLeutreeList> {
+$getOperationByExerciceOperationLeutree(exerciceOperationId: string): Observable<OperationList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/by-exercice-operation-leutree/${exerciceOperationId}`).pipe(
-    map((response: OperationLeutreeList) => response),
+    map((response: OperationList) => response),
     catchError(this.handleError())
   );
 }

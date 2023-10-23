@@ -45,32 +45,49 @@ export class DashboardDemoComponent implements OnInit {
         this.breadcrumbService.setItems([
             { label: 'Dashboard', routerLink: [''] }
         ]);
+        
+    }
 
+    ngOnInit() {    
         console.log('les roles du user est'+this.keycloak.getUserRoles());
         this.keycloak.loadUserProfile().then(profile => {
         console.log("===========profile===========>", profile['attributes'].role);
         this.name = profile.firstName + ' ' + profile.lastName;
-        if (profile['attributes'].role.length != 0){
+
+        if (profile['attributes'].role){
         this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
             this.viewMessage = true;
             this.position = 'top';
+            if(this.role === 'ASSURE' || this.role === 'PRESTATAIRE' || this.role === 'GARANT') {
+                console.log("Vous êtes dans un truc ....");
+            } else {
+                this.state$=this.store.pipe(select(statistique));
+                this.store.dispatch(loadStatistique());
+                this.state$.pipe(takeUntil(this.destroy$))
+                          .subscribe(value => {
+                            if (value) {
+                              this.state = value;
+                            }
+                });
+            }
+        } else {
+            this.state$=this.store.pipe(select(statistique));
+            this.store.dispatch(loadStatistique());
+            this.state$.pipe(takeUntil(this.destroy$))
+                      .subscribe(value => {
+                        if (value) {
+                          this.state = value;
+                        }
+            });
         }
         /* if(this.role === 'ASSURE' || this.role === 'PRESTATAIRE' || this.role === 'GARANT'){
             this.router.navigate(['/portail/registerChoose']);
         } */
-      }) 
-        
-    }
+      });
 
-    ngOnInit() {       
-        this.state$=this.store.pipe(select(statistique));
-        this.store.dispatch(loadStatistique());
-        this.state$.pipe(takeUntil(this.destroy$))
-                  .subscribe(value => {
-                    if (value) {
-                      this.state = value;
-                    }
-        });
+
+        //console.log("Vous êtes dans un truc 11111111111111111111....");
+        
 
 
 /*

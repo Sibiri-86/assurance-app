@@ -66,8 +66,8 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   exerciceComptableOperationList: Array<ExerciceComptableOperation>;
   operationList:Array<Operation> = [];
   operationList$: Observable<Array<Operation>>;
-  operationLeutreeList:Array<OperationLeutree> = [];
-  operationLeutreeList$: Observable<Array<OperationLeutree>>;
+  operationLeutreeList:Array<Operation> = [];
+  operationLeutreeList$: Observable<Array<Operation>>;
   operation: Operation = {};
   operation1: Operation = {};
   exerciceComptableOperation: ExerciceComptableOperation = {};
@@ -173,7 +173,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.operationLeutreeList$ = this.store.pipe(select(operationListSelector.operationLeutreeList));
+    this.operationLeutreeList$ = this.store.pipe(select(operationListSelector.operationList));
     this.operationLeutreeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       
       if (value) {

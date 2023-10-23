@@ -32,6 +32,8 @@ export interface Operation {
     boolTotal?: boolean;
     compteAuxiliaireSelected?: Tiers;
     isSoldeAnterieur?: boolean;
+    numeroLeutrage?: string;
+    leutrage?: boolean;
    
 }
 

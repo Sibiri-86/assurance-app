@@ -181,7 +181,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                       console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
                       console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
                     }
-                    this.updateRowGroupMetaData();
+                    //this.updateRowGroupMetaData();
                     /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
                     console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
                     this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
@@ -415,7 +415,7 @@ onCreate() {
           console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
           console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
         }
-        this.updateRowGroupMetaData();
+        //this.updateRowGroupMetaData();
       }
 );
 }
@@ -468,7 +468,7 @@ actualiser() {
           console.log('..............this.montantTotalReclameFamille..............   ', this.montantTotalReclameFamille);
           console.log('..............this.montantTotalRembourseFamille..............   ', this.montantTotalRembourseFamille);
         }
-        this.updateRowGroupMetaData();
+        //this.updateRowGroupMetaData();
       }
 );
 }
@@ -655,7 +655,7 @@ voirSinistreDetail(sinistre: any) {
   }
 
     onSort() {
-      //this.updateRowGroupMetaData();
+      this.updateRowGroupMetaData();
   }
 
   onSortTiersPayant() {

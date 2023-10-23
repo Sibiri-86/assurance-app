@@ -74,7 +74,7 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-                        <th>Assuré(e)</th>
+                        <th  style="width:250px">Assuré(e)</th>
                         <th pSortableColumn="id" >Total Montant Réclamé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Total Montant Remboursé<p-sortIcon field="contact"></p-sortIcon></th>
                         <th pSortableColumn="id" >Date de déclaration<p-sortIcon field="contact"></p-sortIcon></th>
@@ -88,7 +88,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-garant let-rowIndex="rowIndex">
 					<tr>
-                        <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
+                        <td  style="width:250px" *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
                             <span class="p-text-bold p-ml-2">{{garant?.adherent?.nom}} {{garant?.adherent?.prenom}}</span>
                         </td>
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
@@ -142,7 +142,7 @@
                                 <div class="p-field p-col">
                                     <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                                     <br>
-                                    <span >{{prestation?.pathologie?.libelle}}</span>
+                                    <span >{{prestation?.pathologie?.code}}</span>
                                 </div>
                                 
                                 <!-- <div class="p-field p-col">
@@ -557,7 +557,7 @@
                                     <div class="p-field p-col">
                                         <label for="sousActe" style="font-size: 15px !important;">Pathologie:</label>
                                         <br>
-                                        <span >{{prestation?.pathologie?.libelle}}</span>
+                                        <span >{{prestation?.pathologie?.code}}</span>
                                     </div>
                                 </div>
                                     

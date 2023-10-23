@@ -152,11 +152,11 @@ export class OperationEffects {
     
     fetchOperationByExerciceOperationLeutree$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadOperationByExerciceOperationLeutree),
+        ofType(featureActions.loadOperationByExerciceOperation),
         mergeMap(({exerciceOperationId}) =>
             this.operationService.$getOperationByExerciceOperationLeutree(exerciceOperationId).pipe(
                 switchMap(value => [
-                    featureActions.setOperationLeutree(value)
+                    featureActions.setOperation(value)
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             )

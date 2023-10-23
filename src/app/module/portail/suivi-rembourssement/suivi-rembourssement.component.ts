@@ -99,6 +99,8 @@ export class SuiviRembourssementComponent implements OnInit {
   rembourssementValid: Array<Prefinancement>;
   rembourssementValidAndPaiementValid: Array<Prefinancement>;
   rowGroupMetadata: any;
+  rowGroupMetadataValid: any;
+  rowGroupMetadataValidAndPaiementValid: any;
   prestationDetail: Prestation[];
   displayPrefinancementPrestationDetail=false;
 
@@ -344,7 +346,7 @@ export class SuiviRembourssementComponent implements OnInit {
       (res) => {
           console.log('..............rembourssements..............   ', res);
           this.rembourssements = res;
-          this.updateRowGroupMetaData();
+          //this.updateRowGroupMetaData();
       }
   );
     })
@@ -358,7 +360,7 @@ export class SuiviRembourssementComponent implements OnInit {
         (res) => {
             console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValid = res;
-            this.updateRowGroupMetaDataValid();
+            //this.updateRowGroupMetaDataValid();
         }
     );
     })
@@ -372,7 +374,7 @@ export class SuiviRembourssementComponent implements OnInit {
         (res) => {
             console.log('..............rembourssementValid..............   ', res);
             this.rembourssementValidAndPaiementValid = res;
-            this.updateRowGroupMetaDataValidAndPaiement();
+            //this.updateRowGroupMetaDataValidAndPaiement();
         }
     );
     })
@@ -404,23 +406,23 @@ export class SuiviRembourssementComponent implements OnInit {
   }
 
   updateRowGroupMetaDataValid() {
-    this.rowGroupMetadata = {};
+    this.rowGroupMetadataValid = {};
 
     if (this.rembourssementValid) {
         for (let i = 0; i < this.rembourssementValid.length; i++) {
             let rowData = this.rembourssementValid[i];
             let representativeName = rowData?.adherent?.prenom;
             if (i == 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+                this.rowGroupMetadataValid[representativeName] = { index: 0, size: 1 };
             }
             else {
                 let previousRowData = this.rembourssementValid[i - 1];
                 let previousRowGroup = previousRowData.adherent.prenom;
                 if (representativeName === previousRowGroup) {
-                  this.rowGroupMetadata[representativeName].size++;
+                  this.rowGroupMetadataValid[representativeName].size++;
                 }
                 else{
-                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+                  this.rowGroupMetadataValid[representativeName] = { index: i, size: 1 };
                 }
             }
         }
@@ -428,23 +430,23 @@ export class SuiviRembourssementComponent implements OnInit {
   }
 
   updateRowGroupMetaDataValidAndPaiement() {
-    this.rowGroupMetadata = {};
+    this.rowGroupMetadataValidAndPaiementValid = {};
 
     if (this.rembourssementValidAndPaiementValid) {
         for (let i = 0; i < this.rembourssementValidAndPaiementValid.length; i++) {
             let rowData = this.rembourssementValidAndPaiementValid[i];
             let representativeName = rowData?.adherent?.prenom;
             if (i == 0) {
-                this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+                this.rowGroupMetadataValidAndPaiementValid[representativeName] = { index: 0, size: 1 };
             }
             else {
                 let previousRowData = this.rembourssementValidAndPaiementValid[i - 1];
                 let previousRowGroup = previousRowData.adherent.prenom;
                 if (representativeName === previousRowGroup) {
-                  this.rowGroupMetadata[representativeName].size++;
+                  this.rowGroupMetadataValidAndPaiementValid[representativeName].size++;
                 }
                 else{
-                  this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+                  this.rowGroupMetadataValidAndPaiementValid[representativeName] = { index: i, size: 1 };
                 }
             }
         }

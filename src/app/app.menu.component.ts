@@ -143,7 +143,7 @@ export class AppMenuComponent implements OnInit {
                         {label: 'Tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/tiers'], visible: true},
                         {label: 'Grand livre auxiliaire', routerLink: ['/comptabilite/grand-livre-auxiliaire'], visible: true},
                         {label: 'Balance tiers', icon: 'pi pi-print', routerLink: ['/comptabilite/balance-tiers'], visible: true},
-                        {label: 'Bilan', icon: 'pi pi-print', routerLink: ['/comptabilite/bilan'], visible: true},
+                        {label: 'Etats financiers', icon: 'pi pi-print', routerLink: ['/comptabilite/bilan'], visible: true},
                     ]
                 }
                     
@@ -196,71 +196,95 @@ export class AppMenuComponent implements OnInit {
                     
                     ]
             },
-            {
-                label: 'Conso. & Suivi', icon: 'pi pi-fw pi-wallet', routerLink: ['/portail'],
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE),
-                items: [
-                      
-                    {label: 'Assuré Consom.', icon: 'pi pi-fw pi-wallet', routerLink: ['/portail/assureConsommation'],
+            {label: 'Consommation.', icon: '', routerLink: ['/portail/assureConsommation'],
                     visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
-                    { label: 'Suivi Remb.', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-rembourssement'],
-                    visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)} 
-                    ]
-            },
-            {
-                label: 'Prod. Exclu & Entente', icon: 'pi pi-fw pi-slack', routerLink: ['/portail'],
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE),
-                items: [
-                      
-                    {label: 'Produit Exclu', icon: 'pi pi-fw pi-slack', routerLink: ['/portail/produit-exclu'],
+                    { label: 'Suivi Remb.', icon: '', routerLink: ['/portail/suivi-rembourssement'],
                     visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
-                    { label: 'Entente', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/entente'], 
-                    visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)}
-                    ]
-            },
+                    {label: 'Exclusion', icon: '', routerLink: ['/portail/produit-exclu'],
+                    visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
+                    { label: 'Entente', icon: '', routerLink: ['/portail/entente'], 
+                    visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)},
+                    {
+                        label: 'Pharmacies', icon: '', routerLink: ['/portail/pharmacie-garde'],
+                         visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                    },
+                    {
+                        label: 'Condit. gle et parti.', icon: '', routerLink: ['/portail/condition-generale-particuliere'],
+                        visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                    },
+                    {
+                        label: 'Barème', icon: '', routerLink: ['/portail/bareme'], 
+                        visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                    },
+                    {
+                        label: 'remboursement', icon: '', routerLink: ['/portail/remboursement-initie'], 
+                        visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
+                    },
+                    {
+                        label: 'Prestataire', icon: '', routerLink: ['/portail/prestataire-cartographie-quartier'], 
+                        visible: this.keycloak.isUserInRole(Function.sm_portail)
+                    },
+                    {
+                        label: 'FAQ', icon: '', routerLink: ['/portail/foire-question'],
+                         visible: this.keycloak.isUserInRole(Function.sm_portail)
+                    },
             {
-                label: 'Suivi Facture', icon: 'pi pi-fw pi-chevron-circle-right', routerLink: ['/portail/suivi-facture'], 
+                label: 'Suivi Facture', icon: '', routerLink: ['/portail/suivi-facture'], 
                 visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
+            
             {
-                label: 'Pharmacies', icon: 'pi pi-fw pi-list', routerLink: ['/portail/pharmacie-garde'],
-                 visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
-            },
-            {
-                label: 'Convention', icon: 'pi pi-fw pi-list', routerLink: ['/portail/convention'],
+                label: 'Convention', icon: '', routerLink: ['/portail/convention'],
                  visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
             {
-                label: 'Bon', icon: 'pi pi-fw pi-list', routerLink: ['/portail/bon-prestataire'], 
+                label: 'Bon', icon: '', routerLink: ['/portail/bon-prestataire'], 
                 visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)
             },
             
-            {label: 'Infos assuré', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme-prestataire'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
+            {label: 'Infos assuré', icon: '', routerLink: ['/portail/bareme-prestataire'], visible: this.keycloak.isUserInRole(Function.VUE_PRESTATAIRE)},
 
             {
-                label: 'Prestataire', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/prestataire-cartographie-quartier'], 
-                visible: this.keycloak.isUserInRole(Function.sm_portail)
-            },
-            {
-                label: 'Condit. gle et parti.', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/condition-generale-particuliere'],
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
-            },
-            {
-                label: 'Barème', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/bareme'], 
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
-            },
-            {
-                label: 'remboursement', icon: 'pi pi-fw pi-thumbs-up', routerLink: ['/portail/remboursement-initie'], 
-                visible: this.keycloak.isUserInRole(Function.VUE_ASSURE)
-            },
-            
-            {
-                label: 'Souscripteur Mouvement', icon: 'pi pi-fw pi-sort-alt', routerLink: ['/portail/mouvement-souscripteur'], 
+                label: 'Souscripteur Mouvement', icon: '', routerLink: ['/portail/mouvement-souscripteur'], 
                 visible: this.keycloak.isUserInRole(Function.VUE_SOUSCRIPTEUR) 
             },
+
             {
-                label: 'FAQ', icon: 'pi pi-fw pi-list', routerLink: ['/portail/foire-question'],
-                 visible: this.keycloak.isUserInRole(Function.sm_portail)
+                label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],visible: this.keycloak.isUserInRole(Function.sm_reporting), 
+                items: [
+                    {
+                        label: 'Production', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
+                                items: [
+                                    {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/recapitulatif'], visible: true},
+                                    {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille'], visible: true},
+                                    {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-acte'], visible: true},
+                                    {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
+                                    {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
+                                    {label: 'Affection', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
+                                    {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
+                                    {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
+                                    {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/evolution-mensuelle'], visible: true},
+                                    {label: 'Fam. Assure', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/famille-assure'], visible: true},
+                                ]
+                    },
+                    {
+                        label: 'Prestation', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
+                                items: [
+                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                                    {label: 'Statistique des opérateurs de saisie', routerLink: ['/reporting/reporting-operateur'], visible: true},
+                                    {label: 'Statistique des factures impayées par prestataire', routerLink: ['/reporting/reporting-cheque-non-valide'], visible: true},
+                                    {label: 'Statistique des factures payées par prestataire', routerLink: ['/reporting/reporting-cheque-valide'], visible: true},
+                                ]
+                    },
+                    {
+                        label: 'Médical', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
+                                items: [
+                                    {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
+                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                                ]
+                    }
+                    
+                                    ]
             },
         ];
 
