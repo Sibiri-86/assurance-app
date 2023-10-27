@@ -120,7 +120,10 @@ createItem(): FormGroup {
     });
 
     this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
-    this.store.dispatch(featureActionPrefinancement.searchPrefinancement({matricule: null, dateDeclaration: null}));
+    if(this.matricule || this.dateSoins) {
+      this.store.dispatch(featureActionPrefinancement.searchPrefinancement({matricule: null, dateDeclaration: null}));
+    }
+    
     this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {

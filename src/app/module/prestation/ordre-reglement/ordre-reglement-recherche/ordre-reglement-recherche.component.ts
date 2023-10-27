@@ -89,8 +89,11 @@ rechercherOrdreReglement() {
         }
     });
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
-    this.store.dispatch(featureActionPrefinancement.searchOrdreReglement({numero: null,
-      date: null}));
+    if(this.numero || this.date) {
+      this.store.dispatch(featureActionPrefinancement.searchOrdreReglement({numero: null,
+        date: null}));
+    }
+    
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
