@@ -204,6 +204,15 @@ putUpdateOrdreReglementWorkflow(ordre: OrdreReglement, etat: TypeEtatOrdreReglem
   // @FIXME: post request
   return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/etat/${etat}/${w}`, ordre);
 }
+
+getPrestationsBySinistreId(sinistreId: string): Observable<Array<Prestation>> {
+  // @FIXME: get request
+  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/getPrestationsBySinistreId/${sinistreId}`).pipe(
+    map((response: Array<Prestation>) => response),
+    catchError(this.handleError())
+);
+}
+
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {
