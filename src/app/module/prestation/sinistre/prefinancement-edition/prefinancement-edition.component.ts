@@ -1326,7 +1326,7 @@ verifieDateSoins(event){
       this.displayFP = false;
     }
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-    this.findMontantTotalConsommeFamille();
+    // this.findMontantTotalConsommeFamille();
   }
   changeDisplay() {
     if(this.prestationPopForm.value?.produitPharmaceutique) {

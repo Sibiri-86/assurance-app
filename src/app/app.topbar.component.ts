@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppMainComponent} from './app.main.component';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit{
     name = '';
     role = '';
     logOutUrl= '/';
@@ -22,6 +22,24 @@ export class AppTopBarComponent {
     adherent: Adherent = {};
     adherentSelected$: Observable<Adherent>;
     constructor( private store: Store<AppState>,public app: AppMainComponent, public keycloak: KeycloakService, private router: Router) {
+      
+
+     
+    }
+
+    async lagout() {
+      console.log('deconnecter');
+      // this.router.navigateByUrl('/');
+      await this.keycloak.logout()
+      /* .then(() => {
+        this.keycloak.getToken();
+        console.log("oooooooooooothis.keycloak.getToken 1", this.keycloak.getToken());
+        this.keycloak.clearToken();
+        console.log("oooooooooooothis.keycloak.getToken 2", this.keycloak.getToken());
+      }) */;
+    }
+
+    ngOnInit(): void {
       console.log('les roles du user est'+this.keycloak.getUserRoles());
       this.keycloak.loadUserProfile().then(profile => {
         console.log("===========profile===========>", profile['attributes'].role);
@@ -44,19 +62,5 @@ export class AppTopBarComponent {
            });
         console.log("oooooooooooothis.keycloak.getToken 12", this.keycloak.getToken());
       });
-
-     
-    }
-
-    async lagout() {
-      console.log('deconnecter');
-      // this.router.navigateByUrl('/');
-      await this.keycloak.logout()
-      /* .then(() => {
-        this.keycloak.getToken();
-        console.log("oooooooooooothis.keycloak.getToken 1", this.keycloak.getToken());
-        this.keycloak.clearToken();
-        console.log("oooooooooooothis.keycloak.getToken 2", this.keycloak.getToken());
-      }) */;
     }
 }
