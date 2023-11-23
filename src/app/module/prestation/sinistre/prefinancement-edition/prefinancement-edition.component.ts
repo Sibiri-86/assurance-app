@@ -156,7 +156,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                private tierPayantService: TierPayantService,
                private prefinancementService: PrefinancementService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router ) {
+               private router: Router,
+               ) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
    }
 
@@ -309,21 +310,21 @@ findMontantPlafond(event){
     if (value) {
         
         if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
-          console.log(this.prestationsList.length);
+          /* console.log(this.prestationsList.length);
           console.log("====adherentSelected2021=======");
           console.log(this.adherentSelectedfinal.numero);
           console.log(value.numero);
-          console.log("====adherentSelected2021=======");
+          console.log("====adherentSelected2021======="); */
           if(this.adherentSelectedfinal.numero !== value.numero) {
             this.addMessage('error', 'Assuré(e) non pris en compte', 'Veuillez continuer avec le même assuré');
           } else{
             this.adherentSelected = value;
             this.adherentSelectedfinal = this.adherentSelected;
-        console.log(this.adherentSelected.dateIncorporation);
+       /*  console.log(this.adherentSelected.dateIncorporation);
         console.log(this.prestationForm.value.dateDeclaration);
        
         console.log('***********this.adherentSelected***********', this.adherentSelected);
-        console.log(this.adherentSelected);
+        console.log(this.adherentSelected); */
         this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
        //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
         this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
@@ -390,11 +391,11 @@ findMontantPlafond(event){
         } else {
           this.adherentSelected = value;
           this.adherentSelectedfinal = this.adherentSelected;
-          console.log(this.adherentSelected.dateIncorporation);
+          /* console.log(this.adherentSelected.dateIncorporation);
           console.log(this.prestationForm.value.dateDeclaration);
          
           console.log('***********this.adherentSelected***********', this.adherentSelected);
-          console.log(this.adherentSelected);
+          console.log(this.adherentSelected); */
           this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
          //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
           this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
@@ -457,7 +458,7 @@ findMontantPlafond(event){
         }
        
        
-        console.log(this.bonPriseEnChargeList);
+        //console.log(this.bonPriseEnChargeList);
         this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
           e.typeBon === TypeBon.ENTENTEPREALABLE);
         //this.taux = this.adherentSelected.groupe.taux;
@@ -501,13 +502,13 @@ findMontantPlafond(event){
       }
     });
 
-    this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+    /* this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
     this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.tauxList = value.slice();
       }
-    });
+    }); */
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
@@ -525,7 +526,7 @@ findMontantPlafond(event){
        // this.prestataireList.filter(ele => console.log('***************' + ele.libelleTypePrestataire.toUpperCase()));
         this.prestatairePrescripteur = this.prestataireList.filter(ele => ele.libelleTypePrestataire &&
            ele.libelleTypePrestataire.toUpperCase() !== 'PHARMACIE');
-        console.log(this.prestatairePrescripteur);
+        //console.log(this.prestatairePrescripteur);
         this.prestataireExecutant = this.prestataireList;
       }
     });
@@ -553,8 +554,16 @@ findMontantPlafond(event){
 
   imprimer(pref: Prefinancement) {
     this.report.typeReporting = TypeReport.PREFINANCEMENT_FICHE_DETAIL_REMBOURSEMENT;
-    this.report.prefinancementDto = pref;
-    this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
+    this.prefinancementService.getPrestationsBySinistreId(pref.id).subscribe(
+      (res) => {
+        if(res) {
+          pref.prestation = res;
+          this.report.prefinancementDto = pref;
+          this.store.dispatch(featureActionPrefinancement.FetchReportPrestation(this.report));
+        }
+      }
+    );
+    
   }
 
   validerPrestation(pref: Prefinancement) {
@@ -720,11 +729,18 @@ findMontantPlafond(event){
     this.displayPrestationbon = false;
   }
   editerPrestation(pref: Prefinancement) {
+    this.prefinancementService.getPrestationsBySinistreId(pref.id).subscribe(
+      (res) => {
+        if(res) {
+          this.prestationsList = res;
+        }
+      }
+    );
     console.log("=====================");
     console.log(pref);
     this.adherentSelected = pref.adherent;
     this.adherentSelectedfinal = pref.adherent;
-    this.prestationsList = pref.prestation; 
+    //this.prestationsList = pref.prestation; 
     this.prestationForm.get('id').setValue(pref.id);
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
@@ -742,7 +758,7 @@ findMontantPlafond(event){
     this.prestationForm.get('typePaiement').setValue(pref.typePaiement);
     //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
     this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
-    for (const pr of pref.prestation) {
+    for (const pr of this.prestationsList) {
     const formPrestation: FormGroup = this.createItem();
     formPrestation.patchValue(pr);
     formPrestation.get('dateSoins').setValue(pr.dateSoins);
@@ -758,9 +774,17 @@ findMontantPlafond(event){
   }
 
   voirPrestation(pref: Prefinancement){
+    this.prefinancementService.getPrestationsBySinistreId(pref.id).subscribe(
+      (res) => {
+        if(res) {
+          this.prestationListPrefinancement = res;
+          this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+        }
+      }
+    );
     this.displayPrestation = true;
-    this.prestationListPrefinancement = pref.prestation;
-    this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
+    //this.prestationListPrefinancement = pref.prestation;
+    
   }
 
   supprimerPrestation(prestation: Prestation, i: number) {
