@@ -502,13 +502,13 @@ findMontantPlafond(event){
       }
     });
 
-    /* this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+    this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
     this.store.dispatch(loadTaux());
     this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.tauxList = value.slice();
       }
-    }); */
+    });
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
