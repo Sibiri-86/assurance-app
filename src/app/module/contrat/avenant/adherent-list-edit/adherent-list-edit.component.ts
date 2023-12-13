@@ -280,7 +280,7 @@ export class AdherentListEditComponent implements OnInit {
 
   }
   voirCarte(ad:Adherent) {
-    this.pictureUrl =ad.urlCarte;
+    this.pictureUrl =ad.urlCarte?.replace("http", "https")?.replace(":92", "");
     this.displayCarte = true;
   }
 

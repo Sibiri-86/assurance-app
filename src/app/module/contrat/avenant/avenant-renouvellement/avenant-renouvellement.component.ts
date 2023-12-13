@@ -201,6 +201,7 @@ export class AvenantRenouvellementComponent implements OnInit {
     plafondFamilleActePlafongConfig: Array<PlafondFamilleActe> = [];
     historiquePlafondFamilleActePlafongConfigTMP: Array<HistoriquePlafondFamilleActe> = [];
     historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
+    historiquePlafondFamilleActePlafongConfigResult: Array<HistoriquePlafondFamilleActe> = [];
     plafondActePlafongConfig: Array<PlafondActe> = [];
     plafondSousActePlafongConfig: Array<PlafondSousActe> = [];
     groupePlafongConfig: Groupe = {};
@@ -1586,7 +1587,53 @@ export class AvenantRenouvellementComponent implements OnInit {
             this.historiqueAvenantService.getsHistoriqueAvenantPlafondIncorporationAndRetraitModifReview(this.avenantId, this.groupePlafongConfig.id).subscribe(
                 (res) => {
                     this.historiquePlafondFamilleActePlafongConfig = res.historiquePlafondGroupeFamilleActes;
-                    console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", this.historiquePlafondFamilleActePlafongConfig);        
+                   // console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", this.historiquePlafondFamilleActePlafongConfig);
+                   
+                   for(let i = 0; i<this.historiquePlafondFamilleActePlafongConfig.length; i++) {
+                    console.log("=========================oui=====bieen==========");
+
+                    if(this.historiquePlafondFamilleActePlafongConfig[i].plafondGroupeFamilleActe.domaine && this.historiquePlafondFamilleActePlafongConfig[i].plafondGroupeFamilleActe.domaine.length !=3) {
+                        console.log("=========================oui=====1==========",this.historiquePlafondFamilleActePlafongConfig[i].plafondGroupeFamilleActe.garantie.code);
+             
+                        this.historiquePlafondFamilleActePlafongConfigResult = this.historiquePlafondFamilleActePlafongConfig.filter(h=>h.plafondGroupeFamilleActe.garantie.id=== this.historiquePlafondFamilleActePlafongConfig[i].plafondGroupeFamilleActe.garantie.id);
+                        console.log("=========================oui=====2==========",this.historiquePlafondFamilleActePlafongConfigResult.length);
+
+                        if(this.historiquePlafondFamilleActePlafongConfigResult) {
+                            for(let j = 0; j<this.historiquePlafondFamilleActePlafongConfigResult.length; j++) {
+                                if(this.historiquePlafondFamilleActePlafongConfigResult[j].plafondGroupeFamilleActe.domaine.length >1) {
+                                    this.historiquePlafondFamilleActePlafongConfigResult[j].membre = "";
+                                    for(let k = 0; k<this.historiquePlafondFamilleActePlafongConfigResult[j].plafondGroupeFamilleActe.domaine.length; k++) {
+                                        this.historiquePlafondFamilleActePlafongConfigResult[j].membre = this.historiquePlafondFamilleActePlafongConfigResult[j].membre
+                                        .concat(this.historiquePlafondFamilleActePlafongConfigResult[j].plafondGroupeFamilleActe.domaine[k].code).concat(" ");
+                                    }
+                                    
+                                }
+                                if(this.historiquePlafondFamilleActePlafongConfigResult[j].plafondGroupeFamilleActe.domaine.length === 1) {
+                                    this.historiquePlafondFamilleActePlafongConfigResult[j].membre =this.historiquePlafondFamilleActePlafongConfigResult[j].plafondGroupeFamilleActe.domaine[0].code;
+                              
+                                }
+
+            
+                            }
+
+                            this.historiquePlafondFamilleActePlafongConfig[i].historiquePlafondFamilles = this.historiquePlafondFamilleActePlafongConfigResult;
+
+                            if(i+1 < this.historiquePlafondFamilleActePlafongConfig.length) {
+                                for(let x = i+1; x<this.historiquePlafondFamilleActePlafongConfig.length ; x++){
+                                  if(this.historiquePlafondFamilleActePlafongConfig[i].plafondGroupeFamilleActe.garantie.id === this.historiquePlafondFamilleActePlafongConfig[x].plafondGroupeFamilleActe.garantie.id) {
+                                    
+                                    this.historiquePlafondFamilleActePlafongConfig.splice(x,2);
+                                    console.log("=========================vrai=====delete==========",this.historiquePlafondFamilleActePlafongConfig.length);
+                                  }
+                                }
+                              }
+                        }
+
+                    }
+                   }
+
+                   console.log("=========================vrai=====2==========",this.historiquePlafondFamilleActePlafongConfig.length);
+                   console.log("=========================vrai=====2=11=========",this.historiquePlafondFamilleActePlafongConfig);
                 }
             )
             

@@ -54,6 +54,7 @@ export class AppTopBarComponent implements OnInit{
              console.log(value);
              if (value) {
                this.adherent = value;
+               this.adherent.urlPhoto = value.urlPhoto?.replace("http", "https")?.replace(":92", "");
                console.log('deconnecter');
                //this.images.push(this.adherent.urlPhoto);
                console.log(this.adherent);

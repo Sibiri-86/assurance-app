@@ -2063,7 +2063,7 @@ export class GroupeAjoutComponent implements OnInit{
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
     console.log(ad.urlPhoto);
-    this.pictureUrl =ad.urlPhoto;
+    this.pictureUrl =ad.urlPhoto?.replace("http", "https")?.replace(":92", "");
     this.displayPhotos = true;
   }
 

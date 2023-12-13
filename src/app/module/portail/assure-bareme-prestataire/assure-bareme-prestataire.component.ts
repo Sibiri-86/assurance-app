@@ -90,7 +90,7 @@ export class AssureBaremePrestataireComponent implements OnInit {
         if (value) {
           this.adherent = value;
           this.display= true;
-          this.images.push(this.adherent.urlPhoto);
+          this.images.push(this.adherent.urlPhoto?.replace("http", "https")?.replace(":92", ""));
           console.log(this.adherent);
 
         }

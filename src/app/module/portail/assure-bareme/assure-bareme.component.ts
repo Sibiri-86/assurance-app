@@ -79,7 +79,7 @@ export class AssureBaremeComponent implements OnInit {
         console.log(value);
         if (value) {
           this.adherent = value;
-          this.images.push(this.adherent.urlPhoto);
+          this.images.push(this.adherent.urlPhoto?.replace("http", "https")?.replace(":92", ""));
           console.log(this.adherent);
 
         }
