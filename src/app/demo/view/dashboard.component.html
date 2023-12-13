@@ -5,12 +5,12 @@
 				<!-- <div class="row-bg">  -->
 						<div class="p-col-12">
 							<h4 class="text-primary text-uppercase container p-1 text-center" style="box-shadow: 0 2px 3px 1px #33f802; text-align: center !important; text-transform: uppercase !important;">
-								Bienvenu(e) sur le portail de VIMSO</h4>
+								Bienvenu sur le portail de VIMSO</h4>
 							<hr>
 						</div>
 						<div class="p-col" id="dashbord">
 							<div class="p-grid  pr-3 pl-3">
-								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+								<!-- <div class="p-col-12 p-md-12 col-sm-6 sup-center"
 									 (mouseover)="getDecrption('Assuré(e)', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'ASSURE'">
 									<br>
 									<p-card id="cardre1" header="Assuré(e)" 
@@ -27,13 +27,13 @@
 										<p-footer>
 										</p-footer>
 									</p-card>
-								</div>
+								</div> -->
 			
 								<!-- <div class="card p-col-12 p-md-12 col-sm-6 sup-center" *ngIf="role === 'ASSURE'">
 									<h4>Vertical</h4>
 									<p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
 								</div> -->
-								<div class="p-col-12 p-md-12 p-sm-6 sup-center"
+								<!-- <div class="p-col-12 p-md-12 p-sm-6 sup-center"
 									 (mouseover)="getDecrption('Prestataire', 'indic')" *ngIf="role === 'PRESTATAIRE'">
 									<br>
 									<p-card id="cardre2" header="Prestataire" 
@@ -48,18 +48,12 @@
 											</div>
 										</div>
 										<p-footer>
-											<!-- <a target="_blank">
-												<button pButton type="button" label="Visiter" icon="pi pi-check"
-														class="ui-button-secondary font-weight-bold" (click)="register2()"
-														style="margin-right: .25em"></button>
-											</a> -->
-											<!--<button pButton type="button" label="Info" icon="pi pi-info"
-													class="ui-button-secondary"></button-->
+											
 										</p-footer>
 									</p-card>
-								</div>
+								</div> -->
 
-								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+								<!-- <div class="p-col-12 p-md-12 col-sm-6 sup-center"
 									 (mouseover)="getDecrption('Garant', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'GARANT'">
 									<br>
 									<p-card id="cardre1" header="Garant" 
@@ -76,8 +70,8 @@
 										<p-footer>
 										</p-footer>
 									</p-card>
-								</div>
-								<div class="p-col-12 p-md-12 col-sm-6 sup-center"
+								</div> -->
+								<!-- <div class="p-col-12 p-md-12 col-sm-6 sup-center"
 									 (mouseover)="getDecrption('Souscripteur', 'user')" (mouseleave)="resetvalue()" *ngIf="role === 'SOUSCRIPTEUR'">
 									<br>
 									<p-card id="cardre1" header="souscripteur" 
@@ -94,7 +88,7 @@
 										<p-footer>
 										</p-footer>
 									</p-card>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<div class="p-col-1 text-right r-panel" style="margin-top: 12% !important;">
@@ -153,9 +147,9 @@
 								<div class="justify-content-center">
 									<h5 class="font-weight-bold">Ce profil offre la possibilité au garant d'acceder aux reportings.</h5><br>
 									<div class="font-weight-bold ml-3" style="font-size: medium">
-										<ul>
+										<!-- <ul>
 											<li>Extraire les données de reporting qui le concerne</li>
-										</ul>
+										</ul> -->
 									</div>
 								</div>
 							</div>
@@ -182,12 +176,12 @@
 							 <img class="logo" src="assets/layout/images/favicon.ico" alt="SOLMAVI-PORTAIL"/>
 						 </a>
 						 <br>
-						<h3><span>Bienvenu(e) sur la plateforme en ligne de VIMSO <br><mark>{{name}}</mark></span></h3>
+						<h3><span>Bienvenu sur la plateforme en ligne de VIMSO <br><br><mark>{{name}}</mark></span></h3>
 						<h5><span>Vous êtes connecté(e) avec le profil {{role}}</span></h5>
 						
 					</div>
 			 
-					<marquee behavior="alternate"><mark><span>VIMSO, innover, encore innover et toujours innover</span></mark></marquee>
+					<marquee behavior="alternate"><mark><span>Innover, encore innover, toujours innover.</span></mark></marquee>
 			 
 							<ng-template pTemplate="footer">
 								<p-button icon="pi pi-arrow-circle-right" (click)="explorer()" label="Explorer" styleClass="p-button-text"></p-button>

@@ -440,7 +440,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {field: 'groupe.police.nom', header: 'SOUSCRIPTEUR', type: 'string'},
       {field: 'groupe.police.numero', header: 'NUM_POLICE', type: 'string'},
       {field: 'numero', header: 'NUM_ASSURE', type: 'string'},
-      {field: 'groupe.police.nom', header: 'BENEFICIAIRE', type: 'string'},
+      {field: 'adherentPrincipalfullName', header: 'BENEFICIAIRE', type: 'string'},
+      {field: 'dateNaissance', header: 'DATE DE NAISSANCE', type: 'date'},
       {field: 'groupe.taux.taux', header: 'TAUX', type: 'string'},
       {field: 'fullName', header: 'ASSURE', type: 'string'},
       {field: 'groupe.dateEffet', header: 'EFFET', type: 'date'},
@@ -453,6 +454,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {field: 'plafondGroupeSousActe.taux.taux', header: 'ANALYSE SPECIALES', type: 'number'},
       {field: 'plafondGroupeSousActe.taux.taux', header: 'FRAIS SCANNER', type: 'number'},
       {field: 'fullName', header: 'Photo', type: 'string'},
+      
     ];
   }
 
