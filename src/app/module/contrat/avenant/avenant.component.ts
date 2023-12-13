@@ -2955,7 +2955,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirPhotos(ad:Adherent) {
     //this.pictureUrl ='http://178.170.40.93/images/logo-vimso.jpg';
     console.log(ad.urlPhoto);
-    this.pictureUrl = ad.urlPhoto;
+    this.pictureUrl = ad.urlPhoto?.replace("http", "https")?.replace(":92", "");
     this.displayPhotos = true;
   }
 
@@ -3000,7 +3000,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
 
   voirCarte(ad:Adherent) {
-    this.pictureUrl =ad.urlCarte;
+    this.pictureUrl =ad.urlCarte?.replace("http", "https")?.replace(":92", "");
     this.displayCarte = true;
   }
 }

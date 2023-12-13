@@ -250,7 +250,7 @@ export class AppMenuComponent implements OnInit {
             },
 
             {
-                label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],visible: this.keycloak.isUserInRole(Function.sm_reporting), 
+                label: 'Reporting', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting'],visible: this.keycloak.isUserInRole(Function.sm_reporting_AG_DGA), 
                 items: [
                     {
                         label: 'Production', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,

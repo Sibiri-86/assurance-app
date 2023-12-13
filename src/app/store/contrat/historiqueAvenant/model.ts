@@ -167,6 +167,20 @@ export class HistoriquePlafondFamilleActe {
     listeActe?: Array<PlafondActe>;
     domaine?: Array<QualiteAssure>;
     historiqueAvenant?: HistoriqueAvenant;
+    historiquePlafondFamilles?: Array<HistoriquePlafondFamilleActe>;
+    membre?: string;
+    plafondGroupeFamilleActe?: PlafondGroupeFamilleActe
+}
+
+export interface PlafondGroupeFamilleActe {
+    garantie?: Garantie;
+    montantPlafond?: number;
+    dimensionPeriode?: DimensionPeriode;
+    dateEffet?: Date;
+    taux?: Taux;
+    nombre?: number;
+    listeActe?: Array<PlafondActe>;
+    domaine?: Array<QualiteAssure>; 
 }
 
 export interface HistoriquePlafondActe {
