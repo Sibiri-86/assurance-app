@@ -28,6 +28,15 @@ export interface Adherent{
     groupe?: Groupe;
     adherentPrincipal?: Adherent;
     plafondGroupeSousActe?: PlafondSousActe;
+    plafondGroupeSousActeCSG?: PlafondSousActe;
+    plafondGroupeSousActeCSS?: PlafondSousActe;
+    plafondGroupeSousActeFRST?: PlafondSousActe;
+    plafondGroupeSousActeFRSP?: PlafondSousActe;
+    plafondGroupeSousActeFANAD?: PlafondSousActe;
+    plafondGroupeSousActeFASP?: PlafondSousActe;
+    plafondGroupeSousActeSCANN?: PlafondSousActe;
+    plafondGroupeFamilleActeHO?: PlafondFamilleActe;
+    //plafondGroupeSousActeList?: Array<PlafondSousActe>;
     matriculeSouscripteur?: string;
     fullName?: string;
     urlPhoto?: string;
@@ -47,6 +56,7 @@ export interface Adherent{
     totalMontantReclame?: number;
     totalMontantRembourse?: number;
     urlCarte?: string;
+    adherentPrincipalfullName?: string;
 }
 
 export interface ConditionGenerale {
@@ -63,6 +73,7 @@ export interface AdherentResearchReponse {
 export interface AdherentFamille {
    adherent?: Adherent;
    famille?: Array<Adherent>;
+   groupeFamille?: Groupe;
 }
 
 export interface AdherentList{

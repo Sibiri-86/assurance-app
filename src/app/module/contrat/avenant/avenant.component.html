@@ -4643,7 +4643,7 @@
         <p-tabView>
             <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
                 <div>
-                    <span style="color: green !important"> <h4> Informations sur la police numéro1 <mark>{{viewPolice?.numero}}</mark>  de la société <mark>{{viewPolice?.nom}}</mark> </h4></span>
+                    <span style="color: green !important"> <h4> Informations sur la police numéro <mark>{{viewPolice?.numero}}</mark>  de la société <mark>{{viewPolice?.nom}}</mark> </h4></span>
                     <br>
                     <p-fieldset legend="Police" toggleable="true">
                         <div class="p-fluid p-formgrid p-grid">
@@ -5005,7 +5005,7 @@
             </p-tabPanel>
 
             <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERANT">
-                <span style="color: green !important"> <h4> Informations portant sur liste actualisée des adherents de l'avenant</h4></span>
+                <span style="color: green !important"> <h4>Liste actualisée des assurés</h4></span>
                 
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
