@@ -476,6 +476,9 @@ export class AvenantIncorporationComponent implements OnInit{
                 adherantFamille.adherent = this.adherentForm.value;
                 adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
                 adherantFamille.famille = this.familys.value;
+                console.log('*****-this.groupeFamille 11111 --- ', this.curentGroupe);
+                adherantFamille.groupeFamille = this.curentGroupe ;
+                console.log('*****-this.groupeFamille 22222 --- ', adherantFamille.groupeFamille);
                 adherantFamille.famille.forEach(f => {
                     f.adherentPrincipal = null;
                     f.groupe = this.customForm.controls.groupe.value;
