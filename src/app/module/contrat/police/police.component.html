@@ -8,11 +8,11 @@
                         (click)="addPolice()"></button>
                     <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger p-mb-2"
                         (click)="deleteSelectedPolice()"
-                        [disabled]="!selectedGarants || !selectedGarants.length"></button>
+                        [disabled]="!policeAllSelected || !policeAllSelected.length"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="policeList" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="policeList" [columns]="cols" [rows]="10" [paginator]="true" [(selection)]="policeAllSelected"
                 [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux', 'nom']" [rowHover]="true"
                 dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"

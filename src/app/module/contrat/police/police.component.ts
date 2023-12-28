@@ -299,6 +299,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   boMembre = false;
   policeAllList: Array<Police> = [];
   policeSelected: Police = {};
+  policeAllSelected: Array<Police> = [];
 
 
   constructor(
@@ -1651,17 +1652,12 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onVerifieExistPolice() {
     if(this.policeAllList) {
-      console.log("=======================oui============oui====",this.policeAllList.length);
       this.policeSelected = this.policeAllList.find(pol=>pol.nom.toLowerCase() === this.policeForm.get('nom').value.toLowerCase());
-      console.log("=======================oui============oui==1==",this.policeSelected.id);
       if(this.policeForm.get('garant').value) {
-        console.log("=======================oui============oui=2===",this.policeSelected.garant.id, '========o==',this.policeForm.get('garant').value.id);
         if(this.policeForm.get('intermediaire').value) {
-          console.log("=======================oui============oui=3===",this.policeSelected.intermediaire.id, '========o==',this.policeForm.get('garant').value.id);
           if(this.policeForm.get('nom').value) {
-            console.log("=======================oui============oui=5===");
   
-            if(this.policeSelected.garant.id ==  this.policeForm.get('garant').value.id || 
+            if(this.policeSelected.garant.id ==  this.policeForm.get('garant').value.id && 
             this.policeSelected.intermediaire.id ==  this.policeForm.get('intermediaire').value.id) {
               console.log("=======================oui============oui=6===");
               this.policeForm.get('nom').setValue("");
@@ -1960,6 +1956,17 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       icon: "pi pi-exclamation-triangle",
       accept: () => {
         this.store.dispatch(featureAction.deletePolice(police));
+      },
+    });
+  }
+
+  deleteSelectedPolice() {
+    this.confirmationService.confirm({
+      message: "Etes vous sur de vouloir supprimer?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(featureAction.deletePolices({PoliceList: this.policeAllSelected}));
       },
     });
   }
