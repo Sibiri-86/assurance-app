@@ -36,7 +36,7 @@
                     </p-toolbar>
         
                     <p-table #dt [value]="policeListFiltrer" [columns]="cols" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                              [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                              [showCurrentPageReport]="true">
@@ -175,7 +175,7 @@
                     </p-toolbar>
         
                     <p-table #dt [value]="autofinancementList" [columns]="cols" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                              [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                              [showCurrentPageReport]="true">
@@ -314,7 +314,7 @@
                     </p-toolbar>
         
                     <p-table #dt [value]="mutuelleList" [columns]="cols" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                              [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                              [showCurrentPageReport]="true">
@@ -453,7 +453,7 @@
                     </p-toolbar>
         
                     <p-table #dt [value]="particulierList" [columns]="cols" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                              [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                              [showCurrentPageReport]="true">
@@ -592,7 +592,7 @@
                     </p-toolbar>
         
                     <p-table #dt [value]="autreList" [columns]="cols" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','numero','taux.taux']"
+                             [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                              [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                              [showCurrentPageReport]="true">
@@ -4639,8 +4639,8 @@
 
     <p-dialog [maximizable]="true" [(visible)]="displayViewContrat"
               header="Détails du contrat" [modal]="true" styleClass="p-fluid"
-              [style]="{'width':'1400px'}">
-        <p-tabView>
+              [style]="{'width':'1400px'}" (onHide)="fermerViewContrat()">
+        <p-tabView (onChange)="onTabStatChange($event)">
             <p-tabPanel header="INFOS" leftIcon="pi pi-users" tooltip="Information sur la police" [style]="{'width': '100%'}">
                 <div>
                     <span style="color: green !important"> <h4> Informations sur la police numéro <mark>{{viewPolice?.numero}}</mark>  de la société <mark>{{viewPolice?.nom}}</mark> </h4></span>
@@ -5101,6 +5101,143 @@
                     </p-table>
                 </div>
 
+
+                <div class="p-col-12">
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel *ngIf="roleMajAssure" header="MAJ ADHERENT" leftIcon="pi pi-refresh" tooltip="ADHERANT">
+                <!-- <span style="color: green !important"> <h4>Liste actualisée des assurés à mettre à jour</h4></span> -->
+                <span style="color: red !important"> <h5>Veuillez cliquer sur le bouton de modification devant le nom de l'assuré et mettre à jour son numero matricule du garant.</h5></span>
+                
+                <div class="card">
+                    <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
+                             [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
+                             styleClass="p-datatable-customers"
+                             currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
+                             [showCurrentPageReport]="true" editMode="row">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header">
+                                <h5 class="p-m-0"></h5>
+                                <div class="p-grid">
+                                    <div class="p-col-8">
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder="Search..." [style]="{width: '20%'}"/>
+                                </span>
+
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <!-- <button pButton pRipple label="Exporter" icon="pi pi-upload" class="p-button-help"
+                                                    (click)="dtAD.exportCSV()"></button> -->
+                                        </div>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <!-- <button pButton pRipple label="Imprimer" icon="pi pi-print" class="p-button-info">
+
+                                            </button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span *ngIf="this.adhrentAJourToSave.length !== 0" style="color: green !important"> <h5>{{this.adhrentAJourToSave.length}} assuré(es) séléctionné(es) pour être mis à jour.</h5></span>
+                        </ng-template>
+                        
+                        <ng-template pTemplate="header">
+                            
+                            <tr>
+                                
+                                <th pSortableColumn="numero" style="font-size: 12px !important; font-weight: bold;">Matricule
+                                    <p-sortIcon field="numero"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="numeroGarant" style=" font-size: 12px !important; font-weight: bold;">Matricule Garant
+                                    <p-sortIcon field="numeroGarant"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nom">Nom
+                                    <p-sortIcon field="nom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="prenom" style="width: 12rem">Prenom
+                                    <p-sortIcon field="prenom"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="adresseEmail">Date de naissance
+                                    <p-sortIcon field="dateNaissance"></p-sortIcon>
+                                </th>
+                                <!-- <th pSortableColumn="adresseEmail">Email
+                                    <p-sortIcon field="adresseEmail"></p-sortIcon>
+                                </th> -->
+                                <th pSortableColumn="numeroTelephone">Téléphone
+                                    <p-sortIcon field="numeroTelephone"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre" style="width: 3rem">Genre
+                                    <p-sortIcon field="genre.libelle"></p-sortIcon>
+                                </th>
+                                <th style="width:8rem"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-adherent let-editing="editing" let-ri="rowIndex">
+                            <tr [ngClass]="{'colorZone': !adherent?.adherentPrincipal}" [pEditableRow]="adherent">
+                                <td><span class="p-column-title">{{adherent.numero}}</span></td>
+
+                                <!-- <td><span class="p-column-title">{{adherent.matriculeGarant}}</span></td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="adherent.matriculeGarant" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent.matriculeGarant}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td><span class="p-column-title">{{adherent?.nom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.prenom}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.dateNaissance}}</span>
+
+                                <!-- </td>
+                                <td><span class="p-column-title">{{adherent?.email}}</span>
+
+                                </td> -->
+                                <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
+
+                                </td>
+                                <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                                <td style="text-align:center">
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInitAdherent(adherent)" class="p-button-rounded p-button-text"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSaveAdherent(adherent)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancelAdherent(adherent, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="p-d-flex p-ai-center p-jc-between">
+                                {{avenantModif1.adhrents ? avenantModif1.adhrents.length : 0 }} adherent(s).
+                            </div>
+                        </ng-template>
+                    </p-table>
+                    <br>
+                    <div class="p-grid">
+                        <div class="mt-3 p-col-6">
+                            <button pButton pRipple label="valider" *ngIf="this.adhrentAJourToSave.length !== 0" (click)="saveMajAdherent()" icon="pi pi-check-square" class="p-button-success">
+        
+                            </button>
+                        </div>
+                        <div class="mt-3 p-col-6">
+                            <button pButton pRipple label="Annuler" (click)="fermerViewContrat()" icon="pi pi-times" class="p-button-danger">
+        
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
 
                 <div class="p-col-12">
 

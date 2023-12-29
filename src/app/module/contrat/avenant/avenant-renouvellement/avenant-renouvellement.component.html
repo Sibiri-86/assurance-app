@@ -520,7 +520,7 @@
                     
                         <div class="p-grid p-justify-center">
                             <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annulerGroupe()"></button> -->
-                            <button type="button" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
+                            <button type="button" [disabled]="groupeForm.invalid" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantGroupe()"></button>
                         </div>
 
                 </p-fieldset>

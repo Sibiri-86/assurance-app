@@ -122,6 +122,8 @@ import * as exerciceSelector from '../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../store/contrat/exercice/actions';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from '../../common/config/role.user';
 // import * from 
 
 
@@ -339,6 +341,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   mutuelleList: Police[];
   particulierList: Police[];
   autreList: Police[];
+  adhrentAJour: Adherent[];
+  adhrentAJourToSave: Adherent[] = [];
+  clonedAdherent: { [s: string]: Adherent } = {};
+  roleMajAssure = this.keycloak.isUserInRole(Function.vue_maj_assuere);
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -351,7 +357,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private historiqueAvenantAdherentService: HistoriqueAvenantAdherentService,
       private adherentService: AdherentService,
       private plafondService: PlafondService,
-      private groupeService: GroupeService
+      private groupeService: GroupeService,
+      private keycloak: KeycloakService,
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -444,8 +451,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
       {field: 'dateNaissance', header: 'DATE DE NAISSANCE', type: 'date'},
       {field: 'groupe.taux.taux', header: 'TAUX', type: 'string'},
       {field: 'fullName', header: 'BENEFICIAIRE', type: 'string'},
-      {field: 'groupe.dateEffet', header: 'EFFET', type: 'date'},
-      {field: 'groupe.dateEcheance', header: 'ECHEANCE', type: 'date'},
+      {field: 'exercice.debut', header: 'EFFET', type: 'date'},
+      {field: 'exercice.fin', header: 'ECHEANCE', type: 'date'},
       {field: 'plafondGroupeSousActeCSG.taux.taux', header: 'CONS GENERALISTE', type: 'number'},
       {field: 'plafondGroupeSousActeCSG.montantPlafondParActe', header: 'CONS GENERALISTE MONTANT', type: 'number'},
       {field: 'plafondGroupeSousActeCSS.taux.taux', header: 'CONS SPECIALISTE', type: 'number'},
@@ -3011,5 +3018,100 @@ export class AvenantComponent implements OnInit, OnDestroy {
   voirCarte(ad:Adherent) {
     this.pictureUrl =ad.urlCarte?.replace("http", "https")?.replace(":92", "");
     this.displayCarte = true;
+  }
+
+  onRowEditInitAdherent(assure: Adherent) {
+    this.clonedAdherent[assure.id] = {...assure};
+  }
+
+  onRowEditSaveAdherent(assure: Adherent) {
+    if(assure.adherentPrincipal == null) {
+      this.adhrentAJour = this.avenantModif1.adhrents?.filter(p=> p.adherentPrincipal?.numero === assure.numero);
+      /* this.adhrentAJour?.forEach(hist=> {
+       
+        this.avenantModif1.adhrents.filter(hist1=> hist1.adherentPrincipal?.numero === hist.numero).forEach(h=>h.matriculeGarant = assure.matriculeGarant);
+      }); */
+      this.avenantModif1.adhrents.forEach(p1 => {
+        this.adhrentAJour.forEach(p2 => {
+          if(p1.id === p2.id) {
+            p1.matriculeGarant = assure.matriculeGarant;
+            p2.matricule = assure.matriculeGarant;
+            p2.maj = true;
+          }
+        })
+      });
+      assure.matricule = assure.matriculeGarant;
+      assure.maj = true;
+      this.adhrentAJour.push(assure);
+      this.adhrentAJourToSave = this.adhrentAJour;
+      /* this.adhrentAJour.forEach(p=>p.matriculeGarant = assure.matriculeGarant);*/  
+      console.log("montrer la maj a enregistrer", this.adhrentAJourToSave); 
+      console.log("montrer la maj", this.adhrentAJour);
+      console.log("montrer la maj de avenantModif1.adhrents ", this.avenantModif1.adhrents );
+    } else {
+      assure.matricule = assure.matriculeGarant;
+      this.adhrentAJour?.push(assure);
+      this.adhrentAJourToSave = this.adhrentAJour;
+      console.log("montrer la maj a enregistrer", this.adhrentAJourToSave); 
+      console.log("montrer la maj", this.adhrentAJour);
+      console.log("montrer la maj de avenantModif1.adhrents ", this.avenantModif1.adhrents );
+    }
+    this.adhrentAJourToSave = this.avenantModif1.adhrents.filter(p=>p.maj === true);
+    console.log("montrer la maj a enregistrer final", this.adhrentAJourToSave); 
+  }
+
+  onRowEditCancelAdherent() {
+
+  }
+
+  saveMajAdherent() {
+    if(this.adhrentAJourToSave.length != 0) {
+      this.adherentService.putAdherentMatriculeGarant(this.adhrentAJourToSave).subscribe(
+        (res) => {
+          this.displayViewContrat = false;
+        }
+      );
+    }
+  }
+  fermerViewContrat() {
+    this.displayViewContrat = false;
+    this.avenantModif1 = {};
+    this.adhrentAJourToSave = [];
+  }
+
+  onTabStatChange(event): void {
+    var index = event.index;
+    console.log('****index** onTabStatChange** ', index);
+    switch (index) {
+      case 0: {
+        
+        break;
+      }
+      case 1: {
+        
+        break;
+      }
+      case 2: {
+        
+        break;
+      }
+      case 3: {
+        
+        break;
+      }
+      case 4: {
+        this.avenantModif1.adhrents.forEach(p => {
+          if(p.adherentPrincipal === null) {
+            this.avenantModif1.adhrents.find(p1 => p1.adherentPrincipal.numero === p.numero);
+          }
+        });
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
   }
 }

@@ -572,7 +572,22 @@ export class AvenantIncorporationComponent implements OnInit{
         this.selectedFile = event;
         this.policeService.loadAdherentsByExcelFile(event).subscribe(
             (res) => {
-                this.adherentFamilleListe = res.slice();
+                if(res) {
+                    if(this.curentGroupe.id !== undefined && this.curentExercice.id !== undefined) {
+                        console.log('***************1111111111 ');
+                        console.log('***************1111111111 ', this.curentGroupe.id);
+                        console.log('***************1111111111 ', this.curentExercice.id);
+                        this.adherentFamilleListe = res.slice();
+                        this.adherentFamilleListe.forEach(p=> {
+                            p.groupeFamille = this.curentGroupe;
+                        });
+                    } else {
+                        console.log('***************222222222 ');
+                        this.addMessage('error', 'Groupe ou Exercice non sélectionnés',
+                            'Veuillez selectionner un groupe et un exercice avant de faire cette action !!');
+                    }
+                    
+                }
                 console.log('***************A******************* ', this.adherentFamilleListe.length);
                 console.log('***************B******************* ', this.adherentFamilleListe);
                 this.viewListe = !this.viewListe;

@@ -57,6 +57,7 @@ export interface Adherent{
     totalMontantRembourse?: number;
     urlCarte?: string;
     adherentPrincipalfullName?: string;
+    maj?:boolean;
 }
 
 export interface ConditionGenerale {
