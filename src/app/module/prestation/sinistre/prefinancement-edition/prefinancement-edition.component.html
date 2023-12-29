@@ -190,6 +190,83 @@
                 
              </ng-template>
         </p-dialog>
+
+        <p-dialog [(visible)]="displayAssure"  header="Veuillez rechercher un assuré" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content"> 
+                <div class="card">
+                    <p-toolbar styleClass="p-mb-4">
+                        <ng-template pTemplate="left">
+                                <div >
+                                <label for="lastname2" style="font-weight: bold;">Souscripteur</label><br>
+                                <input id="nom" style="width: 90%;" type="text"  [(ngModel)]="adherentsearch.nom" name="nom" pInputText>                                                
+                            </div>
+                               
+
+                            <div >
+                                <label for="lastname2" style="font-weight: bold;">Matricule garant</label><br>
+                                <input id="matriculeGarant" style="width: 80%;" type="text"  [(ngModel)]="adherentsearch.matriculeGarant" name="matriculeGarant" pInputText>                                                
+                                <button pButton icon="pi pi-search"[disabled]="!adherentsearch?.nom && !adherentsearch?.matriculeGarant" class="p-ml-2" (click)="filtrer()"></button>   
+                            </div>
+
+                        </ng-template>
+
+                        <ng-template pTemplate="right">
+                            <div >
+                              <button pButton icon="pi pi-plus" label="Valider" [disabled]="!adherentsSelected?.id" class="p-ml-2" (click)="addAssure()"></button>   
+                        </div>
+                           
+
+                    </ng-template>
+                    </p-toolbar>
+
+                    <div class="p-col-12">
+                        <p-table #adt [value]="adherentsList" [(selection)]="adherentsSelected"  [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+                        [rowHover]="true" styleClass="p-datatable-customers"
+                        [globalFilterFields]="['groupe.police.nom','nom','prenom']"
+                         currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+                        [showCurrentPageReport]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="adt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                </span>
+                            </div>
+                        </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 3rem">
+                                    </th>
+                                    <th>SOUSCRIPTEUR</th>
+                                    <th>NOM</th>
+                                    <th>PRENOM(S)</th>
+                                    <th>DATE NAISS.</th>
+                                   
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-historiqueAveantAdherant let-editing="editing"
+                                         let-ri="rowIndex">
+                                <tr  [ngClass]="{'colorZone': !historiqueAveantAdherant.adherentPrincipal}">
+                                    <td style="width: 3rem">
+                                        <p-tableRadioButton [value]="historiqueAveantAdherant"></p-tableRadioButton>
+                                    </td>
+                                    <td>{{historiqueAveantAdherant?.groupe?.police?.nom}}</td>
+                                    <td>{{historiqueAveantAdherant?.nom | upercase}}
+                                    </td>
+                                    <td>{{historiqueAveantAdherant?.prenom }}
+                                    </td>
+                                    <td>{{historiqueAveantAdherant?.dateNaissance | formatTableValue : 'date'}}
+                                    </td>
+                                    
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dialog>
+    
         <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation" [modal]="true" styleClass="p-fluid" (onHide)="fermerPrestation()">
     
             <ng-template pTemplate="content"> 
@@ -205,8 +282,11 @@
                             </div>
                             <div class="p-field p-col">
                                 <label for="matriculeAdherent">Matricule bénéficiaire <span class="required">*</span></label>
-                                <input id="matriculeAdherent"  type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                <input id="matriculeAdherent" style="width: 80%;" type="text" formControlName="matriculeAdherent" (blur)="rechercherAdherent($event)" pInputText>
+                                <button pButton pRipple [disabled]="!prestationPopForm?.value?.dateSoins" icon="pi pi-plus" pTooltip="Recherche un assuré" 
+                                class="p-button-success p-ml-1" type="button" (click)="rechercherAssure()"></button>
                             </div>
+                            
                             <div class="p-field p-col">
                                 <label for="nomAdherent">Nom & Prénom(s) bénéficiare <span class="required">*</span></label>
                                 <input *ngIf="adherentSelected?.signeAdherent !=='-'" id="nomAdherent" class="champVert" type="text" formControlName="nomAdherent" pInputText>

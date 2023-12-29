@@ -343,5 +343,46 @@ putAdherentMatriculeGarant(adherentFamille: Adherent[]): Observable<any> {
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALL_MAJ)}`, adherentFamille);
 }
 
+
+searchAllAdherentByDateSoinsAndMatriculeGarant(dateSoins: Date, matriculeGarant: string): Observable<Adherent[]> {
+  // @FIXME: post request
+  if (matriculeGarant ) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.matriculeGarant = matriculeGarant; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureByMatricule-garant-adherent`, adherent).pipe(
+    map((response: Adherent[]) => response)
+    //catchError(this.handleError())
+   );
+  }
 }
 
+searchAllAdherentByDateSoinsAndSouscripteur(dateSoins: Date, nom: string): Observable<Adherent[]> {
+  // @FIXME: post request
+  if (nom ) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.nom = nom; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureBySouscripteur-adherent`, adherent).pipe(
+    map((response: Adherent[]) => response)
+    //catchError(this.handleError())
+   );
+  }
+}
+
+searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(dateSoins: Date, nom: string,  matriculeGarant: string): Observable<Adherent[]> {
+  // @FIXME: post request
+  if (nom && matriculeGarant) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.nom = nom;
+    adherent.matriculeGarant = matriculeGarant; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureBySouscripteur-Matricule-garant-adherent`, adherent).pipe(
+    map((response: Adherent[]) => response)
+    //catchError(this.handleError())
+   );
+  }
+}
+
+
+}

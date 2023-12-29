@@ -77,6 +77,7 @@ import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { GlobalConfig } from 'src/app/config/global.config';
 import { ConventionService } from 'src/app/store/medical/convention/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
 
 
 
@@ -178,25 +179,168 @@ export class TierPayantEditionComponent implements OnInit {
     showMessage = false;
     showAlert = false;
     displayPrestationbon = false;
-
-
+    displayAssure = false;
+    adherentsearch:  Adherent = {};
+    adherentsList: Array<Adherent> = [];
+    adherentsSelected: Adherent = {}
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private tierPayantService: TierPayantService,
                 private prefinancementService: PrefinancementService,
                 private conventionService: ConventionService,
+                private adherentService: AdherentService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
 
+    rechercherAssure(): void {
+        this.displayAssure = true;
+      }
     fermerPrestation1(){
        if(this.prestationsList && !this.prefinancement.id) {
         this.onCreate();
        }
       }
 
+
+      filtrer(): void {
+        if(this.adherentsearch.matriculeGarant && !this.adherentsearch.nom) {
+          this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+            if(rest) {
+              this.adherentsList= rest;
+            }
+            });
+        
+          }
+          if(!this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationAdd.dateSoins,this.adherentsearch.nom).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+          if(this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+        
+          }
+
+          addAssure(): void {
+            this.displayAssure = false;
+            this.adherentsList = [];
+            console.log("=============this.adherentsSelected=====================");
+            console.log(this.adherentsSelected);
+            console.log("==========this.adherentsSelected========================");
+        
+            if (this.adherentsSelected) {
+                this.adherentSelected = this.adherentsSelected;
+                this.onRowSelectBonAdherent();
+                if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
+            
+
+                    this.addMessage('error', 'Date de soins invalide',
+                                'La date de soins du sinistre ne peut pas être antérieure à celle de la date d\'incorporation du sinitre');
+                                this.prestationAdd.dateSoins = null;
+                                this.adherentSelected = null;
+                                
+                         
+        
+        
+                }
+                if(this.adherentSelected.signeAdherent !=='*') {
+                    if((this.adherentsSelected.dateSortie === null && this.adherentsSelected.dateSuspension  !== null) || (this.adherentsSelected.dateSortie !== null && this.adherentsSelected.dateSuspension  !== null && new Date(this.adherentsSelected.dateSuspension).getTime() < new Date(this.adherentsSelected.dateSortie).getTime()
+                    && new Date(this.adherentsSelected.dateSortie).getTime() > new Date(this.prestationAdd.dateSoins).getTime())) {
+                        this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) est  suspendu(e) !!!');
+                        if( new Date(this.adherentSelected?.dateSuspension).getTime() <= new Date(this.prestationAdd.dateSoins).getTime()) {
+                            this.prestationAdd.observation = "Cet(te) assuré(e) a  été suspendu(e)";
+                            this.prestationAdd.sort = Sort.REJETE;
+                            this.prestationAdd.montantRembourse = 0;
+                           
+                        }
+                        this.prestationAdd.dateRetrait = new Date(this.adherentSelected.dateSuspension);
+                        
+                    } 
+                    
+                    if(this.adherentsSelected.dateSortie !== null && (new Date(this.adherentsSelected.dateSuspension)?.getTime() < new Date(this.adherentsSelected.dateSortie)?.getTime() )) {
+                        this.addMessage('error', 'Assuré(e) non pris en compte',
+                        'Cet(te) assuré(e) a problablement été rétiré(e), résilié(e) ou suspendu(e) !!!');
+
+                     
+                        if( new Date(this.adherentSelected?.dateSortie).getTime() <= new Date(this.prestationAdd.dateSoins).getTime() 
+                        ) {
+                          this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été rétiré(e)";
+                          this.prestationAdd.sort = Sort.REJETE;
+                          this.prestationAdd.montantRembourse = 0;
+                         
+                      }
+
+                      if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() <= new Date(this.prestationAdd.dateSoins).getTime()) {
+                        this.prestationAdd.observation = "Cet(te) assuré(e) a problablement été suspendu(e)";
+                          this.prestationAdd.sort = Sort.REJETE;
+                          this.prestationAdd.montantRembourse = 0;
+            
+                      }
+                      this.prestationAdd.dateRetrait = new Date(this.adherentSelected.dateSortie);
+                     
+                    }
+                   
+    
+           
+                    
+                  }
+                this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
+                this.prestationAdd.nomAdherent = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
+                
+                this.prestationAdd.prenomAdherent = this.adherentSelected.prenom;
+                
+                this.prestationAdd.numeroGroupe = this.adherentSelected.groupe.numeroGroupe?.toString();
+                console.log("========this.prestationAdd.numeroGroupe============", this.prestationAdd.numeroGroupe);
+                
+                this.prestationAdd.numeroPolice = this.adherentSelected.groupe.police.numero;
+                this.prestationAdd.souscripteur =  this.adherentSelected.groupe.police.nom;
+                this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
+                this.prestationAdd.adherent = this.adherentSelected;
+            
+                this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
+                this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+                if (this.adherentSelected.adherentPrincipal != null) {
+                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+                    this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal.nom.concat("  ").concat(this.adherentSelected.adherentPrincipal.prenom);
+                    this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.adherentPrincipal.prenom;
+                } else {
+                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
+                    this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
+                    this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.prenom;
+                }
+                this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+                this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+                this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+                this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+                
+                
+
+               
+              /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+                    e.typeBon === TypeBon.PRISEENCHARGE);*/
+                    this.onRowSelectBonAdherent();
+
+                    
+            } else {
+
+            }
+            this.adherentsearch = {};
+            this.adherentsSelected = {};
+          }
+        
     onCreate() {
         
         
