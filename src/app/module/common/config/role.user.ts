@@ -48,6 +48,7 @@ export const Function = {
     sm_dashboard: 'sm_dashboard',
     VUE_SOUSCRIPTEUR: 'VUE_SOUSCRIPTEUR',
     sm_reporting_AG_DGA: 'sm_reporting_AG_DGA',
+    vue_maj_assuere: 'vue_maj_assuere',
 };
 
 export const UsersRoles = {

@@ -337,6 +337,13 @@ searchAdherentByDateSoinsAndMatricule(dateSoins: Date, matricule: number): Obser
   }
 }
 
+
+putAdherentMatriculeGarant(adherentFamille: Adherent[]): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE_ACTUALL_MAJ)}`, adherentFamille);
+}
+
+
 searchAllAdherentByDateSoinsAndMatriculeGarant(dateSoins: Date, matriculeGarant: string): Observable<Adherent[]> {
   // @FIXME: post request
   if (matriculeGarant ) {
@@ -377,5 +384,5 @@ searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(dateSoins: Date, nom:
   }
 }
 
-}
 
+}

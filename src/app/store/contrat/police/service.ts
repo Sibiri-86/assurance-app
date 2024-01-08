@@ -119,9 +119,11 @@ export class PoliceService {
     }
 
     loadAdherentsByExcelFile(file: File): Observable<AdherentFamille[]> {
+        console.log("avant enregistrement", file);
         // @FIXME: post request
         const data: FormData = new FormData();
         data.append('file', file);
+        console.log("avant enregistrement data", data);
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/json');

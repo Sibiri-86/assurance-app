@@ -272,6 +272,7 @@ export class AvenantRetraitRenouvellementComponent implements OnInit {
         hist.dateRetrait = this.avenantDate;
 
         this.adherantDeleteds.push(hist);
+        console.log('liste3 === ', this.adherantDeleteds);
       });
     }
     
