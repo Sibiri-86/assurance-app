@@ -1218,17 +1218,20 @@ findMontantPlafond(event){
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
 
-    if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
+    if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) {
+      if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
 
-      console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
-      myForm.patchValue({
-        sort: Sort.ACCORDE,
-        observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
-        montantRembourse: this.montantPlafond1 - this.montantConsomme,
-        montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
-      })
-     
-  }/* else {
+        console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
+        myForm.patchValue({
+          sort: Sort.ACCORDE,
+          observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+          montantRembourse: this.montantPlafond1 - this.montantConsomme,
+          montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+        })
+       
+    }
+    }
+    /* else {
     myForm.patchValue({
       sort: Sort.REJETE,
       observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de ",
