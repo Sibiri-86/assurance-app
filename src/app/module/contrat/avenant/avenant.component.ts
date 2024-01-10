@@ -1536,6 +1536,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadActualListWithoutList(): void {
+    /* this.adherentService.findAdherantActuallList(police.id).subscribe(
+        (res) => {
+          console.log('---------- Actual Liste ----------');
+          console.log(res);
+          this.adherentsListeActuelle = res;
+          this.adherentsListeActuelleRetirer = res.filter(e => e.signeAdherent === "-");
+          this.displayALA = true;
+        }
+    ); */
+    this.displayALA = true;
+  }
+
+  
+
   /* methode pour calculer la prime totale par police */
  getPolicePrimeTotale(police: Police): void {
     this.getPrimeTotalByPoliceId();
@@ -1546,9 +1561,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   findAdherentListByExerciceId(currentExercice: Exercice) {
     console.log('---------- currentExercice ----------', currentExercice);
-    this.adherentService.findAdherantActuallListByExerciceId(currentExercice.id).subscribe(
+    this.adherentService.findAdherantActuallListByExerciceWithBaremeDataId(currentExercice.id).subscribe(
       (res) => {
-        console.log('---------- Actual Liste by Exrcice Id ----------');
+        console.log('---------- Actual Liste by Exrcice Id ----------', currentExercice.id);
         console.log(res);
         this.adherentsListeActuelleByExercice = res;
         this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
