@@ -1563,7 +1563,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     console.log('---------- currentExercice ----------', currentExercice);
     this.adherentService.findAdherantActuallListByExerciceWithBaremeDataId(currentExercice.id).subscribe(
       (res) => {
-        console.log('---------- Actual Liste by Exrcice Id ----------');
+        console.log('---------- Actual Liste by Exrcice Id ----------', currentExercice.id);
         console.log(res);
         this.adherentsListeActuelleByExercice = res;
         this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
