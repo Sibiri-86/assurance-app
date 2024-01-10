@@ -56,7 +56,7 @@ import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
-import { Report } from 'src/app/store/contrat/police/model';
+import { Police, Report } from 'src/app/store/contrat/police/model';
 import { TauxCommissionIntermediaireEffects } from 'src/app/store/parametrage/taux-commission-intermediaire/effect';
 import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
 import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
@@ -70,6 +70,8 @@ import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 import { Router } from '@angular/router';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
+import { policeList } from 'src/app/store/contrat/police/selector';
 
 
 @Component({
@@ -153,7 +155,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayAssure = false;
   adherentsearch:  Adherent = {};
   adherentsList: Array<Adherent> = [];
-  adherentsSelected: Adherent = {}
+  adherentsSelected: Adherent = {};
+  policeList$: Observable<Array<Police>>;
+    policeList: Array<Police>;
+    police: Police;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -182,7 +187,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
     this.displayAssure = true;
   }
 filtrer(): void {
-if(this.adherentsearch.matriculeGarant && !this.adherentsearch.nom) {
+if(this.adherentsearch.matriculeGarant && !this.police.nom) {
   this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
     if(rest) {
       this.adherentsList= rest;
@@ -190,14 +195,14 @@ if(this.adherentsearch.matriculeGarant && !this.adherentsearch.nom) {
     });
 
   }
-  if(!this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
-    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom).subscribe((rest)=>{
+  if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationPopForm.get('dateSoins').value,this.police.nom).subscribe((rest)=>{
       if(rest) {
         this.adherentsList= rest;
       }
       });
   }
-  if(this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
+  if(this.adherentsearch.matriculeGarant && this.police.nom) {
     this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
       if(rest) {
         this.adherentsList= rest;
@@ -479,6 +484,16 @@ findMontantPlafond(event){
       numeroVirement: new FormControl(),
       nomBenefiniciaire: new FormControl(),
     });
+
+    this.policeList$ = this.store.pipe(select(policeList));
+        this.store.dispatch(loadPoliceAll());
+        this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.policeList = value.slice();
+            console.log('+++++++++++this.policeList+++++++++++++');
+            console.log(this.policeList);
+          }
+        });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))

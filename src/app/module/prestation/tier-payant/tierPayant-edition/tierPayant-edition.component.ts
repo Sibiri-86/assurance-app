@@ -52,7 +52,7 @@ import {status} from '../../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../../common/models/enum.etat.sinistre';
 import {printPdfFile} from 'src/app/module/util/common-util';
 import {TypeReport} from 'src/app/store/contrat/enum/model';
-import {Report} from 'src/app/store/contrat/police/model';
+import {Police, Report} from 'src/app/store/contrat/police/model';
 import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model';
 import {Pathologie} from '../../../../store/parametrage/pathologie/model';
 import * as pathologieSelector from '../../../../store/parametrage/pathologie/selector';
@@ -78,6 +78,8 @@ import { GlobalConfig } from 'src/app/config/global.config';
 import { ConventionService } from 'src/app/store/medical/convention/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { policeList } from 'src/app/store/contrat/police/selector';
+import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 
 
 
@@ -182,7 +184,10 @@ export class TierPayantEditionComponent implements OnInit {
     displayAssure = false;
     adherentsearch:  Adherent = {};
     adherentsList: Array<Adherent> = [];
-    adherentsSelected: Adherent = {}
+    adherentsSelected: Adherent = {};
+    policeList$: Observable<Array<Police>>;
+    policeList: Array<Police>;
+    police: Police;
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -206,7 +211,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
       filtrer(): void {
-        if(this.adherentsearch.matriculeGarant && !this.adherentsearch.nom) {
+        if(this.adherentsearch.matriculeGarant && !this.police.nom) {
           this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
             if(rest) {
               this.adherentsList= rest;
@@ -214,15 +219,15 @@ export class TierPayantEditionComponent implements OnInit {
             });
         
           }
-          if(!this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
-            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationAdd.dateSoins,this.adherentsearch.nom).subscribe((rest)=>{
+          if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationAdd.dateSoins,this.police.nom).subscribe((rest)=>{
               if(rest) {
                 this.adherentsList= rest;
               }
               });
           }
-          if(this.adherentsearch.matriculeGarant && this.adherentsearch.nom) {
-            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+          if(this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationAdd.dateSoins,this.police.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
               if(rest) {
                 this.adherentsList= rest;
               }
@@ -436,6 +441,15 @@ export class TierPayantEditionComponent implements OnInit {
         });
 
        
+        this.policeList$ = this.store.pipe(select(policeList));
+        this.store.dispatch(loadPoliceAll());
+        this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.policeList = value.slice();
+            console.log('+++++++++++this.policeList+++++++++++++');
+            console.log(this.policeList);
+          }
+        });
         this.prestationForm.get('dateSaisie').setValue(new Date());
         this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
         this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -1713,7 +1727,9 @@ export class TierPayantEditionComponent implements OnInit {
           }
 
           if(this.prestationsList) {
+            this.prefinancement.montantPaye = 0;
             for(let i=0; i<this.prestationsList.length ; i++) {
+                
                 this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationsList[i].montantRembourse;
                
                 this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
