@@ -196,16 +196,22 @@
                 <div class="card">
                     <p-toolbar styleClass="p-mb-4">
                         <ng-template pTemplate="left">
-                                <div >
-                                <label for="lastname2" style="font-weight: bold;">Souscripteur</label><br>
-                                <input id="nom" style="width: 90%;" type="text"  [(ngModel)]="adherentsearch.nom" name="nom" pInputText>                                                
+                            <div >
+                                <label for="lastname2" style="font-weight: bold;">Souscripteur<span style="color: red !important; size: 1.4em;" class="required"></span></label><br>
+                                <p-dropdown inputId="souscripteur" dataKey="id" [filter]="true"
+                                    showClear="true" [options]="policeList"
+                                    [autoDisplayFirst]="false" 
+                                    placeholder="Selectionnez le souscripteur"
+                                    optionLabel="nom" class="p-mr-2" [(ngModel)]="police"></p-dropdown>
+                            
+                                <!--  <input id="nom" style="width: 90%;" type="text"  [(ngModel)]="adherentsearch.nom" name="nom" pInputText>  -->                                               
                             </div>
                                
-
+        
                             <div >
-                                <label for="lastname2" style="font-weight: bold;">Matricule garant</label><br>
-                                <input id="matriculeGarant" style="width: 80%;" type="text"  [(ngModel)]="adherentsearch.matriculeGarant" name="matriculeGarant" pInputText>                                                
-                                <button pButton icon="pi pi-search"[disabled]="!adherentsearch?.nom && !adherentsearch?.matriculeGarant" class="p-ml-2" (click)="filtrer()"></button>   
+                                <label  for="lastname2" style="font-weight: bold;margin-left: 3px;">Matricule garant</label><br>
+                                <input   id="matriculeGarant" style="width: 80%;margin-left: 3px;" type="text" Label="Matricule garant" [(ngModel)]="adherentsearch.matriculeGarant" name="matriculeGarant" pInputText>                                                
+                                <button pButton icon="pi pi-search" [disabled]="!police && !adherentsearch?.matriculeGarant" class="p-ml-2" (click)="filtrer()"></button>   
                             </div>
 
                         </ng-template>
