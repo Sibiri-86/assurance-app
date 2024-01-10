@@ -345,6 +345,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   adhrentAJourToSave: Adherent[] = [];
   clonedAdherent: { [s: string]: Adherent } = {};
   roleMajAssure = this.keycloak.isUserInRole(Function.vue_maj_assuere);
+  historiqueAvenantPrimesSelect: HistoriqueAvenantPrime[] = [];
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -2526,12 +2527,41 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   onRowEditSavePrime(historiqueAvenantPrime: HistoriqueAvenantPrime) {
+   
     if(this.clonedPPrime[historiqueAvenantPrime.id].primeTotal !== historiqueAvenantPrime.primeTotal || this.clonedPPrime[historiqueAvenantPrime.id].primeNet !== historiqueAvenantPrime.primeNet) {
       historiqueAvenantPrime.deletedMaj = true;
       this.displayModif = true;
       historiqueAvenantPrime.fraisAccessoir = historiqueAvenantPrime?.historiqueAvenant?.fraisAccessoires;
       historiqueAvenantPrime.fraisBadge = historiqueAvenantPrime?.historiqueAvenant?.fraisBadges;
+      
     }
+    this.historiqueAvenantPrimes.forEach(hap => {
+      if (hap.fraisAccessoir) {
+        hap.fraisAccessoir = removeBlanks(hap.fraisAccessoir + '');
+      }
+      if (hap.fraisBadge) {
+        hap.fraisBadge = removeBlanks(hap.fraisBadge + '');
+      }
+      if (hap.primeNet) {
+        hap.primeNet = removeBlanks(hap.primeNet + '');
+      }
+      if (hap.primeTotal) {
+        hap.primeTotal = removeBlanks(hap.primeTotal + '');
+      }
+      if (hap.primeTTC) {
+        hap.primeTTC = removeBlanks(hap.primeTTC + '');
+      }
+      
+    });
+    this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeNet =this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeNet).reduce((a, b) => a + b);
+            this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeTotal).reduce((a, b) => a + b);
+            this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeTotal  = this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeNet + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisAccessoir + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisBadge;
+    
+           
+
+    
       
       delete this.clonedPPrime[historiqueAvenantPrime.id];
       // this.messageService.add({severity: 'success', summary: 'Success', detail: 'Product is updated'});
@@ -2625,6 +2655,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   onChangePrimeNet(): void {
+    console.log("historiqueAvenantPrimes 142 ", this.historiqueAvenantPrimes);
     this.historiqueAvenantPrimes.forEach(hap => {
       if (hap.primeNet) {
         hap.primeNet = removeBlanks(hap.primeNet + '');
@@ -2640,8 +2671,32 @@ export class AvenantComponent implements OnInit, OnDestroy {
         hap.primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
             .map(elem => elem.primeTotal).reduce((a, b) => a + b);
             hap.primeTotal  = hap.primeTotal + hap.fraisAccessoir + hap.fraisBadge;
+            console.log("prime totaleeee ", hap.primeTotal);
       }
     });
+  }
+
+  onChangePrimeNet1(historiqueAvenantPrime: HistoriqueAvenantPrime): void {
+    
+   // console.log("historiqueAvenantPrimes 142 ", this.historiqueAvenantPrimes);
+    
+      if (historiqueAvenantPrime.primeNet) {
+        historiqueAvenantPrime.primeNet = removeBlanks(historiqueAvenantPrime.primeNet + '');
+        historiqueAvenantPrime.primeTotal  = historiqueAvenantPrime.primeNet + historiqueAvenantPrime.fraisAccessoir + historiqueAvenantPrime.fraisBadge;
+      }
+      if (historiqueAvenantPrime.primeTotal) {
+        historiqueAvenantPrime.primeTotal = removeBlanks(historiqueAvenantPrime.primeTotal + '');
+        historiqueAvenantPrime.primeTotal  = historiqueAvenantPrime.primeTotal + historiqueAvenantPrime.fraisAccessoir + historiqueAvenantPrime.fraisBadge;
+      }
+      if (!historiqueAvenantPrime.groupe) {
+        historiqueAvenantPrime.primeNet = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeNet).reduce((a, b) => a + b);
+            historiqueAvenantPrime.primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
+            .map(elem => elem.primeTotal).reduce((a, b) => a + b);
+            historiqueAvenantPrime.primeTotal  = historiqueAvenantPrime.primeTotal + historiqueAvenantPrime.fraisAccessoir + historiqueAvenantPrime.fraisBadge;
+            console.log("prime totaleeee ", historiqueAvenantPrime.primeTotal);
+      }
+      this.clonedPPrime[historiqueAvenantPrime.id] = {...historiqueAvenantPrime};
   }
 
   disableAvenant(historiqueAvenant: HistoriqueAvenant): boolean {
@@ -3100,11 +3155,11 @@ export class AvenantComponent implements OnInit, OnDestroy {
         break;
       }
       case 4: {
-        this.avenantModif1.adhrents.forEach(p => {
+        /* this.avenantModif1.adhrents.forEach(p => {
           if(p.adherentPrincipal === null) {
             this.avenantModif1.adhrents.find(p1 => p1.adherentPrincipal.numero === p.numero);
           }
-        });
+        }); */
         break;
       }
       default: {

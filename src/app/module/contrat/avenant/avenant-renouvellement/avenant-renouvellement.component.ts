@@ -2212,7 +2212,7 @@ export class AvenantRenouvellementComponent implements OnInit {
           this.historiqueAvenantService.getVerifyIsOverlap(this.exerciceForm.get('debut').value, 
             this.exerciceForm.get('typeDuree').value.value, this.exerciceForm.get('duree').value, this.police.id ).subscribe(
           (res) => {
-              const dataDuJour = new Date();
+              //const dataDuJour = new Date();
             this.overlapVariable = res.body;
             if(!this.overlapVariable) {
                     this.addMessage('error', 'Erreur sur la date de l\'exercice',
