@@ -894,6 +894,7 @@ findMontantPlafond(event){
         this.prestationPopForm.get('montantPlafond').setValue(value);
         //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
       } else {
+        this.prestationPopForm.get('montantPlafond').setValue('');
       }
     });
     }
