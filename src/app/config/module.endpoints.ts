@@ -501,4 +501,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/assurance-voyage.mock.json`
         };
 
+        static readonly CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST_WITH_BAREME_DATA = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/exercice-actuall-WithBaremeData`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }

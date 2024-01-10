@@ -187,6 +187,7 @@ deleteAdherents(adherent: Array<Adherent>): Observable<any> {
       );
   }
 
+
     loadAdherentsByPolice(idPolice: string): Observable<Adherent[]> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_POLICE)}/${idPolice}`).pipe(
@@ -382,6 +383,14 @@ searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(dateSoins: Date, nom:
     //catchError(this.handleError())
    );
   }
+}
+
+findAdherantActuallListByExerciceWithBaremeDataId(idExercice: string): Observable<Adherent[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST_WITH_BAREME_DATA)}/${idExercice}`).pipe(
+      map((response: Adherent[]) => response),
+      catchError(this.handleError())
+  );
 }
 
 
