@@ -4342,7 +4342,7 @@
                               <ng-template pTemplate="input">
                                   <input pInputText type="text"
                                          [(ngModel)]="historiqueAvenantPrime.primeNet" [value]="historiqueAvenantPrime.primeNet | formatTableValue: 'number':true"
-                                  (change)="onChangePrimeNet()">
+                                  (change)="onChangePrimeNet1(historiqueAvenantPrime)">
                               </ng-template>
                               <ng-template pTemplate="output">
                                   <span style="font-weight: bold">{{historiqueAvenantPrime.primeNet | formatTableValue: 'number':true}}</span>
@@ -4358,10 +4358,11 @@
                               <ng-template pTemplate="input">
                                   <input pInputText type="text"
                                          [(ngModel)]="historiqueAvenantPrime.primeTotal" [value]="historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true"
-                                         (change)="onChangePrimeNet()">
+                                         (change)="onChangePrimeNet1(historiqueAvenantPrime)">
                               </ng-template>
                               <ng-template pTemplate="output">
-                                  <span style="font-weight: bold">{{historiqueAvenantPrime.primeTotal + historiqueAvenantPrime?.historiqueAvenant?.surprime | formatTableValue: 'number':true}}</span>
+                                  <span style="font-weight: bold">{{historiqueAvenantPrime.primeTotal | formatTableValue: 'number':true}}</span>
+                                  <!-- <span style="font-weight: bold">{{historiqueAvenantPrime.primeTotal + historiqueAvenantPrime?.historiqueAvenant?.surprime | formatTableValue: 'number':true}}</span> -->
                               </ng-template>
                           </p-cellEditor>
                       </td>

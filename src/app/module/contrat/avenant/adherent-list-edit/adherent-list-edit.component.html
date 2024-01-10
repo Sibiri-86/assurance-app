@@ -46,9 +46,9 @@
                 <tr [ngClass]="{'colorZone': !historiqueAvenantAdherant.adherent.adherentPrincipal}">
                     <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
                     <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.adherentPrincipal?.nom}} {{historiqueAvenantAdherant?.adherent?.adherentPrincipal?.prenom}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numero}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.nom | upercase}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.prenom | beginLowerCase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.numero}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.nom | upercase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.prenom | upercase}}</span></td>
                     <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
                     <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent?.qualiteAssure?.libelle}}</span></td>
                     <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
