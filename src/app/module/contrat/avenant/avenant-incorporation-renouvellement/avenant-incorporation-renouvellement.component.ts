@@ -101,6 +101,8 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     adherentsListeActuelleByExercice: Adherent[]= [];
     adherentsListe: Adherent[]= [];
     exerciceOfLast : Exercice;
+    compteur: number = null; 
+    viewFamille = false;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -318,7 +320,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
       }
 
     addAdherentFamilleToList(): void {
-       
+        this.viewListe = true;
       //   this.createHistoriqueAvenant();
         // const historiqueAvenant1: HistoriqueAvenant = {};
         this.adherentFamilleListe.forEach(af => {
@@ -409,8 +411,69 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     }
 
    
-
     createHistoriqueAvenant(): void {
+        console.log("================length============", this.familys.length);
+        
+        if(this.viewFamille && this.familys?.length ===0 || this.familys?.length === null) {
+            this.addMessage('error', 'Famille',
+            'Veuillez ajouter la famille');
+                  
+    } else {
+    
+        if(this.familys.value) {
+            const famil: Array<Adherent> = this.familys.value;
+            famil?.forEach(f => {
+              
+                if(f.nom === null || f.prenom ===null || f.dateNaissance === null || f.genre === null || f.qualiteAssure === null) {
+                    this.addMessage('error', 'Champs obligatoire',
+                    'Veuillez remplir les champs obligatoire');
+                }
+            });
+           
+
+        
+
+            
+                if(this.adherentForm.value.id === null) {
+
+                    this.adherentForm.value.id ="0";
+                }
+                const adherantFamille: AdherentFamille = {};
+                adherantFamille.adherent = this.adherentForm.value;
+                adherantFamille.adherent.groupe = this.customForm.controls.groupe.value;
+                adherantFamille.famille = this.familys.value;
+                console.log('*****-this.groupeFamille 11111 --- ', this.curentGroupe);
+                adherantFamille.groupeFamille = this.curentGroupe ;
+                console.log('*****-this.groupeFamille 22222 --- ', adherantFamille.groupeFamille);
+                adherantFamille.famille.forEach(f => {
+                    f.adherentPrincipal = null;
+                    f.groupe = this.customForm.controls.groupe.value;
+                });
+                if(this.compteur !=null) {
+                    this.adherentFamilleListe[this.compteur] = adherantFamille;
+                } else {
+                    this.adherentFamilleListe.push(adherantFamille);
+                }
+                
+                this.adherentForm.reset();
+                
+                console.log("============id==========",this.adherentForm.value.id);
+                this.familys.reset();
+                this.familys.clear();
+                this.adherentSelected = {};
+                
+                console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
+                console.log(adherantFamille);
+                console.log('***************-------------------------', this.customForm.get('groupe').value);
+                this.compteur = null;
+            }
+        }
+        this.viewFamille = false;
+    
+  }
+
+
+   /*  createHistoriqueAvenant(): void {
         console.log("============================", this.adherentForm.value);
         const adherantFamille: AdherentFamille = {};
         adherantFamille.adherent = this.adherentForm.value;
@@ -429,7 +492,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
         console.log(adherantFamille);
         console.log('***************-------------------------');
     }
-
+ */
     loadAdherentPrincipalInfo() {
         console.log(this.adherentSelected);
         this.obj.group = this.adherentSelected;
@@ -438,6 +501,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
         /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
 		console.log('*************this.genre*************', this.genre);*/
         this.setAdherentPrincipal(this.adherentSelected);
+        this.viewFamille = true;
     }
 
     setAdherentPrincipal(adherent: Adherent): void {
@@ -513,6 +577,29 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
         this.messageService.add({severity: severite, summary: resume, detail: detaile});
     }
 
+    supprimerHistoriqueAvenant1(ri: number): void {
+        console.log(ri);
+        this.familys.removeAt(ri);
+    }
+    modifierHistoriqueAvenant1(ri: number): void {
+        
+        this.compteur = ri;
+        
+
+            
+            this.adherentForm.patchValue(this.adherentFamilleListe[ri].adherent);
+            if(this.adherentFamilleListe[ri].famille) {
+                this.ajouter();
+                this.familys.patchValue(this.adherentFamilleListe[ri].famille);
+            }
+       
+       
+       
+        
+        console.log('*****-this.adherentFamilleListe---', this.adherentFamilleListe);
+       
+        console.log('***************-------------------------', this.customForm.get('groupe').value);
+    }
     compareDateIncorp(): void {
         this.historiqueAvenantService.compareDate(this.adherentForm.get('dateIncorporation').value, this.myForm.get('dateIncorparation').value).subscribe(
             (res) => {

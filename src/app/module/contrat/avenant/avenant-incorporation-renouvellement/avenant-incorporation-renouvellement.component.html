@@ -348,16 +348,85 @@
                                         [disabled]="adherentFamilleListe.length === 0 && isImport === 'NON'">
                                 </button>
                             </div>
+
+                            <div class="p-col-12" *ngIf="adherentFamilleListe.length !==0">
+                        
+                                <p-table #dt [value]="adherentFamilleListe" [rows]="15" [paginator]="true" [globalFilterFields]="['adherent.nom','adherent.prenom', 'adherent.numeroTelephone', 'adherent.numero', 
+                                'qualiteAssure?.libelle']"
+                                         [rowHover]="true" dataKey="id"
+                                         styleClass="p-datatable-customers"
+                                         currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                                    <ng-template pTemplate="caption">
+                                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                                            <h5 class="p-m-0"></h5>
+                                            <span class="p-input-icon-left">
+                                                    <i class="pi pi-search"></i>
+                                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
+                                                </span>
+                                        </div>
+                                    </ng-template>
+                        
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <!--<th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>-->
+                                            <th pSortableColumn="nom" style="width: 7rem">Nom<p-sortIcon field="nom"></p-sortIcon></th>
+                                            <th pSortableColumn="prenom" style="width: 9rem" >Prénom (s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                                            <th pSortableColumn="numero" style="width: 5rem">Date Naissance<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                                            <th pSortableColumn="numero" style="width: 4rem">Qualité<p-sortIcon field="dateNaissance"></p-sortIcon></th>
+                                            <th style="width: 3em"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-adherent let-ri="rowIndex">
+                                        <tr>
+                                            <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
+                                            <td><span class="p-column-title">{{adherent?.adherent?.nom || upercase}}</span></td>
+                                            <td><span class="p-column-title">{{adherent?.adherent?.prenom || upercase}}</span></td>
+                                            <td><span class="p-column-title">{{adherent?.adherent?.dateNaissance | formatTableValue : 'date'}}</span></td>
+                                            <td><span class="p-column-title">{{adherent?.adherent?.qualiteAssure?.libelle}}</span></td>
+                                            <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
+                                            <td style="width: 5em">
+                                                <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button"
+                                                class="p-button p-button-icon p-mr-2"  (click)="modifierHistoriqueAvenant1(ri)">
+                                                </button>
+                                                <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" type="button"
+                                                class="p-button-danger p-button-icon"  (click)="supprimerHistoriqueAvenant1(ri)">
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="loadingbody" let-columns="columns">
+                                        <tr style="height:34px">
+                                            <div class="loading-text"></div>
+                        
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7" style="color: red; font-weight: bold">
+                                                Aucune famille trouvée !
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <div class="p-d-flex p-ai-center p-jc-between">
+                                            {{adherentFamilleListe ? adherentFamilleListe.length : 0 }} familles
+                                        </div>
+                                    </ng-template>
+                                </p-table>
+                            </div>
                         </div>
                         </p-fieldset>
+
+                        
 
             </div>
         </div>
     </div>
     <p-dialog [maximizable]="true" [(visible)]="viewListe" header="Liste des adhérents à incorporer"
               [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}" (onHide)="hideListe()">
-            <app-adherent-list [adherentFamilleList]="adherentFamilleListe" [statut]="etat" *ngIf="adherentFamilleListe?.length > 0"></app-adherent-list>
-    </p-dialog>
+
+              <!--             <app-adherent-list [adherentFamilleList]="adherentFamilleListe" [statut]="etat" *ngIf="adherentFamilleListe?.length !==0"></app-adherent-list>
+ -->    </p-dialog>
     <div class="p-fluid p-formgrid p-grid" *ngIf="viewListeEdit">
         <div class="p-field p-col-12">
                     <app-adherent-list-edit [historiqueAvenantAdherants]="historiqueAvenantAdherants" *ngIf="historiqueAvenantAdherants?.length > 0"

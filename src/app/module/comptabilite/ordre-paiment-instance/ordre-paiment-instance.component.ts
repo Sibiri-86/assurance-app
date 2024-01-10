@@ -46,6 +46,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   displaySinistre = false;
   prefinancement: Array<Prefinancement>;
   report: Report = {};
+  clonedPlafondConfiguration: { [s: string]: OrdreReglement } = {};
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -68,6 +69,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       console.log(value);
       if (value) {
         this.ordreReglementList = value.slice();
+        this.ordreReglementList.forEach(ordr=> {
+
+          ordr.datePaiement = new Date();
+        });
     }
     });
   }
@@ -90,4 +95,17 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     this.prefinancement = ordre.prefinancement;
   }
 
+
+  onRowEditInitOrdreConfiguration(ordre: OrdreReglement) {
+    this.clonedPlafondConfiguration[ordre.id] = {...ordre};
+  }
+
+  onRowEditSaveOrdreConfiguration(ordre: OrdreReglement) {
+    delete this.clonedPlafondConfiguration[ordre.id];
+  }
+
+  onRowEditCancelOrdreConfiguration(ordre: OrdreReglement, index: number) {
+    this.ordreReglementList[index] = this.clonedPlafondConfiguration[ordre.id];
+    delete this.clonedPlafondConfiguration[ordre.id];
+  }
 }

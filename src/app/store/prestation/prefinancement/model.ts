@@ -56,6 +56,7 @@ export interface OrdreReglement {
     dateValidationFinance?: string;
     dateValidationDirection?: string;
     montantReclame?: number;
+    datePaiement?: Date;
 }
 
 export interface Prefinancement {

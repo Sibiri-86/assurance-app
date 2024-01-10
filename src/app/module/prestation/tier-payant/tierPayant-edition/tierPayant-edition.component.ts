@@ -1694,20 +1694,33 @@ export class TierPayantEditionComponent implements OnInit {
         if(this.prefinancement.montantPaye == null ) {
             this.prefinancement.montantPaye = 0;
         }
-        if(this.compteur === null){
+        if(this.prefinancement.montantReclame == null ) {
+            this.prefinancement.montantReclame = 0;
+        }
+       /*  if(this.compteur === null){
                 this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
                
                     this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
-          } 
+          }  */
         if(this.compteur !=null) {
-            this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
+           // this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                
-            this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+           // this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
             this.prestationsList.push(this.prestationAdd);
           }
+
+          if(this.prestationsList) {
+            for(let i=0; i<this.prestationsList.length ; i++) {
+                this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationsList[i].montantRembourse;
+               
+                this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+        
+            }
+          }
+
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
          this.prestationAddFin.dateSoins = this.prestationAdd.dateSoins;
          this.prestationAddFin.numeroBon = this.prestationAdd.numeroBon;
