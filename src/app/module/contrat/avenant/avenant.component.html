@@ -2964,7 +2964,7 @@
                             </div>
                             <div class="p-col-2">
                                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                                    <button pButton pRipple label="Exporter" [disabled]="adherentsListeActuelleByExercice.length > 1" icon="pi pi-upload" class="p-button-help"
+                                    <button pButton pRipple label="Exporter" [disabled]="!adherentsListeActuelleByExercice" icon="pi pi-upload" class="p-button-help"
                                             (click)="dtAL.exportCSV()"></button>
                                 </div>
                             </div>

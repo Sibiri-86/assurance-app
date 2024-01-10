@@ -1217,7 +1217,8 @@ findMontantPlafond(event){
     this.prefinancementModel.dateSaisie = new Date();
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
-    if (this.montantPlafond1 != 0 || this.montantPlafond1 !==null) {
+    
+    if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) {
       if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
 
         console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
@@ -1229,15 +1230,7 @@ findMontantPlafond(event){
         })
        
     }
-    } else {
-      myForm.patchValue({montantRembourse:
-        (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
-        debours: this.prestationPopForm.get('nombreActe').value *
-      this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
-      this.prestationPopForm.get('nombreActe').value *
-      this.prestationPopForm.get('coutUnitaire').value});
     }
-
     /* else {
     myForm.patchValue({
       sort: Sort.REJETE,
