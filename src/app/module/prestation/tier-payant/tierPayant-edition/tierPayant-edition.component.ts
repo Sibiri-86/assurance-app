@@ -1885,6 +1885,10 @@ export class TierPayantEditionComponent implements OnInit {
           if (value) {
               this.prestationAdd.montantPlafond = value.prefinancementState.montantPlafondSousActe; 
               this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
+              if(value?.prefinancementState?.montantPlafondSousActe == 0 ) {
+                this.prestationAdd.montantPlafond = null; 
+                this.montantPlafond =  null;
+              }
           } else {
             this.prestationAdd.sort = Sort.REJETE;
            // myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
