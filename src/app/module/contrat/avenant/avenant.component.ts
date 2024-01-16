@@ -2572,7 +2572,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
             .map(elem => elem.primeNet).reduce((a, b) => a + b);
             this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeTotal = this.historiqueAvenantPrimes.filter(g => g.groupe !== null)
             .map(elem => elem.primeTotal).reduce((a, b) => a + b);
-            this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeTotal  = this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeNet + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisAccessoir + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisBadge;
+            this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeTotal  = this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].primeNet
+             + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisAccessoir + this.historiqueAvenantPrimes[this.historiqueAvenantPrimes.length - 1 ].fraisBadge;
     
            
 

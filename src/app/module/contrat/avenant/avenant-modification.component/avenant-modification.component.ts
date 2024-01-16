@@ -93,6 +93,7 @@ import * as exerciceSelector from '../../../../store/contrat/exercice/selector';
 import * as featureExerciceAction from '../../../../store/contrat/exercice/actions';
 import { onInitEffects } from '@ngrx/effects/src/lifecycle_hooks';
 import { HistoriqueAvenantAdherentList } from 'src/app/store/contrat/historiqueAvenantAdherent/model';
+import * as historiqueAvenantAction from '../../../../store/contrat/historiqueAvenant/actions';
 
 @Component({
   selector: 'app-avenant-modification',
@@ -1254,6 +1255,81 @@ export class AvenantModificationComponent implements OnInit {
     console.log("objet envoyé**************", this.objet);
    this.eventEmitterM.emit(this.objet);
   }
+
+  createAvenantPlafond(): void {
+    this.enleverEspace();
+    this.objet.plafondGroupeActes = this.acteListFinal;
+    this.objet.plafondFamilleActes = this.familleActeListFinal;
+    this.objet.plafondGroupeSousActes = this.sousActeListFinal;
+
+    this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+    
+    this.historiqueAvenant.id = this.avenantId;
+    console.log('*********************this.avenantArrivedId*******', this.avenantId);
+    //this.objet.historiqueAvenant.numero = this.avenantNumero;
+    //console.log('*********************this.avenantNumero*******', this.avenantNumero);
+    // this.objet.groupes = this.groupesRev;
+    this.validerGroupe();
+    this.objet.idHisto = this.avenantId;
+    this.objet.exercice = this.exerciceRevenu;
+    console.log('*********************this.objet.exercice*******', this.objet.exercice);
+    this.historiqueAvenant.isTerminer = false;
+    this.objet.historiqueAvenant = this.historiqueAvenant;
+    this.objet.historiqueAvenant.exercice = this.curentExercice;
+    this.objet.groupe = this.groupeForm.value;
+    console.log('*********************this.objet*******', this.objet);
+    //this.eventEmitterM.emit(this.objet);
+
+    this.store.dispatch(historiqueAvenantAction.createAvenantPlafond(this.objet));
+}
+
+enleverEspace() {
+  this.acteListFinal.forEach(pa => {
+      pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+      // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+  });
+  this.familleActeListFinal.forEach(pa => {
+      pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+      // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+  });
+  this.sousActeListFinal.forEach(pa => {
+      pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+      // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+  });
+  this.plafondFamilleActePlafongConfig.forEach(pfa => {
+      if (pfa.montantPlafond) {
+          pfa.montantPlafond = removeBlanks(pfa.montantPlafond + '');
+          // parseInt(pfa.montantPlafond.toString().replace(' ', ''), 10);
+      }
+      if (pfa.nombre) {
+          pfa.nombre = parseInt(pfa.nombre.toString().replace(' ', ''), 10);
+      }
+      if (pfa.listeActe) {
+          pfa.listeActe.forEach(pa => {
+              if (pa.nombre) {
+                  pa.nombre = parseInt(pa.nombre.toString().replace(' ', ''), 10);
+              }
+              if (pa.montantPlafond) {
+                  pa.montantPlafond = removeBlanks(pa.montantPlafond + '');
+                  // parseInt(pa.montantPlafond.toString().replace(' ', ''), 10);
+              }
+              if (pa.listeSousActe) {
+                  pa.listeSousActe.forEach(psa => {
+                      if (psa.nombre) {
+                          psa.nombre = parseInt(psa.nombre.toString().replace(' ', ''), 10);
+                      }
+                      if (psa.montantPlafond) {
+                          psa.montantPlafond = removeBlanks(psa.montantPlafond + '');
+                          // parseInt(psa.montantPlafond.toString().replace(' ', ''), 10);
+                      }
+                  });
+              }
+          });
+      }
+  });
+}
+
+
   fermerAvenantModif() {
     this.objet.historiqueAvenant = this.historiqueAvenant;
     this.objet.historiqueAvenant.isTerminer = true;
