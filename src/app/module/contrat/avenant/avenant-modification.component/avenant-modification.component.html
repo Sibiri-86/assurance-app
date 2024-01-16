@@ -938,9 +938,9 @@
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
                                                 <p-dropdown [options]="tauxList" [(ngModel)]="sousActe.taux" optionLabel="taux" placeholder="Select taux"
-                                                            [style]="{'width':'100%'}" (onChange)="changeFamilleActeTaux(plafond)"></p-dropdown>
+                                                            [style]="{'width':'100%'}" ></p-dropdown>
                                             </ng-template>
-                                            <ng-template pTemplate="output">
+                                            <ng-template pTemplate="output" (onChange)="changeFamilleActeTaux(sousActe)">
                                                 {{sousActe?.taux?.taux}}
                                             </ng-template>
                                         </p-cellEditor>
@@ -1005,6 +1005,15 @@
 </ng-template>
 </p-table>
 </ng-template>
+<p-fieldset legend="Enregistrer des plafonds modifiés" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+                                    
+                                    
+    <div class="p-grid p-justify-center">
+        <!-- <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button> -->
+        <button type="button" [disabled]="plafondFamilleActePlafongConfig?.length === 0" pTooltip="Enregistrer la liste des groupes de l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantPlafond()"></button>
+    </div>
+
+</p-fieldset>
 
 
         </p-tabPanel>
@@ -1046,7 +1055,7 @@
                                                    [(ngModel)]="historiqueAveantAdherant.adherent.nom">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant?.adherent?.nom | upercase}}
+                                            {{historiqueAveantAdherant?.adherent?.nom}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -1057,7 +1066,7 @@
                                                    [(ngModel)]="historiqueAveantAdherant.adherent.prenom" required>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}
+                                            {{historiqueAveantAdherant?.adherent?.prenom}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -1256,9 +1265,9 @@
                                     
                                     
         <div class="p-grid p-justify-center">
-            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()"></button>
+            <button pButton pRipple class="p-button-danger p-mr-4" icon="pi pi-times" (click)="annuler()" [disabled]="avenantId"></button>
             <button type="button"  pTooltip="Enregistrer l'avenant" pButton pRipple class="p-button-success " icon="pi pi-save" (click)="createAvenantModif()"
-             [disabled]="myForm.invalid || etat==='VIEW'"></button>
+             [disabled]="myForm.invalid || etat==='VIEW' || avenantId"></button>
         </div>
 
     </p-fieldset>
