@@ -1209,7 +1209,7 @@ findMontantPlafond(event){
     }
     
     myForm.patchValue({ sort: Sort.ACCORDE});
-   // myForm.patchValue({observation: "Remboursement favorable"});
+    myForm.patchValue({observation: "Remboursement favorable"});
 
     if (this.prestationPopForm.get('nombreActe').value &&
     this.prestationPopForm.get('coutUnitaire').value) {
@@ -1340,6 +1340,7 @@ findMontantPlafond(event){
       myForm.patchValue({
       montantRembourse: this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantSupporte').value
     });
+    
     }
     
   } else {
