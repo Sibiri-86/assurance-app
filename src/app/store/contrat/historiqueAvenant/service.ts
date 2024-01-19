@@ -133,7 +133,7 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         console.log(historiqueAvenant.dateAvenant);
         console.log(new Date(historiqueAvenant.dateAvenant).getFullYear());
         console.log(new Date(historiqueAvenant.dateAvenant).getMonth());
-        console.log(new Date(historiqueAvenant.dateAvenant).getDay());
+        console.log(new Date(historiqueAvenant.dateAvenant).getUTCDay);
         date.setFullYear(new Date(historiqueAvenant.dateAvenant).getFullYear(), new Date(historiqueAvenant.dateAvenant).getMonth(),
         new Date(historiqueAvenant.dateAvenant).getDay());
         data.append('year', new Date(historiqueAvenant.dateAvenant).getFullYear().toString());

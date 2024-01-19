@@ -24,7 +24,8 @@ import {
   HistoriquePlafondActe,
   HistoriquePlafondFamilleActe,
   HistoriquePlafondSousActe,
-  TypeDemandeur
+  TypeDemandeur,
+  TypeHistoriqueAvenant
 } from '../../../../store/contrat/historiqueAvenant/model';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
 import * as genreSelector from '../../../../store/parametrage/genre/selector';
@@ -224,6 +225,8 @@ export class AvenantModificationComponent implements OnInit {
   groupeSelectedNouvo: Groupe = {};
   adherentPermutList?: AdherentPermute [] = [];
   adherentPermutSelect?: AdherentPermute = {};
+  plafondBoolean: Boolean = false;
+
   constructor(
       private store: Store<AppState>,
       private messageService: MessageService,
@@ -772,7 +775,7 @@ export class AvenantModificationComponent implements OnInit {
           }
         });
 
-    this.qualiteAssureList$ = this.store.pipe(
+    /* this.qualiteAssureList$ = this.store.pipe(
         select(qualiteAssureSelector.qualiteAssureList)
     );
     this.store.dispatch(loadQualiteAssure());
@@ -783,7 +786,17 @@ export class AvenantModificationComponent implements OnInit {
             this.qualiteAssureList1 = value.slice();
             this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT');
           }
-        });
+        }); */
+
+        this.qualiteAssureList$ = this.store.pipe(select(qualiteAssureSelector.qualiteAssureList));
+        this.qualiteAssureList$.pipe(takeUntil(this.destroy$))
+            .subscribe((value) => {
+                if (value) {
+                    this.qualiteAssureList = value.slice();
+                    /* this.qualiteAssureList1 = value.slice().filter(qa => qa.code === 'ADHERENT');
+                    this.qualiteAssureList2 = value.slice().filter(e => e.code !== 'ADHERENT'); */
+                }
+            });
 
     // this.loadHistoriqueAvenantAdherantByPolice();
     this.addFamilleActe(this.police);
@@ -1253,35 +1266,10 @@ export class AvenantModificationComponent implements OnInit {
     this.objet.historiqueGroupes = this.historiqueGroupes;
     this.objet.historiqueAvenant.isTerminer = false;
     console.log("objet envoyé**************", this.objet);
-   this.eventEmitterM.emit(this.objet);
+     this.eventEmitterM.emit(this.objet);
   }
 
-  createAvenantPlafond(): void {
-    this.enleverEspace();
-    this.objet.plafondGroupeActes = this.acteListFinal;
-    this.objet.plafondFamilleActes = this.familleActeListFinal;
-    this.objet.plafondGroupeSousActes = this.sousActeListFinal;
-
-    this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
-    
-    this.historiqueAvenant.id = this.avenantId;
-    console.log('*********************this.avenantArrivedId*******', this.avenantId);
-    //this.objet.historiqueAvenant.numero = this.avenantNumero;
-    //console.log('*********************this.avenantNumero*******', this.avenantNumero);
-    // this.objet.groupes = this.groupesRev;
-    this.validerGroupe();
-    this.objet.idHisto = this.avenantId;
-    this.objet.exercice = this.exerciceRevenu;
-    console.log('*********************this.objet.exercice*******', this.objet.exercice);
-    this.historiqueAvenant.isTerminer = false;
-    this.objet.historiqueAvenant = this.historiqueAvenant;
-    this.objet.historiqueAvenant.exercice = this.curentExercice;
-    this.objet.groupe = this.groupeForm.value;
-    console.log('*********************this.objet*******', this.objet);
-    //this.eventEmitterM.emit(this.objet);
-
-    this.store.dispatch(historiqueAvenantAction.createAvenantPlafond(this.objet));
-}
+ 
 
 enleverEspace() {
   this.acteListFinal.forEach(pa => {
@@ -1528,6 +1516,22 @@ enleverEspace() {
   );
   }
 
+  loadPlafondConfigBygroupe2(groupe : Groupe){
+    console.log('this.curentExercice.id======>',this.curentExercice.id);
+    console.log("bbbbbbbbbbbbbbbbbbbbbbbbbb", groupe.id);
+         this.plafondService.getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(groupe.id, this.curentExercice.id).subscribe(
+            (res) => {
+                this.plafondFamilleActePlafongConfig = res.body;
+                console.log("zzzzzzzzzzzzzzzzzzzzzz", this.plafondFamilleActePlafongConfig);
+                console.log("kdc,ksk,skc,sk,c", this.myForm.get('dateEffet').value);
+                this.plafondFamilleActePlafongConfig.forEach(p=>p.dateEffet = this.myForm.get('dateEffet').value)
+            }
+        );
+        this.groupeListeFinale = [];
+        this.plafondBoolean = true;
+        this.groupeListeFinale.push(groupe);
+}
+
 
 
   modificationPeriodeFamille(famille: PlafondFamilleActe) {
@@ -1540,13 +1544,61 @@ enleverEspace() {
               sous.dimensionPeriode =famille.dimensionPeriode;
             })
           });
-          
-       
+        }
+      }
 
-    }
-            
-   
-  }
+  modificationTauxCouverture(famille: PlafondFamilleActe) {
+      
+    if(famille.taux) {
+      
+      famille?.listeActe?.forEach(act=>{
+            act.taux =famille.taux;
+            act?.listeSousActe?.forEach(sous=>{
+              sous.taux =famille.taux;
+            })
+          });
+        }
+      }
+
+  modificationQualiteAssure(famille: PlafondFamilleActe) {
+      
+    if(famille.domaine) {
+      
+      famille?.listeActe?.forEach(act=>{
+            act.domaine =famille.domaine;
+            act?.listeSousActe?.forEach(sous=>{
+              sous.domaine =famille.domaine;
+            })
+          });
+        }
+      }
+
+      modificationDateEffet(famille: PlafondFamilleActe) {
+        if(!famille.dateEffet) {
+          famille.dateEffet = this.myForm.get('dateEffet').value;
+        }
+        if(famille && this.myForm.get('dateEffet').value) {
+          
+          famille?.listeActe?.forEach(act=>{
+                act.dateEffet = famille.dateEffet;
+                act?.listeSousActe?.forEach(sous=>{
+                  sous.dateEffet =famille.dateEffet;
+                })
+              });
+            }
+          }
+
+          modificationEtat(famille: PlafondFamilleActe) {
+            if(famille.etat) {
+              
+              famille?.listeActe?.forEach(act=>{
+                    act.etat = famille.etat;
+                    act?.listeSousActe?.forEach(sous=>{
+                      sous.etat = famille.etat;
+                    })
+                  });
+                }
+              }
 
 
   modificationPeriode(act: PlafondActe) {
@@ -1745,11 +1797,31 @@ enleverEspace() {
     console.log('***this.sousActeListFinal****', this.sousActeListFinal);
   }
   addFA(): void {
-    const plafondFamilleActe: PlafondFamilleActe = {};
+    /* if(this.plafondFamilleActePlafongConfig.length >= 8) {
+      this.addMessage('error', 'Nombre maximale de familles d\'acte atteint',
+                'Vous ne pouvez plus ajouter de famille d\'acte à ce barème');
+    } else {
+      const plafondFamilleActe: PlafondFamilleActe = {};
+    plafondFamilleActe.dateEffet = this.myForm.get('dateEffet').value;
     this.plafondFamilleActePlafongConfig.push(plafondFamilleActe);
+    } */
+    const plafondFamilleActe: PlafondFamilleActe = {};
+    /* plafondFamilleActe.dateEffet = this.myForm.get('dateEffet').value;
+    this.modificationDateEffet(plafondFamilleActe); */
+    console.log('avant ajout', this.plafondFamilleActePlafongConfig);
+    plafondFamilleActe.groupe = this.groupePlafongConfig;
+    this.plafondFamilleActePlafongConfig.push(plafondFamilleActe);
+    console.log('apres ajout', this.plafondFamilleActePlafongConfig);
+  }
+
+  supprimerFamilleActe(plafond: PlafondFamilleActe, index: number) {
+    this.plafondFamilleActePlafongConfig[index] = this.clonedPlafondConfiguration[plafond.garantie?.id];
+    delete this.clonedPlafondConfiguration[plafond.garantie?.id];
+    delete this.plafondFamilleActePlafongConfig[index];
   }
 
   onPlafondFamilleActeChange(plafond: PlafondFamilleActe) {
+    //this.modificationDateEffet(plafond);
     plafond.listeActe = [];
     this.acteList.filter(a => a.idTypeGarantie === plafond.garantie.id).forEach(acte => {
       const pa: PlafondActe = {};
@@ -2080,6 +2152,63 @@ enleverEspace() {
     this.loadHistoriqueAvenantAdherantByPoliceAndExerciceId();
 
  }
+
+ createAvenantPlafond(): void {
+  this.enleverEspace();
+  this.objet.plafondGroupeActes = this.acteListFinal;
+  this.objet.plafondFamilleActes = this.familleActeListFinal;
+  this.objet.plafondGroupeSousActes = this.sousActeListFinal;
+
+  this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+  
+  this.historiqueAvenant.id = this.avenantId;
+  console.log('*********************this.avenantArrivedId*******', this.avenantId);
+  //this.objet.historiqueAvenant.numero = this.avenantNumero;
+  //console.log('*********************this.avenantNumero*******', this.avenantNumero);
+  // this.objet.groupes = this.groupesRev;
+  this.validerGroupe();
+  this.objet.idHisto = this.avenantId;
+  this.objet.exercice = this.curentExercice;
+  console.log('*********************this.objet.exercice*******', this.objet.exercice);
+  this.historiqueAvenant.isTerminer = false;
+  
+  this.objet.historiqueAvenant = this.historiqueAvenant;
+  this.objet.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.MODIFICATION;
+  this.objet.historiqueAvenant.exercice = this.curentExercice;
+  this.objet.groupe = this.groupeListeFinale[0];
+  console.log('*********************this.objet*******', this.objet);
+  //this.eventEmitterM.emit(this.objet);
+
+ this.store.dispatch(historiqueAvenantAction.createAvenantPlafond(this.objet));
+}
+
+
+createAvenantPlafond1(): void {
+  this.enleverEspace();
+  this.objet.plafondGroupeActes = this.acteListFinal;
+  this.objet.plafondFamilleActes = this.familleActeListFinal;
+  this.objet.plafondGroupeSousActes = this.sousActeListFinal;
+
+  this.objet.plafondFamilleActes = this.plafondFamilleActePlafongConfig;
+  
+  this.historiqueAvenant.id = this.avenantId;
+  console.log('*********************this.avenantArrivedId*******', this.avenantId);
+  //this.objet.historiqueAvenant.numero = this.avenantNumero;
+  //console.log('*********************this.avenantNumero*******', this.avenantNumero);
+  // this.objet.groupes = this.groupesRev;
+  this.validerGroupe();
+  this.objet.idHisto = this.avenantId;
+  this.objet.exercice = this.exerciceRevenu;
+  console.log('*********************this.objet.exercice*******', this.objet.exercice);
+  this.historiqueAvenant.isTerminer = false;
+  this.objet.historiqueAvenant = this.historiqueAvenant;
+  this.objet.historiqueAvenant.exercice = this.curentExercice;
+  this.objet.groupe = this.groupeForm.value;
+  console.log('*********************this.objet*******', this.objet);
+  this.eventEmitterM.emit(this.objet);
+
+  this.store.dispatch(historiqueAvenantAction.createAvenantPlafond(this.objet));
+}
 
 
 }

@@ -2695,7 +2695,7 @@
                                                     class="p-button-rounded p-button-help p-mr-2" [disabled]="rowdata.valide">
                                             </button>
                                         </div>
-                                        <div class="p-col-">
+                                        <div class="p-col-" *ngIf="rowdata.typeHistoriqueAvenant !== 'MODIFICATION'">
                                             <button pButton pRipple icon="pi pi-times" pTooltip="Supprimer" (click)="supprimerAvenant(rowdata)"
                                                     class="p-button-rounded p-button-danger p-mr-2" [disabled]="rowdata.valide">
                                             </button>

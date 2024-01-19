@@ -255,7 +255,7 @@
             </div>
 
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe" >
+        <p-tabPanel [disabled]="!avenantId" [style]="{'width': '100%'}" header="GROUPE" leftIcon="pi pi-users" tooltip="Groupe" >
             <div class="p-grid">
                 <!--<div class="p-col-12">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -565,8 +565,8 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe" >
-
+        <p-tabPanel [disabled]="!avenantId" [style]="{'width': '100%'}" header="PLAFOND" leftIcon="pi pi-sort-numeric-up-alt" tooltip="Groupe" >
+           <!--  [disabled]="!avenantId" -->
             <ng-template pTemplate="content">
                 <div class="p-grid">
                     <div class="p-col-4">
@@ -574,7 +574,8 @@
                         <p-dropdown [options]="groupeListes" optionLabel="libelle" [(ngModel)]="groupePlafongConfig"
                                     [filter]="true" filterBy="libelle" [showClear]="true"
                                     placeholder="Choisir un groupe"
-                                    (onChange)="loadPlafondConfigBygroupe(); getPlafondGroupeByGroupe()" [style]="{'width': '100%'}">
+                                    (onChange)="loadPlafondConfigBygroupe2(groupePlafongConfig); getPlafondGroupeByGroupe()" [style]="{'width': '100%'}">
+                                    <!-- (onChange)="loadPlafondConfigBygroupe(); getPlafondGroupeByGroupe()" [style]="{'width': '100%'}" -->
                         </p-dropdown>
                     </div>
                 </div>
@@ -620,8 +621,9 @@
                             <th>Status</th>
                             <th>
                                 <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-success"
-                                        icon="pi pi-plus" (click)="addFA()" label="Famille Acte"></button>
+                                        icon="pi pi-plus" (click)="addFA()" pTooltip="Ajouter une famille d'acte manquante" label="Famille Acte"></button>
                             </th>
+                            <!-- <th> </th>  reserver pour la suppression des familles-->
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-plafond let-editing="editing" (onClick)="getsHistoriquePlafondGroupeActe(plafond)" let-ri1="rowIndex" let-expanded="expanded" >
@@ -636,7 +638,7 @@
                                                     (onChange)="onPlafondFamilleActeChange(plafond)"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{plafond.garantie?.libelle}}
+                                        {{plafond?.garantie?.libelle}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -653,7 +655,7 @@
                                         <!--<input pInputText type="text" [(ngModel)]="plafond.montantPlafond" [value]="plafond.montantPlafond | formatTableValue: 'number':true" placeholder="plafond/periode" required>-->
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{plafond.montantPlafond | formatTableValue: 'number':true}}
+                                        {{plafond?.montantPlafond | formatTableValue: 'number':true}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -677,7 +679,7 @@
                                         <!--<input pInputText type="text" [(ngModel)]="plafond.nombre">-->
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{plafond.nombre | formatTableValue: 'number':true}}
+                                        {{plafond?.nombre | formatTableValue: 'number':true}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -686,7 +688,7 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-dropdown [options]="tauxList" [(ngModel)]="plafond.taux" optionLabel="taux" placeholder="Select taux"
-                                                    [style]="{'width':'100%'}"></p-dropdown>
+                                                    [style]="{'width':'100%'}" (onChange)="modificationTauxCouverture(plafond)" ></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{plafond?.taux?.taux}}
@@ -698,10 +700,10 @@
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
                                         <p-multiSelect [options]="qualiteAssureList"  [(ngModel)]="plafond.domaine" optionLabel="libelle"
-                                                       [style]="{'width':'100%'}" placeholder="Select domaine"></p-multiSelect>
+                                                       [style]="{'width':'100%'}" placeholder="Select domaine" (onChange)="modificationQualiteAssure(plafond)"></p-multiSelect>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        <span *ngFor="let d of plafond.domaine">
+                                        <span *ngFor="let d of plafond?.domaine">
                                             {{d.libelle}}
                                         </span>
                                     </ng-template>
@@ -711,10 +713,10 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input  type="date"  [(ngModel)]="plafond.dateEffet" pInputText >
+                                        <input  type="date"  [(ngModel)]="plafond.dateEffet" (change)="modificationDateEffet(plafond)" pInputText >
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{plafond.dateEffet | formatTableValue : 'date'}}
+                                        {{plafond?.dateEffet | formatTableValue : 'date'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -722,7 +724,7 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat" placeholder="Select status"
+                                        <p-dropdown [options]="typeEtat" [(ngModel)]="plafond.etat"  (onChange)="modificationEtat(plafond)" placeholder="Select status"
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -736,6 +738,9 @@
                                 <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
                                 <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
                             </td>
+                            <!-- <td>
+                                <button type="button" pTooltip="Supprimer la famille d'acte de la liste" pButton pRipple class="p-button-danger " icon="pi pi-trash" (click)="supprimerFamilleActe(plafond, ri1)"></button>
+                            </td> -->
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="rowexpansion" let-plafond let-ri1>
@@ -994,6 +999,7 @@
 
 
                 </p-table>
+                
 </div>
 </td>
 </tr>
@@ -1004,8 +1010,7 @@
 </tr>
 </ng-template>
 </p-table>
-</ng-template>
-<p-fieldset legend="Enregistrer des plafonds modifiés" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
+<p-fieldset legend="Enregistrer les plafonds modifiés" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">
                                     
                                     
     <div class="p-grid p-justify-center">
@@ -1014,10 +1019,12 @@
     </div>
 
 </p-fieldset>
+</ng-template>
 
 
-        </p-tabPanel>
-        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT" >
+
+    </p-tabPanel>
+        <p-tabPanel header="ADHERENT" leftIcon="pi pi-user-edit" tooltip="ADHERENT" [disabled]="!avenantId">
             <div class="p-grid">
                 <div class="p-col-4">
                     <label class="p-fieldset-content">Choisir le Groupe</label>
@@ -1133,7 +1140,7 @@
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE" >
+        <p-tabPanel [disabled]="!avenantId" [style]="{'width': '100%'}" header="HISTORIQUE" leftIcon="pi pi-cog" tooltip="HISTORIQUE" >
           <app-plafond-famille-acte [etat]="'UPDATE'" [avenant1]="historiqueAvenant" [historiquePlafondFamilleActePlafongConfig] = "historiquePlafondFamilleActePlafongConfig"></app-plafond-famille-acte>
         </p-tabPanel>
 
