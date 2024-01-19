@@ -1232,8 +1232,9 @@ export class TierPayantEditionComponent implements OnInit {
     
 
     calculDebours() {
-        console.log("======idGenre=======",this.adherentSelected.qualiteAssure.code);
-        this.prestationAdd.taux = this.adherentSelected.groupe.taux;
+       if(this.montantConsomme == null) {
+        this.montantConsomme = 0;
+       }
         if(this.prestationAdd.sort === Sort.REJETE) {
             this.prestationAdd.debours = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
             this.prestationAdd.baseRemboursement = this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire;
@@ -1272,7 +1273,7 @@ export class TierPayantEditionComponent implements OnInit {
             });
         }
         console.log(this.montantConsomme , this.montantPlafond);
-        if(this.montantConsomme > this.montantPlafond1  ) {
+        if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && this.montantConsomme > this.montantPlafond1  ) {
             this.showToast('error', 'INFORMATION', 'Vous avez atteint votre plafond');
 
          //   console.log(this.montantConsomme , this.montantPlafond);
@@ -1426,7 +1427,7 @@ export class TierPayantEditionComponent implements OnInit {
             }
             console.log("=============this.montantPlafond12=============",this.montantPlafond1);
 
-            if((this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
+            if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
 
                 
                 this.prestationAdd.sort = Sort.ACCORDE;
@@ -1885,6 +1886,10 @@ export class TierPayantEditionComponent implements OnInit {
           if (value) {
               this.prestationAdd.montantPlafond = value.prefinancementState.montantPlafondSousActe; 
               this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
+              if(value?.prefinancementState?.montantPlafondSousActe == 0 ) {
+                this.prestationAdd.montantPlafond = null; 
+                this.montantPlafond =  null;
+              }
           } else {
             this.prestationAdd.sort = Sort.REJETE;
            // myForm.patchValue({montantPlafond: 0, sort: Sort.REJETE});
