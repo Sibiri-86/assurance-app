@@ -17,6 +17,9 @@ import { Police } from 'src/app/store/contrat/police/model';
 import {policeList, selectByteFile} from '../../../store/contrat/police/selector';
 import {loadPolice, loadPoliceAll} from 'src/app/store/contrat/police/actions';
 import { element } from 'protractor';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { Exercice } from 'src/app/store/contrat/exercice/model';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-assure',
   templateUrl: './assure.component.html',
@@ -33,15 +36,19 @@ export class AssureComponent implements OnInit, OnDestroy {
   garantList: Array<Garant>;
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
-  police: Police;
+  police: Police = {};
   garant: Garant;
   infosAdherent: boolean = false;
   displayPhotos: Boolean = false;
   pictureUrl='';
+  exerciceList : Exercice[];
+  exercice : Exercice = {};
 
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
-              private store: Store<AppState>) {
+              private store: Store<AppState>,
+              private adherentService: AdherentService,
+              private messageService: MessageService,) {
                 this.breadcrumbService.setItems([{ label: 'Assuré' }]);
               }
 
@@ -76,18 +83,39 @@ export class AssureComponent implements OnInit, OnDestroy {
     });
 
   }
+  filtrerExerciceByPolice(police: Police){
+    this.exerciceList = [];
+    this.exercice = {};
+  if(police != null) {
+    this.adherentService.$getExerciceByPoliceId(police.id)
+    .subscribe((res) => {
+      this.exerciceList = res;
+      console.log('res ====== ', this.exerciceList);
+    });
+  }
+  }
 
   filtrer(){
     let idGarantie = '';
     let idPolice = '';
+    let exoId = '';
     if (this.garant){
       idGarantie = this.garant.id;
     }
     if (this.police){
       idPolice = this.police.id;
     }
-    this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie,
-      idPolice}));
+    if(this.exercice) {
+      exoId = this.exercice.id;
+    }
+    if(this.police?.id != null && this.exercice?.id != null) {
+      this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie,
+        idPolice, exoId}));
+    } else {
+      this.addMessage('error', 'selection non valide',
+                'Veuillez selectionner la police et au moins un exercice afin de continuer !!!');
+    }
+    
   }
 
   ngOnDestroy(): void{
@@ -97,6 +125,13 @@ export class AssureComponent implements OnInit, OnDestroy {
   voirAssure(adherent: Adherent){
     this.adherent = {...adherent};
     this.infosAdherent = true;
+  }
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
   voirPhotos(ad:Adherent) {
