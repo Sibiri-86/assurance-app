@@ -134,8 +134,8 @@ export class AdherentEffects {
     fetchAdherentAll$ = createEffect(() =>
                 this.actions$.pipe(
                     ofType(featureActions.loadAdherentAll),
-                    mergeMap(({idGarantie, idPolice}) =>
-                        this.AdherentService.$getAdherentsAll(idGarantie, idPolice).pipe(
+                    mergeMap(({idGarantie, idPolice, exoId}) =>
+                        this.AdherentService.$getAdherentsAll(idGarantie, idPolice, exoId).pipe(
                             switchMap(value => [
                                 //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                                 featureActions.setAdherent(value)

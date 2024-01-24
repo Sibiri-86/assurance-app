@@ -10,16 +10,24 @@
                     -->
                     <div>
                     <p-dropdown inputId="souscripteur" dataKey="id" [filter]="true"
-                                        showClear="true" [options]="policeList"
-                                        [autoDisplayFirst]="false"
-                                        placeholder="Selectionnez le souscripteur"
-                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="police"></p-dropdown>
+                            showClear="true" [options]="policeList"
+                            [autoDisplayFirst]="false" (onChange)="filtrerExerciceByPolice(police)"
+                            placeholder="Selectionnez le souscripteur"
+                            optionLabel="nom" class="p-mr-2" [(ngModel)]="police">
+                    </p-dropdown>
+                    <p-dropdown inputId="Exercice" dataKey="id" [filter]="true"
+                            showClear="true" [options]="exerciceList"
+                            [autoDisplayFirst]="false"
+                            placeholder="Selectionnez l'exercice"
+                            optionLabel="nomExo" class="p-mr-2" [(ngModel)]="exercice">
+                    </p-dropdown>
                                         
                     <p-dropdown inputId="garant" dataKey="id" [filter]="true"
-                                        showClear="true" [options]="garantList"
-                                        [autoDisplayFirst]="false"
-                                        placeholder="Selectionnez le garant"
-                                        optionLabel="nom" class="p-mr-2" [(ngModel)]="garant"></p-dropdown>
+                            showClear="true" [options]="garantList"
+                            [autoDisplayFirst]="false"
+                            placeholder="Selectionnez le garant"
+                            optionLabel="nom" class="p-mr-2" [(ngModel)]="garant">
+                    </p-dropdown>
                     
                     <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
                     </div>
@@ -47,7 +55,7 @@
                         <th pSortableColumn="nom">Matricule <p-sortIcon field="matricule"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="width: 200px">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="prenom" style="width: 12rem">Prenom<p-sortIcon field="prenom"></p-sortIcon></th>
-                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre?.libelle"></p-sortIcon></th>
                         <th pSortableColumn="qualiteAssure" style="width: 12rem">Qualité assuré<p-sortIcon field="qualiteAssure"></p-sortIcon></th>
                         <th pSortableColumn="souscripteur" style="width: 12rem">Souscripteur<p-sortIcon field="souscripteur"></p-sortIcon></th>
                         <th pSortableColumn="garant" style="width: 12rem">Garant<p-sortIcon field="qualiteAssure"></p-sortIcon></th>
@@ -71,8 +79,8 @@
 
                         </td>
                         
-                        <td><span class="p-column-title">{{adherent.genre.libelle}}</span></td>
-                        <td><span class="p-column-title">{{adherent.qualiteAssure.libelle}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                        <td><span class="p-column-title">{{adherent?.qualiteAssure?.libelle}}</span></td>
                         <td>
                             <span class="p-column-title">{{adherent.groupe.police.nom}}</span>
                         </td>

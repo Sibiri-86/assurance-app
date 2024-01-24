@@ -53,9 +53,11 @@
                         <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th> -->
-                        <th>acte</th>
-                        <th>Montant plafond par acte</th>
+                        <th>Acte</th>
+                        <th>Montant plafond/acte</th>
+                        <th>Montant plafond/période</th>
                         <th>Périodicité</th>
+                        <th>Taux</th>
                         <th>Montant prime</th>
                         <th>Date d'effet</th>
                         
@@ -80,11 +82,31 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafond">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.montantPlafond}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
                                     <p-dropdown [options]="dimensionPeriodeList" [(ngModel)]="convention.dimensionPeriode" optionLabel="libelle" placeholder="Select periode"
                                                 [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{convention?.dimensionPeriode?.libelle}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafond">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{convention.montantPlafond}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>

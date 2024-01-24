@@ -30,10 +30,10 @@ $getAdherentsByExerciceAndGroupeId(idGroupe: string, exerciceId: string): Observ
   );
 }
 
-$getAdherentsAll(idGarantie: string, idPolice: string): Observable<AdherentList> {
+$getAdherentsAll(idGarantie: string, idPolice: string, exoId: string): Observable<AdherentList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}`, {params: createRequestOption({idGarantie,
-     idPolice})}).pipe(
+     idPolice, exoId})}).pipe(
     map((response: AdherentList) => response),
     catchError(this.handleError())
   );
@@ -390,6 +390,15 @@ findAdherantActuallListByExerciceWithBaremeDataId(idExercice: string): Observabl
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_EXERCICE_ACTUALL_LIST_WITH_BAREME_DATA)}/${idExercice}`).pipe(
       map((response: Adherent[]) => response),
       catchError(this.handleError())
+  );
+}
+
+$getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_EXERCICE_BY_POLICE)}`, {params: createRequestOption({idPolice})})
+  .pipe(
+    map((response: Exercice[]) => response),
+    catchError(this.handleError())
   );
 }
 

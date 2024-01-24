@@ -506,4 +506,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly CONTRAT_EXERCICE_BY_POLICE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/findExerciceValidByPoliceId`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }
