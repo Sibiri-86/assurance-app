@@ -1379,8 +1379,11 @@ findMontantPlafond(event){
 
 findTaux() {
   this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.id, this.adherentSelected.id).subscribe((rest)=>{
-    console.log("============tauuuuxxxxx==========", rest);
-    this.prestationPopForm.get('taux').setValue(rest);
+  //  console.log("============tauuuuxxxxx==========", rest);
+    if(rest) {
+      this.prestationPopForm.get('taux').setValue(rest);
+    }
+    
   });
   
 }
