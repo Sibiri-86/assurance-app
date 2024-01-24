@@ -265,4 +265,6 @@ export interface AddSousActeDto {
     sousActeId?: string;
     montantPrime?: number;
     dateEffet?: Date;
+    montantPlafondParActe?: number;
+    taux?: Taux;
 }

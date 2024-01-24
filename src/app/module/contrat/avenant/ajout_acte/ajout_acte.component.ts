@@ -8,7 +8,7 @@ import { Acte } from 'src/app/store/parametrage/acte/model';
 import { Garant } from 'src/app/store/parametrage/garant/model';
 import { Garantie } from 'src/app/store/parametrage/garantie/model';
 import { Pays } from 'src/app/store/parametrage/pays/model';
-import { PlafondFamilleActe } from 'src/app/store/parametrage/plafond/model';
+import { PlafondFamilleActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 import { SousActe } from 'src/app/store/parametrage/sous-acte/model';
 import { Taux } from 'src/app/store/parametrage/taux/model';
 import { Territorialite } from 'src/app/store/parametrage/territorialite/model';
@@ -166,6 +166,14 @@ export class AjoutActeComponent implements OnInit {
           this.dimensionPeriodeList = value.slice();
         }
       });
+
+      this.tauxList$ = this.store.pipe(select(tauxSelector.tauxList));
+        this.store.dispatch(loadTaux());
+        this.tauxList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.tauxList = value.slice();
+          }
+    });
   }
  
 
@@ -247,8 +255,10 @@ export class AjoutActeComponent implements OnInit {
   saveAherentNewGroupe() {
     this.addSousActeDto.groupeId = this.groupeSelectedPermuter.id;
     console.log(this.addSousActeDto);
-    if(this.addSousActeDto.montantPlafond != null || this.addSousActeDto.dimensionPeriode != null || this.addSousActeDto.dateEffet != null) {
+    if(this.addSousActeDto.montantPlafond != null || this.addSousActeDto.dimensionPeriode != null || this.addSousActeDto.dateEffet != null
+      || this.addSousActeDto.taux ) {
       this.store.dispatch(featureActionHistoriqueAdherant.ajoutActe(this.addSousActeDto));
+      this.listeSousActe = [];
     } else {
       this.messageService.add({severity:'error', summary: 'Erreur', detail:'Veuillez Renseigner les informations nécéssaires'});
     }
@@ -294,12 +304,14 @@ onRowEditSave(sa: SousActe) {
   this.addSousActeDto.dimensionPeriode = sa.dimensionPeriode;
   this.addSousActeDto.domaine = this.selectedQualiteAssure;
   this.addSousActeDto.montantPlafond = sa.montantPlafond;
+  this.addSousActeDto.montantPlafondParActe = sa.montantPlafondParActe;
   this.addSousActeDto.groupeId = this.groupeSelectedPermuter.id;
   this.addSousActeDto.idTypeActe =  sa.idTypeActe;
   this.addSousActeDto.exerciceId = this.exerciceRevenu.id;
   this.addSousActeDto.avenantId = this.avenantId;
   this.addSousActeDto.sousActeId = sa.id;
   this.addSousActeDto.dateEffet = sa.dateEffet;
+  this.addSousActeDto.taux = sa.taux;
   this.addSousActeDto.montantPrime = sa.montantPrime;
   console.log('ssssssssssssssssssssssss', this.addSousActeDto);
   delete this.clonedSousActe[sa.id];
@@ -334,6 +346,7 @@ onRowSelect(event: any) {
   }
 
   selectSousActe(sa: SousActe) {
+    sa.taux = this.groupeSelectedPermuter.taux;
     this.listeSousActe.push(sa);
     console.log("this listeSousActe", this.listeSousActe);
   }
@@ -342,5 +355,12 @@ onRowSelect(event: any) {
     this.listeSousActeFiltrer = this.sousActeList.filter(s => s.idTypeActe === a.id);
     console.log(this.listeSousActeFiltrer);
   }
+
+  modificationTauxCouverture(plafondSousActe: PlafondSousActe) {
+      
+    if(plafondSousActe.taux) {
+       plafondSousActe.taux = this.groupeSelectedPermuter.taux;
+      }
+    }
 
 }
