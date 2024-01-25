@@ -445,7 +445,7 @@
 
                                 <div class="p-field p-col">
                                     <label for="nombreActe">Nombre Acte <span class="required">*</span></label>
-                                    <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}" formControlName="nombreActe" mode="decimal" locale="fr-FR"></p-inputNumber>  
+                                    <p-inputNumber  [inputStyle]="{'font-weight': 'bold'}" formControlName="nombreActe" mode="decimal" (onBlur)="verificationTaux()" locale="fr-FR"></p-inputNumber>  
                                 </div>
                                    
                                 <div class="p-field p-col">
@@ -535,6 +535,7 @@
                     </form>
                 </div>
             </ng-template>
+           
      </p-dialog>
 
      <p-dialog header="Ajouter des observations au(x) produit(s) non pris en charge" styleClass="p-datatable-striped" [position]="position" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"

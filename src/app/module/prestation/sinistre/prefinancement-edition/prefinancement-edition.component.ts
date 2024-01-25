@@ -409,10 +409,14 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 }
 
 findMontantPlafond(event){
+  this.montantPlafond1 = null;
   this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
 
+    if(rest) {
       this.montantPlafond1 = rest;
       console.log("==========this.montantPlafond1==========", this.montantPlafond1);
+     
+    }
      
   });
 }
@@ -875,29 +879,36 @@ findMontantPlafond(event){
   }
   selectDateSoinsSousActe() {
     console.log( this.adherentSelected);
+    this.prestationPopForm.get('taux').setValue('');
+    this.prestationPopForm.get('montantPlafond').setValue(null);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
     console.log("========================" ,this.prestationPopForm.get('sousActe').value);
+    console.log('le montantPlafond de montantPlafond est ********************' + this.prestationPopForm.get('montantPlafond').value);
     this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
+    
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
       this.montantConvention = rest;
 
   });
     if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
-    this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+
+      
+this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
-        console.log('la valeur de i est ********************' + this.numberPrestation);
-        console.log('le montant de i est ********************' + value);
+        
+        console.log('la valeur de i est ********************', featureActionPrefinancement.checkPlafond);
+        console.log('le montant de i est ********************', value);
         this.prestationPopForm.get('montantPlafond').setValue(value);
         if(value == 0 ) {
           this.prestationPopForm.get('montantPlafond').setValue('');
         }
-        //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
       } else {
-        this.prestationPopForm.get('montantPlafond').setValue('');
+        this.prestationPopForm.get('montantPlafond').setValue(null);
+        
       }
     });
     }
@@ -1169,7 +1180,19 @@ findMontantPlafond(event){
   
   }
 
+  verificationTaux() {
+    if(!this.prestationPopForm.get('taux').value) {
+      this.prestationPopForm.get('nombreActe').setValue(null);
+      this.prestationPopForm.get('montantPlafond').setValue(null);
+      this.messageService.addAll([{severity:'error', summary:'INFORMATION', detail:'le sousActe n\'est pas valide'},
+      {severity:'error', summary:'Info ', detail:'Veuillez paramétrer ce sousActe dans le barème'}]);
+    
+    }
+  }
+
   calculDebours1() {
+
+    
     if (this.prestationPopForm.get('sort').value !== Sort.REJETE) {
       
     
@@ -1379,8 +1402,12 @@ findMontantPlafond(event){
 
 findTaux() {
   this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.id, this.adherentSelected.id).subscribe((rest)=>{
-    console.log("============tauuuuxxxxx==========", rest);
-    this.prestationPopForm.get('taux').setValue(rest);
+    if(rest) {
+      this.prestationPopForm.get('taux').setValue(rest);
+    } else {
+      this.prestationPopForm.get('taux').setValue('');
+    }
+    
   });
   
 }
@@ -1657,7 +1684,7 @@ verifieDateSoins(event){
       this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
   }
     console.log( "999999999999999", this.prestationsList);
-    
+    this.prestationPopForm.get('montantPlafond').setValue(0);
    
     
     
