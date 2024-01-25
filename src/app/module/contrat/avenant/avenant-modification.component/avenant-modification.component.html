@@ -1261,7 +1261,7 @@
         </p-tabPanel>
 
         <!-- <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-user-edit" tooltip="BASCULER" [disabled]="!avenantId"></p-tabPanel> -->
-        <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-plus" tooltip="AJOUT ACTES" >
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="AJOUT ACTES" leftIcon="pi pi-plus" tooltip="AJOUT ACTES" [disabled]="!avenantId">
 
             <app-ajout_acte [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantId"></app-ajout_acte>
         </p-tabPanel>
