@@ -72,10 +72,10 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafond">
+                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafondParActe">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{convention.montantPlafond}}
+                                    {{convention.montantPlafondParActe}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -98,15 +98,17 @@
                                 <ng-template pTemplate="output">
                                     {{convention?.dimensionPeriode?.libelle}}
                                 </ng-template>
-                            </p-cellEditor>
+                            </p-cellEditor> 
                         </td>
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="convention.montantPlafond">
+                                    <p-dropdown [options]="tauxList" [(ngModel)]="convention.taux" optionLabel="taux" placeholder="Select un taux"
+                                     [style]="{'width':'100%'}">
+                                    </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{convention.montantPlafond}}
+                                    {{convention?.taux?.taux}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>

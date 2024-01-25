@@ -1,5 +1,6 @@
 import { DimensionPeriode } from "../dimension-periode/model";
 import { QualiteAssure } from "../qualite-assure/model";
+import { Taux } from "../taux/model";
 
 export interface SousActe {
     id?: string;
@@ -16,6 +17,8 @@ export interface SousActe {
     domaine?: Array<QualiteAssure>;
     montantPlafond?: number;
     montantPrime?: number;
+    taux?: Taux;
+    montantPlafondParActe?: number;
 }
 export interface SousActeList {
     typeSousActeDtoList?: Array<SousActe>;
