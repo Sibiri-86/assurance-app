@@ -624,7 +624,7 @@
             
             <div class="p-field p-col">
                 <label for="nombreActe" id="nombreActe">Nombre Acte <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.medecin" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte"></p-inputNumber>
+                <p-inputNumber name="nombreActe" [disabled]="!prestationAdd.medecin" [inputStyle]="{'font-weight': 'bold'}" [(ngModel)]="prestationAdd.nombreActe" mode="decimal" locale="fr-FR" placeholder="Nombre Acte" (onBlur)="verificationTaux()"></p-inputNumber>
             </div>
             <div class="p-field p-col">
              <label for="coutUnitaire" id="coutUnitaire">Cout unitaire <span style="color: red !important; size: 1.4em;" class="required">*</span></label>

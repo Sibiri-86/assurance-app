@@ -1229,7 +1229,15 @@ export class TierPayantEditionComponent implements OnInit {
             }
         });
     }
-    
+    verificationTaux() {
+        if(!this.prestationAdd.taux) {
+          this.prestationAdd.nombreActe = null;
+          this.prestationAdd.montantPlafond = null;
+          this.messageService.addAll([{severity:'error', summary:'INFORMATION', detail:'le sousActe n\'est pas valide'},
+          {severity:'error', summary:'Info ', detail:'Veuillez paramétrer ce sousActe dans le barème'}]);
+        
+        }
+      }
 
     calculDebours() {
        if(this.montantConsomme == null) {
@@ -1516,6 +1524,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
     findTaux() {
+        this.prestationAdd.taux  = null;
         this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationAdd?.sousActe?.id, this.adherentSelected.id).subscribe((rest)=>{
           
           this.prestationAdd.taux  =rest;
