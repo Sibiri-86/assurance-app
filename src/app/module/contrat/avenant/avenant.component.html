@@ -52,41 +52,44 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 3rem">
+                                <!-- <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                                </th>
+                                </th> -->
                                 <th pSortableColumn="numero" style="width: 12rem">Numero
                                     <p-sortIcon field="numero"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="nom" style="width: 15rem">Souscripteur
+                                <th pSortableColumn="nom" style="width: 26rem">Souscripteur
                                     <p-sortIcon field="nom"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="taux" style="width: 12rem">Personne ressource 
+                                <th pSortableColumn="taux" style="width: 16rem">Personne ressource 
                                     <p-sortIcon field="taux.taux"></p-sortIcon></th>
                                 <!--<th pSortableColumn="territorialite" style="width: 14rem">Territorialite
                                     <p-sortIcon field="territorialite.libelle"></p-sortIcon>
                                 </th>-->
-                                <th pSortableColumn="duree" style="width: 7rem">Duree
+                                <th pSortableColumn="duree" style="width: 6rem">Duree
                                     <p-sortIcon field="duree"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="dateEffet" style="width: 14rem">Date effet
+                                <th pSortableColumn="dateEffet" style="width: 8rem">Date effet
                                     <p-sortIcon field="dateEffet"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="dateEcheance" style="width: 14rem">Date écheance
+                                <th pSortableColumn="dateEcheance" style="width: 8rem">Date écheance
                                     <p-sortIcon field="dateEcheance"></p-sortIcon>
                                 </th>
+                                <!-- <th style="width: 12rem">Etat</th> -->
                                 <th></th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-police>
                             <tr>
-                                <td>
+                               <!--  <td>
                                     <p-tableCheckbox [value]="police"></p-tableCheckbox>
-                                </td>
+                                </td> -->
         
                                 <td><span class="p-column-title">{{police.numero}}</span>
                                 </td>
-                                <td><span class="p-column-title">{{police.nom}}</span>
+                                <td>
+                                    <p-badge *ngIf="police.isEnCours" value="{{police.nom}}"  severity="success"></p-badge>
+                                    <p-badge *ngIf="!police.isEnCours" value="{{police.nom}}" severity="danger"></p-badge>
                                 </td>
                                 <td><span class="p-column-title">{{police.personneRessource}}</span>
                                 </td>
@@ -102,6 +105,9 @@
                                 <td>
                                     <span class="p-column-title">{{police.dateEcheance | formatTableValue : 'date'}}</span>
                                 </td>
+                                <!-- <td>
+                                    <span class="p-column-title">{{police.dateEcheance | formatTableValue : 'date'}}</span>
+                                </td> -->
                                 <td>
                                     <button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-pencil"
                                             pTooltip="editer" class="p-button-rounded p-button-success p-mr-1"

@@ -64,6 +64,7 @@ export interface Police{
     typeDuree?: TypeDuree;
     isPlafond?: boolean;
     isResilie?: boolean;
+    isEnCours?:boolean;
 }
 
 export interface Statistique {

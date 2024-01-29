@@ -184,5 +184,15 @@ getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(idGroupe: string, idExerc
   return this.http.get<PlafondFamilleActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/famille-acte-groupe-byGroupe-and-Exercice-Renouv`,
       {params: createRequestOption({idGroupe, idExercice}), observe: 'response'});
 }
+
+findPlafondGroupeActeByPlafondGroupeFamilleActeId(exoId: string, groupeId: string, pfgaId: string): Observable<HttpResponse<PlafondActe[]>> {
+  return this.http.get<PlafondActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeActeByPlafondGroupeFamilleActeId`,
+      {params: createRequestOption({exoId, groupeId, pfgaId}), observe: 'response'});
+}
+
+findPlafondGroupeSousActeByPlafondGroupeActeId(exoId: string, groupeId: string, pfgaId: string): Observable<HttpResponse<PlafondSousActe[]>> {
+  return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeSousActeByPlafondGroupeActeId`,
+      {params: createRequestOption({exoId, groupeId, pfgaId}), observe: 'response'});
+}
 }
 
