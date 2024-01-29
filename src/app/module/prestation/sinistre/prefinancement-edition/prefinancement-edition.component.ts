@@ -72,6 +72,8 @@ import { Router } from '@angular/router';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
+import { PlafondService } from 'src/app/store/contrat/plafond/service';
+import { PlafondActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 
 
 @Component({
@@ -157,8 +159,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   adherentsList: Array<Adherent> = [];
   adherentsSelected: Adherent = {};
   policeList$: Observable<Array<Police>>;
-    policeList: Array<Police>;
-    police: Police;
+  policeList: Array<Police>;
+  police: Police;
+  listActe: Array<PlafondActe>;
+  listSousActe: Array<PlafondSousActe>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -166,6 +170,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                private tierPayantService: TierPayantService,
                private prefinancementService: PrefinancementService,
                private adherentService: AdherentService,
+               private plafondService: PlafondService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router,
                ) {
@@ -397,9 +402,9 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
    }
 
    findMontantConsomme(event){
-    console.log("====================verifier", event.value?.id);
+    console.log("====================verifier", event.value?.sousActe?.id);
     console.log(event);
-    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
         console.log("==========rest==========", rest);
@@ -409,8 +414,9 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 }
 
 findMontantPlafond(event){
+  console.log("==========event========== ", event);
   this.montantPlafond1 = null;
-  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.acte?.id).subscribe(rest=>{
 
     if(rest) {
       this.montantPlafond1 = rest;
@@ -762,14 +768,14 @@ findMontantPlafond(event){
       }
     });
 
-    this.acteList$ = this.store.pipe(select(acteSelector.acteList));
+    /* this.acteList$ = this.store.pipe(select(acteSelector.acteList));
     this.store.dispatch(loadActe());
     this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.acteList = value.slice();
         this.acteListFilter = this.acteList;
       }
-    });
+    }); */
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
@@ -883,9 +889,9 @@ findMontantPlafond(event){
     this.prestationPopForm.get('montantPlafond').setValue(null);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
-    console.log("========================" ,this.prestationPopForm.get('sousActe').value);
+    console.log("========================" ,this.prestationPopForm.get('sousActe').value.sousActe);
     console.log('le montantPlafond de montantPlafond est ********************' + this.prestationPopForm.get('montantPlafond').value);
-    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value.sousActe;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
@@ -931,7 +937,14 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
   selectActe(event){
     console.log(event);
-    this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+    // this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+
+    console.log("this.adherentSelected ", this.adherentSelected);
+    // this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+    this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+    subscribe((res) =>{
+      this.listSousActe = res.body;
+    });
   }
   
 
@@ -1401,7 +1414,7 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
 
 findTaux() {
-  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.id, this.adherentSelected.id).subscribe((rest)=>{
+  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.sousActe.id, this.adherentSelected.id).subscribe((rest)=>{
     if(rest) {
       this.prestationPopForm.get('taux').setValue(rest);
     } else {
@@ -1578,7 +1591,13 @@ verifieDateSoins(event){
     } else {
       this.displayFP = false;
     }
-    this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+    console.log("this.adherentSelected ", this.adherentSelected);
+    // this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+    this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+    subscribe((res) =>{
+      this.listActe = res.body;
+    });
+    console.log("this.listActe  ", this.listActe );
     // this.findMontantTotalConsommeFamille();
   }
   changeDisplay() {
@@ -1712,6 +1731,7 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
 } else {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   }
+  console.log("85858585858585858585 ",prestation);
   this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, prestation.sousActe?.id).subscribe(rest=>{
 
     this.montantConsomme = rest - prestation.montantRembourse ;
