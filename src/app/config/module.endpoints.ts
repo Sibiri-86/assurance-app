@@ -511,4 +511,9 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly HISTORIQUE_AVENANT_MAJ_ADHERENT_NUMERO = {
+            prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload_majAdherentNumero`,
+            mock: `assets/mock/contrat/historique-avenant.mock.json`
+        };
+
 }
