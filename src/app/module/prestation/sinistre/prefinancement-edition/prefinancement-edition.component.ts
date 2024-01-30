@@ -768,14 +768,14 @@ findMontantPlafond(event){
       }
     });
 
-    /* this.acteList$ = this.store.pipe(select(acteSelector.acteList));
+    this.acteList$ = this.store.pipe(select(acteSelector.acteList));
     this.store.dispatch(loadActe());
     this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.acteList = value.slice();
         this.acteListFilter = this.acteList;
       }
-    }); */
+    }); 
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
@@ -937,14 +937,14 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
   selectActe(event){
     console.log(event);
-    // this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+     this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
 
     console.log("this.adherentSelected ", this.adherentSelected);
-    // this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-    this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+    //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+   /* this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
     subscribe((res) =>{
       this.listSousActe = res.body;
-    });
+    });*/
   }
   
 
@@ -1593,11 +1593,11 @@ verifieDateSoins(event){
       this.displayFP = false;
     }
     console.log("this.adherentSelected ", this.adherentSelected);
-    // this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-    this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+   /* this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
     subscribe((res) =>{
       this.listActe = res.body;
-    });
+    });*/
     console.log("this.listActe  ", this.listActe );
     // this.findMontantTotalConsommeFamille();
   }
