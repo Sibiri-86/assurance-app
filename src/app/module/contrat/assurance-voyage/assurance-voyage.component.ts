@@ -74,6 +74,7 @@ import { AssuranceVoyageService } from 'src/app/store/contrat/assurance-voyage/s
 import * as assuranceVoyageSelector from "../../../store/contrat/assurance-voyage/selector";
 import * as featureActionAssuranceVoyage from '../../../store/contrat/assurance-voyage/actions';
 import { loadAssuranceVoyageList } from '../../../store/contrat/assurance-voyage/actions';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -265,7 +266,8 @@ findMontantPlafond(event){
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
-          etat: TypeEtatSinistre.VALIDE}));
+          etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
