@@ -143,4 +143,18 @@ export class BonPriseEnChargeEffects {
         )
     )
     );
+
+    loadBonPeriode$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadBonPriseEnChargePeriode),
+        mergeMap(({dateD, dateF}) =>
+            this.bonPriseEnChargeService.$getBonsByPeriode(dateD,dateF).pipe(
+                switchMap(value => [
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setBon(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
 }

@@ -13,3 +13,5 @@ export const setReportBon = createAction('[set Report] set Report Bon', props<{r
 export const FetchReportBon = createAction('[Report] Fetch Report Bon', props<Report>());
 export const valideBon = createAction('[App Init] Bon Prise en charge valide', props<BonPriseEnCharge>());
 export const invalideBon = createAction('[App Init] Bon Prise en charge invalide', props<BonPriseEnCharge>());
+export const loadBonPriseEnChargePeriode = createAction('[App Init] load BonPriseEnCharge by periode', props<{dateD: string,
+    dateF: string}>() );
