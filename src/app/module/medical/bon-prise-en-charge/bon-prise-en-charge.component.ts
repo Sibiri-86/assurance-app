@@ -1137,6 +1137,7 @@ console.log(myForm);
   }
 
   addPrestation1() {
+
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
@@ -1147,6 +1148,8 @@ console.log(myForm);
     }
    
    this.prestationPopForm.reset();
+   this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value.sousActe);
+    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value.acte);
    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelectedfinal.numero);
    this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
     this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
