@@ -1457,11 +1457,17 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
 
 findTaux() {
-  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value?.sousActe?.id, this.adherentSelected?.id).subscribe((rest)=>{
+  console.log('sous acte id', this.prestationPopForm.get('sousActe').value);
+  console.log('sous acte id', this.prestationPopForm.get('sousActe').value?.sousActe?.id);
+  console.log('groupe id', this.adherentSelected.groupe.id);
+  console.log('adherent id', this.adherentSelected.id);
+  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value?.id, this.adherentSelected?.id).subscribe((rest)=>{
     if(rest) {
       this.prestationPopForm.get('taux').setValue(rest);
+      console.log('111111111111');
     } else {
       this.prestationPopForm.get('taux').setValue('');
+      console.log('222222222222');
     }
     
   });
