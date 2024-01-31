@@ -395,4 +395,16 @@ private handleError<T>() {
         console.log('suppression en cours 11111111111....');
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/delete/${historiqueAvenantId}/${groupeId}`);
     }
+
+    postMisAJoursAdherentNumero(file: File): Observable<any> {
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
+        console.log('++++++++++++++++++data++++++++++++++++++++++');
+        console.log(data.append);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_MAJ_ADHERENT_NUMERO)}`, data, {headers: headers});
+    }
 }

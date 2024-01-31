@@ -67,6 +67,8 @@ import { loadCommune } from 'src/app/store/parametrage/commune/actions';
 import * as communeSelector from "../../../store/parametrage/commune/selector";
 import { Commune } from 'src/app/store/parametrage/commune/model';
 import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
+import { TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 
 
 @Component({
@@ -123,6 +125,7 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
   prestataire: Prestataire = {};
   prestataire2: Array<Prestataire>;
   prestataireToSave: Array<Prestataire> = [];
+  isImport = 'NON';
 
 
   constructor( private store: Store<AppState>,
@@ -131,7 +134,8 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
                private messageService: MessageService,
                private garantieService: GarantieService,
                private breadcrumbService: BreadcrumbService,
-               private prestataireService: PrestataireService) {
+               private prestataireService: PrestataireService,
+               private historiqueAvenantService: HistoriqueAvenantService) {
      this.breadcrumbService.setItems([{ label: 'Mis à jours des données des prestataires (écran à caché après cette maj)' }]);
 }
 
@@ -451,6 +455,41 @@ onRowEditSave(prestataire: Prestataire) {
 onRowEditCancel(prestataire: Prestataire, index: number) {
     this.prestataire2[index] = this.clonedProducts[prestataire.id];
     delete this.clonedProducts[prestataire.id];
+}
+
+exportModel(): void {
+  // this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+  this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+      (res) => {
+        const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+        const  fileUrl = URL.createObjectURL(file);
+        window.open(fileUrl);
+      }
+  );
+}
+
+getAdherentFiles(event: any): void {
+  console.log(event);
+  this.historiqueAvenantService.postMisAJoursAdherentNumero(event).subscribe(
+      (res) => {
+        console.log('liste des adhérents === ');
+        console.log(res);
+        /* res.forEach(adherentFamille => {
+          console.log(adherentFamille.adherent.profession);
+          console.log(adherentFamille.famille);
+          if (!adherentFamille.adherent && adherentFamille.adherent.profession === '') {
+            adherentFamille.adherent.profession = {};
+          }
+          if (adherentFamille.famille) {
+            adherentFamille.famille.forEach(adFam => {
+              if (adFam.profession === '') {
+                adFam.profession = {};
+              }
+            });
+          }
+        }); */
+      }
+  );
 }
 
 }

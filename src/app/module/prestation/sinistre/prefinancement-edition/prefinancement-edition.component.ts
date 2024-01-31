@@ -405,9 +405,9 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
    }
 
    findMontantConsomme(event){
-    console.log("====================verifier", event.value?.sousActe?.id);
+    console.log("====================verifier", event.value?.id);
     console.log(event);
-    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
         console.log("==========rest==========", rest);
@@ -1301,7 +1301,8 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
       this.prestationPopForm.get('coutUnitaire').value});
     }
 
-    if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
+    if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
+      console.log("cas 11111111111");
       myForm.patchValue({montantRembourse:
         (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
         debours: this.prestationPopForm.get('nombreActe').value *
@@ -1397,7 +1398,7 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
           this.prestationPopForm.get('montantRembourse').value
         });
         if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
-          if(this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
+          if(this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
              // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
              myForm.patchValue({
               montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,
@@ -1456,7 +1457,7 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
 
 findTaux() {
-  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.sousActe.id, this.adherentSelected.id).subscribe((rest)=>{
+  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value?.sousActe?.id, this.adherentSelected?.id).subscribe((rest)=>{
     if(rest) {
       this.prestationPopForm.get('taux').setValue(rest);
     } else {
@@ -1716,6 +1717,8 @@ verifieDateSoins(event){
 
 
   addPrestation1() {
+    this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value.sousActe);
+    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value.acte);
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
@@ -1764,6 +1767,7 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.compteur = rowIndex;
   this.adherentSelected = prestation?.adherent;
   this.prestationPopForm.patchValue(prestation);
+  this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe'));
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   this.prestationPopForm.get('matriculeAdherent').setValue(prestation.adherent.numero);
   this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);
@@ -1775,7 +1779,7 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
 } else {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   }
-  console.log("85858585858585858585 ",prestation);
+  console.log("85858585858585858585 ",prestation.sousActe?.id);
   this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, prestation.sousActe?.id).subscribe(rest=>{
 
     this.montantConsomme = rest - prestation.montantRembourse ;

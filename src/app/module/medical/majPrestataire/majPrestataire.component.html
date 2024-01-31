@@ -544,4 +544,33 @@
         </p-dialog>
         <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
     </div>
+
+    <p-fieldset legend="Import adhérent" toggleable="true">
+        <div class="p-field p-col-12">
+            <div class="p-field p-col-7">
+                <div class="p-field-checkbox">
+                    <label class="p-badge-success">Souhaitez vous importer les adhérents à travers un fichier excel
+                        ?</label>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="OUI" [(ngModel)]="isImport" inputId="city1"
+                            id="city1"></p-radioButton>
+                        <label for="city1">OUI</label>
+                    </div>
+                    <div class="p-field-radiobutton p-ml-5 p-mt-2"><br>
+                        <p-radioButton name="city" value="NON" [(ngModel)]="isImport" inputId="city2"
+                            id="city2"></p-radioButton>
+                        <label for="city2">NON </label>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-5" *ngIf="isImport === 'OUI'">
+                <app-upload-file (fileEvent)="getAdherentFiles($event)"></app-upload-file>
+            </div>
+            <div class="p-field p-col-2">
+                <button pButton pRipple icon="pi pi-upload" pTooltip="Exporter un model" type="button"
+                    class="p-button p-button-icon" label="export model" (click)="exportModel()">
+                </button>
+            </div>
+        </div>
+    </p-fieldset>
 </div>
