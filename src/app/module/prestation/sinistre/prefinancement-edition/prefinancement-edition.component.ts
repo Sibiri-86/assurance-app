@@ -226,9 +226,11 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     console.log("=============this.adherentsSelected=====================");
     console.log(this.adherentsSelected);
     console.log("==========this.adherentsSelected========================");
-
+    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
+    
     if (this.adherentsSelected) {
-        
+      
+
       if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
         /* console.log(this.prestationsList.length);
         console.log("====adherentSelected2021=======");
@@ -378,11 +380,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
       }
      
      
-      //console.log(this.bonPriseEnChargeList);
-      this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
-        e.typeBon === TypeBon.ENTENTEPREALABLE);
-      //this.taux = this.adherentSelected.groupe.taux;
-     // this.adherentsSelected = {};
+      
     }
     this.adherentsearch = {};
     this.adherentsSelected = {};
@@ -533,6 +531,8 @@ findMontantPlafond(event){
       console.log(value);
       if (value) {
         this.bonPriseEnChargeList = value;
+        this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
+          e.typeBon === TypeBon.ENTENTEPREALABLE);
       }
     });
 
@@ -693,8 +693,7 @@ findMontantPlafond(event){
        
        
         //console.log(this.bonPriseEnChargeList);
-        this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
-          e.typeBon === TypeBon.ENTENTEPREALABLE);
+       
         //this.taux = this.adherentSelected.groupe.taux;
       }
       
@@ -829,7 +828,8 @@ findMontantPlafond(event){
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
-          etat: TypeEtatSinistre.VALIDE}));
+          etat: TypeEtatSinistre.VALIDE, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }

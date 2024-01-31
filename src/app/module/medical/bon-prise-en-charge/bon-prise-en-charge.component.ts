@@ -559,7 +559,8 @@ findMontantPlafond(event){
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
-          etat: TypeEtatSinistre.VALIDE}));
+          etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
@@ -1131,7 +1132,7 @@ calculDebours1() {
     this.prestationPopForm.get('nombreActe').value *
     this.prestationPopForm.get('coutUnitaire').value});
   }
-  if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < this.prestationPopForm.get('coutUnitaire').value) {
+  if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value* (this.prestationPopForm.get('taux').value.taux) / 100)) {
     myForm.patchValue({montantRembourse:
       (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
       debours: this.prestationPopForm.get('nombreActe').value *

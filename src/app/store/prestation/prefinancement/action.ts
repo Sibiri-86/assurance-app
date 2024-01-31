@@ -11,7 +11,7 @@ export const loadPrefinancementValide = createAction('[App Init] load prefinance
 export const updateEtatAnnulerPrefinancement = createAction('[App Init] update etat annuler Prefinancement',
  props<{prefinancement: Prefinancement, etat: TypeEtatSinistre}>());
 export const updateEtatValiderPrefinancement = createAction('[App Init] update etat valider Prefinancement',
- props<{prefinancement: Prefinancement, etat: TypeEtatSinistre}>());
+ props<{prefinancement: Prefinancement, etat: TypeEtatSinistre, dateD: string, dateF: string}>());
 export const createOrdreReglement = createAction('[App Init] Create Ordre de reglement', props<{prefinancement: Array<Prefinancement>}>());
 export const validerOrdreReglement = createAction('[App Init] valider ordre reglement',
 props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement}>());
