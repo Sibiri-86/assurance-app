@@ -74,6 +74,7 @@ import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { PlafondActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -163,6 +164,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   police: Police;
   listActe: Array<PlafondActe>;
   listSousActe: Array<PlafondSousActe>;
+  dateDebut: any;
+  dateFin: any;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -467,6 +470,8 @@ findMontantPlafond(event){
   }
 
   ngOnInit(): void {
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
       id: new FormControl(),
@@ -524,7 +529,6 @@ findMontantPlafond(event){
 
     // chargement des bons de prise en charge
     this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
-    this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
     this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -549,6 +553,7 @@ findMontantPlafond(event){
           } else{
             this.adherentSelected = value;
             this.adherentSelectedfinal = this.adherentSelected;
+            this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
        /*  console.log(this.adherentSelected.dateIncorporation);
         console.log(this.prestationForm.value.dateDeclaration);
        
@@ -713,8 +718,18 @@ findMontantPlafond(event){
       }
     });
 
+   /*  if (this.dateDebut){
+      dateD =  formatDate(this.dateSoins, 'dd/MM/yyyy', 'en-fr');
+    } */
     this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
-    this.store.dispatch(featureActionPrefinancement.loadPrefinancement());
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+    
     this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -779,6 +794,18 @@ findMontantPlafond(event){
 
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
+  }
+
+
+  rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+    
   }
 
   imprimer(pref: Prefinancement) {
@@ -989,6 +1016,21 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
     this.adherentSelectedfinal = pref.adherent;
     //this.prestationsList = pref.prestation; 
     this.prestationForm.get('id').setValue(pref.id);
+    if(pref.nomBenefiniciaire) {
+      this.prestationForm.get('nomBenefiniciaire').setValue(pref.nomBenefiniciaire);
+    }
+   
+    if(pref.numeroMobicash) {
+      this.prestationForm.get('numeroMobicash').setValue(pref.numeroMobicash);
+    }
+    
+    if(pref.numeroOrange) {
+      this.prestationForm.get('numeroOrange').setValue(pref.numeroOrange);
+    }
+    if(pref.numeroVirement) {
+      this.prestationForm.get('numeroVirement').setValue(pref.numeroVirement);
+    }
+    
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
     this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
     this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
@@ -1499,7 +1541,8 @@ verifieDateSoins(event){
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
-    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')} ));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();
@@ -1545,7 +1588,8 @@ verifieDateSoins(event){
    console.log("===========this.prefinancementModel2==================", this.prefinancementModel);
    this.prefinancementList.push(this.prefinancementModel);
    console.log(this.prefinancementList);
-   this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+   this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+   dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
   console.log("===========bon==================");
   console.log(this.prefinancementModel);

@@ -63,6 +63,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { ConventionService } from 'src/app/store/medical/convention/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -853,7 +854,8 @@ console.log(myForm);
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
-    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();

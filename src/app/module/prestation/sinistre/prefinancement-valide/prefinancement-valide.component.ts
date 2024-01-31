@@ -54,6 +54,7 @@ import { printPdfFile } from 'src/app/module/util/common-util';
 import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -327,7 +328,8 @@ export class PrefinancementValideComponent implements OnInit {
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
-    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
   }
 
   // permet d'enregistrer une prestation par famille

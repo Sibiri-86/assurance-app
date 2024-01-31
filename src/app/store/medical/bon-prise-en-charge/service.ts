@@ -28,6 +28,14 @@ $getBons(): Observable<BonPriseEnChargeList> {
     );
   }
 
+  $getBonsSansPrestationByAdherent(adherentId: string): Observable<BonPriseEnChargeList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/no-prestation-byadherent/${adherentId}`).pipe(
+      map((response: BonPriseEnChargeList) => response),
+      catchError(this.handleError())
+    );
+  }
+
 posBons(bon: BonPriseEnCharge): Observable<any> {
     // @FIXME: post request
     return this.http.post(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}`, bon);

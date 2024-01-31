@@ -106,12 +106,30 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     );
   }
 
+  $getOrdreReglementValidePeriode(dateD: string, dateF: string): Observable<OrdreReglementList> {
+    // @FIXME: get request
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/valide/periode`, {params :
+      this.createRequestOption({dateD, dateF})}).pipe(
+        map((response: OrdreReglementList) => response),
+        catchError(this.handleError())
+    );
+  }
+
   $getPrefinancement(): Observable<PrefinancementList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}`).pipe(
         map((response: PrefinancementList) => response),
         catchError(this.handleError())
     );
+}
+
+$getPrefinancementPeriode(dateD: string, dateF: string): Observable<PrefinancementList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/periode` , {params :
+    this.createRequestOption({dateD, dateF})}).pipe(
+      map((response: PrefinancementList) => response),
+      catchError(this.handleError())
+  );
 }
 
 $getPrefinancementValide(): Observable<PrefinancementList> {

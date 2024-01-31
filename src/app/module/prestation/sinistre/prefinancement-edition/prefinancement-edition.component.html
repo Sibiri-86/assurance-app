@@ -12,7 +12,22 @@
 				</ng-template>
                 
 			</p-toolbar>
-            
+            <div class="p-formgroup-inline">
+                <div class="p-field">
+                    <label for="matricule" class="p-sr-only"></label>
+                    <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+<!--                     <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
+ -->                </div>
+                
+                <div class="p-field">
+                    <label for="dateSoins" class="p-sr-only"></label>
+                    <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                </div>
+                <div class="p-field">
+                    <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+                </div>
+                
+            </div> 
             
             <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"

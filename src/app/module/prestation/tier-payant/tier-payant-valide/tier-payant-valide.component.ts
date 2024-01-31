@@ -55,6 +55,7 @@ import {SinistreTierPayant} from '../../../../store/prestation/tierPayant/model'
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -293,7 +294,8 @@ export class TierPayantValideComponent implements OnInit {
   // valider prefinancement
   validerPrefinancement() {
     console.log(this.prefinancementList);
-    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList}));
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
   }
 
   // permet d'enregistrer une prestation par famille

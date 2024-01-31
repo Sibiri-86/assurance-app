@@ -4,7 +4,7 @@ import { TypeEtatSinistre } from 'src/app/module/common/models/enum.etat.sinistr
 import { Report } from '../../contrat/police/model';
 import {  MontantPlafondGarantieResponse } from './model';
 import { CheckPlafond, CheckPlafondResponse, CheckPrefinancementReponse, OrdreReglement, OrdreReglementList, OrdreReglementListFinance, OrdreReglementListMedical, Prefinancement, PrefinancementList, Prestation } from './model';
-export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>}>());
+export const createPrefinancement = createAction('[App Init] Create Prefinancement', props<{prefinancement: Array<Prefinancement>, dateD: string, dateF: string}>());
 export const setPrefinancement = createAction('[App Init] set Prefinancement',  props<PrefinancementList>());
 export const loadPrefinancement = createAction('[App Init] load prefinancement');
 export const loadPrefinancementValide = createAction('[App Init] load prefinancement valide');
@@ -62,4 +62,7 @@ export const validerOrdreReglementWorkflow = createAction('[App Init] valider or
 props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
 export const loadOrdreReglementValideDirection = createAction('[App Init] load ordre reglement valide Direction');
 export const setLoadOrdreReglementDirection = createAction('[App Init] set ordre reglement Direction',  props<OrdreReglementList>());
-
+export const loadPrefinancementPeriode = createAction('[App Init] load prefinancement by periode', props<{dateD: string,
+        dateF: string}>() );
+export const loadOrdreReglementValidePeriode = createAction('[App Init] load ordre reglement valide by periode', props<{dateD: string,
+                dateF: string}>());

@@ -54,6 +54,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -68,6 +69,8 @@ export class OrdreReglementValideComponent implements OnInit {
   displaySinistre = false;
   prefinancement: Array<Prefinancement>;
   report: Report = {};
+  dateDebut: Date;
+  dateFin: Date;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -77,6 +80,7 @@ export class OrdreReglementValideComponent implements OnInit {
 }
 
   ngOnInit(): void {
+    
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -86,7 +90,8 @@ export class OrdreReglementValideComponent implements OnInit {
     });
 
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
-    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValide());
+    this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValidePeriode({dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -94,7 +99,21 @@ export class OrdreReglementValideComponent implements OnInit {
     }
     });
   }
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
 
+
+  rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadOrdreReglementValidePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+    
+  }
   deValiderOrdreReglement(ordre: OrdreReglement) {
     this.confirmationService.confirm({
       message: 'voulez-vous annuler cet ordre de reglement?',
