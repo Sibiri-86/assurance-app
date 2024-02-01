@@ -34,6 +34,7 @@ import * as featureActionPrefinancement from '../../../store/prestation/prefinan
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store/parametrage/Banques/actions';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-remboursement-effectue',
@@ -52,6 +53,8 @@ export class RemboursementEffectueComponent implements OnInit {
   ordreReglementPaiement: OrdreReglement;
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
+  dateDebut: Date;
+  dateFin: Date;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -59,6 +62,22 @@ export class RemboursementEffectueComponent implements OnInit {
      this.breadcrumbService.setItems([{ label: 'Remboursement effectué' }]);
 }
 
+
+rechercherPrefinancementByPeriode() {
+  if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+    this.addMessage('error', 'Dates  invalide',
+    'La date de debut ne peut pas être supérieure à celle du de fin');
+  } else {
+    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementValide({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+  }
+  
+}
+
+
+addMessage(severite: string, resume: string, detaile: string): void {
+  this.messageService.add({severity: severite, summary: resume, detail: detaile});
+}
   ngOnInit(): void {
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -69,7 +88,8 @@ export class RemboursementEffectueComponent implements OnInit {
     });
 
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
-    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementValide());
+    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementValide({dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -103,7 +123,8 @@ export class RemboursementEffectueComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.paiementChequeCaisseDevalider({ordre}));
+        this.store.dispatch(featureActionPrefinancement.paiementChequeCaisseDevalider({ordre, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }

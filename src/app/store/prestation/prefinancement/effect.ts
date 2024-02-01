@@ -338,8 +338,8 @@ export class PrefinancementEffects {
                                         loadOrdrePaiementValide$ = createEffect(() =>
                                         this.actions$.pipe(
                                             ofType(featureActions.loadOrdrePaiementValide),
-                                            mergeMap(() =>
-                                                this.prefinancementService.$getOrdrePaiementValide().pipe(
+                                            mergeMap(({dateD, dateF}) =>
+                                                this.prefinancementService.$getOrdrePaiementValide(dateD, dateF).pipe(
                                                     switchMap(value => [
                                                             // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                                                     featureActions.setLoadOrdreReglement(value)
@@ -397,11 +397,11 @@ export class PrefinancementEffects {
                                                         paiementChequeCaisseDevalider$ = createEffect(() =>
                                                         this.actions$.pipe(
                                                                 ofType(featureActions.paiementChequeCaisseDevalider),
-                                                                mergeMap(({ordre}) =>
+                                                                mergeMap(({ordre,dateD, dateF}) =>
                                                                     this.prefinancementService.paiementChequeCaisseDevalider(ordre).pipe(
                                                                         switchMap(value => [
                                                                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                                                                           featureActions.loadOrdrePaiementInstanceCheque()
+                                                                          featureActions.loadOrdrePaiementValide({dateD, dateF})
                                                                         ]),
                                                                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                                                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

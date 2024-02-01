@@ -156,9 +156,10 @@ $getOrdrePaiementInstanceCheque(): Observable<OrdreReglementList> {
   );
 }
 
-$getOrdrePaiementValide(): Observable<OrdreReglementList> {
+$getOrdrePaiementValide(dateD: string, dateF: string): Observable<OrdreReglementList> {
   // @FIXME: get request
-  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-valide`).pipe(
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-valide`, {params :
+    this.createRequestOption({dateD, dateF})}).pipe(
       map((response: OrdreReglementList) => response),
       catchError(this.handleError())
   );

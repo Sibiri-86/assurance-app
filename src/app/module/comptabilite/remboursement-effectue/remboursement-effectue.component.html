@@ -4,14 +4,25 @@
 		<p-toast></p-toast>
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
-                <!--
-				<ng-template pTemplate="right">
-					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
-				</ng-template>
-                -->
-			</p-toolbar>
-            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+                <ng-template pTemplate="left">
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <label for="matricule" class="p-sr-only"></label>
+                            <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                        </div>
+                        
+                        <div class="p-field">
+                            <label for="dateSoins" class="p-sr-only"></label>
+                            <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                        </div>
+                        <div class="p-field">
+                            <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+                        </div>
+                        
+                    </div>
+        </ng-template>
+        </p-toolbar>
+            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -47,7 +58,7 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{ordre?.police?.numero}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>

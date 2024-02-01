@@ -44,13 +44,15 @@ export const setPlafondSousActe = createAction('[set Plafond] set plafond', prop
 export const loadOrdrePaiementInstance = createAction('[App Init] load ordre paiement instance');
 export const setLoadOrdrePaiementInstance = createAction('[App Init] load ordre paiement instance set',  props<CheckPlafondResponse>());
 export const loadOrdrePaiementInstanceCheque = createAction('[App Init] load ordre paiement instance cheque');
-export const loadOrdrePaiementValide = createAction('[App Init] load ordre paiement valide en caisse');
+export const loadOrdrePaiementValide = createAction('[App Init] load ordre paiement valide en caisse', props<{dateD: string,
+        dateF: string}>());
 export const validerPaiementEspece = createAction('[App Init] valider ordre paiement espece',
 props<{ordre: OrdreReglement}>());
 export const validerPaiementCheque = createAction('[App Init] valider ordre paiement cheque',
 props<{ordre: OrdreReglement}>());
 export const paiementChequeCaisseDevalider = createAction('[App Init] devalider ordre paiement caisse',
-props<{ordre: OrdreReglement}>());
+props<{ordre: OrdreReglement, dateD: string,
+        dateF: string}>());
 /* export const checkMontantRestantPlafondGarantie = createAction('[App Init] Check plafond famille acte', props<CheckMontantRestantPlafondGarantieResponse>());
 export const setPlafondGarantie = createAction('[set Plafond] set Plafond famille acte', props<{check:CheckMontantRestantPlafondGarantie}>()); */
 export const checkMontantRestantPlafondGarantie = createAction('[App Init] Check plafond famille acte',  props<{assureId: string, exerciceId: string, familleActeId: string, groupeId: string}>());
