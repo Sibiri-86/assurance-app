@@ -31,6 +31,7 @@ import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -47,6 +48,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   prefinancement: Array<Prefinancement>;
   report: Report = {};
   clonedPlafondConfiguration: { [s: string]: OrdreReglement } = {};
+  dateDebut: any;
+  dateFin: any;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -55,6 +58,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 }
 
   ngOnInit(): void {
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
@@ -63,8 +68,32 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         }
     });
 
+   /*  this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        this.store.dispatch(featureActionBonPriseEnCharge.loadBonPriseEnChargePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+      }
+
+      this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        console.log(value);
+        if (value) {
+          this.bonPriseEnChargeList = value.slice();
+          console.log("this.bonPriseEnChargeList=================> ", this.bonPriseEnChargeList);
+        }
+      }); */ 
+
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
-    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+    }
+    
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -87,7 +116,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   paiemrntEspece(ordre: OrdreReglement) {
     this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
-    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
+    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    this.addMessage('success', 'Reussite',
+      'Ordre de règlement validé avec succès');
   }
 
   voirSinistre(ordre: OrdreReglement) {
@@ -107,5 +139,20 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   onRowEditCancelOrdreConfiguration(ordre: OrdreReglement, index: number) {
     this.ordreReglementList[index] = this.clonedPlafondConfiguration[ordre.id];
     delete this.clonedPlafondConfiguration[ordre.id];
+  }
+  
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+    
   }
 }

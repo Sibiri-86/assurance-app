@@ -56,7 +56,7 @@
         
         <p-table #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                  [rowHover]="true" dataKey="id"
-                 styleClass="p-datatable-customers"
+                 styleClass="p-datatable-striped"
                  currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true" [(selection)]="selectedPrefinancement">
             <ng-template pTemplate="caption">
                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">

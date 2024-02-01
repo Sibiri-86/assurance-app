@@ -10,12 +10,28 @@
 					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
 				</ng-template>
                 -->
-                <span> <p-badge size="large" value="Filtre multi-critères: numéro, numéro de Bordéreau, Nom de l'assuré principal, Prénom de l'assuré principal, nom de la police, TypePaiement."  severity="warning"></p-badge></span>
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <label for="matricule" class="p-sr-only"></label>
+                        <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+        <!--                     <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
+        -->                </div>
+                    
+                    <div class="p-field">
+                        <label for="dateSoins" class="p-sr-only"></label>
+                        <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                    </div>
+                    <div class="p-field">
+                        <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+                    </div>
+                    
+                </div> 
+
 			</p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','assurePrinc.nom','assurePrinc.prenom','police.nom','typePaiement']"
                      [rowHover]="true" dataKey="id"
                      editMode="row"
-                     styleClass="p-datatable-customers"
+                     styleClass="p-datatable-striped"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -24,6 +40,7 @@
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                         </span>
+                        <span style="color: red; font-weight: bold; font-size: 12px;"> Filtre multi-critères: numéro, numéro de Bordéreau, Nom de l'assuré principal, Prénom de l'assuré principal, nom de la police, TypePaiement.</span>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -33,9 +50,9 @@
                         </th> -->
                         <th pSortableColumn="numero" style="min-width:10px">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:10px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:7px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:15px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:10px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:10px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:10px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:10px">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -54,7 +71,7 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.assurePrinc.nom }} {{ordre.assurePrinc.prenom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
@@ -78,7 +95,7 @@
                         <button *ngIf="editing1" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger  p-mr-1" (click)="onRowEditCancelPlafondConfiguration(ordre, ri)"></button>
                        
                         
-                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <!-- <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button> -->
                         <button pButton [disabled]="editing1" icon="pi pi-check" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiemrntEspece(ordre)"></button>
                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
                         </td>

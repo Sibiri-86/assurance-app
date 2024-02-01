@@ -132,6 +132,15 @@ $getPrefinancementPeriode(dateD: string, dateF: string): Observable<Prefinanceme
   );
 }
 
+$getOrdrePaiementInstanceByPeriode(dateD: string, dateF: string): Observable<OrdreReglementList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/instance/periode`,{params :
+    this.createRequestOption({dateD, dateF})}).pipe(
+      map((response: OrdreReglementList) => response),
+      catchError(this.handleError())
+  );
+}
+
 $getPrefinancementValide(): Observable<PrefinancementList> {
     // @FIXME: get request
     return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/valide`).pipe(
