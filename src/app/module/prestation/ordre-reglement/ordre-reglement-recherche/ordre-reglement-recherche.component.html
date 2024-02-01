@@ -17,7 +17,7 @@
             </div>
             
             
-        <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+        <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['police.numero','police.nom','numero','assurePrinc.prenom', 'assurePrinc.nom']"
             [rowHover]="true" dataKey="id"
             styleClass="p-datatable-customers"
             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"  [showCurrentPageReport]="true">
