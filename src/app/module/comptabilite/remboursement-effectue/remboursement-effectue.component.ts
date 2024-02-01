@@ -86,7 +86,8 @@ addMessage(severite: string, resume: string, detaile: string): void {
                 printPdfFile(bytes);
         }
     });
-
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
     this.ordreReglementList$ = this.store.pipe(select(prefinancementSelector.ordreReglementList));
     this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementValide({dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
     dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));

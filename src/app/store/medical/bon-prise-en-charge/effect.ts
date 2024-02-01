@@ -21,11 +21,11 @@ export class BonPriseEnChargeEffects {
     createBons$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createBon),
-        mergeMap((bon: BonPriseEnCharge) =>
+        mergeMap(({bon, dateD, dateF}) =>
             this.bonPriseEnChargeService.posBons(bon).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadBon()
+                    featureActions.loadBonPriseEnChargePeriode({dateD, dateF})
                 ]),
                 catchError((error: HttpErrorResponse) => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))

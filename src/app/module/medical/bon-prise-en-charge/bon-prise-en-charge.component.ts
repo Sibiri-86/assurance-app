@@ -964,7 +964,8 @@ console.log(myForm);
     */
     console.log(this.bonPriseEnCharge);
     this.bonPriseEnCharge.prestation = this.prestationsList;
-     this.store.dispatch(featureActionBonPriseEnCharge.createBon(this.bonPriseEnCharge));
+     this.store.dispatch(featureActionBonPriseEnCharge.createBon({bon: this.bonPriseEnCharge, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
     this.displayPrestation = false;
     this.displayFormPrefinancement = false;
     this.prestationsList = [];
@@ -1115,8 +1116,7 @@ console.log(myForm);
     console.log( this.adherentSelected);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
-    console.log("========================" ,this.prestationPopForm.get('sousActe').value);
-    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
       this.montantConvention = rest;
@@ -1141,6 +1141,8 @@ console.log(myForm);
 
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
+    prestat.acte = this.prestationPopForm.get('acte').value?.acte;
+    prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
