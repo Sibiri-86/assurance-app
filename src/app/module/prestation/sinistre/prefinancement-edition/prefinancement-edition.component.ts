@@ -417,7 +417,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 findMontantPlafond(event){
   console.log("==========event========== ", event);
   this.montantPlafond1 = null;
-  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+  this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, event.value?.acte?.id).subscribe(rest=>{
 
     if(rest) {
       this.montantPlafond1 = rest;
@@ -916,7 +916,7 @@ findMontantPlafond(event){
     this.prestationPopForm.get('montantPlafond').setValue(null);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
-    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value;
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
@@ -1725,6 +1725,8 @@ verifieDateSoins(event){
     this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value);
     this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value);
     const prestat = this.prestationPopForm.value as Prestation;
+    prestat.acte = this.prestationPopForm.get('acte').value?.acte;
+    prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
