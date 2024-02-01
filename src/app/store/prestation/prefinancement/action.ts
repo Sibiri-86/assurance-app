@@ -16,7 +16,8 @@ export const createOrdreReglement = createAction('[App Init] Create Ordre de reg
 export const validerOrdreReglement = createAction('[App Init] valider ordre reglement',
 props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement}>());
 export const deValiderOrdreReglement = createAction('[App Init] deValider ordre reglement',
-props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
+props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow, dateD: string,
+        dateF: string}>());
 export const annulerOrdreReglement = createAction('[App Init] annuler ordre reglement',
 props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
 export const loadOrdreReglement = createAction('[App Init] load ordre reglement');
@@ -26,7 +27,8 @@ export const FetchReportPrestation = createAction('[Report] Fetch Report prestat
 export const setReportPrestation = createAction('[set Report] set Report prestation', props<{reportFile: ArrayBuffer}>());
 export const deletePrestation = createAction('[set Report] delete prestation', props<Prestation>());
 export const deletePrefinancement = createAction('[delete prefinancement] delete prefinancement', props<{prefinancement:
-    Array<Prefinancement>}>());
+    Array<Prefinancement>, dateD: string,
+    dateF: string}>());
 export const deleteOrdreDeReglement = createAction('[delete ordre de reglement] delete ordreReglement', props<{ordreReglement:
         Array<OrdreReglement>}>());
 export const checkPrefinancement = createAction('[App Init] Check Prefinancement', props<{prefinancement: Array<Prefinancement>}>());

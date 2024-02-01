@@ -332,7 +332,8 @@ findMontantPlafond(event){
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement}));
+          this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement,dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       }
      });
     }

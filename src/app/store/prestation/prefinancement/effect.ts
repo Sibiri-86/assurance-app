@@ -92,11 +92,11 @@ export class PrefinancementEffects {
             deletePrefinancement$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.deletePrefinancement),
-                mergeMap(({prefinancement}) =>
+                mergeMap(({prefinancement,  dateD, dateF}) =>
                     this.prefinancementService.deletePrefinancement(prefinancement).pipe(
                         switchMap(value => [
                                 // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadPrefinancement()
+                        featureActions.loadPrefinancementPeriode({dateD,dateF})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                             // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -267,11 +267,11 @@ export class PrefinancementEffects {
                 updateETatDeValiderOrdreReglement$ = createEffect(() =>
                     this.actions$.pipe(
                             ofType(featureActions.deValiderOrdreReglement),
-                            mergeMap(({ordre, etat, w}) =>
+                            mergeMap(({ordre, etat, w,dateD, dateF}) =>
                                 this.prefinancementService.putUpdateOrdreReglement(ordre, etat).pipe(
                                     switchMap(value => [
                                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                                        featureActions.loadOrdreReglementValide()
+                                        featureActions.loadOrdreReglementValidePeriode({dateD, dateF})
                                     ]),
                                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
