@@ -916,9 +916,7 @@ findMontantPlafond(event){
     this.prestationPopForm.get('montantPlafond').setValue(null);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
-    console.log("========================" ,this.prestationPopForm.get('sousActe').value.sousActe);
-    console.log('le montantPlafond de montantPlafond est ********************' + this.prestationPopForm.get('montantPlafond').value);
-    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value.sousActe;
+    this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
@@ -956,7 +954,8 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement}));
+          this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       }
      });
     }
@@ -1723,9 +1722,11 @@ verifieDateSoins(event){
 
 
   addPrestation1() {
-    this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value.sousActe);
-    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value.acte);
+    this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value);
+    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value);
     const prestat = this.prestationPopForm.value as Prestation;
+    prestat.acte = this.prestationPopForm.get('acte').value?.acte;
+    prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
@@ -1773,7 +1774,6 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.compteur = rowIndex;
   this.adherentSelected = prestation?.adherent;
   this.prestationPopForm.patchValue(prestation);
-  this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe'));
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   this.prestationPopForm.get('matriculeAdherent').setValue(prestation.adherent.numero);
   this.prestationPopForm.get('numeroGroupe').setValue(prestation.adherent.groupe.numeroGroupe);

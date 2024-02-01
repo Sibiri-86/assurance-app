@@ -120,7 +120,15 @@ export class OrdreReglementValideComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionPrefinancement.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.DEVALIDE, w: Workflow.PRESTATION}));
+        if(!this.dateDebut) {
+          this.dateDebut = new Date();
+        }
+
+        if(!this.dateFin) {
+          this.dateFin = new Date();
+        }
+        this.store.dispatch(featureActionPrefinancement.deValiderOrdreReglement({ordre, etat: TypeEtatOrdreReglement.DEVALIDE, w: Workflow.PRESTATION,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
