@@ -64,6 +64,9 @@ import { ConventionService } from 'src/app/store/medical/convention/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 import { formatDate } from '@angular/common';
+import { BonPriseEnChargeService } from 'src/app/store/medical/bon-prise-en-charge/service';
+import { PlafondService } from 'src/app/store/contrat/plafond/service';
+import { PlafondActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -127,6 +130,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   montantPlafond1: number = 0;
   montantPlafond: number = 0;
   plafondSousActe: CheckPlafond;
+  dateDebut: any;
+  dateFin: any;
+  bonPriseEnChargeListNouveau: BonPriseEnCharge[] = [];
+  listActe: Array<PlafondActe>;
+  listSousActe: Array<PlafondSousActe>;
+  
  // userCurent: Us
 
 
@@ -147,6 +156,8 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
                private conventionService: ConventionService,
                private tierPayantService: TierPayantService,
                private prefinancementService: PrefinancementService,
+               private bonService: BonPriseEnChargeService,
+               private plafondService: PlafondService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -253,6 +264,8 @@ findMontantPlafond(event){
 }
 
   ngOnInit(): void {
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
     this.typeBon = [{label: 'PRISE-EN-CHARGE', value: 'PRISEENCHARGE'},
     {label: 'ENTENTE-PREALABLE', value: 'ENTENTEPREALABLE'}];
     //this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse));
@@ -448,7 +461,7 @@ findMontantPlafond(event){
       }
     });
 
-    this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+    /* this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
     this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
     this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
@@ -456,7 +469,42 @@ findMontantPlafond(event){
         this.bonPriseEnChargeList = value.slice();
         console.log("this.bonPriseEnChargeList", this.bonPriseEnChargeList);
       }
+    }); */
+    this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        this.store.dispatch(featureActionBonPriseEnCharge.loadBonPriseEnChargePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+      }
+
+      this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        console.log(value);
+        if (value) {
+          this.bonPriseEnChargeList = value.slice();
+          console.log("this.bonPriseEnChargeList=================> ", this.bonPriseEnChargeList);
+        }
+      }); 
+      
+
+    /* this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+    
+    this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.prefinancementDtoList = value.slice();
+      }
     });
+ */
+    
 
     this.produitPharmaceutiqueList$ = this.store.pipe(select(produitPharmaceutiqueSelector.produitPharmaceutiqueList));
     this.store.dispatch(loadProduitPharmaceutique());
@@ -541,9 +589,14 @@ findMontantPlafond(event){
       }
     });
 
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
+
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
+
+  
 
   imprimer(bon: BonPriseEnCharge) {
     bon.userCurent = this.keycloak.getUsername();
@@ -582,9 +635,21 @@ findMontantPlafond(event){
     }
   }
 
-  selectActe(event){
+  /* selectActe(event){
     console.log(event);
     this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+  } */
+
+  selectActe(event){
+    console.log(event);
+     //this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+
+    console.log("this.adherentSelected ", this.adherentSelected);
+    //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+   this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+    subscribe((res) =>{
+      this.listSousActe = res.body;
+    });
   }
 
   editer(pref: BonPriseEnCharge) {
@@ -940,7 +1005,7 @@ console.log(myForm);
     this.prestationForm.reset();
   }
 
-  changeGarantie(garantie) {
+  /* changeGarantie(garantie) {
     console.log(garantie);
     if(garantie.value?.code == "FP") {
       this.displayFP = true;
@@ -948,6 +1013,23 @@ console.log(myForm);
        this.displayFP = false;
      }
     this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+  } */
+
+  changeGarantie(garantie) {
+    console.log(garantie);
+    if(garantie.value?.code == "FP") {
+     this.displayFP = true;
+    } else {
+      this.displayFP = false;
+    }
+    console.log("this.adherentSelected ", this.adherentSelected);
+     //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+    subscribe((res) =>{
+      this.listActe = res.body;
+    });
+    console.log("this.listActe  ", this.listActe );
+    // this.findMontantTotalConsommeFamille();
   }
 
   changeDisplay() {
@@ -1056,6 +1138,7 @@ console.log(myForm);
   }
 
   addPrestation1() {
+
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
@@ -1066,6 +1149,8 @@ console.log(myForm);
     }
    
    this.prestationPopForm.reset();
+   this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value.sousActe);
+    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value.acte);
    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelectedfinal.numero);
    this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
     this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
@@ -1237,11 +1322,29 @@ calculDebours1() {
 }
 }
 
-findTaux() {
+/* findTaux() {
   this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value.id, this.adherentSelected.id).subscribe((rest)=>{
     
     this.prestationPopForm.get('taux').setValue(rest);
   });
+} */
+
+findTaux() {
+  console.log('sous acte id', this.prestationPopForm.get('sousActe').value);
+  console.log('sous acte id', this.prestationPopForm.get('sousActe').value?.sousActe?.id);
+  console.log('groupe id', this.adherentSelected.groupe.id);
+  console.log('adherent id', this.adherentSelected.id);
+  this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value?.sousActe?.id, this.adherentSelected?.id).subscribe((rest)=>{
+    if(rest) {
+      this.prestationPopForm.get('taux').setValue(rest);
+      console.log('111111111111');
+    } else {
+      this.prestationPopForm.get('taux').setValue('');
+      console.log('222222222222');
+    }
+    
+  });
+  
 }
 
 editerPrestation1(prestation: Prestation, rowIndex: number) {
@@ -1300,6 +1403,27 @@ editerPrestation(pref: BonPriseEnCharge) {
   }
   this.displayFormPrefinancement = true;
 }
+
+rechercherPrefinancementByPeriode() {
+  if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+    this.addMessage('error', 'Dates  invalide',
+    'La date de debut ne peut pas être supérieure à celle du de fin');
+  } else {
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBonPriseEnChargePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+  }
+  
+}
+
+/* this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+    this.store.dispatch(featureActionBonPriseEnCharge.loadBon());
+    this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value);
+      if (value) {
+        this.bonPriseEnChargeList = value.slice();
+        console.log("this.bonPriseEnChargeList", this.bonPriseEnChargeList);
+      }
+    }); */
 
 }
 
