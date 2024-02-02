@@ -646,7 +646,27 @@ changeGarantie(garantie, indexLigne: number) {
   }
 }
 
-
+changeActeANdSousActe(plafond: PlafondFamilleActe, indexLigne: number) {
+  this.plafondActe = [];
+  this.plafondSousActe = [];
+  this.displayActe = true;
+  if (this.plafondActe.length === 0){
+    for (let j = 0; j < this.acteList.length; j++){
+    if (this.acteList[j].idTypeGarantie === plafond.garantie.id) {
+      this.plafondSousActe = [];
+      // recuperer les sous actes de l'acte
+      for (let i = 0; i < this.sousActeList.length; i++){
+        if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0})
+        }
+      }
+      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: plafond.garantie});
+    }
+  }
+  plafond.listeActe.push(... this.plafondActe);
+    console.log(this.plafondActe);
+  }
+}
 
 
   ajouterBareme(){

@@ -1760,6 +1760,7 @@
                     <th>Domaine</th>
                     <th>Date effet</th>
                     <th>Status</th>
+                    
                     <th></th>
                 </tr>
             </ng-template>
@@ -1859,6 +1860,7 @@
                     </td>
 
                     <td style="text-align:center">
+                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" style="margin-right: .5em" (click)="changeActeANdSousActe(plafond, ri)"></button>
                         <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
