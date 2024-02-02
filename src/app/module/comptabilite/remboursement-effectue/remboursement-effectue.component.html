@@ -37,35 +37,39 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th style="min-width:150px"></th>
+                        </th> -->
+                        <th pSortableColumn="numero" style="min-width:10px">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:10px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:10px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:10px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th style="min-width:20px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ordre>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
-                        </td>
+                        </td> -->
 
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.date | formatTableValue : 'date'}}</span>
+                        </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre?.police?.numero}}</span>
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
-
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
+                        <td><span class="p-column-title" style="min-width:200px">{{ordre.typePaiement}}</span>
                         </td>
-                        
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
+                        </td>
                         <td style="min-width:150px">
                         <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
                         <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderPayement(ordre)"></button>
