@@ -405,7 +405,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
    findMontantConsomme(event){
     console.log("====================verifier", event.value?.id);
     console.log(event);
-    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
         console.log("==========rest==========", rest);
