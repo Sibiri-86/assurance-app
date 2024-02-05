@@ -67,6 +67,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Date de pièce</th>
+                        <th>Assuré Princ</th>
                         <th>c.j</th>
                         <th>Reférence</th>
                         <th>N° pièce</th>
@@ -83,6 +84,7 @@
                         <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
                                
                         </td>
+                        <td style="font-weight: bold;">{{operation.ordreReglement?.assurePrinc?.nom}} {{operation.ordreReglement?.assurePrinc?.prenom}}</td>
                         <td>{{operation.exerciceComptableOperation?.journaux?.code}}</td>
                         <td>{{operation.reference}} </td>
                         <td>{{operation.numPiece}}</td>

@@ -164,6 +164,7 @@ export class GrandLivreGeneralComponent implements OnInit, OnDestroy {
       if (value) {
         
         this.operationList = value.slice();
+        console.log("List des opérations  ==> ", this.operationList);
         this.operationSelected  = this.operationList[this.operationList.length -1]
         
        
