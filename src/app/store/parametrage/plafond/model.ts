@@ -23,6 +23,7 @@ export interface PlafondFamilleActe {
     checked?: boolean;
     plafondFamilles?: Array<PlafondFamilleActe>;
     membre?: string;
+    display?: boolean;
   }
 
 export interface PlafondActe {
@@ -40,6 +41,7 @@ export interface PlafondActe {
     domaine?: Array<QualiteAssure>;
     plafondGroupeFamilleActe?: PlafondFamilleActe;
     garantie?: Garantie;
+    display?: boolean;
   }
 
 export interface PlafondSousActe {
@@ -58,4 +60,5 @@ export interface PlafondSousActe {
     idGenre?: string;
     libelleGenre?: string; 
     libelle?: string;
+    display?: boolean;
 }

@@ -97,6 +97,10 @@ export class BaremeComponent implements OnInit, OnDestroy {
   plafondFamilleActeConstructConstant: Array<PlafondFamilleActe> = [];
   boAdul = false;
   boMembre = false;
+  acteByGarantieList: Array<Acte>;
+  plafondActeAjout: Array<PlafondActe>;
+  plafondSousActeAjout: Array<PlafondSousActe>;
+  sousActeByActeList: Array<SousActe>;
   constructor(private breadcrumbService: BreadcrumbService, private messageService: MessageService,
               private confirmationService: ConfirmationService, private formBuilder: FormBuilder,
               private store: Store<AppState>) {
@@ -646,26 +650,237 @@ changeGarantie(garantie, indexLigne: number) {
   }
 }
 
-changeActeANdSousActe(plafond: PlafondFamilleActe, indexLigne: number) {
-  this.plafondActe = [];
-  this.plafondSousActe = [];
-  this.displayActe = true;
-  if (this.plafondActe.length === 0){
-    for (let j = 0; j < this.acteList.length; j++){
-    if (this.acteList[j].idTypeGarantie === plafond.garantie.id) {
-      this.plafondSousActe = [];
-      // recuperer les sous actes de l'acte
-      for (let i = 0; i < this.sousActeList.length; i++){
-        if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
-          this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0})
+changeActeANdSousActeList(plafond: PlafondFamilleActe) {
+  plafond.display = true;
+  this.acteByGarantieList= [];
+  let compteurActe = 0;
+  let compteurSousActe = 0;
+
+    this.acteByGarantieList= [];
+      if(plafond.listeActe) {
+        this.acteByGarantieList=  this.acteList.filter(acte=>acte.idTypeGarantie===plafond.garantie.id);
+        for (let j = 0; j < this.acteByGarantieList.length; j++) {
+          let compteur = 0;
+          this.plafondSousActeAjout= [];
+          this.plafondActeAjout= [];
+          for (let k = 0; k < plafond.listeActe.length; k++) {
+            
+            if(this.acteByGarantieList[j].id === plafond.listeActe[k].acte.id) {
+              compteur= 1;
+              this.sousActeByActeList = this.sousActeList?.filter(sous=>sous.idTypeActe === plafond.listeActe[j].acte.id);
+              if(this.sousActeByActeList) {
+                this.plafondSousActeAjout =[];
+                for (let i = 0; i < this.sousActeByActeList.length; i++) {
+                  this.plafondSousActeAjout.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true})
+
+                  let compteur1 = 0;
+                  if( plafond.listeActe[k].listeSousActe) {
+                    for (let t = 0; t < plafond.listeActe[k].listeSousActe.length; t++) {
+    
+                      if(plafond.listeActe[k].listeSousActe[t].sousActe.id === this.sousActeByActeList[i].id ) {
+                        compteur1 = 1;
+                      }
+                    }
+                     if(compteur1 === 0) {
+                      plafond.listeActe[k].listeSousActe.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0, display: true})
+                     
+                      console.log("============compteurSousActe====1================");
+                      console.log(plafond.listeActe[k].listeSousActe);
+                      console.log("==============compteurSousActe==2================");
+                      compteurSousActe =  compteurSousActe +1;
+                     }
+                  }
+                }
+              }
+    
+            }
+            
+          }
+    
+          if(compteur === 0) {
+            
+            for (let i = 0; i < this.sousActeList.length; i++){
+              if (this.sousActeList[i].idTypeActe === this.acteByGarantieList[j].id) {
+                this.plafondSousActeAjout.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true})
+              }
+            }
+            plafond.listeActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux:plafond.taux, dateEffet: plafond.dateEffet, listeSousActe: this.plafondSousActeAjout, garantie: plafond.garantie , display: true});
+            compteurActe= compteurActe + 1;
+          } 
+        }
+      } else {
+        this.plafondActe = [];
+        if (this.plafondActe.length === 0){
+          for (let j = 0; j < this.acteList.length; j++){
+          if (this.acteList[j].idTypeGarantie === plafond.garantie.id) {
+            this.plafondSousActe = [];
+            // recuperer les sous actes de l'acte
+            for (let i = 0; i < this.sousActeList.length; i++){
+              if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+                this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0, display: true})
+              }
+            }
+            this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: plafond.garantie, display: true});
+            compteurActe = compteurActe + 1;
+          }
+        }
+        plafond.listeActe.push(... this.plafondActe);
         }
       }
-      this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: plafond.garantie});
+     
+      delete this.clonedPlafondConfiguration[plafond.id];
+}
+
+changeActeANdSousActe(plafond: PlafondFamilleActe) {
+  plafond.display = true;
+  this.acteByGarantieList= [];
+  let compteurActe = 0;
+  let compteurSousActe = 0;
+  if(plafond.plafondFamilles) {
+    this.acteByGarantieList= [];
+    for(let x = 0; x< plafond.plafondFamilles.length; x++) {
+      if(plafond.plafondFamilles[x].listeActe) {
+        this.acteByGarantieList=  this.acteList.filter(acte=>acte.idTypeGarantie===plafond.plafondFamilles[x].garantie.id);
+        for (let j = 0; j < this.acteByGarantieList.length; j++) {
+          let compteur = 0;
+          this.plafondSousActeAjout= [];
+          this.plafondActeAjout= [];
+          for (let k = 0; k < plafond.plafondFamilles[x].listeActe.length; k++) {
+            
+            if(this.acteByGarantieList[j].id === plafond.plafondFamilles[x].listeActe[k].acte.id) {
+              compteur= 1;
+              this.sousActeByActeList = this.sousActeList?.filter(sous=>sous.idTypeActe === plafond.plafondFamilles[x].listeActe[j].acte.id);
+              if(this.sousActeByActeList) {
+                this.plafondSousActeAjout =[];
+                for (let i = 0; i < this.sousActeByActeList.length; i++) {
+                  this.plafondSousActeAjout.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true})
+
+                  let compteur1 = 0;
+                  if( plafond.plafondFamilles[x].listeActe[k].listeSousActe) {
+                    for (let t = 0; t < plafond.plafondFamilles[x].listeActe[k].listeSousActe.length; t++) {
+    
+                      if(plafond.plafondFamilles[x].listeActe[k].listeSousActe[t].sousActe.id === this.sousActeByActeList[i].id ) {
+                        compteur1 = 1;
+                      }
+                    }
+                     if(compteur1 === 0) {
+                      plafond.plafondFamilles[x].listeActe[k].listeSousActe.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0, display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+                     
+                      console.log("============compteurSousActe====1================");
+                      console.log(plafond.plafondFamilles[x].listeActe[k].listeSousActe);
+                      console.log("==============compteurSousActe==2================");
+                      compteurSousActe =  compteurSousActe +1;
+                     }
+                  }
+                }
+              }
+    
+            }
+          }
+    
+          if(compteur === 0) {
+            
+            for (let i = 0; i < this.sousActeList.length; i++){
+              if (this.sousActeList[i].idTypeActe === this.acteByGarantieList[j].id) {
+                this.plafondSousActeAjout.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+              }
+            }
+            plafond.plafondFamilles[x].listeActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux:plafond.taux, dateEffet: plafond.dateEffet, listeSousActe: this.plafondSousActeAjout, garantie: plafond.garantie , display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
+            compteurActe= compteurActe + 1;
+          } 
+        }
+      } else {
+        this.plafondActe = [];
+        if (this.plafondActe.length === 0){
+          for (let j = 0; j < this.acteList.length; j++){
+          if (this.acteList[j].idTypeGarantie === plafond.garantie.id) {
+            this.plafondSousActe = [];
+            // recuperer les sous actes de l'acte
+            for (let i = 0; i < this.sousActeList.length; i++){
+              if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+                this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0, display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+              }
+            }
+            this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: plafond.garantie, display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
+            compteurActe = compteurActe + 1;
+          }
+        }
+        plafond.plafondFamilles[x].listeActe.push(... this.plafondActe);
+        }
+      }
     }
   }
-  plafond.listeActe.push(... this.plafondActe);
-    console.log(this.plafondActe);
+  if(!plafond?.plafondFamilles) {
+    this.acteByGarantieList= [];
+    if(plafond.listeActe) {
+      this.acteByGarantieList=  this.acteList.filter(acte=>acte.idTypeGarantie===plafond.garantie.id);
+      for (let j = 0; j < this.acteByGarantieList.length; j++) {
+        let compteur = 0;
+        this.plafondSousActeAjout= [];
+        this.plafondActeAjout= [];
+        for (let k = 0; k < plafond.listeActe.length; k++) {
+          
+          if(this.acteByGarantieList[k].id === plafond.listeActe[j].acte.id) {
+            compteur= 1;
+            this.sousActeByActeList = this.sousActeList?.filter(sous=>sous.idTypeActe === plafond.listeActe[j].acte.id);
+            if(this.sousActeByActeList) {
+              for (let i = 0; i < this.sousActeByActeList.length; i++) {
+                let compteur1 = 0;
+                if( plafond.listeActe[j].listeSousActe) {
+                  for (let t = 0; t < plafond.listeActe[j].listeSousActe.length; t++) {
+  
+                    if(plafond.listeActe[j].listeSousActe[t].sousActe.id === this.sousActeByActeList[i].id ) {
+                      compteur1 = 1;
+                    }
+                  }
+                   if(compteur1 === 0) {
+                    plafond.listeActe[j].listeSousActe.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0, display: true,
+                       dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+                    compteurSousActe =  compteurSousActe+1;
+                   }
+                }
+              }
+            }
+  
+          }
+        }
+  
+        if(compteur === 0) {
+          
+          for (let i = 0; i < this.sousActeList.length; i++){
+            if (this.sousActeList[i].idTypeActe === this.acteByGarantieList[j].id) {
+              this.plafondSousActeAjout.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true,  dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+            }
+          }
+          plafond.listeActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux:plafond.taux, dateEffet: plafond.dateEffet, listeSousActe: this.plafondSousActeAjout, garantie: plafond.garantie , display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
+          compteurActe= compteurActe + 1;
+        } 
+      }
+    } else {
+      this.plafondActe = [];
+      if (this.plafondActe.length === 0){
+        for (let j = 0; j < this.acteList.length; j++){
+        if (this.acteList[j].idTypeGarantie === plafond.garantie.id) {
+          this.plafondSousActe = [];
+          // recuperer les sous actes de l'acte
+          for (let i = 0; i < this.sousActeList.length; i++){
+            if (this.sousActeList[i].idTypeActe === this.acteList[j].id) {
+              this.plafondSousActe.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: {}, dateEffet: new Date(), montantPlafond: 0, montantPlafondParActe: 0, display: true,  dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+            }
+          }
+          this.plafondActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux: {}, dateEffet: new Date(), listeSousActe: this.plafondSousActe, garantie: plafond.garantie, display: true,  dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
+          compteurActe = compteurActe + 1;
+        }
+      }
+      plafond.listeActe.push(... this.plafondActe);
+      }
+    }
   }
+  
+  
+  this.messageService.add({severity:'success', summary: 'Success', detail:'Vous venez d\' ajouter '+compteurActe +' '+ 'Actes'+ ' et '+compteurSousActe+ ' sousActe' });
+  
+  
 }
 
 

@@ -880,7 +880,7 @@
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{sousActe?.taux.taux}}
+                                        {{sousActe?.taux?.taux}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1286,7 +1286,7 @@
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{sousActe?.taux.taux}}
+                                        {{sousActe?.taux?.taux}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1654,7 +1654,7 @@
                                             [style]="{'width':'100%'}"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                {{sousActe?.taux.taux}}
+                                {{sousActe?.taux?.taux}}
                             </ng-template>
                         </p-cellEditor>
                     </td>
@@ -1860,7 +1860,7 @@
                     </td>
 
                     <td style="text-align:center">
-                        <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" style="margin-right: .5em" (click)="changeActeANdSousActe(plafond, ri)"></button>
+                        <button *ngIf="!plafond?.display" pButton type="button"  icon="pi pi-plus" class="button-small" style="margin-right: .5em" (click)="changeActeANdSousActe(plafond)"></button>
                         <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInitPlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSavePlafondConfiguration(plafond)"></button>
                         <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancelPlafondConfiguration(plafond, ri1)"></button>
@@ -2013,7 +2013,8 @@
                             <tr [pEditableRow]="acte" class="colorZoneActe"(onRowSelect)="expandActe(ri)" *ngIf="acte.etat==='ACTIF'">
                                 <td> <button type="button" pButton  pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
                                 
-                                <td>{{acte?.acte?.libelle}}</td>
+                                <td><span *ngIf="acte?.display" style="color: blue;">{{acte?.acte?.libelle}}</span>
+                                    <span *ngIf="!acte?.display">{{acte?.acte?.libelle}}</span></td>
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
@@ -2136,7 +2137,8 @@
                             <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
                                 <tr [pEditableRow]="sousActe" class="colorZoneSousActe" *ngIf="sousActe.etat==='ACTIF'">
                                     <td></td>
-                                    <td>{{sousActe?.sousActe?.libelle}}</td>
+                                    <td><span *ngIf="sousActe?.display" style="color: blue;">{{sousActe?.sousActe?.libelle}}</span>
+                                        <span *ngIf="!sousActe?.display">{{sousActe?.sousActe?.libelle}}</span></td>
                                     <td>
                                         <p-cellEditor>
                                             <ng-template pTemplate="input">
@@ -2188,7 +2190,7 @@
                                                             [style]="{'width':'100%'}"></p-dropdown>
                                             </ng-template>
                                             <ng-template pTemplate="output">
-                                                {{sousActe?.taux.taux}}
+                                                {{sousActe?.taux?.taux}}
                                             </ng-template>
                                         </p-cellEditor>
                                     </td>
@@ -2277,7 +2279,9 @@
                 <ng-template pTemplate="body" let-acte let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
                     <tr  [pEditableRow]="acte" class="colorZoneActe" (onRowSelect)="expandActe(ri)">
                         <td> <button type="button" pButton  pRipple [pRowToggler]="acte" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button></td>
-                        <td>{{acte?.acte?.libelle}}</td>
+                        <td><span *ngIf="acte?.display" style="color: blue;">{{acte?.acte?.libelle}}</span>
+                            <span *ngIf="!acte?.display">{{acte?.acte?.libelle}}</span>
+                        </td>
                         <td> 
                         </td>
                         <td>
@@ -2393,7 +2397,9 @@
                     <ng-template pTemplate="body" let-sousActe let-editing="editing" let-ri="rowIndex" let-expanded="expanded">
                         <tr [pEditableRow]="sousActe" class="colorZoneSousActe">
                             <td></td>
-                            <td>{{sousActe?.sousActe?.libelle}}</td>
+                            <td>
+                                <span *ngIf="sousActe?.display" style="color: blue;">{{sousActe?.sousActe?.libelle}}</span>
+                            <span *ngIf="!sousActe?.display">{{sousActe?.sousActe?.libelle}}</span></td>
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
@@ -2445,7 +2451,7 @@
                                                     [style]="{'width':'100%'}"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{sousActe?.taux.taux}}
+                                        {{sousActe?.taux?.taux}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
