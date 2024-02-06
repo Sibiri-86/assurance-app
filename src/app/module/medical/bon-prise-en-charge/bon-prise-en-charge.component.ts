@@ -67,6 +67,10 @@ import { formatDate } from '@angular/common';
 import { BonPriseEnChargeService } from 'src/app/store/medical/bon-prise-en-charge/service';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { PlafondActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { Police } from 'src/app/store/contrat/police/model';
+import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
+import { policeList } from 'src/app/store/contrat/police/selector';
 
 @Component({
   selector: 'app-bon-prise-en-charge',
@@ -135,8 +139,12 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   bonPriseEnChargeListNouveau: BonPriseEnCharge[] = [];
   listActe: Array<PlafondActe>;
   listSousActe: Array<PlafondSousActe>;
-  
- // userCurent: Us
+  adherentsearch:  Adherent = {};
+  adherentsList: Array<Adherent> = [];
+  adherentsSelected: Adherent = {};
+  policeList: Array<Police>;
+  police: Police;
+  policeList$: Observable<Array<Police>>;
 
 
  prestationPopForm: FormGroup;
@@ -146,6 +154,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
  numberPrestation = 0;
  compteur: number = null;
  displayFP = false;
+ displayAssure = false;
 
 
 
@@ -155,6 +164,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
                private keycloak: KeycloakService,
                private conventionService: ConventionService,
                private tierPayantService: TierPayantService,
+               private adherentService: AdherentService,
                private prefinancementService: PrefinancementService,
                private bonService: BonPriseEnChargeService,
                private plafondService: PlafondService,
@@ -247,9 +257,176 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  addAssure(): void {
+    this.displayAssure = false;
+    this.adherentsList = [];
+    console.log("=============this.adherentsSelected=====================");
+    console.log(this.adherentsSelected);
+    console.log("==========this.adherentsSelected========================");
+    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
+    
+    if (this.adherentsSelected) {
+      
+
+      if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
+        /* console.log(this.prestationsList.length);
+        console.log("====adherentSelected2021=======");
+        console.log(this.adherentSelectedfinal.numero);
+        console.log(value.numero);
+        console.log("====adherentSelected2021======="); */
+        if(this.adherentSelectedfinal.numero !== this.adherentsSelected.numero) {
+          this.addMessage('error', 'Assuré(e) non pris en compte', 'Veuillez continuer avec le même assuré');
+        } else{
+          this.adherentSelected = this.adherentsSelected;
+          this.adherentSelectedfinal = this.adherentSelected;
+     /*  console.log(this.adherentSelected.dateIncorporation);
+      console.log(this.prestationForm.value.dateDeclaration);
+     
+      console.log('***********this.adherentSelected***********', this.adherentSelected);
+      console.log(this.adherentSelected); */
+      this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+     //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+      this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+      this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+      this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+      this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+      if (this.adherentSelected.adherentPrincipal !== null) {
+        this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+    } else {
+        this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    }
+    
+      if(this.adherentSelected.signeAdherent ==='-') {
+        if((this.adherentsSelected.dateSortie === null && this.adherentsSelected.dateSuspension  !== null) || (this.adherentsSelected.dateSortie !== null && this.adherentsSelected.dateSuspension  !== null && new Date(this.adherentsSelected.dateSuspension).getTime() < new Date(this.adherentsSelected.dateSortie).getTime()
+        && new Date(this.adherentsSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime()) ) {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+            'Cet(te) assuré(e) est  suspendu(e) !!!');
+            if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                this.prestationPopForm.patchValue({
+                //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) a  été suspendu(e1)",
+                  sort : Sort.REJETE
+                  // sort: Sort.ACCORDE
+                  });
+               
+            }
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSuspension),
+              // sort: Sort.ACCORDE
+              });
+            
+        } 
+        if(this.adherentsSelected.dateSortie !== null || (this.adherentsSelected.dateSuspension !== null  && (new Date(this.adherentsSelected.dateSuspension)?.getTime() < new Date(this.adherentsSelected.dateSortie)?.getTime())
+        && new Date(this.adherentsSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+            'Cet(te) assuré(e) est  retiré(e) !!!');
+            if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                this.prestationPopForm.patchValue({
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) est  retiré(e)",
+                  sort : Sort.REJETE
+                  });
+               
+            }
+
+            if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()
+            ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+              this.prestationPopForm.patchValue({
+                montantRembourse : 0,
+                observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                sort : Sort.REJETE
+                });
+  
+            }
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSortie),
+              });
+            
+        }
+        
+      }
+        }
+      } else {
+        this.adherentSelected = this.adherentsSelected;
+        this.adherentSelectedfinal = this.adherentSelected;
+        /* console.log(this.adherentSelected.dateIncorporation);
+        console.log(this.prestationForm.value.dateDeclaration);
+       
+        console.log('***********this.adherentSelected***********', this.adherentSelected);
+        console.log(this.adherentSelected); */
+        this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+       //  this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+        this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+        this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+        this.prestationPopForm.get('souscripteur').setValue(this.adherentSelected.groupe.police.nom);
+        this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+        if (this.adherentSelected.adherentPrincipal !== null) {
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
+      } else {
+          this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+      }
+        if(this.adherentSelected.signeAdherent ==='-') {
+          if((this.adherentsSelected.dateSortie === null && this.adherentsSelected.dateSuspension  !== null) || (this.adherentsSelected.dateSortie !== null && this.adherentsSelected.dateSuspension  !== null && new Date(this.adherentsSelected.dateSuspension).getTime() < new Date(this.adherentsSelected.dateSortie).getTime()
+        && new Date(this.adherentsSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+            'Cet(te) assuré(e) est  suspendu(e) !!!');
+            if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                this.prestationPopForm.patchValue({
+                //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                  sort : Sort.REJETE
+                  // sort: Sort.ACCORDE
+                  });
+               
+            }
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSuspension),
+              // sort: Sort.ACCORDE
+              });
+            
+        } 
+        if(this.adherentsSelected.dateSortie !== null || (this.adherentsSelected.dateSuspension !=null && (new Date(this.adherentsSelected.dateSuspension)?.getTime() < new Date(this.adherentsSelected.dateSortie)?.getTime() ))) {
+            this.addMessage('error', 'Assuré(e) non pris en compte',
+            'Cet(te) assuré(e) est  retiré(e) !!!');
+            if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+                this.prestationPopForm.patchValue({
+                  montantRembourse : 0,
+                  observation: "Cet(te) assuré(e) a  été retiré(e)",
+                  sort : Sort.REJETE
+                  });
+               
+            }
+
+            if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+             
+              this.prestationPopForm.patchValue({
+                montantRembourse : 0,
+                observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                sort : Sort.REJETE
+                });
+  
+            }
+            this.prestationPopForm.patchValue({
+              dateRetrait: new Date(this.adherentSelected.dateSortie),
+              });
+            
+        } 
+        }
+      }
+     
+     
+      
+    }
+    this.adherentsearch = {};
+    this.adherentsSelected = {};
+  }
+  
   findMontantConsomme(event){
     console.log(event);
-    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.id).subscribe(rest=>{
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
        
@@ -288,6 +465,15 @@ findMontantPlafond(event){
       /* souscripteur: new FormControl({value: '', disabled: true}), */
       prestation: this.formBuilder.array([])
     });
+    this.policeList$ = this.store.pipe(select(policeList));
+        this.store.dispatch(loadPoliceAll());
+        this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.policeList = value.slice();
+            console.log('+++++++++++this.policeList+++++++++++++');
+            console.log(this.policeList);
+          }
+        });
     this.prestationForm.get('dateSaisie').setValue(new Date());
     this.store.dispatch(featureActionBonPriseEnCharge.setBon(null));
     this.store.pipe(select(selectorsBonPriseEnCharge.selectByteFile)).pipe(takeUntil(this.destroy$))
@@ -596,7 +782,32 @@ findMontantPlafond(event){
     this.checkStatus();
   }
 
-  
+  filtrer(): void {
+    if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+      this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+        if(rest) {
+          this.adherentsList= rest;
+        }
+        });
+    
+      }
+      if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationPopForm.get('dateSoins').value,this.police.nom).subscribe((rest)=>{
+          if(rest) {
+            this.adherentsList= rest;
+          }
+          });
+      }
+      if(this.adherentsearch.matriculeGarant && this.police.nom) {
+        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+          if(rest) {
+            this.adherentsList= rest;
+          }
+          });
+      }
+    
+      }
+    
 
   imprimer(bon: BonPriseEnCharge) {
     bon.userCurent = this.keycloak.getUsername();
@@ -1116,6 +1327,7 @@ console.log(myForm);
     console.log( this.adherentSelected);
     this.plafondSousActe = {};
     this.plafondSousActe.adherent = this.adherentSelectedfinal;
+    this.prestationPopForm.get('montantPlafond').setValue(null);
     this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
     this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
@@ -1132,14 +1344,24 @@ console.log(myForm);
         this.prestationPopForm.get('montantPlafond').setValue(value);
         //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
       } else {
+        //this.prestationPopForm.get('montantPlafond').setValue(null);
       }
     });
     //}
+    console.log('le montantPlafond de i est ********************' + this.prestationPopForm.get('montantPlafond').value);
+  }
+
+  rechercherAssure(): void {
+    this.displayAssure = true;
   }
 
   addPrestation1() {
 
     const prestat = this.prestationPopForm.value as Prestation;
+    let sousActe = this.prestationPopForm.get('sousActe').value;
+    let acte = this.prestationPopForm.get('acte').value;
+    let familleActe = this.prestationPopForm.get('familleActe').value;
+
     prestat.adherent = this.adherentSelected;
     prestat.acte = this.prestationPopForm.get('acte').value?.acte;
     prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
@@ -1151,9 +1373,10 @@ console.log(myForm);
     }
    
    this.prestationPopForm.reset();
-   this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value.sousActe);
-    this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value.acte);
-   this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelectedfinal.numero);
+   this.prestationPopForm.get('familleActe').setValue(familleActe);
+  // this.prestationPopForm.get('sousActe').setValue(sousActe);
+    this.prestationPopForm.get('acte').setValue(acte);
+   this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelected.numero);
    this.prestationPopForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
     this.prestationPopForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
     this.prestationPopForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);

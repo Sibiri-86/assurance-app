@@ -468,6 +468,8 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
+
                 this.onRowSelectBonAdherent();
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
             
@@ -1422,7 +1424,7 @@ export class TierPayantEditionComponent implements OnInit {
             }*/
 
             if(this.montantPlafond !== null && this.montantPlafond !== 0 ) {
-                if(this.montantPlafond < this.prestationAdd.coutUnitaire) {
+                if(this.montantPlafond < (this.prestationAdd.coutUnitaire* (this.prestationAdd?.taux?.taux / 100))) {
                    // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
                     this.prestationAdd.montantRembourse = this.montantPlafond * this.prestationAdd.nombreActe;
                     this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
@@ -1434,8 +1436,9 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.observation= "remboursement favorable";
             }
             console.log("=============this.montantPlafond12=============",this.montantPlafond1);
+            console.log("=============this.montantPlafond12=============",this.montantConsomme);
 
-            if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
+            if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * (this.prestationAdd?.taux?.taux / 100)) ) > this.montantPlafond1) {
 
                 
                 this.prestationAdd.sort = Sort.ACCORDE;
@@ -1504,7 +1507,7 @@ export class TierPayantEditionComponent implements OnInit {
             if(this.prestationAdd.sort === Sort.ACCORDE) {
                this.prestationAdd.montantRembourse =  ((this.prestationAdd.baseRemboursement - this.prestationAdd.montantExclu) *  this.prestationAdd.taux?.taux) /100;
                this.prestationAdd.montantRestant = this.prestationAdd.baseRemboursement  - this.prestationAdd.montantRembourse ;
-               if( this.montantPlafond1 !== null && (this.montantConsomme + this.prestationAdd.montantRembourse) > this.montantPlafond1  ) {
+               if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + ((this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * this.prestationAdd?.taux?.taux) / 100)) > this.montantPlafond1  ) {
 
                 
                 this.prestationAdd.sort = Sort.ACCORDE;
@@ -1540,7 +1543,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationAdd = {};
         // this.prefinancement.montantRestant = this.prefinancement.montantPaye;
         const formPrestation: FormGroup = this.createItem();
-        this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+        // this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         // formPrestation.get('montantReclame').setValue(this.prestationForm.get('montantReclame').value)
         
         this.prestation.push(formPrestation);
