@@ -5016,7 +5016,7 @@
                 
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [globalFilterFields]="['numero','nom','prenom','territorialite.libelle']"
                              [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
@@ -5119,7 +5119,7 @@
                 
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['libelle','description','duree','territorialite.libelle']"
+                             [globalFilterFields]="['nom','prenom','numero','territorialite.libelle']"
                              [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"

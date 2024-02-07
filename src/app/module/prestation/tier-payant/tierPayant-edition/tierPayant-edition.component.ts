@@ -561,20 +561,20 @@ export class TierPayantEditionComponent implements OnInit {
                
               /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
                     e.typeBon === TypeBon.PRISEENCHARGE);*/
-                    this.onRowSelectBonAdherent();
+                  //  this.onRowSelectBonAdherent();
 
                     
             } else {
 
             }
         });
-        this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
+       /*  this.exerciceList$ = this.store.pipe(select(exerciceSelector.selectExerciceList));
         this.store.dispatch(featureExerciceAction.loadExercices());
         this.exerciceList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             if(value) {
                 this.exerciceList = value.slice();
             }
-        });
+        }); */
 
         this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
         this.store.dispatch(featureActionTierPayant.loadTierPayant());
@@ -668,14 +668,14 @@ export class TierPayantEditionComponent implements OnInit {
         });
 
         // chargement des bons de prise en charge
-        this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+       /*  this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
         this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
           console.log(value);
           if (value) {
             this.bonPriseEnChargeList = value.slice();
           }
-    });
+    }); */
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
@@ -1453,6 +1453,11 @@ export class TierPayantEditionComponent implements OnInit {
               //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
             }
         }
+
+        if(this.prestationAdd.baseRemboursement) {
+            this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+
+        }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
                 if(!this.prestationAdd.observation) {
@@ -1808,7 +1813,7 @@ export class TierPayantEditionComponent implements OnInit {
             }));
           }
         
-          this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+         // this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
           if(this.prefinancement?.montantReclame < this.prefinancement?.montantPaye) {
             this.showAlert = true;
           }

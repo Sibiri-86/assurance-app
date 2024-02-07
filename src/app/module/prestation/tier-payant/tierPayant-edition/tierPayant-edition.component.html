@@ -455,6 +455,7 @@
 </p-dialog>
 
 <p-dialog [(visible)]="displayPrestationpop"  header="Veuillez ajouter une prestation"  [modal]="true" styleClass="p-fluid">
+    <p-toast></p-toast>
     <ng-template pTemplate="header">
         <Span style="font-weight: bold">Montant reclamé: {{prefinancement?.montantReclame | formatTableValue: 'number':true}}</Span>
         <Span *ngIf="prefinancement?.montantReclame > prefinancement?.montantPaye" style="font-weight: bold; color: rgb(12, 125, 12);">Montant remboursé: {{prefinancement?.montantPaye | formatTableValue: 'number':true}}</Span>
