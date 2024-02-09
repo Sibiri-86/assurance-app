@@ -245,7 +245,9 @@ export class TierPayantEditionComponent implements OnInit {
         
             if (this.adherentsSelected) {
                 this.adherentSelected = this.adherentsSelected;
-                this.onRowSelectBonAdherent();
+                if(this.bonPriseEnChargeList) {
+                    this.onRowSelectBonAdherent();
+                }
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
             
 
@@ -336,7 +338,10 @@ export class TierPayantEditionComponent implements OnInit {
                
               /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
                     e.typeBon === TypeBon.PRISEENCHARGE);*/
-                    this.onRowSelectBonAdherent();
+                    if(this.bonPriseEnChargeList) {
+                        this.onRowSelectBonAdherent();
+                    }
+                    
 
                     
             } else {
@@ -462,7 +467,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
-        this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
+       // this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
         this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
@@ -710,9 +715,8 @@ export class TierPayantEditionComponent implements OnInit {
     onRowSelectBonAdherent() {
     
 
-          this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
+          this.bonPriseEnChargeList = this.bonPriseEnChargeList?.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
             && bon.prestataire?.id === this.prestataireSelected.id &&  bon.typeBon === TypeBon.PRISEENCHARGE);
-            console.log('====lidt==========', this.bonPriseEnChargeList);
         
     }
 
@@ -1868,9 +1872,11 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
          // this.onRowSelectAdherent();
-         
-          this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === prestation?.adherent?.id 
-            && bon.prestataire?.id === this.prefinancement?.prestataire?.id);
+         if(this.bonPriseEnChargeList ) {
+            this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(bon=>bon?.adherent?.id === prestation?.adherent?.id 
+                && bon.prestataire?.id === this.prefinancement?.prestataire?.id);
+         }
+        
          
           this.displayPrestationpop = true;
           this.baseAnterieur = prestation.montantRembourse;
