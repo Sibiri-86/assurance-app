@@ -80,6 +80,7 @@ import { PrefinancementService } from 'src/app/store/prestation/prefinancement/s
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
+import { PlafondService } from 'src/app/store/contrat/plafond/service';
 
 
 
@@ -188,6 +189,10 @@ export class TierPayantEditionComponent implements OnInit {
     policeList$: Observable<Array<Police>>;
     policeList: Array<Police>;
     police: Police;
+    listActe: Array<PlafondActe>;
+    listSousActe: Array<PlafondSousActe>;
+    dateDebut: any;
+    dateFin: any;
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -195,6 +200,7 @@ export class TierPayantEditionComponent implements OnInit {
                 private prefinancementService: PrefinancementService,
                 private conventionService: ConventionService,
                 private adherentService: AdherentService,
+                private plafondService: PlafondService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
@@ -392,7 +398,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
     findMontantConsomme(){
-        this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, this.prestationAdd.sousActe.id).subscribe(rest=>{
+        this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, this.prestationAdd.sousActe?.sousActe?.id).subscribe(rest=>{
 
             this.montantConsomme = rest;
            
@@ -400,7 +406,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     findMontantPlafond(){
-        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, this.prestationAdd.acte.id).subscribe(rest=>{
+        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, this.prestationAdd.acte?.acte?.id).subscribe(rest=>{
 
             this.montantPlafond1 = rest;
             console.log("mmmmmmmmmmmmmmmtttttttmmmmmmmmmmmmmmmmmmmmmm", this.montantPlafond1);
@@ -410,7 +416,8 @@ export class TierPayantEditionComponent implements OnInit {
 
 
     ngOnInit(): void {
-
+        this.dateDebut = new Date();
+        this.dateFin = new Date();
         // this.prestationList = [];
         this.prestationForm = this.formBuilder.group({
             // domaine: new FormControl({}),
@@ -717,7 +724,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
 
-    selectActe(event){
+    selectActe1(event){
         this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
         /* this.sousActeEnCours$ = this.store.pipe(select(plafondSelector.plafondSousActeEnCours));
         this.store.dispatch(featureActionPlafond.loadSousActeEnCours({idPGA: event.value.acte.id}));
@@ -730,6 +737,18 @@ export class TierPayantEditionComponent implements OnInit {
             }
         }); */
     }
+
+    selectActe(event){
+        console.log(event);
+         //this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
+    
+        console.log("this.adherentSelected ", this.adherentSelected);
+        //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+       this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+        subscribe((res) =>{
+          this.listSousActe = res.body;
+        });
+      }
 
     imprimer(pref: SinistreTierPayant) {
         this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
@@ -1147,25 +1166,42 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
     }
 
-    changeGarantie(event) {
+    /**changeGarantie(event) {
         if(event.value?.code == "FP") {
             this.displayFP = true;
            } else {
             this.displayFP = false;
           }
         this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === event.value.id);
-        /* this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
-        this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
-        console.log('++++++++++++++++++++++++++++++++++++item+++', event.value.garantie.id);
-        this.acteEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-            console.log('++++++++++++++++++++++++++++++++++++value+++', value);
-            if (value) {
-                this.acteEnCours = value.slice();
-                console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
-            }
-        }); */
+        // this.acteEnCours$ = this.store.pipe(select(plafondSelector.plafondActeEnCours));
+        // this.store.dispatch(featureActionPlafond.loadActeEnCours({idPGFA: event.value.garantie.id}));
+        // console.log('++++++++++++++++++++++++++++++++++++item+++', event.value.garantie.id);
+        // this.acteEnCours$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        //     console.log('++++++++++++++++++++++++++++++++++++value+++', value);
+        //     if (value) {
+        //         this.acteEnCours = value.slice();
+        //         console.log('++++++++++++++++++++++++++++++++++++acteEnCours$+++', this.acteEnCours$);
+        //     }
+        // });
         this.findMontantTotalConsommeFamille();
-    }
+    }*/
+
+    changeGarantie(garantie) {
+        console.log(garantie);
+        if(garantie.value?.code == "FP") {
+         this.displayFP = true;
+        } else {
+          this.displayFP = false;
+        }
+        console.log("this.adherentSelected ", this.adherentSelected);
+         //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
+       this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+        subscribe((res) =>{
+          this.listActe = res.body;
+        });
+        console.log("this.listActe  ", this.listActe );
+        this.findMontantTotalConsommeFamille();
+      }
 
     changeDisplay() {
         if(this.prestationAdd.produitPharmaceutique) {
@@ -1528,7 +1564,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     findTaux() {
         this.prestationAdd.taux  = null;
-        this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationAdd?.sousActe?.id, this.adherentSelected.id).subscribe((rest)=>{
+        this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationAdd?.sousActe?.sousActe?.id, this.adherentSelected.id).subscribe((rest)=>{
           
           this.prestationAdd.taux  =rest;
         });
@@ -1751,6 +1787,10 @@ export class TierPayantEditionComponent implements OnInit {
           }
 
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
+         this.prestationAdd.acte = this.prestationAdd.acte.acte;
+         this.prestationAdd.sousActe = this.prestationAdd.sousActe.sousActe;
+         console.log("111111111111111 acte ", this.prestationAdd.acte);
+         console.log("222222222222222 sousActe ", this.prestationAdd.sousActe);
          this.prestationAddFin.dateSoins = this.prestationAdd.dateSoins;
          this.prestationAddFin.numeroBon = this.prestationAdd.numeroBon;
          this.prestationAdd = {};
@@ -1829,14 +1869,14 @@ export class TierPayantEditionComponent implements OnInit {
         console.log("========prestation==============",prestation);
         this.adherentSelected = prestation?.adherent;
        
-        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.id).subscribe(rest=>{
+        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
 
             this.montantConsomme = rest;
            
            
         });
 
-        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.id).subscribe(rest=>{
+        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
 
             this.montantPlafond1 = rest;
            
@@ -1883,10 +1923,11 @@ export class TierPayantEditionComponent implements OnInit {
 
       selectDateSoins(){
         this.plafondSousActe = {};
-        this.plafondSousActe.sousActe =  this.prestationAdd.sousActe; 
+        this.plafondSousActe.sousActe =  this.prestationAdd.sousActe.sousActe; 
+        console.log("============  ", this.plafondSousActe.sousActe);
         this.plafondSousActe.dateSoins = this.prestationAdd.dateSoins;
         this.plafondSousActe.adherent = this.prestationAdd.adherent;
-        this.conventionService.$findMontantConvention(this.prestationAdd.sousActe.id).subscribe((rest)=>{
+        this.conventionService.$findMontantConvention(this.prestationAdd.sousActe.sousActe.id).subscribe((rest)=>{
             this.montantConvention = rest;
 
         });

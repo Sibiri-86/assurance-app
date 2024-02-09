@@ -102,7 +102,7 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: true},
                     {label: 'New barème', icon: '', routerLink: ['/medical/new-bareme'], visible: true},
                     {label: 'Remboursement en entente de validation', icon: '', routerLink: ['/medical/remboursement-entente'], visible: true},
-                    {label: 'majPrestataire', icon: '', routerLink: ['/medical/maj-prestataire'], visible: true},
+                    {label: 'majPrestataire', icon: '', routerLink: ['/medical/maj-prestataire'], visible: this.keycloak.isUserInRole(Function.vue_maj_prestataire)},
                     
                 ]
             },

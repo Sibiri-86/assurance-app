@@ -10,6 +10,22 @@
 				</ng-template>
                 
 			</p-toolbar>
+            <div class="p-formgroup-inline">
+                <div class="p-field">
+                    <label for="matricule" class="p-sr-only"></label>
+                    <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+<!--                     <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
+ -->                </div>
+                
+                <div class="p-field">
+                    <label for="dateSoins" class="p-sr-only"></label>
+                    <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                </div>
+                <div class="p-field">
+                    <button pButton pRipple type="button" label="Rechercher"></button>
+                </div>
+                
+            </div> 
 
 
             <p-table #dt [value]="sinistreTierPayantDTOList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire.libelle','numeroFacture']"
@@ -561,15 +577,15 @@
                <div class="p-field p-col">
                    <label for="acte">Acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                    <p-dropdown dataKey="id" inputId="acte" [disabled]="!prestationAdd.familleActe" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
-                               [options]="acteListFilter"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="libelle" (onChange)="selectActe($event)"></p-dropdown>
+                               [options]="listActe"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="acte.libelle" (onChange)="selectActe($event)"></p-dropdown>
                </div>
 
                <div class="p-field p-col">
                 <label for="sousActe" id="sousActe">SousActe <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                 <p-dropdown inputId="sousActe" [filter]="true" [disabled]="!prestationAdd.acte"
-                            showClear="true" [options]="sousActeListFilter" name="sousActe"
+                            showClear="true" [options]="listSousActe" name="sousActe"
                             [(ngModel)]="prestationAdd.sousActe" placeholder="Select sous-acte"
-                            optionLabel="libelle" (onChange)="selectDateSoins(); findMontantConsomme(); findMontantPlafond();  findTaux()"></p-dropdown>
+                            optionLabel="sousActe.libelle" (onChange)="selectDateSoins(); findMontantConsomme(); findMontantPlafond();  findTaux()"></p-dropdown>
             </div>
 
            </div>
