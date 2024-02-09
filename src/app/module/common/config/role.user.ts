@@ -49,6 +49,7 @@ export const Function = {
     VUE_SOUSCRIPTEUR: 'VUE_SOUSCRIPTEUR',
     sm_reporting_AG_DGA: 'sm_reporting_AG_DGA',
     vue_maj_assuere: 'vue_maj_assuere',
+    vue_maj_prestataire: 'vue_maj_prestataire',
 };
 
 export const UsersRoles = {
@@ -64,5 +65,5 @@ export const UsersRoles = {
     Function.sm_workflow_prefinancement_finance, Function.sm_workflow_prefinancement_direction, Function.sm_workflow_prefinancement_prestation_valider, Function.sm_workflow_prefinancement_Medical_valider, 
     Function.sm_workflow_prefinancement_finance_valider, Function.sm_workflow_prefinancement_direction_valider, Function.sm_workflow_prefinancement_prestation_devalider, Function.sm_workflow_prefinancement_Medical_devalider, 
     Function.sm_workflow_prefinancement_finance_devalider, Function.sm_workflow_prefinancement_direction_devalider, 
-    Function.VUE_ASSURE, Function.sm_portail, Function.sm_reporting_AG_DGA]
+    Function.VUE_ASSURE, Function.sm_portail, Function.sm_reporting_AG_DGA, Function.vue_maj_assuere, Function.vue_maj_prestataire]
 };

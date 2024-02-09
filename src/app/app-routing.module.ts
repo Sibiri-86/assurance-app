@@ -447,7 +447,7 @@ import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
                     data: { roles: ['sm_production']}},
                     {path: 'medical/maj-prestataire', component: MajPrestataireComponent,
                     canActivate: [AuthGuard],
-                    data: { roles: ['sm_medical']}},
+                    data: { roles: ['vue_maj_prestataire']}},
                     {path: 'comptabilite/bilan', component: BilanComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_finance']}},
