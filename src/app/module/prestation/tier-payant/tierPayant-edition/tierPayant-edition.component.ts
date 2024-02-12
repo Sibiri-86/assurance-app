@@ -766,8 +766,14 @@ export class TierPayantEditionComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
-            etat: TypeEtatSinistre.VALIDE}));
+            this.tierPayantService.findPrestationBySinitreTierPayant(pref.id).subscribe((rest)=>{
+                if(rest) {
+                    pref.prestation = rest;
+                    this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
+                        etat: TypeEtatSinistre.VALIDE}));
+                }
+            });
+          
         },
       });
     }
@@ -1978,6 +1984,12 @@ export class TierPayantEditionComponent implements OnInit {
          
           this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
           this.prefinancement.dateSaisie = new Date(tierPayant.dateSaisie);
+          this.tierPayantService.findPrestationBySinitreTierPayant(tierPayant.id).subscribe((rest)=> {
+            if(rest) {
+               // this.prefinancementDetail.prestation= rest;
+               this.prestationsList = rest;
+            }
+        })
           this.prestationsList = tierPayant.prestation;
           this.displayFormPrefinancement = true;
       }
@@ -1985,6 +1997,11 @@ export class TierPayantEditionComponent implements OnInit {
       voirTierPyant(tierPayant: SinistreTierPayant){
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
+        this.tierPayantService.findPrestationBySinitreTierPayant(tierPayant.id).subscribe((rest)=> {
+            if(rest) {
+                this.prefinancementDetail.prestation= rest;
+            }
+        });
         // this.prestationDetail = tierPayant.prestation[0];
        // console.log(tierPayant.prestation[0]?.sousActe);
           this.displayFormPrefinancementDetail = true;

@@ -118,6 +118,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/prestation/${prestation.id}`, null);
     }
 
+    findPrestationBySinitreTierPayant(sinitreTierId: string): Observable<Prestation[]> {
+        // @FIXME: post request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/prestation/${sinitreTierId}`).pipe(
+            map((response: Prestation[]) => response),
+            catchError(this.handleError())
+        );    }
+
     deleteTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         // @FIXME: post request
         return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}`, tierPayant);
