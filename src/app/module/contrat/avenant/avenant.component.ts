@@ -1674,14 +1674,29 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   deValiderPolice(police: Police){
-    this.confirmationService.confirm({
-      message: 'Etes vous sûr(e) de vouloir dévalider la police?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.store.dispatch(featureAction.deValiderPolice(police));
-      },
+    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: police.id}));
+    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.historiqueAvenants1 = value.slice();
+        console.log('..this.historiqueAvenants1....', this.historiqueAvenants1); 
+        /** Verification avant dévalidation de l'avenant */
+        if(this.historiqueAvenants1) {
+          this.addMessage('error', 'Impossible', 'Cette police ne peut pas être devalider car elle contient plus d\'un avenant.');
+        } else {
+          this.confirmationService.confirm({
+            message: 'Etes vous sûr(e) de vouloir dévalider la police?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.store.dispatch(featureAction.deValiderPolice(police));
+            },
+          });
+        }
+      }
     });
+    
+    
   }
 
   voirGroupe(police: Police) {
@@ -2865,16 +2880,24 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   getStatistique(police: Police): void {
     console.log('get statistique police ....start...');
-    this.policeService.rapportPolice(police).subscribe(
-      (res) => {
-        this.stat = res;
-        this.viewStat = true;
-        console.log('get statistique police ....end...', res);
-      }
-    );
+    this.loadExerciceByPolice(police);
+    this.viewStat = true;
+  }
+  onExerciceChangeForReport(curentExercice: Exercice) {
+    if(curentExercice != null) {
+      console.log("l'exercice partant ", curentExercice.id);
+      this.policeService.rapportByExercice(curentExercice.police.id, curentExercice.id).subscribe(
+        (res) => {
+          this.stat = res;
+          console.log('get statistique police ....end...', res);
+        }
+      );
+    } 
   }
 
   hideStat(): void {
+    this.stat = {};
+    this.curentExercice = null;
     this.viewStat = false;
   }
 

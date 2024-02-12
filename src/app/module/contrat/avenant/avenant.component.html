@@ -4635,12 +4635,20 @@
     <p-confirmDialog [style]="{width: '500px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 
     <p-dialog [maximizable]="false" [(visible)]="viewStat" header="Statistiques" [modal]="true" styleClass="p-fluid" [style]="{'width':'400px'}" (onHide)="hideStat()">
+        <div>
+            <label for="fraisBadge">Exercice</label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChangeForReport(curentExercice)">
+            </p-dropdown> 
+            <!-- *ngIf="curentExercice?.id != null" -->
+        </div>
+        <br>
         <div class="p-fluid p-formgrid p-grid">
-            <div class="p-field p-col-8 stat-item">Nombre d'adhérent : </div> <div class="p-field p-col-4 stat-count">{{stat?.nombreAdherent}}</div>
-            <div class="p-field p-col-8 stat-item">Nombre de Conjoint(es)</div> <div class="p-field p-col-4 stat-count">{{stat?.nombreConjoint}}</div>
-            <div class="p-field p-col-8 stat-item">Nombre d'Enfant(s)</div> <div class="p-field p-col-4 stat-count">{{stat?.nombreEnfant}}</div> <br>
+            <div class="p-field p-col-8 stat-item">Nombre d'Adhérent(es) : </div> <div class="p-field p-col-4 stat-count">{{stat?.nombreAdherent}}</div>
+            <div class="p-field p-col-8 stat-item">Nombre de Conjoint(es) :</div> <div class="p-field p-col-4 stat-count">{{stat?.nombreConjoint}}</div>
+            <div class="p-field p-col-8 stat-item">Nombre d'Enfant(s) :</div> <div class="p-field p-col-4 stat-count">{{stat?.nombreEnfant}}</div> <br>
             <div class="p-field p-col-12"><hr style="height:3px;border-width:0;color:gray;background-color:gray"></div>  
-            <div class="p-field p-col-8 stat-item">Effectif total</div> <div class="p-field p-col-4 stat-count">{{stat?.total}}</div>
+            <div class="p-field p-col-8 stat-item">Effectif total :</div> <div class="p-field p-col-4 stat-count">{{stat?.total}}</div>
         </div>
     </p-dialog>
 

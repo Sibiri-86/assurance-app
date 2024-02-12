@@ -130,4 +130,14 @@ export class PoliceService {
         return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data,
             {headers: headers});
     }
+
+    rapportByExercice(policeId: string, id: string): Observable<any> {
+        // @FIXME: post request
+        if(policeId && id){
+            return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/rapportByExercice/${policeId}/${id}`).pipe(
+              map((response: any) => response),
+              catchError(this.handleError())
+            );
+            }
+    }
 }
