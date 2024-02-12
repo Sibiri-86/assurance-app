@@ -766,13 +766,16 @@ export class TierPayantEditionComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            this.tierPayantService.findPrestationBySinitreTierPayant(pref.id).subscribe((rest)=>{
+           /* this.tierPayantService.findPrestationBySinitreTierPayant(pref.id).subscribe((rest)=>{
                 if(rest) {
                     pref.prestation = rest;
                     this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
                         etat: TypeEtatSinistre.VALIDE}));
                 }
-            });
+            });*/
+            this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
+                etat: TypeEtatSinistre.VALIDE})); this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
+                        etat: TypeEtatSinistre.VALIDE}));
           
         },
       });
