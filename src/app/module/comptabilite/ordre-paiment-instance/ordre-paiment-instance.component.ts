@@ -115,8 +115,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   }
 
   paiemrntEspece(ordre: OrdreReglement) {
-    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
-    this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
     this.addMessage('success', 'Reussite',
       'Ordre de règlement validé avec succès');

@@ -365,7 +365,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancement.dateSaisie = new Date();
       this.prefinancement.prestation = this.prestationsList;
       console.log(this.prefinancement);
-           this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
+      this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
         // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);

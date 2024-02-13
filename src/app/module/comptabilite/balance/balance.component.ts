@@ -44,6 +44,7 @@ import * as featureActionExerciceComptableOperation from '../../../store/comptab
 import { ExerciceComptable } from 'src/app/store/comptabilite/exercice-comptable/model';
 import * as exerciceListSelector from '../../../store/comptabilite/exercice-comptable/selector';
 import * as featureActionExercice from '../../../store/comptabilite/exercice-comptable/actions';
+import { formatDate } from '@angular/common';
 
 
 
@@ -245,7 +246,8 @@ export class BalanceComponent implements OnInit {
   }
 
   paiemrntEspece(ordre: OrdreReglement) {
-    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
+    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre,dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
   }
 
