@@ -47,6 +47,7 @@ import * as featureActionExercice from '../../../store/comptabilite/exercice-com
 import * as tierSelector from '../../../store/comptabilite/tiers/selector';
 import { Tiers } from 'src/app/store/comptabilite/tiers/model';
 import * as featureActiontiers from '../../../store/comptabilite/tiers/actions';
+import { formatDate } from '@angular/common';
 
 
 
@@ -230,7 +231,8 @@ export class BalanceTiersComponent implements OnInit {
   }
 
   paiemrntEspece(ordre: OrdreReglement) {
-    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre}));
+    this.store.dispatch(featureActionPrefinancement.validerPaiementEspece({ordre: ordre,dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     //this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstance());
   }
 
