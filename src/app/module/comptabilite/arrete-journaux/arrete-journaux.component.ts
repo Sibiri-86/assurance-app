@@ -331,4 +331,8 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  supprimerEcriture(operation: Operation) {
+    
+  }
+
 }

@@ -1677,7 +1677,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
     this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: police.id}));
     this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (value) {
+      //if (value) {
         this.historiqueAvenants1 = value.slice();
         console.log('..this.historiqueAvenants1....', this.historiqueAvenants1); 
         /** Verification avant dévalidation de l'avenant */
@@ -1693,7 +1693,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
             },
           });
         }
-      }
+      //}
     });
     
     
