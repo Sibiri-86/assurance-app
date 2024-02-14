@@ -332,7 +332,13 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
   }
 
   supprimerEcriture(operation: Operation) {
-    
+    console.log("operation  ====>", operation);
+    console.log("this.journal.id  ====>", this.journal.id);
+    this.operationService.deleteOperationAndMajOther(operation, this.journal.id).subscribe((res)=> {
+      if(res) {
+        this.operationList = res.body;
+      }
+    });
   }
 
 }

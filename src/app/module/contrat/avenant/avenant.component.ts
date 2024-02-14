@@ -154,6 +154,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   plafond: Plafond;
   paysList$: Observable<Array<Pays>>;
   police: Police;
+  policeDevalide: Police;
   historiqueAvenant: HistoriqueAvenant;
   exercice: Exercice;
   exerciceSelected: Exercice = {};
@@ -161,6 +162,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   displayDialogFormPolice = false;
   displayDialogFormAddAdherent = false;
   displayDialogFormGroupe = false;
+  loadingPolice = false;
   policeForm: FormGroup;
   groupeForm: FormGroup;
   plafondForm: FormGroup;
@@ -281,7 +283,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantListWithoutActiveList: Array<HistoriqueAvenant>;
   historiqueAvenantList$: Observable<Array<HistoriqueAvenant>>;
   historiqueAvenantList: Array<HistoriqueAvenant>;
-  historiqueAvenants1: Array<HistoriqueAvenant>;
+  historiqueAvenants1: Array<HistoriqueAvenant> = [];
   historiqueAvenants1$: Observable<any>;
   historiqueAvenantAdherents: Array<HistoriqueAvenantAdherant>;
   historiqueAvenantAdherent1s: Array<HistoriqueAvenantAdherant>;
@@ -925,6 +927,25 @@ export class AvenantComponent implements OnInit, OnDestroy {
       if (value) {
         this.loading = false;
         this.historiqueAvenantList = value.slice();
+        if(this.loadingPolice) {
+          if(this.historiqueAvenantList.length === 0 ) {
+            this.confirmationService.confirm({
+              message: 'Etes vous sûr(e) de vouloir dévalider la police?',
+              header: 'Confirmation',
+              icon: 'pi pi-exclamation-triangle',
+              accept: () => {
+                this.store.dispatch(featureAction.deValiderPolice(this.policeDevalide));
+              },
+            });
+          } else {
+            this.addMessage('error', 'Impossible', 'Cette police ne peut pas être devalider car elle contient plus d\'un avenant.');
+  
+          }
+          this.loadingPolice = false;
+
+        }
+        
+
         console.log('................historiqueAvenantList............................');
         console.log(this.historiqueAvenantList);
       }
@@ -1673,28 +1694,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.isAvenantProrogation = false;
   }
 
-  deValiderPolice(police: Police){
-    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+  deValiderPolice1(police: Police){
+    this.policeDevalide = police;
+    this.loadingPolice= true;
+   // this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
     this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: police.id}));
-    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      //if (value) {
-        this.historiqueAvenants1 = value.slice();
-        console.log('..this.historiqueAvenants1....', this.historiqueAvenants1); 
-        /** Verification avant dévalidation de l'avenant */
-        if(this.historiqueAvenants1) {
-          this.addMessage('error', 'Impossible', 'Cette police ne peut pas être devalider car elle contient plus d\'un avenant.');
-        } else {
-          this.confirmationService.confirm({
-            message: 'Etes vous sûr(e) de vouloir dévalider la police?',
-            header: 'Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-              this.store.dispatch(featureAction.deValiderPolice(police));
-            },
-          });
-        }
-      //}
-    });
+   
     
     
   }
