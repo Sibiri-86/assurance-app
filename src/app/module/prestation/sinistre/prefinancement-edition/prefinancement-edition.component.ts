@@ -1379,9 +1379,9 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
         } 
        } else {
         console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
-        if(this.montantPlafond1 != null && this.montantConsomme >  this.montantPlafond1) {
+        if(this.montantPlafond1 != null && this.montantPlafond1 != 0 && this.montantConsomme >  this.montantPlafond1) {
           this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
-          myForm.patchValue({observation: "Votre plafond est atteint"});
+          // myForm.patchValue({observation: "Votre plafond est atteint"});
           myForm.patchValue({
             sort: Sort.REJETE,
             observation: "Votre plafond est atteint",
