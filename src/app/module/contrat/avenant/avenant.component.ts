@@ -348,6 +348,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   clonedAdherent: { [s: string]: Adherent } = {};
   roleMajAssure = this.keycloak.isUserInRole(Function.vue_maj_assuere);
   historiqueAvenantPrimesSelect: HistoriqueAvenantPrime[] = [];
+  genre: Genre = {};
+  qa:QualiteAssure = {};
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -3124,6 +3126,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   onRowEditSaveAdherent(assure: Adherent) {
+    console.log("=================> ", assure);
     if(assure.adherentPrincipal == null) {
       this.adhrentAJour = this.avenantModif1.adhrents?.filter(p=> p.adherentPrincipal?.numero === assure.numero);
       /* this.adhrentAJour?.forEach(hist=> {
@@ -3163,10 +3166,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   }
 
+  onChangeGenre(ad :Adherent) {
+    if(ad) {
+      ad.genre = this.genre;
+    }
+  }
+
+  onChangeQualiteAssure(ad :Adherent) {
+    if(ad) {
+      ad.qualiteAssure = this.qa;
+    }
+  }
+
   saveMajAdherent() {
     if(this.adhrentAJourToSave.length != 0) {
       this.adherentService.putAdherentMatriculeGarant(this.adhrentAJourToSave).subscribe(
         (res) => {
+          this.showToast('success', 'INFORMATION', 'mise à jour effectué avec succès');
           this.displayViewContrat = false;
         }
       );
