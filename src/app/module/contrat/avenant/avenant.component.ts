@@ -3152,6 +3152,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       console.log("montrer la maj de avenantModif1.adhrents ", this.avenantModif1.adhrents );
     } else {
       assure.matricule = assure.matriculeGarant;
+      assure.maj = true;
       this.adhrentAJour?.push(assure);
       this.adhrentAJourToSave = this.adhrentAJour;
       console.log("montrer la maj a enregistrer", this.adhrentAJourToSave); 

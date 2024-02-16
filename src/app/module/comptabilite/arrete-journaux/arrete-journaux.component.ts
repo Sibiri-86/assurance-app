@@ -35,6 +35,8 @@ import { ExerciceComptableOperationService } from 'src/app/store/comptabilite/ex
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { printPdfFile } from '../../util/common-util';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from '../../common/config/role.user';
 
 
 
@@ -77,6 +79,7 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
   verificationDebitCredit: string = "1";
   operationSelected: Operation = {};
   report: Report = {};
+  roleMajPaiement= this.keycloak.isUserInRole(Function.vue_maj_paiement);
   
   
   constructor( private store: Store<AppState>,
@@ -84,7 +87,8 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
                private operationService: OperationService,
                private compteService: CompteService,
                private exerciceOperationService: ExerciceComptableOperationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  
+               private breadcrumbService: BreadcrumbService, private keycloak: KeycloakService,) {
                 this.breadcrumbService.setItems([{ label: 'Arrêté'}]);
    }
 
