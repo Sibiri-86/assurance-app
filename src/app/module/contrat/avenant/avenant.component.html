@@ -123,7 +123,7 @@
                                     <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
                                     <button pButton pRipple icon="pi pi-reply" pTooltip="Rétrograder"
                                             class="p-button-rounded p-button-warning p-ml-1 p-mr-1"
-                                            (click)="deValiderPolice(police)"></button>
+                                            (click)="deValiderPolice1(police)"></button>
                                     <!-- <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée" 
                                             class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button> -->
                                             <button pButton pRipple icon="pi pi-eye" pTooltip="voir statistique"
@@ -5184,11 +5184,20 @@
                                 <!-- <th pSortableColumn="adresseEmail">Email
                                     <p-sortIcon field="adresseEmail"></p-sortIcon>
                                 </th> -->
-                                <th pSortableColumn="numeroTelephone">Téléphone
+                                <!-- <th pSortableColumn="numeroTelephone">Téléphone
                                     <p-sortIcon field="numeroTelephone"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="genre" style="width: 3rem">Genre
+                                </th> -->
+                                <th pSortableColumn="genre" >Genre
                                     <p-sortIcon field="genre.libelle"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre">Qualité
+                                    <p-sortIcon field="qualite"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre">date incorp
+                                    <p-sortIcon field="dateIncorp"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="genre">date entrée
+                                    <p-sortIcon field="dateEntree"></p-sortIcon>
                                 </th>
                                 <th style="width:8rem"></th>
                             </tr>
@@ -5209,22 +5218,96 @@
                                     </p-cellEditor>
                                 </td>
 
-                                <td><span class="p-column-title">{{adherent?.nom}}</span>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="adherent.nom" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.nom}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.nom}}</span> -->
 
                                 </td>
-                                <td><span class="p-column-title">{{adherent?.prenom}}</span>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="adherent.prenom" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.prenom}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.prenom}}</span> -->
 
                                 </td>
-                                <td><span class="p-column-title">{{adherent?.dateNaissance}}</span>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="date" [(ngModel)]="adherent.dateNaissance" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.dateNaissance}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.dateNaissance}}</span> -->
 
                                 <!-- </td>
                                 <td><span class="p-column-title">{{adherent?.email}}</span>
 
                                 </td> -->
-                                <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
+                                <!-- <td><span class="p-column-title">{{adherent?.numeroTelephone}}</span>
 
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="genreList" [(ngModel)]="genre" optionLabel="libelle" placeholder="Select genre" [filter]="true"
+                                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onChangeGenre(adherent)">
+                                            </p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.genre?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.genre?.libelle}}</span> -->
                                 </td>
-                                <td><span class="p-column-title">{{adherent?.genre?.libelle}}</span></td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="qualiteAssureList" [(ngModel)]="qa" optionLabel="libelle" placeholder="Select qualité assuré" [filter]="true"
+                                                [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onChangeQualiteAssure(adherent)">
+                                            </p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.qualiteAssure?.libelle}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.genre?.libelle}}</span> -->
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="date" [(ngModel)]="adherent.dateIncorporation" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.dateIncorporation}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.genre?.libelle}}</span> -->
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="date" [(ngModel)]="adherent.dateEntree" required>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{adherent?.dateEntree}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                    <!-- <span class="p-column-title">{{adherent?.genre?.libelle}}</span> -->
+                                </td>
                                 <td style="text-align:center">
                                     <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInitAdherent(adherent)" class="p-button-rounded p-button-text"></button>
                                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSaveAdherent(adherent)" class="p-button-rounded p-button-text p-button-success p-mr-2"></button>

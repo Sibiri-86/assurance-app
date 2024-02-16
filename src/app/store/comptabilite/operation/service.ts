@@ -109,6 +109,11 @@ $getSoldeAnterieurByMonth(id: string, b: boolean): Observable<OperationSoldeAnte
     );
   }
 
+  deleteOperationAndMajOther(operation: Operation, id:string): Observable<any> {
+    // @FIXME: post request
+    return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/deleteOperationAndMajOther/${id}`, operation);
+  }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');
