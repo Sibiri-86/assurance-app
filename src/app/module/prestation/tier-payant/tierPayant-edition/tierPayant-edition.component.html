@@ -261,9 +261,10 @@
 
                         <hr/>
 
-                        <p-fieldset legend="Liste des Prestations" toggleable="true">
-                            <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle',
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
+                        <p-fieldset legend="Liste des Prestations" toggleable="true"> 
+                            <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll"
+                            selectionMode="multiple" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
                                
                                 <ng-template pTemplate="caption">
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -293,7 +294,7 @@
                                 </ng-template>
                     
                                 <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
-                                    <tr>
+                                    <tr [pSelectableRow]="rowData">
                                 
                                         <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                         <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
