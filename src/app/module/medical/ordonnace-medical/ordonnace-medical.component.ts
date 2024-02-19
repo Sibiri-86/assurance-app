@@ -145,6 +145,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     policeList$: Observable<Array<Police>>;
     adherentsearch:  Adherent = {};
     adherentsList: Array<Adherent> = [];
+    adherentsSelected: Adherent = {};
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
         {label: 'PAQUET', value: TypeQuantite.PAQUET},
@@ -169,6 +170,96 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.displayAssure = true;
       }
 
+
+      addAssure(): void {
+        this.displayAssure = false;
+        this.adherentsList = [];
+        console.log("=============this.adherentsSelected=====================");
+        console.log(this.adherentsSelected);
+        console.log("==========this.adherentsSelected========================");
+        this.prestationForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
+        
+        if (this.adherentsSelected) {
+           
+            this.adherentSelected = this.adherentsSelected;
+            this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
+            this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+            if (this.adherentSelected.adherentPrincipal != null) {
+                this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
+                this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+            } else {
+                this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
+                this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
+            }
+            this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+            this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
+            this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
+            this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+        
+           
+           
+            if(this.adherentSelected.signeAdherent ==='-') {
+              if((this.adherentsSelected.dateSortie === null && this.adherentsSelected.dateSuspension  !== null) || (this.adherentsSelected.dateSortie !== null && this.adherentsSelected.dateSuspension  !== null && new Date(this.adherentsSelected.dateSuspension).getTime() < new Date(this.adherentsSelected.dateSortie).getTime()
+            && new Date(this.adherentsSelected.dateSortie).getTime() > new Date(this.prestationForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationForm.value.dateSoins).getTime()) {
+                this.addMessage('error', 'Assuré(e) non pris en compte',
+                'Cet(te) assuré(e) est  suspendu(e) !!!');
+                if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationForm.value.dateSoins).getTime()) {
+                    this.prestationForm.patchValue({
+                    //  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                      montantRembourse : 0,
+                      observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                      sort : Sort.REJETE
+                      // sort: Sort.ACCORDE
+                      });
+                   
+                }
+                this.prestationForm.patchValue({
+                  dateRetrait: new Date(this.adherentSelected.dateSuspension),
+                  // sort: Sort.ACCORDE
+                  });
+                
+            } 
+            if(this.adherentsSelected.dateSortie !== null || (this.adherentsSelected.dateSuspension !=null && (new Date(this.adherentsSelected.dateSuspension)?.getTime() < new Date(this.adherentsSelected.dateSortie)?.getTime() ))) {
+                this.addMessage('error', 'Assuré(e) non pris en compte',
+                'Cet(te) assuré(e) est  retiré(e) !!!');
+                if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSortie).getTime() == new Date(this.prestationForm.value.dateSoins).getTime()) {
+                    this.prestationForm.patchValue({
+                      montantRembourse : 0,
+                      observation: "Cet(te) assuré(e) a  été retiré(e)",
+                      sort : Sort.REJETE
+                      });
+                   
+                }
+    
+                if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationForm.value.dateSoins).getTime()) {
+                 
+                  this.prestationForm.patchValue({
+                    montantRembourse : 0,
+                    observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                    sort : Sort.REJETE
+                    });
+      
+                }
+                this.prestationForm.patchValue({
+                  dateRetrait: new Date(this.adherentSelected.dateSortie),
+                  });
+                
+            } 
+            }
+          
+         
+         
+          
+        }
+        this.adherentsearch = {};
+        this.adherentsSelected = {};
+      }
+
+
+
+      addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+      }
       filtrer(): void {
         if(this.adherentsearch.matriculeGarant && !this.police.nom) {
           this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
@@ -395,12 +486,19 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
                 this.prestationForm.get('nomAdherent').setValue(pref.adherent.nom);
                 this.prestationForm.get('prenomAdherent').setValue(pref.adherent.prenom);
-                this.prestationForm.get('nomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.nom);
-                this.prestationForm.get('prenomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.prenom);
+                if (pref.adherent.adherentPrincipal != null) {
+                    this.prestationForm.get('nomAssurePrin').setValue(pref.adherent.adherentPrincipal.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(pref.adherent.adherentPrincipal.prenom);
+                } else {
+                    this.prestationForm.get('nomAssurePrin').setValue(pref.adherent.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(pref.adherent.prenom);
+                }
+                //this.prestationForm.get('nomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.nom);
+                // this.prestationForm.get('prenomAssurePrin').setValue(pref?.adherent?.adherentPrincipal?.prenom);
                 this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
                 this.prestationForm.get('prestataire').setValue(this.prestataireList.find(p => p.id === pref.prestataire.id));
-                this.prestationForm.get('pathologie').setValue(this.pathologieList.find(p => p.id === pref.pathologie.id))
+                this.prestationForm.get('pathologie').setValue(this.pathologieList.find(p => p.id === pref?.pathologie?.id))
                 console.log('***************pref.prestataire.libelle******************', pref.prestataire);
                 this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(pref.adherent.groupe.police.nom);
