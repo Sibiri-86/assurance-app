@@ -51,7 +51,7 @@ import {status} from '../../../store/global-config/selector';
 import {TypeEtatSinistre} from '../../common/models/enum.etat.sinistre';
 import {printPdfFile} from 'src/app/module/util/common-util';
 import {TypeReport} from 'src/app/store/contrat/enum/model';
-import {Report} from 'src/app/store/contrat/police/model';
+import {Police, Report} from 'src/app/store/contrat/police/model';
 import {SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
 import {Pathologie} from '../../../store/parametrage/pathologie/model';
 import * as pathologieSelector from '../../../store/parametrage/pathologie/selector';
@@ -69,6 +69,9 @@ import { OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, TypeQuantite
 import * as featureActionOrdonnanceMedical from '../../../store/medical/ordonnance-medical/actions';
 import * as selectorsOrdonnanceMedicale from '../../../store/medical/ordonnance-medical/selector';
 import * as featureActionOrdonnanceMedicale from '../../../store/medical/ordonnance-medical/actions';
+import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
+import { policeList } from 'src/app/store/contrat/police/selector';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
 
 
 
@@ -125,6 +128,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     sousActeEnCours$: Observable<PlafondSousActe[]>;
     sousActeEnCours: Array<PlafondSousActe>;
     checkControl = true;
+    displayAssure = false;
     tab: number[] = [];
     checkTierPayantResult: Array<CheckTierPayantResult>;
     isDetail: boolean;
@@ -136,7 +140,11 @@ export class OrdonnaceMedicalComponent implements OnInit {
     prestationListPrefinancement: Array<OrdonnanceMedical>;
     prestationListPrefinancementFilter: Array<OrdonnanceMedical>;
     prestatairePrescripteur: Array<Prestataire>;
-
+    policeList: Array<Police>;
+    police: Police;
+    policeList$: Observable<Array<Police>>;
+    adherentsearch:  Adherent = {};
+    adherentsList: Array<Adherent> = [];
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
         {label: 'PAQUET', value: TypeQuantite.PAQUET},
@@ -150,10 +158,42 @@ export class OrdonnaceMedicalComponent implements OnInit {
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
+                private adherentService: AdherentService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([{ label: 'Bon de prise en charge Pharmacie' }]);
     }
+
+
+    rechercherAssure(): void {
+        this.displayAssure = true;
+      }
+
+      filtrer(): void {
+        if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+          this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+            if(rest) {
+              this.adherentsList= rest;
+            }
+            });
+        
+          }
+          if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationForm.get('dateSoins').value,this.police.nom).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+          if(this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+        
+          }
 
     onCreate() {
         /** Methode pour enregistrer l'ordonnance médicale*/
@@ -225,6 +265,16 @@ export class OrdonnaceMedicalComponent implements OnInit {
                     printPdfFile(bytes);
                 }
             });
+
+            this.policeList$ = this.store.pipe(select(policeList));
+        this.store.dispatch(loadPoliceAll());
+        this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.policeList = value.slice();
+            console.log('+++++++++++this.policeList+++++++++++++');
+            console.log(this.policeList);
+          }
+        });
 
         this.adherentSelected$ = this.store.pipe(select(adherentSelector.selectedAdherent));
         this.store.dispatch(featureActionAdherent.searchAdherent({numero: 0}));
