@@ -1692,6 +1692,16 @@ export class TierPayantEditionComponent implements OnInit {
                       this.prestationsList = this.prestationsList1;
                 }
                 
+
+                for(let i=0; i<this.prestationsList.length ; i++) {
+                
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationsList[i].montantRembourse;
+                   
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+            
+                }
+                
+
              //   this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
             },
         });
