@@ -22,7 +22,8 @@
                     </div>
         </ng-template>
         </p-toolbar>
-            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero']"
+            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero',
+            'assurePrinc.nom', 'assurePrinc.prenom', 'typePaiement', 'montantPaye']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
