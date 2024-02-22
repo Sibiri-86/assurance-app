@@ -361,8 +361,10 @@ export class TierPayantEditionComponent implements OnInit {
         
         
         
-    
+    if(!this.prefinancement.id) {
         this.prefinancement.dateSaisie = new Date();
+    } 
+        
       this.prefinancement.prestation = this.prestationsList;
       console.log(this.prefinancement);
       this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
