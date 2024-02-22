@@ -62,11 +62,11 @@
                         <td>
                             <p-tableCheckbox [value]="tierPayant"></p-tableCheckbox>
                         </td>
-                        <td> <span class="p-column-title" style="width:50px; font-weight: bold;" >{{tierPayant.numeroFacture}}</span>
+                        <td> <span class="p-column-title" style="width:50px; font-weight: bold;" >{{tierPayant?.numeroFacture}}</span>
                         </td>
-                        <td><span class="p-column-title" style="width:100px">{{tierPayant.prestataire.libelle}}</span>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant?.prestataire?.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title" style="width:100px">{{tierPayant.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" style="width:100px">{{tierPayant?.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
 
                         

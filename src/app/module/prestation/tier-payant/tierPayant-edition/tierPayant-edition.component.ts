@@ -358,12 +358,9 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
     onCreate() {
-        
-        
-        
-    
-        this.prefinancement.dateSaisie = new Date();
+      this.prefinancement.dateSaisie = new Date();
       this.prefinancement.prestation = this.prestationsList;
+      this.prefinancement.prestataire = this.prestataireSelected;
       console.log(this.prefinancement);
       this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
@@ -715,8 +712,9 @@ export class TierPayantEditionComponent implements OnInit {
         });
     }
     onRowSelectPrestataire(event)  {
-       
           this.prestataireSelected = event.value;
+          console.log('=============prestataire====== ', event.value);
+          console.log('=============this.prestataireSelected====== ', this.prestataireSelected);
     }
 
     onRowSelectBonAdherent() {
@@ -1984,6 +1982,9 @@ export class TierPayantEditionComponent implements OnInit {
           console.log("===bonPriseEnChargeList===",this.bonPriseEnChargeList);
           this.prefinancement = tierPayant;
           this.prestataireSelected = tierPayant.prestataire;
+          if(this.prestataireSelected.id != tierPayant.prestataire.id) {
+            tierPayant.prestataire = this.prestataireSelected;
+          }
          
           this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
           this.prefinancement.dateSaisie = new Date(tierPayant.dateSaisie);
