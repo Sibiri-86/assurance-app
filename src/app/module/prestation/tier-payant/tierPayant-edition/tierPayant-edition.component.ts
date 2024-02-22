@@ -372,7 +372,7 @@ export class TierPayantEditionComponent implements OnInit {
         // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-        console.log(this.prefinancementModel);
+       // console.log(this.prefinancementModel);
         this.tierPayantList = [];
         this.prestationsList = [];
         this.prestationForm.reset();
