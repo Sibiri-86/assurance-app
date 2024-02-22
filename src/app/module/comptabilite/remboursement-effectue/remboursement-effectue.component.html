@@ -22,7 +22,8 @@
                     </div>
         </ng-template>
         </p-toolbar>
-            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero']"
+            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero',
+            'assurePrinc.nom', 'assurePrinc.prenom', 'typePaiement', 'montantPaye']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -41,6 +42,7 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th> -->
                         <th pSortableColumn="numero" style="min-width:10px">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="min-width:10px">Date Validation<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:10px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
@@ -57,6 +59,8 @@
                         </td> -->
 
                         <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.date | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.datePaiement | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
                         </td>

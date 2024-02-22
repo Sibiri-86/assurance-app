@@ -335,14 +335,29 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
   supprimerEcriture(operation: Operation) {
-    console.log("operation  ====>", operation);
-    console.log("this.journal.id  ====>", this.journal.id);
-    this.operationService.deleteOperationAndMajOther(operation, this.journal.id).subscribe((res)=> {
-      if(res) {
-        this.operationList = res.body;
-      }
+    this.confirmationService.confirm({
+      message: 'voulez-vous vraiment supprimer cette opération, cette action est irréversible',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log("operation  ====>", operation);
+        console.log("this.journal.id  ====>", this.journal.id);
+        this.operationService.deleteOperationAndMajOther(operation, this.journal.id).subscribe((res)=> {
+          if(res) {
+            //this.operationList = res.body;
+            this.findJournalier();
+            this.addMessage('success', 'Effectué',
+          'Opération supprimée avec succès');
+          }
+        });
+      },
     });
+    
   }
 
 }
