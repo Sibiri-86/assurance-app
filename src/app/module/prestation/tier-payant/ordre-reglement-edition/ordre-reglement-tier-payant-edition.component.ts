@@ -17,6 +17,7 @@ import * as featureActionTierPayant from '../../../../store/prestation/tierPayan
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import {OrdreReglement, Prestation} from '../../../../store/prestation/prefinancement/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -37,7 +38,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   showDetailOrdreReglement = false;
 
   constructor(private store: Store<AppState>,
-              private confirmationService: ConfirmationService,
+              private confirmationService: ConfirmationService,private router: Router,
               private formBuilder: FormBuilder,  private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT EDITION' }]);
   }
@@ -117,6 +118,14 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
     console.log('*************************yes1********************' + this.showDetailOrdreReglement);
     console.log('*************************prestation********************' + this.ordreReglement .tierPayant[0].prestation);
 
+  }
+
+  navigateSinistre() {
+    this.router.navigateByUrl('/prestation/tierPayant/ordre-reglement/valide');
+  }
+
+  navigateSinistre2() {
+    this.router.navigateByUrl('/prestation/tierPayant/valide');
   }
 
 }

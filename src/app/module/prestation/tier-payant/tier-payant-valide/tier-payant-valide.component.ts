@@ -56,6 +56,7 @@ import * as tierPayantSelector from '../../../../store/prestation/tierPayant/sel
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -106,6 +107,7 @@ export class TierPayantValideComponent implements OnInit {
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
+               private router: Router,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private breadcrumbService: BreadcrumbService) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE VALIDE' }]);
@@ -309,7 +311,13 @@ export class TierPayantValideComponent implements OnInit {
   newRowPrestation() {
     return {taux: this.taux};
   }
+  navigateSinistre() {
+    this.router.navigateByUrl('/prestation/tierPayant/ordre-reglement');
+  }
 
+  navigateSinistre2() {
+    this.router.navigateByUrl('/prestation/tierPayant');
+  }
   addPrefinancement(){
     this.displayFormPrefinancement = true;
   }
