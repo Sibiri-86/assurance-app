@@ -359,7 +359,14 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
     onCreate() {
-      this.prefinancement.dateSaisie = new Date();
+
+        
+        
+        
+    if(!this.prefinancement.id) {
+        this.prefinancement.dateSaisie = new Date();
+    } 
+        
       this.prefinancement.prestation = this.prestationsList;
       this.prefinancement.prestataire = this.prestataireSelected;
       console.log(this.prefinancement);
@@ -368,7 +375,7 @@ export class TierPayantEditionComponent implements OnInit {
         // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
         // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-        console.log(this.prefinancementModel);
+       // console.log(this.prefinancementModel);
         this.tierPayantList = [];
         this.prestationsList = [];
         this.prestationForm.reset();
@@ -1699,6 +1706,16 @@ export class TierPayantEditionComponent implements OnInit {
                       this.prestationsList = this.prestationsList1;
                 }
                 
+
+                for(let i=0; i<this.prestationsList.length ; i++) {
+                
+                    this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationsList[i].montantRembourse;
+                   
+                    this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+            
+                }
+                
+
              //   this.prestationListPrefinancementFilter = this.prestationListPrefinancement.filter(el  => el.id  !== prestation.id);
             },
         });
