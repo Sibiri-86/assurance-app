@@ -570,8 +570,8 @@
            <div class="p-field p-col">
             <label for="familleActe">Famille acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
             <p-dropdown dataKey="id" inputId="garantie" [filter]="true" showClear="true" placeholder="Select famille-acte"
-                        [options]="garanties" [disabled]="!prestationAdd.adherent" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
-                        optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                        [options]="listFamilleActe" [disabled]="!prestationAdd.adherent" name="familleActe" [(ngModel)]="prestationAdd.familleActe"  [autoDisplayFirst]="false"
+                        optionLabel="garantie.libelle" (onChange)="changeGarantie($event)"></p-dropdown>
         </div>
                
 
