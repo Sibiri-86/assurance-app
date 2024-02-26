@@ -9,7 +9,7 @@ import {Endpoints} from '../../../config/module.endpoints';
 import { Groupe } from "../groupe/model";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {createRequestOption} from '../../../module/util/loader-util';
-import {AdherentResearchReponse} from '../adherent/model';
+import {Adherent, AdherentResearchReponse} from '../adherent/model';
 
 @Injectable({providedIn: 'root'})
 export class PlafondService {
@@ -194,5 +194,17 @@ findPlafondGroupeSousActeByPlafondGroupeActeId(exoId: string, groupeId: string, 
   return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeSousActeByPlafondGroupeActeId`,
       {params: createRequestOption({exoId, groupeId, pfgaId}), observe: 'response'});
 }
-}
 
+findPlafondGroupeFamilleActeByPlafondGroupeActeId(dateSoins: Date, matricule: number): Observable<PlafondFamilleActe[]> {
+  // @FIXME: post request
+  if (matricule && matricule != 0) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.numero = matricule; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeFamilleActeByPlafondGroupeActeId`, adherent).pipe(
+    map((response: PlafondFamilleActe[]) => response)
+    //catchError(this.handleError())
+   );
+  }
+}
+}

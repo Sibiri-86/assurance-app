@@ -191,6 +191,7 @@ export class TierPayantEditionComponent implements OnInit {
     police: Police;
     listActe: Array<PlafondActe>;
     listSousActe: Array<PlafondSousActe>;
+    listFamilleActe: Array<PlafondFamilleActe>;
     dateDebut: any;
     dateFin: any;
 
@@ -359,6 +360,7 @@ export class TierPayantEditionComponent implements OnInit {
           }
         
     onCreate() {
+
         
         
         
@@ -367,6 +369,7 @@ export class TierPayantEditionComponent implements OnInit {
     } 
         
       this.prefinancement.prestation = this.prestationsList;
+      this.prefinancement.prestataire = this.prestataireSelected;
       console.log(this.prefinancement);
       this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
@@ -722,8 +725,9 @@ export class TierPayantEditionComponent implements OnInit {
         });
     }
     onRowSelectPrestataire(event)  {
-       
           this.prestataireSelected = event.value;
+          console.log('=============prestataire====== ', event.value);
+          console.log('=============this.prestataireSelected====== ', this.prestataireSelected);
     }
 
     onRowSelectBonAdherent() {
@@ -750,6 +754,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     selectActe(event){
+        
         console.log(event);
          //this.sousActeListFilter = this.sousActeList.filter(e => e.idTypeActe === event.value.id);
     
@@ -958,7 +963,14 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prestationAdd.observation = "";
                 
         
-        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: event.target.value}));;
+        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: event.target.value}));
+            this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeId(this.prestationAdd.dateSoins, event.target.value).
+            subscribe((res) =>{
+              this.listFamilleActe = res;
+              console.log("famillles actes ===================== >", this.listFamilleActe);
+            });
+        
+        
       /*   this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
@@ -1207,7 +1219,7 @@ export class TierPayantEditionComponent implements OnInit {
     }*/
 
     changeGarantie(garantie) {
-        console.log(garantie);
+        console.log("garantie=============>", garantie);
         if(garantie.value?.code == "FP") {
          this.displayFP = true;
         } else {
@@ -1215,7 +1227,7 @@ export class TierPayantEditionComponent implements OnInit {
         }
         console.log("this.adherentSelected ", this.adherentSelected);
          //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-       this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+       this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id).
         subscribe((res) =>{
           this.listActe = res.body;
         });
@@ -1822,6 +1834,7 @@ export class TierPayantEditionComponent implements OnInit {
           }
 
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
+         this.prestationAdd.familleActe = this.prestationAdd.familleActe.garantie;
          this.prestationAdd.acte = this.prestationAdd.acte.acte;
          this.prestationAdd.sousActe = this.prestationAdd.sousActe.sousActe;
          console.log("111111111111111 acte ", this.prestationAdd.acte);
@@ -2001,6 +2014,9 @@ export class TierPayantEditionComponent implements OnInit {
           console.log("===bonPriseEnChargeList===",this.bonPriseEnChargeList);
           this.prefinancement = tierPayant;
           this.prestataireSelected = tierPayant.prestataire;
+          if(this.prestataireSelected.id != tierPayant.prestataire.id) {
+            tierPayant.prestataire = this.prestataireSelected;
+          }
          
           this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
           this.prefinancement.dateSaisie = new Date(tierPayant.dateSaisie);

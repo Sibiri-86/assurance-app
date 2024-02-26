@@ -73,7 +73,7 @@ import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
-import { PlafondActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
+import { PlafondActe, PlafondFamilleActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 import { formatDate } from '@angular/common';
 
 
@@ -166,6 +166,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   listSousActe: Array<PlafondSousActe>;
   dateDebut: any;
   dateFin: any;
+  listFamilleActe: Array<PlafondFamilleActe>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -1541,6 +1542,11 @@ verifieDateSoins(event){
         this.prestationPopForm.get('observation').setValue("");
     
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
+    this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeId(this.prestationPopForm.get('dateSoins').value, event.target.value).
+            subscribe((res) =>{
+              this.listFamilleActe = res;
+              console.log("famillles actes ===================== >", this.listFamilleActe);
+            });
     }
   }
 
@@ -1643,7 +1649,7 @@ verifieDateSoins(event){
     }
     console.log("this.adherentSelected ", this.adherentSelected);
      //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id).
     subscribe((res) =>{
       this.listActe = res.body;
     });
@@ -1722,11 +1728,13 @@ verifieDateSoins(event){
 
 
   addPrestation1() {
+    this.prestationPopForm.get('familleActe').setValue(this.prestationPopForm.get('familleActe').value);
     this.prestationPopForm.get('sousActe').setValue(this.prestationPopForm.get('sousActe').value);
     this.prestationPopForm.get('acte').setValue(this.prestationPopForm.get('acte').value);
     const prestat = this.prestationPopForm.value as Prestation;
     prestat.acte = this.prestationPopForm.get('acte').value?.acte;
     prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
+    prestat.familleActe = this.prestationPopForm.get('familleActe').value?.garantie;
     prestat.adherent = this.adherentSelected;
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;

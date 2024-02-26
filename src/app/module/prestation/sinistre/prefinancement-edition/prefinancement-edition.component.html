@@ -367,8 +367,8 @@
                             </div> -->
                             <div class="p-field p-col">
                                 <label for="lastname2">Famille acte <span class="required">*</span></label>
-                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="garanties" 
-                                formControlName="familleActe" optionLabel="libelle" (onChange)="changeGarantie($event)"></p-dropdown>
+                                <p-dropdown dataKey="id" inputId="garantie" [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="listFamilleActe" 
+                                formControlName="familleActe" optionLabel="garantie.libelle" (onChange)="changeGarantie($event)"></p-dropdown>
                             </div>
 
                            </div>
@@ -725,8 +725,8 @@
                                         <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                                         
                                         <td style="text-align:center">
-                                            <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
-                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+                                            <button  pButton pRipple type="button" pTooltip="editer la prestation"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                            <button pButton pRipple type="button" pTooltip="supprimer la prestation"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
 
                     
                                             </td>
