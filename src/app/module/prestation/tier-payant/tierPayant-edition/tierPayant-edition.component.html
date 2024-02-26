@@ -8,6 +8,10 @@
 					<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="addTierPayant()"></button>
 					<button pButton pRipple label="Supprimer" [disabled]="TierPayantSelected?.length<1" icon="pi pi-trash" (click)="supprimerPrefinancement()" class="p-button-danger p-mb-2"></button>
 				</ng-template>
+
+                <ng-template pTemplate="right">
+					<button pButton pRipple label="Aller aux sinistres validés" icon="pi pi-arrow-right" class="p-button-secondary p-mr-2 p-mb-2" (click)="navigateSinistre()"></button>
+				</ng-template>
                 
 			</p-toolbar>
             <div class="p-formgroup-inline">

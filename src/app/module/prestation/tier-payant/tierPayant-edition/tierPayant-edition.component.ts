@@ -72,7 +72,7 @@ import * as prefinancementSelector from '../../../../store/prestation/prefinance
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import * as exerciceSelector from 'src/app/store/contrat/exercice/selector';
 import * as featureExerciceAction from 'src/app/store/contrat/exercice/actions';
-import { Event } from '@angular/router';
+import { Event, Router } from '@angular/router';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { GlobalConfig } from 'src/app/config/global.config';
 import { ConventionService } from 'src/app/store/medical/convention/service';
@@ -203,6 +203,7 @@ export class TierPayantEditionComponent implements OnInit {
                 private adherentService: AdherentService,
                 private plafondService: PlafondService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
+                private router: Router,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
     }
@@ -382,6 +383,10 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancement = {};
         this.displayFormPrefinancement = false;
     }
+
+    navigateSinistre() {
+        this.router.navigateByUrl('/prestation/tierPayant/valide');
+      }
 
     addPrestation1() {
         this.prefinancementModel.prestation = this.prestationsList;
