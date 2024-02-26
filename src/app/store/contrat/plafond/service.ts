@@ -206,5 +206,20 @@ findPlafondGroupeFamilleActeByPlafondGroupeActeId(dateSoins: Date, matricule: nu
     //catchError(this.handleError())
    );
   }
+
+  
 }
+
+findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(adherent :Adherent): Observable<PlafondFamilleActe[]> {
+  // @FIXME: post request
+  
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine`, adherent).pipe(
+    map((response: PlafondFamilleActe[]) => response)
+    //catchError(this.handleError())
+   );
+  
+
+  
+}
+
 }
