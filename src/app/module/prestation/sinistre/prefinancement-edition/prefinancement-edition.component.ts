@@ -230,7 +230,11 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
     
     if (this.adherentsSelected) {
-      
+      this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentsSelected).
+      subscribe((res) =>{
+        this.listFamilleActe = res;
+        console.log("famillles actes ===================== >", this.listFamilleActe);
+      });
 
       if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
         /* console.log(this.prestationsList.length);
@@ -542,7 +546,11 @@ findMontantPlafond(event){
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
     if (value) {
-        
+      this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(value).
+      subscribe((res) =>{
+        this.listFamilleActe = res;
+        console.log("famillles actes ===================== >", this.listFamilleActe);
+      });
         if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
           /* console.log(this.prestationsList.length);
           console.log("====adherentSelected2021=======");
@@ -1542,11 +1550,7 @@ verifieDateSoins(event){
         this.prestationPopForm.get('observation').setValue("");
     
     this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationPopForm.get('dateSoins').value, matricule: event.target.value}));
-    this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeId(this.prestationPopForm.get('dateSoins').value, event.target.value).
-            subscribe((res) =>{
-              this.listFamilleActe = res;
-              console.log("famillles actes ===================== >", this.listFamilleActe);
-            });
+    
     }
   }
 
@@ -1781,6 +1785,13 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.prestationPopForm = this.createItem();
   this.compteur = rowIndex;
   this.adherentSelected = prestation?.adherent;
+  this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
+  subscribe((res) =>{
+    this.listFamilleActe = res;
+    console.log("famillles actes ===================== >", this.listFamilleActe);
+    this.prestationPopForm.get('familleActe').setValue(this.listFamilleActe.find(fam=>fam.garantie.id === prestation?.familleActe?.id));
+
+  });
   this.prestationPopForm.patchValue(prestation);
   this.prestationPopForm.get('nomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   this.prestationPopForm.get('matriculeAdherent').setValue(prestation.adherent.numero);
@@ -1788,6 +1799,8 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.prestationPopForm.get('numeroPolice').setValue(prestation.adherent.groupe.police.numero);
   this.prestationPopForm.get('souscripteur').setValue(prestation.adherent.groupe.police.nom);
   this.prestationPopForm.get('nomGroupeAdherent').setValue(prestation.adherent.groupe.libelle);
+  console.log("famille acte =>",prestation.familleActe);
+  console.log("this.prestationPopForm =>",this.prestationPopForm);
   if (prestation.adherent.adherentPrincipal != null) {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.adherentPrincipal.nom+" "+prestation.adherent.adherentPrincipal.prenom);
 } else {

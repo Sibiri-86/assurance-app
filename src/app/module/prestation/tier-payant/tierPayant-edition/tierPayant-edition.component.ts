@@ -252,6 +252,13 @@ export class TierPayantEditionComponent implements OnInit {
             console.log("==========this.adherentsSelected========================");
         
             if (this.adherentsSelected) {
+
+                this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentsSelected).
+                subscribe((res) =>{
+                  this.listFamilleActe = res;
+                  // console.log("famillles actes ===================== >", this.listFamilleActe);
+                });
+
                 this.adherentSelected = this.adherentsSelected;
                 if(this.bonPriseEnChargeList) {
                     this.onRowSelectBonAdherent();
@@ -490,6 +497,11 @@ export class TierPayantEditionComponent implements OnInit {
             if (value) {
                 console.log('=========value=============',value);
                 this.adherentSelected = value;
+                this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
+            subscribe((res) =>{
+              this.listFamilleActe = res;
+              console.log("famillles actes ===================== >", this.listFamilleActe);
+            });
                 this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
 
                 this.onRowSelectBonAdherent();
@@ -964,11 +976,7 @@ export class TierPayantEditionComponent implements OnInit {
                 
         
         this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationAdd.dateSoins, matricule: event.target.value}));
-            this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeId(this.prestationAdd.dateSoins, event.target.value).
-            subscribe((res) =>{
-              this.listFamilleActe = res;
-              console.log("famillles actes ===================== >", this.listFamilleActe);
-            });
+            
         
         
       /*   this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1916,7 +1924,11 @@ export class TierPayantEditionComponent implements OnInit {
         this.compteur = rowIndex;
         console.log("========prestation==============",prestation);
         this.adherentSelected = prestation?.adherent;
-       
+        this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
+                subscribe((res) =>{
+                  this.listFamilleActe = res;
+                  // console.log("famillles actes ===================== >", this.listFamilleActe);
+                });
         this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
 
             this.montantConsomme = rest;
