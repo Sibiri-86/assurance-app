@@ -1898,7 +1898,7 @@ export class TierPayantEditionComponent implements OnInit {
 
                 this.prefinancement = rest;
                 this.prestationsList = this.prefinancement.prestation;
-                this.store.dispatch(featureActionTierPayant.loadTierPayant());
+                // this.store.dispatch(featureActionTierPayant.loadTierPayant());
                 this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
 
             }));
