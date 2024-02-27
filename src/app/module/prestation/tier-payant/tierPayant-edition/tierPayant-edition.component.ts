@@ -1719,7 +1719,7 @@ export class TierPayantEditionComponent implements OnInit {
                       this.prestationsList = this.prestationsList1;
                 }
                 
-
+                this.prefinancement.montantPaye = 0;
                 for(let i=0; i<this.prestationsList.length ; i++) {
                 
                     this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationsList[i].montantRembourse;
