@@ -1893,7 +1893,7 @@ export class TierPayantEditionComponent implements OnInit {
           if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
-            console.log("************this.prefinancement******************")
+            console.log("************this.prefinancement******************");
             this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((rest=>{
 
                 this.prefinancement = rest;
@@ -1909,6 +1909,7 @@ export class TierPayantEditionComponent implements OnInit {
             this.showAlert = true;
           }
           
+          console.log("la taille des données******************>", this.prestationsList.length);
       }
 
       fermerPrestation(){
