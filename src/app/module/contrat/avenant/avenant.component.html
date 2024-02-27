@@ -3889,7 +3889,7 @@
             </p-table>
 
         </p-tabPanel>
-
+        
     </p-tabView>
         </p-dialog>
 
@@ -5348,6 +5348,29 @@
 
                 </div>
             </p-tabPanel>
+
+            <p-tabPanel header="CREATION AVENANT ANTERIEUR" leftIcon="pi pi-cog" tooltip="liste des personnes retirées">
+                <span style="color: green !important"> <h4> Informations portant sur la création de l'avenant anterieur</h4></span>
+                <div class="card">
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <label for="matricule" class="p-sr-only">Date Debut</label>
+                        <p-calendar style="min-width:300px" [showIcon]="true" appendTo="body"  inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                    </div>
+                    
+                    <div class="p-field">
+                        <label for="dateSoins" class="p-sr-only">Date Fin</label>
+                        <p-calendar [showIcon]="true" inputId="icon" appendTo="body"  dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                    </div>
+                    <div class="p-field">
+                        <button pButton pRipple type="button" label="Rechercher"  (click)="createAnterieur()"></button>
+                    </div>
+                    
+                </div> 
+            </div>
+    
+            </p-tabPanel>
+
         </p-tabView>
     </p-dialog>
     <p-dialog [(visible)]="displayPhotos" header="Photos" [modal]="true" styleClass="p-fluid" [style]="{width: '300px'}">

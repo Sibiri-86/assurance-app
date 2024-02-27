@@ -49,6 +49,21 @@ postHistoriqueAvenant(historiqueAvenant: HistoriqueAvenant): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}`, historiqueAvenant, {headers: headers});
   }
 
+
+  createHistoriqueAvenantAnterieur(historiqueAvenant: HistoriqueAvenant): Observable<any> {
+    // @FIXME: post request
+    historiqueAvenant.file = new FormData();
+    // const data: FormData = new FormData();
+    // data.append('file', historiqueAvenant.fileToLoad);
+    // historiqueAvenant.file.append('file', historiqueAvenant.fileToLoad);
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.set('Accept', 'application/json');
+    console.log('++++++++++++++++++historiqueAvenant++++++++++++++++++++++');
+    console.log(historiqueAvenant);
+    return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/Anterieur`, historiqueAvenant, {headers: headers});
+  }
+
   permuterAherent(adherentPermutList: AdherentPermuteList): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/permuter`, adherentPermutList,
         {observe: 'response'}

@@ -350,6 +350,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   historiqueAvenantPrimesSelect: HistoriqueAvenantPrime[] = [];
   genre: Genre = {};
   qa:QualiteAssure = {};
+  dateDebut: any;
+  dateFin: any;
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -485,7 +487,20 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.displayParametragePlafond = true;
   }
 
+  createAnterieur() {
+    this.historiqueAvenant.dateEffet = this.dateDebut;
+    this.historiqueAvenant.dateEcheance = this.dateFin;
+    this.historiqueAvenant.groupeId = this.viewPolice.id;
+    this.historiqueAvenantService.createHistoriqueAvenantAnterieur(this.historiqueAvenant).subscribe((rest)=>{
+      if(rest) {
+
+      }
+    })
+  }
+
   ngOnInit(): void {
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
     this.historiqueAvenantAdherents = [];
     this.historiqueAvenantAdherents1 = [];
     // this.historiqueAvenantAdherents2 = [];
@@ -1732,6 +1747,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
     });
     this.displayDialogFormGroupe = true;
   }
+
 
   /** afficher les details de la police */
   onRowSelectPolice(police: Police) {
