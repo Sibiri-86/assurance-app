@@ -3,7 +3,8 @@ import { BonPriseEnCharge, BonPriseEnChargeList, Report } from './model';
 export const createBon = createAction('[App Init] Bon Prise en charge', props<{bon: BonPriseEnCharge, dateD: string,
     dateF: string}>());
 export const updateBon = createAction('[App Init] update Bon Prise en charge', props<BonPriseEnCharge>());
-export const deleteBon = createAction('[App Init] delete Bon Prise en charge', props<BonPriseEnCharge>());
+export const deleteBon = createAction('[App Init] delete Bon Prise en charge', props<{bon: BonPriseEnCharge, dateD: string,
+    dateF: string}>());
 export const loadBon = createAction('[App Init] load Bon Prise en charge');
 export const loadBons = createAction('[App Init] loadBons Bon Prise en charge');
 export const loadBonsByAdherent = createAction('[App Init] loadBons Bon Prise en charge by adherent',

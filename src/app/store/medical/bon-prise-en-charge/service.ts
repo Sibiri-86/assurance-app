@@ -58,7 +58,7 @@ updateBons(bon: BonPriseEnCharge): Observable<any> {
 
 deleteBons(bon: BonPriseEnCharge): Observable<any> {
     // @FIXME: post request
-    return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/${bon.id}`, null);
+    return this.http.patch(`${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}`, bon);
 }
 
 $getReport(report: Report): Observable<ArrayBuffer> {

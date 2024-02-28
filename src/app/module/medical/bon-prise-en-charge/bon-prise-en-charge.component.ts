@@ -822,11 +822,30 @@ findMontantPlafond(event){
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
+       
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
           dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       },
     });
+  }
+
+  deleteBon(prefinancement: BonPriseEnCharge) {
+    this.confirmationService.confirm({
+      message: 'voulez-vous supprimer le sinistre',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if(!this.dateDebut) {
+          this.dateDebut = new Date();
+        }
+        if(!this.dateFin) {
+          this.dateFin = new Date();
+        }
+        this.store.dispatch(featureActionBonPriseEnCharge.deleteBon({bon: prefinancement,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    }
+   });
   }
 
   supprimerPrefinancement() {

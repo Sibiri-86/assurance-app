@@ -1893,14 +1893,21 @@ export class TierPayantEditionComponent implements OnInit {
           if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
-            console.log("************this.prefinancement******************")
+            // console.log("************this.prefinancement******************");
             this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((rest=>{
 
-                this.prefinancement = rest;
-                this.prestationsList = this.prefinancement.prestation;
-                // this.store.dispatch(featureActionTierPayant.loadTierPayant());
-                this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
+                if(rest) {
 
+                    this.prefinancement = rest;
+                    this.tierPayantService.findPrestationBySinitreTierPayant(this.prefinancement.id).subscribe((rest)=> {
+                        if(rest) {
+                            this.prestationsList = rest;
+                        }
+                    });
+                    this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
+    
+                }
+                
             }));
           }
         
