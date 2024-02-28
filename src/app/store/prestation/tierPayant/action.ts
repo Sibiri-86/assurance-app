@@ -54,6 +54,10 @@ props<{ordre: OrdreReglementTierPayant}>());
 export const devaliderPaiement = createAction('[App Init] devalider facture par facture',
 props<{ordre: OrdreReglementTierPayant}>());
 export const loadTierPayantOrdreReglementFacturePaye = createAction('[App Init] load tier payant facture paye');
+export const loadTierPayantOrdreReglementValideByPeriode = createAction('[App Init] load tier payant ordre reglement valide par periode', props<{dateD: string,
+    dateF: string}>() );
+export const deValiderOrdreReglementByPeriode = createAction('[App Init] deValider TierPayant ordre reglement par periode',
+    props<{ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement, dateD: string, dateF: string}>());
 
 
 

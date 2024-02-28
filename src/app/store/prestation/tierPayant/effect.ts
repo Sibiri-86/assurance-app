@@ -219,6 +219,20 @@ export class TierPayantEffects {
                 ))
         ));
 
+        loadReglementValideByPeriode$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.loadTierPayantOrdreReglementValideByPeriode),
+            mergeMap(({dateD, dateF}) =>
+                this.tierPayantService.$getTierPayantOrdreReglementPeriode(dateD,dateF).pipe(
+                    switchMap(value => [
+                        // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.setLoadOrdreReglementTierPayant(value)
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
         loadTierPayantOrdreReglementFactureInstance$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.loadTierPayantOrdreReglementFactureInstance),
@@ -255,6 +269,20 @@ export class TierPayantEffects {
                     switchMap(value => [
                         GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.loadTierPayantOrdreReglementValide()
+                    ]),
+                    catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                ))
+        ));
+
+        updateETatDeValiderOrdreReglementByPeriode$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(featureActions.deValiderOrdreReglementByPeriode),
+            mergeMap(({ordre, etat, dateD, dateF}) =>
+                this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, etat).pipe(
+                    switchMap(value => [
+                        GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                        featureActions.loadTierPayantOrdreReglementValideByPeriode({dateD, dateF})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

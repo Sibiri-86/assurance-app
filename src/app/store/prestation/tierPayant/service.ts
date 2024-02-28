@@ -171,6 +171,15 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
           this.createRequestOption({numero, date})});
       }
 
+      $getTierPayantOrdreReglementPeriode(dateD: string, dateF: string): Observable<any> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/tierPayantOrdreReglement/valide/periode` , {params :
+          this.createRequestOption({dateD, dateF})}).pipe(
+            map((response: any) => response),
+            catchError(this.handleError())
+        );
+      }
+
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();
         if (req) {

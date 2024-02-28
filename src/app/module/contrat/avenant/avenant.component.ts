@@ -1610,6 +1610,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
   );
   }
 
+  findAdherentAndFamilleListByExerciceId(currentExercice: Exercice) {
+    console.log('---------- currentExercice ----------', currentExercice);
+    this.avenantModif1.adhrents = [];
+    this.adherentService.findAdherantActuallListByExerciceWithBaremeDataId(currentExercice.id).subscribe(
+      (res) => {
+        console.log('---------- Actual Liste by Exrcice Id ----------', currentExercice.id);
+        console.log(res);
+        this.avenantModif1.adhrents = res;
+        /* this.adherentsListeActuelleByExercice = res;
+        this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
+        this.displayALA = true; */
+      }
+  );
+  }
+
   addNewGroupe(): void {
     this.isNewGroupe = !this.isNewGroupe;
     // this.displayDialogFormAdherent = true;

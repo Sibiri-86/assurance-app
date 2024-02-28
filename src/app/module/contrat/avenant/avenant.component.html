@@ -5123,8 +5123,15 @@
             </p-tabPanel>
             <p-tabPanel *ngIf="roleMajAssure" header="MAJ ADHERENT" leftIcon="pi pi-refresh" tooltip="ADHERANT">
                 <!-- <span style="color: green !important"> <h4>Liste actualisée des assurés à mettre à jour</h4></span> -->
-                <span style="color: red !important"> <h5>Veuillez cliquer sur le bouton de modification devant le nom de l'assuré et mettre à jour son numero matricule du garant.</h5></span>
-                
+                <span style="color: red !important"> <h5>Veuillez cliquer sur le bouton de modification devant le nom de l'assuré et mettre à jour ses informations.</h5></span>
+                <div class="p-grid">
+                    <div class="p-col-4">
+                        <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+                        <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice" optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                                    [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findAdherentAndFamilleListByExerciceId(curentExercice)">
+                        </p-dropdown>
+                    </div>
+                </div>
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
                              [globalFilterFields]="['nom','prenom','numero','territorialite.libelle']"
