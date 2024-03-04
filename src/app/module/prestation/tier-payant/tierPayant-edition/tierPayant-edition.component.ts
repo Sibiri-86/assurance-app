@@ -61,7 +61,7 @@ import {ProduitPharmaceutique} from '../../../../store/parametrage/produit-pharm
 import * as produitPharmaceutiqueSelector from '../../../../store/parametrage/produit-pharmaceutique/selector';
 import {loadProduitPharmaceutique} from '../../../../store/parametrage/produit-pharmaceutique/actions';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../../../store/parametrage/plafond/model';
-import {BonPriseEnCharge, CheckPlafond, ReponseCheckMontantRestantGarantie} from '../../../../store/prestation/prefinancement/model';
+import {BonPriseEnCharge, CheckPlafond, ReponseCheckMontantRestantGarantie, Saisie} from '../../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import * as featureActionBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/actions';
 import * as selectorsBonPriseEnCharge from '../../../../store/medical/bon-prise-en-charge/selector';
@@ -81,6 +81,8 @@ import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
+import { KeycloakService } from 'keycloak-angular';
+import { formatDate } from '@angular/common';
 
 
 
@@ -194,6 +196,11 @@ export class TierPayantEditionComponent implements OnInit {
     listFamilleActe: Array<PlafondFamilleActe>;
     dateDebut: any;
     dateFin: any;
+    nom = '';
+    prenom = '';
+    operateur = '';
+    role = '';
+    saisie : Saisie = {};
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -204,8 +211,22 @@ export class TierPayantEditionComponent implements OnInit {
                 private plafondService: PlafondService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private router: Router,
+                public keycloak: KeycloakService,
                 private breadcrumbService: BreadcrumbService, private historiqueAvenantService: HistoriqueAvenantService) {
         this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE EDITION' }]);
+        this.keycloak.loadUserProfile().then(profile => {
+            //console.log("===========profile===========>", profile['attributes'].role);
+            this.nom = profile.lastName;
+            this.prenom = profile.firstName;
+            this.operateur = profile.username;
+            console.log("===========profile nom===========>", profile.lastName);
+            console.log("===========profile prenom===========>", profile.firstName);
+            console.log("===========profile operateur===========>", profile.username);
+      
+            this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+            
+          });
     }
 
     rechercherAssure(): void {
@@ -611,11 +632,39 @@ export class TierPayantEditionComponent implements OnInit {
         }); */
 
         this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
-        this.store.dispatch(featureActionTierPayant.loadTierPayant());
+        
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+            this.addMessage('error', 'Dates  invalide',
+            'La date de debut ne peut pas être supérieure à celle du de fin');
+          } else {
+      
+            if(!this.prenom && !this.nom && !this.operateur) {
+              this.keycloak.loadUserProfile().then(profile => {
+                //console.log("===========profile===========>", profile['attributes'].role);
+                this.nom = profile.lastName;
+                this.prenom = profile.firstName;
+                this.operateur = profile.username;
+                console.log("===========profile nom===========>", profile.lastName);
+                console.log("===========profile prenom===========>", profile.firstName);
+                console.log("===========profile operateur===========>", profile.username);
+          
+                this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+                
+              });
+            } else {
+              this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+            }
+            
+          }
+
+        // this.store.dispatch(featureActionTierPayant.loadTierPayant());
         this.sinistreTierPayantDTOList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
                 this.sinistreTierPayantDTOList = value.slice();
+                this.saisie = this.sinistreTierPayantDTOList[0].statSaisie;
             }
         });
 
@@ -723,6 +772,17 @@ export class TierPayantEditionComponent implements OnInit {
        
         
     }
+
+    rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+    }
+    
+  }
 
     onRowSelectAdherent() {
         this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));

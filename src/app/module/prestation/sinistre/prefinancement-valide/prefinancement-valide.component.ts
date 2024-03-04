@@ -55,6 +55,7 @@ import { Table } from 'primeng/table';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -98,11 +99,16 @@ export class PrefinancementValideComponent implements OnInit {
   report: Report = {};
   disableButtomOrdreReglement = true;
   tab: Array<string> = [];
+  nom = '';
+  prenom = '';
+  operateur = '';
+  role = '';
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-               private router: Router) {
+               private router: Router,
+               public keycloak: KeycloakService) {
      this.breadcrumbService.setItems([{ label: 'Sinistre valide' }]);
 }
 
@@ -159,6 +165,19 @@ export class PrefinancementValideComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.keycloak.loadUserProfile().then(profile => {
+      //console.log("===========profile===========>", profile['attributes'].role);
+      this.nom = profile.lastName;
+      this.prenom = profile.firstName;
+      this.operateur = profile.username;
+      console.log("===========profile nom===========>", profile.lastName);
+      console.log("===========profile prenom===========>", profile.firstName);
+      console.log("===========profile operateur===========>", profile.username);
+
+      if (profile['attributes'].role){
+      this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+      }
+    });
     this.prestationList = [];
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
@@ -329,7 +348,7 @@ export class PrefinancementValideComponent implements OnInit {
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
   }
 
   // permet d'enregistrer une prestation par famille

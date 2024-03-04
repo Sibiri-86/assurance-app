@@ -26,8 +26,45 @@
                 <div class="p-field">
                     <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
                 </div>
+                <div class="p-field">
+                    
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: green; font-size: 20px; font-weight: bold;">
+                        <mark> Saisie: {{saisie?.nombreSaisie}} </mark>
+                    </span>
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: orange; font-size: 20px; font-weight: bold;">
+                        <mark>Modifié: {{saisie?.nombreModifie}} </mark>
+                    </span>
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: red; font-size: 20px; font-weight: bold;">
+                        <mark>Supprimé: {{saisie?.nombreSupprime}} </mark>
+                    </span>
+                </div>
+
+                <!-- <div *ngIf="saisie != null" class="p-grid p-field">
+                    <div class="p-col-3">
+                        <span style="color: green; font-size: 20px; font-weight: bold;">
+                            Saisie: {{saisie?.nombreSaisie}}
+                        </span>
+                    </div>
+                    <div class="p-col-4">
+                        <span style="color: orange; font-size: 20px; font-weight: bold;">
+                            Modifié: {{saisie?.nombreModifie}}
+                        </span>
+                    </div>
+                    <div class="p-col-5">
+                        <span style="color: red; font-size: 20px; font-weight: bold;">
+                            Supprimé: {{saisie?.nombreSupprime}}
+                        </span>
+                    </div>
+                </div> -->
                 
             </div> 
+            
             
             <p-table #dt [value]="prefinancementDtoList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
@@ -37,9 +74,28 @@
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                         </span>
+                        <!-- <span class="p-input-icon-right">
+                            <div *ngIf="saisie != null" class="p-grid">
+                                <div class="p-col-4">
+                                    <span>
+                                        Saisie: <br> {{saisie?.nombreSaisie}}
+                                    </span>
+                                </div>
+                                <div class="p-col-4">
+                                    <span>
+                                        Modifié: <br> {{saisie?.nombreModifie}}
+                                    </span>
+                                </div>
+                                <div class="p-col-4">
+                                    <span>
+                                        Supprimé: <br> {{saisie?.nombreSupprimer}}
+                                    </span>
+                                </div>
+                            </div>
+                        </span> -->
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">

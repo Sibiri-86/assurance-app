@@ -75,6 +75,7 @@ import * as assuranceVoyageSelector from "../../../store/contrat/assurance-voyag
 import * as featureActionAssuranceVoyage from '../../../store/contrat/assurance-voyage/actions';
 import { loadAssuranceVoyageList } from '../../../store/contrat/assurance-voyage/actions';
 import { formatDate } from '@angular/common';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -159,6 +160,10 @@ export class AssuranceVoyageComponent implements OnInit, OnDestroy {
   assuranceVoyage: AssuranceVoyage;
   assuranceVoyageList$: Observable<Array<AssuranceVoyage>>;
   assuranceVoyageList: Array<AssuranceVoyage>;
+  nom = '';
+  prenom = '';
+  operateur = '';
+  role = '';
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -167,7 +172,8 @@ export class AssuranceVoyageComponent implements OnInit, OnDestroy {
                private prefinancementService: PrefinancementService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router,
-               private assuranceVoyageService: AssuranceVoyageService ) {
+               private assuranceVoyageService: AssuranceVoyageService,
+               public keycloak: KeycloakService ) {
                 this.breadcrumbService.setItems([{ label: 'Edition de l\'assurance voyage' }]);
    }
 
@@ -229,6 +235,19 @@ findMontantPlafond(event){
   }
 
   ngOnInit(): void {
+    this.keycloak.loadUserProfile().then(profile => {
+      //console.log("===========profile===========>", profile['attributes'].role);
+      this.nom = profile.lastName;
+      this.prenom = profile.firstName;
+      this.operateur = profile.username;
+      console.log("===========profile nom===========>", profile.lastName);
+      console.log("===========profile prenom===========>", profile.firstName);
+      console.log("===========profile operateur===========>", profile.username);
+
+      if (profile['attributes'].role){
+      this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+      }
+    });
     this.prestationVoyageForm = this.formBuilder.group({
       // domaine: new FormControl({}),
       id: new FormControl(),
@@ -267,7 +286,7 @@ findMontantPlafond(event){
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       },
     });
   }
@@ -333,7 +352,7 @@ findMontantPlafond(event){
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement,dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       }
      });
     }
