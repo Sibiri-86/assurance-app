@@ -74,11 +74,11 @@ export class BonPriseEnChargeEffects {
             deleteActe$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.deleteBon),
-                mergeMap((bon: BonPriseEnCharge) =>
+                mergeMap(({bon, dateD, dateF}) =>
                     this.bonPriseEnChargeService.deleteBons(bon).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.loadBon()
+                            featureActions.loadBonPriseEnChargePeriode({dateD, dateF})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         //catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
