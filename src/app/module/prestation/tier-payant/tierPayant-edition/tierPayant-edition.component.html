@@ -871,7 +871,8 @@
                             
                                     <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                     <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
-                                    <td>{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
+                                    <td *ngIf="rowData.observation != 'remboursement favorable'" style="color: red; font-weight: bold;">{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
+                                    <td *ngIf="rowData.observation == 'remboursement favorable'" style="color: green; font-weight: bold;">{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
                                     <td>{{rowData.familleActe?.libelle}}</td>
                                     <td>{{rowData.acte?.libelle}}</td>
                 

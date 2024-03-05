@@ -194,10 +194,6 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                   console.log("===========profile nom===========>", profile.lastName);
                   console.log("===========profile prenom===========>", profile.firstName);
                   console.log("===========profile operateur===========>", profile.username);
-            
-                  if (profile['attributes'].role){
-                  this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
-                  }
                 });
    }
 

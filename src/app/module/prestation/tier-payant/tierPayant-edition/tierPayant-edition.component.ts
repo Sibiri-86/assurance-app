@@ -222,9 +222,6 @@ export class TierPayantEditionComponent implements OnInit {
             console.log("===========profile nom===========>", profile.lastName);
             console.log("===========profile prenom===========>", profile.firstName);
             console.log("===========profile operateur===========>", profile.username);
-      
-            this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
             
           });
     }
@@ -398,6 +395,7 @@ export class TierPayantEditionComponent implements OnInit {
         
       this.prefinancement.prestation = this.prestationsList;
       this.prefinancement.prestataire = this.prestataireSelected;
+      this.prefinancement.operateur = this.operateur;
       console.log(this.prefinancement);
       this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
@@ -1953,7 +1951,10 @@ export class TierPayantEditionComponent implements OnInit {
           if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
+            this.prefinancement.operateur = this.operateur;
             console.log("************this.prefinancement******************");
+            console.log(this.prefinancement);
+            console.log("this.prefinancement*******", this.prefinancement.operateur);
             this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((rest=>{
 
                 this.prefinancement = rest;
@@ -1970,7 +1971,7 @@ export class TierPayantEditionComponent implements OnInit {
           }
           
           console.log("la taille des données******************>", this.prestationsList.length);
-      }
+    }
 
       fermerPrestation(){
         this.prestationAdd = {};
@@ -2108,7 +2109,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
         this.tierPayantService.findPrestationBySinitreTierPayant(tierPayant.id).subscribe((rest)=> {
             if(rest) {
-                this.prefinancementDetail.prestation= rest;
+                this.prefinancementDetail.prestation = rest;
+                console.log("tierPayant==> ", tierPayant);
+                console.log("prestation==> ", rest);
             }
         });
         // this.prestationDetail = tierPayant.prestation[0];
@@ -2118,10 +2121,18 @@ export class TierPayantEditionComponent implements OnInit {
 
 
       imprimerPrestation(prestation: Prestation) {
+        this.report.sinistreTierPayantDTO = this.prefinancementDetail;
+        this.report.sinistreTierPayantDTO.prestation = [];
+        this.report.sinistreTierPayantDTO.prestation.push(prestation);
         this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
-        this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+        //this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+        //this.report.sinistreTierPayantDTO.prestation.push(prestation);
+        //this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant.prestation;
+        console.log("this.report.sinistreTierPayantDTO========> ", this.report.sinistreTierPayantDTO);
+        console.log("prestation 22222222========> ", this.report.sinistreTierPayantDTO.prestation);
         
         this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+        this.report.sinistreTierPayantDTO = this.prefinancementDetail;
       }
 
       compareToDateIncorportion() {
