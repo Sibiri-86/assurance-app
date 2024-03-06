@@ -261,7 +261,7 @@ export class TierPayantEditionComponent implements OnInit {
 
                 this.adherentSelected = this.adherentsSelected;
                 if(this.bonPriseEnChargeList) {
-                    this.onRowSelectBonAdherent();
+                //    this.onRowSelectBonAdherent();
                 }
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
             
@@ -354,7 +354,7 @@ export class TierPayantEditionComponent implements OnInit {
               /*  this.bonPriseEnChargeList = this.bonPriseEnChargeList.filter(e => e.adherent.id === this.adherentSelected.id &&
                     e.typeBon === TypeBon.PRISEENCHARGE);*/
                     if(this.bonPriseEnChargeList) {
-                        this.onRowSelectBonAdherent();
+                       // this.onRowSelectBonAdherent();
                     }
                     
 
@@ -504,7 +504,7 @@ export class TierPayantEditionComponent implements OnInit {
             });
                 this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
 
-                this.onRowSelectBonAdherent();
+               // this.onRowSelectBonAdherent();
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
             
 
@@ -702,14 +702,14 @@ export class TierPayantEditionComponent implements OnInit {
         });
 
         // chargement des bons de prise en charge
-       /*  this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
-        this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
+         this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));
+        //this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
         this.bonPriseEnChargeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
           console.log(value);
           if (value) {
             this.bonPriseEnChargeList = value.slice();
           }
-    }); */
+    }); 
 
         this.statusObject$ = this.store.pipe(select(status));
         this.checkStatus();
@@ -742,13 +742,13 @@ export class TierPayantEditionComponent implements OnInit {
           console.log('=============this.prestataireSelected====== ', this.prestataireSelected);
     }
 
-    onRowSelectBonAdherent() {
+   /*  onRowSelectBonAdherent() {
     
 
           this.bonPriseEnChargeList = this.bonPriseEnChargeList?.filter(bon=>bon?.adherent?.id === this.adherentSelected.id 
             && bon.prestataire?.id === this.prestataireSelected.id &&  bon.typeBon === TypeBon.PRISEENCHARGE);
         
-    }
+    } */
 
 
     selectActe1(event){

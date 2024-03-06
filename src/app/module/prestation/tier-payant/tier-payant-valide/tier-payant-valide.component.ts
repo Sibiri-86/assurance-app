@@ -343,28 +343,28 @@ export class TierPayantValideComponent implements OnInit {
   }
 
   onRowSelectSinistre(event) {
-    if (this.selectTierPayant && this.selectTierPayant.length > 1 && event.data.adherent.adherentPrincipal &&
-        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
-        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id !== event.data.adherentPrincipal.id){
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && event.data.prestataire.id &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].prestataire.id &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].prestataire.id !== event.data.prestataire.id){
       this.disableButtomOrdreReglement = false;
       this.tab.push(event.data.id);
-      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+      this.showToast('error', 'INFORMATION', 'les factures n\'appartiennent pas au même prestatiare ');
     }
 
-    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
-        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
-        this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal.id !== event.data.adherent.id){
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.prestataire &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].prestataire.id &&
+        this.selectTierPayant[this.selectTierPayant.length - 2].prestataire.id !== event.data.prestataire.id){
       this.disableButtomOrdreReglement = false;
       this.tab.push(event.data.id);
-      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+      this.showToast('error', 'INFORMATION', 'les factures n\'appartiennent pas au même prestatiare');
     }
 
-    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.adherent.adherentPrincipal &&
-        !this.selectTierPayant[this.selectTierPayant.length - 2].adherent.adherentPrincipal &&
-        event.data.adherent.id !== this.selectTierPayant[this.selectTierPayant.length - 2].adherent.id){
+    if (this.selectTierPayant && this.selectTierPayant.length > 1 && !event.data.prestataire &&
+        !this.selectTierPayant[this.selectTierPayant.length - 2].prestataire &&
+        event.data.prestataire.id !== this.selectTierPayant[this.selectTierPayant.length - 2].prestataire.id){
       this.disableButtomOrdreReglement = false;
       this.tab.push(event.data.id);
-      this.showToast('error', 'INFORMATION', 'les sinistres ne sont pas de la meme famille');
+      this.showToast('error', 'INFORMATION', 'les factures n\'appartiennent pas au même prestatiare');
     }
 
     console.log(this.selectTierPayant);
