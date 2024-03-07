@@ -59,6 +59,20 @@ export class TierPayantEffects {
                 ))
         ));
 
+        loadTierPayantPeriode$ = createEffect(() =>
+    this.actions$.pipe(
+        ofType(featureActions.loadTierPayantByPeriode),
+        mergeMap(({dateD, dateF, nom, prenom, operateur}) =>
+            this.tierPayantService.$getTierPayantByPeriode(dateD,dateF, nom, prenom, operateur).pipe(
+                switchMap(value => [
+                    // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                    featureActions.setTierPayant(value)
+                ]),
+                catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+            ))
+        ));
+
     fetchReportTierPayant$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.FetchReportTierPayant),

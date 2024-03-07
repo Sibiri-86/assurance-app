@@ -180,6 +180,14 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
       }
 
+      $getTierPayantByPeriode(dateD: string, dateF: string, nom: string, prenom: string, operateur: string): Observable<SinistreTierPayantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/periode`, {params :
+            this.createRequestOption({dateD, dateF, nom, prenom, operateur})}).pipe(
+              map((response: SinistreTierPayantList) => response),
+              catchError(this.handleError())
+          );
+        }
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();
         if (req) {

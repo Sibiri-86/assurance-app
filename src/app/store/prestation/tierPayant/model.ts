@@ -6,7 +6,7 @@ import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
-import {BonPriseEnCharge, OrdreReglement, Prefinancement, TypePaiement, TypePrestation} from '../prefinancement/model';
+import {BonPriseEnCharge, OrdreReglement, Prefinancement, Saisie, TypePaiement, TypePrestation} from '../prefinancement/model';
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from '../../parametrage/plafond/model';
 import {Acte} from '../../parametrage/acte/model';
 import {Sort} from '../../../module/common/models/sort.enum';
@@ -58,6 +58,8 @@ export interface SinistreTierPayant {
     montantReclame?:number;
     montantPaye?:number;
     montantRestant?:number;
+    statSaisie?: Saisie;
+    operateur?: string;
     
 }
 

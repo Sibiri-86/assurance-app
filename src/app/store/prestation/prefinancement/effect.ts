@@ -35,8 +35,8 @@ export class PrefinancementEffects {
         loadPrefinancementPeriode$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadPrefinancementPeriode),
-        mergeMap(({dateD, dateF}) =>
-            this.prefinancementService.$getPrefinancementPeriode(dateD,dateF).pipe(
+        mergeMap(({dateD, dateF, nom, prenom, operateur}) =>
+            this.prefinancementService.$getPrefinancementPeriode(dateD,dateF, nom, prenom, operateur).pipe(
                 switchMap(value => [
                     // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setPrefinancement(value)
@@ -92,11 +92,11 @@ export class PrefinancementEffects {
             deletePrefinancement$ = createEffect(() =>
             this.actions$.pipe(
                 ofType(featureActions.deletePrefinancement),
-                mergeMap(({prefinancement,  dateD, dateF}) =>
+                mergeMap(({prefinancement,  dateD, dateF, nom, prenom, operateur}) =>
                     this.prefinancementService.deletePrefinancement(prefinancement).pipe(
                         switchMap(value => [
                                 // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadPrefinancementPeriode({dateD,dateF})
+                        featureActions.loadPrefinancementPeriode({dateD,dateF , nom, prenom, operateur})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                             // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -161,11 +161,11 @@ export class PrefinancementEffects {
     createPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createPrefinancement),
-        mergeMap(({prefinancement, dateD, dateF}) =>
+        mergeMap(({prefinancement, dateD, dateF, nom, prenom, operateur}) =>
             this.prefinancementService.posPrefinancement(prefinancement).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadPrefinancementPeriode({dateD,dateF})
+                    featureActions.loadPrefinancementPeriode({dateD,dateF, nom, prenom, operateur})
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -239,11 +239,11 @@ export class PrefinancementEffects {
     updateETatValiderPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
             ofType(featureActions.updateEtatValiderPrefinancement),
-            mergeMap(({prefinancement, etat,  dateD, dateF}) =>
+            mergeMap(({prefinancement, etat,  dateD, dateF, nom, prenom, operateur}) =>
                 this.prefinancementService.putUpdatePrefinancement(prefinancement, etat).pipe(
                     switchMap(value => [
                         // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                        featureActions.loadPrefinancementPeriode({dateD,dateF})
+                        featureActions.loadPrefinancementPeriode({dateD,dateF, nom, prenom, operateur})
                     ]),
                     catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

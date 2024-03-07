@@ -6,15 +6,18 @@
                 <div class="p-col-4">
                     <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photo un a un" uploadLabel="Valider" invalidFileSizeMessageDetail="Taille de l'image" accept=".png, .jpg, .jpeg" maxFileSize="1000000" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
                 </div>
-                <!-- <div class="p-col-4">
-                    <p-fileUpload #form2 mode="basic" customUpload="true" chooseLabel="photos multiples" uploadLabel="Valider"  multiple="multiple" name="demo2[]" accept=".png, .jpg, .jpeg" maxFileSize="100000000" (uploadHandler)="onBasicUploadLot($event, form2)"></p-fileUpload>
+               <!--  <div class="p-col-4">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <button pButton pRipple label="Exporter" [disabled]="!historiqueAvenantAdherants" icon="pi pi-upload" class="p-button-help"
+                                    (click)="dtAL.exportCSV()"></button>
+                        </div>
                 </div> -->
                     
     </div>
     <div class="p-field p-grid p-col-12">
-        <p-table #dt [value]="historiqueAvenantAdherants" [rows]="15" [paginator]="true" [globalFilterFields]="['adherent.nom','adherent.prenom', 'adherent.numeroTelephone', 'adherent.numero', 
+        <p-table #dtAL [value]="historiqueAvenantAdherants" [columns]="colsAL" [rows]="15" [paginator]="true" [globalFilterFields]="['adherent.nom','adherent.prenom', 'adherent.numeroTelephone', 'adherent.numero', 
         'qualiteAssure?.libelle']"
-                 [rowHover]="true" dataKey="id"
+                 [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée incorporation'" csvSeparator=";"
                  styleClass="p-datatable-customers"
                  currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true"
                   (onRowSelect)="onRowSelect($event)">
@@ -25,6 +28,13 @@
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." [style]="{width: '70%'}"/>
                         </span>
+                </div>
+
+                <div class="p-col-2">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <button pButton pRipple label="Exporter" [disabled]="!historiqueAvenantAdherants" icon="pi pi-upload" class="p-button-help"
+                                (click)="dtAL.exportCSV()"></button>
+                    </div>
                 </div>
             </ng-template>
 

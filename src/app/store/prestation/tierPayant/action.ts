@@ -58,6 +58,8 @@ export const loadTierPayantOrdreReglementValideByPeriode = createAction('[App In
     dateF: string}>() );
 export const deValiderOrdreReglementByPeriode = createAction('[App Init] deValider TierPayant ordre reglement par periode',
     props<{ordre: OrdreReglementTierPayant, etat: TypeEtatOrdreReglement, dateD: string, dateF: string}>());
+export const loadTierPayantByPeriode = createAction('[App Init] load tierPayant by periode', props<{dateD: string,
+    dateF: string, nom: string, prenom: string, operateur: string}>() );
 
 
 

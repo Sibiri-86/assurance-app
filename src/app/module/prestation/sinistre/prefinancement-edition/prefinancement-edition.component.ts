@@ -50,7 +50,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import * as featureActionPrefinancement from '../../../../store/prestation/prefinancement/action';
 import * as adherentSelector from '../../../../store/contrat/adherent/selector';
-import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, MontantPlafondGarantieResponse, Prefinancement, Prestation, ReponseCheckMontantRestantGarantie, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
+import { BonPriseEnCharge, CheckPlafond, CheckPrefinancementResult, MontantPlafondGarantieResponse, Prefinancement, Prestation, ReponseCheckMontantRestantGarantie, Saisie, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { Status } from 'src/app/store/global-config/model';
 import { status } from '../../../../store/global-config/selector';
 import { TypeEtatSinistre } from '../../../common/models/enum.etat.sinistre';
@@ -75,6 +75,7 @@ import { policeList } from 'src/app/store/contrat/police/selector';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { PlafondActe, PlafondFamilleActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 import { formatDate } from '@angular/common';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -167,6 +168,11 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   dateDebut: any;
   dateFin: any;
   listFamilleActe: Array<PlafondFamilleActe>;
+  nom = '';
+  prenom = '';
+  operateur = '';
+  role = '';
+  saisie : Saisie = {};
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -177,8 +183,18 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                private plafondService: PlafondService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private router: Router,
+               public keycloak: KeycloakService
                ) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
+                this.keycloak.loadUserProfile().then(profile => {
+                  //console.log("===========profile===========>", profile['attributes'].role);
+                  this.nom = profile.lastName;
+                  this.prenom = profile.firstName;
+                  this.operateur = profile.username;
+                  console.log("===========profile nom===========>", profile.lastName);
+                  console.log("===========profile prenom===========>", profile.firstName);
+                  console.log("===========profile operateur===========>", profile.username);
+                });
    }
 
    get prestation() {
@@ -475,6 +491,7 @@ findMontantPlafond(event){
   ngOnInit(): void {
     this.dateDebut = new Date();
     this.dateFin = new Date();
+
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
       id: new FormControl(),
@@ -734,14 +751,33 @@ findMontantPlafond(event){
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
-      this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+
+      if(!this.prenom && !this.nom && !this.operateur) {
+        this.keycloak.loadUserProfile().then(profile => {
+          //console.log("===========profile===========>", profile['attributes'].role);
+          this.nom = profile.lastName;
+          this.prenom = profile.firstName;
+          this.operateur = profile.username;
+          console.log("===========profile nom===========>", profile.lastName);
+          console.log("===========profile prenom===========>", profile.firstName);
+          console.log("===========profile operateur===========>", profile.username);
+    
+          this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+          
+        });
+      } else {
+        this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+      }
+      
     }
     
     this.prefinancementDtoList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
         this.prefinancementDtoList = value.slice();
+        this.saisie = this.prefinancementDtoList[0].statSaisie;
       }
     });
     this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
@@ -811,7 +847,7 @@ findMontantPlafond(event){
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
       this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
     }
     
   }
@@ -838,7 +874,7 @@ findMontantPlafond(event){
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       },
     });
   }
@@ -964,7 +1000,7 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       }
      });
     }
@@ -1558,7 +1594,7 @@ verifieDateSoins(event){
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')} ));
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur} ));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();
@@ -1605,7 +1641,7 @@ verifieDateSoins(event){
    this.prefinancementList.push(this.prefinancementModel);
    console.log(this.prefinancementList);
    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-   dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+   dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
   console.log("===========bon==================");
   console.log(this.prefinancementModel);

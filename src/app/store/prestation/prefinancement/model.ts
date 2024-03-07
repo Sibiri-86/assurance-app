@@ -76,6 +76,7 @@ export interface Prefinancement {
     numeroMobicash?: string;
     numeroVirement?: string;
     nomBenefiniciaire?: string;
+    statSaisie?: Saisie;
 }
 
 export interface BonPriseEnCharge {
@@ -179,7 +180,21 @@ export enum TypePrestation {
     exerciceId?: string;
     familleActeId?: string;
     groupeId?: string;
-} 
+}
+
+export interface Saisie {
+    id?: string;
+    nom?: string;
+    prenom?: string;
+    operateur?: string;
+    nombreSaisie?: number;
+    dateSaisie?: Date;
+    typePrestation?: TypePrestation;
+    nombreModifie?: number;
+    nombreSupprime?: number;
+}
+
+    
 
 export interface MontantPlafondGarantieResponse {
     checkMontantRestantPlafondGarantie?: ReponseCheckMontantRestantGarantie;

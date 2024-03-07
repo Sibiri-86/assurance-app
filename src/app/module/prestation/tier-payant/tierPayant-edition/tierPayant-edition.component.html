@@ -26,7 +26,22 @@
                     <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
                 </div>
                 <div class="p-field">
-                    <button pButton pRipple type="button" label="Rechercher"></button>
+                    <button pButton pRipple type="button" label="Rechercher" (click)="rechercherPrefinancementByPeriode()"></button>
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: green; font-size: 20px; font-weight: bold;">
+                        <mark> Saisie: {{saisie?.nombreSaisie}} </mark>
+                    </span>
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: orange; font-size: 20px; font-weight: bold;">
+                        <mark>Modifié: {{saisie?.nombreModifie}} </mark>
+                    </span>
+                </div>
+                <div class="p-field" *ngIf="saisie != null">
+                    <span style="color: red; font-size: 20px; font-weight: bold;">
+                        <mark>Supprimé: {{saisie?.nombreSupprime}} </mark>
+                    </span>
                 </div>
                 
             </div> 
@@ -862,7 +877,8 @@
                             
                                     <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                     <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
-                                    <td>{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
+                                    <td *ngIf="rowData.observation != 'remboursement favorable'" style="color: red; font-weight: bold;">{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
+                                    <td *ngIf="rowData.observation == 'remboursement favorable'" style="color: green; font-weight: bold;">{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
                                     <td>{{rowData.familleActe?.libelle}}</td>
                                     <td>{{rowData.acte?.libelle}}</td>
                 

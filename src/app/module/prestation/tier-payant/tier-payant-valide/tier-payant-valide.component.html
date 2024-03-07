@@ -115,7 +115,7 @@
             </p-table>
         </div>
         
-        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" [style]="{width: '1200px'}"> 
+        <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation" [modal]="true" styleClass="p-fluid" > 
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancement" [columns]="cols" [rows]="10" [paginator]="true"
@@ -124,6 +124,8 @@
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pSortableColumn="numero" style="width: 150px" >Assuré<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="numero" style="width: 150px" >Souscripteur<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="width: 150px" >SousActe<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" >Nombre acte<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Cout unitaire<p-sortIcon field="nom"></p-sortIcon></th>
@@ -137,7 +139,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-prestation>
                     <tr>
-
+                        <td *ngIf="prestation.observation != 'remboursement favorable'"> <span style="color: red; font-weight: bold;" class="p-column-title">{{prestation.adherent.nom}} {{prestation.adherent.prenom}}</span>
+                        <td *ngIf="prestation.observation == 'remboursement favorable'"> <span style="color: green; font-weight: bold;" class="p-column-title">{{prestation.adherent.nom}} {{prestation.adherent.prenom}}</span>
+                        <td><span class="p-column-title">{{prestation.adherent.groupe.police.nom}}</span>
                         <td><span class="p-column-title">{{prestation.sousActe.libelle}}</span>
                         </td>
                         <td><span class="p-column-title">{{prestation.nombreActe}}</span>

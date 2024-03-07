@@ -57,6 +57,7 @@ import * as featureActionTierPayant from '../../../../store/prestation/tierPayan
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -103,13 +104,17 @@ export class TierPayantValideComponent implements OnInit {
   tab: Array<string> = [];
   isDetail: boolean;
   editForm: FormGroup;
+  nom = '';
+  prenom = '';
+  operateur = '';
+  role = '';
 
 
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private router: Router,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
-               private breadcrumbService: BreadcrumbService) {
+               private breadcrumbService: BreadcrumbService,private keycloak: KeycloakService,) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE VALIDE' }]);
   }
 
@@ -123,6 +128,19 @@ export class TierPayantValideComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.keycloak.loadUserProfile().then(profile => {
+      //console.log("===========profile===========>", profile['attributes'].role);
+      this.nom = profile.lastName;
+      this.prenom = profile.firstName;
+      this.operateur = profile.username;
+      console.log("===========profile nom===========>", profile.lastName);
+      console.log("===========profile prenom===========>", profile.firstName);
+      console.log("===========profile operateur===========>", profile.username);
+
+      if (profile['attributes'].role){
+      this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+      }
+    });
     this.prestationList = [];
     this.prestationForm = this.formBuilder.group({
       // domaine: new FormControl({}),
@@ -269,7 +287,14 @@ export class TierPayantValideComponent implements OnInit {
     this.prestationListPrefinancement = pref.prestation;
   }
 
+  /* this.report.sinistreTierPayantDTO = this.prefinancementDetail;
+  this.report.sinistreTierPayantDTO.prestation = [];
+  this.report.sinistreTierPayantDTO.prestation.push(prestation);
+  this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT; */
+
   imprimerPrestation(prestation: Prestation) {
+    this.report.sinistreTierPayantDTO.prestation = [];
+    this.report.sinistreTierPayantDTO.prestation.push(prestation);
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
     this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
     
@@ -297,7 +322,7 @@ export class TierPayantValideComponent implements OnInit {
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
   }
 
   // permet d'enregistrer une prestation par famille

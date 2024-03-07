@@ -155,6 +155,10 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
  compteur: number = null;
  displayFP = false;
  displayAssure = false;
+ nom = '';
+  prenom = '';
+  operateur = '';
+  role = '';
 
 
 
@@ -441,6 +445,19 @@ findMontantPlafond(event){
 }
 
   ngOnInit(): void {
+    this.keycloak.loadUserProfile().then(profile => {
+      //console.log("===========profile===========>", profile['attributes'].role);
+      this.nom = profile.lastName;
+      this.prenom = profile.firstName;
+      this.operateur = profile.username;
+      console.log("===========profile nom===========>", profile.lastName);
+      console.log("===========profile prenom===========>", profile.firstName);
+      console.log("===========profile operateur===========>", profile.username);
+
+      if (profile['attributes'].role){
+      this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
+      }
+    });
     this.dateDebut = new Date();
     this.dateFin = new Date();
     this.typeBon = [{label: 'PRISE-EN-CHARGE', value: 'PRISEENCHARGE'},
@@ -825,7 +842,7 @@ findMontantPlafond(event){
        
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       },
     });
   }
@@ -859,7 +876,7 @@ findMontantPlafond(event){
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.store.dispatch(featureActionPrefinancement.deletePrefinancement({prefinancement: this.selectedPrefinancement,dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       }
      });
     }
@@ -1152,7 +1169,7 @@ console.log(myForm);
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();

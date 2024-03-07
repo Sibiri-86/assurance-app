@@ -53,6 +53,7 @@ export class AdherentListEditComponent implements OnInit {
   displayCarte: Boolean = false;
   pictureUrl='';
   adherentHisChecked : HistoriqueAvenantAdherant;
+  colsAL: any[];
 
   constructor(
       private formBuilder: FormBuilder,
@@ -88,6 +89,7 @@ export class AdherentListEditComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('satus ==== ' + this.statut);
+    console.log('this.historiqueAvenantAdherants ==== ', this.historiqueAvenantAdherants);
     this.historiqueAvenantAdherantTMPs = this.historiqueAvenantAdherants;
     this.qualiteAssureList$ = this.store.pipe(
         select(qualiteAssureSelector.qualiteAssureList)
@@ -122,6 +124,36 @@ export class AdherentListEditComponent implements OnInit {
     this.loadGoupeByPolice();
     this.loadAdherentPrincipalByPolice();
     // this.createAdherents();
+
+    this.colsAL = [
+      {field: 'adherent.groupe.police.nom', header: 'SOUSCRIPTEUR', type: 'string'},
+      {field: 'adherent.groupe.police.numero', header: 'NUM_POLICE', type: 'string'},
+      {field: 'adherent.numero', header: 'NUM_ASSURE', type: 'string'},
+      {field: 'adherent.adherentPrincipalfullName', header: 'ADHERENT', type: 'string'},
+      {field: 'adherent.dateNaissance', header: 'DATE DE NAISSANCE', type: 'date'},
+      {field: 'adherent.groupe.taux.taux', header: 'TAUX', type: 'string'},
+      {field: 'adherent.fullName', header: 'BENEFICIAIRE', type: 'string'},
+      {field: 'adherent.exercice.debut', header: 'EFFET', type: 'date'},
+      {field: 'adherent.exercice.fin', header: 'ECHEANCE', type: 'date'},
+      {field: 'adherent.plafondGroupeSousActeCSG.taux.taux', header: 'CONS GENERALISTE', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeCSG.montantPlafondParActe', header: 'CONS GENERALISTE MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeCSS.taux.taux', header: 'CONS SPECIALISTE', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeCSS.montantPlafondParActe', header: 'CONS SPECIALISTE MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFRST.taux.taux', header: 'RADIO STANDARD', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFRST.montantPlafondParActe', header: 'RADIO STANDARD MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFRSP.taux.taux', header: 'RADIO SPECIALISTE', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFRSP.montantPlafondParActe', header: 'RADIO SPECIALISTE MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFANAD.taux.taux', header: 'ANALYSE STANDARD', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFANAD.montantPlafondParActe', header: 'ANALYSE STANDARD MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFASP.taux.taux', header: 'ANALYSE SPECIALISEES', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeFASP.montantPlafondParActe', header: 'ANALYSE SPECIALISEES MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeSCANN.taux.taux', header: 'FRAIS SCANNER', type: 'number'},
+      {field: 'adherent.plafondGroupeSousActeSCANN.montantPlafondParActe', header: 'FRAIS SCANNER MONTANT', type: 'number'},
+      {field: 'adherent.plafondGroupeFamilleActeHO.taux.taux', header: 'HOSPITALISATION', type: 'number'},
+      {field: 'adherent.plafondGroupeFamilleActeHO.montantPlafondParActe', header: 'HOSPITALISATION MONTANT', type: 'number'},
+      {field: 'adherent.fullName', header: 'Photo', type: 'string'},
+      
+    ];
   }
   /* createAdherents(): void {
     if (this.adherentFamilleList) {
