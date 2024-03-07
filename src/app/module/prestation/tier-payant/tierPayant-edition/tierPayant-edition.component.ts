@@ -1963,9 +1963,9 @@ export class TierPayantEditionComponent implements OnInit {
                 if(rest) {
 
                     this.prefinancement = rest;
-                    this.tierPayantService.findPrestationBySinitreTierPayant(this.prefinancement.id).subscribe((rest)=> {
-                        if(rest) {
-                            this.prestationsList = rest;
+                    this.tierPayantService.findPrestationBySinitreTierPayant(this.prefinancement.id).subscribe((res)=> {
+                        if(res) {
+                            this.prestationsList = res;
                         }
                     });
                     this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
