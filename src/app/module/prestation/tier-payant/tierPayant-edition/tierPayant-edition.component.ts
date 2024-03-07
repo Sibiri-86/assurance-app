@@ -1839,6 +1839,9 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
             }
+            this.prefinancement.montantPaye = Math.round(this.prefinancement.montantPaye);
+            this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+
           }
 
          // this.messageService.add({severity:'success', summary:'Service Message', detail:this.montantRemboursessMsg.concat(this.prefinancement.montantPaye.toString())});
