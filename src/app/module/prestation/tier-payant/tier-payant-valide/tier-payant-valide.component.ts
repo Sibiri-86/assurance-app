@@ -287,7 +287,14 @@ export class TierPayantValideComponent implements OnInit {
     this.prestationListPrefinancement = pref.prestation;
   }
 
+  /* this.report.sinistreTierPayantDTO = this.prefinancementDetail;
+  this.report.sinistreTierPayantDTO.prestation = [];
+  this.report.sinistreTierPayantDTO.prestation.push(prestation);
+  this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT; */
+
   imprimerPrestation(prestation: Prestation) {
+    this.report.sinistreTierPayantDTO.prestation = [];
+    this.report.sinistreTierPayantDTO.prestation.push(prestation);
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
     this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
     
