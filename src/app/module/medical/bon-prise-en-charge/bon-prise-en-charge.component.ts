@@ -1378,9 +1378,12 @@ console.log(myForm);
         console.log('la valeur de i est ********************' + this.numberPrestation);
         console.log('le montant de i est ********************' + value);
         this.prestationPopForm.get('montantPlafond').setValue(value);
-        //this.prestation.at(this.numberPrestation).get('montantPlafond').setValue(value);
+        if(value == 0 ) {
+          this.prestationPopForm.get('montantPlafond').setValue('');
+        }
       } else {
-        //this.prestationPopForm.get('montantPlafond').setValue(null);
+        this.prestationPopForm.get('montantPlafond').setValue(null);
+        
       }
     });
     //}
