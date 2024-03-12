@@ -15,7 +15,7 @@
                     
     </div>
     <div class="p-field p-grid p-col-12">
-        <p-table #dtAL [value]="historiqueAvenantAdherants" [columns]="colsAL" [rows]="15" [paginator]="true" [globalFilterFields]="['adherent.nom','adherent.prenom', 'adherent.numeroTelephone', 'adherent.numero', 
+        <p-table #dtAL [value]="adherentCarteInfo" [columns]="colsAL" [rows]="15" [paginator]="true" [globalFilterFields]="['nom','prenom', 'numeroTelephone', 'numero', 
         'qualiteAssure?.libelle']"
                  [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée incorporation'" csvSeparator=";"
                  styleClass="p-datatable-customers"
@@ -32,7 +32,7 @@
 
                 <div class="p-col-2">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                        <button pButton pRipple label="Exporter" [disabled]="!historiqueAvenantAdherants" icon="pi pi-upload" class="p-button-help"
+                        <button pButton pRipple label="Exporter" [disabled]="!adherentCarteInfo" icon="pi pi-upload" class="p-button-help"
                                 (click)="dtAL.exportCSV()"></button>
                     </div>
                 </div>
@@ -53,16 +53,16 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-historiqueAvenantAdherant>
-                <tr [ngClass]="{'colorZone': !historiqueAvenantAdherant.adherent.adherentPrincipal}">
+                <tr [ngClass]="{'colorZone': !historiqueAvenantAdherant.adherentPrincipal}">
                     <!--<td><p-tableCheckbox [value]="adherent"></p-tableCheckbox></td>-->
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.adherentPrincipal?.nom}} {{historiqueAvenantAdherant?.adherent?.adherentPrincipal?.prenom}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.numero}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.nom | upercase}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherent?.prenom | upercase}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.dateNaissance | formatTableValue : 'date'}}</span></td>
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent?.qualiteAssure?.libelle}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.adherentPrincipal?.nom}} {{historiqueAvenantAdherant?.adherent?.adherentPrincipal?.prenom}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.numero}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.nom | upercase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.prenom | upercase}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.dateNaissance | formatTableValue : 'date'}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.qualiteAssure?.libelle}}</span></td>
                     <!--<td><span class="p-column-title">{{adherent.lieuNaissance}}</span></td>-->
-                    <td><span class="p-column-title">{{historiqueAvenantAdherant.adherent.numeroTelephone | formatTableValue : 'number'}}</span></td>
+                    <td><span class="p-column-title">{{historiqueAvenantAdherant?.numeroTelephone | formatTableValue : 'number'}}</span></td>
                     <td *ngIf="statut === 'VIEW' || statut === 'UPDATE'"><span class="p-column-title">{{historiqueAvenantAdherant?.singe}}</span></td>
                     <td style="width: 6em">
                         <button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" type="button" [disabled]="statut === 'VIEW'"
@@ -71,9 +71,9 @@
                         <button pButton pRipple icon="pi pi-eye" pTooltip="Visualiser" type="button"
                                 class="p-button-info p-button-icon  p-mr-2" label="" (click)="view(historiqueAvenantAdherant)">
                         </button>
-                        <button *ngIf="historiqueAvenantAdherant.adherent.urlCarte" pButton pRipple icon="pi pi-search" 
+                        <button *ngIf="historiqueAvenantAdherant?.urlCarte" pButton pRipple icon="pi pi-search" 
                         pTooltip="voir carte" class="p-button-rounded p-button-info" 
-                        (click)="voirCarte(historiqueAvenantAdherant.adherent)">
+                        (click)="voirCarte(historiqueAvenantAdherant)">
                     </button>
                     </td>
                 </tr>
@@ -93,7 +93,7 @@
             </ng-template>
             <ng-template pTemplate="summary">
                 <div class="p-d-flex p-ai-center p-jc-between">
-                    {{historiqueAvenantAdherants ? historiqueAvenantAdherants.length : 0 }} assurés
+                    {{adherentCarteInfo ? adherentCarteInfo.length : 0 }} assurés
                 </div>
             </ng-template>
         </p-table>

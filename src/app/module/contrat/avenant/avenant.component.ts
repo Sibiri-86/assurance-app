@@ -2103,6 +2103,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
           this.store.dispatch(featureAction.FetchReport(this.report));
         }},
+      {label: 'Liste de renouvellement', icon: 'pi pi-print', command: () => {
+        this.report.typeReporting = TypeReport.LISTE_AVENANT_RENOUVELLEMENT;
+        this.report.historiqueAvenant = historiqueAvenant;
+        console.log('==================this.report.historiqueAvenant=================={}', this.report.historiqueAvenant);
+        this.store.dispatch(featureAction.FetchReport(this.report));
+      }},
       {label: 'Facture de renouvellement', icon: 'pi pi-print', command: () => {
           this.report.typeReporting = TypeReport.FACTURE_INCORP;
           this.report.historiqueAvenant = historiqueAvenant;

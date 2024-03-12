@@ -45,7 +45,7 @@ export class AvenantIncorporationComponent implements OnInit{
     @Input() etat: string;
     @Output() adherentFamilleEvent = new EventEmitter();
     @Input() police: Police;
-    //  newgroupe: Groupe;
+    @Output() adherentCarte = new EventEmitter();
     lastExerciceForm: FormGroup;
     adherentForm: FormGroup;
     myForm: FormGroup;
@@ -99,6 +99,7 @@ export class AvenantIncorporationComponent implements OnInit{
     selectedGroup: Groupe = {};
     curentExercice: Exercice = {};
     compteur: number = null; 
+    adherentCarteInfo: Array<Adherent>;
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -761,6 +762,16 @@ export class AvenantIncorporationComponent implements OnInit{
                         groupe: res.groupe.libelle
                     }); */
                     // this.viewListeEdit = true;
+                    if(res) {
+                        if(this.historiqueAvenant1.typeHistoriqueAvenant === TypeHistoriqueAvenant.INCORPORATION) {
+                            this.historiqueAvenantService.getIncorporationCarteInfo(avenantId).subscribe(
+                                (res) => {
+                                    this.adherentCarteInfo = res;
+                                    console.log('..... adherentCarteInfo .....', this.adherentCarteInfo);
+                                    this.adherentCarte.emit(this.adherentCarteInfo);
+                                });
+                        }
+                    }
                 }
             );
             this.viewListeEdit = true;
@@ -792,6 +803,7 @@ export class AvenantIncorporationComponent implements OnInit{
         this.historiqueAvenant1.historiqueAvenantAdherants = event;
         console.log('..... Liste modifier .....', this.historiqueAvenant1);
         this.adherentFamilleEvent.emit(this.historiqueAvenant1);
+        this.adherentCarte.emit(this.adherentCarteInfo);
         this.init();
     }
 

@@ -58,6 +58,8 @@ export interface Adherent{
     urlCarte?: string;
     adherentPrincipalfullName?: string;
     maj?:boolean;
+    isCouvert?:boolean;
+    
 }
 
 export interface ConditionGenerale {

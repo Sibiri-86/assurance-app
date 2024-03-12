@@ -411,6 +411,12 @@ private handleError<T>() {
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/delete/${historiqueAvenantId}/${groupeId}`);
     }
 
+    getIncorporationCarteInfo(avenantId: string): Observable<any> {
+        // @FIXME: post request
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-adherent-carte-info`,
+            {params: createRequestOption({avenantId})});
+    }
+
     postMisAJoursAdherentNumero(file: File): Observable<any> {
         // @FIXME: post request
         const data: FormData = new FormData();
