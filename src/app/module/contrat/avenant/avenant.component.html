@@ -5349,7 +5349,7 @@
                 </div>
             </p-tabPanel>
 
-            <p-tabPanel header="CREATION AVENANT ANTERIEUR" leftIcon="pi pi-cog" tooltip="liste des personnes retirées">
+            <p-tabPanel header="CREATION AVENANT ANTERIEUR" leftIcon="pi pi-cog" tooltip="CREATION AVENANT ANTERIEUR">
                 <span style="color: green !important"> <h4> Informations portant sur la création de l'avenant anterieur</h4></span>
                 <div class="card">
                 <div class="p-formgroup-inline">
@@ -5363,9 +5363,14 @@
                         <p-calendar [showIcon]="true" inputId="icon" appendTo="body"  dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
                     </div>
                     <div class="p-field">
-                        <button pButton pRipple type="button" label="Rechercher"  (click)="createAnterieur()"></button>
+                        <button pButton pRipple type="button" label="valider"  (click)="createAnterieur()"></button>
                     </div>
                     
+
+                    <div class="p-field">
+                        <button pButton pRipple type="button" label="Mise à jour"  (click)="miseAjourAvenants()"></button>
+                    </div>
+
                 </div> 
             </div>
     

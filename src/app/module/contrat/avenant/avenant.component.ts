@@ -498,6 +498,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
     })
   }
 
+  miseAjourAvenants() {
+    this.historiqueAvenantService.updateHistoriqueAvenantByPolice(this.viewPolice.id).subscribe((rest)=>{
+      if(rest) {
+
+      }
+    })
+  }
+
   ngOnInit(): void {
     this.dateDebut = new Date();
     this.dateFin = new Date();

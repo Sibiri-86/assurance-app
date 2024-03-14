@@ -1431,21 +1431,24 @@ console.log(myForm);
 
 
 calculDebours1() {
-  if(this.prestationPopForm.get('sort').value !==Sort.REJETE) {
 
+    
+  if (this.prestationPopForm.get('sort').value !== Sort.REJETE) {
+    
   
   const myForm = this.prestationPopForm;
- 
- if((this.prestationPopForm.get('sousActe').value.idGenre  && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
+
+  
+ if((this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id === this.prestationPopForm.get('sousActe').value.idGenre) ||
  (this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT")) {
     myForm.patchValue({ montantRembourse : 0});
     myForm.patchValue({ montantRestant:  this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value});
     if(this.adherentSelected.genre.id !== this.prestationPopForm.get('sousActe').value.idGenre && this.adherentSelected.qualiteAssure.code =="ENFANT") {
-  
+     // myForm.patchValue({taux: this.adherentSelected.groupe.taux});
       myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour les enfants filles"}); 
 
     } else {
-     
+      // myForm.patchValue({taux: this.adherentSelected.groupe.taux});
       myForm.patchValue({observation: "Nous ne prenons pas en compte "+ this.prestationPopForm.get('sousActe').value.libelle+ " "+"pour le genre"+ " " +this.adherentSelected.genre.libelle}); 
 
     }
@@ -1482,7 +1485,9 @@ calculDebours1() {
     this.prestationPopForm.get('nombreActe').value *
     this.prestationPopForm.get('coutUnitaire').value});
   }
-  if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value* (this.prestationPopForm.get('taux').value.taux) / 100)) {
+
+  if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
+    console.log("cas 11111111111");
     myForm.patchValue({montantRembourse:
       (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
       debours: this.prestationPopForm.get('nombreActe').value *
@@ -1491,51 +1496,37 @@ calculDebours1() {
     this.prestationPopForm.get('coutUnitaire').value});
   }
 
-
   this.prefinancementModel = this.prestationForm.value;
   this.prefinancementModel.dateSaisie = new Date();
   this.prefinancementModel.adherent = this.adherentSelected;
   this.prefinancementList.push(this.prefinancementModel);
-  /* executer le controle de la prestation */
- /* this.store.dispatch(featureActionPrefinancement.checkPrefinancement({prefinancement: this.prefinancementList}));
-  this.store.pipe(select(prefinancementSelector.selectCheckPrefinancementReponse)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    console.log(value);
-    if (!value) {
+  
+  if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) {
+    if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
 
-    } else {
-      this.checkPrefinancementResult = value.slice();
-      console.log(this.checkPrefinancementResult);
-      for (let j = 0; j < this.checkPrefinancementResult.length; j++){
-        const myForm1 = (this.prestationForm.get('prestation') as FormArray).at(j);
-       
-        const plafond = myForm1.get('montantPlafond').value;
-        const totalPlafond = plafond * this.prestationForm.get('prestation').value[j].nombreActe;
-        let montantRembourse = this.checkPrefinancementResult[j].montantRembourse;
-        let montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
-        this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
-        if (this.checkPrefinancementResult[j].montantRembourse > totalPlafond) {
-          montantRembourse = totalPlafond;
-          montantSupporte = (this.prestationForm.get('prestation').value[j].nombreActe *
-          this.prestationForm.get('prestation').value[j].coutUnitaire) - montantRembourse;
-        }
-        myForm1.patchValue({montantRembourse, montantSupporte,
-          sort: this.checkPrefinancementResult[j].sort, montantRestant: this.checkPrefinancementResult[j].montantRestant,
-          observation: this.checkPrefinancementResult[j].message, historiqueAvenant: this.checkPrefinancementResult[j].historiqueAvenant
-        });
-        if(!this.checkPrefinancementResult[j].montantRestant) {
-          myForm1.patchValue({ montantRestant: this.prestationForm.get('prestation').value[j].baseRemboursement -  this.prestationForm.get('prestation').value[j].montantRembourse });
-        }
-      }*/
+      console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
+      myForm.patchValue({
+        sort: Sort.ACCORDE,
+        observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+        montantRembourse: this.montantPlafond1 - this.montantConsomme,
+        montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
+        montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+      })
+     
+  }
+  }
+ 
+  
     /* Gestion des personnes rétirées au front */
     if(this.adherentSelected.signeAdherent ==='-') {
       if((this.adherentSelected.dateSortie === null && this.adherentSelected.dateSuspension  !== null) || (new Date(this.adherentSelected.dateSuspension).getTime() < new Date(this.adherentSelected.dateSortie).getTime()
       && new Date(this.adherentSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
   
-          if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+          if(this.adherentSelected.dateSuspension !== null &&  new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
                myForm.patchValue({
              
                 montantRembourse : 0,
-                observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                observation: "Cet(te) assuré(e) a  été suspendu(e1)",
                 montantSupporte: this.prestationPopForm.get('nombreActe').value *
                 this.prestationPopForm.get('coutUnitaire').value,
                 sort : Sort.REJETE
@@ -1548,24 +1539,35 @@ calculDebours1() {
       } 
       if(this.adherentSelected.dateSortie !== null && (new Date(this.adherentSelected.dateSuspension)?.getTime() < new Date(this.adherentSelected.dateSortie)?.getTime() )) {
           
-          if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+          if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
             myForm.patchValue({
                 montantRembourse : 0,
-                observation: "Cet(te) assuré(e) a  été suspendu(e)",
+                observation: "Cet(te) assuré(e) a  été retiré(e)",
                 montantSupporte: this.prestationPopForm.get('nombreActe').value *
                 this.prestationPopForm.get('coutUnitaire').value,
                 sort : Sort.REJETE
                 });
              
           }
+
+          if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+            myForm.patchValue({
+              montantRembourse : 0,
+              observation: "Cet(te) assuré(e) a  été suspendu(e)",
+              montantSupporte: this.prestationPopForm.get('nombreActe').value *
+              this.prestationPopForm.get('coutUnitaire').value,
+              sort : Sort.REJETE
+              });
+
+          }
     
           
       } 
      } else {
       console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme)
-      if(this.montantConsomme >   this.montantPlafond1) {
+      if(this.montantPlafond1 != null && this.montantPlafond1 != 0 && this.montantConsomme >  this.montantPlafond1) {
         this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
-        myForm.patchValue({observation: "Votre plafond est atteint"});
+        // myForm.patchValue({observation: "Votre plafond est atteint"});
         myForm.patchValue({
           sort: Sort.REJETE,
           observation: "Votre plafond est atteint",
@@ -1580,10 +1582,44 @@ calculDebours1() {
         montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
         this.prestationPopForm.get('montantRembourse').value
       });
+      if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
+        if(this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
+           // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
+           myForm.patchValue({
+            montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,
+            montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
+            this.prestationPopForm.get('montantRembourse').value
+          });
+           
+        }
+        
+    }
+
     }
 
   }
+ 
+  if(this.prestationPopForm.get('montantRembourse').value == 0) {
+
+    myForm.patchValue({
+    montantRembourse: this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantSupporte').value
+  });
+  
+  }
+  
+} else {
+  const myForm1 = this.prestationPopForm;
+  myForm1.patchValue({
+    montantRembourse: 0,
+    debours: this.prestationPopForm.get('nombreActe').value *
+  this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+  this.prestationPopForm.get('nombreActe').value *
+  this.prestationPopForm.get('coutUnitaire').value, montantSupporte: this.prestationPopForm.get('nombreActe').value *
+  this.prestationPopForm.get('coutUnitaire').value});
 }
+
+
+
 }
 
 /* findTaux() {
