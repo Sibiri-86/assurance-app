@@ -319,6 +319,7 @@
                                     <th>NOM</th>
                                     <th>PRENOM(S)</th>
                                     <th>DATE NAISS.</th>
+                                    <th>COUVERTURE</th>
                                    
                                 </tr>
                             </ng-template>
@@ -333,8 +334,9 @@
                                     </td>
                                     <td>{{historiqueAveantAdherant?.prenom }}
                                     </td>
-                                    <td>{{historiqueAveantAdherant?.dateNaissance | formatTableValue : 'date'}}
-                                    </td>
+                                    <td>{{historiqueAveantAdherant?.dateNaissance | formatTableValue : 'date'}}</td>
+                                    <td *ngIf="historiqueAveantAdherant?.isCouvert"><p-badge value="Personne couverte à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="success"></p-badge></td>
+                                    <td *ngIf="!historiqueAveantAdherant?.isCouvert"><p-badge value="Personne non couvert à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="danger"></p-badge></td>
                                     
                                 </tr>
                             </ng-template>
