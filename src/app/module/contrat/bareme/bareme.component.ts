@@ -811,28 +811,30 @@ changeActeANdSousActe(plafond: PlafondFamilleActe) {
   if(!plafond?.plafondFamilles) {
     this.acteByGarantieList= [];
     if(plafond.listeActe) {
+      
+
       this.acteByGarantieList=  this.acteList.filter(acte=>acte.idTypeGarantie===plafond.garantie.id);
       for (let j = 0; j < this.acteByGarantieList.length; j++) {
         let compteur = 0;
         this.plafondSousActeAjout= [];
         this.plafondActeAjout= [];
         for (let k = 0; k < plafond.listeActe.length; k++) {
-          
-          if(this.acteByGarantieList[k].id === plafond.listeActe[j]?.acte?.id) {
+  
+          if(this.acteByGarantieList[j].id === plafond.listeActe[k]?.acte?.id) {
             compteur= 1;
-            this.sousActeByActeList = this.sousActeList?.filter(sous=>sous.idTypeActe === plafond.listeActe[j].acte.id);
+            this.sousActeByActeList = this.sousActeList?.filter(sous=>sous.idTypeActe === plafond.listeActe[k].acte.id);
             if(this.sousActeByActeList) {
               for (let i = 0; i < this.sousActeByActeList.length; i++) {
                 let compteur1 = 0;
-                if( plafond.listeActe[j].listeSousActe) {
-                  for (let t = 0; t < plafond.listeActe[j].listeSousActe.length; t++) {
+                if( plafond.listeActe[k].listeSousActe) {
+                  for (let t = 0; t < plafond.listeActe[k].listeSousActe.length; t++) {
   
-                    if(plafond.listeActe[j].listeSousActe[t].sousActe.id === this.sousActeByActeList[i].id ) {
+                    if(plafond.listeActe[k].listeSousActe[t].sousActe.id === this.sousActeByActeList[i].id ) {
                       compteur1 = 1;
                     }
                   }
                    if(compteur1 === 0) {
-                    plafond.listeActe[j].listeSousActe.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0, display: true,
+                    plafond.listeActe[k].listeSousActe.push({id: this.sousActeByActeList[i].id, sousActe: this.sousActeByActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0, display: true,
                        dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
                     compteurSousActe =  compteurSousActe+1;
                    }
@@ -845,12 +847,14 @@ changeActeANdSousActe(plafond: PlafondFamilleActe) {
   
         if(compteur === 0) {
           
+          this.plafondSousActeAjout= [];
           for (let i = 0; i < this.sousActeList.length; i++){
             if (this.sousActeList[i].idTypeActe === this.acteByGarantieList[j].id) {
-              this.plafondSousActeAjout.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: plafond.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true,  dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
+              
+              this.plafondSousActeAjout.push({id: this.sousActeList[i].id, sousActe: this.sousActeList[i], taux: plafond?.taux, dateEffet: plafond.dateEffet, montantPlafond: 0, montantPlafondParActe: 0 , display: true,  dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat})
             }
           }
-          plafond.listeActe.push({id: this.acteList[j].id, acte: this.acteList[j], taux:plafond.taux, dateEffet: plafond.dateEffet, listeSousActe: this.plafondSousActeAjout, garantie: plafond.garantie , display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
+          plafond.listeActe.push({id: this.acteByGarantieList[j].id, acte: this.acteByGarantieList[j], taux:plafond?.taux, dateEffet: plafond.dateEffet, listeSousActe: this.plafondSousActeAjout, garantie: plafond.garantie , display: true, dimensionPeriode: plafond.dimensionPeriode, etat: plafond.etat});
           compteurActe= compteurActe + 1;
         } 
       }
