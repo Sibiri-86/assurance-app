@@ -108,6 +108,7 @@ export class TierPayantValideComponent implements OnInit {
   prenom = '';
   operateur = '';
   role = '';
+  tierpayantToPrint: SinistreTierPayant = {};
 
 
 
@@ -285,6 +286,8 @@ export class TierPayantValideComponent implements OnInit {
   voirPrestation(pref: SinistreTierPayant){
     this.displayPrestation = true;
     this.prestationListPrefinancement = pref.prestation;
+    this.tierpayantToPrint = pref;
+    
   }
 
   /* this.report.sinistreTierPayantDTO = this.prefinancementDetail;
@@ -293,12 +296,18 @@ export class TierPayantValideComponent implements OnInit {
   this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT; */
 
   imprimerPrestation(prestation: Prestation) {
+    this.report.sinistreTierPayantDTO = this.tierpayantToPrint;
     this.report.sinistreTierPayantDTO.prestation = [];
     this.report.sinistreTierPayantDTO.prestation.push(prestation);
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
-    this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+    
+    /* this.report.sinistreTierPayantDTO.prestation = [];
+    this.report.sinistreTierPayantDTO.prestation.push(prestation);
+    this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT; */
+    
     
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+    this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
   }
 
   calculCoutDebours(data: FraisReels, ri: number){

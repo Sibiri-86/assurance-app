@@ -123,7 +123,8 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/prestation/${sinitreTierId}`).pipe(
             map((response: Prestation[]) => response),
             catchError(this.handleError())
-        );    }
+        );    
+    }
 
     deleteTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         // @FIXME: post request
