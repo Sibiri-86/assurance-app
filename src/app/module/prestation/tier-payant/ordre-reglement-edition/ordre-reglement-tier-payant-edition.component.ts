@@ -18,6 +18,7 @@ import * as featureActionPrefinancement from '../../../../store/prestation/prefi
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import {OrdreReglement, Prestation} from '../../../../store/prestation/prefinancement/model';
 import { Router } from '@angular/router';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 @Component({
   selector: 'app-ordre-reglement-edition',
@@ -31,6 +32,7 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   cols: any[];
   displaySinistre = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
+  sinistreTierPayants: Array<SinistreTierPayant>;
   prestations: Array<Prestation>;
   report: Report = {};
   selectedOrdreReglement: OrdreReglementTierPayant [];
@@ -39,7 +41,8 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,private router: Router,
-              private formBuilder: FormBuilder,  private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+              private formBuilder: FormBuilder,  private messageService: MessageService, 
+              private breadcrumbService: BreadcrumbService,private sinistreTiersPayantService: TierPayantService) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT EDITION' }]);
   }
 
@@ -64,6 +67,13 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   }
 
   validerOrdreReglement(ordre: OrdreReglementTierPayant){
+    this.sinistreTiersPayantService.findSinistreTierPayantByOrdreReglementTierPayantId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistreTierPayants = res;
+      console.log('****************prestations****************', this.sinistreTierPayants);
+      this.prestations = this.sinistreTierPayants[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    })); 
     this.confirmationService.confirm({
       message: 'voulez-vous valider cet ordre de reglement',
       header: 'Confirmation',
@@ -101,8 +111,15 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   voirSinistre(ordre: OrdreReglementTierPayant) {
     console.log('****************ordre****************', ordre);
+    this.sinistreTiersPayantService.findSinistreTierPayantByOrdreReglementTierPayantId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistreTierPayants = res;
+      console.log('****************prestations****************', this.sinistreTierPayants);
+      this.prestations = this.sinistreTierPayants[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    })); 
     this.displaySinistre = true;
-    this.prestations = ordre.tierPayant[0].prestation;
+    //this.prestations = ordre.tierPayant[0].prestation;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
 
@@ -113,10 +130,18 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   consulter(ordre: OrdreReglementTierPayant){
     this.ordreReglement = ordre;
+    this.sinistreTiersPayantService.findSinistreTierPayantByOrdreReglementTierPayantId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistreTierPayants = res;
+      console.log('****************prestations****************', this.sinistreTierPayants);
+      this.ordreReglement.tierPayant = this.sinistreTierPayants;
+      this.prestations = this.sinistreTierPayants[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    }));
   
     this.showDetailOrdreReglement = true;
-    console.log('*************************yes1********************' + this.showDetailOrdreReglement);
-    console.log('*************************prestation********************' + this.ordreReglement .tierPayant[0].prestation);
+    //console.log('*************************yes1********************' + this.showDetailOrdreReglement);
+    //console.log('*************************prestation********************' + this.ordreReglement .tierPayant[0].prestation);
 
   }
 
