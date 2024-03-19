@@ -67,13 +67,13 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   }
 
   validerOrdreReglement(ordre: OrdreReglementTierPayant){
-    this.sinistreTiersPayantService.findSinistreTierPayantByOrdreReglementTierPayantId(ordre.id).subscribe((res=>{
+    /* this.sinistreTiersPayantService.findSinistreTierPayantByOrdreReglementTierPayantId(ordre.id).subscribe((res=>{
       console.log('****************res****************', res);
       this.sinistreTierPayants = res;
       console.log('****************prestations****************', this.sinistreTierPayants);
       this.prestations = this.sinistreTierPayants[0].prestation;
       //this.prestations = this.prestations.prestation;
-    })); 
+    }));  */
     this.confirmationService.confirm({
       message: 'voulez-vous valider cet ordre de reglement',
       header: 'Confirmation',
