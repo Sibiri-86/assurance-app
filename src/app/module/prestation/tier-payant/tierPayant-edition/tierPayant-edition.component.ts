@@ -515,6 +515,7 @@ export class TierPayantEditionComponent implements OnInit {
             console.log(value);
             if (value) {
                 console.log('=========value=============',value);
+                this.prestationAdd.sousActe = {};
                 this.adherentSelected = value;
                 this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
             subscribe((res) =>{
@@ -830,7 +831,7 @@ export class TierPayantEditionComponent implements OnInit {
     
         console.log("this.adherentSelected ", this.adherentSelected);
         //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-       this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+       this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id, this.adherentSelected?.qualiteAssure?.id).
         subscribe((res) =>{
           this.listSousActe = res.body;
         });
@@ -1293,7 +1294,7 @@ export class TierPayantEditionComponent implements OnInit {
         }
         console.log("this.adherentSelected ", this.adherentSelected);
          //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-       this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id).
+       this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id, this.adherentSelected?.qualiteAssure?.id).
         subscribe((res) =>{
           this.listActe = res.body;
         });

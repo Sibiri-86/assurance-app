@@ -563,6 +563,7 @@ findMontantPlafond(event){
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
     if (value) {
+      this.prestationPopForm.get('sousActe').setValue(null);
       this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(value).
       subscribe((res) =>{
         this.listFamilleActe = res;
@@ -579,6 +580,7 @@ findMontantPlafond(event){
           } else{
             this.adherentSelected = value;
             this.adherentSelectedfinal = this.adherentSelected;
+           
             this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
        /*  console.log(this.adherentSelected.dateIncorporation);
         console.log(this.prestationForm.value.dateDeclaration);
@@ -1012,9 +1014,10 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
 
     console.log("this.adherentSelected ", this.adherentSelected);
     //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-   this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+   this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id, this.adherentSelected?.qualiteAssure?.id).
     subscribe((res) =>{
       this.listSousActe = res.body;
+      console.log("=======",this.listSousActe);
     });
   }
   
@@ -1507,6 +1510,7 @@ findTaux() {
   console.log('adherent id', this.adherentSelected.id);
   this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, this.prestationPopForm.get('sousActe').value?.sousActe?.id, this.adherentSelected?.id).subscribe((rest)=>{
     if(rest) {
+      console.log('111111111111',rest);
       this.prestationPopForm.get('taux').setValue(rest);
       console.log('111111111111');
     } else {
@@ -1689,7 +1693,7 @@ verifieDateSoins(event){
     }
     console.log("this.adherentSelected ", this.adherentSelected);
      //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id).
+   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.garantie.id, this.adherentSelected?.qualiteAssure?.id).
     subscribe((res) =>{
       this.listActe = res.body;
     });
