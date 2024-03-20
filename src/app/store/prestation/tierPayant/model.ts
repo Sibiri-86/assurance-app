@@ -38,6 +38,7 @@ export interface OrdreReglementTierPayant{
     banque?: Banque;
     montantPaye?: number;
     isPaiement?: Boolean;
+    prestataire?: string;
 }
 
 export interface SinistreTierPayant {

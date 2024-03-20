@@ -123,7 +123,8 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/prestation/${sinitreTierId}`).pipe(
             map((response: Prestation[]) => response),
             catchError(this.handleError())
-        );    }
+        );    
+    }
 
     deleteTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         // @FIXME: post request
@@ -187,6 +188,14 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
               map((response: SinistreTierPayantList) => response),
               catchError(this.handleError())
           );
+        }
+
+        findSinistreTierPayantByOrdreReglementTierPayantId(ordreId: string): Observable<Prestation[]> {
+            // @FIXME: post request
+            return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/sinistreTiersPayantByOrdreId/${ordreId}`).pipe(
+                map((response: Prestation[]) => response),
+                catchError(this.handleError())
+            );    
         }
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();

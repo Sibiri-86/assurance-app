@@ -1661,14 +1661,14 @@ enleverEspace() {
 
   compareDateavenant(): void {
      
-    if (this.lastExerciceForm.get('debut').value) {
-        console.log(this.lastExerciceForm.get('debut').value);
-        if(new Date(this.myForm.get('dateAvenant').value)?.getTime() < new Date(this.lastExerciceForm.get('debut')?.value).getTime() ) {
+    if (this.curentExercice.debut) {
+        console.log(this.curentExercice.debut);
+        if(new Date(this.myForm.get('dateAvenant').value)?.getTime() < new Date(this.curentExercice.debut).getTime() ) {
             this.addMessage('error', 'Date d\'effet invalide',
                         'La date d\'effet de l\'avenant de peut pas être postérieure à celle de la police');
                   this.myForm.patchValue({dateAvenant: null});
           }
-        if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.lastExerciceForm.get('fin').value)?.getTime() ) {
+        if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.curentExercice.fin)?.getTime() ) {
             this.addMessage('error', 'Date d\'effet invalide',
                       'La date d\'effet de l\'avenant de peut pas être antérieure à celle de la police');
                   this.myForm.patchValue({dateAvenant: null});

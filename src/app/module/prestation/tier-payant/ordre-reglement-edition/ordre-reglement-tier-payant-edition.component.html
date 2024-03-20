@@ -49,7 +49,7 @@
                         <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="nom" >Montant<p-sortIcon field="nom"></p-sortIcon></th> -->
                        <!-- <th pSortableColumn="taux" style="min-width:200px">Numéro police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                          <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th> -->
                         <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -68,10 +68,12 @@
                         <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
                         </td>
 
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        </td> -->
+                        <td><span class="p-column-title">{{ordre?.prestataire}}</span>
                         </td>
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
-                        </td>
+                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
+                        </td> -->
                        
                         <td>
                             <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
@@ -83,7 +85,7 @@
                         <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
                             <button pButton  pRipple icon="pi pi-eye" pTooltip="voir Ordre de règlement" class="p-button-rounded p-button-help p-mr-2" (click)="consulter(ordre)"></button>
                         <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerOrdreReglement(ordre)"></button>
-                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
+                        <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button> -->
                         </td>
                         
                         <!--

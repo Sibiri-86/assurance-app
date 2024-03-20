@@ -48,7 +48,7 @@
                         <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
                         <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
@@ -64,10 +64,10 @@
                         <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
                         </td>
 
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        <td><span class="p-column-title">{{ordre?.prestataire}}</span>
                         </td>
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
-                        </td>
+                        <!-- <td><span class="p-column-title">{{ordre?.prestataire}}</span>
+                        </td> -->
                         <td>
                             <span *ngIf="ordre?.etat ==='VALIDE'" class="p-badge p-badge-success">{{ordre?.etat}}</span>
                             <span *ngIf="ordre?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
