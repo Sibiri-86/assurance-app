@@ -402,5 +402,14 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
   );
 }
 
+$getAdherentsDistinctGroupeAndExerciceId(idGarantie: string, idPolice: string, idGroupe: string, date:String): Observable<AdherentList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/distinct-groupe-exercice`, {params: createRequestOption({idGarantie,
+     idPolice, idGroupe, date})}).pipe(
+    map((response: AdherentList) => response),
+    catchError(this.handleError())
+  );
+}
+
 
 }

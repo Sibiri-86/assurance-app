@@ -59,6 +59,8 @@ import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 import { KeycloakService } from 'keycloak-angular';
 import { environment } from 'src/environments/environment';
 import * as Keycloak from 'keycloak-js';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { formatDate } from '@angular/common';
 //import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 
@@ -121,6 +123,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   user: User = {};
   displayuser = false;
   dysplayGarant = false;
+  adherentPrincipaux : Array<Adherent>;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -130,7 +133,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
                private keycloakService: KeycloakService,
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  
+               private breadcrumbService: BreadcrumbService, 
+               private adherentService: AdherentService) {
                 this.breadcrumbService.setItems([{ label: 'Depense  Familiale'}]);
    }
 
@@ -219,7 +224,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
         
         this.adherentList = value.slice();
         this.adherentList.forEach(ad=>{
-          ad.nom = ad.nom.concat("/").concat(ad.prenom);
+          ad.nom = ad.nom.concat(" ").concat(ad.prenom);
         })
         
        
@@ -256,8 +261,14 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
 
   }
   loadAdherentByGroupe(){
-  this.store.dispatch(featureActionAdherent.loadAdherentDistinctGroupe({idGarantie: this.check.garant.id, idPolice: this.check.police.id, idGroupe: this.check.groupe.id}));
-
+  //this.store.dispatch(featureActionAdherent.loadAdherentDistinctGroupe({idGarantie: this.check.garant.id, idPolice: this.check.police.id, idGroupe: this.check.groupe.id}));
+  if(this.check.dateDebut != null ){
+    this.adherentService.$getAdherentsDistinctGroupeAndExerciceId(this.check.garant.id,  this.check.police.id, this.check.groupe.id, formatDate(this.check.dateDebut, 'dd/MM/yyyy', 'en-fr'))
+      .subscribe((res=>{
+    this.adherentPrincipaux = res.adherentDtoList;
+  }));
+  }
+  
 }
   viderDebit() {
     this.operation.montantDebit = null;
