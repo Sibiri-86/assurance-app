@@ -185,14 +185,14 @@ getPlafondGroupeFamilleActeByGroupeAndExerciceIdRenouv(idGroupe: string, idExerc
       {params: createRequestOption({idGroupe, idExercice}), observe: 'response'});
 }
 
-findPlafondGroupeActeByPlafondGroupeFamilleActeId(exoId: string, groupeId: string, pfgaId: string): Observable<HttpResponse<PlafondActe[]>> {
+findPlafondGroupeActeByPlafondGroupeFamilleActeId(exoId: string, groupeId: string, pfgaId: string, domaineId: string): Observable<HttpResponse<PlafondActe[]>> {
   return this.http.get<PlafondActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeActeByPlafondGroupeFamilleActeId`,
-      {params: createRequestOption({exoId, groupeId, pfgaId}), observe: 'response'});
+      {params: createRequestOption({exoId, groupeId, pfgaId, domaineId}), observe: 'response'});
 }
 
-findPlafondGroupeSousActeByPlafondGroupeActeId(exoId: string, groupeId: string, pfgaId: string): Observable<HttpResponse<PlafondSousActe[]>> {
+findPlafondGroupeSousActeByPlafondGroupeActeId(exoId: string, groupeId: string, pfgaId: string, domaineId: string): Observable<HttpResponse<PlafondSousActe[]>> {
   return this.http.get<PlafondSousActe[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/findPlafondGroupeSousActeByPlafondGroupeActeId`,
-      {params: createRequestOption({exoId, groupeId, pfgaId}), observe: 'response'});
+      {params: createRequestOption({exoId, groupeId, pfgaId, domaineId}), observe: 'response'});
 }
 
 findPlafondGroupeFamilleActeByPlafondGroupeActeId(dateSoins: Date, matricule: number): Observable<PlafondFamilleActe[]> {

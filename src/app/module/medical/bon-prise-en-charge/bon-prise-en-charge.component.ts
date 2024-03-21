@@ -528,7 +528,7 @@ findMontantPlafond(event){
     this.store.pipe(select(adherentSelector.selectedAdherent)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
     console.log(value);
     if (value) {
-        
+      this.prestationPopForm.get('sousActe').setValue(null);
         if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
           console.log(this.prestationsList.length);
           console.log("====adherentSelected2021=======");
@@ -893,7 +893,7 @@ findMontantPlafond(event){
 
     console.log("this.adherentSelected ", this.adherentSelected);
     //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-   this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id).
+   this.plafondService.findPlafondGroupeSousActeByPlafondGroupeActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, event.value.acte.id, this.adherentSelected?.qualiteAssure?.id).
     subscribe((res) =>{
       this.listSousActe = res.body;
     });
@@ -1272,7 +1272,7 @@ console.log(myForm);
     }
     console.log("this.adherentSelected ", this.adherentSelected);
      //this.acteListFilter = this.acteList.filter(element => element.idTypeGarantie === garantie.value.id);
-   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id).
+   this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, garantie.value.id, this.adherentSelected?.qualiteAssure?.id).
     subscribe((res) =>{
       this.listActe = res.body;
     });
