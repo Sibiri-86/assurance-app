@@ -1887,6 +1887,7 @@ export class TierPayantEditionComponent implements OnInit {
             this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
             this.prestationsList.push(this.prestationAdd);
+            this.prestationsList.push(this.prestationAdd);
           }
 
           if(this.prestationsList) {

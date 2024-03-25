@@ -1413,6 +1413,7 @@ console.log(myForm);
    
    this.prestationPopForm.reset();
    this.prestationPopForm.get('familleActe').setValue(familleActe);
+   this.prestationPopForm.get('dateSoins').setValue(prestat.dateSoins);
   // this.prestationPopForm.get('sousActe').setValue(sousActe);
     this.prestationPopForm.get('acte').setValue(acte);
    this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentSelected.numero);
