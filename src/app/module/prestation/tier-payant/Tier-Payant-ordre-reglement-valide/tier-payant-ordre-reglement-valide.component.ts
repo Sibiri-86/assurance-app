@@ -14,6 +14,7 @@ import {TypeReport} from '../../../../store/contrat/enum/model';
 import {TypeEtatOrdreReglement} from '../../../common/models/emum.etat.ordre-reglement';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import { formatDate } from '@angular/common';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -34,6 +35,7 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
+              private sinistreTiersPayantService: TierPayantService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT VALIDE' }]);
 }
@@ -85,8 +87,15 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.store.dispatch(featureActionTierPayant.deValiderOrdreReglementByPeriode({ordre, etat: TypeEtatOrdreReglement.DEVALIDE, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+        this.sinistreTiersPayantService.findSinistreTiersPayantByOrdreReglementId(ordre.id).subscribe((res=>{
+          if(res) {
+     
+            ordre.tierPayant = res;
+            this.store.dispatch(featureActionTierPayant.deValiderOrdreReglementByPeriode({ordre, etat: TypeEtatOrdreReglement.DEVALIDE, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+          }
+         }));
+       
       },
     });
   }
@@ -111,8 +120,14 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
   voirSinistre(ordre: OrdreReglementTierPayant) {
     console.log('****************ordre****************', ordre);
     this.displaySinistre = true;
-    this.sinistreTierPayant = ordre.tierPayant;
-    console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
+    this.sinistreTiersPayantService.findSinistreTiersPayantByOrdreReglementId(ordre.id).subscribe((res=>{
+     if(res) {
+
+      this.sinistreTierPayant = res;
+     }
+    }));
+  
+  //  console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
 
 }

@@ -1973,9 +1973,10 @@ export class TierPayantEditionComponent implements OnInit {
                     this.tierPayantService.findPrestationBySinitreTierPayant(this.prefinancement.id).subscribe((res)=> {
                         if(res) {
                             this.prestationsList = res;
+                            this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
+
                         }
                     });
-                    this.messageService.add({severity:'success', summary:'Service Message', detail:this.successMsg});
     
                 }
                 
