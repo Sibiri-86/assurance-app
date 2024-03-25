@@ -408,6 +408,8 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationForm.reset();
         this.prefinancement = {};
         this.displayFormPrefinancement = false;
+        this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
     }
 
     navigateSinistre() {
@@ -1865,6 +1867,7 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
       addPrestation() {
+        console.log("this.operateurrrrrrr =>", this.operateur);
         if(this.prefinancement.montantRestant == null ) {
             this.prefinancement.montantRestant = 0;
         }
@@ -1880,6 +1883,7 @@ export class TierPayantEditionComponent implements OnInit {
                     this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
         
           }  */
+          this.prestationAdd.operateur = this.operateur;
         if(this.compteur !=null) {
            // this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
                
@@ -1925,6 +1929,7 @@ export class TierPayantEditionComponent implements OnInit {
          this.prestationAdd.souscripteur =  this.adherentSelected.groupe.police.nom;
          this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
          this.prestationAdd.adherent = this.adherentSelected;
+         this.prestationAdd.operateur = this.operateur;
          if (this.adherentSelected.adherentPrincipal != null) {
                this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal.nom.concat("  ").concat(this.adherentSelected.adherentPrincipal.prenom);
             this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.adherentPrincipal.prenom;
@@ -1956,6 +1961,7 @@ export class TierPayantEditionComponent implements OnInit {
           if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
+            console.log("this.prestationsList =>", this.prestationsList);
             this.prefinancement.operateur = this.operateur;
             console.log("************this.prefinancement******************");
             console.log(this.prefinancement);
@@ -1984,6 +1990,8 @@ export class TierPayantEditionComponent implements OnInit {
           }
           
           console.log("la taille des données******************>", this.prestationsList.length);
+          console.log("la liste des prestattions******************>", this.prestationsList);
+          
     }
 
       fermerPrestation(){

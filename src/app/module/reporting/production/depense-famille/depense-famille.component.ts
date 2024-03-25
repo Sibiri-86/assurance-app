@@ -266,6 +266,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.adherentService.$getAdherentsDistinctGroupeAndExerciceId(this.check.garant.id,  this.check.police.id, this.check.groupe.id, formatDate(this.check.dateDebut, 'dd/MM/yyyy', 'en-fr'))
       .subscribe((res=>{
     this.adherentPrincipaux = res.adherentDtoList;
+    this.adherentPrincipaux.forEach(ad=>{
+      ad.nom = ad.nom.concat(" ").concat(ad.prenom);
+    })
   }));
   }
   
