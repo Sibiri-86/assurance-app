@@ -107,6 +107,7 @@ export interface Prestation {
     nomGroupe?: string;
     montantExclu?: number;
     typePrestation?: TypePrestation;
+    operateur?: string;
 }
 
 export interface SinistreTierPayantList {
