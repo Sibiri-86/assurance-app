@@ -47,6 +47,8 @@ import { loadPoliceByAffaireNouvelle } from 'src/app/store/contrat/police/action
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { KeycloakService } from 'keycloak-angular';
 import * as featureActionPolice from '../../../../store/contrat/police/actions';
+import { formatDate } from '@angular/common';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
 
 
 
@@ -142,7 +144,8 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
               private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService, 
               private keycloakService: KeycloakService,
-              private recaptulatifService: RecapitulatifService) {
+              private recaptulatifService: RecapitulatifService,
+              private adherentService: AdherentService) {
 
       this.appelFondForm = this.formBuilder.group({
         id: new FormControl(''),
@@ -439,21 +442,36 @@ onPoliceChange() {
   }
 }
 
-imprimerRecap() {
-  //console.log('recap=============>', recap);
-  this.repartitionDepenseStatut = {};
-  this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
-  this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
-  this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
-  this.repartitionDepenseStatut.policeId = this.appelFondForm.get('police').value?.id;
-  this.repartitionDepenseStatut.groupeId = this.appelFondForm.get('groupe').value?.id;
-  this.repartitionDepenseStatut.garantId = this.appelFondForm.get('garant').value?.id;
-  this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
-  this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
-  console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);
-  console.log('this.report', this.report);
-  this.store.dispatch(repartitionDepenseStatutAction.FetchReportRepartitionDepenseStatut(this.report));
-}
+  imprimerRecap() {
+    //console.log('recap=============>', recap);
+    this.repartitionDepenseStatut = {};
+    this.repartitionDepenseStatut.dateDebut = this.appelFondForm.get('dateDebut').value;
+    this.repartitionDepenseStatut.dateFin = this.appelFondForm.get('dateFin').value;
+    this.repartitionDepenseStatut.tauxChargement = this.appelFondForm.get('tauxChargement').value;
+    this.repartitionDepenseStatut.policeId = this.appelFondForm.get('police').value?.id;
+    this.repartitionDepenseStatut.groupeId = this.appelFondForm.get('groupe').value?.id;
+    this.repartitionDepenseStatut.garantId = this.appelFondForm.get('garant').value?.id;
+    this.report.typeReporting = TypeReport.REPARTITION_DEPENSE_STATUT;
+    this.report.repartitionDepenseStatut = this.repartitionDepenseStatut;
+    console.log('this.repartitionDepenseStatut=============>', this.repartitionDepenseStatut);
+    console.log('this.report', this.report);
+    this.store.dispatch(repartitionDepenseStatutAction.FetchReportRepartitionDepenseStatut(this.report));
+  }
+
+  /* loadAdherentByGroupe(){
+    if(this.appelFondForm.get('dateDebut').value != null && this.appelFondForm.get('police').value != null 
+    && this.appelFondForm.get('groupe').value != null && this.appelFondForm.get('garant').value != null){
+      this.adherentService.$getAdherentsDistinctGroupeAndExerciceId(this.appelFondForm.get('garant').value.id,  this.appelFondForm.get('police').value.id,
+      this.appelFondForm.get('groupe').value.id, formatDate(this.appelFondForm.get('dateDebut').value, 'dd/MM/yyyy', 'en-fr'))
+        .subscribe((res=>{
+      this.adherentPrincipaux = res.adherentDtoList;
+      this.adherentPrincipaux.forEach(ad=>{
+        ad.nom = ad.nom.concat(" ").concat(ad.prenom);
+      })
+    }));
+    }
+    
+  } */
 }
 
 
