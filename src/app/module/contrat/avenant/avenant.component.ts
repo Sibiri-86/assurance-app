@@ -1606,10 +1606,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   
 
   findAdherentListByExerciceId(currentExercice: Exercice) {
-    console.log('---------- currentExercice ----------', currentExercice);
+    console.log('---------- currentExercice -1---------', currentExercice);
     this.adherentService.findAdherantActuallListByExerciceWithBaremeDataId(currentExercice.id).subscribe(
       (res) => {
-        console.log('---------- Actual Liste by Exrcice Id ----------', currentExercice.id);
+        console.log('---------- Actual Liste by Exrcice Id --res--------', res);
         console.log(res);
         this.adherentsListeActuelleByExercice = res;
         this.adherentsListeActuelleByExerciceRetirer = res.filter(e => e.signeAdherent === "-");
