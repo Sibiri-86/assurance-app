@@ -72,6 +72,8 @@ import * as featureActionOrdonnanceMedicale from '../../../store/medical/ordonna
 import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { formatDate } from '@angular/common';
+
 
 
 
@@ -154,6 +156,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
         {label: 'TUBE', value: TypeQuantite.TUBE},
         {label: 'UNITAIRE', value: TypeQuantite.UNITAIRE}
         ];
+        dateDebut: any;
+        dateFin: any;
 
 
 
@@ -327,6 +331,8 @@ export class OrdonnaceMedicalComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.dateDebut = new Date();
+        this.dateFin = new Date();
         this.prestationForm = this.formBuilder.group({
             id: new FormControl(''),
             dateSaisie: new FormControl({value: '', disabled: true}),
@@ -424,7 +430,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
             }
         });
 
-    this.ordonnanceMedicalList$ = this.store.pipe(select(selectorsOrdonnanceMedicale.ordonnanceMedicalProduitPharmaceutiqueList));
+    /**this.ordonnanceMedicalList$ = this.store.pipe(select(selectorsOrdonnanceMedicale.ordonnanceMedicalProduitPharmaceutiqueList));
     this.store.dispatch(featureActionOrdonnanceMedicale.loadOrdonnance());
     this.ordonnanceMedicalList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
@@ -432,7 +438,24 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.ordonnaceMedicalProduitPharmaceutiqueDTOList = value.slice();
         console.log('***************this.ordonnaceMedicalProduitPharmaceutiqueDTOList*****************', this.ordonnaceMedicalProduitPharmaceutiqueDTOList);
       }
-    });
+    });*/
+
+    this.ordonnanceMedicalList$ = this.store.pipe(select(selectorsOrdonnanceMedicale.ordonnanceMedicalProduitPharmaceutiqueList));      
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        this.store.dispatch(featureActionOrdonnanceMedicale.loadOrdonnancePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+      }
+
+      this.ordonnanceMedicalList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        console.log(value);
+        if (value) {
+          this.ordonnaceMedicalProduitPharmaceutiqueDTOList = value.slice();
+          console.log("this.ordonnaceMedicalProduitPharmaceutique=================> ", this.ordonnaceMedicalProduitPharmaceutiqueDTOList);
+        }
+      }); 
 
     this.pathologieList$ = this.store.pipe(select(pathologieSelector.pathologieList));
         this.store.dispatch(loadPathologie());
@@ -668,6 +691,24 @@ export class OrdonnaceMedicalComponent implements OnInit {
     }
 
 }
+
+rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        this.store.dispatch(featureActionOrdonnanceMedicale.loadOrdonnancePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+      }
+    /* if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.store.dispatch(featureActionBonPriseEnCharge.loadBonPriseEnChargePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+    } */
+    
+  }
 
 }
 

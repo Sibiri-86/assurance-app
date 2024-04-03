@@ -17,7 +17,7 @@ export class EndpointsMedical {
     };
 
     static readonly ORDONNANCE_MEDICALE_LOAD = {
-        prod: `${SERVICE_PREFIX}/ordonnanceMedical/getOrdonnance`,
+        prod: `${SERVICE_PREFIX}/ordonnanceMedical/getOrdonnance-by-periode`,
         mock: `assets/mock/ordonnanceMedical.mock.json`
     };
 
