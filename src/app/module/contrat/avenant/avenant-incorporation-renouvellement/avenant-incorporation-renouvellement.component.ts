@@ -298,10 +298,6 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             
 
             this.init();
-
-            if(this.etat === 'CREATE' || this.isRenouv) {
-                this.loadAdherentByPoliceAndExercice();
-            }
        
     }
 
@@ -644,6 +640,9 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
         }
     }
     onGroupeChange() {
+        if(this.etat === 'CREATE' || this.isRenouv) {
+            this.loadAdherentByPoliceAndExercice();
+        }
         console.log('-------------this.curentGroupe--------------------' + this.curentGroupe.id);
         this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe?.id);
         console.log('-------------this.adherentPrincipaux--------------------' + this.adherentPrincipaux);

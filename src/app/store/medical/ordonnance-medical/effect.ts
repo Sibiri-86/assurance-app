@@ -33,9 +33,9 @@ export class OrdonnanceMedicaleEffects {
 
         fetchBon$ = createEffect(() =>
     this.actions$.pipe(
-        ofType(featureActions.loadOrdonnance),
-        mergeMap(() =>
-            this.ordonnanceMedicaleService.$getOrdonnanceMedicale().pipe(
+        ofType(featureActions.loadOrdonnancePeriode),
+        mergeMap(({dateD, dateF}) =>
+            this.ordonnanceMedicaleService.$getOrdonnanceMedicaleByPeriode(dateD,dateF).pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setOrdonnance(value)
