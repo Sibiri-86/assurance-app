@@ -693,6 +693,13 @@ export class OrdonnaceMedicalComponent implements OnInit {
 }
 
 rechercherPrefinancementByPeriode() {
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        this.store.dispatch(featureActionOrdonnanceMedicale.loadOrdonnancePeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+        dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')})); 
+      }
     /* if(this.dateDebut.getTime()> this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
