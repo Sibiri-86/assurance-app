@@ -859,8 +859,8 @@ export class TierPayantEditionComponent implements OnInit {
                 }
             });*/
             this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
-                etat: TypeEtatSinistre.VALIDE})); this.store.dispatch(featureActionTierPayant.updateEtatValiderTierPayant({tierPayant: pref,
-                        etat: TypeEtatSinistre.VALIDE}));
+                etat: TypeEtatSinistre.VALIDE}));
+                
           
         },
       });
@@ -1958,7 +1958,7 @@ export class TierPayantEditionComponent implements OnInit {
           this.prestationAdd.montantExclu = null;
           this.prestationAdd.observation = null;*/
           this.compteur = null;
-          if(this.prestationsList?.length%10 == 0){
+         /* if(this.prestationsList?.length%10 == 0){
 
             this.prefinancement.prestation = this.prestationsList;
             console.log("this.prestationsList =>", this.prestationsList);
@@ -1982,7 +1982,7 @@ export class TierPayantEditionComponent implements OnInit {
                 }
                 
             }));
-          }
+          }*/
         
          // this.store.dispatch(featureActionBonPriseEnCharge.loadBons());
           if(this.prefinancement?.montantReclame < this.prefinancement?.montantPaye) {
