@@ -61,6 +61,7 @@ export interface SinistreTierPayant {
     montantRestant?:number;
     statSaisie?: Saisie;
     operateur?: string;
+    sinistreTierPayantPrincipal?: SinistreTierPayant;
     
 }
 
