@@ -451,6 +451,9 @@ import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
                     {path: 'comptabilite/bilan', component: BilanComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_finance']}},
+                    {path: 'reporting', 
+                    canActivate: [AuthGuard],
+                    data: { roles: ['sm_reporting_AG_DGA']}},
                     
 
                     
