@@ -1884,15 +1884,12 @@ export class TierPayantEditionComponent implements OnInit {
         
           }  */
           this.prestationAdd.operateur = this.operateur;
-        /* if(this.compteur !=null) {
-           // this.prefinancement.montantPaye = this.prefinancement.montantPaye - this.prestationsList[this.compteur].montantRembourse;
-               
-           // this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
-            this.prestationsList[this.compteur] = this.prestationAdd;
+         if(this.compteur !=null) {
+                   this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
             this.prestationsList.push(this.prestationAdd);
-          } */
-          this.prestationsList.push(this.prestationAdd);
+          } 
+         // this.prestationsList.push(this.prestationAdd);
 
           if(this.prestationsList) {
             this.prefinancement.montantPaye = 0;
