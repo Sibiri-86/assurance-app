@@ -328,7 +328,7 @@ export class AvenantRetraitComponent implements OnInit {
             }
           }
       );
-      if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.exercice.fin)?.getTime() ) {
+      if(new Date(this.myForm.get('dateAvenant').value)?.getTime() > new Date(this.curentExercice.fin)?.getTime() ) {
         this.addMessage('error', 'Date d\'effet invalide',
                   'La date d\'effet de l\'avenant doit être compris dans la periode de l\'exercice');
               this.myForm.patchValue({dateAvenant: null});
