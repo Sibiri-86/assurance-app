@@ -16,6 +16,7 @@ export interface Adherent{
     lieuNaissance?: string;
     numeroTelephone?: string;
     numero?: number;
+    numeroPoste?: number;
     adresse?: string;
     adresseEmail?: string;
     profession?: Profession;

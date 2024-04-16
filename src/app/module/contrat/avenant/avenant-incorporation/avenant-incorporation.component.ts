@@ -201,6 +201,7 @@ export class AvenantIncorporationComponent implements OnInit{
             numero: new FormControl(null, ),
             familys: this.formBuilder.array([]),
             manageIncorporation: new FormControl(1),
+            numeroPoste: new FormControl(null, ),
            
         });
 
