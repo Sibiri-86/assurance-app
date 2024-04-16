@@ -2125,6 +2125,7 @@ export class TierPayantEditionComponent implements OnInit {
       voirTierPyant(tierPayant: SinistreTierPayant){
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
+        console.log("tierPayant.iddddddddddd==> ", tierPayant.id);
         this.tierPayantService.findPrestationBySinitreTierPayant(tierPayant.id).subscribe((rest)=> {
             if(rest) {
                 this.prefinancementDetail.prestation = rest;
