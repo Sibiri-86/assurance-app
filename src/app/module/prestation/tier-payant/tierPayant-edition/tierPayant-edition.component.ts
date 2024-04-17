@@ -2103,7 +2103,7 @@ export class TierPayantEditionComponent implements OnInit {
       editerTierPayant(tierPayant: SinistreTierPayant) {
           console.log(tierPayant);
 
-          console.log("===bonPriseEnChargeList===",this.bonPriseEnChargeList);
+        //  console.log("===bonPriseEnChargeList===",this.bonPriseEnChargeList);
           this.prefinancement = tierPayant;
           this.prestataireSelected = tierPayant.prestataire;
           if(this.prestataireSelected.id != tierPayant.prestataire.id) {
@@ -2118,7 +2118,7 @@ export class TierPayantEditionComponent implements OnInit {
                this.prestationsList = rest;
             }
         })
-          this.prestationsList = tierPayant.prestation;
+        //  this.prestationsList = tierPayant.prestation;
           this.displayFormPrefinancement = true;
       }
 
