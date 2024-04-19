@@ -58,6 +58,7 @@ import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 
 @Component({
@@ -114,6 +115,7 @@ export class TierPayantValideComponent implements OnInit {
 
   constructor( private store: Store<AppState>,   private formBuilder: FormBuilder,
                private router: Router,
+               private tierPayantService: TierPayantService,
                private confirmationService: ConfirmationService,  private messageService: MessageService,
                private breadcrumbService: BreadcrumbService,private keycloak: KeycloakService,) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | SINISTRE VALIDE' }]);
@@ -285,8 +287,14 @@ export class TierPayantValideComponent implements OnInit {
 
   voirPrestation(pref: SinistreTierPayant){
     this.displayPrestation = true;
-    this.prestationListPrefinancement = pref.prestation;
+    
     this.tierpayantToPrint = pref;
+    this.tierPayantService.findPrestationBySinitreTierPayant(pref.id).subscribe((rest)=> {
+      if(rest) {
+        this.prestationListPrefinancement  = rest;
+         
+      }
+  });
     
   }
 
