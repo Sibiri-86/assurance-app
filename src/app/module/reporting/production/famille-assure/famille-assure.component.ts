@@ -163,7 +163,7 @@ export class FamilleAssureComponent implements OnInit, OnDestroy {
 
         this.keycloakService.loadUserProfile().then(profile => {
          
-          if(profile['attributes']) {
+          if(profile['attributes'].role == "GARANT") {
                 this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
                 if(this.garantList) {
                   this.check.garant = this.garantList[0];

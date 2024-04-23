@@ -216,7 +216,7 @@ ngOnInit(): void {
       if (value) {
         this.keycloakService.loadUserProfile().then(profile => {
          
-          if(profile['attributes']) {
+          if(profile['attributes'].role == "GARANT") {
                 this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
                 console.log("profile.username.toLocaleUpperCase()", profile.username.toLocaleUpperCase());
                 console.log("value.slice()", value.slice());
