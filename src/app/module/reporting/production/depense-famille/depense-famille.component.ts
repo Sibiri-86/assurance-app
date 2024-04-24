@@ -154,7 +154,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       if (value) {
         this.keycloakService.loadUserProfile().then(profile => {
          
-          if(profile['attributes']) {
+          if(profile['attributes'].role == "GARANT") {
                 this.garantList = value.slice().filter(garant=>garant.code === profile.username.toLocaleUpperCase());
                 if(this.garantList) {
                   this.check.garant = this.garantList[0];
@@ -195,9 +195,11 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.store.dispatch(featureActionDepense.setReportDepenseFamille(null));
     this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
+      console.log("========================displayExcel===", this.displayExcel);
         if (bytes) {
           if(this.displayExcel) {
             printExcelfFile(bytes);
+            console.log("========================bytes===");
             this.displayExcel = false;
           } else {
             printPdfFile(bytes);
@@ -479,7 +481,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     console.log("=====================",this.report)
  console.log("=====================",this.report)
      this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
-    this.displayExcel= false;
+    //this.displayExcel= false;
     //this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 
   }

@@ -255,32 +255,32 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Production', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
                                 items: [
-                                    {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/recapitulatif'], visible: true},
-                                    {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille'], visible: true},
-                                    {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-acte'], visible: true},
-                                    {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
-                                    {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
-                                    {label: 'Affection', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-pathologie'], visible: true},
-                                    {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/statistique-tranche-age'], visible: true},
-                                    {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-optique'], visible: true},
-                                    {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/evolution-mensuelle'], visible: true},
-                                    {label: 'Fam. Assure', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/famille-assure'], visible: true},
+                                    {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/recapitulatif'], visible: true},
+                                    {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille'], visible: true},
+                                    {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille-acte'], visible: true},
+                                    {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/repartition-depense-statut'], visible: true},
+                                    {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille-prestataire'], visible: true},
+                                    {label: 'Affection', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille-pathologie'], visible: true},
+                                    {label: 'Stat Tranche Age', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/statistique-tranche-age'], visible: true},
+                                    {label: 'Dépenses Optique', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-optique'], visible: true},
+                                    {label: 'Evo. mensuelle', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/evolution-mensuelle'], visible: true},
+                                    {label: 'Fam. Assure', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/famille-assure'], visible: true},
                                 ]
                     },
                     {
                         label: 'Prestation', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
                                 items: [
-                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
-                                    {label: 'Statistique des opérateurs de saisie', routerLink: ['/reporting/reporting-operateur'], visible: true},
-                                    {label: 'Statistique des factures impayées par prestataire', routerLink: ['/reporting/reporting-cheque-non-valide'], visible: true},
-                                    {label: 'Statistique des factures payées par prestataire', routerLink: ['/reporting/reporting-cheque-valide'], visible: true},
+                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/facture-par-prestataires'], visible: true},
+                                    {label: 'Statistique des opérateurs de saisie', routerLink: ['/reporting_AG_DGA/reporting-operateur'], visible: true},
+                                    {label: 'Statistique des factures impayées par prestataire', routerLink: ['/reporting_AG_DGA/reporting-cheque-non-valide'], visible: true},
+                                    {label: 'Statistique des factures payées par prestataire', routerLink: ['/reporting_AG_DGA/reporting-cheque-valide'], visible: true},
                                 ]
                     },
                     {
                         label: 'Médical', icon: 'pi pi-fw pi-align-left', routerLink: ['/reporting'],visible: true,
                                 items: [
-                                    {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/medical/consommation-par-sexe'], visible: true},
-                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/facture-par-prestataires'], visible: true},
+                                    {label: 'Consom. Par Sexe', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/medical/consommation-par-sexe'], visible: true},
+                                    {label: 'Fact. Type Prest. & Prest.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/facture-par-prestataires'], visible: true},
                                 ]
                     }
                     
