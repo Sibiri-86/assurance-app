@@ -161,6 +161,8 @@ export class TierPayantEditionComponent implements OnInit {
     exerciceSelected: Exercice = {};
     prestationsList: Prestation[]= [];
     prestationsList1: Prestation[]= [];
+    prestationsList2: Prestation[]= [];
+    prestationsList3: Prestation[]= [];
     prestationDetail:Prestation = {};
     prestationAdd: Prestation = {};
     prestationAddFin: Prestation = {};
@@ -386,18 +388,31 @@ export class TierPayantEditionComponent implements OnInit {
         
     onCreate() {
 
-        
+        this.prestationsList1 = [];
+        this.prestationsList2 = [];
+        this.prestationsList3 = [];
         
         
     if(!this.prefinancement.id) {
         this.prefinancement.dateSaisie = new Date();
     } 
-        
-      this.prefinancement.prestation = this.prestationsList;
+    
+    this.prestationsList1 = this.prestationsList?.filter(pret=>pret.updatPrest == true);
+    this.prestationsList2 = this.prestationsList?.filter(pret=>pret.id == null);
+    this.prestationsList3.push(... this.prestationsList1);
+    this.prestationsList3.push(... this.prestationsList2);
+      this.prefinancement.prestation = this.prestationsList3;
       this.prefinancement.prestataire = this.prestataireSelected;
       this.prefinancement.operateur = this.operateur;
       console.log(this.prefinancement);
-      this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
+      console.log("====================bien==1======", this.prestationsList1);
+      console.log("====================bien==2======", this.prestationsList2);
+      console.log("====================bien==3======", this.prestationsList3);
+      this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((res)=> {
+       this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+      })
+      //this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
         // tslint:disable-next-line:max-line-length 
         // console.log('*******this.prefinancementModel*******', this.prefinancementModel);
@@ -405,12 +420,13 @@ export class TierPayantEditionComponent implements OnInit {
        // console.log(this.prefinancementModel);
         this.tierPayantList = [];
         this.prestationsList = [];
+        
         this.prestationForm.reset();
         this.prefinancement = {};
         this.displayFormPrefinancement = false;
-        this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
-    }
+       /* 
+    */
+        }
 
     navigateSinistre() {
         this.router.navigateByUrl('/prestation/tierPayant/valide');
@@ -996,7 +1012,9 @@ export class TierPayantEditionComponent implements OnInit {
         this.prestationAdd.prenomAdherentPrincipal = "";
         this.prestationAdd.sort = null;
         this.prestationAdd.observation = "";
-                
+        if(event.target.value == null || event.target.value == 0) {
+            event.target.value = this.prestationBon.matriculeAdherent;
+        }        
         
         this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
       /*   this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1885,9 +1903,14 @@ export class TierPayantEditionComponent implements OnInit {
           }  */
           this.prestationAdd.operateur = this.operateur;
          if(this.compteur !=null) {
+            this.prestationAdd.updatPrest = true;
                    this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
-            this.prestationsList.push(this.prestationAdd);
+
+            for(let i =0; i< 50; i++) {
+                this.prestationsList.push(this.prestationAdd);
+            }
+            
           } 
          // this.prestationsList.push(this.prestationAdd);
 
@@ -2114,8 +2137,10 @@ export class TierPayantEditionComponent implements OnInit {
           this.prefinancement.dateSaisie = new Date(tierPayant.dateSaisie);
           this.tierPayantService.findPrestationBySinitreTierPayant(tierPayant.id).subscribe((rest)=> {
             if(rest) {
-               // this.prefinancementDetail.prestation= rest;
+                this.prefinancement.prestation = rest;
+               console.log("===================rest=========", rest);
                this.prestationsList = rest;
+             //  this.prestationsList.push(... rest);
             }
         })
         //  this.prestationsList = tierPayant.prestation;
