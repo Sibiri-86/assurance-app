@@ -409,6 +409,8 @@ export class TierPayantEditionComponent implements OnInit {
       console.log("====================bien==2======", this.prestationsList2);
       console.log("====================bien==3======", this.prestationsList3);
       this.tierPayantService.posTierPayant1(this.prefinancement).subscribe((res)=> {
+        this.messageService.add({severity:'success', summary:'Service Message', detail:"Opération reussie !"});
+
        this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
           dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
       })
