@@ -314,6 +314,10 @@
                                                         optionLabel="libelle" placeholder="Select Make"
                                                         [style]="{'width':'100%'}"></p-dropdown>
                                         </div>
+                                        <div class="p-field p-col-3">
+                                            <label [for]="'numeroPoste' + ri">Numero de l'exercice postérieur <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                                            <input id="numeroPoste" [name]="'numeroPoste' + ri" type="number" formControlName="numeroPoste" pInputText>
+                                        </div>
                                         <div class="p-col-2">
                                             <label [for]="'nom2' + ri">Qualité Assuré <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <p-dropdown [options]="qualiteAssureList2" [name]="'qualite' + ri"

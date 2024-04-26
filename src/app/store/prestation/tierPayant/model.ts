@@ -112,6 +112,33 @@ export interface Prestation {
     updatPrest?: boolean;
 }
 
+export interface ConsommationPasse {
+    id?:string;
+    Souscripteur?:string;
+    numSinistre?:string;
+    numOrdreReglement?:string;
+     dateSur?:Date;
+     dateDeclaratioin?:Date;
+    nomBeneficiaire?:string;
+     qualiteAssure?:string;
+    libelleGroupe?:string;
+    codeFamille?:string;
+    libelleActe?:string;
+    codeSousActe?:string;
+     montantTotal?:string;
+     montantRembourse?:string;
+    libellePrestataire?:string;
+    numFacture?:string;
+     dateFacture?:Date;
+     dateValidation?:Date;
+     dateCreationOrdre?:Date;
+    phatologie?:string;
+     numeroGroupe?:number;
+    nomAdherent?:string;
+     codeMembre?:string;
+    dateSaisie?:Date;
+}
+
 export interface SinistreTierPayantList {
     sinistreTierPayantDTOList: Array<SinistreTierPayant>;
 }
