@@ -441,6 +441,7 @@ export class AvenantIncorporationComponent implements OnInit{
             genre: new FormControl(null, [Validators.required]),
             dateIncorporation: new FormControl(null, [Validators.required]),
             dateEntree: new FormControl(null),
+            numeroPoste: new FormControl(null),
         });
     }
 
@@ -448,6 +449,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     createHistoriqueAvenant(): void {
         console.log("================length============", this.familys.length);
+        console.log("================length============", this.familys);
         
         if(this.viewFamille && this.familys?.length ===0 || this.familys?.length === null) {
             this.addMessage('error', 'Famille',

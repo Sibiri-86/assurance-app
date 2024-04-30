@@ -1905,13 +1905,16 @@ export class TierPayantEditionComponent implements OnInit {
           }  */
           this.prestationAdd.operateur = this.operateur;
          if(this.compteur !=null) {
-            this.prestationAdd.updatPrest = true;
+            if(this.prestationAdd.id ) {
+                this.prestationAdd.updatPrest = true;
+            }
+            
                    this.prestationsList[this.compteur] = this.prestationAdd;
           } else {
 
-            for(let i =0; i< 50; i++) {
+            // for(let i =0; i< 50; i++) {
                 this.prestationsList.push(this.prestationAdd);
-            }
+           // }
             
           } 
          // this.prestationsList.push(this.prestationAdd);
