@@ -61,6 +61,7 @@ import { environment } from 'src/environments/environment';
 import * as Keycloak from 'keycloak-js';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { formatDate } from '@angular/common';
+import { Function } from 'src/app/module/common/config/role.user';
 //import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 
@@ -124,6 +125,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   displayuser = false;
   dysplayGarant = false;
   adherentPrincipaux : Array<Adherent>;
+  role1 = this.keycloak.isUserInRole(Function.sm_export_depense_excel);
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -134,7 +136,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
                private depenseService: DepenseFamilleService,
                private exerciceOperationService: ExerciceComptableOperationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  
-               private breadcrumbService: BreadcrumbService, 
+               private breadcrumbService: BreadcrumbService, private keycloak: KeycloakService,
                private adherentService: AdherentService) {
                 this.breadcrumbService.setItems([{ label: 'Depense  Familiale'}]);
    }
@@ -471,20 +473,48 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   }
 
   findOperationGrandLivre() {
-   this.check.garantId = this.check.garant.id;
-    this.check.policeId = this.check?.police?.id;
-    this.check.adherentPrincipalId = this.check?.adherent?.id;
-    this.check.display = this.displayExcel;
-   
-    this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
-    this.report.check = this.check;
-    console.log("=====================",this.report)
- console.log("=====================",this.report)
-     this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    if(this.displayExcel) {
+      this.check.garantId = this.check.garant.id;
+      this.check.policeId = this.check?.police?.id;
+      this.check.adherentPrincipalId = this.check?.adherent?.id;
+      this.check.display = this.displayExcel;
+     
+      this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
+      this.report.check = this.check;
+      console.log("==========1111111===========",this.report)
+      console.log("=========111111111============",this.report)
+      this.store.dispatch(featureActionDepense.FetchReportDepenseFamilleExcel(this.report));
+    } else {
+      this.check.garantId = this.check.garant.id;
+      this.check.policeId = this.check?.police?.id;
+      this.check.adherentPrincipalId = this.check?.adherent?.id;
+      this.check.display = this.displayExcel;
+     
+      this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
+      this.report.check = this.check;
+      console.log("=========22222222============",this.report)
+      console.log("=========22222222222============",this.report)
+      this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
+    }
+    
     //this.displayExcel= false;
     //this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
 
   }
+
+  /* printDepenseFamilleToExcel() {
+    this.check.garantId = this.check.garant.id;
+     this.check.policeId = this.check?.police?.id;
+     this.check.adherentPrincipalId = this.check?.adherent?.id;
+     this.check.display = this.displayExcel;
+    
+     this.report.typeReporting = TypeReport.DEPENSE_FAMILLE;
+     this.report.check = this.check;
+     console.log("=====================",this.report)
+     console.log("=====================",this.report)
+     this.store.dispatch(featureActionDepense.FetchReportDepenseFamilleExcel(this.report));
+ 
+   } */
 
   
 

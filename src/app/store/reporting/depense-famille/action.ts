@@ -11,6 +11,8 @@ export const setReportDepenseFamille = createAction('[set Report] set Report Dep
 export const updateDepenseFamille = createAction('[App Init] update Depense Famille',props<Check>());
 export const updateDepenseFamilleActe = createAction('[App Init] update Depense Famille acte',props<Check>());
 export const FetchReportBilan = createAction('[Report] Fetch Report Bilan', props<ExerciceComptable>());
+export const FetchReportDepenseFamilleExcel = createAction('[Report] Fetch Depense Famille excel', props<Report>());
+export const setReportDepenseFamilleExcel = createAction('[set Report] set Report DepenseFamille excel', props<{reportFile: ArrayBuffer}>());
 
 
 
