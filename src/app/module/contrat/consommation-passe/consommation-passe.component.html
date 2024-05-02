@@ -11,7 +11,7 @@
         <div class="p-col-12">
             <p-table #dt [value]="consommations"  [rows]="10" dataKey="id" editMode="row" [paginator]="true"
             [rowHover]="true" styleClass="p-datatable-customers"
-            (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+            
              currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
             [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
