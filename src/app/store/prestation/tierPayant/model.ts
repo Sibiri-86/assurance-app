@@ -114,7 +114,7 @@ export interface Prestation {
 
 export interface ConsommationPasse {
     id?:string;
-    Souscripteur?:string;
+    souscripteur?:string;
     numSinistre?:string;
     numOrdreReglement?:string;
      dateSur?:Date;
@@ -125,8 +125,8 @@ export interface ConsommationPasse {
     codeFamille?:string;
     libelleActe?:string;
     codeSousActe?:string;
-     montantTotal?:string;
-     montantRembourse?:string;
+    montantTotal?:number;
+    montantRembourse?:number;
     libellePrestataire?:string;
     numFacture?:string;
      dateFacture?:Date;

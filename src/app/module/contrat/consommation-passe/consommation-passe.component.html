@@ -1,0 +1,100 @@
+
+    <div class="p-grid">
+        
+        <div class="p-field p-col-5" >
+            <app-upload-file (fileEvent)="getAdherentFiles($event)"></app-upload-file>
+        </div>
+        
+      
+        
+        
+        <div class="p-col-12">
+            <p-table #dt [value]="consommations"  [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+            [rowHover]="true" styleClass="p-datatable-customers"
+            (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
+            [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        
+                        <th>Souscripteur</th>
+                        <th>N° Sinistre</th>
+                      <!--   <th>N° Ordre</th> -->
+                        <th>Date Soin</th>
+                        <!-- <th>Date Declaratioin</th>
+                        <th>Date Facture</th>
+                        <th>Date Validation</th>
+                        <th>Date Creation Ordre</th> -->
+                        <th>Bénéficiaire</th>
+                        <th>Adhérent</th>
+                        <th>qualite Assure</th>
+                        <th>Groupe</th>
+                        <th>N° groupe</th>
+                        <th>Prestataire</th>
+                        <th>Famille</th>
+                        <th>Acte</th>
+                        <th>Montant total</th>
+                        <th>Montant remboursé</th>
+                        <th>N° facture</th>
+                        <th>code membre</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-consommation let-editing="editing"
+                             let-ri="rowIndex">
+                    <tr>
+    
+    
+                        <td>{{consommation.souscripteur}}</td>
+                        <td>{{consommation.numSinistre }}
+                        </td>
+                        <!-- <td>{{consommation.numOrdreReglement }}
+                        </td> -->
+                        <td>{{consommation.dateSur | formatTableValue : 'date'}}
+                        </td>
+                       <!--  <td>{{consommation.dateDeclaratioin | formatTableValue : 'date'}}
+                        </td>
+                        <td>{{consommation.dateFacture | formatTableValue : 'date'}}
+                        </td>
+                        <td>{{consommation.dateValidation | formatTableValue : 'date'}}
+                        </td> -->
+                        <!-- <td>{{consommation.dateCreationOrdre | formatTableValue : 'date'}}
+                        </td> -->
+                        <td>{{consommation.nomBeneficiaire }}
+                        </td>
+
+                        <td>{{consommation.nomAdherent}}
+                        </td>
+
+                        <td>{{consommation.qualiteAssure }}
+                        </td>
+                        
+                        <td>{{consommation.libelleGroupe}}
+                        </td>
+                        <td>{{consommation.numeroGroupe}}
+                        </td>
+
+                        <td>{{consommation.libellePrestataire}}
+                        </td>
+                        <td>{{consommation.codeFamille}}
+                        </td>
+                        <td>{{consommation.codeSousActe}}
+                        </td>
+                        <td>{{consommation.montantTotal | formatTableValue: 'number':true}}
+                        </td>
+                        <td>{{consommation.montantRembourse | formatTableValue: 'number':true}}
+                        </td>
+                        <td>{{consommation.numFacture}}
+                        </td>
+                        <td>{{consommation.codeMembre}}
+                        </td>
+
+
+                        
+                        
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+

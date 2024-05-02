@@ -350,6 +350,7 @@ import { AssuranceVoyageEffects } from './store/contrat/assurance-voyage/effect'
 import { MajPrestataireComponent } from './module/medical/majPrestataire/majPrestataire.component';
 import { AjoutActeComponent } from './module/contrat/avenant/ajout_acte/ajout_acte.component';
 import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
+import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
 
 @NgModule({
     imports: [
@@ -634,7 +635,8 @@ import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
         AssuranceVoyageComponent,
         MajPrestataireComponent,
         AjoutActeComponent,
-        BilanComponent
+        BilanComponent,
+        ConsommationPasseComponent
     ],
     providers: [
         {

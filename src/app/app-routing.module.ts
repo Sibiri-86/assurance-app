@@ -128,6 +128,7 @@ import { AuthGuard } from './auth/user-route-access-service';
 import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assurance-voyage.component';
 import { MajPrestataireComponent } from './module/medical/majPrestataire/majPrestataire.component';
 import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
+import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
 
 @NgModule({
     imports: [
@@ -158,6 +159,10 @@ import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
                         data: { roles: ['sm_parametrage']}},
                     ]
                     },
+                    {path: 'contrat/consommation-passe', 
+                    canActivate: [AuthGuard],
+                    component: ConsommationPasseComponent,    
+                    data: { roles: ['sm_production', 'sm_garant']}},
                     {path: 'contrat/garant', 
                     canActivate: [AuthGuard],
                     component: GarantComponent,    
