@@ -23,6 +23,7 @@ export class AppMenuComponent implements OnInit {
                  visible: this.keycloak.isUserInRole(Function.sm_production),
                 items: [
                     {label: 'Condition générale', icon: '', routerLink: ['/contrat/condition-generale'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
+                    {label: 'Conso. passé', icon: '', routerLink: ['/contrat/consommation-passe'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
                     {label: 'Garant', icon: '', routerLink: ['/contrat/garant'], visible: this.keycloak.isUserInRole(Function.sm_garant)},
                     {label: 'Intermediaire', icon: '', routerLink: ['/contrat/intermediaire'],
                     visible: this.keycloak.isUserInRole(Function.sm_intermediaire)},

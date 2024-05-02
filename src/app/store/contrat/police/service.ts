@@ -7,6 +7,7 @@ import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import {AdherentFamille} from '../adherent/model';
 import {createRequestOption} from '../../../module/util/loader-util';
+import { ConsommationPasse } from "../../prestation/tierPayant/model";
 
 @Injectable({providedIn: 'root'})
 export class PoliceService {
@@ -128,6 +129,19 @@ export class PoliceService {
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/json');
         return this.http.post<AdherentFamille[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}`, data,
+            {headers: headers});
+    }
+
+    loadConsommationsByExcelFile(file: File): Observable<ConsommationPasse[]> {
+        console.log("avant enregistrement", file);
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        console.log("avant enregistrement data", data);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/json');
+        return this.http.post<ConsommationPasse[]>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_LOAD_ADHERENT)}/consommation`, data,
             {headers: headers});
     }
 
