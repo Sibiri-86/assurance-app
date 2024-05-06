@@ -92,17 +92,17 @@ export class AppMenuComponent implements OnInit {
             },
             {
                 label: 'Medical', icon: 'pi pi-fw pi-star', routerLink: ['/medical'],
-                visible: this.keycloak.isUserInRole(Function.sm_medical),
+                visible: this.keycloak.isUserInRole(Function.sm_medical), 
                 items: [
-                    {label: 'convention', icon: 'pi pi-pencil', routerLink: ['/medical/convention'], visible: true},
-                    {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: true},
-                    {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: true},
-                    {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: true},
-                    {label: 'Produit Exclu', icon: 'pi pi-fw pi-times', routerLink: ['/medical/produit-exclu'], visible: true},
-                    {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: true},
-                    {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: true},
-                    {label: 'New barème', icon: '', routerLink: ['/medical/new-bareme'], visible: true},
-                    {label: 'Remboursement en entente de validation', icon: '', routerLink: ['/medical/remboursement-entente'], visible: true},
+                    {label: 'convention', icon: 'pi pi-pencil', routerLink: ['/medical/convention'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'bon / Entente Préalable', icon: 'pi pi-comment', routerLink: ['/medical/bon-prise-en-charge'], visible: this.keycloak.isUserInRole(Function.sm_medical_pretataire)},
+                    {label: 'Bon de prise en charge Pharmacie', icon: 'pi pi-comments', routerLink: ['/medical/ordonnace-medical'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'Cartographie', icon: 'pi pi-fw pi-home', routerLink: ['/prestataire-cartographie'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'Produit Exclu', icon: 'pi pi-fw pi-times', routerLink: ['/medical/produit-exclu'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'Entente', icon: '', routerLink: ['/medical/entente-bon'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'Localité prestataire', icon: '', routerLink: ['/medical/quartier-prestataire-garant'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'New barème', icon: '', routerLink: ['/medical/new-bareme'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
+                    {label: 'Remboursement en entente de validation', icon: '', routerLink: ['/medical/remboursement-entente'], visible: this.keycloak.isUserInRole(Function.sm_medical_tout)},
                     {label: 'majPrestataire', icon: '', routerLink: ['/medical/maj-prestataire'], visible: this.keycloak.isUserInRole(Function.vue_maj_prestataire)},
                     
                 ]
