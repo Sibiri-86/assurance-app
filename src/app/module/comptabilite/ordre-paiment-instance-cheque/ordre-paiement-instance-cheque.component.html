@@ -11,9 +11,9 @@
 				</ng-template>
                 -->
 			</p-toolbar>
-            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom','taux.taux']"
                      [rowHover]="true" dataKey="id"
-                     styleClass="p-datatable-customers"
+                     styleClass="p-datatable-striped"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
@@ -26,22 +26,23 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="numero" style="min-width:200px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="min-width:200px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:200px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        </th> -->
+                        <th pSortableColumn="numero" style="min-width:50px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+                        <th pSortableColumn="nom" style="min-width:50px">Numero bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:50px">Numero police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="territorialite" style="min-width:250px">Assuré Principal<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ordre>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
-                        </td>
+                        </td> -->
 
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numero}}</span>
                         </td>
@@ -51,8 +52,9 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
-
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:250px">{{ordre.assurePrinc?.nom}} {{ordre.assurePrinc?.prenom}}</span>
                         </td>
                         
                         <td style="min-width:150px">
