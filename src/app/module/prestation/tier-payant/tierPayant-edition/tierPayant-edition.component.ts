@@ -412,7 +412,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.messageService.add({severity:'success', summary:'Service Message', detail:"Opération reussie !"});
 
        this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       })
       //this.store.dispatch(featureActionTierPayant.createTierPayantNoList({tierPayant:  this.prefinancement}));
         
@@ -658,22 +658,8 @@ export class TierPayantEditionComponent implements OnInit {
           } else {
       
             if(!this.prenom && !this.nom && !this.operateur) {
-              this.keycloak.loadUserProfile().then(profile => {
-                //console.log("===========profile===========>", profile['attributes'].role);
-                this.nom = profile.lastName;
-                this.prenom = profile.firstName;
-                this.operateur = profile.username;
-                console.log("===========profile nom===========>", profile.lastName);
-                console.log("===========profile prenom===========>", profile.firstName);
-                console.log("===========profile operateur===========>", profile.username);
-          
                 this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
-                
-              });
-            } else {
-              this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+            dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
             }
             
           }
@@ -798,7 +784,7 @@ export class TierPayantEditionComponent implements OnInit {
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
       this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
     }
     
   }

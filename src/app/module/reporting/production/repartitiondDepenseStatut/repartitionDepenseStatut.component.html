@@ -363,7 +363,7 @@
                     </div>
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col">
-                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <label for="firstname2">Garant<span style="color: red !important; font-size: 1.4em"></span>*</label>
                             <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
                                                     showClear="true" [options]="garantList"
                                                     formControlName="garant"
@@ -371,7 +371,7 @@
                             </p-dropdown>
                         </div>
                         <div class="p-field p-col">
-                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em"></span></label>
+                            <label for="firstname2">Police<span style="color: red !important; font-size: 1.4em">*</span></label>
                             <p-dropdown inputId="police" [filter]="true" optionLabel="nom"
                                                     showClear="true" [options]="policeList" (onChange)="onPoliceChange()"
                                                     formControlName="police"

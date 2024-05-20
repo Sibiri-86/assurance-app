@@ -336,7 +336,7 @@
                                     </td>
                                     <td>{{historiqueAveantAdherant?.dateNaissance | formatTableValue : 'date'}}</td>
                                     <td *ngIf="historiqueAveantAdherant?.isCouvert"><p-badge value="Personne couverte à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="success"></p-badge></td>
-                                    <td *ngIf="!historiqueAveantAdherant?.isCouvert"><p-badge value="Personne non couvert à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="danger"></p-badge></td>
+                                    <td *ngIf="!historiqueAveantAdherant?.isCouvert"><p-badge value="Personne non couverte à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="danger"></p-badge></td>
                                     
                                 </tr>
                             </ng-template>

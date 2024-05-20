@@ -62,8 +62,8 @@ export class TierPayantEffects {
         loadTierPayantPeriode$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.loadTierPayantByPeriode),
-        mergeMap(({dateD, dateF, nom, prenom, operateur}) =>
-            this.tierPayantService.$getTierPayantByPeriode(dateD,dateF, nom, prenom, operateur).pipe(
+        mergeMap(({dateD, dateF}) =>
+            this.tierPayantService.$getTierPayantByPeriode(dateD,dateF).pipe(
                 switchMap(value => [
                     // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                     featureActions.setTierPayant(value)

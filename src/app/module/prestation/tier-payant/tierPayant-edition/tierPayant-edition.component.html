@@ -28,7 +28,7 @@
                 <div class="p-field">
                     <button pButton pRipple type="button" label="Rechercher" (click)="rechercherPrefinancementByPeriode()"></button>
                 </div>
-                <div class="p-field" *ngIf="saisie != null">
+                <!-- <div class="p-field" *ngIf="saisie != null">
                     <span style="color: green; font-size: 20px; font-weight: bold;">
                         <mark> Saisie: {{saisie?.nombreSaisie}} </mark>
                     </span>
@@ -42,7 +42,7 @@
                     <span style="color: red; font-size: 20px; font-weight: bold;">
                         <mark>Supprimé: {{saisie?.nombreSupprime}} </mark>
                     </span>
-                </div>
+                </div> -->
                 
             </div> 
 
@@ -300,7 +300,7 @@
                                        
                                         <th style="width:8rem">N° Sinistre</th>
                                         <th>Date de soins</th>
-                                        <th>Assuré</th>
+                                        <th style="width:15rem">Assuré</th>
                                         <th>Famille acte</th>
                                         <th>Acte</th>
                                         <th>Sous Acte</th>
@@ -317,7 +317,7 @@
                                 
                                         <td  style="width:8rem">{{rowData?.sinistreTierPayant?.numeroSinistre}}</td>
                                         <td>{{rowData.dateSoins | formatTableValue : 'date'}}</td>
-                                        <td>{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
+                                        <td style="width:15rem">{{rowData.adherent?.nom}}&nbsp;&nbsp;{{rowData.adherent?.prenom}}</td>
                                         <td>{{rowData.familleActe?.libelle}}</td>
                                         <td>{{rowData.acte?.libelle}}</td>
                     
