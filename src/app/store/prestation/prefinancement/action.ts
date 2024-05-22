@@ -70,6 +70,6 @@ props<{ordre: OrdreReglement, etat: TypeEtatOrdreReglement, w: Workflow}>());
 export const loadOrdreReglementValideDirection = createAction('[App Init] load ordre reglement valide Direction');
 export const setLoadOrdreReglementDirection = createAction('[App Init] set ordre reglement Direction',  props<OrdreReglementList>());
 export const loadPrefinancementPeriode = createAction('[App Init] load prefinancement by periode', props<{dateD: string,
-        dateF: string, nom: string, prenom: string, operateur: string}>() );
+        dateF: string}>() );
 export const loadOrdreReglementValidePeriode = createAction('[App Init] load ordre reglement valide by periode', props<{dateD: string,
                 dateF: string}>());

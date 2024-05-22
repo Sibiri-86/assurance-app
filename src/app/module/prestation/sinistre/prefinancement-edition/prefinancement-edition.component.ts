@@ -186,15 +186,14 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
                public keycloak: KeycloakService
                ) {
                 this.breadcrumbService.setItems([{ label: 'Sinistre edition' }]);
-                this.keycloak.loadUserProfile().then(profile => {
-                  //console.log("===========profile===========>", profile['attributes'].role);
+               /*  this.keycloak.loadUserProfile().then(profile => {
                   this.nom = profile.lastName;
                   this.prenom = profile.firstName;
                   this.operateur = profile.username;
                   console.log("===========profile nom===========>", profile.lastName);
                   console.log("===========profile prenom===========>", profile.firstName);
                   console.log("===========profile operateur===========>", profile.username);
-                });
+                }); */
    }
 
    get prestation() {
@@ -749,29 +748,12 @@ findMontantPlafond(event){
       dateD =  formatDate(this.dateSoins, 'dd/MM/yyyy', 'en-fr');
     } */
     this.prefinancementDtoList$ = this.store.pipe(select(prefinancementSelector.prefinancementList));
-    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+    if(this.dateDebut.getTime() > this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
-
-      if(!this.prenom && !this.nom && !this.operateur) {
-        this.keycloak.loadUserProfile().then(profile => {
-          //console.log("===========profile===========>", profile['attributes'].role);
-          this.nom = profile.lastName;
-          this.prenom = profile.firstName;
-          this.operateur = profile.username;
-          console.log("===========profile nom===========>", profile.lastName);
-          console.log("===========profile prenom===========>", profile.firstName);
-          console.log("===========profile operateur===========>", profile.username);
-    
-          this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
-          
-        });
-      } else {
         this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
-      }
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       
     }
     
@@ -844,12 +826,12 @@ findMontantPlafond(event){
 
 
   rechercherPrefinancementByPeriode() {
-    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+    if(this.dateDebut.getTime() > this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
       this.store.dispatch(featureActionPrefinancement.loadPrefinancementPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+      dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
     }
     
   }

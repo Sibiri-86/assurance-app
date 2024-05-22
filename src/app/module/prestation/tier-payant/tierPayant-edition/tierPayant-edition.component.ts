@@ -652,15 +652,12 @@ export class TierPayantEditionComponent implements OnInit {
 
         this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
         
-        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        if(this.dateDebut.getTime() > this.dateFin.getTime()) {
             this.addMessage('error', 'Dates  invalide',
             'La date de debut ne peut pas être supérieure à celle du de fin');
           } else {
-      
-            if(!this.prenom && !this.nom && !this.operateur) {
                 this.store.dispatch(featureActionTierPayant.loadTierPayantByPeriode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
             dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
-            }
             
           }
 
@@ -779,7 +776,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     rechercherPrefinancementByPeriode() {
-    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+    if(this.dateDebut.getTime() >= this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {

@@ -123,10 +123,10 @@ posPrefinancement(prefinancement: Array<Prefinancement>): Observable<any> {
     );
 }
 
-$getPrefinancementPeriode(dateD: string, dateF: string, nom: string, prenom: string, operateur: string): Observable<PrefinancementList> {
+$getPrefinancementPeriode(dateD: string, dateF: string): Observable<PrefinancementList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/periode` , {params :
-    this.createRequestOption({dateD, dateF, nom, prenom, operateur})}).pipe(
+    this.createRequestOption({dateD, dateF})}).pipe(
       map((response: PrefinancementList) => response),
       catchError(this.handleError())
   );
