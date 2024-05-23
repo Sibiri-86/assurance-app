@@ -43,6 +43,12 @@ constructor(private http: HttpClient) {
             report, {responseType: 'arraybuffer'});
       }
 
+      $getReportDepenseFamilleExcel(check: Check): Observable<ArrayBuffer> {
+        // @FIXME: get request
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille/report-excel`,
+        check, {responseType: 'arraybuffer'});
+      }
+
    
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();

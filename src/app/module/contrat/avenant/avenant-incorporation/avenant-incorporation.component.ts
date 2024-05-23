@@ -346,7 +346,7 @@ export class AvenantIncorporationComponent implements OnInit{
 
     controleAge() {
         if(this.adherentForm.value.dateNaissance) {
-            if (new Date(this.adherentForm.value.dateNaissance).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+            if (new Date(this.adherentForm.value.dateNaissance).getTime() > new Date(this.curentExercice.fin).getTime()) {
                 this.adherentForm.get('dateNaissance').setValue('');
                 this.addMessage('error', 'Date de naissance invalide',
                 'La date de naissance ne peut pas être postérieure à celle de la police');
@@ -356,10 +356,10 @@ export class AvenantIncorporationComponent implements OnInit{
 
     controleEntre() {
         if(this.adherentForm.value.dateEntree) {
-            if (new Date(this.adherentForm.value.dateEntree).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+            if (new Date(this.adherentForm.value.dateEntree).getTime() > new Date(this.curentExercice.fin).getTime()) {
                 this.adherentForm.get('dateEntree').setValue('');
                 this.addMessage('error', 'Date d\' entrée invalide',
-                'La date d\'entrée ne peut pas être postérieure à celle de la police');
+                'La date d\'entrée ne peut pas être postérieure à celle de l\'exercice');
             }
           }
     }
@@ -390,7 +390,7 @@ export class AvenantIncorporationComponent implements OnInit{
     controleAgeRi(ri: number) {
         let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
         if(this.adherentForm.get('familys').value[ri].dateNaissance) {
-            if (new Date(this.adherentForm.get('familys').value[ri].dateNaissance).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateNaissance).getTime() > new Date(this.curentExercice.fin).getTime()) {
                 myForm.patchValue({dateNaissance: null});
                 this.addMessage('error', 'Date de naissance invalide',
                 'La date de naissance ne peut pas être postérieure à celle de la police');
@@ -401,7 +401,7 @@ export class AvenantIncorporationComponent implements OnInit{
     controleEntreRi(ri: number) {
         let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
         if(this.adherentForm.get('familys').value[ri].dateEntree) {
-            if (new Date(this.adherentForm.get('familys').value[ri].dateEntree).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateEntree).getTime() > new Date(this.curentExercice.fin).getTime()) {
                 myForm.patchValue({dateEntree: null});
                 this.addMessage('error', 'Date d\' entrée invalide',
                 'La date d\'entrée ne peut pas être postérieure à celle de la police');
@@ -412,7 +412,7 @@ export class AvenantIncorporationComponent implements OnInit{
     controleIncorporRi(ri: number) {
         let myForm = (this.adherentForm.get('familys') as FormArray).at(ri);
         if(this.adherentForm.get('familys').value[ri].dateIncorporation) {
-            if (new Date(this.adherentForm.get('familys').value[ri].dateIncorporation).getTime() > new Date(this.lastExerciceForm.value.fin).getTime()) {
+            if (new Date(this.adherentForm.get('familys').value[ri].dateIncorporation).getTime() > new Date(this.curentExercice.fin).getTime()) {
                 myForm.patchValue({dateIncorporation: null});
                 this.addMessage('error', 'Date d\' incorporation invalide',
                 'La date d\'incoporation ne peut pas être postérieure à celle de la police');

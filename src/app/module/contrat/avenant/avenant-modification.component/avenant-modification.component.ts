@@ -1322,6 +1322,7 @@ enleverEspace() {
     this.objet.historiqueAvenant = this.historiqueAvenant;
     this.objet.historiqueAvenant.isTerminer = true;
     this.eventEmitterM.emit(this.objet);
+    this.avenantId = null;
   }
 
   loadHistoriquePlafondGroupe(): void {

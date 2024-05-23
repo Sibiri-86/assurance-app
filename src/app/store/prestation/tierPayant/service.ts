@@ -181,10 +181,10 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
       }
 
-      $getTierPayantByPeriode(dateD: string, dateF: string, nom: string, prenom: string, operateur: string): Observable<SinistreTierPayantList> {
+      $getTierPayantByPeriode(dateD: string, dateF: string): Observable<SinistreTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/periode`, {params :
-            this.createRequestOption({dateD, dateF, nom, prenom, operateur})}).pipe(
+            this.createRequestOption({dateD, dateF})}).pipe(
               map((response: SinistreTierPayantList) => response),
               catchError(this.handleError())
           );

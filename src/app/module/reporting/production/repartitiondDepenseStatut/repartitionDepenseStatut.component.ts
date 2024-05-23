@@ -183,9 +183,9 @@ export class RepartitionDepenseStatutComponent implements OnInit, OnDestroy {
         dateDebut: new FormControl('', [Validators.required]),
         dateFin: new FormControl('', [Validators.required]),
         tauxChargement: new FormControl('', [Validators.required]),
-        police: new FormControl(),
+        police: new FormControl('', [Validators.required]),
         groupe: new FormControl(),
-        garant: new FormControl(),
+        garant: new FormControl('', [Validators.required]),
     });
 
       this.breadcrumbService.setItems([
