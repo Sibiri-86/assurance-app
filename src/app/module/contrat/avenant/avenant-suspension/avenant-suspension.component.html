@@ -104,11 +104,11 @@
                             <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant, rowIndex)"
                             [disabled]="etat === 'VIEW'"></p-checkbox>
                         </td>
-                        <td >{{historiqueAveantAdherant.adherent.numero}}</td>
+                        <td >{{historiqueAveantAdherant?.adherent?.numero}}</td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.nom | upercase}}</span>
 
                         </td>
-                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom | beginLowerCase}}</span>
+                        <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.prenom }}</span>
 
                         </td>
                         <td><span class="p-column-title">{{historiqueAveantAdherant?.adherent?.groupe?.libelle}}</span>
