@@ -515,6 +515,8 @@ findMontantPlafond(event){
       typePaiement: new FormControl('', Validators.required),
       numeroOrange: new FormControl(),
       numeroMobicash: new FormControl(),
+      numeroWave: new FormControl(),
+      numeroSank: new FormControl(),
       numeroVirement: new FormControl(),
       nomBenefiniciaire: new FormControl(),
     });
@@ -1058,6 +1060,13 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
     }
     if(pref.numeroVirement) {
       this.prestationForm.get('numeroVirement').setValue(pref.numeroVirement);
+    }
+    if(pref.numeroSank) {
+      this.prestationForm.get('numeroSank').setValue(pref.numeroSank);
+    }
+
+    if(pref.numeroWave) {
+      this.prestationForm.get('numeroWave').setValue(pref.numeroWave);
     }
     
     this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
@@ -1861,6 +1870,10 @@ if(typePaiement == 'ORANGE_MONEY' && this.prestationForm.get('numeroOrange').val
 } else if ( typePaiement == 'MOOV_MONEY' && this.prestationForm.get('numeroMobicash').value == null || typePaiement == 'MOOV_MONEY' && this.prestationForm.get('nomBenefiniciaire').value == null ) {
   this.typePaiementValide = true;
 } else if(typePaiement == 'VIREMENT' && this.prestationForm.get('numeroVirement').value == null) {
+  this.typePaiementValide = true;
+} else if(typePaiement == 'WAVE' && this.prestationForm.get('numeroWave').value == null || typePaiement == 'WAVE' && this.prestationForm.get('nomBenefiniciaire').value == null) {
+  this.typePaiementValide = true;
+} else if(typePaiement == 'SANK_MONEY' && this.prestationForm.get('numeroSank').value == null || typePaiement == 'SANK_MONEY' && this.prestationForm.get('nomBenefiniciaire').value == null) {
   this.typePaiementValide = true;
 } else {
   this.typePaiementValide = false;

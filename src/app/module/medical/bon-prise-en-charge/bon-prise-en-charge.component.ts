@@ -976,7 +976,7 @@ findMontantPlafond(event){
    
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log(value);
+      console.log("this checkplafond +++++++++++=======> ",value);
       if (value) {
           this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
       } 
@@ -1372,6 +1372,13 @@ console.log(myForm);
   });
    // if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+    this.store.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log("this checkplafond +++++++++++=======> ",value);
+      if (value) {
+          this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
+      } 
+    
+    });
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {

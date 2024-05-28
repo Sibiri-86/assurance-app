@@ -29,7 +29,7 @@
                 <div class="p-field">
                     
                 </div>
-                <div class="p-field" *ngIf="saisie != null">
+                <!-- <div class="p-field" *ngIf="saisie != null">
                     <span style="color: green; font-size: 20px; font-weight: bold;">
                         <mark> Saisie: {{saisie?.nombreSaisie}} </mark>
                     </span>
@@ -43,7 +43,7 @@
                     <span style="color: red; font-size: 20px; font-weight: bold;">
                         <mark>Supprimé: {{saisie?.nombreSupprime}} </mark>
                     </span>
-                </div>
+                </div> -->
 
                 <!-- <div *ngIf="saisie != null" class="p-grid p-field">
                     <div class="p-col-3">
@@ -702,7 +702,15 @@
                         <label for="dateEffet">Numero Moov Money <span class="required">*</span></label>
                         <input type="text" name="numeroMobicash" id="numeroMobicash" pInputText formControlName="numeroMobicash" (blur)="changeType(prestationForm.value.typePaiement)">
                     </div>
-                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY' || prestationForm.value.typePaiement === 'ORANGE_MONEY'" class="p-field p-col">
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'SANK_MONEY'" class="p-field p-col">
+                        <label for="dateEffet">Numero Sank Money<span class="required">*</span></label>
+                        <input type="tel" name="numeroSank" id="numeroSank" pInputText formControlName="numeroSank" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'WAVE'" class="p-field p-col">
+                        <label for="dateEffet">Numero Wave<span class="required">*</span></label>
+                        <input type="tel" name="numeroWave" id="numeroWave" pInputText formControlName="numeroWave" (blur)="changeType(prestationForm.value.typePaiement)">
+                    </div>
+                    <div class="required" *ngIf="prestationForm.value.typePaiement === 'MOOV_MONEY' || prestationForm.value.typePaiement === 'ORANGE_MONEY' || prestationForm.value.typePaiement === 'SANK_MONEY' || prestationForm.value.typePaiement === 'WAVE'"  class="p-field p-col">
                         <label for="dateEffet">Nom et prenom du bénéficiaire <span class="required">*</span></label>
                         <input type="text" name="nomBenefiniciaire" id="nomBenefiniciaire" pInputText formControlName="nomBenefiniciaire" (blur)="changeType(prestationForm.value.typePaiement)">
                     </div>
@@ -710,6 +718,7 @@
                         <label for="dateEffet">Numero Virement <span class="required">*</span></label>
                         <input type="text" name="numeroVirement" id="numeroVirement" pInputText formControlName="numeroVirement" (blur)="changeType(prestationForm.value.typePaiement)">
                     </div>
+                    
                 </div>
                 
                     

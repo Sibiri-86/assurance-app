@@ -76,6 +76,8 @@ export interface Prefinancement {
     numeroOrange?: string;
     numeroMobicash?: string;
     numeroVirement?: string;
+    numeroWave?: string;
+    numeroSank?: string;
     nomBenefiniciaire?: string;
     statSaisie?: Saisie;
 }
@@ -161,6 +163,8 @@ export enum TypePaiement {
     ESPECE = 'ESPECE',
     ORANGE_MONEY = 'ORANGE_MONEY',
     MOOV_MONEY = 'MOOV_MONEY',
+    WAVE = 'WAVE',
+    SANK_MONEY = 'SANK_MONEY',
     CHEQUE = 'CHEQUE',
     VIREMENT = 'VIREMENT'
 
