@@ -2020,18 +2020,46 @@ export class TierPayantEditionComponent implements OnInit {
                   this.listFamilleActe = res;
                   // console.log("famillles actes ===================== >", this.listFamilleActe);
                 });
-        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
 
-            this.montantConsomme = rest;
-           
-           
-        });
+                if(prestation?.sousActe.sousActe) {
 
-        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
+                    this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
 
-            this.montantPlafond1 = rest;
-           
-          });
+                        this.montantConsomme = rest;
+                       
+                       
+                    });
+                } else {
+                    if(prestation.sousActe.id) {
+                        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.id).subscribe(rest=>{
+
+                            this.montantConsomme = rest;
+                           
+                           
+                        });
+                    }
+                }
+
+                if(prestation?.acte.acte) {
+
+                    this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
+
+                        this.montantPlafond1 = rest;
+                       
+                      });
+                } else {
+                    if(prestation.acte.id) {
+                        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
+
+                            this.montantPlafond1 = rest;
+                           
+                          });
+                    }
+                }
+                
+       
+
+        
 
           this.prestationAdd = prestation;
           this.prestationAdd.matriculeAdherent = this.prestationAdd?.adherent?.numero.toString();
