@@ -11,6 +11,7 @@ const initialState: PrefinancementState = {
     reportFile: null,
     checkPrefinancementReponse: null,
     montantPlafondSousActe: null,
+    isTwist: null,
     selectedMontantResearch: null,
     ordreReglementListMedical: null,
     ordreReglementListFinance: null,
@@ -45,6 +46,9 @@ const featureReducer = createReducer(
       })),
       on(featureActions.setLoadOrdreReglementDirection, (state, payload: OrdreReglementListDirection) => ({
         ...state, ordreReglementListDirection: payload.ordreReglementDtoList
+      })),
+      on(featureActions.setPlafondSousActe, (state, payload: CheckPlafondResponse) => ({
+        ...state, isTwist: payload.isTwist
       })),
   );
 

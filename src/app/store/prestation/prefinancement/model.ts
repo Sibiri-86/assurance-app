@@ -104,6 +104,7 @@ export interface CheckPlafond {
 
 export interface CheckPlafondResponse {
     montant?: number;
+    isTwist?:boolean;
 }
 
 export interface Prestation {

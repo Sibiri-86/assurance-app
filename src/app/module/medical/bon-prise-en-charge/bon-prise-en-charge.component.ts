@@ -145,6 +145,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   policeList: Array<Police>;
   police: Police;
   policeList$: Observable<Array<Police>>;
+  isTwistOptique = false;
 
 
  prestationPopForm: FormGroup;
@@ -185,6 +186,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestation.push(formPrestation); */
     this.prestationPopForm = this.createItem();
     this.displayPrestationpop = true;
+    this.isTwistOptique = false;
   }
 
    deleteItemPrestation(i: number) {
@@ -976,7 +978,9 @@ findMontantPlafond(event){
    
     this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
     this.store.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log("Dambre---=======> ",value);
       console.log("this checkplafond +++++++++++=======> ",value);
+      console.log("this montantPlafond +++++++++++=======> ",value.prefinancementState?.montantPlafondSousActe);
       if (value) {
           this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
       } 
@@ -1376,6 +1380,17 @@ console.log(myForm);
       console.log("this checkplafond +++++++++++=======> ",value);
       if (value) {
           this.montantPlafond =  value.prefinancementState?.montantPlafondSousActe;
+          this.isTwistOptique = value.prefinancementState?.isTwist;
+          console.log("isTwistOptique 111111111 +++++++++++=======> ",this.isTwistOptique);
+          if(this.isTwistOptique) {
+            this.addMessage('error', 'Attention', 'Cet(te) assuré(e) doit attendre la prochaine periode de couverture pour bénéficier de cette garantie');
+            console.log("this.prestationForm  +=======> ",this.prestationForm);
+            this.prestationPopForm.get('montantPlafond').setValue('');
+            this.prestationPopForm.reset();
+            this.isTwistOptique = false;
+            //this.prestation.clear();
+            //this.displayPrestationpop = false;
+          }
       } 
     
     });
@@ -1672,6 +1687,7 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
     this.prestationPopForm.get('prenomAdherent').setValue(prestation.adherent.nom+" "+prestation.adherent.prenom);
   }
   this.displayPrestationpop = true;
+  this.isTwistOptique = false;
 }
 
 editerPrestation(pref: BonPriseEnCharge) {

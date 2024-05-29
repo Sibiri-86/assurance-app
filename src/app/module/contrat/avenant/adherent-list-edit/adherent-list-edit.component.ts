@@ -134,7 +134,7 @@ export class AdherentListEditComponent implements OnInit {
       {field: 'dateNaissance', header: 'DATE DE NAISSANCE', type: 'date'},
       {field: 'groupe.taux.taux', header: 'TAUX', type: 'string'},
       {field: 'fullName', header: 'BENEFICIAIRE', type: 'string'},
-      {field: 'exercice.debut', header: 'EFFET', type: 'date'},
+      {field: 'dateIncorporation', header: 'EFFET', type: 'date'},
       {field: 'exercice.fin', header: 'ECHEANCE', type: 'date'},
       {field: 'plafondGroupeSousActeCSG.taux.taux', header: 'CONS GENERALISTE', type: 'number'},
       {field: 'plafondGroupeSousActeCSG.montantPlafondParActe', header: 'CONS GENERALISTE MONTANT', type: 'number'},

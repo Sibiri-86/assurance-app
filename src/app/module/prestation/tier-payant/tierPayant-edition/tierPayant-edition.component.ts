@@ -194,6 +194,7 @@ export class TierPayantEditionComponent implements OnInit {
     policeList: Array<Police>;
     police: Police;
     listActe: Array<PlafondActe>;
+    listActeModif: Array<PlafondActe>;
     listSousActe: Array<PlafondSousActe>;
     listFamilleActe: Array<PlafondFamilleActe>;
     dateDebut: any;
@@ -776,7 +777,7 @@ export class TierPayantEditionComponent implements OnInit {
     }
 
     rechercherPrefinancementByPeriode() {
-    if(this.dateDebut.getTime() >= this.dateFin.getTime()) {
+    if(this.dateDebut.getTime() > this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
@@ -2011,15 +2012,28 @@ export class TierPayantEditionComponent implements OnInit {
           this.displaySinistreDetail = true;
       }
 
-      editerPrestation1(prestation: Prestation, rowIndex: number) {
+      editerPrestation1(prestation: Prestation, rowIndex: number) {    
         this.compteur = rowIndex;
         console.log("========prestation==============",prestation);
         this.adherentSelected = prestation?.adherent;
         this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
                 subscribe((res) =>{
                   this.listFamilleActe = res;
-                  // console.log("famillles actes ===================== >", this.listFamilleActe);
+                  console.log("famillles actes ===================== >", this.listFamilleActe);
+                  if(this.listFamilleActe) {
+                    this.prestationAdd.familleActe = this.listFamilleActe.find(p=> p.garantie.id == prestation.familleActe.id);
+                  }
                 });
+                /* this.plafondService.findPlafondGroupeActeByPlafondGroupeFamilleActeId(this.adherentSelected.exercice.id, this.adherentSelected.groupe.id, prestation.familleActe.id, this.adherentSelected.qualiteAssure.id).
+                subscribe((res) =>{
+                  this.listActeModif = res.body;
+                  console.log("actes ===================== >", this.listActeModif);
+                  if(this.listActeModif) {
+                    this.prestationAdd.acte = this.listActeModif.find(p=> p.acte.id == prestation.acte.id);
+                    console.log("id 11111 ===================== >", this.listActeModif[0].acte.id);
+                    console.log("id 22222 ===================== >", prestation.acte.id);
+                  }
+                }); */
 
                 if(prestation?.sousActe.sousActe) {
 
@@ -2049,7 +2063,7 @@ export class TierPayantEditionComponent implements OnInit {
                       });
                 } else {
                     if(prestation.acte.id) {
-                        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
+                        this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.id).subscribe(rest=>{
 
                             this.montantPlafond1 = rest;
                            
@@ -2077,7 +2091,7 @@ export class TierPayantEditionComponent implements OnInit {
           this.prestationAdd.nomGroupe = prestation.adherent?.groupe.libelle;
           this.prestationAdd.numeroPolice = this.prestationAdd?.adherent?.groupe.police.numero;
           this.prestationAdd.souscripteur = this.prestationAdd?.adherent?.groupe.police.nom;
-          if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined) {
+          if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined && !this.prestationAdd.id) {
             this.bonPriseEnChargeList.push(this.prestationAdd?.bonPriseEnCharge);
           }
         

@@ -3,6 +3,7 @@ export const prefinancementList = (state: AppState) => state.prefinancementState
 export const ordreReglementList = (state: AppState) => state.prefinancementState.ordreReglementList;
 export const selectByteFile = (state: AppState) => state.prefinancementState.reportFile;
 export const montantSousActe = (state: AppState) => state.prefinancementState.montantPlafondSousActe;
+export const isTwist = (state: AppState) => state.prefinancementState.isTwist;
 export const selectCheckPrefinancementReponse = (state: AppState) => state.prefinancementState.checkPrefinancementReponse;
 export const selectedMontant = (state: AppState) => state.prefinancementState.selectedMontantResearch;
 export const ordreReglementListMedical = (state: AppState) => state.prefinancementState.ordreReglementListMedical;
