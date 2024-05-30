@@ -986,7 +986,7 @@ findMontantPlafond(event){
       } 
     
     });
-    }
+  }
   
   calculDebours(i: number) {
     if(this.prestationForm.get('prestation')?.value?.length > 1) {
@@ -1151,6 +1151,7 @@ console.log(myForm);
   }
 
   rechercherAdherent(event) {
+    this.isTwistOptique = false;
     if (event.target.value !== '') {
     console.log(event.target.value);
    
