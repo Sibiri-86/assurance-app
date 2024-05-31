@@ -860,7 +860,7 @@ findMontantPlafond(event){
       accept: () => {
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+          dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
@@ -1589,7 +1589,7 @@ verifieDateSoins(event){
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur} ));
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')} ));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();
@@ -1636,7 +1636,7 @@ verifieDateSoins(event){
    this.prefinancementList.push(this.prefinancementModel);
    console.log(this.prefinancementList);
    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
-   dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+   dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
   console.log("===========bon==================");
   console.log(this.prefinancementModel);

@@ -844,7 +844,7 @@ findMontantPlafond(event){
        
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
@@ -1174,7 +1174,7 @@ console.log(myForm);
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();

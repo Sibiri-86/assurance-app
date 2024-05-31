@@ -161,7 +161,7 @@ export class PrefinancementEffects {
     createPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createPrefinancement),
-        mergeMap(({prefinancement, dateD, dateF, nom, prenom, operateur}) =>
+        mergeMap(({prefinancement, dateD, dateF}) =>
             this.prefinancementService.posPrefinancement(prefinancement).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
@@ -239,7 +239,7 @@ export class PrefinancementEffects {
     updateETatValiderPrefinancement$ = createEffect(() =>
     this.actions$.pipe(
             ofType(featureActions.updateEtatValiderPrefinancement),
-            mergeMap(({prefinancement, etat,  dateD, dateF, nom, prenom, operateur}) =>
+            mergeMap(({prefinancement, etat,  dateD, dateF}) =>
                 this.prefinancementService.putUpdatePrefinancement(prefinancement, etat).pipe(
                     switchMap(value => [
                         // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
