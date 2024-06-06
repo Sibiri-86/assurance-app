@@ -1637,16 +1637,16 @@ verifieDateSoins(event){
    console.log(this.prefinancementList);
    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
-  // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
-  console.log("===========bon==================");
-  console.log(this.prefinancementModel);
+   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
+    console.log("===========bon==================");
+    console.log(this.prefinancementModel);
    console.log("==============bon===============");
    this.prefinancementList = [];
    this.prestationsList = [];
    this.prestationForm.reset();
    //this.prestationForm.get('dateSaisie').setValue(new Date());
    this.displayFormPrefinancement = false;
-   }
+  }
 
   // permet d'enregistrer une prestation par famille
   addPrestation(){
