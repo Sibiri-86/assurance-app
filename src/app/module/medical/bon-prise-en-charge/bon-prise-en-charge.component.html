@@ -120,7 +120,7 @@
             </ng-template>
             <ng-template pTemplate="summary">
                 <div class="p-d-flex p-ai-center p-jc-between">
-                    {{prefinancementDtoList ? prefinancementDtoList.length : 0 }} sinistre(s).
+                    {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon(s) de prise en charge.
                 </div>
             </ng-template>
         </p-table>
@@ -712,7 +712,7 @@
             <hr/> 
             <p-fieldset legend="Prestaions" toggleable="true">
 
-            <p-table #dt [value]="bonPriseEnChargeDetail.prestation" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="prestations" [columns]="cols" [rows]="10" [paginator]="true"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
