@@ -831,10 +831,22 @@ findMontantPlafond(event){
     
 
   imprimer(bon: BonPriseEnCharge) {
-    bon.userCurent = this.keycloak.getUsername();
-    this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
-    this.report.bonPriseEnChargeDto = bon;
-    this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
+    this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(bon.id).subscribe((res=>{
+      if(res) {
+  
+        this.prestations = res;
+        console.log('prestationssssssssss ==>', this.prestations);
+        bon.prestation = this.prestations;
+        //this.prestationsList = this.prestations;
+        bon.userCurent = this.keycloak.getUsername();
+        this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
+        this.report.bonPriseEnChargeDto = bon;
+        this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
+      } else {
+        this.showToast('info', 'INFORMATION', 'Ce bon ne contient pas de prestations');
+      }
+     }));
+    
   }
 
   validerPrestation(pref: Prefinancement) {
@@ -1702,6 +1714,7 @@ editerPrestation(pref: BonPriseEnCharge) {
 
       this.prestations = res;
       console.log('prestationssssssssss ==>', this.prestations);
+      this.prestationsList = this.prestations;
     }
    }));
   /* this.prestationsList = this.prestations; */
