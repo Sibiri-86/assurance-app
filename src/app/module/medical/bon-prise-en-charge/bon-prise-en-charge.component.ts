@@ -146,6 +146,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   police: Police;
   policeList$: Observable<Array<Police>>;
   isTwistOptique = false;
+  prestations: Prestation[];
 
 
  prestationPopForm: FormGroup;
@@ -173,6 +174,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
                private prefinancementService: PrefinancementService,
                private bonService: BonPriseEnChargeService,
                private plafondService: PlafondService,
+               private bonPriseEnChargeService: BonPriseEnChargeService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
                 this.breadcrumbService.setItems([{ label: 'Bon prise en charge / Entente préalable'}]);
    }
@@ -829,10 +831,22 @@ findMontantPlafond(event){
     
 
   imprimer(bon: BonPriseEnCharge) {
-    bon.userCurent = this.keycloak.getUsername();
-    this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
-    this.report.bonPriseEnChargeDto = bon;
-    this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
+    this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(bon.id).subscribe((res=>{
+      if(res) {
+  
+        this.prestations = res;
+        console.log('prestationssssssssss ==>', this.prestations);
+        bon.prestation = this.prestations;
+        //this.prestationsList = this.prestations;
+        bon.userCurent = this.keycloak.getUsername();
+        this.report.typeReporting = TypeReport.BONPRISEENCHARGE;
+        this.report.bonPriseEnChargeDto = bon;
+        this.store.dispatch(featureActionBonPriseEnCharge.FetchReportBon(this.report));
+      } else {
+        this.showToast('info', 'INFORMATION', 'Ce bon ne contient pas de prestations');
+      }
+     }));
+    
   }
 
   validerPrestation(pref: Prefinancement) {
@@ -844,7 +858,7 @@ findMontantPlafond(event){
        
         this.store.dispatch(featureActionPrefinancement.updateEtatValiderPrefinancement({prefinancement: pref,
           etat: TypeEtatSinistre.VALIDE, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+          dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
       },
     });
   }
@@ -986,7 +1000,7 @@ findMontantPlafond(event){
       } 
     
     });
-    }
+  }
   
   calculDebours(i: number) {
     if(this.prestationForm.get('prestation')?.value?.length > 1) {
@@ -1151,6 +1165,7 @@ console.log(myForm);
   }
 
   rechercherAdherent(event) {
+    this.isTwistOptique = false;
     if (event.target.value !== '') {
     console.log(event.target.value);
    
@@ -1173,7 +1188,7 @@ console.log(myForm);
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
     this.prefinancementList = [];
     this.prestationList = [];
     this.prestationForm.reset();
@@ -1694,24 +1709,20 @@ editerPrestation(pref: BonPriseEnCharge) {
   console.log("=====================");
   console.log(pref);
   this.adherentSelected = pref.adherent;
-  this.prestationsList = pref.prestation; 
-  // this.prestationForm.get('referenceBordereau').setValue(pref.referenceBordereau);
-  /* this.prestationForm.get('matriculeAdherent').setValue(pref.adherent.numero);
-  this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
-  if (this.adherentSelected.adherentPrincipal != null) {
-    this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
-} else {
-    this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
-}
-  this.prestationForm.get('numeroGroupe').setValue(pref.adherent.groupe.numeroGroupe);
-  this.prestationForm.get('numeroPolice').setValue(pref.adherent.groupe.police.numero);
-  this.prestationForm.get('souscripteur').setValue(pref.adherent.groupe.police.nom); */
+  this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(pref.id).subscribe((res=>{
+    if(res) {
+
+      this.prestations = res;
+      console.log('prestationssssssssss ==>', this.prestations);
+      this.prestationsList = this.prestations;
+    }
+   }));
+  /* this.prestationsList = this.prestations; */
+  pref.prestation = this.prestations; 
   this.prestationForm.get('id').setValue(pref?.id);
   this.prestationForm.get('typeBon').setValue(pref?.typeBon);
   this.prestationForm.get('prestataire').setValue(pref?.prestataire);
-  // this.prestationForm.get('nomGroupeAdherent').setValue(pref.adherent.groupe.libelle);
   this.prestationForm.get('dateDeclaration').setValue(pref.dateDeclaration);
-  //this.prestationForm.get('dateSoins').setValue(new Date(pref.dateSoins));
   this.prestationForm.get('dateSaisie').setValue(new Date(pref.dateSaisie));
   for (const pr of pref.prestation) {
   const formPrestation: FormGroup = this.createItem();
@@ -1737,6 +1748,16 @@ rechercherPrefinancementByPeriode() {
     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
   }
   
+}
+
+prestationByBon(pres: BonPriseEnCharge) {
+  this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(pres.id).subscribe((res=>{
+    if(res) {
+
+      this.prestations = res;
+      console.log('prestationssssssssss ==>', this.prestations);
+    }
+   }));
 }
 
 /* this.bonPriseEnChargeList$ = this.store.pipe(select(selectorsBonPriseEnCharge.bonPriseEnChargeList));

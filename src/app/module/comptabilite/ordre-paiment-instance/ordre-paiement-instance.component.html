@@ -14,8 +14,8 @@
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
                         <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
-        <!--                     <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
-        -->                </div>
+                    <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
+                    -->                </div>
                     
                     <div class="p-field">
                         <label for="dateSoins" class="p-sr-only"></label>
@@ -26,6 +26,10 @@
                     </div>
                     
                 </div> 
+                <!-- <ng-template pTemplate="right">
+                    <button pButton pRipple icon="pi pi-file-excel" label="Conso wave" pTooltip="Consommations wave" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
+
+                </ng-template> -->
 
 			</p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','assurePrinc.nom','assurePrinc.prenom','police.nom','typePaiement']"

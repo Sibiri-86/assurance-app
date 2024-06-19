@@ -10,6 +10,8 @@ import { Report } from '../../contrat/police/model';
 import { Bilan, Check, DepenseFamilleList } from './model';
 import { DepartementList } from '../../parametrage/departement/model';
 import { ExerciceComptable } from '../../comptabilite/exercice-comptable/model';
+import { OrdreReglement } from '../../prestation/prefinancement/model';
+import { Byte } from '@angular/compiler/src/util';
 
 @Injectable({providedIn: 'root'})
 export class DepenseFamilleService {
@@ -48,6 +50,15 @@ constructor(private http: HttpClient) {
         return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/depense-famille/report-excel`,
         check, {responseType: 'arraybuffer'});
       }
+
+      $getReportConsommationWaveExcel(dateD: string, dateF: string): Observable<Byte> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/consommation-wave/report-excel`,{params :
+            this.createRequestOption({dateD, dateF})}).pipe(
+              map((response: Byte) => response),
+              catchError(this.handleError())
+          );
+        }
 
    
     private createRequestOption = (req?: any): HttpParams => {

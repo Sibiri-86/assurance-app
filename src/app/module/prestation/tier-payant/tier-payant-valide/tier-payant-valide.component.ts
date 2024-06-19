@@ -339,7 +339,7 @@ export class TierPayantValideComponent implements OnInit {
   validerPrefinancement() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList, dateD: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'),
-    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr'), nom: this.nom, prenom: this.prenom, operateur: this.operateur}));
+    dateF: formatDate(new Date(), 'dd/MM/yyyy', 'en-fr')}));
   }
 
   // permet d'enregistrer une prestation par famille

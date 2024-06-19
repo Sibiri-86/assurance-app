@@ -26,12 +26,13 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
 
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
-import { printPdfFile } from 'src/app/module/util/common-util';
+import { printExcelfFile, printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
 import { formatDate } from '@angular/common';
+import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/service';
 
 
 @Component({
@@ -53,7 +54,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,
+                 private breadcrumbService: BreadcrumbService,
+                 private depenseFamilleService: DepenseFamilleService) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement en espèce instance' }]);
 }
 
@@ -64,7 +67,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     this.store.pipe(select(prefinancementSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
     .subscribe(bytes => {
         if (bytes) {
-                printPdfFile(bytes);
+                printExcelfFile(bytes);
         }
     });
 
@@ -154,4 +157,18 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     }
     
   }
+
+  imprimerFormulaireExcel(ordre: OrdreReglement){
+    if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      this.depenseFamilleService.$getReportConsommationWaveExcel(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')).subscribe((rest)=>{
+          if(rest) {
+            printExcelfFile(rest);
+          }
+          
+        });
+  }
+}
 }

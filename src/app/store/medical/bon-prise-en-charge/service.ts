@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import {GlobalConfig} from '../../../config/global.config';
 import {Endpoints} from '../../../config/module.endpoints';
 import { EndpointsMedical } from 'src/app/config/module.medical.endpoints';
+import { Prestation } from '../../prestation/prefinancement/model';
 
 @Injectable({providedIn: 'root'})
 export class BonPriseEnChargeService {
@@ -74,6 +75,14 @@ $getBonsByPeriode(dateD: string, dateF: string): Observable<BonPriseEnChargeList
     map((response: BonPriseEnChargeList) => response),
     catchError(this.handleError())
   );
+}
+
+getPrestationByBonDePriseEnCharge(idBon: string): Observable<Prestation[]> {
+  // @FIXME: post request
+  return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/prestationBy-bonPriseEnCharge-Id/${idBon}`).pipe(
+      map((response: Prestation[]) => response),
+      catchError(this.handleError())
+  );    
 }
 
 

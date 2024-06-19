@@ -54,7 +54,7 @@ export interface SinistreTierPayant {
     numeroFacture?: string;
     dateFacture?: Date;
     prestataire?: Prestataire;
-    etat?: TypeEtatSinistre;
+    etat?: TypeEtatSinistre; 
     bonPriseEnCharge?: BonPriseEnCharge;
     montantReclame?:number;
     montantPaye?:number;

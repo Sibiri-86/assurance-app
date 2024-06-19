@@ -5024,7 +5024,7 @@
                 
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['numero','nom','prenom','territorialite.libelle']"
+                             [globalFilterFields]="['numero','nom','prenom','territorialite.libelle','numeroGarant']"
                              [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
@@ -5134,7 +5134,7 @@
                 </div>
                 <div class="card">
                     <p-table #dtAD [value]="avenantModif1.adhrents" [columns]="colsAL" [rows]="10" [paginator]="true"
-                             [globalFilterFields]="['nom','prenom','numero','territorialite.libelle']"
+                             [globalFilterFields]="['numero','nom','prenom','territorialite.libelle','numeroGarant']"
                              [rowHover]="true" dataKey="id" [exportFilename]="'liste actualisée'" csvSeparator=";"
                              styleClass="p-datatable-customers"
                              currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements"
@@ -5146,7 +5146,7 @@
                                     <div class="p-col-8">
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                    <input pInputText type="text" (input)="dtAD.filterGlobal($event.target.value, 'contains')"
                                            placeholder="Search..." [style]="{width: '20%'}"/>
                                 </span>
 
