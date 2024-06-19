@@ -27,6 +27,8 @@ export interface Bareme {
     typeBareme?: TypeBareme;
     taux?: Taux;
     baremeFamilleActe?: Array<PlafondFamilleActe>;
+    ageMin?: number;
+    ageMax?: number;
 }
 
 export interface BaremeList {

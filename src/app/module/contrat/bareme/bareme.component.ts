@@ -116,7 +116,9 @@ export class BaremeComponent implements OnInit, OnDestroy {
     libelle: new FormControl(),
     description: new FormControl(null, [Validators.required]),
     taux: new FormControl(),
-    typeBareme: new FormControl(null, [Validators.required])
+    typeBareme: new FormControl(null, [Validators.required]),
+    ageMin: new FormControl(),
+    ageMax: new FormControl(),
   });
 
    }
@@ -354,10 +356,10 @@ export class BaremeComponent implements OnInit, OnDestroy {
 
   modifierBareme(bareme: Bareme) {
     console.log(bareme);
-    if(!this.typeBareme.find(type=>type.value === bareme.typeBareme )) {
+    /* if(!this.typeBareme.find(type=>type.value === bareme.typeBareme )) {
       this.typeBareme.push({ label: bareme.typeBareme, value: bareme.typeBareme });
 
-    }
+    } */
     
     this.baremeForm.patchValue(bareme);
     this.plafondFamilleActeConstruct = bareme.baremeFamilleActe.filter(famille=> famille?.etat === "ACTIF");

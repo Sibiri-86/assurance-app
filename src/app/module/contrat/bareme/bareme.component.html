@@ -165,6 +165,16 @@
                                 <label for="lastname2">Type Barème <span class="required">*</span></label>
                                 <p-dropdown  inputId="typeBareme" [filter]="true" showClear="true" [options]="typeBareme" formControlName="typeBareme" placeholder="Select barème"></p-dropdown>
                             </div>
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Age minimun <span class="required"></span></label>
+                                <input id="ageMin" type="number" required formControlName="ageMin"  pInputText>
+                            </div>
+
+                            <div class="p-field p-col">
+                                <label for="firstname2">Age maximal <span class="required"></span></label>
+                                <input id="ageMax" type="number" required formControlName="ageMax"  pInputText>
+                            </div>
                         </div>
 
                         <!-- <div class="p-fluid p-formgrid p-grid">
