@@ -97,7 +97,7 @@ import {BreadcrumbService} from "../../../app.breadcrumb.service";
 import {loadTypePrime} from "../../../store/parametrage/type-prime/actions";
 import * as typePrimeSelector from "../../../store/parametrage/type-prime/selector";
 import {PlafondActe, PlafondFamilleActe, PlafondSousActe} from "../../../store/parametrage/plafond/model";
-import {Plafond} from "src/app/store/contrat/plafond/model";
+import {Bareme, Plafond} from "src/app/store/contrat/plafond/model";
 import {printPdfFile, removeBlanks} from "../../util/common-util";
 import {Arrondissement} from 'src/app/store/parametrage/arrondissement/model';
 import {Secteur} from 'src/app/store/parametrage/secteur/model';
@@ -272,6 +272,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   typeEtat = Object.keys(Etat).map(key => ({ label: Etat[key], value: key }));
   private afficheDetail = false;
   bareme: TypeBareme;
+  baremeSeleted: Bareme = {};
   taux: Taux;
   tauxGlobal: Taux;
   baremeList$: Observable<Array<PlafondFamilleActe>>;
@@ -300,6 +301,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   policeAllList: Array<Police> = [];
   policeSelected: Police = {};
   policeAllSelected: Array<Police> = [];
+  typeBaremes: Bareme[] = [];
 
 
   constructor(
@@ -522,6 +524,12 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
 
 
+    this.plafondService.$findBaremes().subscribe((res)=>{
+
+      if(res) {
+        this.typeBaremes = res;
+      }
+    });
     this.tauxCommissionIntermediaireList$ = this.store.pipe(select(tauxCommissionIntermediaireSelector.tauxcommissionintermediaireList));
     this.store.dispatch(tauxCommissionIntermediaireAction.loadTauxCommissionIntermediaire());
     this.tauxCommissionIntermediaireList$.pipe(takeUntil(this.destroy$))
@@ -1816,12 +1824,70 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
     importerBareme() {
       this.importer = true;
       console.log(this.importer);
-     /*  this.plafondService.$getBaremesConfigSansTaux(this.bareme).subscribe((rest)=>{
+     /*  this.plafondService.$getBaremesConfigSansTauxByBareme(this.baremeSeleted.id).subscribe((rest)=>{
         console.log(rest)
       }) */
 
+      if(this.baremeSeleted.ageMin) {
+        console.log("================rest==1=============");
+    this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
+      if (value) {
+         value.adherentDtoList;
+
+        if(value.adherentDtoList.length == 1) {
+
+          this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance;
+          this.plafondService.accordByAgeMin(this.baremeSeleted).subscribe((rest)=> {
+
+           // console.log("===============================",rest);
+            if(rest) {
+              this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
+
+            } else {
+              this.addMessage('error', 'Revoir l\'âge du souscripteur',
+              'L\'âge minimal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMin+ ' ans');
+          
+            }
+          }); 
+          
+
+        }
+      }
+    });
+
+       
+      }
+
+      if(this.baremeSeleted.ageMax) {
+        console.log("================rest=====2==========");
+        this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
+          if (value) {
+             value.adherentDtoList;
+    
+            if(value.adherentDtoList.length == 1) {
+    
+              this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance;
+              this.plafondService.accordByAgeMax(this.baremeSeleted).subscribe((rest)=> {
+    
+                console.log("================rest===============",rest);
+                if(rest) {
+                  this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
+    
+                } else {
+                  this.addMessage('error', 'Revoir l\'âge du souscripteur',
+                  'L\'âge maximal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMax+ ' ans');
+              
+                }
+              }); 
+              
+    
+            }
+          }
+        });
+    
+           
+          }
       
-      this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTaux({typeBareme: this.bareme}));
     }
 
     changeTypeDureeGroupe(){

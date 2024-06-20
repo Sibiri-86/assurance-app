@@ -15,6 +15,7 @@ export const setPlafondGroupe = createAction('[App Init] set Plafond Groupe',  p
 export const importPlafond = createAction('[App Init] import Plafond',  props<{file: File}>());
 export const loadPlafondConfig = createAction('[App Init] load Plafond config', props<{typeBareme: string, taux: number}>());
 export const loadPlafondConfigSansTaux = createAction('[App Init] load sans taux Plafond config', props<{typeBareme: string}>());
+export const loadPlafondConfigSansTauxByBareme = createAction('[App Init] load sans taux Plafond config', props<{idBareme: string}>());
 export const setPlafondConfig = createAction('[App Init] set Plafond config',  props<PlafondConfig>());
 /**action pour creer le bareme */
 export const createBareme = createAction('[App Init] Create Bareme', props<Bareme>());

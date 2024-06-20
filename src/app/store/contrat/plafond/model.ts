@@ -29,6 +29,7 @@ export interface Bareme {
     baremeFamilleActe?: Array<PlafondFamilleActe>;
     ageMin?: number;
     ageMax?: number;
+    dateNaissance?: Date;
 }
 
 export interface BaremeList {

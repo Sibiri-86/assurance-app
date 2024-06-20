@@ -890,7 +890,8 @@ changeActeANdSousActe(plafond: PlafondFamilleActe) {
 
   ajouterBareme(){
     this.dispplayDialogueBareme = true;
-    if(this.baremeList) {
+    console.log("==================",this.typeBareme);
+  /*  if(this.baremeList) {
       
       this.baremeList.forEach(bareme=>{
         if(bareme.typeBareme) {
@@ -899,8 +900,8 @@ changeActeANdSousActe(plafond: PlafondFamilleActe) {
           
         }
       })
-    }
-    this.typeBareme
+    }*/
+    //this.typeBareme
   }
   controleDateFamilleActe(dateEffet: Date) {
     this.dateEffetFamilleActe = dateEffet;

@@ -1715,10 +1715,11 @@ editerPrestation(pref: BonPriseEnCharge) {
       this.prestations = res;
       console.log('prestationssssssssss ==>', this.prestations);
       this.prestationsList = this.prestations;
+      pref.prestation = this.prestations; 
     }
    }));
   /* this.prestationsList = this.prestations; */
-  pref.prestation = this.prestations; 
+  
   this.prestationForm.get('id').setValue(pref?.id);
   this.prestationForm.get('typeBon').setValue(pref?.typeBon);
   this.prestationForm.get('prestataire').setValue(pref?.prestataire);

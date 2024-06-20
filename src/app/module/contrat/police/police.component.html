@@ -344,13 +344,13 @@
                     </div> -->
                 <div class="p-field" >
                     <label for="typeBareme" class="p-sr-only">TypeBareme</label>
-                    <p-dropdown dataKey="id" inputId="typeBareme" [filter]="true" showClear="true"
-                        [options]="typeBareme" placeholder="Sélectionnez le type-barème"
-                        [(ngModel)]="bareme"></p-dropdown>
+                    <p-dropdown optionLabel="description"  [filter]="true" showClear="true"
+                        [options]="typeBaremes" placeholder="Sélectionnez le type-barème"
+                        [(ngModel)]="baremeSeleted"></p-dropdown>
                 </div>
 
                 <div class="p-field" >
-                    <button pButton [disabled]="!bareme" pRipple type="button" label="Importer barème standard"
+                    <button pButton [disabled]="!baremeSeleted" pRipple type="button" label="Importer barème standard"
                         (click)="importerBareme()"></button>
                 </div>
             </div>

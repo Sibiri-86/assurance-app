@@ -68,6 +68,15 @@ deleteBareme(bareme: Bareme): Observable<any> {
   return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/${bareme.id}`, bareme);
 }
 
+accordByAgeMin(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/ageMin`, bareme);
+}
+
+accordByAgeMax(bareme: Bareme): Observable<any> {
+  // @FIXME: post request
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.BAREME)}/ageMax`, bareme);
+}
 $getBaremes(): Observable<BaremeList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}`).pipe(
@@ -76,6 +85,13 @@ $getBaremes(): Observable<BaremeList> {
   );
 }
 
+$findBaremes(): Observable<Bareme[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/list`).pipe(
+    map((response: Bareme[]) => response),
+    catchError(this.handleError())
+  );
+}
 $getBaremesConfig(typeBareme: string, taux: number): Observable<PlafondConfig> {
   // @FIXME: get request
   if(typeBareme && taux){
@@ -90,6 +106,16 @@ $getBaremesConfigSansTaux(typeBareme: string): Observable<PlafondConfig> {
   // @FIXME: get request
   if(typeBareme){
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/config/${typeBareme}`).pipe(
+    map((response: PlafondConfig) => response),
+    catchError(this.handleError())
+  );
+  }
+}
+
+$getBaremesConfigSansTauxByBareme(idBareme: string): Observable<PlafondConfig> {
+  // @FIXME: get request
+  if(idBareme){
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.BAREME)}/config-bareme/${idBareme}`).pipe(
     map((response: PlafondConfig) => response),
     catchError(this.handleError())
   );
