@@ -33,6 +33,9 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import * as featureActionPrefinancement from '../../../store/prestation/prefinancement/action';
 import { formatDate } from '@angular/common';
 import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/service';
+import * as featureActionDepense from '../../../store/reporting/depense-famille/action';
+import { Check } from 'src/app/store/reporting/depense-famille/model';
+import * as depenseListSelector from '../../../store/reporting/depense-famille/selector';
 
 
 @Component({
@@ -51,6 +54,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   clonedPlafondConfiguration: { [s: string]: OrdreReglement } = {};
   dateDebut: any;
   dateFin: any;
+  check: Check = {};
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -68,6 +72,16 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     .subscribe(bytes => {
         if (bytes) {
                 printExcelfFile(bytes);
+        }
+    });
+
+    this.store.dispatch(featureActionDepense.setReportDepenseFamille(null));
+    this.store.pipe(select(depenseListSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+    .subscribe(bytes => {
+      //console.log("========================displayExcel===", this.displayExcel);
+        if (bytes) {
+          printExcelfFile(bytes);
+                
         }
     });
 
@@ -163,12 +177,18 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
     } else {
-      this.depenseFamilleService.$getReportConsommationWaveExcel(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')).subscribe((rest)=>{
+      console.log("dateD ===>", formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'));
+      console.log("dateF ===>", formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'));
+      this.check.dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      this.check.dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+      this.report.check = this.check;
+      this.store.dispatch(featureActionDepense.FetchReportConsommationWaveExcel(this.report));
+      /* this.depenseFamilleService.$getReportConsommationWaveExcel(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')).subscribe((rest)=>{
           if(rest) {
             printExcelfFile(rest);
           }
           
-        });
+        }); */
   }
 }
 }

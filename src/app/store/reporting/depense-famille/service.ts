@@ -51,14 +51,20 @@ constructor(private http: HttpClient) {
         check, {responseType: 'arraybuffer'});
       }
 
-      $getReportConsommationWaveExcel(dateD: string, dateF: string): Observable<Byte> {
+      $getReportConsommationWaveExcel(check: Check): Observable<ArrayBuffer> {
+        // @FIXME: get request
+        return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/consommation-wave/report-excel`,
+        check, {responseType: 'arraybuffer'});
+      }
+
+      /* $getReportConsommationWaveExcel(dateD: string, dateF: string): Observable<Byte> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/consommation-wave/report-excel`,{params :
             this.createRequestOption({dateD, dateF})}).pipe(
-              map((response: Byte) => response),
+              map((response: arraybuffer) => response),
               catchError(this.handleError())
           );
-        }
+        } */
 
    
     private createRequestOption = (req?: any): HttpParams => {

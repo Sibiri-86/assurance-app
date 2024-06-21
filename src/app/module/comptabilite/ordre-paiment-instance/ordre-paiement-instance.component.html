@@ -26,10 +26,10 @@
                     </div>
                     
                 </div> 
-                <!-- <ng-template pTemplate="right">
-                    <button pButton pRipple icon="pi pi-file-excel" label="Conso wave" pTooltip="Consommations wave" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple icon="pi pi-file-excel" label="Conso wave" pTooltip="Consommations wave" class="p-button-rounded p-button-secondary" (click)="imprimerFormulaireExcel()"></button>
 
-                </ng-template> -->
+                </ng-template>
 
 			</p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','assurePrinc.nom','assurePrinc.prenom','police.nom','typePaiement']"

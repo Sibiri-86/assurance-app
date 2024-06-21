@@ -83,10 +83,24 @@ export class DepenseFamilleEffects {
                     this.depenseFamilleService.$getReportDepenseFamilleExcel(report).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.setReportDepenseFamille({reportFile: value})
+                            featureActions.setReportConsommationWaveExcel({reportFile: value})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                     ))
             ));
+
+            FetchReportConsommationWaveExcel$ = createEffect(() =>
+                this.actions$.pipe(
+                    ofType(featureActions.FetchReportConsommationWaveExcel),
+                    mergeMap((report: Check) =>
+                        this.depenseFamilleService.$getReportConsommationWaveExcel(report).pipe(
+                            switchMap(value => [
+                                GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                                featureActions.setReportDepenseFamille({reportFile: value})
+                            ]),
+                            catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                            // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                        ))
+                ));
 }

@@ -35,6 +35,8 @@ export interface Check {
     tranches?: Array<Tranche>;
     display?: Boolean;
     taux?: number;
+    dateD?: string;
+    dateF?: string;
 }
 
 export interface Tranche  {
