@@ -83,7 +83,7 @@ export class DepenseFamilleEffects {
                     this.depenseFamilleService.$getReportDepenseFamilleExcel(report).pipe(
                         switchMap(value => [
                             GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                            featureActions.setReportConsommationWaveExcel({reportFile: value})
+                            featureActions.setReportDepenseFamille({reportFile: value})
                         ]),
                         catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                         // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))

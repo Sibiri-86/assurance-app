@@ -27,7 +27,7 @@
                     
                 </div> 
                 <ng-template pTemplate="right">
-                    <button pButton pRipple icon="pi pi-file-excel" label="Conso wave" pTooltip="Consommations wave" class="p-button-rounded p-button-secondary" (click)="imprimerFormulaireExcel()"></button>
+                    <button pButton pRipple icon="pi pi-file-excel" label="Consommations Excel" pTooltip="Consommations Excel" class="p-button-rounded p-button-secondary" (click)="imprimerFormulaireExcel()"></button>
 
                 </ng-template>
 
@@ -187,6 +187,22 @@
                     </div>
                 </ng-template>
             </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [maximizable]="true" [(visible)]="displayTypeFichier" header="Choisissez le type de fichier (Wave ou OM)" [modal]="true" [style]="{width: '500px'}"> 
+            <ng-template pTemplate="content">
+                <div class="card">
+                    <div class="p-formgroup-inline">
+                        <div class="p-field p-col">
+                            <button pButton pRipple type="button" icon="pi pi-file-excel" class="p-button-rounded p-button-info p-button-lg" (click)="importerExcelWave()" label="Wave"></button>
+                        </div>
+                        <div class="p-field p-col">
+                            <button pButton pRipple type="button" icon="pi pi-file-excel" class="p-button-rounded p-button-warning p-button-lg" (click)="importerExcelOrangeMoney()" label="Orange Money"></button>
+                        </div>
+                    </div>
+                     
                 </div>
             </ng-template>
         </p-dialog>

@@ -23,7 +23,7 @@ import { Medecin } from 'src/app/store/parametrage/medecin/model';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
 
-import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { printExcelfFile, printPdfFile } from 'src/app/module/util/common-util';
@@ -55,7 +55,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   dateDebut: any;
   dateFin: any;
   check: Check = {};
-
+  displayTypeFichier = false;
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,
@@ -173,6 +173,37 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   }
 
   imprimerFormulaireExcel(ordre: OrdreReglement){
+    this.displayTypeFichier = true;
+    /**if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+      this.addMessage('error', 'Dates  invalide',
+      'La date de debut ne peut pas être supérieure à celle du de fin');
+    } else {
+      console.log("dateD ===>", formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'));
+      console.log("dateF ===>", formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'));
+      this.check.dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      this.check.dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+      this.check.typePaiement = TypePaiement.WAVE;
+      this.report.check = this.check;
+      this.store.dispatch(featureActionDepense.FetchReportConsommationWaveExcel(this.report));
+  }*/
+}
+  importerExcelWave(){
+      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        console.log("dateD ===>", formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'));
+        console.log("dateF ===>", formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'));
+        this.check.dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        this.check.dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+        this.check.typePaiement = TypePaiement.WAVE;
+        this.report.check = this.check;
+        this.store.dispatch(featureActionDepense.FetchReportConsommationWaveExcel(this.report));
+        this.displayTypeFichier = false;
+      }
+  }
+
+  importerExcelOrangeMoney(){
     if(this.dateDebut.getTime()> this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
       'La date de debut ne peut pas être supérieure à celle du de fin');
@@ -181,14 +212,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       console.log("dateF ===>", formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'));
       this.check.dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       this.check.dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+      this.check.typePaiement = TypePaiement.ORANGE_MONEY;
       this.report.check = this.check;
       this.store.dispatch(featureActionDepense.FetchReportConsommationWaveExcel(this.report));
-      /* this.depenseFamilleService.$getReportConsommationWaveExcel(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')).subscribe((rest)=>{
-          if(rest) {
-            printExcelfFile(rest);
-          }
-          
-        }); */
-  }
+      this.displayTypeFichier = false;
+    }
 }
 }

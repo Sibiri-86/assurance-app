@@ -5,6 +5,7 @@ import { Groupe } from '../../contrat/groupe/model';
 import { Police } from '../../contrat/police/model';
 import { Garantie } from '../../parametrage/garantie/model';
 import { TypePrestataire } from '../../parametrage/type-prestataire/model';
+import { TypePaiement } from '../../prestation/prefinancement/model';
 
 import { Prestation } from '../../prestation/tierPayant/model';
 
@@ -37,6 +38,7 @@ export interface Check {
     taux?: number;
     dateD?: string;
     dateF?: string;
+    typePaiement?: TypePaiement;
 }
 
 export interface Tranche  {
