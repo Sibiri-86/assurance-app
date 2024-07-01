@@ -27,7 +27,8 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 
-                                <th pSortableColumn="numero" >Date de Saisie<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" >Date de depôt<p-sortIcon field="numero"></p-sortIcon></th>
+                                <th pSortableColumn="numero" >Date de Paiement<p-sortIcon field="numero"></p-sortIcon></th>
                                 <th pSortableColumn="numero" >Numéro Facture<p-sortIcon field="numero"></p-sortIcon></th>
                                 <th pSortableColumn="numero" >Numéro Sinistre<p-sortIcon field="numero"></p-sortIcon></th>
                                 <th pSortableColumn="etat" >Prestataire<p-sortIcon field="etat"></p-sortIcon></th>
@@ -39,7 +40,8 @@
                         <ng-template pTemplate="body" let-ordre>
                             <tr>
                                 
-                                <td><span class="p-column-title" >{{ordre?.dateSaisie  | formatTableValue : 'date'}}</span></td>
+                                <td><span class="p-column-title" >{{ordre?.dateDeclaration  | formatTableValue : 'date'}}</span></td>
+                                <td><span class="p-column-title" >{{ordre?.ordreReglementTierPayant?.datePaiement  | formatTableValue : 'date'}}</span></td>
                                 <td><span class="p-column-title" >{{ordre.numeroFacture}}</span></td>
                                 <td><span class="p-column-title" >{{ordre.numeroSinistre}}</span></td>
                                 <td><span class="p-column-title" >{{ordre?.prestataire?.libelle}}</span></td>

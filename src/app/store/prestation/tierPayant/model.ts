@@ -39,6 +39,7 @@ export interface OrdreReglementTierPayant{
     montantPaye?: number;
     isPaiement?: Boolean;
     prestataire?: string;
+    datePaiement?:Date;
 }
 
 export interface SinistreTierPayant {
