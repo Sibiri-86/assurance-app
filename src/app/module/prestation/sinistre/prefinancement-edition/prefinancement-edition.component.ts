@@ -1354,17 +1354,31 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
     this.prefinancementModel.adherent = this.adherentSelected;
     this.prefinancementList.push(this.prefinancementModel);
     
-    if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) {
+    if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) { 
       if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.montantPlafond1  ) {
+        this.addMessage('error', 'Plafond atteint',
+          'Vous avez atteint votre plafond pour cette garantie');
 
         console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
-        myForm.patchValue({
-          sort: Sort.ACCORDE,
-          observation: "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
-          montantRembourse: this.montantPlafond1 - this.montantConsomme,
-          montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
-          montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
-        })
+        console.log("============2222========== ",this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
+        if(this.montantConsomme + this.prestationPopForm.get('montantRembourse').value <= this.montantPlafond1) {
+            myForm.patchValue({
+              sort: Sort.ACCORDE,
+              observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+              montantRembourse: this.montantPlafond1 - this.montantConsomme,
+              montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
+              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+            })
+        } else {
+            myForm.patchValue({
+              sort: Sort.REJETE,
+              observation: "Vous avez atteint votre plafond pour cette garantie",
+              montantRembourse: 0,
+              montantRestant:   0,
+              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value
+            })
+        }
+        
        
     }
     }
