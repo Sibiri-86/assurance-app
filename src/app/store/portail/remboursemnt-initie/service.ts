@@ -21,7 +21,7 @@ constructor(private http: HttpClient) {
 }
 
 
-posRemboursement(idAdherent: string, typePaiement: TypePaiement, numeroOrange: string, numeroMobicash: string,
+posRemboursement(idAdherent: string,id: string, typePaiement: TypePaiement, numeroOrange: string, numeroMobicash: string,
   numeroVirement: string, nomBenefiniciaire: string, files: File[]): Observable<any> {
     // @FIXME: post request
     const data: FormData = new FormData();
@@ -35,6 +35,7 @@ posRemboursement(idAdherent: string, typePaiement: TypePaiement, numeroOrange: s
     data.append('numeroMobicash', numeroMobicash);
     data.append('numeroVirement', numeroVirement);
     data.append('nomBenefiniciaire', nomBenefiniciaire);
+    data.append('id', id);
     
     let headers = new HttpHeaders();
     console.log("=====data===========", data);
@@ -46,9 +47,9 @@ posRemboursement(idAdherent: string, typePaiement: TypePaiement, numeroOrange: s
     
   }
 
-  $getRemboursement(): Observable<RemboursementList> {
+  $getRemboursement(numero: number): Observable<RemboursementList> {
     // @FIXME: get request
-    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/createRemboursement`).pipe(
+    return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/createRemboursement/${numero}`).pipe(
         map((response: RemboursementList) => response),
         catchError(this.handleError())
     );

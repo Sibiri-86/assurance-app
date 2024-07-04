@@ -443,6 +443,8 @@ findMontantPlafond(event){
       this.montantPlafond1 = rest;
       console.log("==========this.montantPlafond1==========", this.montantPlafond1);
      
+    } else {
+      this.montantPlafond1 = 0;
     }
      
   });

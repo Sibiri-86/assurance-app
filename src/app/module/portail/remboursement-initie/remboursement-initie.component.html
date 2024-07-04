@@ -175,7 +175,7 @@
                         
               
                         <p-fieldset legend="Liste des factures" toggleable="true">
-                            <p-table #dt [value]="files" dataKey="id" editMode="row"  [globalFilterFields]="['name']" [autoLayout]="true" [columns]="cols" 
+                            <p-table #dt [value]="documentsFile" dataKey="id" editMode="row"  [globalFilterFields]="['nom']" [autoLayout]="true" [columns]="cols" 
                             [rowHover]="true"  styleClass="p-datatable-customers"
                             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" responsiveLayout="scroll" [rows]="5" [paginator]="true" [showCurrentPageReport]="true">
                                
@@ -203,10 +203,10 @@
                                 <ng-template  pTemplate="body" let-rowData let-ri="rowIndex" >
                                     <tr>
                                 
-                                        <td > <i class="pi pi-file-pdf">{{rowData?.name}}</i></td>
+                                        <td > <i class="pi pi-file-pdf">{{rowData?.nom}}</i></td>
                                        
                                         <td style="text-align:center">
-                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(rowData,ri)"></button>
+                                            <button pButton pRipple type="button"   icon="pi pi-trash" class="p-button-danger p-mb-2" (click)="supprimerPrestation(ri)"></button>
 
                     
                                             </td>
@@ -222,7 +222,7 @@
                                 <button pButton pRipple label="Quitter" icon="pi pi-check" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button  pButton [disabled]="!files.length || !prestationForm.value.typePaiement" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button  pButton [disabled]="!documentsFile.length || !prestationForm.value.typePaiement" pRipple  label="Valider" icon="pi pi-check" type="submit" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                </form>

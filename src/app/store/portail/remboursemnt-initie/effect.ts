@@ -21,11 +21,11 @@ export class RemboursementEffects {
     createRemboursement$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.createRemboursement),
-        mergeMap(({idAdherent, typePaiement, numeroOrange, numeroMobicash, numeroVirement, nomBenefiniciaire, files}) =>
-            this.remboursementService.posRemboursement(idAdherent,typePaiement, numeroOrange, numeroMobicash, numeroVirement, nomBenefiniciaire,files).pipe(
+        mergeMap(({idAdherent,numero,id, typePaiement, numeroOrange, numeroMobicash, numeroVirement, nomBenefiniciaire, files}) =>
+            this.remboursementService.posRemboursement(idAdherent,id,typePaiement, numeroOrange, numeroMobicash, numeroVirement, nomBenefiniciaire,files).pipe(
                 switchMap(value => [
                     GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
-                    featureActions.loadRemboursement()
+                    featureActions.loadRemboursement({numero})
                 ]),
                 catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
@@ -35,8 +35,8 @@ export class RemboursementEffects {
         loadRemboursement$ = createEffect(() =>
         this.actions$.pipe(
             ofType(featureActions.loadRemboursement),
-            mergeMap(() =>
-                this.remboursementService.$getRemboursement().pipe(
+            mergeMap(({numero}) =>
+                this.remboursementService.$getRemboursement(numero).pipe(
                     switchMap(value => [
                         // GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
                         featureActions.setRemboursement(value)

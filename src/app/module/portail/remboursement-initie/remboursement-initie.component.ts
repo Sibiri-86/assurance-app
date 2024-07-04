@@ -49,7 +49,7 @@ import { PrefinancementService } from 'src/app/store/prestation/prefinancement/s
 import { Router } from '@angular/router';
 import { Sort } from '../../common/models/sort.enum';
 import { takeUntil } from 'rxjs/operators';
-import { Remboursement } from 'src/app/store/portail/remboursemnt-initie/model';
+import { DocumentFacture, Remboursement } from 'src/app/store/portail/remboursemnt-initie/model';
 import { KeycloakService } from 'keycloak-angular';
 
 
@@ -123,6 +123,9 @@ export class RemboursementInitieComponent implements OnInit, OnDestroy {
   prestationBon: Prestation = {};
   documents: string[];
   files: File[] = [];
+  documentsFile: DocumentFacture[] = [];
+  document: DocumentFacture = {};
+  documentsFiltre: DocumentFacture[] = [];
   filesModife: File[] = [];
   fileTree: TreeNode[]= [];
   fiTree: TreeNode = {};
@@ -432,7 +435,6 @@ findMontantPlafond(event){
 
    
     this.remboursementList$ = this.store.pipe(select(remboursementSelector.remboursementList));
-    this.store.dispatch(featureActionRemboursement.loadRemboursement());
     this.remboursementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -461,7 +463,7 @@ findMontantPlafond(event){
     });
     this.keycloakService.loadUserProfile().then(profile => {
       this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:new Date(), matricule: parseInt(profile.username)}));;
-      
+      this.store.dispatch(featureActionRemboursement.loadRemboursement({numero: parseInt(profile.username, 10)}));
     });
 
 
@@ -516,9 +518,10 @@ findMontantPlafond(event){
     if(event.files) {
      
       this.files = event.files;
-      /* for(let i=0; i< event.files.length; i++) {
-        this.files.push(event.files[i]);
-      } */
+       for(let i=0; i< event.files.length; i++) {
+        this.document.nom = event.files[i].name;
+        this.documentsFile.push(this.document);
+      } 
       
       form.clear();
       
@@ -585,7 +588,7 @@ findMontantPlafond(event){
     this.prestationListPrefinancementFilter = this.prestationListPrefinancement;
   }
 
-  supprimerPrestation(file: File, i: number) {
+  supprimerPrestation( i: number) {
     this.confirmationService.confirm({
       message: 'voulez-vous supprimer le fichier',
       header: 'Confirmation',
@@ -594,17 +597,22 @@ findMontantPlafond(event){
         if(i>0) {
           for(let j= 0; j< i; j++) {
             this.filesModife.push(this.files[j]);
+
+            this.documentsFiltre.push(this.documentsFile[j]);
           }
           for(let j= i+1; j< this.files.length ; j++) {
-            this.filesModife.push(this.files[j])
+            this.filesModife.push(this.files[j]);
+            this.documentsFiltre.push(this.documentsFile[j]);
           }
   
         }else {
           for(let j= 1; j< this.files.length; j++) {
             this.filesModife.push(this.files[j]);
+            this.documentsFiltre.push(this.documentsFile[j]);
           }
         }
         this.files = this.filesModife;
+        this.documentsFile = this.documentsFiltre;
         this.filesModife = [];
       },
     });
@@ -711,6 +719,18 @@ verifieDateSoins(event){
     
    
   }
+
+  modifier(remboursement: Remboursement) {
+    this.displayFormPrefinancement = true;
+
+    this.prestationForm.patchValue(remboursement);
+    this.displayFormPrefinancement = true;
+    this.prestationForm.get('dateSaisie').setValue(new Date());
+    this.documentsFile = remboursement.documents;
+    console.log("===========bon==================");
+    console.log(this.prestationForm.value);
+     console.log("==============bon===============");
+  }
  
   /** enregistrement cas de prefinancement */
   onCreate() {
@@ -720,10 +740,10 @@ verifieDateSoins(event){
     this.remboursement.files = this.files;
     this.remboursement.adherent = this.adherentSelected;
     console.log("===========bon==================");
-    console.log(this.adherentSelected.id);
+    console.log(this.remboursement );
      console.log("==============bon===============");
 
-   this.store.dispatch(featureActionRemboursement.createRemboursement({ idAdherent: this.adherentSelected.id,typePaiement: this.remboursement.typePaiement,
+   this.store.dispatch(featureActionRemboursement.createRemboursement({ idAdherent: this.adherentSelected.id,numero:this.adherentSelected.numero, id:this.remboursement.id, typePaiement: this.remboursement.typePaiement,
     numeroOrange:this.remboursement.numeroOrange, numeroMobicash:this.remboursement.numeroMobicash, numeroVirement:this.remboursement.numeroVirement, nomBenefiniciaire: this.remboursement.nomBenefiniciaire,  files:this.files}));
   // this.prefinancementModel.prestation = this.prestationForm.get('itemsPrestation').value;
  
@@ -734,6 +754,7 @@ verifieDateSoins(event){
    this.displayFormPrefinancement = false;
    }
 
+   
   // permet d'enregistrer une prestation par famille
   addPrestation(){
     this.prefinancementModel.dateDeclaration = this.prestationForm.get('dateDeclaration').value;
