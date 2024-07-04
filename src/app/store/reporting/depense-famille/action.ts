@@ -12,6 +12,8 @@ export const updateDepenseFamille = createAction('[App Init] update Depense Fami
 export const updateDepenseFamilleActe = createAction('[App Init] update Depense Famille acte',props<Check>());
 export const FetchReportBilan = createAction('[Report] Fetch Report Bilan', props<ExerciceComptable>());
 export const FetchReportDepenseFamilleExcel = createAction('[Report] Fetch Depense Famille excel', props<Report>());
+export const FetchReportConsommationWaveExcel = createAction('[Report] Fetch Consommation Wave excel', props<Report>());
+export const setReportConsommationWaveExcel = createAction('[Report] set Consommation Wave excel', props<{reportFile: ArrayBuffer}>());
 export const setReportDepenseFamilleExcel = createAction('[set Report] set Report DepenseFamille excel', props<{reportFile: ArrayBuffer}>());
 
 
