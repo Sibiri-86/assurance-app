@@ -1291,6 +1291,12 @@ export class TierPayantEditionComponent implements OnInit {
     }*/
 
     changeGarantie(garantie) {
+        console.log("==============================",this.prestationAdd.adherent);
+        if(!this.prestationAdd.adherent.isPlafondAnnuel) {
+          this.addMessage('warn', 'Calcul plafond annuel',
+            'Veuillez recliquer dans le champ matricule et dans le vide ensuite pour recalculer le plafond');
+            
+        }
         console.log("garantie=============>", garantie);
         if(garantie.value?.code == "FP") {
          this.displayFP = true;
@@ -1578,7 +1584,7 @@ export class TierPayantEditionComponent implements OnInit {
             console.log("=============this.montantPlafond12=============",this.montantPlafond1);
             console.log("=============this.montantPlafond12=============",this.montantConsomme);
 
-            if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * (this.prestationAdd?.taux?.taux / 100)) ) > this.montantPlafond1) {
+            if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * (this.prestationAdd?.taux?.taux / 100)) ) >= this.montantPlafond1) {
 
                 
                 this.prestationAdd.sort = Sort.ACCORDE;
@@ -1587,10 +1593,29 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
                 this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                 
-             //   this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationAdd.montantRembourse;
-               
+                
 
-              //  this.prefinancement.montantRestant = this.prefinancement.montantReclame - this.prefinancement.montantPaye;
+                this.addMessage('error', 'Plafond atteint',
+                    'L\'assuré(e) a atteint son plafond pour cette garantie');
+
+
+          
+                  console.log("============1==========",this.montantPlafond1,"====",this.prestationAdd.montantRembourse , "=",this.montantConsomme);
+                  console.log("============2222========== ",this.montantConsomme + this.prestationAdd.montantRembourse);
+
+                  if(this.montantConsomme + this.prestationAdd.montantRembourse <= this.montantPlafond1) {
+                    this.prestationAdd.sort = Sort.ACCORDE;
+                    this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. . L'assuré(e) devra prendre en charge  " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.baseRemboursement))) ;
+                   
+                    this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
+                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                  } else {
+                    this.prestationAdd.sort = Sort.ACCORDE;
+                    this.prestationAdd.observation = "L'assuré(e) a atteint son plafond pour cette garantie";
+                   
+                    this.prestationAdd.montantRembourse = 0;
+                    this.prestationAdd.montantRestant =  0;
+                  }
             }
         }
 
@@ -1598,6 +1623,16 @@ export class TierPayantEditionComponent implements OnInit {
             this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
 
         }
+
+        if(this.montantConsomme + this.adherentSelected.montantPlafondAnnuelRestant >= this.adherentSelected.montantPlafondAnnuel) {
+            this.addMessage('error', 'Plafond global atteint',
+              'L\'assuré(e) n\'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat');
+              this.prestationAdd.montantRembourse = 0;
+              this.prestationAdd.sort =Sort.REJETE;
+              this.prestationAdd.montantRestant = 0;
+              this.prestationAdd.montantPaye = this.prestationAdd.baseRemboursement;
+              this.prestationAdd.observation = "L'assuré(e) n'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat";
+           }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
                 if(!this.prestationAdd.observation) {

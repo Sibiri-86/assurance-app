@@ -438,7 +438,7 @@
                                 
                                 <div class="p-field p-col">
                                     <label for="lastname2">Acte <span class="required">*</span></label>
-                                    <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="listActe" 
+                                    <p-dropdown dataKey="id" [disabled]="!adherentSelected?.isPlafondAnnuel" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" [options]="listActe" 
                                     formControlName="acte" optionLabel="acte.libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
                                 </div>  
                                 

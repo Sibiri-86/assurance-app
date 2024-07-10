@@ -604,7 +604,7 @@
 
                <div class="p-field p-col">
                    <label for="acte">Acte<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                   <p-dropdown dataKey="id" inputId="acte" [disabled]="!prestationAdd.familleActe" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
+                   <p-dropdown dataKey="id" inputId="acte" [disabled]="!prestationAdd.familleActe || !prestationAdd.adherent?.isPlafondAnnuel" [autoDisplayFirst]="false" [filter]="true" showClear="true" placeholder="Select acte"
                                [options]="listActe"  name="acte" [(ngModel)]="prestationAdd.acte" optionLabel="acte.libelle" (onChange)="selectActe($event)"></p-dropdown>
                </div>
 

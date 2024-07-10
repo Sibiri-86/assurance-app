@@ -367,7 +367,7 @@
                             
                             <div class="p-field p-col">
                                 <label for="lastname2">Acte <span class="required">*</span></label>
-                                <p-dropdown dataKey="id" inputId="acte"  [autoDisplayFirst]="false" [filter]="true" showClear="true" 
+                                <p-dropdown dataKey="id" inputId="acte" [disabled]="!adherentSelected?.isPlafondAnnuel"  [autoDisplayFirst]="false" [filter]="true" showClear="true" 
                                 [options]="listActe" formControlName="acte" optionLabel="acte.libelle" (onChange)="selectActe($event)"></p-dropdown>
                             </div>  
                             
@@ -376,7 +376,7 @@
                                 <p-dropdown  [filter]="true"
                                             showClear="true" [options]="listSousActe"
                                             formControlName="sousActe"  [autoDisplayFirst]="false"
-                                            optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe(); findMontantConsomme($event); findTaux()"></p-dropdown>      
+                                            optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe(); findMontantConsomme($event); findTaux(); findMontantPlafond($event)"></p-dropdown>      
                             </div>
                         </div>
                             

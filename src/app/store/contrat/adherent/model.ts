@@ -60,6 +60,9 @@ export interface Adherent{
     adherentPrincipalfullName?: string;
     maj?:boolean;
     isCouvert?:boolean;
+    montantPlafondAnnuel?:number;
+    montantPlafondAnnuelRestant?:number;
+    isPlafondAnnuel?:boolean;
     
 }
 
