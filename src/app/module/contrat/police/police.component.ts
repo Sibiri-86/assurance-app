@@ -1858,7 +1858,7 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
        
       }
 
-      if(this.baremeSeleted.ageMax) {
+      if(this.baremeSeleted.ageMax ) {
         console.log("================rest=====2==========");
         this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
           if (value) {
@@ -1886,6 +1886,11 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     
            
+          }
+
+          if(!this.baremeSeleted.ageMax && !this.baremeSeleted.ageMin) {
+            this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
+
           }
       
     }
