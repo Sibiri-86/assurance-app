@@ -79,6 +79,7 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
   verificationDebitCredit: string = "1";
   operationSelected: Operation = {};
   report: Report = {};
+  montantJournalier: number;
   roleMajPaiement= this.keycloak.isUserInRole(Function.vue_maj_paiement);
   
   
@@ -138,7 +139,12 @@ export class ArreteJournauxComponent implements OnInit, OnDestroy {
         
         this.operationList = value.slice();
         this.operationSelected  = this.operationList[this.operationList.length -1]
-        
+        if(this.operationList) {
+          this.montantJournalier = 0;
+          this.operationList.forEach(ordr=> {
+            this.montantJournalier = this.montantJournalier+ordr.montantCredit;
+          });
+        }
        
       }
     });
