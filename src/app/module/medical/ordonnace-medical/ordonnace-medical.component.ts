@@ -73,6 +73,7 @@ import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { policeList } from 'src/app/store/contrat/police/selector';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { formatDate } from '@angular/common';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 
 
@@ -114,6 +115,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
     sinistreTierPayantDTOList: Array<SinistreTierPayant>;
     cols: any[];
     taux: Taux;
+    tauxSelect: Taux;
     displayPrestation = false;
     report: Report = {};
     sousActeListFilter: Array<SousActe>;
@@ -165,6 +167,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private adherentService: AdherentService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
+                private prefinancementService: PrefinancementService,
                 private breadcrumbService: BreadcrumbService) {
         this.breadcrumbService.setItems([{ label: 'Bon de prise en charge Pharmacie' }]);
     }
@@ -676,15 +679,25 @@ export class OrdonnaceMedicalComponent implements OnInit {
             });
         }
     }
+    calculTaux() {
+      this.prefinancementService.findTauxSousActe(this.adherentSelected.groupe.id, "62c6bd1c100c61638b86e261", this.adherentSelected?.id).subscribe((rest)=>{
+        if(rest) {
+          this.tauxSelect = rest;
+        } else {
+          this.tauxSelect = {};
+        }
+        
+      });
+    }
 
     calculMontant(i:number) {
         let myForm = (this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques') as FormArray).at(i);
         console.log('lmmmmmmmmmmmmmmmmmmmmmmmmmmmm', this.adherentSelected);   
-        myForm.patchValue({taux: this.adherentSelected.groupe.taux});
+        myForm.patchValue({taux: this.tauxSelect});
         if(this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration 
         && this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite) {
             myForm.patchValue({
-                montantRembourse: (((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite) * this.adherentSelected.groupe.taux.taux) / 100)
+                montantRembourse: (((this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].declaration * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite) * this.tauxSelect.taux) / 100)
                 // * this.prestationForm.get('ordonnanceMedicalProduitPharmaceutiques').value[i].quantite
         })
         

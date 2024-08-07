@@ -313,6 +313,7 @@
                                             <p-dropdown inputId="pharmaceutique" dataKey="id" [filter]="true"
                                                         showClear="true" [options]="produitPharmaceutiqueList"
                                                         formControlName="pharmaceutique"  [autoDisplayFirst]="false"
+                                                        (onChange)="calculTaux()"
                                                         optionLabel="libelle">
                                             </p-dropdown>
                                         </div>
