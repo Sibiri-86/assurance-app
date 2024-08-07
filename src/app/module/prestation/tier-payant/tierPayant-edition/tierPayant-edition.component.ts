@@ -1624,15 +1624,25 @@ export class TierPayantEditionComponent implements OnInit {
 
         }
 
-        if(this.montantConsomme + this.adherentSelected.montantPlafondAnnuelRestant >= this.adherentSelected.montantPlafondAnnuel) {
+        if( this.prestationAdd.montantRembourse >= this.adherentSelected.montantPlafondAnnuelRestant) {
             this.addMessage('error', 'Plafond global atteint',
               'L\'assuré(e) n\'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat');
-              this.prestationAdd.montantRembourse = 0;
+              if(this.adherentSelected.montantPlafondAnnuelRestant > 0) {
+                this.prestationAdd.montantRembourse = this.adherentSelected.montantPlafondAnnuelRestant;
+                this.prestationAdd.sort =Sort.ACCORDE;
+                this.prestationAdd.montantRestant = 0;
+                this.prestationAdd.montantPaye = this.prestationAdd.baseRemboursement - this.adherentSelected.montantPlafondAnnuelRestant;
+                this.prestationAdd.observation = "L'assuré(e) n'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat";
+             
+              } else {
+                this.prestationAdd.montantRembourse = 0;
               this.prestationAdd.sort =Sort.REJETE;
               this.prestationAdd.montantRestant = 0;
               this.prestationAdd.montantPaye = this.prestationAdd.baseRemboursement;
               this.prestationAdd.observation = "L'assuré(e) n'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat";
-           }
+           
+              }
+              }
             /* if(this.prefinancement.montantRestant < 0){
                 this.prestationAdd.sort = Sort.REJETE;
                 if(!this.prestationAdd.observation) {
