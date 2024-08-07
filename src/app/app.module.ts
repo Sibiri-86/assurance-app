@@ -351,6 +351,7 @@ import { MajPrestataireComponent } from './module/medical/majPrestataire/majPres
 import { AjoutActeComponent } from './module/contrat/avenant/ajout_acte/ajout_acte.component';
 import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
 import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
+import { MajPlafondComponent } from './module/contrat/avenant/maj_plafond/maj_plafond.component';
 
 @NgModule({
     imports: [
@@ -636,7 +637,8 @@ import { ConsommationPasseComponent } from './module/contrat/consommation-passe/
         MajPrestataireComponent,
         AjoutActeComponent,
         BilanComponent,
-        ConsommationPasseComponent
+        ConsommationPasseComponent, 
+        MajPlafondComponent
     ],
     providers: [
         {

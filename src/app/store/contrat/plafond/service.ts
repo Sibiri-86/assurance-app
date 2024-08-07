@@ -248,4 +248,14 @@ findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(adherent :Adherent):
   
 }
 
+$misAJourPlafondGroupeByExercice(groupeId: string, exoId: string): Observable<HttpResponse<Plafond>> {
+  return this.http.get<Plafond>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/misAJourPlafondGroupeByExercice`,
+      {params: createRequestOption({groupeId, exoId}), observe: 'response'});
+}
+
+enregistreMisAJourPlafondGroupeByExercice(Plafond: Plafond): Observable<any> {
+  // @FIXME: post request
+  return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/enregistreMisAJourPlafondGroupeByExercice`, Plafond);
+}
+ 
 }

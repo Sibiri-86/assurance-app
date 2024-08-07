@@ -207,7 +207,8 @@ export class AvenantModificationComponent implements OnInit {
   historiqueGroupes: HistoriqueGroupe[] = [];
   numero: number;
   exerciceList: Array<Exercice>;
-  exercice$: Observable<Exercice>;exerciceList$
+  exercice$: Observable<Exercice>;
+  exerciceList$: Observable<Array<Exercice>>;
   curentExercice: Exercice = {};
   historiquePlafondFamilleActePlafongConfig: Array<HistoriquePlafondFamilleActe> = [];
   historiquePlafondFamilleActePlafongModifier: Array<HistoriquePlafondFamilleActe> = [];

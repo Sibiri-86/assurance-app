@@ -1266,6 +1266,11 @@
             <app-ajout_acte [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantId"></app-ajout_acte>
         </p-tabPanel>
 
+        <p-tabPanel *ngIf="etat !=='VIEW'" header="MAJ PLAFOND ANNUELLE" leftIcon="pi pi-refresh" tooltip="MAJ PLAFOND ANNUELLE">
+
+            <app-maj_plafond [groupeListes]="groupeListes" [police] = "police" [exerciceRevenu] = "exerciceRevenu" [avenantId] = "avenantId"></app-maj_plafond>
+        </p-tabPanel>
+
     </p-tabView>
     <hr>
     <p-fieldset legend="Enregistrement de l'avenant" toggleable="true" [transitionOptions]="'400ms'" *ngIf="etat !=='VIEW'">

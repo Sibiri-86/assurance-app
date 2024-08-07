@@ -3,6 +3,7 @@ import { PlafondFamilleActe } from '../../parametrage/plafond/model';
 import { Groupe } from '../groupe/model';
 import { TypeBareme } from 'src/app/module/common/models/bareme.enum';
 import { Taux } from '../../parametrage/taux/model';
+import { Exercice } from '../exercice/model';
 
 export interface Plafond {
     id?: string;
@@ -14,6 +15,7 @@ export interface Plafond {
     groupe?: Groupe;
     plafondGlobalEvacuationSanitaire?: number;
     avenantId?: string;
+    exercice?:Exercice;
 }
 
 export interface PlafondConfig {
