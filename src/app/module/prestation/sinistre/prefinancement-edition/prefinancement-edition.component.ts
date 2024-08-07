@@ -1488,18 +1488,18 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
     this.prestationPopForm.get('coutUnitaire').value});
   }
 
-  if(this.montantConsomme + this.adherentSelected.montantPlafondAnnuelRestant+this.prestationPopForm.get('montantRembourse').value >= this.adherentSelected.montantPlafondAnnuel) {
+  if(this.prestationPopForm.get('montantRembourse').value >= this.adherentSelected.montantPlafondAnnuelRestant) {
     console.log(this.montantConsomme," 2 ", this.adherentSelected.montantPlafondAnnuelRestant," 3 ",this.prestationPopForm.get('montantRembourse').value," 4 ",this.adherentSelected.montantPlafondAnnuel)
     this.addMessage('error', 'Plafond global atteint',
       'L\'assuré(e) n\'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat');
-      if(this.adherentSelected.montantPlafondAnnuel - (this.adherentSelected.montantPlafondAnnuelRestant + this.prestationPopForm.get('montantRembourse').value) > 0) {
+      if(this.adherentSelected.montantPlafondAnnuelRestant  > 0) {
         const myForm2 = this.prestationPopForm;
         myForm2.patchValue({
         sort: Sort.ACCORDE,
         observation: "L'assuré(e) n'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat",
-        montantRembourse: this.adherentSelected.montantPlafondAnnuel-this.montantConsomme,
+        montantRembourse: this.adherentSelected.montantPlafondAnnuelRestant,
         montantRestant:   0,
-        montantSupporte:   this.prestationPopForm.get('baseRemboursement').value-(this.adherentSelected.montantPlafondAnnuel-this.montantConsomme )
+        montantSupporte:   this.prestationPopForm.get('baseRemboursement').value-this.adherentSelected.montantPlafondAnnuelRestant
         })
       } else {
         const myForm1 = this.prestationPopForm;
