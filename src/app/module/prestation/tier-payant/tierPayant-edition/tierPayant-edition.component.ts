@@ -160,6 +160,7 @@ export class TierPayantEditionComponent implements OnInit {
     plafondSousActe: CheckPlafond;
     exerciceSelected: Exercice = {};
     prestationsList: Prestation[]= [];
+    prestationsListWithBon: Prestation[]= [];
     prestationsList1: Prestation[]= [];
     prestationsList2: Prestation[]= [];
     prestationsList3: Prestation[]= [];
@@ -542,7 +543,7 @@ export class TierPayantEditionComponent implements OnInit {
               this.listFamilleActe = res;
               console.log("famillles actes ===================== >", this.listFamilleActe);
             });
-                this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherent({adherentId: this.adherentSelected.id}));
+                this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherentAndPrestataire({adherentId: this.adherentSelected.id, prestataireId:this.prefinancement.prestataire.id, typeBon:"PRISEENCHARGE"}));
 
                // this.onRowSelectBonAdherent();
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
@@ -2289,11 +2290,22 @@ export class TierPayantEditionComponent implements OnInit {
         }
         if(this.prestationBon.bonPriseEnCharge) {
             for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
-                this.prestationBon.bonPriseEnCharge.prestation[i].id = null;
+             //   this.prestationBon.bonPriseEnCharge.prestation[i].id = null;
+                this.prestationBon.bonPriseEnCharge.isRatache = true;
+                //this.prestationBon.bonPriseEnCharge.prestation[i]
                 this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationBon.bonPriseEnCharge.prestation[i].montantRembourse;
                 this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
-         
-                this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
+                this.prestationsListWithBon.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
+                //this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
+                console.log("this.prestationsList ===>", this.prestationsList);
+            }
+
+            if(this.prestationsListWithBon.length != 0) {
+                this.prestationsListWithBon.forEach(p=>{
+                    p.updatPrest = true;
+                    this.prestationsList.push(p);
+                });
+                console.log("this.prestationsList ===>", this.prestationsList);
             }
             
         }

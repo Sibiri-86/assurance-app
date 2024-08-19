@@ -2,13 +2,12 @@ import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/e
 import { Sort } from 'src/app/module/common/models/sort.enum';
 import { TypeBon } from 'src/app/module/medical/enumeration/bon.enum';
 import { Adherent } from '../../contrat/adherent/model';
-import { HistoriqueAvenant, TypeHistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
+import { HistoriqueAvenant } from '../../contrat/historiqueAvenant/model';
 import { Police } from '../../contrat/police/model';
 import { Acte } from '../../parametrage/acte/model';
 import { Banque } from '../../parametrage/Banques/model';
 import { Garantie } from '../../parametrage/garantie/model';
 import { Medecin } from '../../parametrage/medecin/model';
-import { PlafondSousActe } from '../../parametrage/plafond/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
 import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/model';
 import { SousActe } from '../../parametrage/sous-acte/model';
@@ -94,6 +93,7 @@ export interface BonPriseEnCharge {
     prestataire?: Prestataire;
     prestation?: Array<Prestation>;
     typeBon?: TypeBon;
+    isRatache?: Boolean;
 }
 
 export interface CheckPlafond {

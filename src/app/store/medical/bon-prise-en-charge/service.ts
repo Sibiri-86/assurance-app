@@ -85,6 +85,14 @@ getPrestationByBonDePriseEnCharge(idBon: string): Observable<Prestation[]> {
   );    
 }
 
+$getBonsSansPrestationByAdherentAndPrestataire(adherentId: string, prestataireId: string, typeBon: string): Observable<BonPriseEnChargeList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(EndpointsMedical.BONPRISEENCHARGE)}/no-prestation-byadherent-andPrestataire/${adherentId}/${prestataireId}/${typeBon}`).pipe(
+    map((response: BonPriseEnChargeList) => response),
+    catchError(this.handleError())
+  );
+}
+
 
 
 private handleError<T>() {

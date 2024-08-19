@@ -157,4 +157,19 @@ export class BonPriseEnChargeEffects {
                 // catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
             ))
         ));
+
+        fetchBonsByAdherentAndPrestataire$ = createEffect(() =>
+            this.actions$.pipe(
+                ofType(featureActions.loadBonsByAdherentAndPrestataire),
+                mergeMap(({adherentId, prestataireId, typeBon}) =>
+                    this.bonPriseEnChargeService.$getBonsSansPrestationByAdherentAndPrestataire(adherentId,prestataireId, typeBon).pipe(
+                        switchMap(value => [
+                            //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),
+                            featureActions.setBon(value)
+                        ]),
+                        catchError(error => of(GlobalConfig.setStatus(StatusEnum.error, null, error)))
+                    )
+                )
+            )
+            );
 }
