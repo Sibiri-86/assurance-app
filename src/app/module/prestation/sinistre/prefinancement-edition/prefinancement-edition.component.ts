@@ -1522,11 +1522,11 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
         if(this.prestationPopForm.get('sort').value === Sort.ACCORDE) {
           this.prestationPopForm.get('montantRembourse').setValue(((this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantExclu').value) *  this.prestationPopForm.get('taux').value.taux) /100);
           this.prestationPopForm.get('montantSupporte').setValue( this.prestationPopForm.get('baseRemboursement').value  - this.prestationPopForm.get('montantRembourse').value) ;
-           if( this.prestationPopForm.get('montantPlafond').value  && (this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) > this.prestationPopForm.get('montantPlafond').value  ) {
+           if( this.prestationPopForm.get('montantPlafond').value  &&  this.prestationPopForm.get('montantRembourse').value > this.adherentSelected.montantPlafondAnnuelRestant  ) {
             console.log("============2==========");
-            this.prestationPopForm.get('observation').setValue( "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value)))) ;
+            this.prestationPopForm.get('observation').setValue( "Remboursement favorable avec un plafond atteint. Vous avez franchi de " + (this.prestationPopForm.get('baseRemboursement').value -this.adherentSelected.montantPlafondAnnuelRestant )) ;
            
-            this.prestationPopForm.get('montantRembourse').setValue( this.prestationPopForm.get('montantPlafond').value - this.montantConsomme);
+            this.prestationPopForm.get('montantRembourse').setValue( this.adherentSelected.montantPlafondAnnuelRestant);
             this.prestationPopForm.get('montantSupporte').setValue(this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value);
             
             

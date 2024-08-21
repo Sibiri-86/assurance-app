@@ -1558,7 +1558,7 @@ calculDebours1() {
 
       console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
       console.log("============2222========== ",this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
-      if(this.montantConsomme + this.prestationPopForm.get('montantRembourse').value <= this.montantPlafond1) {
+      if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) <= this.montantPlafond1) {
           myForm.patchValue({
             sort: Sort.ACCORDE,
             observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
