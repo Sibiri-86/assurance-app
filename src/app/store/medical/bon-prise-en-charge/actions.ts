@@ -9,7 +9,7 @@ export const loadBon = createAction('[App Init] load Bon Prise en charge');
 export const loadBons = createAction('[App Init] loadBons Bon Prise en charge');
 export const loadBonsByAdherent = createAction('[App Init] loadBons Bon Prise en charge by adherent',
 props<{adherentId: string}>());
-export const loadBonsByAdherentAndPrestataire = createAction('[App Init] loadBons Bon Prise en charge by adherent and prestataire',
+export const loadBonsByAdherentAndPrestataire = createAction('[App Init] loadBons Bon Prise en charge by adherent and prestataire ==>',
     props<{adherentId: string, prestataireId: string, typeBon:string}>());
 export const setBon = createAction('[App Init] set Bon Prise en charge',  props<BonPriseEnChargeList>());
 export const importBon = createAction('[App Init] import Bon Prise en charge',  props<{file: File}>());
