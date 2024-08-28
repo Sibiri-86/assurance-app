@@ -535,7 +535,7 @@ export class TierPayantEditionComponent implements OnInit {
         this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
-                console.log('=========value=============',value);
+                console.log('=========value=============',value.id);
                 this.prestationAdd.sousActe = {};
                 this.adherentSelected = value;
                 this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentSelected).
@@ -543,7 +543,11 @@ export class TierPayantEditionComponent implements OnInit {
               this.listFamilleActe = res;
               console.log("famillles actes ===================== >", this.listFamilleActe);
             });
+
+            if(this.adherentSelected.id != null ) {
+                console.log("bonnnnnnn =====4804====>"+this.adherentSelected.id)
                 this.store.dispatch(featureActionBonPriseEnCharge.loadBonsByAdherentAndPrestataire({adherentId: this.adherentSelected.id, prestataireId:this.prefinancement.prestataire.id, typeBon:"PRISEENCHARGE"}));
+            }
 
                // this.onRowSelectBonAdherent();
                 if( new Date(this.adherentSelected.dateIncorporation).getTime() > new Date(this.prestationAdd.dateSoins).getTime()) {
@@ -630,6 +634,9 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
+                this.prestationForm.get('observation').setValue(this.prestationAdd.observation);
+                this.prestationForm.get('sort').setValue(this.prestationAdd.sort);
+                
                 
                 
 
@@ -650,6 +657,7 @@ export class TierPayantEditionComponent implements OnInit {
                 this.exerciceList = value.slice();
             }
         }); */
+        
 
         this.sinistreTierPayantDTOList$ = this.store.pipe(select(tierPayantSelector.tierPayantList));
         
@@ -1582,7 +1590,7 @@ export class TierPayantEditionComponent implements OnInit {
             if(!this.prestationAdd.observation) {
                 this.prestationAdd.observation= "remboursement favorable";
             }
-            console.log("=============this.montantPlafond12=============",this.montantPlafond1);
+            console.log("=============this.montantPlafond1212121=============",this.montantPlafond1);
             console.log("=============this.montantPlafond12=============",this.montantConsomme);
 
             if(this.montantPlafond1 !=null && this.montantPlafond1 !=0 && (this.montantConsomme + (this.prestationAdd.nombreActe * this.prestationAdd.coutUnitaire * (this.prestationAdd?.taux?.taux / 100)) ) >= this.montantPlafond1) {
@@ -2121,6 +2129,10 @@ export class TierPayantEditionComponent implements OnInit {
         
 
           this.prestationAdd = prestation;
+          this.prestationAdd.observation = prestation.observation;
+          this.prestationAdd.sort = prestation.sort;
+          this.prestationAdd.sousActe = prestation.sousActe;
+          this.prestationAdd.acte = prestation.acte;
           this.prestationAdd.matriculeAdherent = this.prestationAdd?.adherent?.numero.toString();
           this.prestationAdd.nomAdherent = this.prestationAdd?.adherent?.nom.concat(" ").concat(this.prestationAdd?.adherent?.prenom);
         if(this.prestationAdd.prenomAdherentPrincipal) {
@@ -2307,10 +2319,14 @@ export class TierPayantEditionComponent implements OnInit {
                 });
                 console.log("this.prestationsList ===>", this.prestationsList);
             }
-            
+            this.updateView();
         }
         this.prestationBon = {};
         this.displayPrestationbon = false;
+      }
+
+      updateView() {
+        this.prestationsList = [...this.prestationsList];
       }
 
       findMontantTotalConsommeFamille() {
