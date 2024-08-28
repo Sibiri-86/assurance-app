@@ -506,7 +506,8 @@ export class TierPayantEditionComponent implements OnInit {
             montantReclame: new FormControl('', Validators.required),
             bonPriseEnCharge: new FormControl(),
             montantPaye: new FormControl(),
-            montantRestant: new FormControl()
+            montantRestant: new FormControl(),
+            observation: new FormControl(),
         });
 
        
@@ -617,25 +618,25 @@ export class TierPayantEditionComponent implements OnInit {
                 this.prestationAdd.nomGroupe = this.adherentSelected.groupe.libelle;
                 this.prestationAdd.adherent = this.adherentSelected;
             
-                this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
-                this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom);
+                /* this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);
+                this.prestationForm.get('prenomAdherent').setValue(this.adherentSelected.prenom); */
                 if (this.adherentSelected.adherentPrincipal != null) {
-                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
-                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom);
+                    /* this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.adherentPrincipal.prenom); */
                     this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.adherentPrincipal.nom.concat("  ").concat(this.adherentSelected.adherentPrincipal.prenom);
                     this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.adherentPrincipal.prenom;
                 } else {
-                    this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
-                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom);
+                    /* this.prestationForm.get('nomAssurePrin').setValue(this.adherentSelected.nom);
+                    this.prestationForm.get('prenomAssurePrin').setValue(this.adherentSelected.prenom); */
                     this.prestationAdd.nomAdherentPrincipal = this.adherentSelected.nom.concat("  ").concat(this.adherentSelected.prenom);
                     this.prestationAdd.prenomAdherentPrincipal = this.adherentSelected.prenom;
                 }
-                this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
+              /*  this.prestationForm.get('numeroGroupe').setValue(this.adherentSelected.groupe.numeroGroupe);
                 this.prestationForm.get('numeroPolice').setValue(this.adherentSelected.groupe.police.numero);
                 this.prestationForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
                 this.prestationForm.get('nomPoliceAdherent').setValue(this.adherentSelected.groupe.police.nom);
                 this.prestationForm.get('observation').setValue(this.prestationAdd.observation);
-                this.prestationForm.get('sort').setValue(this.prestationAdd.sort);
+                this.prestationForm.get('sort').setValue(this.prestationAdd.sort);*/
                 
                 
                 
