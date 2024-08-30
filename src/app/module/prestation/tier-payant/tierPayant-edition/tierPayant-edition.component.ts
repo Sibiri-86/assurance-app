@@ -1613,12 +1613,22 @@ export class TierPayantEditionComponent implements OnInit {
                   console.log("============1==========",this.montantPlafond1,"====",this.prestationAdd.montantRembourse , "=",this.montantConsomme);
                   console.log("============2222========== ",this.montantConsomme + this.prestationAdd.montantRembourse);
 
-                  if(this.montantConsomme + this.prestationAdd.montantRembourse <= this.montantPlafond1) {
-                    this.prestationAdd.sort = Sort.ACCORDE;
-                    this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. . L'assuré(e) devra prendre en charge  " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.baseRemboursement))) ;
+                  if(this.montantConsomme  <= this.montantPlafond1) {
+                    if(this.montantConsomme == 0) {
+                        this.prestationAdd.sort = Sort.ACCORDE;
+                        this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. . L'assuré(e) devra prendre en charge  " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.baseRemboursement))) ;
+                       
+                        this.prestationAdd.montantRembourse = this.montantPlafond1;
+                        this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
                    
-                    this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
-                    this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                    } else {
+                        this.prestationAdd.sort = Sort.ACCORDE;
+                        this.prestationAdd.observation = "Remboursement favorable avec un plafond atteint. . L'assuré(e) devra prendre en charge  " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationAdd.baseRemboursement))) ;
+                       
+                        this.prestationAdd.montantRembourse = this.montantPlafond1 - this.montantConsomme;
+                        this.prestationAdd.montantRestant =  this.prestationAdd.baseRemboursement - this.prestationAdd.montantRembourse;
+                    }
+                    
                   } else {
                     this.prestationAdd.sort = Sort.ACCORDE;
                     this.prestationAdd.observation = "L'assuré(e) a atteint son plafond pour cette garantie";
