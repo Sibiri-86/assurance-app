@@ -147,6 +147,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   policeList$: Observable<Array<Police>>;
   isTwistOptique = false;
   prestations: Prestation[];
+  prestation1: Prestation;
 
 
  prestationPopForm: FormGroup;
@@ -1753,6 +1754,53 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.isTwistOptique = false;
 }
 
+deletePrestationBonPEC(prestation: Prestation) {
+  this.confirmationService.confirm({
+    message: 'Etes vous sûre de vouloir supprimer?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      this.prefinancementService.deletePrestationBonPEC(prestation).subscribe(rest=>{
+        
+          console.log("==========rest=1111111111=========", prestation.bonPriseEnCharge.id);
+          //this.prestation1 = rest;
+          this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(prestation.bonPriseEnCharge.id).subscribe((res=>{
+            if(res) {
+              this.addMessage('success', 'reussite',
+                'Suppréssion de la prestation effectuée avec succès');
+              this.prestations = res;
+              console.log('prestationssssssssss ==>', this.prestations);
+              this.prestationsList = this.prestations;
+              prestation.bonPriseEnCharge.prestation = this.prestations; 
+            }
+         
+          /* this.prestationsList = this.prestations; */
+          
+          this.prestationForm.get('id').setValue(prestation.bonPriseEnCharge?.id);
+          this.prestationForm.get('typeBon').setValue(prestation.bonPriseEnCharge?.typeBon);
+          this.prestationForm.get('prestataire').setValue(prestation.bonPriseEnCharge?.prestataire);
+          this.prestationForm.get('dateDeclaration').setValue(prestation.bonPriseEnCharge.dateDeclaration);
+          this.prestationForm.get('dateSaisie').setValue(new Date(prestation.bonPriseEnCharge.dateSaisie));
+          for (const pr of prestation.bonPriseEnCharge.prestation) {
+          const formPrestation: FormGroup = this.createItem();
+          formPrestation.patchValue(pr);
+          formPrestation.get('dateSoins').setValue(pr.dateSoins);
+          formPrestation.get('debours').setValue(pr.debours);
+          formPrestation.get('taux').setValue(pr.taux);
+          formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+          formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+          formPrestation.get('montantSupporte').setValue(pr.montantSupporte);
+          formPrestation.get('montantPlafond').setValue(pr.montantPlafond);
+          this.prestation.push(formPrestation);
+          }
+        }));
+          console.log("==========rest==========", rest);
+          console.log(this.prestation1);
+      });
+    },
+  });
+}
+
 editerPrestation(pref: BonPriseEnCharge) {
   console.log("=====================");
   console.log(pref);
@@ -1803,6 +1851,8 @@ rechercherPrefinancementByPeriode() {
 prestationByBon(pres: BonPriseEnCharge) {
   this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(pres.id).subscribe((res=>{
     if(res) {
+      this.addMessage('success', 'Reussite',
+        'prestation supprimé avec succès');
 
       this.prestations = res;
       console.log('prestationssssssssss ==>', this.prestations);

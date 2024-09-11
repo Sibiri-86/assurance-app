@@ -609,7 +609,8 @@
                                     <td style="font-weight: bold"> {{rowData.montantRembourse  | formatTableValue: 'number':true}}</td>
                                     
                                     <td style="text-align:center">
-                                        <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2"></button>
+                                        <button  pButton pRipple type="button"  icon="pi pi-pencil" (click)="editerPrestation1(rowData, ri)" class="p-button-rounded p-button-success p-mr-2" pTooltip="modifier le bon"></button>
+                                        <button  pButton pRipple type="button"  icon="pi pi-trash" (click)="deletePrestationBonPEC(rowData)" class="p-button-rounded p-button-danger p-mr-2" pTooltip="supprimer le bon"></button>
                 
                 
                                         </td>

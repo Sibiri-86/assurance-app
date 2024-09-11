@@ -241,6 +241,11 @@ getPrestationsBySinistreId(sinistreId: string): Observable<Array<Prestation>> {
 );
 }
 
+deletePrestationBonPEC(prestation: Prestation): Observable<any> {
+  // @FIXME: post request
+  return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/deletePrestationBonPriseEnCharge/${prestation.id}`, null);
+}
+
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {
