@@ -147,6 +147,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   policeList$: Observable<Array<Police>>;
   isTwistOptique = false;
   prestations: Prestation[];
+  prestation1: Prestation;
 
 
  prestationPopForm: FormGroup;
@@ -449,6 +450,8 @@ findMontantPlafond(event){
       this.montantPlafond1 = rest;
       console.log("==========rest 125555555==========", rest);
       console.log(this.montantConsomme);
+      console.log("==========rest 125555555====858858558555======", rest);
+      console.log(this.montantPlafond1);
      
   });
 }
@@ -1552,29 +1555,44 @@ calculDebours1() {
   
   if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) {
     if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) >= this.montantPlafond1  ) {
-
+      console.log("------this.montantConsomme + this.prestationPopForm.get('montantRembourse').value)-------", this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
+      console.log("------this.montantConsomme -------", this.montantConsomme);
       this.addMessage('error', 'Plafond atteint',
         'L\'assuré(e) a atteint son plafond pour cette garantie');
 
-      console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
-      console.log("============2222========== ",this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
-      if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) <= this.montantPlafond1) {
-          myForm.patchValue({
-            sort: Sort.ACCORDE,
-            observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
-            montantRembourse: this.montantPlafond1 - this.montantConsomme,
-            montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
-            montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
-          })
-      } else {
-          myForm.patchValue({
-            sort: Sort.REJETE,
-            observation: "L'assuré(e) a atteint son plafond pour cette garantie",
-            montantRembourse: 0,
-            montantRestant:   0,
-            montantSupporte:   this.prestationPopForm.get('baseRemboursement').value
-          })
-      }
+        console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
+        console.log("============2222========== ",this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
+        if(this.montantConsomme  <= this.montantPlafond1) {
+           if(this.montantConsomme  == 0) {
+            console.log("------on est dans le 1111111-------", this.montantConsomme);
+            myForm.patchValue({
+              sort: Sort.ACCORDE,
+              observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+              montantRembourse: this.montantPlafond1,
+              montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
+              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+            });
+           } else {
+            console.log("------on est dans le 222222-------", this.montantConsomme);
+            console.log("------on est dans le 222222---3333333333----", this.montantPlafond1 - this.montantConsomme);
+            myForm.patchValue({
+              sort: Sort.ACCORDE,
+              observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
+              montantRembourse: this.montantPlafond1 - this.montantConsomme,
+              montantRestant:   this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value)),
+              montantSupporte:  (this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))-this.montantPlafond1
+            })
+           }
+            
+        } else {
+            myForm.patchValue({
+              sort: Sort.REJETE,
+              observation: "L'assuré(e) a atteint son plafond pour cette garantie",
+              montantRembourse: 0,
+              montantRestant:   0,
+              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value
+            })
+        }
      
   }
   }
@@ -1640,13 +1658,14 @@ calculDebours1() {
         });
       }
     }
-    if(myForm.get('sort').value === Sort.ACCORDE) {
+    /* if(myForm.get('sort').value === Sort.ACCORDE) {
       myForm.patchValue({
         montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
         this.prestationPopForm.get('montantRembourse').value
       });
       if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
         if(this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
+          console.log("------entrer ici 111111-------", this.montantConsomme);
            // this.prestationAdd.montantRestant = this.prestationAdd.montantRembourse - this.montantPlafond;
            myForm.patchValue({
             montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,
@@ -1658,12 +1677,12 @@ calculDebours1() {
         
     }
 
-    }
+    } */
 
   }
  
   if(this.prestationPopForm.get('montantRembourse').value == 0) {
-
+    console.log("------entrer ici 22222-------", this.montantConsomme);
     myForm.patchValue({
     montantRembourse: this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantSupporte').value
   });
@@ -1685,6 +1704,7 @@ if( this.prestationPopForm.get('montantRembourse').value >= this.adherentSelecte
   this.addMessage('error', 'Plafond global atteint',
     'L\'assuré(e) n\'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat');
     if(this.adherentSelected.montantPlafondAnnuelRestant > 0) {
+      console.log("------entrer ici 333333-------", this.montantConsomme);
       const myForm1 = this.prestationPopForm;
       myForm1.patchValue({
       sort: Sort.ACCORDE,
@@ -1753,6 +1773,53 @@ editerPrestation1(prestation: Prestation, rowIndex: number) {
   this.isTwistOptique = false;
 }
 
+deletePrestationBonPEC(prestation: Prestation) {
+  this.confirmationService.confirm({
+    message: 'Etes vous sûre de vouloir supprimer?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      this.prefinancementService.deletePrestationBonPEC(prestation).subscribe(rest=>{
+        
+          console.log("==========rest=1111111111=========", prestation.bonPriseEnCharge.id);
+          //this.prestation1 = rest;
+          this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(prestation.bonPriseEnCharge.id).subscribe((res=>{
+            if(res) {
+              this.addMessage('success', 'reussite',
+                'Suppréssion de la prestation effectuée avec succès');
+              this.prestations = res;
+              console.log('prestationssssssssss ==>', this.prestations);
+              this.prestationsList = this.prestations;
+              prestation.bonPriseEnCharge.prestation = this.prestations; 
+            }
+         
+          /* this.prestationsList = this.prestations; */
+          
+          this.prestationForm.get('id').setValue(prestation.bonPriseEnCharge?.id);
+          this.prestationForm.get('typeBon').setValue(prestation.bonPriseEnCharge?.typeBon);
+          this.prestationForm.get('prestataire').setValue(prestation.bonPriseEnCharge?.prestataire);
+          this.prestationForm.get('dateDeclaration').setValue(prestation.bonPriseEnCharge.dateDeclaration);
+          this.prestationForm.get('dateSaisie').setValue(new Date(prestation.bonPriseEnCharge.dateSaisie));
+          for (const pr of prestation.bonPriseEnCharge.prestation) {
+          const formPrestation: FormGroup = this.createItem();
+          formPrestation.patchValue(pr);
+          formPrestation.get('dateSoins').setValue(pr.dateSoins);
+          formPrestation.get('debours').setValue(pr.debours);
+          formPrestation.get('taux').setValue(pr.taux);
+          formPrestation.get('montantRembourse').setValue(pr.montantRembourse);
+          formPrestation.get('baseRemboursement').setValue(pr.baseRemboursement);
+          formPrestation.get('montantSupporte').setValue(pr.montantSupporte);
+          formPrestation.get('montantPlafond').setValue(pr.montantPlafond);
+          this.prestation.push(formPrestation);
+          }
+        }));
+          console.log("==========rest==========", rest);
+          console.log(this.prestation1);
+      });
+    },
+  });
+}
+
 editerPrestation(pref: BonPriseEnCharge) {
   console.log("=====================");
   console.log(pref);
@@ -1803,6 +1870,8 @@ rechercherPrefinancementByPeriode() {
 prestationByBon(pres: BonPriseEnCharge) {
   this.bonPriseEnChargeService.getPrestationByBonDePriseEnCharge(pres.id).subscribe((res=>{
     if(res) {
+      this.addMessage('success', 'Reussite',
+        'prestation supprimé avec succès');
 
       this.prestations = res;
       console.log('prestationssssssssss ==>', this.prestations);
