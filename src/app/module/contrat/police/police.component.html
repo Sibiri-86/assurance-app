@@ -3932,7 +3932,7 @@
                         <div class="p-field p-col">
                             <label for="dateNaissance">Date de naissance <span
                                     style="color: red !important;">*</span></label>
-                            <input type="date" name="dateNaissance" id="dateNaissance" pInputText
+                            <input type="date" name="dateNaissance" id="dateNaissance" (change) ="accorderBareme(adherentForm.value.dateNaissance)" pInputText
                                 formControlName="dateNaissance">
                             <app-entity-validation [entityValidations]="entityValidations" [formGroup]="adherentForm"
                                 [entityField]="'dateNaissance'">
@@ -4138,7 +4138,7 @@
                 <button pButton pRipple label="Quitter" icon="pi pi-times" (click)="annulerSaisie()"></button>
             </div>
             <div *ngIf="isImport === 'NON'">
-                <button [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer" icon="pi pi-check"
+                <button [disabled]="adherentForm?.invalid" pButton pRipple label="Enregistrer1" icon="pi pi-check"
                     (click)="onCreateAddherent()"></button>
             </div>
             <div *ngIf="isImport === 'OUI'">

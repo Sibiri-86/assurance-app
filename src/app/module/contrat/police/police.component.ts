@@ -1821,6 +1821,45 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
+
+    accorderBareme(dateNaissance: Date) {
+      console.log("==========dateNaissance=============",dateNaissance);
+     // this.adherentForm.get('dateNaissance').setValue('') ;
+      this.plafondService.findBYPlafondToBareme(this.groupe.id).subscribe((b)=> {
+        console.log("==========B=============",b);
+        if(b) {
+          this.baremeSeleted = b.body;
+          console.log("========== this.baremeSeleted=============", this.baremeSeleted);
+       
+          this.baremeSeleted.dateNaissance = dateNaissance;
+          if(this.baremeSeleted.ageMin) {
+            this.plafondService.accordByAgeMin(this.baremeSeleted).subscribe((rest)=> {
+              if(!rest) {
+                this.addMessage('error', 'Revoir l\'âge du souscripteur',
+                  'L\'âge minimal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMin+ ' ans');
+                  this.adherentForm.get('dateNaissance').setValue('') ;
+              }
+            });
+          }
+    
+          if(this.baremeSeleted.ageMax ) {
+            this.plafondService.accordByAgeMax(this.baremeSeleted).subscribe((rest)=> {
+        
+              console.log("================rest===============",rest);
+              if(!rest) { 
+                this.addMessage('error', 'Revoir l\'âge du souscripteur',
+                  'L\'âge maximal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMax+ ' ans');
+                  this.adherentForm.get('dateNaissance').setValue('') ;
+               } 
+            });  
+          }
+       
+        }
+      });
+
+      
+    }
+
     importerBareme() {
       this.importer = true;
       console.log(this.importer);
@@ -1828,70 +1867,71 @@ export class PoliceComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(rest)
       }) */
 
-      if(this.baremeSeleted.ageMin) {
+     // if(this.baremeSeleted.ageMin) {
         console.log("================rest==1=============");
-    this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
+  /*   this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
       if (value) {
          value.adherentDtoList;
 
         if(value.adherentDtoList.length == 1) {
-
-          this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance;
-          this.plafondService.accordByAgeMin(this.baremeSeleted).subscribe((rest)=> {
+ 
+          this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance; */
+        //  this.plafondService.accordByAgeMin(this.baremeSeleted).subscribe((rest)=> {
 
            // console.log("===============================",rest);
-            if(rest) {
+          //  if(rest) {
               this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
 
-            } else {
-              this.addMessage('error', 'Revoir l\'âge du souscripteur',
-              'L\'âge minimal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMin+ ' ans');
-          
-            }
-          }); 
+            /*  } else {
+                this.addMessage('error', 'Revoir l\'âge du souscripteur',
+                'L\'âge minimal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMin+ ' ans');
+            
+              }
+            }); */ 
           
 
-        }
-      }
-    });
+       // }
+      /* }
+    }); */
 
        
-      }
+     // }
 
-      if(this.baremeSeleted.ageMax ) {
-        console.log("================rest=====2==========");
-        this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
+    /*   if(this.baremeSeleted.ageMax ) {
+        console.log("================rest=====2=========="); */
+       /* this.adherentService.$getAdherents(this.groupe.id).subscribe((value) => {
           if (value) {
              value.adherentDtoList;
     
             if(value.adherentDtoList.length == 1) {
     
-              this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance;
-              this.plafondService.accordByAgeMax(this.baremeSeleted).subscribe((rest)=> {
+              this.baremeSeleted.dateNaissance = value.adherentDtoList[0].dateNaissance;*/
+             /*  this.plafondService.accordByAgeMax(this.baremeSeleted).subscribe((rest)=> {
     
                 console.log("================rest===============",rest);
-                if(rest) {
-                  this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
+                if(rest) { */
+                //  this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
     
-                } else {
+                /* } else {
                   this.addMessage('error', 'Revoir l\'âge du souscripteur',
                   'L\'âge maximal pour souscrire au barème '+this.baremeSeleted.description+ ' est de ' +this.baremeSeleted.ageMax+ ' ans');
               
                 }
-              }); 
+              });  */
               
     
-            }
+         /*   }
           }
-        });
+        });*/
     
            
-          }
+          //}
 
-          if(!this.baremeSeleted.ageMax && !this.baremeSeleted.ageMin) {
-            this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
+          /* if(!this.baremeSeleted.ageMax && !this.baremeSeleted.ageMin) {
+           */ 
+           //this.store.dispatch(featureActionsPlafond.loadPlafondConfigSansTauxByBareme({idBareme: this.baremeSeleted.id}));
 
-          }
+         // }
       
     }
 
@@ -2476,6 +2516,7 @@ const id = this.arrondissementList.find(arrondi=> arrondi.id === police?.secteur
     }
     this.plafond.plafondFamilleActe = this.plafondFamilleActeConstruct;
     this.plafond.groupe = this.groupe;
+    this.plafond.baremeId = this.baremeSeleted.id;
     console.log(this.plafond);
 
 
