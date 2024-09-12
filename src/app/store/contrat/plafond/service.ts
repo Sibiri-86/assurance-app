@@ -154,6 +154,12 @@ private handleError<T>() {
         );
     }
 
+    findBYPlafondToBareme(groupeId: string): Observable<HttpResponse<Bareme>> {
+      return this.http.get<Bareme>(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_PLAFOND)}/plafond-for bareme-groupe`,
+          {params: createRequestOption({groupeId}), observe: 'response'}
+      );
+  }
+
     getPlafondEnCours(numero: number): Observable<Array<PlafondFamilleActe>> {
         // @FIXME: post request
         if (numero && numero !== 0) {

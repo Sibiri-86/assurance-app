@@ -16,6 +16,7 @@ export interface Plafond {
     plafondGlobalEvacuationSanitaire?: number;
     avenantId?: string;
     exercice?:Exercice;
+    baremeId?: string;
 }
 
 export interface PlafondConfig {
