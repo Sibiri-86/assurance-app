@@ -1484,7 +1484,7 @@ calculDebours1() {
 
     
   if (this.prestationPopForm.get('sort').value !== Sort.REJETE) {
-    
+    console.log("============11111==========",this.montantPlafond1);
   
   const myForm = this.prestationPopForm;
 
@@ -1510,9 +1510,10 @@ calculDebours1() {
     this.prestationPopForm.get('coutUnitaire').value, montantSupporte: this.prestationPopForm.get('nombreActe').value *
     this.prestationPopForm.get('coutUnitaire').value});
  } else {
-
+  console.log("============2==========",this.montantPlafond1);
 
   if(this.prestationPopForm.get('coutUnitaire').value > this.montantConvention && this.montantConvention !== 0) {
+    console.log("============3==========",this.montantPlafond1);
     this.showToast('error', 'INFORMATION', 'coût unitaire et le montant de la convention sont differents');
     const c =this.montantConvention - this.prestationPopForm.get('coutUnitaire').value;
     myForm.patchValue({inotPlafond: true});
@@ -1525,7 +1526,7 @@ calculDebours1() {
 
   if (this.prestationPopForm.get('nombreActe').value &&
   this.prestationPopForm.get('coutUnitaire').value) {
-
+    console.log("============4==========",this.montantPlafond1);
     myForm.patchValue({montantRembourse:
       (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('taux').value.taux) / 100,
@@ -1537,6 +1538,7 @@ calculDebours1() {
 
   if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
     console.log("cas 11111111111");
+    console.log("============5==========",this.montantPlafond1);
     myForm.patchValue({montantRembourse:
       (this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value) ,
       debours: this.prestationPopForm.get('nombreActe').value *
@@ -1551,14 +1553,18 @@ calculDebours1() {
   this.prefinancementList.push(this.prefinancementModel);
   
   if(this.montantPlafond1 !=0 && this.montantPlafond1 !=null) { 
+    console.log("============6==========",this.montantPlafond1);
     if((this.montantConsomme + this.prestationPopForm.get('montantRembourse').value) >= this.montantPlafond1  ) {
+      console.log("============7==========",this.montantPlafond1);
       this.addMessage('error', 'Plafond atteint',
         'L\'assuré(e) a atteint son plafond pour cette garantie');
 
       console.log("============1==========",this.montantPlafond1,"====",this.prestationPopForm.get('montantRembourse').value , "=",this.montantConsomme);
       console.log("============2222========== ",this.montantConsomme + this.prestationPopForm.get('montantRembourse').value);
       if(this.montantConsomme  <= this.montantPlafond1) {
+        console.log("============8==========",this.montantPlafond1);
          if(this.montantConsomme  == 0) {
+          console.log("============9==========",this.montantPlafond1);
           myForm.patchValue({
             sort: Sort.ACCORDE,
             observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
@@ -1567,6 +1573,7 @@ calculDebours1() {
             montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
           });
          } else {
+          console.log("============10==========",this.montantPlafond1);
           myForm.patchValue({
             sort: Sort.ACCORDE,
             observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
@@ -1577,6 +1584,7 @@ calculDebours1() {
          }
           
       } else {
+        console.log("============11==========",this.montantPlafond1);
           myForm.patchValue({
             sort: Sort.REJETE,
             observation: "L'assuré(e) a atteint son plafond pour cette garantie",
@@ -1594,10 +1602,12 @@ calculDebours1() {
   
     /* Gestion des personnes rétirées au front */
     if(this.adherentSelected.signeAdherent ==='-') {
+      console.log("============12==========",this.montantPlafond1);
       if((this.adherentSelected.dateSortie === null && this.adherentSelected.dateSuspension  !== null) || (new Date(this.adherentSelected.dateSuspension).getTime() < new Date(this.adherentSelected.dateSortie).getTime()
       && new Date(this.adherentSelected.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
-  
+        console.log("============13==========",this.montantPlafond1);
           if(this.adherentSelected.dateSuspension !== null &&  new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+            console.log("============14==========",this.montantPlafond1);
                myForm.patchValue({
              
                 montantRembourse : 0,
@@ -1613,8 +1623,9 @@ calculDebours1() {
           
       } 
       if(this.adherentSelected.dateSortie !== null && (new Date(this.adherentSelected.dateSuspension)?.getTime() < new Date(this.adherentSelected.dateSortie)?.getTime() )) {
-          
+        console.log("============15==========",this.montantPlafond1);
           if( new Date(this.adherentSelected?.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+            console.log("============16==========",this.montantPlafond1);
             myForm.patchValue({
                 montantRembourse : 0,
                 observation: "Cet(te) assuré(e) a  été retiré(e)",
@@ -1626,6 +1637,7 @@ calculDebours1() {
           }
 
           if( this.adherentSelected.dateSuspension !== null && new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+            console.log("============17==========",this.montantPlafond1);
             myForm.patchValue({
               montantRembourse : 0,
               observation: "Cet(te) assuré(e) a  été suspendu(e)",
@@ -1639,9 +1651,11 @@ calculDebours1() {
           
       } 
      } else {
+      console.log("============18==========",this.montantPlafond1);
       console.log(this.prestationPopForm.get('montantPlafond').value, this.montantConsomme);
-      console.log(this.montantConsomme,"  ", this.adherentSelected.montantPlafondAnnuelRestant,"  ",this.adherentSelected.montantPlafondAnnuel);
+      console.log(this.montantConsomme," 1f ", this.adherentSelected.montantPlafondAnnuelRestant," 2f ",this.adherentSelected.montantPlafondAnnuel);
       if(this.montantPlafond1 != null && this.montantPlafond1 != 0 && this.montantConsomme >  this.montantPlafond1) {
+        console.log("============19===1=======",this.montantPlafond1);
         this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
         // myForm.patchValue({observation: "Votre plafond est atteint"});
         myForm.patchValue({
@@ -1652,13 +1666,61 @@ calculDebours1() {
           this.prestationPopForm.get('coutUnitaire').value
         });
       }
+
+      if(this.montantPlafond1 == null || this.montantPlafond1 == 0 && this.prestationPopForm.get('baseRemboursement').value >  this.montantPlafond) {
+        console.log("============19===2=======",this.montantPlafond+"============19===2======="+this.montantPlafond1);
+        //this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
+        // myForm.patchValue({observation: "Votre plafond est atteint"});
+        myForm.patchValue({
+          sort: Sort.ACCORDE,
+          observation: "Remboursement favorable à hauteur du plafond de l'acte. L'assuré(e) devra prendre en charge " + (this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond),
+          montantRembourse: this.montantPlafond,
+          montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond
+        });
+      }
+      if(this.montantPlafond1 == null || this.montantPlafond1 == 0 && this.prestationPopForm.get('baseRemboursement').value >  this.montantPlafond && this.adherentSelected.montantPlafondAnnuelRestant > 0) {
+        console.log("===19===2===",this.montantPlafond+"====19===2=="+this.montantPlafond1+"====19===3=="+this.adherentSelected.montantPlafondAnnuelRestant);
+        //this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
+        // myForm.patchValue({observation: "Votre plafond est atteint"});
+        if(this.adherentSelected.montantPlafondAnnuelRestant > this.montantConsomme + (this.prestationPopForm.get('baseRemboursement').value * this.prestationPopForm.get('taux').value.taux) / 100) {
+          myForm.patchValue({
+            sort: Sort.ACCORDE,
+            observation: "Remboursement favorable",
+            montantRembourse: (this.prestationPopForm.get('baseRemboursement').value * this.prestationPopForm.get('taux').value.taux) / 100,
+            montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond
+          });
+        }
+        if(this.adherentSelected.montantPlafondAnnuelRestant < this.montantConsomme + (this.prestationPopForm.get('baseRemboursement').value * this.prestationPopForm.get('taux').value.taux) / 100) {
+          myForm.patchValue({
+            sort: Sort.ACCORDE,
+            observation: "Remboursement favorable",
+            montantRembourse: this.adherentSelected.montantPlafondAnnuelRestant,
+            montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.adherentSelected.montantPlafondAnnuelRestant
+          });
+        }
+       /*  if(this.adherentSelected.montantPlafondAnnuelRestant < this.prestationPopForm.get('baseRemboursement').value) {
+          myForm.patchValue({
+            sort: Sort.ACCORDE,
+            observation: "Remboursement favorable",
+            montantRembourse: (this.prestationPopForm.get('baseRemboursement').value * this.prestationPopForm.get('taux').value.taux) / 100,
+            montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond
+          });
+        } */
+        /* myForm.patchValue({
+          sort: Sort.ACCORDE,
+          observation: "Remboursement favorable à hauteur du plafond de l'acte. L'assuré(e) devra prendre en charge " + (this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond),
+          montantRembourse: this.montantPlafond,
+          montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond
+        }); */
+      }
     }
-    if(myForm.get('sort').value === Sort.ACCORDE) {
+    
+    /* if(myForm.get('sort').value === Sort.ACCORDE) {
       myForm.patchValue({
         montantSupporte: this.prestationPopForm.get('baseRemboursement').value -
         this.prestationPopForm.get('montantRembourse').value
       });
-      /* if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
+      if(this.prestationPopForm.get('montantPlafond').value !== null && this.prestationPopForm.get('montantPlafond').value !== 0 ) {
         if(this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
            myForm.patchValue({
             montantRembourse: this.prestationPopForm.get('montantPlafond').value * this.prestationPopForm.get('nombreActe').value,
@@ -1669,20 +1731,22 @@ calculDebours1() {
         }
         
     }
- */
-    }
+
+    } */
 
   }
  
-  if(this.prestationPopForm.get('montantRembourse').value == 0) {
-
+  /* if(this.prestationPopForm.get('montantRembourse').value == 0) {
+    console.log("============20==========",this.montantPlafond1);
+    console.log("============666666==========",this.montantPlafond1);
     myForm.patchValue({
     montantRembourse: this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantSupporte').value
   });
   
-  }
+  } */
   
 } else {
+  console.log("============21==========",this.montantPlafond1);
   const myForm1 = this.prestationPopForm;
   myForm1.patchValue({
     montantRembourse: 0,
@@ -1694,10 +1758,12 @@ calculDebours1() {
 }
 
 if(this.prestationPopForm.get('montantRembourse').value >= this.adherentSelected.montantPlafondAnnuelRestant) {
+  console.log("============22==========",this.montantPlafond1);
   console.log(this.montantConsomme," 2 ", this.adherentSelected.montantPlafondAnnuelRestant," 3 ",this.prestationPopForm.get('montantRembourse').value," 4 ",this.adherentSelected.montantPlafondAnnuel)
   this.addMessage('error', 'Plafond global atteint',
     'L\'assuré(e) n\'a plus aucune prise en charge valide car il a atteint son plafond global pour ce contrat');
     if(this.adherentSelected.montantPlafondAnnuelRestant  > 0) {
+      console.log("============23==========",this.montantPlafond1);
       const myForm2 = this.prestationPopForm;
       myForm2.patchValue({
       sort: Sort.ACCORDE,
@@ -1707,6 +1773,7 @@ if(this.prestationPopForm.get('montantRembourse').value >= this.adherentSelected
       montantSupporte:   this.prestationPopForm.get('baseRemboursement').value-this.adherentSelected.montantPlafondAnnuelRestant
       })
     } else {
+      console.log("============24==========",this.montantPlafond1);
       const myForm1 = this.prestationPopForm;
       myForm1.patchValue({
       sort: Sort.REJETE,
