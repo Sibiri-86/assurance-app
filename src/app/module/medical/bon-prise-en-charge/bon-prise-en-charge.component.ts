@@ -1526,14 +1526,31 @@ calculDebours1() {
 
   if (this.prestationPopForm.get('nombreActe').value &&
   this.prestationPopForm.get('coutUnitaire').value) {
-    console.log("============4==========",this.montantPlafond1);
+    if(this.montantPlafond < (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('taux').value.taux) / 100) {
+      console.log("============4====111======",this.montantPlafond1);
     myForm.patchValue({montantRembourse:
       (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('taux').value.taux) / 100,
       debours: this.prestationPopForm.get('nombreActe').value *
-    this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
-    this.prestationPopForm.get('nombreActe').value *
-    this.prestationPopForm.get('coutUnitaire').value});
+    this.prestationPopForm.get('coutUnitaire').value, 
+    baseRemboursement: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value, 
+    montantSupporte: this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('coutUnitaire').value - (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('taux').value.taux) / 100});
+    } else {
+      console.log("============4====222======",this.montantPlafond);
+      myForm.patchValue({montantRembourse:
+        this.montantPlafond,
+        debours: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, 
+      baseRemboursement: this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value, 
+      montantSupporte:this.prestationPopForm.get('nombreActe').value *
+      this.prestationPopForm.get('coutUnitaire').value - this.montantPlafond});
+    }
+    
   }
 
   if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value < (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
