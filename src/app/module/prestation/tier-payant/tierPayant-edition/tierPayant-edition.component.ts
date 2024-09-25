@@ -2099,16 +2099,16 @@ export class TierPayantEditionComponent implements OnInit {
                   }
                 }); */
 
-                if(prestation?.sousActe.sousActe) {
+                if(prestation?.sousActe?.sousActe) {
 
-                    this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
+                    this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation?.sousActe?.sousActe?.id).subscribe(rest=>{
 
                         this.montantConsomme = rest;
                        
                        
                     });
                 } else {
-                    if(prestation.sousActe.id) {
+                    if(prestation?.sousActe?.id) {
                         this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.id).subscribe(rest=>{
 
                             this.montantConsomme = rest;
@@ -2118,7 +2118,7 @@ export class TierPayantEditionComponent implements OnInit {
                     }
                 }
 
-                if(prestation?.acte.acte) {
+                if(prestation?.acte?.acte) {
 
                     this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.acte?.id).subscribe(rest=>{
 
@@ -2126,7 +2126,7 @@ export class TierPayantEditionComponent implements OnInit {
                        
                       });
                 } else {
-                    if(prestation.acte.id) {
+                    if(prestation?.acte?.id) {
                         this.tierPayantService.$findMontantPlafond(this.adherentSelected.id, prestation?.acte?.id).subscribe(rest=>{
 
                             this.montantPlafond1 = rest;
@@ -2155,8 +2155,8 @@ export class TierPayantEditionComponent implements OnInit {
         }
          
 
-          this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe.numeroGroupe.toString();
-          this.prestationAdd.nomGroupe = prestation.adherent?.groupe.libelle;
+          this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe?.numeroGroupe.toString();
+          this.prestationAdd.nomGroupe = prestation.adherent?.groupe?.libelle;
           this.prestationAdd.numeroPolice = this.prestationAdd?.adherent?.groupe.police.numero;
           this.prestationAdd.souscripteur = this.prestationAdd?.adherent?.groupe.police.nom;
           if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined && !this.prestationAdd.id) {
