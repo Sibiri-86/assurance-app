@@ -2109,7 +2109,8 @@ export class TierPayantEditionComponent implements OnInit {
                     });
                 } else {
                     if(prestation?.sousActe?.id) {
-                        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.id).subscribe(rest=>{
+
+                        this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation?.sousActe?.id).subscribe(rest=>{
 
                             this.montantConsomme = rest;
                            
