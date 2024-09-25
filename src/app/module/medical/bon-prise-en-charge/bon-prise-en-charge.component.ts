@@ -1542,13 +1542,17 @@ calculDebours1() {
     } else {
       console.log("============4====222======",this.montantPlafond);
       myForm.patchValue({montantRembourse:
-        this.montantPlafond,
+        (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('taux').value.taux) / 100,
         debours: this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('coutUnitaire').value, 
       baseRemboursement: this.prestationPopForm.get('nombreActe').value *
       this.prestationPopForm.get('coutUnitaire').value, 
       montantSupporte:this.prestationPopForm.get('nombreActe').value *
-      this.prestationPopForm.get('coutUnitaire').value - this.montantPlafond});
+      this.prestationPopForm.get('coutUnitaire').value -
+      (this.prestationPopForm.get('coutUnitaire').value * this.prestationPopForm.get('nombreActe').value *
+    this.prestationPopForm.get('taux').value.taux) / 100 
+    });
     }
     
   }
