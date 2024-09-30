@@ -2101,7 +2101,7 @@ export class TierPayantEditionComponent implements OnInit {
 
                 if(prestation?.sousActe?.sousActe) {
 
-                    this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation.sousActe?.sousActe?.id).subscribe(rest=>{
+                    this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation?.sousActe?.sousActe?.id).subscribe(rest=>{
 
                         this.montantConsomme = rest;
                        
@@ -2109,6 +2109,7 @@ export class TierPayantEditionComponent implements OnInit {
                     });
                 } else {
                     if(prestation?.sousActe?.id) {
+
                         this.tierPayantService.$findMontantConsomme(prestation.adherent.id, prestation?.sousActe?.id).subscribe(rest=>{
 
                             this.montantConsomme = rest;
@@ -2155,8 +2156,8 @@ export class TierPayantEditionComponent implements OnInit {
         }
          
 
-          this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe.numeroGroupe.toString();
-          this.prestationAdd.nomGroupe = prestation.adherent?.groupe.libelle;
+          this.prestationAdd.numeroGroupe = this.prestationAdd?.adherent?.groupe?.numeroGroupe.toString();
+          this.prestationAdd.nomGroupe = prestation.adherent?.groupe?.libelle;
           this.prestationAdd.numeroPolice = this.prestationAdd?.adherent?.groupe.police.numero;
           this.prestationAdd.souscripteur = this.prestationAdd?.adherent?.groupe.police.nom;
           if(this.prestationAdd?.bonPriseEnCharge?.id !==undefined && !this.prestationAdd.id) {
