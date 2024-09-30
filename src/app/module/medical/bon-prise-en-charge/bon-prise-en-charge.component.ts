@@ -1699,7 +1699,8 @@ calculDebours1() {
           montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.montantPlafond
         });
       }
-      if(this.montantPlafond1 == null || this.montantPlafond1 == 0 && this.prestationPopForm.get('baseRemboursement').value >  this.montantPlafond && this.adherentSelected.montantPlafondAnnuelRestant > 0) {
+      if(this.montantPlafond1 == null || this.montantPlafond1 == 0 && this.prestationPopForm.get('baseRemboursement').value > 
+      this.montantPlafond && this.adherentSelected.montantPlafondAnnuelRestant > 0) {
         console.log("===19===2===",this.montantPlafond+"====19===2=="+this.montantPlafond1+"====19===3=="+this.adherentSelected.montantPlafondAnnuelRestant);
         //this.showToast('error', 'INFORMATION', 'Votre plafond est atteint');
         // myForm.patchValue({observation: "Votre plafond est atteint"});
@@ -1718,6 +1719,20 @@ calculDebours1() {
             montantRembourse: this.adherentSelected.montantPlafondAnnuelRestant,
             montantSupporte: this.prestationPopForm.get('baseRemboursement').value - this.adherentSelected.montantPlafondAnnuelRestant
           });
+        }
+
+        if(this.prestationPopForm.get('montantPlafond').value && this.prestationPopForm.get('montantPlafond').value <= (this.prestationPopForm.get('coutUnitaire').value * (this.prestationPopForm.get('taux').value.taux) / 100)) {
+          console.log("cas 11111111111");
+          console.log("============19======333====",this.montantPlafond);
+          myForm.patchValue({montantRembourse:
+            this.montantPlafond ,
+            debours: this.prestationPopForm.get('nombreActe').value *
+          this.prestationPopForm.get('coutUnitaire').value, baseRemboursement:
+          this.prestationPopForm.get('nombreActe').value *
+          this.prestationPopForm.get('coutUnitaire').value,
+          montantSupporte: this.prestationPopForm.get('nombreActe').value *
+              this.prestationPopForm.get('coutUnitaire').value - this.montantPlafond
+        });
         }
        /*  if(this.adherentSelected.montantPlafondAnnuelRestant < this.prestationPopForm.get('baseRemboursement').value) {
           myForm.patchValue({
