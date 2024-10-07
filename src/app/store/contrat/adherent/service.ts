@@ -143,6 +143,13 @@ posAdherent(Adherent: Adherent): Observable<any> {
      );
     }
   }
+  findAdherent(id: string): Observable<Adherent> {
+    // @FIXME: post request
+    return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/finby-id//${id}`).pipe(
+      map((response: Adherent) => response)
+      //catchError(this.handleError())
+     );
+  }
 
   searchAdherentByNom(nom: string): Observable<AdherentList> {
     // @FIXME: post request
@@ -220,6 +227,13 @@ private handleError<T>() {
             catchError(this.handleError())
         );
     }
+    getAdherentPrincipauxByGroupeAndExercice(idGpe: string, exerciceId: string): Observable<Adherent[]> {
+      // @FIXME: get request
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT_PRINCIPAL_GROUPE)}/${idGpe}/${exerciceId}`).pipe(
+          map((response: Adherent[]) => response),
+          catchError(this.handleError())
+      );
+  }
 
     getAdherentByGroupe(idGroupe: string): Observable<AdherentList> {
         // @FIXME: get request

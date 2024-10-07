@@ -538,12 +538,16 @@ export class AvenantIncorporationComponent implements OnInit{
 
     loadAdherentPrincipalInfo() {
         console.log(this.adherentSelected);
-        this.obj.group = this.adherentSelected;
-        this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
-        console.log('*************this.adherentSelected*************', this.adherentSelected);
-        /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
-		console.log('*************this.genre*************', this.genre);*/
-        this.setAdherentPrincipal(this.adherentSelected);
+        
+                //this.adherentSelected = res;
+                this.obj.group = this.adherentSelected;
+                this.adherentPrincipaux1 = this.adherentPrincipauxTMP.filter(a => a.id === this.adherentSelected.id);
+                console.log('*************this.adherentSelected*************', this.adherentSelected);
+                /*this.genre = this.genreList.filter(value => value.id === this.adherentSelected.genre.id);
+                console.log('*************this.genre*************', this.genre);*/
+                this.setAdherentPrincipal(this.adherentSelected);
+           
+        
         this.viewFamille = true;
     }
 
@@ -710,6 +714,22 @@ export class AvenantIncorporationComponent implements OnInit{
             this.adherentService.getAdherentPrincipauxByGroupe(this.curentGroupe.id).subscribe(
                 (res: Adherent[]) => {
                     this.adherentPrincipaux = res;
+                    console.log('-------------this.adherentPrincipaux--------------------', this.adherentPrincipaux);
+                }
+            );
+        }
+    }
+
+    onGroupeChangeAndExercice() {
+        console.log('-------------this.curentGroupe--------------------' + this.curentGroupe.id);
+       // this.adherentPrincipaux = this.adherentPrincipauxTMP.filter(ad => ad.groupe.id === this.curentGroupe?.id);
+        if (this.curentGroupe.id != null && this.curentExercice.id != null) {
+            /* console.log('-------------groupesInput--------------------' + this.groupesInput.length);
+            this.groupePolicy = this.groupesInput; */
+            this.adherentService.getAdherentPrincipauxByGroupeAndExercice(this.curentGroupe.id, this.curentExercice.id).subscribe(
+                (res: Adherent[]) => {
+                    this.adherentPrincipaux = res;
+                    this.adherentPrincipaux2 = res;
                     console.log('-------------this.adherentPrincipaux--------------------', this.adherentPrincipaux);
                 }
             );

@@ -28,7 +28,7 @@
                                         name="selectedGroup"
                                         [filter]="true" filterBy="libelle" [showClear]="true"
                                         placeholder="Choisir un groupe"
-                                        (onChange)="onGroupeChange()">
+                                        >
                             </p-dropdown>
                             <!-- <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span> -->
                     <!--  </form> -->
@@ -49,7 +49,7 @@
                         <div class="p-col-4 p-mb-3"  *ngIf="etat === 'CREATE' || isRenouv">
                             <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-dropdown [disabled]="(!curentGroupe.id)" [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
-                                        [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange()">
+                                        [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange(); onGroupeChangeAndExercice()">
                                         
                             </p-dropdown>
                         </div>
