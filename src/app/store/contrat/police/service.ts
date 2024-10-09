@@ -154,4 +154,9 @@ export class PoliceService {
             );
             }
     }
+
+    majPoliceName(Police: Police): Observable<any> {
+        // @FIXME: post request
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/majPoliceName`, Police);
+    }
 }

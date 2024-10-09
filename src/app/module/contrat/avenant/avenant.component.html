@@ -5349,7 +5349,7 @@
                 </div>
             </p-tabPanel>
 
-            <p-tabPanel header="CREATION AVENANT ANTERIEUR" leftIcon="pi pi-cog" tooltip="CREATION AVENANT ANTERIEUR">
+            <!-- <p-tabPanel header="CREATION AVENANT ANTERIEUR" leftIcon="pi pi-cog" tooltip="CREATION AVENANT ANTERIEUR">
                 <span style="color: green !important"> <h4> Informations portant sur la création de l'avenant anterieur</h4></span>
                 <div class="card">
                 <div class="p-formgroup-inline">
@@ -5372,6 +5372,41 @@
                     </div>
 
                 </div> 
+                </div>
+    
+            </p-tabPanel> -->
+            <p-tabPanel header="MAJ NOM SOUSCRIPTEUR" leftIcon="pi pi-refresh" tooltip="MAJ NOM SOUSCRIPTEUR">
+                <span style="color: black !important"> <h4> NOM ACTUEL: <mark>{{viewPolice?.nom}}</mark></h4></span>
+                <span style="color: black !important"> <h6> Veuillez renseigner le nouveau nom de la police</h6></span>
+            <div class="card">
+                <!-- <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <label for="matricule" class="p-sr-only">Date Debut</label>
+                        <p-calendar style="min-width:300px" [showIcon]="true" appendTo="body"  inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                    </div>
+                    
+                    <div class="p-field">
+                        <label for="dateSoins" class="p-sr-only">Date Fin</label>
+                        <p-calendar [showIcon]="true" inputId="icon" appendTo="body"  dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                    </div>
+                    <div class="p-field">
+                        <button pButton pRipple type="button" label="valider"  (click)="createAnterieur()"></button>
+                    </div>
+                    
+
+                    <div class="p-field">
+                        <button pButton pRipple type="button" label="Mise à jour"  (click)="miseAjourAvenants()"></button>
+                    </div>
+
+                </div>  -->
+                <div class="p-grid">
+                    <div class="p-col-10">
+                        <input type="text" [(ngModel)]="policeName" pInputText />
+                    </div>
+                    <div class="p-col-2">
+                        <button pButton pRipple type="button" icon="pi pi-refresh" label="Mettre à jour" [disabled]="!policeName"  (click)="misAJourPoliceName()"></button>
+                    </div>
+                </div>
             </div>
     
             </p-tabPanel>
