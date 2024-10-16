@@ -15,6 +15,7 @@ import {
     SinistreTierPayantList
 } from './model';
 import {OrdreReglement, OrdreReglementList, Prefinancement} from '../prefinancement/model';
+import { CourrierPrestataire } from '../../medical/ordonnance-medical/model';
 
 @Injectable({providedIn: 'root'})
 export class TierPayantService {
@@ -205,6 +206,21 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
                 catchError(this.handleError())
             );    
         }
+
+        postCourrierPrestataire(courrier: CourrierPrestataire): Observable<any> {
+            // @FIXME: post request
+            return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/courrier/save`, courrier);
+          }
+
+          $getCourriersByPeriode(dateD: string, dateF: string): Observable<Array<CourrierPrestataire>> {
+            // @FIXME: get request
+            return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/courrier/by_periode` ,{params :
+              this.createRequestOption({dateD, dateF})}).pipe(
+              map((response: Array<CourrierPrestataire>) => response),
+              catchError(this.handleError())
+            );
+          }
+
     private createRequestOption = (req?: any): HttpParams => {
         let options: HttpParams = new HttpParams();
         if (req) {

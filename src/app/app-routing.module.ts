@@ -129,6 +129,7 @@ import { AssuranceVoyageComponent } from './module/contrat/assurance-voyage/assu
 import { MajPrestataireComponent } from './module/medical/majPrestataire/majPrestataire.component';
 import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
 import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
+import { CourrierPrestataireComponent } from './module/prestation/tier-payant/courrier-prestataire/courrier-prestataire.component';
 
 @NgModule({
     imports: [
@@ -213,6 +214,7 @@ import { ConsommationPasseComponent } from './module/contrat/consommation-passe/
                     {path: 'medical/convention', component: ConventionComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_medical','sm_medical_tout']}},
+                    
                     /* {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     {path: 'uikit/input', component: InputDemoComponent},
                     {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
@@ -264,6 +266,9 @@ import { ConsommationPasseComponent } from './module/contrat/consommation-passe/
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_prestation', 'sm_tiers_payant', 'sm_tiers_payant_consultation']}},
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
+                    {path: 'prestation/tierPayant/courrier-prestataire', component: CourrierPrestataireComponent,
+                      canActivate: [AuthGuard],
+                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_medical','sm_medical_tout']}},

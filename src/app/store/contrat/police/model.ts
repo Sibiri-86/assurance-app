@@ -10,7 +10,7 @@ import { TauxCommissionIntermediaire } from '../../parametrage/taux-commission-i
 import { OrdreReglement, Prefinancement } from '../../prestation/prefinancement/model';
 import {OrdreReglementTierPayant, SinistreTierPayant} from '../../prestation/tierPayant/model';
 import {Groupe} from '../groupe/model';
-import { OrdonnanceMedical } from '../../medical/ordonnance-medical/model';
+import { CourrierPrestataire, OrdonnanceMedical } from '../../medical/ordonnance-medical/model';
 import { Pays } from '../../parametrage/pays/model';
 import { Region } from '../../parametrage/region/model';
 import { Arrondissement } from '../../parametrage/arrondissement/model';
@@ -109,6 +109,7 @@ export interface Report {
     consommationParFamille?: ConsommationParFamille; 
     bilan? : Bilan;
     annee?: ExerciceComptable;
+    courrierReport?: CourrierPrestataire;
 }
 
 export interface PoliceList {
