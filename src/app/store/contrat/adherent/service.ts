@@ -385,6 +385,19 @@ searchAllAdherentByDateSoinsAndSouscripteur(dateSoins: Date, nom: string): Obser
   }
 }
 
+searchAllAdherentByDateSoinsAndSouscripteurPaginate(dateSoins: Date, nom: string): Observable<Adherent[]> {
+  // @FIXME: post request
+  if (nom ) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.nom = nom; 
+  return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureBySouscripteur-adherent`, adherent).pipe(
+    map((response: Adherent[]) => response)
+    //catchError(this.handleError())
+   );
+  }
+}
+
 searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(dateSoins: Date, nom: string,  matriculeGarant: string): Observable<Adherent[]> {
   // @FIXME: post request
   if (nom && matriculeGarant) {

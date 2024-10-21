@@ -236,6 +236,13 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 
   }
 
+  paginate(event) {
+    /* event.first = Index of the first record
+    event.rows = Number of rows to display in new page
+    event.page = Index of the new page
+    event.pageCount = Total number of pages */
+}
+
   addAssure(): void {
     this.displayAssure = false;
     this.adherentsList = [];

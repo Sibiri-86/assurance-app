@@ -63,6 +63,7 @@ export interface Adherent{
     montantPlafondAnnuel?:number;
     montantPlafondAnnuelRestant?:number;
     isPlafondAnnuel?:boolean;
+    /**Partie de pagination ajoutée */
     
 }
 

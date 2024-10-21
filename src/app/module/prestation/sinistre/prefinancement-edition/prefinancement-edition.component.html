@@ -210,7 +210,7 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="summary">
+                <ng-template pTemplate="summary">adherentsList
                     <div class="p-d-flex p-ai-center p-jc-between">
                         {{prestationListPrefinancement ? prestationListPrefinancement.length : 0 }} prestation(s).
                     </div>
@@ -338,7 +338,14 @@
                                     <td *ngIf="historiqueAveantAdherant?.isCouvert"><p-badge value="Personne couverte à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="success"></p-badge></td>
                                     <td *ngIf="!historiqueAveantAdherant?.isCouvert"><p-badge value="Personne non couverte à la date du {{prestationPopForm?.value?.dateSoins | formatTableValue : 'date'}}"  severity="danger"></p-badge></td>
                                     
+
                                 </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div class="p-d-flex p-ai-center p-jc-between">
+                                    {{adherentsList ? adherentsList.length : 0 }} assuré(es).
+                                </div>
+                                <!-- <p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator> -->
                             </ng-template>
                         </p-table>
                     </div>
