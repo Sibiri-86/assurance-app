@@ -342,10 +342,10 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary">
-                                <div class="p-d-flex p-ai-center p-jc-between">
+                                <!-- <div class="p-d-flex p-ai-center p-jc-between">
                                     {{adherentsList ? adherentsList.length : 0 }} assuré(es).
-                                </div>
-                                <!-- <p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator> -->
+                                </div> -->
+                                <p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator>
                             </ng-template>
                         </p-table>
                     </div>

@@ -1,6 +1,6 @@
 <div class="p-grid">
     <p-tabView (onChange)="onTabChange($event)">
-        <p-tabPanel header="Préfinancement(s)" leftIcon="pi pi-list" tooltip="Facture(s) préfinancée(s)" [style]="{'width': '100%'}"> 
+        <p-tabPanel header="Préfinancement(s)" leftIcon="pi pi-list" tooltip="Remboursement(s) préfinancé(s)" [style]="{'width': '100%'}"> 
 
 	<div class="p-col-12">
 		<p-toast></p-toast>
@@ -93,11 +93,11 @@
                         </td>
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
                         [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
+                            <span class="p-text-bold p-ml-2" style="color: red !important;">{{garant?.adherent?.totalMontantReclame | formatTableValue: 'number':true}}</span>
                         </td>
                         <td *ngIf="rowGroupMetadata[garant?.adherent?.prenom].index === rowIndex" 
                         [attr.rowspan]="rowGroupMetadata[garant?.adherent?.prenom].size" class="vue">
-                            <span class="p-text-bold p-ml-2">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
+                            <span class="p-text-bold p-ml-2" style="color: green !important;">{{garant?.adherent?.totalMontantRembourse | formatTableValue: 'number':true}}</span>
                         </td>
 						<td><span class="p-column-title" >{{garant?.dateDeclaration | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title" >{{garant?.numeroSinistre}}</span></td>
