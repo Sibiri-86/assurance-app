@@ -1,4 +1,6 @@
 export const SERVICE_PREFIX = `/assurance`;
+export const SMS_PREFIX = `https://www.aqilas.com/api/v1/sms`;
+
 
 
 export class Endpoints {
@@ -197,6 +199,11 @@ export class Endpoints {
     static readonly CONTRAT_POLICE = {
         prod: `${SERVICE_PREFIX}/contrat/police`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+
+    static readonly SMS = {
+        prod: `${SMS_PREFIX}`,
+        mock: `assets/mock/contrat/sms.mock.json`
     };
 
     static readonly CONTRAT_POLICE_UPDATE = {

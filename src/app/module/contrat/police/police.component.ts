@@ -2666,6 +2666,7 @@ changeGarantie(garantie, indexLigne: number) {
   }
 
   validerPolice(police: Police){
+
     this.confirmationService.confirm({
       message: 'Etes vous sur de vouloir valider la police?',
       header: 'Confirmation',

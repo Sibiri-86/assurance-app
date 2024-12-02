@@ -1,4 +1,4 @@
-import {Police, PoliceList, Report, Statistique} from "./model";
+import {Police, PoliceList, Report, SMS, Statistique} from "./model";
 import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
@@ -9,8 +9,11 @@ import {AdherentFamille} from '../adherent/model';
 import {createRequestOption} from '../../../module/util/loader-util';
 import { ConsommationPasse } from "../../prestation/tierPayant/model";
 
+//export const SMS_PREFIX = `https://www.aqilas.com/api/v1/sms`;
+
 @Injectable({providedIn: 'root'})
 export class PoliceService {
+    public resourceUrl = '`https://www.aqilas.com/api/v1/sms';
     constructor(private http: HttpClient) {}
 
     $getPolices(): Observable<PoliceList> {
@@ -92,6 +95,22 @@ export class PoliceService {
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/json');
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/upload`, data, { headers: headers });
+    }
+    postSendSMS(sms: SMS) : Observable<any> {
+        /* let  tel: string[] = [ "+22676062223", "+22670127516" ];
+        const data: FormData = new FormData();
+
+         let sms: SMS= {};
+        sms.from = "VIMSO";
+        sms.text ="Bonjour, nous vous informons que votre contrat d'assurance est pret, juste un test avec solmavi !";
+        sms.to = tel; */
+        console.log(sms);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.SMS)}`, sms,
+         { headers: {'X-AUTH-TOKEN': '25aaf61d-b47e-42ee-b14b-c1b490fd034d',
+            'Content-Type': 'application/json',
+            'Accept': '*/*'
+         } });
+      
     }
 
     private handleError<T>() {
