@@ -190,26 +190,7 @@ export class AssureConsommationComponent implements OnInit, OnDestroy {
                   }
             );
 
-            this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamille).subscribe(
-              (res) => {
-                  console.log('..............consoSinistreTiersPayantFamilles55555555555..............   ', res);
-                  this.consoSinistreTiersPayantFamilles = res;
-                  if(res){
-                    this.montantSinistreTiersPayantTotalReclameFamille = 0;
-                    this.montantSinistreTiersPayantTotalRembourseFamille = 0;
-                    for(let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
-                      this.montantSinistreTiersPayantTotalReclameFamille = this.montantSinistreTiersPayantTotalReclameFamille + this.consoSinistreTiersPayantFamilles[i].baseRemboursement;
-                      this.montantSinistreTiersPayantTotalRembourseFamille = this.montantSinistreTiersPayantTotalRembourseFamille + this.consoSinistreTiersPayantFamilles[i].montantRembourse;
-                    }
-                  }
-                  this.updateRowGroupMetaDataTiersPayant();
-                  /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
-                  console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
-                  this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
-                  console.log('.............consoFamillesSinistreTiersPayant..............   ', this.consoFamillesSinistreTiersPayant);
-                  */
-                }
-          );
+            
 
                   if (profile['attributes'].role.length != 0){
                   this.role = profile['attributes'].role[0]; //gives you array of all attributes of user, extract what you need
@@ -252,6 +233,29 @@ ngOnInit(): void {
   this.statusObject$ = this.store.pipe(select(status));
   this.checkStatus();
   // this.loadPharmacieGarde();
+}
+
+loadTierPayantData () {
+  this.portailService.fetchDepenseSinistreTiersPayantAndFamille$(this.depenseFamille).subscribe(
+    (res) => {
+        console.log('..............consoSinistreTiersPayantFamilles55555555555..............   ', res);
+        this.consoSinistreTiersPayantFamilles = res;
+        if(res){
+          this.montantSinistreTiersPayantTotalReclameFamille = 0;
+          this.montantSinistreTiersPayantTotalRembourseFamille = 0;
+          for(let i = 0; i < this.consoSinistreTiersPayantFamilles.length; i++) {
+            this.montantSinistreTiersPayantTotalReclameFamille = this.montantSinistreTiersPayantTotalReclameFamille + this.consoSinistreTiersPayantFamilles[i].baseRemboursement;
+            this.montantSinistreTiersPayantTotalRembourseFamille = this.montantSinistreTiersPayantTotalRembourseFamille + this.consoSinistreTiersPayantFamilles[i].montantRembourse;
+          }
+        }
+        this.updateRowGroupMetaDataTiersPayant();
+        /* this.consoFamillesSinistre = res.filter(p=>p.totalMontantReclameSinistre != null);
+        console.log('..............consoFamillesSinistre..............   ', this.consoFamillesSinistre);
+        this.consoFamillesSinistreTiersPayant = res.filter(p=>p.totalMontantReclameSinistreTiersPayant != null);
+        console.log('.............consoFamillesSinistreTiersPayant..............   ', this.consoFamillesSinistreTiersPayant);
+        */
+      }
+);
 }
 
 loadGroupeList() {
@@ -587,7 +591,7 @@ voirSinistreDetail(sinistre: any) {
         break;
       }
       case 1: {
-        //this.loadRembourssementEnCours();
+        this.loadTierPayantData();
         break;
       }
       case 2: {
