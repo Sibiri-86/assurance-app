@@ -75,6 +75,12 @@ export interface Statistique {
     nombreAssure?: number;
 }
 
+export interface SMS {
+    from?: string;
+    text?: string;
+    to?: string[];
+}
+
 export interface Rapport {
     nombreConjoint?: number;
     nombreEnfant?: number;
