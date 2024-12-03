@@ -463,6 +463,20 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, this.prestationAdd.sousActe?.sousActe?.id).subscribe(rest=>{
 
             this.montantConsomme = rest;
+            if(this.prestationsList) {
+      
+              for(let i =0; i< this.prestationsList.length; i++) {
+                console.log("==========rest==========", this.prestationAdd.familleActe.garantie?.id);
+                console.log(this.prestationsList[i]?.familleActe?.id);
+                if(this.prestationsList[i]?.familleActe?.id === this.prestationAdd.familleActe?.garantie?.id) {
+                  this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+                }
+              }
+            }
+           
+    
+            console.log("==========rest==========", rest);
+            console.log(this.montantConsomme);
            
         });
     }
