@@ -431,9 +431,16 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     console.log(event);
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
-        this.montantConsomme = rest;
-        console.log("==========rest==========", rest);
-        console.log(this.montantConsomme);
+      if(this.prestationsList) {
+
+        for(let i =0; i< this.prestationsList.length; i++) {
+
+          if(this.prestationsList[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value.id) {
+            this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+          }
+        }
+        rest = this.montantConsomme;
+      }
        
     });
 }
@@ -1372,16 +1379,16 @@ this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousAct
               sort: Sort.ACCORDE,
               observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
               montantRembourse: this.montantPlafond1,
-              montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
-              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+              montantRestant:   ((this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))-this.montantPlafond1),
+              montantSupporte:   ((this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))-this.montantPlafond1)
             });
            } else {
             myForm.patchValue({
               sort: Sort.ACCORDE,
               observation: "Remboursement favorable avec un plafond atteint. L'assuré(e) devra prendre en charge " + (this.montantPlafond1 -(this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))),
               montantRembourse: this.montantPlafond1 - this.montantConsomme,
-              montantRestant:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value,
-              montantSupporte:   this.prestationPopForm.get('baseRemboursement').value - this.prestationPopForm.get('montantRembourse').value
+              montantRestant:   ((this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))-this.montantPlafond1),
+              montantSupporte:   ((this.montantConsomme +  (this.prestationPopForm.get('baseRemboursement').value))-this.montantPlafond1)
             })
            }
             
