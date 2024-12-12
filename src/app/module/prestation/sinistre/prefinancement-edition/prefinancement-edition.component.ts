@@ -143,6 +143,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayPrestationpop = false;
   displayPrestationbon = false;
   prestationsList: Prestation[]= [];
+  listPrestation: Prestation[]= [];
   prestationsList1: Prestation[]= [];
   compteur: number = null;
   typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
@@ -428,13 +429,15 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
-        if(this.prestationsList) {
+        this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
+        console.log("==========listPrestation==========", this.listPrestation);
+        if(this.listPrestation) {
   
-          for(let i =0; i< this.prestationsList.length; i++) {
-            console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
-            console.log(this.prestationsList[i]?.familleActe?.id);
-            if(this.prestationsList[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
-              this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+          for(let i =0; i< this.listPrestation.length; i++) {
+          //  console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
+            console.log(this.listPrestation[i]?.familleActe?.id);
+            if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+              this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
             }
           }
         }

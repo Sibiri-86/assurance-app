@@ -160,6 +160,7 @@ export class TierPayantEditionComponent implements OnInit {
     plafondSousActe: CheckPlafond;
     exerciceSelected: Exercice = {};
     prestationsList: Prestation[]= [];
+    listPrestation: Prestation[] = [];
     prestationsListWithBon: Prestation[]= [];
     prestationsList1: Prestation[]= [];
     prestationsList2: Prestation[]= [];
@@ -463,13 +464,14 @@ export class TierPayantEditionComponent implements OnInit {
         this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, this.prestationAdd.sousActe?.sousActe?.id).subscribe(rest=>{
 
             this.montantConsomme = rest;
-            if(this.prestationsList) {
+            this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
+            console.log("==========listPrestation==========", this.listPrestation);
+            if(this.listPrestation) {
       
-              for(let i =0; i< this.prestationsList.length; i++) {
-                console.log("==========rest==========", this.prestationAdd.familleActe.garantie?.id);
-                console.log(this.prestationsList[i]?.familleActe?.id);
-                if(this.prestationsList[i]?.familleActe?.id === this.prestationAdd.familleActe?.garantie?.id) {
-                  this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+              for(let i = 0; i< this.listPrestation.length; i++) {
+
+                if(this.listPrestation[i]?.familleActe?.id === this.prestationAdd.familleActe?.garantie?.id) {
+                  this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
                 }
               }
             }

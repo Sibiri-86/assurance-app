@@ -154,6 +154,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
  displayPrestationpop = false;
  adherentSelectedfinal: Adherent;
  prestationsList: Prestation[]= [];
+ listPrestation: Prestation[]= [];
  numberPrestation = 0;
  compteur: number = null;
  displayFP = false;
@@ -437,15 +438,18 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     console.log(event);
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
       this.montantConsomme = rest;
-      if(this.prestationsList) {
+      this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id );
 
-        for(let i =0; i< this.prestationsList.length; i++) {
-
-          if(this.prestationsList[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value.id) {
-            this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+        if(this.listPrestation) {
+  
+          for(let i =0; i< this.listPrestation.length; i++) {
+            console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
+            console.log(this.listPrestation[i]?.familleActe?.id);
+            if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+              this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
+            }
           }
         }
-      }
        // this.montantConsomme = rest;
         console.log("==========rest==========", rest);
         console.log(this.montantConsomme);
