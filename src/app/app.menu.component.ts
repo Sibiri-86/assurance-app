@@ -76,7 +76,9 @@ export class AppMenuComponent implements OnInit {
                                     {label: 'Ordre de paiement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_valide)},
                                     {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
-                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)}
+                                    visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)},
+                                    {label: 'Courrier Prestataire', icon: '', routerLink: ['prestation/tierPayant/courrier-prestataire'],
+                                        visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)}
                                 ]
                             },
                             {

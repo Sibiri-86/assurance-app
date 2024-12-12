@@ -322,6 +322,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   statList$: Observable<any>;
   statList: Subscription;
   viewPolice: Police;
+  majPoliceName: Police;
+  policeName: string;
   displayViewContrat = false;
   groupePlafongConfig: Groupe = {};
   adherentHisChecked : HistoriqueAvenantAdherant;
@@ -498,15 +500,34 @@ export class AvenantComponent implements OnInit, OnDestroy {
     })
   }
 
+  misAJourPoliceName() {
+    if(this.policeName) {
+      console.log('new police name', this.policeName);
+      this.majPoliceName = this.viewPolice;
+      this.majPoliceName.nom = this.policeName;
+      console.log('new police name', this.majPoliceName.nom);
+      console.log('new police', this.majPoliceName);
+      
+      this.policeService.majPoliceName(this.majPoliceName).subscribe((rest)=>{
+        if(rest) {
+          
+        }
+        this.displayViewContrat = false;
+      });
+    }
+  }
+
   miseAjourAvenants() {
     this.historiqueAvenantService.updateHistoriqueAvenantByPolice(this.viewPolice.id).subscribe((rest)=>{
       if(rest) {
 
       }
-    })
+    });
   }
 
   ngOnInit(): void {
+    this.majPoliceName = {};
+    this.policeName;
     this.dateDebut = new Date();
     this.dateFin = new Date();
     this.historiqueAvenantAdherents = [];

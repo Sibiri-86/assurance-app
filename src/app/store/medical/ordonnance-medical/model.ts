@@ -1,5 +1,6 @@
 import { Adherent } from '../../contrat/adherent/model';
 import { TypeReport } from '../../contrat/enum/model';
+import { Commune } from '../../parametrage/commune/model';
 import { Medecin } from '../../parametrage/medecin/model';
 import { Pathologie } from '../../parametrage/pathologie/model';
 import { Prestataire } from '../../parametrage/prestataire/model';
@@ -52,5 +53,26 @@ export interface Report {
 
 export interface ReportFile {
     reportFile?: ArrayBuffer;
+}
+
+export interface CourrierPrestataire {
+    id?: number;
+    dateSaisie?: Date;
+    prestataire?:Prestataire;
+    localite?: Commune;
+    referenceCourrier?: string;
+    cheques?: Array<Cheque>;
+    telephone?: number;
+    initialAgent?: Date;
+}
+
+export interface Cheque {
+    id?: number;
+    numeroCheque?: string;
+    numeroFacture?: string;
+    montantPaye?: number;
+    montantReclame?: number;
+    differenceMontant?: number;
+    dateSaisie?: Date;
 }
 

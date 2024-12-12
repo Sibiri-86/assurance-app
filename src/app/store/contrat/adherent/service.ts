@@ -385,6 +385,29 @@ searchAllAdherentByDateSoinsAndSouscripteur(dateSoins: Date, nom: string): Obser
   }
 }
 
+searchAllAdherentByDateSoinsAndSouscripteurPaginate(dateSoins: Date, nom: string): Observable<any> {
+  // @FIXME: post request
+  if (nom ) {
+    const adherent :Adherent = {};
+    adherent.dateEntree = dateSoins;
+    adherent.nom = nom; 
+  return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/getAssureBySouscripteur-adherent/paginate-adherent`,{params: createRequestOption({dateSoins,
+    nom})}).pipe(
+   map((response: AdherentList) => response),
+   catchError(this.handleError())
+ );
+  }
+}
+
+$getAdherentsDistinctGroupeAndExerciceId(idGarantie: string, idPolice: string, idGroupe: string, date:String): Observable<AdherentList> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/distinct-groupe-exercice`, {params: createRequestOption({idGarantie,
+     idPolice, idGroupe, date})}).pipe(
+    map((response: AdherentList) => response),
+    catchError(this.handleError())
+  );
+}
+
 searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(dateSoins: Date, nom: string,  matriculeGarant: string): Observable<Adherent[]> {
   // @FIXME: post request
   if (nom && matriculeGarant) {
@@ -416,14 +439,14 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
   );
 }
 
-$getAdherentsDistinctGroupeAndExerciceId(idGarantie: string, idPolice: string, idGroupe: string, date:String): Observable<AdherentList> {
+/**$getAdherentsDistinctGroupeAndExerciceId(idGarantie: string, idPolice: string, idGroupe: string, date:String): Observable<AdherentList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_ADHERENT)}/distinct-groupe-exercice`, {params: createRequestOption({idGarantie,
      idPolice, idGroupe, date})}).pipe(
     map((response: AdherentList) => response),
     catchError(this.handleError())
   );
-}
+}*/
 
 
 }
