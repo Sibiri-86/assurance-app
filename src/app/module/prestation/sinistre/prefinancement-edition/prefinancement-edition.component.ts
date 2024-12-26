@@ -692,7 +692,7 @@ findMontantPlafond(event){
         }
           if(this.adherentSelected.signeAdherent ==='-') {
             if((value.dateSortie === null && value.dateSuspension  !== null) || (value.dateSortie !== null && value.dateSuspension  !== null && new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
-          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+          && new Date(value.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  suspendu(e) !!!');
               if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
