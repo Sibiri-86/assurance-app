@@ -12,7 +12,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { loadSousActe } from '../../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../../store/parametrage/sous-acte/selector';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, switchMap, takeUntil } from 'rxjs/operators';
 import { SousActe } from 'src/app/store/parametrage/sous-acte/model';
 import { Taux } from '../../../../store/parametrage/taux/model';
 import { loadTaux } from '../../../../store/parametrage/taux/actions';
@@ -187,6 +187,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   isAdherantsList = false;
   isAdherantsSearch = false;
   prenomToSearch: string;
+  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -546,6 +547,7 @@ findMontantPlafond(event){
   }
 
   ngOnInit(): void {
+    this.SearchWithDebounceTime();
     this.dateDebut = new Date();
     this.dateFin = new Date();
 
@@ -2076,6 +2078,37 @@ searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
   });
 }
 
+SearchWithDebounceTime(){
+  this.searchTerms
+      .pipe(
+        debounceTime(500), // Attendre 500ms après la dernière frappe.
+        switchMap((prenom: string) =>
+          this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+            this.police.nom,
+            this.prestationPopForm.get('dateSoins').value,
+            prenom,
+            this.page,
+            this.size
+          )
+        )
+      )
+      .subscribe({
+        next: (data: Page<Adherent[]>) => {
+          this.isAdherantsList = false;
+          this.isAdherantsSearch = true;
+          this.adherentsListByPage = data.content;
+          this.totalElements = data.totalElements;
+          this.totalPages = data.totalPages;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des adhérents', err);
+        },
+      });
+}
+
+searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
+  this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+}
 
 }
 
