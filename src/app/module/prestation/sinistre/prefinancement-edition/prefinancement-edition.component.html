@@ -352,9 +352,9 @@
                             
                                 <div class="pagination">
                                     <span>Total: <span class="champVert">{{totalElements}} </span> </span>
-                                    <button (click)="onPageChange(page - 1)" [disabled]="page === 0">Précédent</button>
+                                    <button (click)="onPageChange(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
                                     <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
-                                    <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages">Suivant</button>
+                                    <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
                                   </div>
                                   
                             </ng-template>

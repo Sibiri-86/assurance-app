@@ -2048,11 +2048,11 @@ onPageChange(newPage: number): void {
 loadAdherentBySouscripteurByDateSoin(): void {
   this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.prestationPopForm.get('dateSoins').value, this.page, this.size).subscribe({
     next: (data: Page<Adherent[]>) => {
+      this.isAdherantsList = true;
+      this.isAdherantsSearch = false;
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
-      this.isAdherantsList = false;
-      this.isAdherantsSearch = true;
     },
     error: (err) => {
       console.error('Erreur lors du chargement des adhérents', err);
@@ -2064,11 +2064,11 @@ searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
   this.prenomToSearch = prenom;
   this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
     next: (data: Page<Adherent[]>) => {
+      this.isAdherantsList = false;
+      this.isAdherantsSearch = true;
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
-      this.isAdherantsList = true;
-      this.isAdherantsSearch = false;
     },
     error: (err) => {
       console.error('Erreur lors du chargement des adhérents', err);
