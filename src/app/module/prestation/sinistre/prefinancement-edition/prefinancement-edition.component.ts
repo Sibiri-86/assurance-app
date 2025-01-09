@@ -2043,7 +2043,7 @@ onPageChange(newPage: number): void {
   }
   if(this.isAdherantsSearch){
     this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenom);
-    //this.SearchWithDebounceTime();
+    this.SearchWithDebounceTime();
   }
 
 }
@@ -2108,7 +2108,6 @@ SearchWithDebounceTime(){
 }
 
 searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
-
   this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
 }
 
