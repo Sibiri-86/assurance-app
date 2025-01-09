@@ -1803,7 +1803,7 @@ calculDebours1() {
   this.prestationPopForm.get('coutUnitaire').value});
 }
 
-if(this.prestationPopForm.get('montantRembourse').value >= this.adherentSelected.montantPlafondAnnuelRestant) {
+if( (this.prestationPopForm.get('baseRemboursement').value * this.prestationPopForm.get('taux').value.taux) / 100 >= this.adherentSelected.montantPlafondAnnuelRestant) {
   console.log("============22==========",this.montantPlafond1);
   console.log(this.montantConsomme," 2 ", this.adherentSelected.montantPlafondAnnuelRestant," 3 ",this.prestationPopForm.get('montantRembourse').value," 4 ",this.adherentSelected.montantPlafondAnnuel)
   this.addMessage('error', 'Plafond global atteint',
