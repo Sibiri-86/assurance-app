@@ -184,6 +184,10 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   page = 0;
   size = 10;
 
+  isAdherantsList = false;
+  isAdherantsSearch = false;
+  prenomToSearch: string;
+
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private conventionService: ConventionService,
@@ -2032,7 +2036,13 @@ addProduitExcluToSaveList() {
 
 onPageChange(newPage: number): void {
   this.page = newPage;
-  this.loadAdherentBySouscripteurByDateSoin();
+  if(this.isAdherantsList){
+    this.loadAdherentBySouscripteurByDateSoin();
+  }
+  if(this.isAdherantsSearch){
+    this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
+  }
+
 }
 
 loadAdherentBySouscripteurByDateSoin(): void {
@@ -2041,6 +2051,8 @@ loadAdherentBySouscripteurByDateSoin(): void {
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
+      this.isAdherantsList = false;
+      this.isAdherantsSearch = true;
     },
     error: (err) => {
       console.error('Erreur lors du chargement des adhérents', err);
@@ -2049,11 +2061,14 @@ loadAdherentBySouscripteurByDateSoin(): void {
 }
 
 searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
+  this.prenomToSearch = prenom;
   this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
     next: (data: Page<Adherent[]>) => {
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
+      this.isAdherantsList = true;
+      this.isAdherantsSearch = false;
     },
     error: (err) => {
       console.error('Erreur lors du chargement des adhérents', err);
