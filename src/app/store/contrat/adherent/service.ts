@@ -1,6 +1,6 @@
 
 import {Adherent, AdherentList, AdherentResearchReponse, ConditionGenerale, ConditionGeneraleList} from './model';
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { AdherentFamille } from './model';
 import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
 import { Exercice } from '../exercice/model';
+import { Page } from 'src/app/module/util/pageable';
 
 @Injectable({providedIn: 'root'})
 export class AdherentService {
@@ -449,4 +450,28 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
 }*/
 
 
+  // Bircof
+  // Recherher les adhérants par souscipteurs et par date
+  searchAllAdherentByDateSoinsAndSouscripteurByPage(souscripteur: string, dateSoins: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('souscripteur', souscripteur)
+      .set('dateSoins', dateSoins)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE)}`, { params });
+  }
+
+  // Bircof
+  // Rechercher les adhérants par souscripteur, date, et par leur nom
+  searchAllAdherentByDateSoinsAndSouscripteurByPrenom(souscripteur: string, dateSoins: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('souscripteur', souscripteur)
+      .set('dateSoins', dateSoins)
+      .set('prenom', prenom)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM)}`, { params });
+  }
 }

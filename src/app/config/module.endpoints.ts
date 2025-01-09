@@ -523,4 +523,15 @@ export class Endpoints {
             mock: `assets/mock/contrat/historique-avenant.mock.json`
         };
 
+
+        static readonly ADHERANT_BY_SOUSCRIPTEUR_BY_DATE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/getAssureBySouscripteur-adherent/paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
+        static readonly ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/getAssureBySouscripteur-adherent/paginate/prenom`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }

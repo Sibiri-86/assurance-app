@@ -76,6 +76,7 @@ import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { PlafondActe, PlafondFamilleActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 import { formatDate } from '@angular/common';
 import { KeycloakService } from 'keycloak-angular';
+import { Page } from 'src/app/module/util/pageable';
 
 
 @Component({
@@ -160,6 +161,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayAssure = false;
   adherentsearch:  Adherent = {};
   adherentsList: Array<Adherent> = [];
+  adherentsListByPage: any;
   adherentsSelected: Adherent = {};
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
@@ -174,6 +176,13 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   operateur = '';
   role = '';
   saisie : Saisie = {};
+
+
+  adherents: Adherent[] = [];
+  totalElements = 0;
+  totalPages = 0;
+  page = 0;
+  size = 10;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -211,7 +220,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   rechercherAssure(): void {
     this.displayAssure = true;
   }
-filtrer(): void {
+  
+/* filtrer(): void {
 if(this.adherentsearch.matriculeGarant && !this.police.nom) {
   this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
     if(rest) {
@@ -221,6 +231,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 
   }
   if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+
     this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationPopForm.get('dateSoins').value,this.police.nom).subscribe((rest)=>{
       if(rest) {
         this.adherentsList= rest;
@@ -235,7 +246,30 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
       });
   }
 
+  } */
+filtrer(): void {
+if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+  this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+    if(rest) {
+      this.adherentsList= rest;
+    }
+    });
+
   }
+  if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+
+    this.loadAdherentBySouscripteurByDateSoin();
+  }
+  if(this.adherentsearch.matriculeGarant && this.police.nom) {
+    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+      if(rest) {
+        this.adherentsList= rest;
+      }
+      });
+  }
+
+  }
+
 
  /*  paginate(event) {
    this.
@@ -1995,6 +2029,39 @@ addProduitExcluToSaveList() {
   this.displayProduitExclus = false;
 }
 
+
+onPageChange(newPage: number): void {
+  this.page = newPage;
+  this.loadAdherentBySouscripteurByDateSoin();
+}
+
+loadAdherentBySouscripteurByDateSoin(): void {
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.prestationPopForm.get('dateSoins').value, this.page, this.size).subscribe({
+    next: (data: Page<Adherent[]>) => {
+      this.adherentsListByPage = data.content;
+      this.totalElements = data.totalElements;
+      this.totalPages = data.totalPages;
+    },
+    error: (err) => {
+      console.error('Erreur lors du chargement des adhérents', err);
+    },
+  });
+}
+
+searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
+    next: (data: Page<Adherent[]>) => {
+      this.adherentsListByPage = data.content;
+      this.totalElements = data.totalElements;
+      this.totalPages = data.totalPages;
+    },
+    error: (err) => {
+      console.error('Erreur lors du chargement des adhérents', err);
+    },
+  });
+}
+
+
 }
 
 
@@ -2013,3 +2080,5 @@ export interface FraisReels {
   dateSoins?: Date;
   produitPharmaceutique: Array<ProduitPharmaceutique>;
 }
+
+
