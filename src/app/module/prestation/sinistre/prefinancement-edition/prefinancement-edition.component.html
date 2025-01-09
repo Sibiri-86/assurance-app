@@ -297,7 +297,7 @@
                     </p-toolbar>
 
                     <div class="p-col-12">
-                        <p-table #adt [value]="adherentsList" [(selection)]="adherentsSelected"  [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+                        <p-table #adt [value]="adherentsListByPage" [(selection)]="adherentsSelected" dataKey="id" editMode="row"
                         [rowHover]="true" styleClass="p-datatable-customers"
                         [globalFilterFields]="['groupe.police.nom','nom','prenom']"
                          currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
@@ -307,7 +307,10 @@
                                 <h5 class="p-m-0"></h5>
                                 <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="adt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                <input pInputText type="text"
+                                
+                                (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenom($event.target.value)"
+                                placeholder="Recherchez par le prénom uniquement" />
                                 </span>
                             </div>
                         </ng-template>
@@ -342,10 +345,18 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary">
-                                <!-- <div class="p-d-flex p-ai-center p-jc-between">
+<!--                                  <div class="p-d-flex p-ai-center p-jc-between">
                                     {{adherentsList ? adherentsList.length : 0 }} assuré(es).
                                 </div> -->
-                                <p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator>
+                                <!--<p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator>-->
+                            
+                                <div class="pagination">
+                                    <span>Total: <span class="champVert">{{totalElements}} </span> </span>
+                                    <button (click)="onPageChange(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
+                                    <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+                                    <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
+                                  </div>
+                                  
                             </ng-template>
                         </p-table>
                     </div>

@@ -76,6 +76,7 @@ import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { PlafondActe, PlafondFamilleActe, PlafondSousActe } from 'src/app/store/parametrage/plafond/model';
 import { formatDate } from '@angular/common';
 import { KeycloakService } from 'keycloak-angular';
+import { Page } from 'src/app/module/util/pageable';
 
 
 @Component({
@@ -143,6 +144,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayPrestationpop = false;
   displayPrestationbon = false;
   prestationsList: Prestation[]= [];
+  listPrestation: Prestation[]= [];
   prestationsList1: Prestation[]= [];
   compteur: number = null;
   typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
@@ -159,6 +161,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayAssure = false;
   adherentsearch:  Adherent = {};
   adherentsList: Array<Adherent> = [];
+  adherentsListByPage: any;
   adherentsSelected: Adherent = {};
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
@@ -173,6 +176,17 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   operateur = '';
   role = '';
   saisie : Saisie = {};
+
+
+  adherents: Adherent[] = [];
+  totalElements = 0;
+  totalPages = 0;
+  page = 0;
+  size = 10;
+
+  isAdherantsList = false;
+  isAdherantsSearch = false;
+  prenomToSearch: string;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -210,7 +224,8 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   rechercherAssure(): void {
     this.displayAssure = true;
   }
-filtrer(): void {
+  
+/* filtrer(): void {
 if(this.adherentsearch.matriculeGarant && !this.police.nom) {
   this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
     if(rest) {
@@ -220,6 +235,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
 
   }
   if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+
     this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationPopForm.get('dateSoins').value,this.police.nom).subscribe((rest)=>{
       if(rest) {
         this.adherentsList= rest;
@@ -234,7 +250,30 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
       });
   }
 
+  } */
+filtrer(): void {
+if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+  this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+    if(rest) {
+      this.adherentsList= rest;
+    }
+    });
+
   }
+  if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+
+    this.loadAdherentBySouscripteurByDateSoin();
+  }
+  if(this.adherentsearch.matriculeGarant && this.police.nom) {
+    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+      if(rest) {
+        this.adherentsList= rest;
+      }
+      });
+  }
+
+  }
+
 
  /*  paginate(event) {
    this.
@@ -432,13 +471,15 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
-        if(this.prestationsList) {
+        this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
+        console.log("==========listPrestation==========", this.listPrestation);
+        if(this.listPrestation) {
   
-          for(let i =0; i< this.prestationsList.length; i++) {
-            console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
-            console.log(this.prestationsList[i]?.familleActe?.id);
-            if(this.prestationsList[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
-              this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+          for(let i =0; i< this.listPrestation.length; i++) {
+          //  console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
+            console.log(this.listPrestation[i]?.familleActe?.id);
+            if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+              this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
             }
           }
         }
@@ -689,7 +730,7 @@ findMontantPlafond(event){
         }
           if(this.adherentSelected.signeAdherent ==='-') {
             if((value.dateSortie === null && value.dateSuspension  !== null) || (value.dateSortie !== null && value.dateSuspension  !== null && new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
-          && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
+          && new Date(value.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime()) ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
               this.addMessage('error', 'Assuré(e) non pris en compte',
               'Cet(te) assuré(e) est  suspendu(e) !!!');
               if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
@@ -1992,6 +2033,50 @@ addProduitExcluToSaveList() {
   this.displayProduitExclus = false;
 }
 
+
+onPageChange(newPage: number): void {
+  this.page = newPage;
+  if(this.isAdherantsList){
+    this.loadAdherentBySouscripteurByDateSoin();
+  }
+  if(this.isAdherantsSearch){
+    this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
+  }
+
+}
+
+loadAdherentBySouscripteurByDateSoin(): void {
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.prestationPopForm.get('dateSoins').value, this.page, this.size).subscribe({
+    next: (data: Page<Adherent[]>) => {
+      this.isAdherantsList = true;
+      this.isAdherantsSearch = false;
+      this.adherentsListByPage = data.content;
+      this.totalElements = data.totalElements;
+      this.totalPages = data.totalPages;
+    },
+    error: (err) => {
+      console.error('Erreur lors du chargement des adhérents', err);
+    },
+  });
+}
+
+searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
+  this.prenomToSearch = prenom;
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
+    next: (data: Page<Adherent[]>) => {
+      this.isAdherantsList = false;
+      this.isAdherantsSearch = true;
+      this.adherentsListByPage = data.content;
+      this.totalElements = data.totalElements;
+      this.totalPages = data.totalPages;
+    },
+    error: (err) => {
+      console.error('Erreur lors du chargement des adhérents', err);
+    },
+  });
+}
+
+
 }
 
 
@@ -2010,3 +2095,5 @@ export interface FraisReels {
   dateSoins?: Date;
   produitPharmaceutique: Array<ProduitPharmaceutique>;
 }
+
+

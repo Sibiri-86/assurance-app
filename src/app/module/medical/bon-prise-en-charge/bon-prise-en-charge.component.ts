@@ -154,6 +154,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
  displayPrestationpop = false;
  adherentSelectedfinal: Adherent;
  prestationsList: Prestation[]= [];
+ listPrestation: Prestation[]= [];
  numberPrestation = 0;
  compteur: number = null;
  displayFP = false;
@@ -437,16 +438,14 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     console.log(event);
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
       this.montantConsomme = rest;
-      if(this.prestationsList) {
-
-        for(let i =0; i< this.prestationsList.length; i++) {
-
-          if(this.prestationsList[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value.id) {
-            this.montantConsomme = this.montantConsomme + this.prestationsList[i].montantRembourse;
+      this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id );
+        if(this.listPrestation) {
+          for(let i =0; i< this.listPrestation.length; i++) {
+            if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+              this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
+            }
           }
         }
-        rest = this.montantConsomme;
-      }
        // this.montantConsomme = rest;
         console.log("==========rest==========", rest);
         console.log(this.montantConsomme);
@@ -638,7 +637,7 @@ findMontantPlafond(event){
         }
           if(this.adherentSelected.signeAdherent ==='-') {
             if((value.dateSortie === null && value.dateSuspension  !== null) || (new Date(value.dateSuspension).getTime() < new Date(value.dateSortie).getTime()
-            && new Date(value.dateSortie).getTime() > new Date(this.prestationPopForm.value.dateSoins).getTime())) {
+            && new Date(value.dateSortie).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime())) {
                 this.addMessage('error', 'Assuré(e) non pris en compte',
                 'Cet(te) assuré(e) est  suspendu(e) !!!');
                 if( new Date(this.adherentSelected?.dateSuspension).getTime() < new Date(this.prestationPopForm.value.dateSoins).getTime() ||  new Date(this.adherentSelected?.dateSuspension).getTime() == new Date(this.prestationPopForm.value.dateSoins).getTime()) {
