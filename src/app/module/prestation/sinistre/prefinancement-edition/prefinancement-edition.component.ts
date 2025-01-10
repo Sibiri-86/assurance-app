@@ -161,7 +161,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   displayAssure = false;
   adherentsearch:  Adherent = {};
   adherentsList: Array<Adherent> = [];
-  adherentsListByPage: any;
+  
   adherentsSelected: Adherent = {};
   policeList$: Observable<Array<Police>>;
   policeList: Array<Police>;
@@ -183,7 +183,7 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
   totalPages = 0;
   page = 0;
   size = 10;
-
+  adherentsListByPage: any;
   isAdherantsList = false;
   isAdherantsSearch = false;
   isAdherantsMatricule = false;

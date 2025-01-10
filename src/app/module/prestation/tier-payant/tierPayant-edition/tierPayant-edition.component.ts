@@ -11,7 +11,7 @@ import {select, Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/app.state';
 import {loadSousActe} from '../../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../../store/parametrage/sous-acte/selector';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {SousActe} from 'src/app/store/parametrage/sous-acte/model';
 import {Taux} from '../../../../store/parametrage/taux/model';
 import {loadTaux} from '../../../../store/parametrage/taux/actions';
@@ -83,6 +83,7 @@ import { loadPoliceAll } from 'src/app/store/contrat/police/actions';
 import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { KeycloakService } from 'keycloak-angular';
 import { formatDate } from '@angular/common';
+import { Page } from 'src/app/module/util/pageable';
 
 
 
@@ -207,6 +208,22 @@ export class TierPayantEditionComponent implements OnInit {
     role = '';
     saisie : Saisie = {};
 
+    adherents: Adherent[] = [];
+    totalElements = 0;
+    totalPages = 0;
+    page = 0;
+    size = 10;
+  
+    adherentsListByPage: any;
+    isAdherantsList = false;
+    isAdherantsSearch = false;
+    isAdherantsMatricule = false;
+    prenomToSearch: string;
+    matriculeToSearch: string;
+    private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
+
+    dateSoins: any;
+
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private tierPayantService: TierPayantService,
@@ -241,7 +258,7 @@ export class TierPayantEditionComponent implements OnInit {
       }
 
 
-      filtrer(): void {
+/*       filtrer(): void {
         if(this.adherentsearch.matriculeGarant && !this.police.nom) {
           this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
             if(rest) {
@@ -265,7 +282,7 @@ export class TierPayantEditionComponent implements OnInit {
               });
           }
         
-          }
+          } */
 
           addAssure(): void {
             this.displayAssure = false;
@@ -494,6 +511,7 @@ export class TierPayantEditionComponent implements OnInit {
 
 
     ngOnInit(): void {
+        this.SearchWithDebounceTime();
         this.dateDebut = new Date();
         this.dateFin = new Date();
         // this.prestationList = [];
@@ -2369,8 +2387,167 @@ export class TierPayantEditionComponent implements OnInit {
           
         }
       }
-      
 
+/*       filtrer(): void {
+        if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+          this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationAdd.dateSoins,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+            if(rest) {
+              this.adherentsList= rest;
+            }
+            });
+        
+          }
+          if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteur(this.prestationAdd.dateSoins,this.police.nom).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+          if(this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationAdd.dateSoins,this.police.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+              if(rest) {
+                this.adherentsList= rest;
+              }
+              });
+          }
+        
+          } */
+
+
+
+        onPageChange(newPage: number): void {
+        this.page = newPage;
+        if(this.isAdherantsList && !this.isAdherantsMatricule && !this.isAdherantsSearch){
+            this.loadAdherentBySouscripteurByDateSoin();
+        }
+        
+        if(this.isAdherantsMatricule && !this.isAdherantsList && this.isAdherantsSearch){
+            this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.matriculeToSearch);
+        }
+        if(this.isAdherantsSearch && !this.isAdherantsMatricule && !this.isAdherantsList){
+            this.SearchWithDebounceTime()
+            this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
+        
+        }
+        
+        }
+          onGetDateSoin(dateSoins: Date){
+            this.dateSoins = dateSoins;
+          }
+
+          onGetMatriculeGarant(matriculeGarant: string){
+            this.matriculeToSearch = matriculeGarant;
+          }
+      filtrer(): void {
+
+        if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+          this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.dateSoins, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+            if(rest) {
+              this.adherentsList= rest;
+            }
+            });
+        
+          }
+          if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.loadAdherentBySouscripteurByDateSoin();
+          }
+          if(this.adherentsearch.matriculeGarant && this.police.nom) {
+            this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.matriculeToSearch);
+        
+          }
+        
+          }
+
+
+
+
+          loadAdherentBySouscripteurByDateSoin(): void {
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.dateSoins, this.page, this.size).subscribe({
+              next: (data: Page<Adherent[]>) => {
+                this.isAdherantsList = true;
+                this.isAdherantsSearch = false;
+                this.isAdherantsMatricule = false;
+                this.adherentsListByPage = data.content;
+                this.totalElements = data.totalElements;
+                this.totalPages = data.totalPages;
+              },
+              error: (err) => {
+                console.error('Erreur lors du chargement des adhérents', err);
+              },
+            });
+          }
+          
+          searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
+            this.prenomToSearch = prenom;
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, prenom, this.page, this.size).subscribe({
+              next: (data: Page<Adherent[]>) => {
+                this.isAdherantsList = false;
+                this.isAdherantsMatricule = false;
+                this.isAdherantsSearch = true;
+                this.adherentsListByPage = data.content;
+                this.totalElements = data.totalElements;
+                this.totalPages = data.totalPages;
+              },
+              error: (err) => {
+                console.error('Erreur lors du chargement des adhérents', err);
+              },
+            });
+          }
+          onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(matriculeGarant: string): void {
+            this.matriculeToSearch = matriculeGarant;
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.police.nom, this.dateSoins, matriculeGarant, this.page, this.size).subscribe({
+              next: (data: Page<Adherent[]>) => {
+          
+                this.isAdherantsList = false;
+                this.isAdherantsSearch = false;
+                this.isAdherantsMatricule = true;
+                this.adherentsListByPage = data.content;
+                this.totalElements = data.totalElements;
+                this.totalPages = data.totalPages;
+              },
+              error: (err) => {
+                console.error('Erreur lors du chargement des adhérents', err);
+              },
+            });
+          }
+          
+          SearchWithDebounceTime(){
+            this.searchTerms
+                .pipe(
+                  debounceTime(500), // Attendre 500ms après la dernière frappe.
+                  switchMap((prenom: string) =>
+                    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                      this.police.nom,
+                      this.dateSoins,
+                      prenom,
+                      this.page,
+                      this.size
+                    )
+                  )
+                )
+                .subscribe({
+                  next: (data: Page<Adherent[]>) => {
+                    this.isAdherantsSearch = true;
+                    this.isAdherantsList = false;
+                    this.isAdherantsMatricule = false;
+                    this.adherentsListByPage = data.content;
+                    this.totalElements = data.totalElements;
+                    this.totalPages = data.totalPages;
+                  },
+                  error: (err) => {
+                    console.error('Erreur lors du chargement des adhérents', err);
+                  },
+                });
+          }
+          
+            searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
+              this.prenomToSearch = prenom;
+              this.isAdherantsSearch = true;
+              this.isAdherantsList = false;
+              this.isAdherantsMatricule = false;
+              this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+            }
       
 
 }

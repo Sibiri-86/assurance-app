@@ -433,7 +433,11 @@
 
                     <div >
                         <label  for="lastname2" style="font-weight: bold;margin-left: 3px;">Matricule garant</label><br>
-                        <input   id="matriculeGarant" style="width: 80%;margin-left: 3px;" type="text" Label="Matricule garant" [(ngModel)]="adherentsearch.matriculeGarant" name="matriculeGarant" pInputText>                                                
+                        <input   id="matriculeGarant" style="width: 80%;margin-left: 3px;" type="text" Label="Matricule garant"
+                         [(ngModel)]="adherentsearch.matriculeGarant" 
+                         name="matriculeGarant" pInputText 
+                         (input)="onGetMatriculeGarant($event.target.value)"
+                         >                                                
                         <button pButton icon="pi pi-search" [disabled]="!police && !adherentsearch?.matriculeGarant" class="p-ml-2" (click)="filtrer()"></button>   
                     </div>
 
@@ -449,17 +453,18 @@
             </p-toolbar>
 
             <div class="p-col-12">
-                <p-table #adt [value]="adherentsList" [(selection)]="adherentsSelected"  [rows]="10" dataKey="id" editMode="row" [paginator]="true"
+                <p-table #adt [value]="adherentsListByPage" [(selection)]="adherentsSelected" dataKey="id" editMode="row"
                 [rowHover]="true" styleClass="p-datatable-customers"
                 [globalFilterFields]="['groupe.police.nom','nom','prenom']"
-                 currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
-                [showCurrentPageReport]="true">
+                >
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="adt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        <input pInputText type="text" 
+                        (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime($event.target.value)"
+                        placeholder="Recherchez par le prénom uniquement" />
                         </span>
                     </div>
                 </ng-template>
@@ -492,6 +497,15 @@
                             
                         </tr>
                     </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="pagination">
+                            <span>Total: <span class="champVert">{{totalElements}} </span> </span>
+                            <button (click)="onPageChange(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
+                            <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+                            <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
+                        </div>
+                                  
+                    </ng-template>
                 </p-table>
             </div>
         </div>
@@ -512,7 +526,13 @@
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col">
                         <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
-                        <input id="dateSoins"   type="date" min="001-01-01" max="9999-12-31" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins" (blur)="rechercheAdherentDateSoin($event)">
+<!--                         <input id="dateSoins"   type="date" min="001-01-01" max="9999-12-31" name="dateSoins" pInputText [(ngModel)]="prestationAdd.dateSoins" (blur)="rechercheAdherentDateSoin($event)">
+ -->                        <input id="dateSoins"  
+                          type="date" min="001-01-01"
+                           max="9999-12-31" name="dateSoins"
+                            pInputText [(ngModel)]="prestationAdd.dateSoins"
+                            #dateSoins
+                            (input)="onGetDateSoin($event.target.value)">
                     </div>
                     <div class="p-field p-col">
                         <label for="numeroBon">Numéro Bon <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
