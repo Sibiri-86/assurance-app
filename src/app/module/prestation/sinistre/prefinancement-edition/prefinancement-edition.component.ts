@@ -186,7 +186,9 @@ export class PrefinancementEditionComponent implements OnInit, OnDestroy {
 
   isAdherantsList = false;
   isAdherantsSearch = false;
+  isAdherantsMatricule = false;
   prenomToSearch: string;
+  matriculeToSearch: string;
   private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
   constructor( private store: Store<AppState>,
@@ -266,11 +268,8 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     this.loadAdherentBySouscripteurByDateSoin();
   }
   if(this.adherentsearch.matriculeGarant && this.police.nom) {
-    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurMatriculeGarant(this.prestationPopForm.get('dateSoins').value,this.adherentsearch.nom, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
-      if(rest) {
-        this.adherentsList= rest;
-      }
-      });
+    this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.adherentsearch.matriculeGarant);
+
   }
 
   }
@@ -2038,12 +2037,17 @@ addProduitExcluToSaveList() {
 
 onPageChange(newPage: number): void {
   this.page = newPage;
-  if(this.isAdherantsList){
+  if(this.isAdherantsList && !this.isAdherantsMatricule && !this.isAdherantsSearch){
     this.loadAdherentBySouscripteurByDateSoin();
   }
-  if(this.isAdherantsSearch){
-    this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenom);
-    this.SearchWithDebounceTime();
+
+  if(this.isAdherantsMatricule && !this.isAdherantsList && this.isAdherantsSearch){
+    this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.matriculeToSearch);
+  }
+  if(this.isAdherantsSearch && !this.isAdherantsMatricule && !this.isAdherantsList){
+    this.SearchWithDebounceTime()
+    this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
+
   }
 
 }
@@ -2053,6 +2057,7 @@ loadAdherentBySouscripteurByDateSoin(): void {
     next: (data: Page<Adherent[]>) => {
       this.isAdherantsList = true;
       this.isAdherantsSearch = false;
+      this.isAdherantsMatricule = false;
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
@@ -2068,7 +2073,25 @@ searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
   this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
     next: (data: Page<Adherent[]>) => {
       this.isAdherantsList = false;
+      this.isAdherantsMatricule = false;
       this.isAdherantsSearch = true;
+      this.adherentsListByPage = data.content;
+      this.totalElements = data.totalElements;
+      this.totalPages = data.totalPages;
+    },
+    error: (err) => {
+      console.error('Erreur lors du chargement des adhérents', err);
+    },
+  });
+}
+onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(matriculeGarant: string): void {
+  this.matriculeToSearch = matriculeGarant;
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.police.nom, this.prestationPopForm.get('dateSoins').value, matriculeGarant, this.page, this.size).subscribe({
+    next: (data: Page<Adherent[]>) => {
+
+      this.isAdherantsList = false;
+      this.isAdherantsSearch = false;
+      this.isAdherantsMatricule = true;
       this.adherentsListByPage = data.content;
       this.totalElements = data.totalElements;
       this.totalPages = data.totalPages;
@@ -2095,8 +2118,9 @@ SearchWithDebounceTime(){
       )
       .subscribe({
         next: (data: Page<Adherent[]>) => {
-          this.isAdherantsList = false;
           this.isAdherantsSearch = true;
+          this.isAdherantsList = false;
+          this.isAdherantsMatricule = false;
           this.adherentsListByPage = data.content;
           this.totalElements = data.totalElements;
           this.totalPages = data.totalPages;
@@ -2107,9 +2131,13 @@ SearchWithDebounceTime(){
       });
 }
 
-searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
-  this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
-}
+  searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
+    this.prenomToSearch = prenom;
+    this.isAdherantsSearch = true;
+    this.isAdherantsList = false;
+    this.isAdherantsMatricule = false;
+    this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+  }
 
 }
 
