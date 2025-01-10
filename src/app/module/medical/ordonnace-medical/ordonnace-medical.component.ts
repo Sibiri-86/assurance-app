@@ -11,7 +11,7 @@ import {select, Store} from '@ngrx/store';
 import {AppState} from 'src/app/store/app.state';
 import {loadSousActe} from '../../../store/parametrage/sous-acte/actions';
 import * as sousActeSelector from '../../../store/parametrage/sous-acte/selector';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {SousActe} from 'src/app/store/parametrage/sous-acte/model';
 import {Taux} from '../../../store/parametrage/taux/model';
 import {loadTaux} from '../../../store/parametrage/taux/actions';
@@ -74,6 +74,7 @@ import { policeList } from 'src/app/store/contrat/police/selector';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { formatDate } from '@angular/common';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { Page } from '../../util/pageable';
 
 
 
@@ -161,7 +162,19 @@ export class OrdonnaceMedicalComponent implements OnInit {
         dateDebut: any;
         dateFin: any;
 
-
+        adherents: Adherent[] = [];
+        totalElements = 0;
+        totalPages = 0;
+        page = 0;
+        size = 10;
+        adherentsListByPage: any;
+        isAdherantsList = false;
+        isAdherantsSearch = false;
+        isAdherantsMatricule = false;
+        prenomToSearch: string;
+        matriculeToSearch: string;
+        dateSoins: string;
+        private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -267,7 +280,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
       addMessage(severite: string, resume: string, detaile: string): void {
         this.messageService.add({severity: severite, summary: resume, detail: detaile});
       }
-      filtrer(): void {
+/*       filtrer(): void {
         if(this.adherentsearch.matriculeGarant && !this.police.nom) {
           this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.prestationForm.get('dateSoins').value,this.adherentsearch.matriculeGarant).subscribe((rest)=>{
             if(rest) {
@@ -291,7 +304,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
               });
           }
         
-          }
+          } */
 
     onCreate() {
         /** Methode pour enregistrer l'ordonnance médicale*/
@@ -723,7 +736,145 @@ rechercherPrefinancementByPeriode() {
     
   }
 
+
+
+
+            onPageChange(newPage: number): void {
+            this.page = newPage;
+            if(this.isAdherantsList && !this.isAdherantsMatricule && !this.isAdherantsSearch){
+                this.loadAdherentBySouscripteurByDateSoin();
+            }
+            
+            if(this.isAdherantsMatricule && !this.isAdherantsList && this.isAdherantsSearch){
+                this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.matriculeToSearch);
+            }
+            if(this.isAdherantsSearch && !this.isAdherantsMatricule && !this.isAdherantsList){
+                this.SearchWithDebounceTime()
+                this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
+            
+            }
+            
+            }
+              onGetDateSoin(dateSoins: any){
+                this.dateSoins = dateSoins;
+              }
+    
+              onGetMatriculeGarant(matriculeGarant: string){
+                this.matriculeToSearch = matriculeGarant;
+              }
+
+        filtrer(): void {
+            if(this.adherentsearch.matriculeGarant && !this.police.nom) {
+              this.adherentService.searchAllAdherentByDateSoinsAndMatriculeGarant(this.dateSoins, this.adherentsearch.matriculeGarant).subscribe((rest)=>{
+                if(rest) {
+                  this.adherentsList= rest;
+                }
+                });
+            
+              }
+              if(!this.adherentsearch.matriculeGarant && this.police.nom) {
+                this.loadAdherentBySouscripteurByDateSoin();
+              }
+              if(this.adherentsearch.matriculeGarant && this.police.nom) {
+                this.onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.matriculeToSearch);
+            
+              }
+            
+              }
+    
+    
+    
+    
+              loadAdherentBySouscripteurByDateSoin(): void {
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.dateSoins, this.page, this.size).subscribe({
+                  next: (data: Page<Adherent[]>) => {
+                    this.isAdherantsList = true;
+                    this.isAdherantsSearch = false;
+                    this.isAdherantsMatricule = false;
+                    this.adherentsListByPage = data.content;
+                    this.totalElements = data.totalElements;
+                    this.totalPages = data.totalPages;
+                  },
+                  error: (err) => {
+                    console.error('Erreur lors du chargement des adhérents', err);
+                  },
+                });
+              }
+              
+              searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
+                this.prenomToSearch = prenom;
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, prenom, this.page, this.size).subscribe({
+                  next: (data: Page<Adherent[]>) => {
+                    this.isAdherantsList = false;
+                    this.isAdherantsMatricule = false;
+                    this.isAdherantsSearch = true;
+                    this.adherentsListByPage = data.content;
+                    this.totalElements = data.totalElements;
+                    this.totalPages = data.totalPages;
+                  },
+                  error: (err) => {
+                    console.error('Erreur lors du chargement des adhérents', err);
+                  },
+                });
+              }
+              onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(matriculeGarant: string): void {
+                this.matriculeToSearch = matriculeGarant;
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.police.nom, this.dateSoins, matriculeGarant, this.page, this.size).subscribe({
+                  next: (data: Page<Adherent[]>) => {
+              
+                    this.isAdherantsList = false;
+                    this.isAdherantsSearch = false;
+                    this.isAdherantsMatricule = true;
+                    this.adherentsListByPage = data.content;
+                    this.totalElements = data.totalElements;
+                    this.totalPages = data.totalPages;
+                  },
+                  error: (err) => {
+                    console.error('Erreur lors du chargement des adhérents', err);
+                  },
+                });
+              }
+              
+              SearchWithDebounceTime(){
+                this.searchTerms
+                    .pipe(
+                      debounceTime(1000), // Attendre 1000ms après la dernière frappe.
+                      switchMap((prenom: string) =>
+                        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                          this.police.nom,
+                          this.dateSoins,
+                          prenom,
+                          this.page,
+                          this.size
+                        )
+                      )
+                    )
+                    .subscribe({
+                      next: (data: Page<Adherent[]>) => {
+                        this.isAdherantsSearch = true;
+                        this.isAdherantsList = false;
+                        this.isAdherantsMatricule = false;
+                        this.adherentsListByPage = data.content;
+                        this.totalElements = data.totalElements;
+                        this.totalPages = data.totalPages;
+                      },
+                      error: (err) => {
+                        console.error('Erreur lors du chargement des adhérents', err);
+                      },
+                    });
+              }
+              
+                searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
+                  this.prenomToSearch = prenom;
+                  this.isAdherantsSearch = true;
+                  this.isAdherantsList = false;
+                  this.isAdherantsMatricule = false;
+                  this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+                }
+          
 }
+
+
 
 export interface FraisReels {
     nombreActe?: string;

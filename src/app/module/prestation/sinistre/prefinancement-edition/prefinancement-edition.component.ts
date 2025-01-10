@@ -2105,7 +2105,7 @@ onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(matriculeGarant: 
 SearchWithDebounceTime(){
   this.searchTerms
       .pipe(
-        debounceTime(500), // Attendre 500ms après la dernière frappe.
+        debounceTime(1000), // Attendre 1000ms après la dernière frappe.
         switchMap((prenom: string) =>
           this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
             this.police.nom,

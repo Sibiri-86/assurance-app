@@ -360,7 +360,7 @@ putAdherentMatriculeGarant(adherentFamille: Adherent[]): Observable<any> {
 }
 
 
-searchAllAdherentByDateSoinsAndMatriculeGarant(dateSoins: Date, matriculeGarant: string): Observable<Adherent[]> {
+searchAllAdherentByDateSoinsAndMatriculeGarant(dateSoins: any, matriculeGarant: string): Observable<Adherent[]> {
   // @FIXME: post request
   if (matriculeGarant ) {
     const adherent :Adherent = {};
