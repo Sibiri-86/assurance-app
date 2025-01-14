@@ -210,21 +210,11 @@ export class AssureComponent implements OnInit, OnDestroy {
     const nom =  this.nomAssure;
     const prenom =  this.prenomAssure;
 
-    console.log('idePolice', idPolice);
-    console.log('exoId', exoId);
-    console.log('idGarant', idGarant);
-    console.log('nom', nom);
-    console.log('prenom', prenom);
-
     if(idPolice && exoId && idGarant && nom && prenom){
 
       this.adherentService.searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(idPolice, exoId, idGarant, nom, prenom, this.page, this.size).subscribe({
         next: (data: Page<Adherent[]>) => {
             this.adherentsListByPage = data.content;
-
-          console.log('data', data);
-          console.log('data.content', data.content);
-
             this.isToSearchNomAndPrenomList = true;
             this.isToSearchAllAssureList = false;
             this.totalElements = data.totalElements;

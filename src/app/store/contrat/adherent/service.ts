@@ -502,7 +502,7 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
 
     // Bircof
   // Rechercher les adhérants par Garand, Police et exercice
-  searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage (idPolice: string, exoId: string, idGarant: string, nom: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+  searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage (idPolice?: string, exoId?: string, idGarant?: string, nom?: string, prenom?: string, page?: number, size?: number): Observable<Page<Adherent[]>> {
     const params = new HttpParams()
       .set('idPolice', idPolice)
       .set('exoId', exoId)
