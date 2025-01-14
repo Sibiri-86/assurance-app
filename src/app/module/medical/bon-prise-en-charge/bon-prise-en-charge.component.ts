@@ -2056,8 +2056,6 @@ prestationByBon(pres: BonPriseEnCharge) {
               }
     
     
-    
-    
               loadAdherentBySouscripteurByDateSoin(): void {
                 this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPage(this.police.nom, this.dateSoins, this.page, this.size).subscribe({
                   next: (data: Page<Adherent[]>) => {

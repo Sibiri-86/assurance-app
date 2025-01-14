@@ -487,4 +487,31 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
     return this.http.get<Page<Adherent[]>>(
       `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_MATRICULE_GARANT)}`, { params });
   }
+    // Bircof
+  // Rechercher les adhérants par Garand, Police et exercice
+  searchAllAdherentByGanrantAndByPoliceAndExercice(idPolice: string, exoId: string, idGarant: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('idPolice', idPolice)
+      .set('exoId', exoId)
+      .set('idGarant', idGarant)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_GARAND_AND_POILICE_EXERCICE)}`, { params });
+  }
+
+    // Bircof
+  // Rechercher les adhérants par Garand, Police et exercice
+  searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage (idPolice: string, exoId: string, idGarant: string, nom: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('idPolice', idPolice)
+      .set('exoId', exoId)
+      .set('idGarant', idGarant)
+      .set('nom', nom)
+      .set('prenom', prenom)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_GARAND_AND_POILICE_EXERCICEAND_NOM_PRENOM)}`, { params });
+  }
 }

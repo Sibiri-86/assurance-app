@@ -20,6 +20,8 @@ import { element } from 'protractor';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { MessageService } from 'primeng/api';
+import { Page } from '../../util/pageable';
+import { Console } from 'console';
 @Component({
   selector: 'app-assure',
   templateUrl: './assure.component.html',
@@ -44,6 +46,16 @@ export class AssureComponent implements OnInit, OnDestroy {
   exerciceList : Exercice[];
   exercice : Exercice = {};
 
+  adherentsListByPage: any;
+  totalElements = 0;
+  totalPages = 0;
+  page = 0;
+  size = 10;
+  nomAssure: string = '';
+  prenomAssure: string = '';
+  isToSearchNomAndPrenomList = false;
+  isToSearchAllAssureList = false;
+
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
               private store: Store<AppState>,
@@ -53,7 +65,7 @@ export class AssureComponent implements OnInit, OnDestroy {
               }
 
   ngOnInit(): void {
-    this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
+/*     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
     //this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: '', idPolice: ''}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -61,7 +73,7 @@ export class AssureComponent implements OnInit, OnDestroy {
         this.adherentListFilter = this.adherentList;
         console.log(this.adherentList);
       }
-    });
+    }); */
 
     this.policeList$ = this.store.pipe(select(policeList));
     this.store.dispatch(loadPoliceAll());
@@ -139,6 +151,91 @@ export class AssureComponent implements OnInit, OnDestroy {
     console.log(ad.urlPhoto);
     this.pictureUrl = ad.urlPhoto?.replace("http", "https")?.replace(":92", "");
     this.displayPhotos = true;
+  }
+  
+
+  onPageChange(newPage: number): void {
+    this.page = newPage;
+    if(this.isToSearchAllAssureList){
+      this.onSearchAllAdherentByGanrantAndByPoliceAndExercice();
+    }
+
+    if(this.isToSearchNomAndPrenomList){
+      this.onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage();
+    }
+    }
+
+  onSearchAllAdherentByGanrantAndByPoliceAndExercice(): void {
+    const idPolice =  this.police.id;
+    const exoId =  this.exercice.id;
+    const idGarant =  this.police?.garant?.id
+
+    if(idPolice && exoId && idGarant){
+  
+      this.adherentService.searchAllAdherentByGanrantAndByPoliceAndExercice(idPolice, exoId, idGarant, this.page, this.size).subscribe({
+        next: (data: Page<Adherent[]>) => {
+    
+          this.adherentsListByPage = [];
+          this.adherentsListByPage = data.content;
+          this.isToSearchNomAndPrenomList = false;
+          this.isToSearchAllAssureList = true;
+          this.totalElements = data.totalElements;
+          this.totalPages = data.totalPages;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des adhérents', err);
+        },
+      });
+    }
+
+  }
+
+  onGetNomAssure(nom: string){    
+    if(nom){
+      this.nomAssure = nom;
+    }
+  }
+
+  onGetPrenomAssure(prenom : string){
+
+    if(prenom){
+      this.prenomAssure = prenom;
+    }
+  }
+
+  onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(): void {
+    const idPolice =  this.police.id;
+    const exoId =  this.exercice.id;
+    const idGarant =  this.police?.garant?.id;
+    const nom =  this.nomAssure;
+    const prenom =  this.prenomAssure;
+
+    console.log('idePolice', idPolice);
+    console.log('exoId', exoId);
+    console.log('idGarant', idGarant);
+    console.log('nom', nom);
+    console.log('prenom', prenom);
+
+    if(idPolice && exoId && idGarant && nom && prenom){
+
+      this.adherentService.searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(idPolice, exoId, idGarant, nom, prenom, this.page, this.size).subscribe({
+        next: (data: Page<Adherent[]>) => {
+            this.adherentsListByPage = data.content;
+
+          console.log('data', data);
+          console.log('data.content', data.content);
+
+            this.isToSearchNomAndPrenomList = true;
+            this.isToSearchAllAssureList = false;
+            this.totalElements = data.totalElements;
+            this.totalPages = data.totalPages;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des adhérents', err);
+        },
+      });
+    }
+
   }
 
 }

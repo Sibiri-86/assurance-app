@@ -19,7 +19,9 @@
                             showClear="true" [options]="exerciceList"
                             [autoDisplayFirst]="false"
                             placeholder="Selectionnez l'exercice"
-                            optionLabel="nomExo" class="p-mr-2" [(ngModel)]="exercice">
+                            optionLabel="nomExo" class="p-mr-2" [(ngModel)]="exercice"
+                            (click)="onSearchAllAdherentByGanrantAndByPoliceAndExercice()"
+                            >
                     </p-dropdown>
                                         
                     <!-- <p-dropdown inputId="garant" dataKey="id" [filter]="true"
@@ -29,20 +31,32 @@
                             optionLabel="nom" class="p-mr-2" [(ngModel)]="garant">
                     </p-dropdown> -->
                     
-                    <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>
-                    </div>
+<!-- <button pButton icon="pi pi-search" class="p-mr-2" (click)="filtrer()"></button>-->                    
+<!--     <button pButton icon="pi pi-search" class="p-mr-2" (click)="onSearchAllAdherentByGanrantAndByPoliceAndExercice()"></button>
+ -->                    </div>
                 </ng-template>
             </p-toolbar>
-            <p-table #dt [value]="adherentListFilter"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom', 'prenom','libelle','description','duree','territorialite.libelle']"
+            <p-table #dt [value]="adherentsListByPage"  [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['nom', 'prenom','libelle','description','duree','territorialite.libelle']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
-                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                     >
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                    
+                        <span class="mr-3">
+                            <input pInputText type="text" 
+                            #nom
+                            (input)="onGetNomAssure(nom.value)" placeholder="Nom" />
+                        </span>
+                        <span class="mr-3">
+                            <input pInputText type="text" #prenom (input)="onGetPrenomAssure(prenom.value)" placeholder="Prénom" />
+                        </span>
+                        <span>
+
+                        </span>
+                        <button pButton icon="pi pi-search" class="p-mr-2" (click)="onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage()"></button>
                         </span>
                     </div>
                 </ng-template>
@@ -88,7 +102,7 @@
                             <span class="p-column-title">{{adherent.groupe.police.nom}}</span>
                         </td> -->
                         <td>
-                            <span class="p-column-title">{{adherent.groupe.police.garant.nom}}</span>
+                            <span class="p-column-title">{{adherent?.groupe?.police?.garant?.nom}}</span>
                         </td>
                         
                         <td>
@@ -102,9 +116,13 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
-                    <div class="p-d-flex p-ai-center p-jc-between">
-                        {{adherentListFilter ? adherentListFilter.length : 0 }} assuré(s) au total.
+                    <div class="pagination">
+                        <span>Total: <span class="champVert">{{totalElements}} </span> </span>
+                        <button (click)="onPageChange(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
+                        <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+                        <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
                     </div>
+                              
                 </ng-template>
             </p-table>
         </div>

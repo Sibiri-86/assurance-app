@@ -538,4 +538,13 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly ADHERANT_BY_GARAND_AND_POILICE_EXERCICE= {
+            prod: `${SERVICE_PREFIX}/contrat/adherent`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+        static readonly ADHERANT_BY_GARAND_AND_POILICE_EXERCICEAND_NOM_PRENOM= {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/nom-Prenom`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }
