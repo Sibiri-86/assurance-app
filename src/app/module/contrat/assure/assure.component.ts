@@ -211,7 +211,6 @@ export class AssureComponent implements OnInit, OnDestroy {
     const prenom =  this.prenomAssure;
 
     if(idPolice && exoId && idGarant && nom && prenom){
-
       this.adherentService.searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(idPolice, exoId, idGarant, nom, prenom, this.page, this.size).subscribe({
         next: (data: Page<Adherent[]>) => {
             this.adherentsListByPage = data.content;
