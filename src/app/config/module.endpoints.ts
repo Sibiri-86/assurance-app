@@ -547,4 +547,13 @@ export class Endpoints {
             mock: `assets/mock/contrat/adherent.mock.json`
         };
 
+        static readonly ADHERANT_BY_EXERCICEAND_GROUPE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+        static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+
 }

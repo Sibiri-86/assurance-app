@@ -10,6 +10,7 @@ import {Endpoints} from '../../../config/module.endpoints';
 import {createRequestOption} from '../../../module/util/loader-util';
 import { Exercice } from '../exercice/model';
 import { Page } from 'src/app/module/util/pageable';
+import { HistoriqueAvenantAdherant } from '../historiqueAvenantAdherent/model';
 
 @Injectable({providedIn: 'root'})
 export class AdherentService {
@@ -513,5 +514,33 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
       .set('size', size.toString());
     return this.http.get<Page<Adherent[]>>(
       `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_GARAND_AND_POILICE_EXERCICEAND_NOM_PRENOM)}`, { params });
+  }
+
+    // Bircof
+  // Rechercher les adhérants par Garand, Police et exercice
+  searchAllAdherentByExerciceAndGroupeByPage (exoId?: string, groupeId?: string, page?: number, size?: number): Observable<Page<HistoriqueAvenantAdherant[]>> {
+    const params = new HttpParams()
+      .set('exoId', exoId)
+      .set('groupeId', groupeId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICEAND_GROUPE)}`, { params });
+  }
+
+    // Bircof
+  // Rechercher les adhérants par Garand, Police et exercice
+  searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage (
+    exoId?: string, groupeId?: string, numero?: any, nom?: string, prenom?: string,  page?: number, size?: number): Observable<Page<HistoriqueAvenantAdherant[]>> {
+    const params = new HttpParams()
+      .set('exoId', exoId)
+      .set('groupeId', groupeId)
+      .set('numero', numero)
+      .set('nom', nom)
+      .set('prenom', prenom)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER)}`, { params });
   }
 }

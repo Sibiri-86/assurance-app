@@ -92,10 +92,7 @@ export class AvenantRetraitComponent implements OnInit {
   size = 10;
   adherentsListByPage: any;
   exoId: string;
-  groupeId: string = undefined;
-  numero: any = undefined;
-  nom: string = undefined;
-  prenom: string = undefined;
+  groupeId: string;
   isToSearchAllAssureList = false;
 
   constructor(
@@ -115,9 +112,11 @@ export class AvenantRetraitComponent implements OnInit {
     this.init();
 
     this.groupe = {};
-
+    console.log('..............police.avenant-retrait..............');
+    console.log(this.police);
+    console.log("ghjklkhghjklkjhjk",this.isRenouv);
+    
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
-
     this.store.dispatch(loadGroupe({policeId: this?.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -507,86 +506,34 @@ export class AvenantRetraitComponent implements OnInit {
     // this.viewListeEdit = true;
   }
 
+
+
   onPageChange(newPage: number): void {
     this.page = newPage;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom);
-    
+    if(this.isToSearchAllAssureList){
+      this.onSearchAllAdherentByExerciceAndGroupeByPage(this.exoId, this.groupeId);
     }
+
+/*     if(this.isToSearchNomAndPrenomList){
+      this.onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage();
+    }*/
+    } 
 
     onSearchAllAdherentByExerciceAndGroupeByPage(exoId: string, groupeId: string): void {
     this.exoId = exoId;
     this.groupeId = groupeId;
-
-    if(exoId && groupeId){
-      this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
-        next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-          this.adherentsListByPage = data.content;
-          this.totalElements = data.totalElements;
-          this.isToSearchAllAssureList = true;
-          this.totalPages = data.totalPages;
-        },
-        error: (err) => {
-          console.error('Erreur lors du chargement des adhérents', err);
-        },
-      });
-    }
-}
-
-  onGetNumero(numero: any){
-
-    console.log('numero', numero);
-    console.log('this.numero', this.numero);
-
-    if(numero){
-      this.numero = numero;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, numero);
-    }
+    
+    this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
+      next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+        this.adherentsListByPage = data.content;
+        this.isToSearchAllAssureList = true;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des adhérents', err);
+      },
+    });
   }
-
-  onGetNom(nom: string){
-    if(nom){
-      this.nom = nom;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, nom);
-    }
-  }
-
-  onGetPrenom(prenom: string){
-    if(prenom){
-      this.prenom = prenom;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, prenom);
-    }
-  }
-
-
-
-onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(
-  exoId?: string, groupeId?: string, numero?: any, nom?: string, prenom?: string): void {
-    this.exoId = exoId;
-    this.groupeId = groupeId;
-    this.numero = numero;
-    this.nom = nom;
-    this.prenom = prenom;
-
-    console.log('exoId', exoId);
-    console.log('groupeId', groupeId);
-    console.log('numero', numero);
-    console.log('nom', nom);
-    console.log('prenom', prenom);
-
-    if(exoId && groupeId){
-      this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(exoId, groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
-        next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-          this.adherentsListByPage = data.content;
-          this.totalElements = data.totalElements;
-          this.isToSearchAllAssureList = true;
-          this.totalPages = data.totalPages;
-        },
-        error: (err) => {
-          console.error('Erreur lors du chargement des adhérents', err);
-        },
-      });
-    }
-
-}
 
 }
