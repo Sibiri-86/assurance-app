@@ -530,7 +530,7 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
 
     // Bircof
   // Rechercher les adhérants par Garand, Police et exercice
-  searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage (
+/*   searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage (
     exoId?: string, groupeId?: string, numero?: any, nom?: string, prenom?: string,  page?: number, size?: number): Observable<Page<HistoriqueAvenantAdherant[]>> {
     const params = new HttpParams()
       .set('exoId', exoId)
@@ -540,6 +540,32 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
       .set('prenom', prenom)
       .set('page', page.toString())
       .set('size', size.toString());
+    return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER)}`, { params });
+  } */
+
+  
+  // Bircof
+  // Rechercher les adhérants par Garand, Police et exercice
+  searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(
+    exoId: string,
+    groupeId?: string,
+    numero?: number,
+    nom?: string,
+    prenom?: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<Page<HistoriqueAvenantAdherant[]>> {
+    let params = new HttpParams()
+      .set('exoId', exoId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (groupeId) params = params.set('groupeId', groupeId);
+    if (numero) params = params.set('numero', numero.toString());
+    if (nom) params = params.set('nom', nom);
+    if (prenom) params = params.set('prenom', prenom);
+
     return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
       `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER)}`, { params });
   }

@@ -94,6 +94,7 @@ export class AvenantRetraitComponent implements OnInit {
   exoId: string;
   groupeId: string;
   isToSearchAllAssureList = false;
+  filterForm: FormGroup;
 
   constructor(
       private store: Store<AppState>,
@@ -105,7 +106,18 @@ export class AvenantRetraitComponent implements OnInit {
       private policeService: PoliceService,
       private exerciceService: ExerciceService,
       private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
-  ) {}
+  ) {
+
+    this.filterForm = this.formBuilder.group({
+      exoId: [''],
+      groupeId: [''],
+      numero: [''],
+      nom: [''],
+      prenom: [''],
+      page: [0],
+      size: [10]
+    });
+  }
 
   ngOnInit(): void {
     console.log('..............avenant-retrait...... ID........' + this.avenantId);
@@ -524,6 +536,22 @@ export class AvenantRetraitComponent implements OnInit {
     this.groupeId = groupeId;
     
     this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
+      next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+        this.adherentsListByPage = data.content;
+        this.isToSearchAllAssureList = true;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des adhérents', err);
+      },
+    });
+  }
+
+  getAdherents(): void {
+    const { exoId, groupeId, numero, nom, prenom, page, size } = this.filterForm.value;
+
+    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(exoId, groupeId, numero, nom, prenom, page, size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
         this.adherentsListByPage = data.content;
         this.isToSearchAllAssureList = true;

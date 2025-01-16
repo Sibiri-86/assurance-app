@@ -93,7 +93,7 @@ export class AvenantRetraitComponent implements OnInit {
   adherentsListByPage: any;
   exoId: string;
   groupeId: string = undefined;
-  numero: any = undefined;
+  numero: number;
   nom: string = undefined;
   prenom: string = undefined;
   isToSearchAllAssureList = false;
@@ -108,7 +108,7 @@ export class AvenantRetraitComponent implements OnInit {
       private policeService: PoliceService,
       private exerciceService: ExerciceService,
       private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
-  ) {}
+  ) {  }
 
   ngOnInit(): void {
     console.log('..............avenant-retrait...... ID........' + this.avenantId);
@@ -509,8 +509,7 @@ export class AvenantRetraitComponent implements OnInit {
 
   onPageChange(newPage: number): void {
     this.page = newPage;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom);
-    
+    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();    
     }
 
     onSearchAllAdherentByExerciceAndGroupeByPage(exoId: string, groupeId: string): void {
@@ -532,61 +531,56 @@ export class AvenantRetraitComponent implements OnInit {
     }
 }
 
-  onGetNumero(numero: any){
+  onGetExoId(exoId: string){
+    if(exoId){
+      this.exoId = exoId;
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+    }
+  }
+  onGetGroupeId(groupeId: string){
+    if(groupeId){
+      this.groupeId = groupeId;
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+    }
+  }
 
-    console.log('numero', numero);
-    console.log('this.numero', this.numero);
-
-    if(numero){
+  onGetNumero(numero?: number){
       this.numero = numero;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, numero);
-    }
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
   }
 
-  onGetNom(nom: string){
-    if(nom){
+  onGetNom(nom?: string){
+
       this.nom = nom;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, nom);
-    }
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+
   }
 
-  onGetPrenom(prenom: string){
-    if(prenom){
+  onGetPrenom(prenom?: string){
+
       this.prenom = prenom;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, prenom);
-    }
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+    
   }
 
 
+  onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(): void {
 
-onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(
-  exoId?: string, groupeId?: string, numero?: any, nom?: string, prenom?: string): void {
-    this.exoId = exoId;
-    this.groupeId = groupeId;
-    this.numero = numero;
-    this.nom = nom;
-    this.prenom = prenom;
+    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
+      next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+        this.adherentsListByPage = data.content;
+        this.isToSearchAllAssureList = true;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des adhérents', err);
+      },
+    });
+  }
 
-    console.log('exoId', exoId);
-    console.log('groupeId', groupeId);
-    console.log('numero', numero);
-    console.log('nom', nom);
-    console.log('prenom', prenom);
-
-    if(exoId && groupeId){
-      this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(exoId, groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
-        next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-          this.adherentsListByPage = data.content;
-          this.totalElements = data.totalElements;
-          this.isToSearchAllAssureList = true;
-          this.totalPages = data.totalPages;
-        },
-        error: (err) => {
-          console.error('Erreur lors du chargement des adhérents', err);
-        },
-      });
-    }
-
-}
+  onSubmit(): void {
+    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+  }
 
 }

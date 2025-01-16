@@ -33,7 +33,8 @@
             <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                         [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true"
-                         (onChange)="onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(curentExercice.id, this.groupeId, this.numero, this.nom, this.prenom)"
+                        #exoId
+                         (onChange)="onGetExoId(exoId.value.id)"
                          >
             </p-dropdown>
         </div>
@@ -58,7 +59,7 @@
                     <p-dropdown [options]="groupeList" [disabled]="!this.curentExercice.id == null" optionLabel="libelle" formControlName="groupe"
                                 [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
                                 #groupe
-                                (onChange)="onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, groupe.value.id, this.numero, this.nom, this.prenom)" [style]="{'width': '90%'}">
+                                (onChange)="onGetGroupeId(groupe.value.id)" [style]="{'width': '90%'}">
                     </p-dropdown>
                 </div>
                 </div>
@@ -134,30 +135,32 @@
                      dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers">
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                        <h5 class="p-m-0"></h5>
-                        <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
-                    <span>
-                    <button pButton icon="pi pi-search" class="p-mr-2" (click)="onGetNumero(this.numero)"></button>
-                    </span>    
-                    </span>
-                        <span class="p-input-icon-left">
+                    <form  (ngSubmit)="onSubmit()">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <h5 class="p-m-0"></h5>
+                            <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #nom class="p-mr-2" (input)="onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(this.exoId, this.groupeId, this.numero, nom.value, this.prenom)" placeholder="Nom" [style]="{width: '80%'}" />
-                            <span>
-                                <button pButton icon="pi pi-search"  class="p-mr-2" (click)="onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom)"></button>
-                                </span>      
+                            <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
+                        <span>
+                        <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()" class="p-mr-2"></button>
+                        </span>    
                         </span>
                             <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText #prenom type="text" class="p-mr-2" (input)="onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(this.exoId, this.groupeId, this.numero, this.nom, prenom.value)" placeholder="Prénom" [style]="{width: '80%'}" />
+                                <input pInputText type="text" #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
                                 <span>
-                                    <button pButton icon="pi pi-search" class="p-mr-2" (click)="onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom)"></button>
+                                    <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
                                     </span>      
                             </span>
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
+                                    <span>
+                                        <button type="submit"  pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
+                                        </span>      
+                                </span>
                     </div>
+                </form>
                 </ng-template>
 
                 <ng-template pTemplate="header">
