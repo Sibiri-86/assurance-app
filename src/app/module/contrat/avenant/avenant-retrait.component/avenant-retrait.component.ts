@@ -3,7 +3,7 @@ import {Police} from '../../../../store/contrat/police/model';
 import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as adherantSelector from '../../../../store/contrat/adherent/selector';
@@ -96,7 +96,10 @@ export class AvenantRetraitComponent implements OnInit {
   numero: number;
   nom: string = undefined;
   prenom: string = undefined;
-  isToSearchAllAssureList = false;
+    isToSearchAllAssureList = false;
+
+ private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
+
 
   constructor(
       private store: Store<AppState>,
@@ -110,7 +113,8 @@ export class AvenantRetraitComponent implements OnInit {
       private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
   ) {  }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
+       // this.SearchWithDebounceTime();
     console.log('..............avenant-retrait...... ID........' + this.avenantId);
     this.init();
 
@@ -559,6 +563,7 @@ export class AvenantRetraitComponent implements OnInit {
   onGetPrenom(prenom?: string){
 
       this.prenom = prenom;
+     // this.searchTerms.next(prenom);
       this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
     
   }
@@ -568,7 +573,8 @@ export class AvenantRetraitComponent implements OnInit {
 
     this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-        this.adherentsListByPage = data.content;
+            this.adherentsListByPage = data.content;
+
         this.isToSearchAllAssureList = true;
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
@@ -581,6 +587,32 @@ export class AvenantRetraitComponent implements OnInit {
 
   onSubmit(): void {
     this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-  }
+    }
+
+
+    SearchWithDebounceTime() {
+
+        this.searchTerms
+            .pipe(
+                debounceTime(1000), // Attendre 1000ms après la dernière frappe.
+                switchMap((prenom: string) =>
+                    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size)
+                )
+            )
+            .subscribe({
+
+                next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+
+                    this.adherentsListByPage = data.content;
+                    this.isToSearchAllAssureList = true;
+                    this.totalElements = data.totalElements;
+                    this.totalPages = data.totalPages;
+                },
+                error: (err) => {
+                    console.error('Erreur lors du chargement des adhérents', err);
+                },
+            });
+    }
+
 
 }

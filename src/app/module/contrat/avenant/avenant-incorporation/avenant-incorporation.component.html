@@ -28,6 +28,8 @@
                                         name="selectedGroup"
                                         [filter]="true" filterBy="libelle" [showClear]="true"
                                         placeholder="Choisir un groupe"
+                                        #groupe
+                                        (onChange)="onGetGroupeId(groupe.value.id)"
                                         >
                             </p-dropdown>
                             <!-- <span *ngIf="!this.customForm.get('groupe').value" style="color: red; font-weight: bold;"> Veuillez choisir le groupe de l'assuré(e)</span> -->
@@ -49,7 +51,9 @@
                         <div class="p-col-4 p-mb-3"  *ngIf="etat === 'CREATE' || isRenouv">
                             <label for="fraisBadge">Exercice<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                             <p-dropdown [disabled]="(!curentGroupe.id)" [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
-                                        [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true" (onChange)="onExerciceChange(); onGroupeChangeAndExercice()">
+                                        [style]="{'width':'100%'}" [disabled]="!curentExercice" filterBy="nomExo" [showClear]="true"
+                                    #exoId
+                                    (onChange)="onGetExoId(exoId.value.id)">
                                         
                             </p-dropdown>
                         </div>
@@ -143,13 +147,67 @@
                 </form>
             </p-fieldset>
              
+
+
             <p-fieldset legend="Information adhérent" toggleable="true" *ngIf="isImport === 'NON' && etat !== 'VIEW'">
                 <div class="p-field p-col">
                     <label for="adherentSelected">Adhérent</label>
-                    <p-dropdown id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux2" [(ngModel)]="adherentSelected"
-                                (onChange)="loadAdherentPrincipalInfo()" placeholder="Rechercher un adhérent principal" optionLabel="fullName"></p-dropdown>
+<!-- 
+                    <p-dropdown  class="dropdown-container" (scroll)="onScroll($event)" id="adherentSelected" inputId="adherentSelected" dataKey="id" [filter]="true" showClear="true" [options]="adherentPrincipaux2" [(ngModel)]="adherentSelected"
+                                
+                    (onChange)="loadAdherentPrincipalInfo()"
+                    placeholder="Rechercher un adhérent principal" 
+                    optionLabel="fullName"></p-dropdown>
+                    
+ -->
+
+<!--         <div class="p-mb-3">
+            <form  (ngSubmit)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()">
+                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                    <h5 class="p-m-0"></h5>
+                    <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
+                <span>
+                <button type="submit" pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()" class="p-mr-2"></button>
+                </span>    
+                </span>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text"  #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
+                        <span>
+                            <button type="submit" pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()"  class="p-mr-2"></button>
+                            </span>
+                    </span>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
+                            <span>
+                                <button type="submit"  pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()"  class="p-mr-2"></button>
+                                </span>      
+                        </span>
+            </div>
+        </form>
+    </div> -->
+
+                    <div class="dropdown-container" (scroll)="onScroll($event)">
+                        <ul>
+                            <li type="button" *ngFor="let adherent of adherentPrincipaux2">
+                            <button 
+                                class="btn-adherent"
+                                (click)="loadAdherentPrincipalInfo(adherent)">
+                                {{ adherent.fullName }}
+                            </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()" >
+
+                  
+
+
+
+                <form [formGroup]="adherentForm" (ngSubmit)="addAdherentFamilleToList()">
                     <div class="p-fluid p-formgrid p-grid">
                         <div class="p-field p-col-3">
                             <label for="nom">Nom <sup style="color: red !important; font-size: 1.4em">*</sup></label>
@@ -195,7 +253,7 @@
 
                         <div class="p-field p-col-3">
                             <label for="naiss">Date de naissance <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input  id="naiss" type="date" formControlName="dateNaissance" pInputText (change) ="controleAge()">
+                            <input id="naiss" type="date" formControlName="dateNaissance" pInputText (change)="controleAge()">
 
                         </div>
 
@@ -206,12 +264,12 @@
 
                         <div class="p-field p-col-3">
                             <label for="entre">Date entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                            <input  id="dateEntree" type="date" formControlName="dateEntree" pInputText (change) ="controleEntre()">
-                            
+                            <input id="dateEntree" type="date" formControlName="dateEntree" pInputText (change)="controleEntre()">
+
                         </div>
                         <div class="p-field p-col-3">
                             <label for="dateIncor">Date d'incorporation <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                            <input  id="dateIncor" type="date" formControlName="dateIncorporation" pInputText  (change)="compareDateIncorp()">
+                            <input id="dateIncor" type="date" formControlName="dateIncorporation" pInputText (change)="compareDateIncorp()">
 
                         </div>
 
@@ -243,27 +301,26 @@
                             <input id="numeroPoste" type="number" formControlName="numeroPoste" pInputText>
                         </div>
 
-                       <!--  <div class="p-field p-col-12 p-mr-2 p-mb-2">
+                        <!--  <div class="p-field p-col-12 p-mr-2 p-mb-2">
 
-                            <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" formControlName="demo" accept="image/*" maxFileSize="1000000" [auto]="true" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
-                            <span *ngIf="this.adherentForm.value.demo !== ''">{{adherentForm.value.demo?.name}}</span>
-                        </div> -->
-
-                       <!-- <div class="p-field p-col-3">
-                            <label for="matri">Matricule</label>
-                            <input id="matri" type="text" formControlName="matricule" pInputText>
-                        </div>-->
+                 <p-fileUpload #form mode="basic" customUpload="true" chooseLabel="photos" uploadLabel="Valider" name="demo[]" formControlName="demo" accept="image/*" maxFileSize="1000000" [auto]="true" (uploadHandler)="onBasicUpload($event, form)" ></p-fileUpload>
+                 <span *ngIf="this.adherentForm.value.demo !== ''">{{adherentForm.value.demo?.name}}</span>
+             </div> -->
+                        <!-- <div class="p-field p-col-3">
+                 <label for="matri">Matricule</label>
+                 <input id="matri" type="text" formControlName="matricule" pInputText>
+             </div>-->
                         <div class="p-field p-col-4"></div>
                         <div class="p-field p-col-2">
                             <button pButton pRipple icon="pi pi-plus" pTooltip="Ajouter membre de famille" label="Famille"
                                     class="p-button-success" type="button" [disabled]="!this.adherentForm.get('nom').value || !this.adherentForm.get('prenom').value || !this.adherentForm.get('dateNaissance').value
-                                    || !this.adherentForm.get('lieuNaissance').value || !this.adherentForm.get('qualiteAssure').value || !this.adherentForm.get('genre').value || !this.adherentForm.get('dateIncorporation').value"  (click)="ajouter()"></button>
+                                    || !this.adherentForm.get('lieuNaissance').value || !this.adherentForm.get('qualiteAssure').value || !this.adherentForm.get('genre').value || !this.adherentForm.get('dateIncorporation').value" (click)="ajouter()"></button>
                         </div>
                         <!-- <div class="p-field p-col-2">
-                            <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
-                                    class="p-button p-button-success" type="button" (click)="voirLaliste()" [disabled]="adherentFamilleListe.length === 0">
-                            </button>
-                        </div> -->
+                <button pButton pRipple icon="pi pi-list" pTooltip="Visualiser la liste" label="Liste"
+                        class="p-button p-button-success" type="button" (click)="voirLaliste()" [disabled]="adherentFamilleListe.length === 0">
+                </button>
+            </div> -->
 
                         <div class="p-fluid formgrig p-col-12" formArrayName="familys">
 
@@ -277,35 +334,35 @@
                                         <div class="p-col-3">
                                             <label [for]="'nom' + ri">Nom<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'nom' + ri" name="nom" type="text" formControlName="nom"
-                                                   pInputText/>
+                                                   pInputText />
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'prenom' + ri">Prénom(s) <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'prenom' + ri" type="text" [name]="'prenom' + ri"
-                                                   formControlName="prenom" pInputText/>
+                                                   formControlName="prenom" pInputText />
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'numeroTelephone' + ri">Téléphone <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                             <p-inputMask [id]="'numeroTelephone' + ri" formControlName="numeroTelephone" mask="99 99 99 99" [name]="'numeroTelephone' + ri">
                                             </p-inputMask>
                                             <!--<input  type="text"
-                                                    formControlName="numeroTelephone"
-                                                   pInputText/>-->
+                                        formControlName="numeroTelephone"
+                                       pInputText/>-->
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateNaissance' + ri">Date Naisse. <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'dateNaissance' + ri" type="date" [name]="'dateNaissance' + ri"
-                                                   formControlName="dateNaissance" pInputText (change) ="controleAgeRi(ri)"/>
+                                                   formControlName="dateNaissance" pInputText (change)="controleAgeRi(ri)" />
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateEntree' + ri">Date Entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                             <input [id]="'dateEntree' + ri" type="date" [name]="'dateEntree' + ri"
-                                                   formControlName="dateEntree" pInputText (change) ="controleEntreRi(ri)"/>
+                                                   formControlName="dateEntree" pInputText (change)="controleEntreRi(ri)" />
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'dateIncorporation' + ri">Date Incorpotration <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                             <input [id]="'dateIncorporation' + ri" type="date" [name]="'dateIncorporation' + ri"
-                                                   formControlName="dateIncorporation" pInputText (change) ="controleIncorporRi(ri)"/>
+                                                   formControlName="dateIncorporation" pInputText (change)="controleIncorporRi(ri)" />
                                         </div>
                                         <div class="p-col-3">
                                             <label [for]="'nom1' + ri">Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>

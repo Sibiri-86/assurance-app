@@ -554,6 +554,16 @@ export class Endpoints {
         static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER = {
             prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-paginate`,
             mock: `assets/mock/contrat/adherent.mock.json`
-        };
+    };
+        static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER_ADHERENTDTO = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-adherantDTO-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_AND_ASSURE_PRINCIPAL = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-and-assure-principal-paginate`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
 
 }
