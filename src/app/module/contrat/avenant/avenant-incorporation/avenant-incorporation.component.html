@@ -161,7 +161,7 @@
                     
  -->
 
-<!--         <div class="p-mb-3">
+         <div class="p-mb-3">
             <form  (ngSubmit)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()">
                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                     <h5 class="p-m-0"></h5>
@@ -169,26 +169,46 @@
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
                 <span>
-                <button type="submit" pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()" class="p-mr-2"></button>
+                <button type="submit" pButton icon="pi pi-search" (click)="onGetNumero()" class="p-mr-2"></button>
                 </span>    
                 </span>
                     <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text"  #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
                         <span>
-                            <button type="submit" pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()"  class="p-mr-2"></button>
+                            <button type="submit" pButton icon="pi pi-search" (click)="onGetNom()"  class="p-mr-2"></button>
                             </span>
                     </span>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
                             <span>
-                                <button type="submit"  pButton icon="pi pi-search" (click)="searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage()"  class="p-mr-2"></button>
+                                <button type="submit"  pButton icon="pi pi-search" (click)="onGetPrenom()"  class="p-mr-2"></button>
                                 </span>      
                         </span>
             </div>
         </form>
-    </div> -->
+    </div>
+<!-- 
+                <div class="card flex justify-center">
+                    <p-virtualScroller 
+                    [items]="adherentPrincipaux2" 
+                    [lazy]="true" 
+                    [rows]="size" 
+                    [totalRecords]="totalElements" 
+                    [itemSize]="50" 
+                    [style]="{ width: '100px', height: '100px' }"
+                    (onLazyLoad)="onLazyLoadAdherents($event)"
+                    >
+                    <ng-template let-adherent pTemplate="item">
+                        <div class="flex items-center p-2" style="height: 50px;">
+                        <div>{{ adherent.fullName }}</div>
+                        </div>
+                    </ng-template>
+                    </p-virtualScroller>
+                </div>
+ -->
+
 
                     <div class="dropdown-container" (scroll)="onScroll($event)">
                         <ul>

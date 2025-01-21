@@ -86,3 +86,13 @@ li {
     background-color: darkgreen; /* Couleur au survol */
   }
   
+  .p-virtualscroller .p-virtualscroller-content {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  
+  .p-virtualscroller-content div {
+    font-size: 14px;
+  }
+  

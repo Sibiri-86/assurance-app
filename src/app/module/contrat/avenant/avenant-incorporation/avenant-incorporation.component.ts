@@ -4,7 +4,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angul
 import {select, Store} from '@ngrx/store';
 import * as qualiteAssureSelector from '../../../../store/parametrage/qualite-assure/selector';
 import {loadQualiteAssure} from '../../../../store/parametrage/qualite-assure/actions';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, switchMap, takeUntil} from 'rxjs/operators';
 import {QualiteAssure} from '../../../../store/parametrage/qualite-assure/model';
 import {Observable, Subject} from 'rxjs';
 import {AppState} from '../../../../store/app.state';
@@ -117,6 +117,9 @@ export class AvenantIncorporationComponent implements OnInit{
     isToSearchAllAssureList = false;
     istoGetAdherantPrincipaux = false;
     isLoading: boolean = false;
+
+    items?: any;
+    searchTerms: any;
 
     init(): void {
 
@@ -1039,6 +1042,11 @@ export class AvenantIncorporationComponent implements OnInit{
                 fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
             }));
 
+
+            this.adherentPrincipaux2 = newAdherents;
+
+            console.log('newAdherents', newAdherents);
+            // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
             this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
             this.totalElements = data.totalElements;
             this.isLoading = false;
@@ -1048,5 +1056,25 @@ export class AvenantIncorporationComponent implements OnInit{
       },
     });
   }
+
+
+  onGetNumero(numero?: number){
+    this.numero = numero;
+    this.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage();
+}
+
+onGetNom(nom?: string){
+    this.nom = nom;
+    this.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage();
+
+}
+
+onGetPrenom(prenom?: string){
+
+    this.prenom = prenom;
+    this.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage();
+  
+}
+
 
 }
