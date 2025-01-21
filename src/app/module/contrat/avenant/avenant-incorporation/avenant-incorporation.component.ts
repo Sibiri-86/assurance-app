@@ -1085,7 +1085,7 @@ onGetPrenom(prenom?: string){
 searchNumeroWithDebounceTime(){
     this.numeroToSearch
         .pipe(
-          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          debounceTime(3000), // Attendre 3000ms après la dernière frappe.
           switchMap((numero: any) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
@@ -1120,7 +1120,7 @@ searchNumeroWithDebounceTime(){
 searchNomWithDebounceTime(){
     this.nomToSearch
         .pipe(
-          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          debounceTime(3000), // Attendre 3000ms après la dernière frappe.
           switchMap((nom: string) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
@@ -1157,7 +1157,7 @@ searchNomWithDebounceTime(){
   searchPrenomWithDebounceTime(){
     this.prenomToSearch
         .pipe(
-          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          debounceTime(3000), // Attendre 3000ms après la dernière frappe.
           switchMap((prenom: string) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
