@@ -109,17 +109,20 @@ export class AvenantIncorporationComponent implements OnInit{
     page = 0;
     size = 10;
     adherentsListByPage: any;
-    exoId: string;
+    exoId:  string = undefined;;
     groupeId: string = undefined;
-    numero: number;
-    nom: string = undefined;
-    prenom: string = undefined;
+    numero:  any;
+    nom:  string = undefined;
+    prenom:  string = undefined;
     isToSearchAllAssureList = false;
     istoGetAdherantPrincipaux = false;
     isLoading: boolean = false;
 
     items?: any;
-    searchTerms: any;
+
+    private numeroToSearch = new Subject<string>();
+    private prenomToSearch = new Subject<string>();
+    private nomToSearch = new Subject<string>();
 
     init(): void {
 
@@ -308,6 +311,8 @@ export class AvenantIncorporationComponent implements OnInit{
               console.log(this.adherentPrincipaux);
             }
         ); */
+
+        this.onSearchWithDebounceTime();
         
     }
 
@@ -1033,7 +1038,7 @@ export class AvenantIncorporationComponent implements OnInit{
     });
   }
 
-  searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(): void {
+  searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(exoId?: any, groupeId?: any, nom?: any, prenom?: any): void {
 
     this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
         next: (data: any) => {
@@ -1076,5 +1081,141 @@ onGetPrenom(prenom?: string){
   
 }
 
+
+searchNumeroWithDebounceTime(){
+    this.numeroToSearch
+        .pipe(
+          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          switchMap((numero: any) =>
+
+            this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
+              this.exoId,
+              this.groupeId,
+              numero,
+              this.nom,
+              this.prenom,
+              this.page,
+              this.size
+            )
+          )
+        )
+        .subscribe({
+            next: (data: any) => {
+                const newAdherents = data.content.map(a => ({
+                    ...a,
+                    fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
+                }));
+    
+    
+                this.adherentPrincipaux2 = newAdherents;
+                this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
+                this.totalElements = data.totalElements;
+                this.isLoading = false;
+            },
+          error: (err) => {
+            console.error('Erreur lors du chargement des adhérents', err);
+          },
+        });
+  }
+searchNomWithDebounceTime(){
+    this.nomToSearch
+        .pipe(
+          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          switchMap((nom: string) =>
+
+            this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
+              this.exoId,
+              this.groupeId,
+              this.numero,
+              nom,
+              this.prenom,
+              this.page,
+              this.size
+            )
+          )
+        )
+        .subscribe({
+            next: (data: any) => {
+                const newAdherents = data.content.map(a => ({
+                    ...a,
+                    fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
+                }));
+    
+    
+                this.adherentPrincipaux2 = newAdherents;
+                this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
+                this.totalElements = data.totalElements;
+                this.isLoading = false;
+            },
+          error: (err) => {
+            console.error('Erreur lors du chargement des adhérents', err);
+          },
+        });
+  }
+
+
+  searchPrenomWithDebounceTime(){
+    this.prenomToSearch
+        .pipe(
+          debounceTime(4000), // Attendre 4000ms après la dernière frappe.
+          switchMap((prenom: string) =>
+
+            this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
+              this.exoId,
+              this.groupeId,
+              this.numero,
+              this.nom,
+              prenom,
+              this.page,
+              this.size
+            )
+          )
+        )
+        .subscribe({
+            next: (data: any) => {
+                const newAdherents = data.content.map(a => ({
+                    ...a,
+                    fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
+                }));
+    
+    
+                this.adherentPrincipaux2 = newAdherents;
+                this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
+                this.totalElements = data.totalElements;
+                this.isLoading = false;
+            },
+          error: (err) => {
+            console.error('Erreur lors du chargement des adhérents', err);
+          },
+        });
+  }
+  
+    searchNumeroWithBebounceTime(numero: string): void {
+      this.numero = numero;
+      this.numeroToSearch.next(numero); // Pousse le terme de recherche dans l'observable.
+    }
+
+    onSearchNomWithBebounceTime(nom: string): void {
+        this.nom = nom;
+        this.nomToSearch.next(nom); // Pousse le terme de recherche dans l'observable.
+      }
+
+      onSearchPrenomWithBebounceTime(prenom: string): void {
+        this.prenom = prenom;
+        this.prenomToSearch.next(prenom); // Pousse le terme de recherche dans l'observable.
+      }
+  
+      onSearchWithDebounceTime(){
+        if(this.numeroToSearch != this.numeroToSearch || undefined){
+            this.searchNumeroWithDebounceTime();
+        }
+        if(this.nomToSearch != this.numeroToSearch || undefined){
+            this.searchNomWithDebounceTime();
+        }
+        if(this.prenomToSearch != this.numeroToSearch || undefined){
+            this.searchPrenomWithDebounceTime();
+        }
+
+      }
 
 }

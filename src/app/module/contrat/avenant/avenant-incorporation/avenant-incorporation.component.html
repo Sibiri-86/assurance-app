@@ -167,21 +167,21 @@
                     <h5 class="p-m-0"></h5>
                     <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
-                    <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
+                    <input pInputText type="text" #numero class="p-mr-2" (input)="searchNumeroWithBebounceTime(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
                 <span>
                 <button type="submit" pButton icon="pi pi-search" (click)="onGetNumero()" class="p-mr-2"></button>
                 </span>    
                 </span>
                     <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text"  #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
+                        <input pInputText type="text"  #nom class="p-mr-2" (input)="onSearchNomWithBebounceTime(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
                         <span>
                             <button type="submit" pButton icon="pi pi-search" (click)="onGetNom()"  class="p-mr-2"></button>
                             </span>
                     </span>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
+                            <input pInputText #prenom type="text" class="p-mr-2" (input)="onSearchPrenomWithBebounceTime(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
                             <span>
                                 <button type="submit"  pButton icon="pi pi-search" (click)="onGetPrenom()"  class="p-mr-2"></button>
                                 </span>      
