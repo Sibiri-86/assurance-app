@@ -1075,7 +1075,6 @@ onGetNom(nom?: string){
 }
 
 onGetPrenom(prenom?: string){
-
     this.prenom = prenom;
     this.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage();
   
@@ -1105,8 +1104,6 @@ searchNumeroWithDebounceTime(){
                     ...a,
                     fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
                 }));
-    
-    
                 this.adherentPrincipaux2 = newAdherents;
                 this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
                 this.totalElements = data.totalElements;
@@ -1177,7 +1174,6 @@ searchNomWithDebounceTime(){
                     ...a,
                     fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
                 }));
-    
     
                 this.adherentPrincipaux2 = newAdherents;
                 this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];

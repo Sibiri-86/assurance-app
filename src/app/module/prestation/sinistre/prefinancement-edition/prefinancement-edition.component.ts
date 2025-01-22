@@ -471,6 +471,7 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
     this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
 
         this.montantConsomme = rest;
+
         this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
         console.log("==========listPrestation==========", this.listPrestation);
         if(this.listPrestation) {
@@ -1016,7 +1017,8 @@ findMontantPlafond(event){
     if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
 
       
-this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+  this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+
     this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
@@ -2070,7 +2072,7 @@ loadAdherentBySouscripteurByDateSoin(): void {
 
 searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
   this.prenomToSearch = prenom;
-  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, prenom, this.page, this.size).subscribe({
+  this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.prestationPopForm.get('dateSoins').value, this.nom, prenom, this.page, this.size).subscribe({
     next: (data: Page<Adherent[]>) => {
       this.isAdherantsList = false;
       this.isAdherantsMatricule = false;
@@ -2110,6 +2112,7 @@ SearchWithDebounceTime(){
           this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
             this.police.nom,
             this.prestationPopForm.get('dateSoins').value,
+            this.nom,
             prenom,
             this.page,
             this.size
@@ -2139,7 +2142,148 @@ SearchWithDebounceTime(){
     this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
   }
 
+  onGetNom(event: any){
+    this.nom = event;
+  }
+
+
+
+
+  findMontantConsomme2(event){
+    console.log("====================verifier", event.value?.id);
+    console.log(event);
+    this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
+
+        this.montantConsomme = rest;
+        this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
+        console.log("==========listPrestation==========", this.listPrestation);
+        if(this.listPrestation) {
+  
+          for(let i =0; i< this.listPrestation.length; i++) {
+          //  console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
+            console.log(this.listPrestation[i]?.familleActe?.id);
+            if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+              this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
+            }
+          }
+        }
+       
+
+        console.log("==========rest==========", rest);
+        console.log(this.montantConsomme);
+    });
 }
+
+
+
+
+selectDateSoinsSousActe2() {
+  console.log( this.adherentSelected);
+  console.log('bircofbircofbircof1111');
+  console.log(this.adherentSelected);
+  console.log('bircofbircofbircof111');
+  this.prestationPopForm.get('taux').setValue('');
+  this.prestationPopForm.get('montantPlafond').setValue(null);
+  this.plafondSousActe = {};
+  this.plafondSousActe.adherent = this.adherentSelectedfinal;
+  this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
+  this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
+  
+  this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
+    this.montantConvention = rest;
+    
+    console.log('bircofbircofbircof2222');
+    console.log(rest);
+    console.log('bircofbircofbircof2222');
+
+});
+  if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+
+  
+this.store.dispatch(featureActionPrefinancement.checkPlafond(this.plafondSousActe));
+
+  this.store.pipe(select(prefinancementSelector.montantSousActe)).pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    console.log(value);
+    if (value) {
+      
+      console.log('la valeur de i est ********************', featureActionPrefinancement.checkPlafond);
+      console.log('le montant de i est ********************', value);
+      this.prestationPopForm.get('montantPlafond').setValue(value);
+      if(value == 0 ) {
+        this.prestationPopForm.get('montantPlafond').setValue('');
+      }
+    } else {
+      this.prestationPopForm.get('montantPlafond').setValue(null);
+      
+    }
+  });
+  }
+}
+
+
+selectDateSoinsSousActe3() {
+  console.log(this.adherentSelected);
+  console.log('Débogage 1');
+  console.log(this.adherentSelected);
+  console.log('Débogage 2');
+
+  // Réinitialisation des champs du formulaire
+  this.prestationPopForm.get('taux').setValue('');
+  this.prestationPopForm.get('montantPlafond').setValue(null);
+
+  // Préparation de l'objet plafondSousActe
+  this.plafondSousActe = {
+    adherent: this.adherentSelectedfinal,
+    sousActe: this.prestationPopForm.get('sousActe').value?.sousActe,
+    dateSoins: this.prestationPopForm.get('dateSoins').value,
+  };
+
+  // Appel au service pour récupérer le montant de convention
+  if (this.plafondSousActe.sousActe) {
+    this.conventionService.$findMontantConvention(this.plafondSousActe.sousActe.id).subscribe((rest) => {
+      this.montantConvention = rest;
+      console.log('Montant de la convention récupéré :', rest);
+    });
+  }
+
+
+  // Validation des données nécessaires
+/*   if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent) {
+    // Calcul ou récupération locale du montant plafond
+    this.calculateMontantPlafond(this.plafondSousActe).subscribe((value) => {
+      console.log('Montant plafond calculé localement :', value);
+
+      // Mise à jour du formulaire en fonction du résultat
+      if (value !== undefined && value !== null) {
+        this.prestationPopForm.get('montantPlafond').setValue(value);
+        if (value === 0) {
+          this.prestationPopForm.get('montantPlafond').setValue('');
+        }
+      } else {
+        this.prestationPopForm.get('montantPlafond').setValue(null);
+      }
+    });
+  } */
+
+  
+}
+
+
+calculateMontantPlafond(plafondSousActe: any): Observable<number> {
+  // Exemple de simulation de traitement avec un service local
+
+  console.log('plafondSousActe', plafondSousActe);
+
+  return of(20);
+
+ // return this.prestationService.calculatePlafond(plafondSousActe);
+}
+
+
+}
+
+
+
 
 
 

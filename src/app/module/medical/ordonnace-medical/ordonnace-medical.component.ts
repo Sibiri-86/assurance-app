@@ -174,6 +174,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
         prenomToSearch: string;
         matriculeToSearch: string;
         dateSoins: string;
+        nom: string = '';
         private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
     constructor(private store: Store<AppState>,
@@ -803,7 +804,7 @@ rechercherPrefinancementByPeriode() {
               
               searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
                 this.prenomToSearch = prenom;
-                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, prenom, this.page, this.size).subscribe({
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, this.nom, prenom, this.page, this.size).subscribe({
                   next: (data: Page<Adherent[]>) => {
                     this.isAdherantsList = false;
                     this.isAdherantsMatricule = false;
@@ -843,6 +844,7 @@ rechercherPrefinancementByPeriode() {
                         this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
                           this.police.nom,
                           this.dateSoins,
+                          this.nom,
                           prenom,
                           this.page,
                           this.size
@@ -870,6 +872,10 @@ rechercherPrefinancementByPeriode() {
                   this.isAdherantsList = false;
                   this.isAdherantsMatricule = false;
                   this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+                }
+
+                onGetNom(event: any){
+                  this.nom = event;
                 }
           
 }
