@@ -530,7 +530,7 @@ export class Endpoints {
         };
 
         static readonly ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM = {
-            prod: `${SERVICE_PREFIX}/contrat/adherent/getAssureBySouscripteur-adherent/paginate/prenom`,
+            prod: `${SERVICE_PREFIX}/contrat/adherent/getAssureBySouscripteur-adherent/paginate/nom-prenom`,
             mock: `assets/mock/contrat/adherent.mock.json`
         };
         static readonly ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_MATRICULE_GARANT = {
@@ -546,5 +546,24 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/contrat/adherent/nom-Prenom`,
             mock: `assets/mock/contrat/adherent.mock.json`
         };
+
+        static readonly ADHERANT_BY_EXERCICEAND_GROUPE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
+        static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+    };
+        static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER_ADHERENTDTO = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-adherantDTO-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_AND_ASSURE_PRINCIPAL = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-and-assure-principal-paginate`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
 
 }

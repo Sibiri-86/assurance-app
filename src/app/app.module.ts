@@ -357,6 +357,7 @@ import { CourrierPrestataireComponent } from './module/prestation/tier-payant/co
 @NgModule({
     imports: [
         BrowserModule,
+        ScrollPanelModule,
         MatStepperModule,
         ProgressSpinnerModule,
         FormsModule,

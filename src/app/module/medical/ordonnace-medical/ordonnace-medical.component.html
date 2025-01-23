@@ -410,7 +410,7 @@
                                     showClear="true" [options]="policeList"
                                     [autoDisplayFirst]="false" 
                                     placeholder="Selectionnez le souscripteur"
-                                    optionLabel="nom" class="p-mr-2" [(ngModel)]="police"></p-dropdown>
+                                    optionLabel="nom" class="p-mr-2" [(ngModel)]="police" (onChange)="filtrer()"></p-dropdown>
                             
                                 <!--  <input id="nom" style="width: 90%;" type="text"  [(ngModel)]="adherentsearch.nom" name="nom" pInputText>  -->                                               
                             </div>
@@ -442,15 +442,30 @@
                          currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
                         [showCurrentPageReport]="true">
                         <ng-template pTemplate="caption">
-                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
+                            <div class="p-mr-3">
                                 <h5 class="p-m-0"></h5>
                                 <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" 
-                                (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime($event.target.value)"
-                                placeholder="Recherchez par le prénom uniquement"  />
+                                <input pInputText type="text"
+                                
+                                (input)="onGetNom($event.target.value)"
+                                placeholder="Nom" />
                                 </span>
                             </div>
+
+                            <div>
+                                <h5 class="p-m-0"></h5>
+                                <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text"
+                                
+                                (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime($event.target.value)"
+                                placeholder="Prénom" />
+                                </span>
+                            </div>
+                            </div>
+
                         </ng-template>
                             <ng-template pTemplate="header">
                                 <tr>

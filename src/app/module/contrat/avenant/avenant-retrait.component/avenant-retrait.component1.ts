@@ -3,7 +3,7 @@ import {Police} from '../../../../store/contrat/police/model';
 import {Exercice} from '../../../../store/contrat/exercice/model';
 import {select, Store} from '@ngrx/store';
 
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import * as groupeSlector from '../../../../store/contrat/groupe/selector';
 import * as adherantSelector from '../../../../store/contrat/adherent/selector';
@@ -92,14 +92,9 @@ export class AvenantRetraitComponent implements OnInit {
   size = 10;
   adherentsListByPage: any;
   exoId: string;
-  groupeId: string = undefined;
-  numero: number;
-  nom: string = undefined;
-  prenom: string = undefined;
-    isToSearchAllAssureList = false;
-
- private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
-
+  groupeId: string;
+  isToSearchAllAssureList = false;
+  filterForm: FormGroup;
 
   constructor(
       private store: Store<AppState>,
@@ -111,17 +106,29 @@ export class AvenantRetraitComponent implements OnInit {
       private policeService: PoliceService,
       private exerciceService: ExerciceService,
       private historiqueAvenantAdherantService: HistoriqueAvenantAdherentService
-  ) {  }
+  ) {
 
-    ngOnInit(): void {
-       // this.SearchWithDebounceTime();
+    this.filterForm = this.formBuilder.group({
+      exoId: [''],
+      groupeId: [''],
+      numero: [''],
+      nom: [''],
+      prenom: [''],
+      page: [0],
+      size: [10]
+    });
+  }
+
+  ngOnInit(): void {
     console.log('..............avenant-retrait...... ID........' + this.avenantId);
     this.init();
 
     this.groupe = {};
-
+    console.log('..............police.avenant-retrait..............');
+    console.log(this.police);
+    console.log("ghjklkhghjklkjhjk",this.isRenouv);
+    
     this.groupeList$ = this.store.pipe(select(groupeSlector.groupeList));
-
     this.store.dispatch(loadGroupe({policeId: this?.police?.id}));
     this.groupeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -511,70 +518,26 @@ export class AvenantRetraitComponent implements OnInit {
     // this.viewListeEdit = true;
   }
 
+
+
   onPageChange(newPage: number): void {
     this.page = newPage;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();    
+    if(this.isToSearchAllAssureList){
+      this.onSearchAllAdherentByExerciceAndGroupeByPage(this.exoId, this.groupeId);
     }
+
+/*     if(this.isToSearchNomAndPrenomList){
+      this.onSearchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage();
+    }*/
+    } 
 
     onSearchAllAdherentByExerciceAndGroupeByPage(exoId: string, groupeId: string): void {
     this.exoId = exoId;
     this.groupeId = groupeId;
-
-    if(exoId && groupeId){
-      this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
-        next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-          this.adherentsListByPage = data.content;
-          this.totalElements = data.totalElements;
-          this.isToSearchAllAssureList = true;
-          this.totalPages = data.totalPages;
-        },
-        error: (err) => {
-          console.error('Erreur lors du chargement des adhérents', err);
-        },
-      });
-    }
-}
-
-  onGetExoId(exoId: string){
-    if(exoId){
-      this.exoId = exoId;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-    }
-  }
-  onGetGroupeId(groupeId: string){
-    if(groupeId){
-      this.groupeId = groupeId;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-    }
-  }
-
-  onGetNumero(numero?: number){
-      this.numero = numero;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-  }
-
-  onGetNom(nom?: string){
-
-      this.nom = nom;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-
-  }
-
-  onGetPrenom(prenom?: string){
-
-      this.prenom = prenom;
-     // this.searchTerms.next(prenom);
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
     
-  }
-
-
-  onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(): void {
-
-    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
+    this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-            this.adherentsListByPage = data.content;
-
+        this.adherentsListByPage = data.content;
         this.isToSearchAllAssureList = true;
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
@@ -585,34 +548,20 @@ export class AvenantRetraitComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
-    }
+  getAdherents(): void {
+    const { exoId, groupeId, numero, nom, prenom, page, size } = this.filterForm.value;
 
-
-    SearchWithDebounceTime() {
-
-        this.searchTerms
-            .pipe(
-                debounceTime(1000), // Attendre 1000ms après la dernière frappe.
-                switchMap((prenom: string) =>
-                    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size)
-                )
-            )
-            .subscribe({
-
-                next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-
-                    this.adherentsListByPage = data.content;
-                    this.isToSearchAllAssureList = true;
-                    this.totalElements = data.totalElements;
-                    this.totalPages = data.totalPages;
-                },
-                error: (err) => {
-                    console.error('Erreur lors du chargement des adhérents', err);
-                },
-            });
-    }
-
+    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(exoId, groupeId, numero, nom, prenom, page, size).subscribe({
+      next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+        this.adherentsListByPage = data.content;
+        this.isToSearchAllAssureList = true;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des adhérents', err);
+      },
+    });
+  }
 
 }

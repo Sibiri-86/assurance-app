@@ -4,3 +4,95 @@
     font-size: 20px !important;
     // text-align: center !important;
 }
+
+.dropdown-container {
+    max-height: 200px; /* Limiter la hauteur */
+    overflow-y: auto;  /* Activer le défilement */
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+.dropdown-container {
+  max-height: 200px; /* Limite la hauteur */
+  overflow-y: auto;  /* Active le défilement */
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  text-align: center; /* Centre le contenu */
+  margin-bottom: 10px; /* Espacement entre les boutons */
+}
+
+.btn-adherent {
+  background-color: blue; /* Couleur de fond bleu */
+  color: white; /* Texte blanc */
+  border: none; /* Supprime les bordures par défaut */
+  padding: 10px 20px; /* Ajoute un padding pour un look esthétique */
+  font-size: 16px; /* Taille de police */
+  border-radius: 5px; /* Coins arrondis */
+  cursor: pointer; /* Curseur interactif */
+  width: 100%; /* S'étend à 100% du conteneur parent */
+  text-align: center; /* Centre le texte */
+}
+
+.btn-adherent:hover {
+  background-color: darkblue; /* Couleur au survol */
+}
+
+.dropdown-container {
+    max-height: 250px; /* Limite la hauteur */
+    overflow-y: auto;  /* Active le défilement */
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  .dropdown-container {
+    max-height: 200px; /* Limite la hauteur */
+    overflow-y: auto;  /* Active le défilement */
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    text-align: center; /* Centre le contenu */
+    margin-bottom: 10px; /* Espacement entre les boutons */
+  }
+  
+  .btn-adherent {
+    background-color: green; /* Couleur de fond vert */
+    color: white; /* Texte blanc */
+    border: none; /* Supprime les bordures par défaut */
+    padding: 10px 20px; /* Ajoute un padding pour un look esthétique */
+    font-size: 16px; /* Taille de police */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur interactif */
+    width: 100%; /* S'étend à 100% du conteneur parent */
+    text-align: center; /* Centre le texte */
+  }
+  
+  .btn-adherent:hover {
+    background-color: darkgreen; /* Couleur au survol */
+  }
+  
+  .p-virtualscroller .p-virtualscroller-content {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  
+  .p-virtualscroller-content div {
+    font-size: 14px;
+  }
+  

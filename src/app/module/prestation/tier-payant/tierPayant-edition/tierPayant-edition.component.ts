@@ -2480,7 +2480,7 @@ export class TierPayantEditionComponent implements OnInit {
           
           searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
             this.prenomToSearch = prenom;
-            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, prenom, this.page, this.size).subscribe({
+            this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, this.nom, prenom, this.page, this.size).subscribe({
               next: (data: Page<Adherent[]>) => {
                 this.isAdherantsList = false;
                 this.isAdherantsMatricule = false;
@@ -2520,6 +2520,7 @@ export class TierPayantEditionComponent implements OnInit {
                     this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
                       this.police.nom,
                       this.dateSoins,
+                      this.nom,
                       prenom,
                       this.page,
                       this.size
@@ -2547,6 +2548,10 @@ export class TierPayantEditionComponent implements OnInit {
               this.isAdherantsList = false;
               this.isAdherantsMatricule = false;
               this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+            }
+
+            onGetNom(event: any){
+              this.nom = event;
             }
       
 

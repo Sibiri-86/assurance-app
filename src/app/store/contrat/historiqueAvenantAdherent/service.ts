@@ -5,7 +5,7 @@ import {
     HistoriqueAvenantAdherentList,
     HistoriqueAvenantList
 } from './model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -15,6 +15,7 @@ import {Avenant, TypeHistoriqueAvenant} from '../historiqueAvenant/model';
 import {HistoriqueAvenantPrime} from '../historiqueAvenant/model';
 import {createRequestOption} from '../../../module/util/loader-util';
 import {Adherent} from '../adherent/model';
+import { Page } from 'src/app/module/util/pageable';
 
 @Injectable({providedIn: 'root'})
 export class HistoriqueAvenantAdherentService {
@@ -176,6 +177,18 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             );
         }
       }
+
+          // Bircof
+        // Rechercher les adhérants par exoId, et groupe
+        searchAllAdherentByExerciceAndGroupeByPage (exoId?: string, groupeId?: string, page?: number, size?: number): Observable<Page<Adherent[]>> {
+          const params = new HttpParams()
+            .set('exoId', exoId)
+            .set('groupeId', groupeId)
+            .set('page', page.toString())
+            .set('size', size.toString());
+          return this.http.get<Page<Adherent[]>>(
+            `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICEAND_GROUPE)}`, { params });
+        }
 
 private handleError<T>() {
     return (error: HttpErrorResponse) => {

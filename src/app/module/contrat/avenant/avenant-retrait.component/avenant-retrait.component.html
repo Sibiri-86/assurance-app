@@ -17,13 +17,28 @@
                 </div>
             </div>
         </div> -->
-        <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
+<!--         <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
             <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
             <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
                         [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="findListeActualiseeByExerciceId(curentExercice)">
             </p-dropdown>
+        </div> -->
+<!--         <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
+            <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true" (onChange)="onSearchAllAdherentByExerciceAndGroupeByPage(curentExercice.id, this.groupeId)">
+            </p-dropdown>
+        </div> -->
+        <div class="p-col-3" *ngIf="etat === 'CREATE' || isRenouv">
+            <label for="fraisBadge">Exercice<span style="color: red !important; size: 2em">*</span></label>
+            <p-dropdown [options]="exerciceList" [(ngModel)]="curentExercice"  optionLabel="nomExo" placeholder="Selectionner un exercice" [filter]="true"
+                        [style]="{'width':'100%'}" filterBy="nomExo" [showClear]="true"
+                        #exoId
+                         (onChange)="onGetExoId(exoId.value.id)"
+                         >
+            </p-dropdown>
         </div>
-        <div class="p-col-3">
+<!--         <div class="p-col-3">
             <form [formGroup]="newForm" *ngIf="!isRenouv && etat !== 'VIEW'">
                 <div class="p-grid">
                 <div class="p-fluid p-formgrid  p-col-12">
@@ -31,6 +46,20 @@
                     <p-dropdown [options]="groupeList" [disabled]="!this.curentExercice.id == null" optionLabel="libelle" formControlName="groupe"
                                 [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
                                 (onChange)="loadAherantByGroupe()" [style]="{'width': '90%'}">
+                    </p-dropdown>
+                </div>
+                </div>
+            </form>
+        </div> -->
+        <div class="p-col-3">
+            <form [formGroup]="newForm" *ngIf="!isRenouv && etat !== 'VIEW'">
+                <div class="p-grid">
+                <div class="p-fluid p-formgrid  p-col-12">
+                    <label class="p-fieldset-content">Choisir le Groupe <span style="color: red !important; size: 2em">*</span></label><br>
+                    <p-dropdown [options]="groupeList" [disabled]="!this.curentExercice.id == null" optionLabel="libelle" formControlName="groupe"
+                                [filter]="true" filterBy="libelle" [showClear]="true" placeholder="Choisir un groupe"
+                                #groupe
+                                (onChange)="onGetGroupeId(groupe.value.id)" [style]="{'width': '90%'}">
                     </p-dropdown>
                 </div>
                 </div>
@@ -101,19 +130,37 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="historiqueAveantAdherantsByExercice" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="adherentsListByPage"
                      [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
-                     [rowHover]="true" dataKey="id" [(selection)]="adherantDeleteds"
-                     styleClass="p-datatable-customers"
-                     currentPageReportTemplate="{first} to {last} of {totalRecords} enregistrements" [showCurrentPageReport]="true">
+                     dataKey="id" [(selection)]="adherantDeleteds"
+                     styleClass="p-datatable-customers">
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                        <h5 class="p-m-0"></h5>
-                        <span class="p-input-icon-left">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Numéro, nom, prénom(s)" [style]="{width: '80%'}" />
+                    <form  (ngSubmit)="onSubmit()">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <h5 class="p-m-0"></h5>
+                            <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
+                        <span>
+                        <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()" class="p-mr-2"></button>
+                        </span>    
                         </span>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
+                                <span>
+                                    <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
+                                    </span>      
+                            </span>
+                                <span class="p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
+                                    <span>
+                                        <button type="submit"  pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
+                                        </span>      
+                                </span>
                     </div>
+                </form>
                 </ng-template>
 
                 <ng-template pTemplate="header">
@@ -130,7 +177,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-historiqueAveantAdherant >
-                    <tr [ngClass]="{'colorZone': !historiqueAveantAdherant.adherent.adherentPrincipal}">
+                    <tr [ngClass]="{'colorZone': !historiqueAveantAdherant?.adherent?.adherentPrincipal}">
                         <td>
                             <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
                             [disabled]="etat === 'VIEW'"></p-checkbox>
@@ -170,9 +217,12 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
-                    <div class="p-d-flex p-ai-center p-jc-between">
-                        {{historiqueAveantAdherantsByExercice ? historiqueAveantAdherantsByExercice.length : 0 }} adherents au total.
-                    </div>
+                    <div class="pagination">
+                        <span>Total: <span class="champVert">{{totalElements}} </span> </span>
+                        <button (click)="onPageChange(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
+                        <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+                        <button (click)="onPageChange(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
+                    </div>             
                 </ng-template>
             </p-table>
         </div>
