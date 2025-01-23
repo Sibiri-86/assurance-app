@@ -55,6 +55,7 @@ import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -71,10 +72,13 @@ export class OrdreReglementValideComponent implements OnInit {
   report: Report = {};
   dateDebut: Date;
   dateFin: Date;
+  sinistres: Array<Prefinancement> = [];
+  prestations: Array<Prestation>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+               private prefinancementService: PrefinancementService,
                private router: Router) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement valide' }]);
 }
@@ -140,8 +144,16 @@ export class OrdreReglementValideComponent implements OnInit {
   }
 
   voirSinistre(ordre: OrdreReglement) {
+    console.log('****************ordre****************', ordre);
+    this.prefinancementService.findSinistreByOrdreReglementId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistres = res;
+      console.log('****************prestations****************', this.sinistres);
+      this.prestations = this.sinistres[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    })); 
     this.displaySinistre = true;
-    this.prefinancement = ordre.prefinancement;
+    //this.prefinancement = ordre.prefinancement;
   }
 
   navigateSinistre2() {

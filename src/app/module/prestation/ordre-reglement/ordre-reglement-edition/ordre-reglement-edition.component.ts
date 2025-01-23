@@ -55,6 +55,7 @@ import { TypeReport } from 'src/app/store/contrat/enum/model';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
 import { Etat } from 'src/app/module/common/models/model';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 
 @Component({
@@ -74,11 +75,14 @@ export class OrdreReglementEditionComponent implements OnInit {
   ordreReglement: OrdreReglement;
   showDetailOrdreReglement = false;
   valide: TypeEtatOrdreReglement.VALIDE;
+  sinistres: Array<Prefinancement> = [];
+  prestations: Array<Prestation>;
 
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+               private prefinancementService: PrefinancementService,
                private router: Router) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement edition' }]);
 }
@@ -108,7 +112,21 @@ export class OrdreReglementEditionComponent implements OnInit {
   }
 
   consulter(ordre: OrdreReglement){
+    if(this.sinistres.length > 0) {
+      ordre.prefinancement = this.sinistres;
+    } else {
+      this.prefinancementService.findSinistreByOrdreReglementId(ordre.id).subscribe((res=>{
+        console.log('****************res****************', res);
+        this.sinistres = res;
+        console.log('****************prestations****************', this.sinistres);
+        this.prestations = this.sinistres[0].prestation;
+        //this.prestations = this.prestations.prestation;
+      })); 
+      ordre.prefinancement = this.sinistres;
+    }
+   
     this.ordreReglement = ordre;
+    console.log('*************************this.ordreReglement********************', this.ordreReglement);
     this.showDetailOrdreReglement = true;
     console.log('*************************yes********************'+ this.showDetailOrdreReglement);
 
@@ -151,8 +169,16 @@ export class OrdreReglementEditionComponent implements OnInit {
   }
 
   voirSinistre(ordre: OrdreReglement) {
+    console.log('****************ordre****************', ordre);
+    this.prefinancementService.findSinistreByOrdreReglementId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistres = res;
+      console.log('****************prestations****************', this.sinistres);
+      this.prestations = this.sinistres[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    })); 
     this.displaySinistre = true;
-    this.prefinancement = ordre.prefinancement;
+    //this.prefinancement = ordre.prefinancement;
   }
 
   navigateSinistre() {

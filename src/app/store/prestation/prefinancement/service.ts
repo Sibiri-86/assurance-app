@@ -246,6 +246,14 @@ deletePrestationBonPEC(prestation: Prestation): Observable<any> {
   return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/deletePrestationBonPriseEnCharge/${prestation.id}`, null);
 }
 
+findSinistreByOrdreReglementId(ordreId: string): Observable<Prestation[]> {
+            // @FIXME: post request
+            return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/sinistreByOrdreIdPrestation/${ordreId}`).pipe(
+                map((response: Prestation[]) => response),
+                catchError(this.handleError())
+            );    
+        }
+
 private createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
   if (req) {
