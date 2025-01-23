@@ -804,7 +804,7 @@ rechercherPrefinancementByPeriode() {
               
               searchAllAdherentByDateSoinsAndSouscripteurByPrenom(prenom: string): void {
                 this.prenomToSearch = prenom;
-                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, this.nom, prenom, this.page, this.size).subscribe({
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.police.nom, this.dateSoins, prenom, this.page, this.size).subscribe({
                   next: (data: Page<Adherent[]>) => {
                     this.isAdherantsList = false;
                     this.isAdherantsMatricule = false;
@@ -844,7 +844,6 @@ rechercherPrefinancementByPeriode() {
                         this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
                           this.police.nom,
                           this.dateSoins,
-                          this.nom,
                           prenom,
                           this.page,
                           this.size

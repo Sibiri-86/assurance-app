@@ -465,7 +465,20 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
 
   // Bircof
   // Rechercher les adhérants par souscripteur, date, et par leur nom
-  searchAllAdherentByDateSoinsAndSouscripteurByPrenom(souscripteur: string, dateSoins: string, nom: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+  searchAllAdherentByDateSoinsAndSouscripteurByPrenom(souscripteur: string, dateSoins: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('souscripteur', souscripteur)
+      .set('dateSoins', dateSoins)
+      .set('prenom', prenom)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM)}`, { params });
+  }
+
+  // Bircof
+  // Rechercher les adhérants par souscripteur, date, et par leur nom
+  searchAllAdherentByDateSoinsAndSouscripteurByNomAndPrenom(souscripteur: string, dateSoins: string, nom: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
     const params = new HttpParams()
       .set('souscripteur', souscripteur)
       .set('dateSoins', dateSoins)
@@ -474,7 +487,7 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
       .set('page', page.toString())
       .set('size', size.toString());
     return this.http.get<Page<Adherent[]>>(
-      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM)}`, { params });
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_NOM_PRENOM)}`, { params });
   }
 
     // Bircof
