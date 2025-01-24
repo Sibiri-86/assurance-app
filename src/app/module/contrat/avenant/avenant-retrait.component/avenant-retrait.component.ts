@@ -91,6 +91,7 @@ export class AvenantRetraitComponent implements OnInit {
   page = 0;
   size = 10;
   adherentsListByPage: any;
+  adherentsListByPageRetrait: any;
   exoId: string;
   groupeId: string = undefined;
   numero: number;
@@ -267,13 +268,13 @@ export class AvenantRetraitComponent implements OnInit {
     // historiqueAvenantAdherant.selected = value;
     const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
     historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
-    historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherantsByExercice;
+    historiqueAdherent.historiqueAvenantAdherentList = this.adherentsListByPageRetrait;
     console.log("*****historiqueAdherent.historiqueAvenantAdherentList****", historiqueAdherent.historiqueAvenantAdherentList);
     this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
         (res) => {
-          this.historiqueAveantAdherantsByExercice = res;
-          console.log("*****historiqueAveantAdherantsByExercice****", this.historiqueAveantAdherantsByExercice);
-          this.historiqueAveantAdherantsByExercice.forEach(haa => {
+          this.adherentsListByPageRetrait = res;
+          console.log("*****adherentsListByPageRetrait****", this.adherentsListByPageRetrait);
+          this.adherentsListByPageRetrait.forEach(haa => {
             haa.dateRetrait = this.myForm.get('dateAvenant').value;
           });
         }
@@ -307,9 +308,9 @@ export class AvenantRetraitComponent implements OnInit {
         default:
           break;
       }
-      this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherantsByExercice.filter(e => e.selected);
+      this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
     } else {
-      this.historiqueAvenant.historiqueAvenantAdherants = this.historiqueAveantAdherantsByExercice;
+      this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
     }
     console.log('******* liste des adhérents à supprimer **************');
     console.log(this.historiqueAvenant);
@@ -442,7 +443,7 @@ export class AvenantRetraitComponent implements OnInit {
       console.log('police id === ' + police.id);
       this.historiqueAvenantAdherantService.getListActualisee(police.id).subscribe(
           (res) => {
-            this.historiqueAveantAdherantsByExercice = res;
+            this.adherentsListByPageRetrait = res;
             this.historiqueAveantAdherantsByExerciceTMP = res;
           }
       );
@@ -455,7 +456,7 @@ export class AvenantRetraitComponent implements OnInit {
       console.log('curentExercice id 1=== ' + currentExercice.id);
       this.historiqueAvenantAdherantService.getListActualiseeByExerciceId(currentExercice.id).subscribe(
           (res) => {
-            this.historiqueAveantAdherantsByExercice = res;
+            this.adherentsListByPageRetrait = res;
             this.historiqueAveantAdherantsByExerciceTMP = res;
           }
       );
@@ -573,7 +574,8 @@ export class AvenantRetraitComponent implements OnInit {
 
     this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-            this.adherentsListByPage = data.content;
+            this.adherentsListByPage = data.content; 
+            this.adherentsListByPageRetrait = data.content; 
 
         this.isToSearchAllAssureList = true;
         this.totalElements = data.totalElements;
