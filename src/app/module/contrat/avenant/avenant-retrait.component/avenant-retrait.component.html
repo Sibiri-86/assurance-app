@@ -130,7 +130,7 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="adherentsListByPage"
+            <p-table #dt [value]="adherentsListByPage" [(selection)]="selectedAdherents" 
                      [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
                      dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers">
@@ -179,7 +179,7 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant >
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant?.adherent?.adherentPrincipal}">
                         <td>
-                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect(historiqueAveantAdherant)" 
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" binary="true" inputId="binary" (click)="onSelect2(historiqueAveantAdherant)" 
                             [disabled]="etat === 'VIEW'"></p-checkbox>
                             <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
                         </td>

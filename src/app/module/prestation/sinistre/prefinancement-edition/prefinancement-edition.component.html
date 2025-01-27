@@ -24,7 +24,8 @@
                     <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
                 </div>
                 <div class="p-field">
-                    <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+<!--                     <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+ -->                    <button pButton pRipple type="button" (click)="getPrefinancementPeriode()" label="Rechercher"></button>
                 </div>
                 <div class="p-field">
                     
@@ -495,7 +496,7 @@
                                     <p-dropdown  [filter]="true"
                                                 showClear="true" [options]="listSousActe"
                                                 formControlName="sousActe"  [autoDisplayFirst]="false"
-                                                optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe(); findMontantConsomme($event); findTaux()"></p-dropdown>      
+                                                optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe5(); findMontantConsomme($event); findTaux()"></p-dropdown>      
                                 </div>
 
                                 <div class="p-field p-col">
@@ -718,7 +719,7 @@
         <p-dialog [maximizable]="true" #dialStudent (onShow)="showDialogPlafondMaximized(dialStudent)" [(visible)]="displayFormPrefinancement" header="Prefinancement" [modal]="true" styleClass="p-fluid" (onHide)="closeDialog()">
             <ng-template pTemplate="content">
                 <div class="card">
-                <form (ngSubmit)="onCreate()"  [formGroup]="prestationForm">    
+                <form (ngSubmit)="onCreate2()"  [formGroup]="prestationForm">    
                 <p-fieldset legend="Sinistre" toggleable="true">
                         
                 <div class="p-fluid p-formgrid p-grid">
