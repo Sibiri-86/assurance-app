@@ -45,7 +45,7 @@
                         <th pSortableColumn="numero" style="min-width:10px">Date Validation<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="numero" style="min-width:10px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
                         <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+                        <th pSortableColumn="taux" style="min-width:20px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:10px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th pSortableColumn="territorialite" style="min-width:10px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
@@ -66,18 +66,18 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span>
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold; font-style: italic;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.police.nom}}</span>
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre.typePaiement}}</span>
                         </td>
-                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
+                        <td><span class="p-column-title" style="min-width:200px; font-weight: bold; color: green;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
                         <td style="min-width:150px">
-                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <!-- <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
                         <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderPayement(ordre)"></button>
-                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
+                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button> -->
                         </td>
                         
                         <!--
