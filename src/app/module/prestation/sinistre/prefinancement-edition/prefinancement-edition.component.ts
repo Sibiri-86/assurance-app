@@ -77,6 +77,7 @@ import { PlafondActe, PlafondFamilleActe, PlafondSousActe } from 'src/app/store/
 import { formatDate } from '@angular/common';
 import { KeycloakService } from 'keycloak-angular';
 import { Page } from 'src/app/module/util/pageable';
+import { error } from 'console';
 
 
 @Component({
@@ -1001,6 +1002,8 @@ findMontantPlafond(event){
     }
     console.log(this.plafondSousActe);
   }
+
+
   selectDateSoinsSousActe() {
     console.log( this.adherentSelected);
     this.prestationPopForm.get('taux').setValue('');
@@ -1731,6 +1734,7 @@ verifieDateSoins(event){
 
   /** enregistrement cas de prefinancement */
   onCreate() {
+    
     /** fonction pour enregistrer la prestation */ 
    console.log('creation prefinancement');
    this.prefinancementList = [];
@@ -1744,6 +1748,7 @@ verifieDateSoins(event){
    if(this.prestationForm.get('id').value != null) {
     this.prefinancementModel.id = this.prestationForm.get('id').value;
    }
+
    console.log("===========this.prefinancementModel2==================", this.prefinancementModel);
    this.prefinancementList.push(this.prefinancementModel);
    console.log(this.prefinancementList);
@@ -1758,6 +1763,61 @@ verifieDateSoins(event){
    this.prestationForm.reset();
    //this.prestationForm.get('dateSaisie').setValue(new Date());
    this.displayFormPrefinancement = false;
+  }
+
+  /** enregistrement cas de prefinancement */
+  onCreate2() {
+
+    /** fonction pour enregistrer la prestation */ 
+   this.prefinancementList = [];
+   this.prefinancementModel = this.prestationForm.value;
+
+   this.prefinancementModel.dateSaisie = new Date();
+   // this.prefinancementModel.dateSoins = 
+   this.prefinancementModel.adherent = this.adherentSelected;
+   this.prefinancementModel.prestation = this.prestationsList;
+   if(this.prestationForm.get('id').value != null) {
+    this.prefinancementModel.id = this.prestationForm.get('id').value;
+   }
+
+   this.prefinancementList.push(this.prefinancementModel);
+
+   this.posPrefinancement(this.prefinancementList);
+   this.prefinancementList = [];
+   this.prestationsList = [];
+   this.prestationForm.reset();
+   this.displayFormPrefinancement = false;
+  }
+
+
+  posPrefinancement(prefinancement: Array<Prefinancement>){
+    this.prefinancementService.posPrefinancement(prefinancement).subscribe(
+      res => {
+        const data = res;
+
+        if(data){
+          this.getPrefinancementPeriode(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'))
+        }
+        this.prefinancementDtoList = data;
+      }, 
+      error => {
+        this.addMessage('error', 'Date de soins invalide', error.error.messag);
+      }
+    );
+  }
+
+  getPrefinancementPeriode(dateD?: string, dateF?: string){
+    this.prefinancementService.$getPrefinancementPeriode(dateD, dateF).subscribe(
+
+      res =>{
+        const data = res.prefinancementDtoList;
+        this.prefinancementDtoList = data;
+      },
+      error => {
+        this.addMessage('error', 'Date de soins invalide', error.error.messag);
+
+      }
+    );
   }
 
   // permet d'enregistrer une prestation par famille
@@ -2276,6 +2336,81 @@ calculateMontantPlafond(plafondSousActe: any): Observable<number> {
   return of(20);
 
  // return this.prestationService.calculatePlafond(plafondSousActe);
+}
+
+
+
+  
+selectDateSoinsSousActe5() {
+  this.prestationPopForm.get('taux').setValue('');
+  this.prestationPopForm.get('montantPlafond').setValue(null);
+  this.plafondSousActe = {};
+  this.plafondSousActe.adherent = this.adherentSelectedfinal;
+  this.plafondSousActe.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
+  this.plafondSousActe.dateSoins = this.prestationPopForm.get('dateSoins').value;
+  
+  this.conventionService.$findMontantConvention( this.plafondSousActe?.sousActe?.id).subscribe((rest)=>{
+    this.montantConvention = rest;
+
+});
+
+  if (this.plafondSousActe.sousActe && this.plafondSousActe.dateSoins && this.plafondSousActe.adherent){
+    this.checkPlafondSousActe(this.plafondSousActe);
+  } 
+}
+
+
+checkPlafondSousActe(plafond: CheckPlafond) {
+
+  this.prefinancementService.checkPlafondSousActe(plafond).subscribe(
+
+    res => {
+       const plafond = res;
+
+       if (plafond) {
+        this.prestationPopForm.get('montantPlafond').setValue(plafond);
+        if(plafond.montant == 0 ) {
+          this.prestationPopForm.get('montantPlafond').setValue('');
+        }
+      } else {
+        this.prestationPopForm.get('montantPlafond').setValue(null);
+        
+      }
+    },
+    error => {
+      this.addMessage('error', 'Assuré(e) non pris en compte', error.error.message);
+    }
+    
+
+  );
+      
+}
+
+
+findMontantConsomme5(event){
+  console.log("====================verifier", event.value?.id);
+  console.log(event);
+  this.tierPayantService.$findMontantConsomme(this.adherentSelected.id, event.value?.sousActe?.id).subscribe(rest=>{
+
+      this.montantConsomme = rest;
+
+      this.listPrestation = this.prestationsList.filter(ad=>ad.adherent.id === this.adherentSelected.id && !ad.id);
+      console.log("==========listPrestation==========", this.listPrestation);
+      if(this.listPrestation) {
+
+        for(let i =0; i< this.listPrestation.length; i++) {
+        //  console.log("==========rest==========", this.prestationPopForm.get('familleActe').value?.garantie?.id);
+          console.log(this.listPrestation[i]?.familleActe?.id);
+          if(this.listPrestation[i]?.familleActe?.id === this.prestationPopForm.get('familleActe').value?.garantie?.id) {
+            this.montantConsomme = this.montantConsomme + this.listPrestation[i].montantRembourse;
+          }
+        }
+      }
+     
+
+      console.log("==========rest==========", rest);
+      console.log(this.montantConsomme);
+  });
 }
 
 

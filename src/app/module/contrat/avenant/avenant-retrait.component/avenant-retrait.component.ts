@@ -97,7 +97,9 @@ export class AvenantRetraitComponent implements OnInit {
   numero: number;
   nom: string = undefined;
   prenom: string = undefined;
-    isToSearchAllAssureList = false;
+  isToSearchAllAssureList = false;
+
+  selectedAdherents: Adherent[] = [];
 
  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
@@ -616,5 +618,56 @@ export class AvenantRetraitComponent implements OnInit {
             });
     }
 
+
+    onSelect2(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+      // const value: boolean = !historiqueAvenantAdherant.selected;
+      console.log('selectionselectionselection');
+      console.log(historiqueAvenantAdherant);
+      console.log('selectionselectionselection');
+
+      
+     if(this.selectedAdherents.length > 0) {
+      console.log("selectedAdherents", this.selectedAdherents);
+
+      const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
+
+
+        historiqueAdherent.historiqueAvenantAdherentList = this.selectedAdherents;
+
+        console.log("historiqueAdherent", historiqueAdherent);
+
+      
+     }
+
+
+      // historiqueAvenantAdherant.selected = value;
+      const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
+      historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
+
+     // historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherantsByExercice;
+
+
+
+
+      this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
+          (res) => {
+            this.historiqueAveantAdherantsByExercice = res;
+
+                console.log('this.rest  rest res res ');
+                console.log(res);
+                console.log('res res res res  ', res);
+
+            console.log("*****historiqueAveantAdherantsByExercice****", this.historiqueAveantAdherantsByExercice);
+
+
+
+            this.historiqueAveantAdherantsByExercice.forEach(haa => {
+              haa.dateRetrait = this.myForm.get('dateAvenant').value;
+            });
+
+
+          }
+      );
+    }
 
 }
