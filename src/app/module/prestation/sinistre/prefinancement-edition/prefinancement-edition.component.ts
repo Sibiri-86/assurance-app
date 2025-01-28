@@ -2368,7 +2368,7 @@ checkPlafondSousActe(plafond: CheckPlafond) {
        const plafond = res;
 
        if (plafond) {
-        this.prestationPopForm.get('montantPlafond').setValue(plafond);
+        this.prestationPopForm.get('montantPlafond').setValue(plafond.montant);
         if(plafond.montant == 0 ) {
           this.prestationPopForm.get('montantPlafond').setValue('');
         }
