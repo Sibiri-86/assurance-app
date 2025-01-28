@@ -1083,6 +1083,7 @@ onGetPrenom(prenom?: string){
 
 searchNumeroWithDebounceTime(){
     this.adherentPrincipaux2 = [];
+    const localPage = 0;
     this.numeroToSearch
         .pipe(
           debounceTime(2000), // Attendre 2000ms après la dernière frappe.
@@ -1094,7 +1095,7 @@ searchNumeroWithDebounceTime(){
               numeroToSearch,
               this.nom,
               this.prenom,
-              this.page,
+              localPage,
               this.size
             )
           )
@@ -1118,6 +1119,7 @@ searchNumeroWithDebounceTime(){
   }
 searchNomWithDebounceTime(){
     this.adherentPrincipaux2 = [];
+    const localPage = 0;
     this.nomToSearch
         .pipe(
           debounceTime(2000), // Attendre 2000ms après la dernière frappe.
@@ -1129,7 +1131,7 @@ searchNomWithDebounceTime(){
               this.numero,
               nomToSearch,
               this.prenom,
-              this.page,
+              localPage,
               this.size
             )
           )
@@ -1157,6 +1159,7 @@ searchNomWithDebounceTime(){
 
   searchPrenomWithDebounceTime(){
     this.adherentPrincipaux2 = [];
+    const localPage = 0;
     this.prenomToSearch
         .pipe(
           debounceTime(2000), // Attendre 2000ms après la dernière frappe.
@@ -1168,7 +1171,7 @@ searchNomWithDebounceTime(){
               this.numero,
               this.nom,
               prenomToSearch,
-              this.page,
+              localPage,
               this.size
             )
           )
