@@ -483,21 +483,21 @@
                                     formControlName="acte" optionLabel="acte.libelle" (onChange)="selectActe($event);findMontantPlafond($event)"></p-dropdown>
                                 </div>  
                                 
+                                 <div class="p-field p-col">
+                                    <label for="sousActe">SousActe <span class="required">*</span></label>
+                                    <p-dropdown  [filter]="true"
+                                                showClear="true" [options]="listSousActe"
+                                                formControlName="sousActe"  [autoDisplayFirst]="false"
+                                                optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe(); findMontantConsomme($event); findTaux()"></p-dropdown>      
+                                </div> 
+
 <!--                                 <div class="p-field p-col">
                                     <label for="sousActe">SousActe <span class="required">*</span></label>
                                     <p-dropdown  [filter]="true"
                                                 showClear="true" [options]="listSousActe"
                                                 formControlName="sousActe"  [autoDisplayFirst]="false"
-                                                optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe(); selectDateSoinsSousActe2(); findMontantConsomme($event); findTaux()"></p-dropdown>      
-                                </div> -->
-
-                                <div class="p-field p-col">
-                                    <label for="sousActe">SousActe <span class="required">*</span></label>
-                                    <p-dropdown  [filter]="true"
-                                                showClear="true" [options]="listSousActe"
-                                                formControlName="sousActe"  [autoDisplayFirst]="false"
                                                 optionLabel="sousActe.libelle" (onChange)="selectDateSoinsSousActe5(); findMontantConsomme($event); findTaux()"></p-dropdown>      
-                                </div>
+                                </div> -->
 
                                 <div class="p-field p-col">
                                     <label for="sousActe">Pathologie<span class="required">*</span></label>
