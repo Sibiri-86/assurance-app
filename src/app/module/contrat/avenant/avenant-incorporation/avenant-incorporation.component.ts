@@ -1038,20 +1038,21 @@ export class AvenantIncorporationComponent implements OnInit{
   }
 
   onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(exoId?: any, groupeId?: any, numero?:any, nom?: any, prenom?: any): void {
-
-    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(exoId, groupeId, numero, nom,prenom, this.page, this.size).subscribe({
+    this.adherentPrincipaux2 = [];
+    this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(exoId, groupeId, numero, nom, prenom, this.page, this.size).subscribe({
         next: (data: any) => {
-            const newAdherents = data.content.map(a => ({
+            
+            this.adherentPrincipaux2 = data.content
+            .map(a => ({
                 ...a,
                 fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
             }));
 
 
-            this.adherentPrincipaux2 = newAdherents;
+            // this.adherentPrincipaux2 = newAdherents;
 
-            console.log('newAdherents', newAdherents);
             // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
-            this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
+            // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
             this.totalElements = data.totalElements;
             this.isLoading = false;
         },
@@ -1064,26 +1065,27 @@ export class AvenantIncorporationComponent implements OnInit{
 
   onGetNumero(numero?: number){
     this.numero = numero;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero,this.nom, this.prenom);
+    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, numero,this.nom, this.prenom);
 }
 
 onGetNom(nom?: string){
     this.nom = nom;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero,this.nom, this.prenom);
+    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero, nom, this.prenom);
 
 }
 
 onGetPrenom(prenom?: string){
     this.prenom = prenom;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero,this.nom, this.prenom);
+    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, this.numero,this.nom, prenom);
   
 }
 
 
 searchNumeroWithDebounceTime(){
+    this.adherentPrincipaux2 = [];
     this.numeroToSearch
         .pipe(
-          debounceTime(2000), // Attendre 3000ms après la dernière frappe.
+          debounceTime(2000), // Attendre 2000ms après la dernière frappe.
           switchMap((numeroToSearch: any) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
@@ -1099,12 +1101,12 @@ searchNumeroWithDebounceTime(){
         )
         .subscribe({
             next: (data: any) => {
-                this.adherentPrincipaux2 = [];
-                const newAdherents = data.content.map(a => ({
+                this.adherentPrincipaux2 = data.content
+                .filter( a => a.adherentPrincipal == null)
+                .map(a => ({
                     ...a,
                     fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
                 }));
-                this.adherentPrincipaux2 = newAdherents;
                // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
                 this.totalElements = data.totalElements;
                 this.isLoading = false;
@@ -1115,9 +1117,10 @@ searchNumeroWithDebounceTime(){
         });
   }
 searchNomWithDebounceTime(){
+    this.adherentPrincipaux2 = [];
     this.nomToSearch
         .pipe(
-          debounceTime(2000), // Attendre 3000ms après la dernière frappe.
+          debounceTime(2000), // Attendre 2000ms après la dernière frappe.
           switchMap((nomToSearch: string) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
@@ -1133,14 +1136,14 @@ searchNomWithDebounceTime(){
         )
         .subscribe({
             next: (data: any) => {
-                this.adherentPrincipaux2 = [];
-                const newAdherents = data.content.map(a => ({
+                this.adherentPrincipaux2 = data.content
+                .filter( a => a.adherentPrincipal == null)
+                .map(a => ({
                     ...a,
                     fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
                 }));
     
     
-                this.adherentPrincipaux2 = newAdherents;
                // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
                 this.totalElements = data.totalElements;
                 this.isLoading = false;
@@ -1153,9 +1156,10 @@ searchNomWithDebounceTime(){
 
 
   searchPrenomWithDebounceTime(){
+    this.adherentPrincipaux2 = [];
     this.prenomToSearch
         .pipe(
-          debounceTime(2000), // Attendre 3000ms après la dernière frappe.
+          debounceTime(2000), // Attendre 2000ms après la dernière frappe.
           switchMap((prenomToSearch: string) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
@@ -1171,14 +1175,14 @@ searchNomWithDebounceTime(){
         )
         .subscribe({
             next: (data: any) => {
-                this.adherentPrincipaux2 = [];
-                const newAdherents = data.content.map(a => ({
+                this.adherentPrincipaux2 = data.content
+                .filter( a => a.adherentPrincipal == null)
+                .map(a => ({
                     ...a,
                     fullName: a.numero + ' - ' + a.nom + ' ' + a.prenom,
                 }));
-    
-                this.adherentPrincipaux2 = newAdherents;
 
+    
                // this.adherentPrincipaux2 = [...this.adherentPrincipaux2, ...newAdherents];
                 this.totalElements = data.totalElements;
                 this.isLoading = false;
