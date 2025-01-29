@@ -35,6 +35,7 @@ import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store/parametrage/Banques/actions';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import { formatDate } from '@angular/common';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 @Component({
   selector: 'app-remboursement-effectue',
@@ -55,10 +56,13 @@ export class RemboursementEffectueComponent implements OnInit {
   banqueList: Array<Banque>;
   dateDebut: Date;
   dateFin: Date;
+  sinistres: Array<Prefinancement> = [];
+  prestations: Array<Prestation>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService) {
+               private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
+              private prefinancementService: PrefinancementService,) {
      this.breadcrumbService.setItems([{ label: 'Remboursement effectué' }]);
 }
 
@@ -130,8 +134,15 @@ addMessage(severite: string, resume: string, detaile: string): void {
     });
   }
   voirSinistre(ordre: OrdreReglement) {
+    this.prefinancementService.findSinistreByOrdreReglementId(ordre.id).subscribe((res=>{
+      console.log('****************res****************', res);
+      this.sinistres = res;
+      console.log('****************prestations****************', this.sinistres);
+      this.prestations = this.sinistres[0].prestation;
+      //this.prestations = this.prestations.prestation;
+    })); 
     this.displaySinistre = true;
-    this.prefinancement = ordre.prefinancement;
+    //this.prefinancement = ordre.prefinancement;
   }
 
 }
