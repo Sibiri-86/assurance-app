@@ -218,6 +218,8 @@ export class TierPayantEditionComponent implements OnInit {
     isAdherantsList = false;
     isAdherantsSearch = false;
     isAdherantsMatricule = false;
+    isList = false;
+    isToEdit = false;
     prenomToSearch: string;
     matriculeToSearch: string;
     private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
@@ -2279,8 +2281,34 @@ export class TierPayantEditionComponent implements OnInit {
         //  this.prestationsList = tierPayant.prestation;
           this.displayFormPrefinancement = true;
       }
+      editerTierPayant2(tierPayant: SinistreTierPayant) {
+          this.isList = false;
+          this.isToEdit = true;
+          this.prefinancement = tierPayant;
+          this.prestataireSelected = tierPayant.prestataire;
+          if(this.prestataireSelected.id != tierPayant.prestataire.id) {
+            tierPayant.prestataire = this.prestataireSelected;
+          }
+         
+          this.prefinancement.dateDeclaration = tierPayant.dateDeclaration;
+          this.prefinancement.dateSaisie = new Date(tierPayant.dateSaisie);
+          this.tierPayantService.findPrestationBySinitreTierPayant2(tierPayant.id, this.page, this.size).subscribe(
+         
+            (data: any)=> {
+              if(data) {
+              this.prefinancementDetail.prestation = data.content as  Array<Prestation>;
+              this.prestationsList = data.content as  Array<Prestation>;
+              this.totalElements = data.totalElements;
+              this.totalPages = data.totalPages;
+              }
+    
+          });
+          this.displayFormPrefinancement = true;
+      }
 
       voirTierPyant(tierPayant: SinistreTierPayant){
+        this.isList = true;
+        this.isToEdit = false;
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
         console.log("tierPayant.iddddddddddd==> ", tierPayant.id);
@@ -2295,6 +2323,25 @@ export class TierPayantEditionComponent implements OnInit {
        // console.log(tierPayant.prestation[0]?.sousActe);
           this.displayFormPrefinancementDetail = true;
       }
+      
+
+      voirTierPyant2(tierPayant: SinistreTierPayant){
+        this.prefinancementDetail = tierPayant;
+        this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
+        this.tierPayantService.findPrestationBySinitreTierPayant2(tierPayant.id, this.page, this.size).subscribe(
+         
+          (data: any)=> {
+            if(data) {
+            this.prefinancementDetail.prestation = data.content as  Array<Prestation>;
+            this.totalElements = data.totalElements;
+            this.totalPages = data.totalPages;
+            }
+            
+        });
+          this.displayFormPrefinancementDetail = true;
+      }
+
+
 
 
       imprimerPrestation(prestation: Prestation) {
@@ -2430,8 +2477,25 @@ export class TierPayantEditionComponent implements OnInit {
             this.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(this.prenomToSearch);
         
         }
+        if(this.isList){
+            this.voirTierPyant2(this.prefinancementDetail);
+        }
+        if(this.isToEdit){
+            this.editerTierPayant2(this.prefinancementDetail);
+        }
         
         }
+
+        onPageChangeVoirTierPyant2(newPage: number): void {
+          this.page = newPage;
+          this.voirTierPyant2(this.prefinancementDetail);
+        }
+
+        onPageChangeEditerTierPayant2(newPage: number): void {
+          this.page = newPage;
+          this.editerTierPayant2(this.prefinancementDetail);        
+        }
+
           onGetDateSoin(dateSoins: Date){
             this.dateSoins = dateSoins;
           }
@@ -2494,6 +2558,7 @@ export class TierPayantEditionComponent implements OnInit {
               },
             });
           }
+
           onSearchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(matriculeGarant: string): void {
             this.matriculeToSearch = matriculeGarant;
             this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByMatriculeGarant(this.police.nom, this.dateSoins, matriculeGarant, this.page, this.size).subscribe({

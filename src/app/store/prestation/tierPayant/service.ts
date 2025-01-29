@@ -16,6 +16,7 @@ import {
 } from './model';
 import {OrdreReglement, OrdreReglementList, Prefinancement} from '../prefinancement/model';
 import { CourrierPrestataire } from '../../medical/ordonnance-medical/model';
+import { Page } from 'src/app/module/util/pageable';
 
 @Injectable({providedIn: 'root'})
 export class TierPayantService {
@@ -126,6 +127,16 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
             catchError(this.handleError())
         );    
     }
+
+    findPrestationBySinitreTierPayant2(sinitreTierId: string, page: number, size: number): Observable<Page<Prestation[]>> {
+    const params = new HttpParams()
+      .set('sinitreTierId', sinitreTierId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Prestation[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT2)}${sinitreTierId}`, { params });
+  }
+
 
     deleteTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         // @FIXME: post request
