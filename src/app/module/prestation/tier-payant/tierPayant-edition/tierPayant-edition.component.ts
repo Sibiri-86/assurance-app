@@ -224,6 +224,12 @@ export class TierPayantEditionComponent implements OnInit {
     matriculeToSearch: string;
     private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
+
+    exoId: string;
+    prestataireId: string;
+    numeroFacture: string;
+    prestataireSelectedId: string;
+
     dateSoins: any;
 
     constructor(private store: Store<AppState>,
@@ -2282,6 +2288,11 @@ export class TierPayantEditionComponent implements OnInit {
           this.displayFormPrefinancement = true;
       }
       editerTierPayant2(tierPayant: SinistreTierPayant) {
+
+        this.exoId = tierPayant?.adherent?.exercice?.id,
+        this.prestataireSelectedId = tierPayant?.prestataire?.id,
+        this.numeroFacture = tierPayant?.numeroFacture,
+
           this.isList = false;
           this.isToEdit = true;
           this.prefinancement = tierPayant;
@@ -2326,6 +2337,13 @@ export class TierPayantEditionComponent implements OnInit {
       
 
       voirTierPyant2(tierPayant: SinistreTierPayant){
+
+        this.exoId = tierPayant?.adherent?.exercice?.id,
+        this.prestataireSelectedId = tierPayant?.prestataire?.id,
+        this.numeroFacture = tierPayant?.numeroFacture,
+
+        console.log('tierPayant',  tierPayant);
+
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
         this.tierPayantService.findPrestationBySinitreTierPayant2(tierPayant.id, this.page, this.size).subscribe(
@@ -2341,7 +2359,67 @@ export class TierPayantEditionComponent implements OnInit {
           this.displayFormPrefinancementDetail = true;
       }
 
+      onSearchAdherentByPrenom(prenom: string){
 
+        console.log('this.exoId ', this.exoId );
+        console.log('this.prestataireSelectedId ', this.prestataireSelectedId );
+        console.log('this.numeroFacture ', this.numeroFacture );
+        const prestataireId = this.prestataireSelectedId;
+         if(prenom) {
+          this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(this.exoId, prestataireId, this.numeroFacture, prenom).subscribe(
+
+            (response: any)=> {
+              console.log('response', response);
+
+              if(response) {
+                const data = response?.content;
+                this.prefinancementDetail.prestation = data;
+                this.prestationsList = data;
+                this.totalElements = data?.totalElements;
+                this.totalPages = data?.totalPages;
+              }
+              
+          });
+        }  
+      }
+
+
+    /*   SearchWithDebounceTime(){
+        this.searchTerms
+            .pipe(
+              debounceTime(1000), // Attendre 1000ms après la dernière frappe.
+              switchMap((prenom: string) =>
+                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                  this.police.nom,
+                  this.prestationPopForm.get('dateSoins').value,
+                  prenom,
+                  this.page,
+                  this.size
+                )
+              )
+            )
+            .subscribe({
+              next: (data: Page<Adherent[]>) => {
+                this.isAdherantsSearch = true;
+                this.isAdherantsList = false;
+                this.isAdherantsMatricule = false;
+                this.adherentsListByPage = data.content;
+                this.totalElements = data.totalElements;
+                this.totalPages = data.totalPages;
+              },
+              error: (err) => {
+                console.error('Erreur lors du chargement des adhérents', err);
+              },
+            });
+      }
+      
+        searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
+          this.prenomToSearch = prenom;
+          this.isAdherantsSearch = true;
+          this.isAdherantsList = false;
+          this.isAdherantsMatricule = false;
+          this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+        } */
 
 
       imprimerPrestation(prestation: Prestation) {

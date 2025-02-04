@@ -11,6 +11,7 @@ import {createRequestOption} from '../../../module/util/loader-util';
 import { Exercice } from '../exercice/model';
 import { Page } from 'src/app/module/util/pageable';
 import { HistoriqueAvenantAdherant } from '../historiqueAvenantAdherent/model';
+import { Prestataire } from '../../parametrage/prestataire/model';
 
 @Injectable({providedIn: 'root'})
 export class AdherentService {
@@ -621,13 +622,9 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
             .set('groupeId', groupeId)
             .set('page', page.toString())
             .set('size', size.toString());
-
-
-        console.log('service exoId', exoId);
-        console.log('service groupeId ', groupeId);
-
-
         return this.http.get<Page<Adherent[]>>(
             `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_AND_ASSURE_PRINCIPAL)}`, { params });
     }
+
+  
 }

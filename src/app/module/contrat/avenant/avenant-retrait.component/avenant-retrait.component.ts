@@ -90,7 +90,7 @@ export class AvenantRetraitComponent implements OnInit {
   totalPages = 0;
   page = 0;
   size = 10;
-  adherentsListByPage: any;
+  adherentsListByPage:  any;
   adherentsListByPageRetrait: any;
   exoId: string;
   groupeId: string = undefined;
@@ -99,7 +99,7 @@ export class AvenantRetraitComponent implements OnInit {
   prenom: string = undefined;
   isToSearchAllAssureList = false;
 
-  selectedAdherents: Adherent[] = [];
+  selectedAdherents: HistoriqueAvenantAdherant[] = [];
 
  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
@@ -476,6 +476,55 @@ export class AvenantRetraitComponent implements OnInit {
               this.police = res.police;
               console.log('*********this.police*********', this.police);
               this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
+              this.adherentsListByPage = res.historiqueAvenantAdherants;
+              console.log('*********this.historiqueAveantAdherantsByExercice*********', this.historiqueAveantAdherantsByExercice);
+              this.historiqueAveantAdherantsByExercice.forEach(haa => {
+                if(haa.id) {
+                  haa.dateRetrait = haa.dateRetrait;
+                } else{
+                  haa.dateRetrait = new Date();
+                } 
+              });
+              this.myForm.setValue({
+                  id: avenantId,
+                  numero: res.numero,
+                  dateSaisie: new Date(res.dateSaisie),
+                  dateAvenant: res.dateAvenant,
+                  observation: res.observation,
+                  demandeur: res.typeDemandeur,
+                  fraisBadges: 0,
+                  fraisAccessoires: 0,
+                  // dateEffet: new Date(res.dateAvenant),
+              });
+              if(this.etat === 'VIEW') {
+                this.myForm.disable();
+              }
+              this.exercice = res.exercice;
+              console.log('*********this.exercice*********', this.exercice);
+              this.lastExerciceForm.patchValue({
+                  id: res.exercice.id,
+                  debut: res.exercice.debut,
+                  fin: res.exercice.fin,
+                  // actived: res.exercice.actived
+              });
+              this.loadExerciceByPolice(this.police);
+              console.log('avenant de retrait ==== ', this.historiqueAvenant);
+          }
+      );
+    }
+    // this.viewListeEdit = true;
+  }
+
+  updateAvenant2(avenantId: string): void {
+    if (avenantId && avenantId !== undefined) {
+      this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
+          (res: HistoriqueAvenant) => {
+              this.historiqueAvenant = res;
+              console.log('*********this.historiqueAvenant*********', this.historiqueAvenant);
+              this.police = res.police;
+              console.log('*********this.police*********', this.police);
+              this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
+              this.adherentsListByPage = res.historiqueAvenantAdherants;
               console.log('*********this.historiqueAveantAdherantsByExercice*********', this.historiqueAveantAdherantsByExercice);
               this.historiqueAveantAdherantsByExercice.forEach(haa => {
                 if(haa.id) {
@@ -526,7 +575,7 @@ export class AvenantRetraitComponent implements OnInit {
     if(exoId && groupeId){
       this.adherentService.searchAllAdherentByExerciceAndGroupeByPage(exoId, groupeId, this.page, this.size).subscribe({
         next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-          this.adherentsListByPage = data.content;
+          this.adherentsListByPage = data.content as any;
           this.totalElements = data.totalElements;
           this.isToSearchAllAssureList = true;
           this.totalPages = data.totalPages;
@@ -576,8 +625,8 @@ export class AvenantRetraitComponent implements OnInit {
 
     this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
-            this.adherentsListByPage = data.content; 
-            this.adherentsListByPageRetrait = data.content; 
+            this.adherentsListByPage = data.content as any; 
+            this.adherentsListByPageRetrait = data.content as any; 
 
         this.isToSearchAllAssureList = true;
         this.totalElements = data.totalElements;
@@ -607,7 +656,7 @@ export class AvenantRetraitComponent implements OnInit {
 
                 next: (data: Page<HistoriqueAvenantAdherant[]>) => {
 
-                    this.adherentsListByPage = data.content;
+                    this.adherentsListByPage = data.content as any;
                     this.isToSearchAllAssureList = true;
                     this.totalElements = data.totalElements;
                     this.totalPages = data.totalPages;
@@ -619,55 +668,61 @@ export class AvenantRetraitComponent implements OnInit {
     }
 
 
-    onSelect2(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
-      // const value: boolean = !historiqueAvenantAdherant.selected;
-      console.log('selectionselectionselection');
-      console.log(historiqueAvenantAdherant);
-      console.log('selectionselectionselection');
 
-      
+    
+  onSelect3(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
+    // const value: boolean = !historiqueAvenantAdherant.selected;
+    console.log(historiqueAvenantAdherant);
+    // historiqueAvenantAdherant.selected = value;
+    const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
+    historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
+    historiqueAdherent.historiqueAvenantAdherentList = this.adherentsListByPageRetrait;
+    console.log("*****historiqueAdherent.historiqueAvenantAdherentList****", historiqueAdherent.historiqueAvenantAdherentList);
+    this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
+        (res) => {
+          this.adherentsListByPageRetrait = res;
+          console.log("*****adherentsListByPageRetrait****", this.adherentsListByPageRetrait);
+          this.adherentsListByPageRetrait.forEach(haa => {
+            haa.dateRetrait = this.myForm.get('dateAvenant').value;
+          });
+        }
+    );
+  }
+
+    onSelect2(historiqueAveantAdherant: any): void {
+
+      if(historiqueAveantAdherant.selected.length > 0 ){
+      this.selectedAdherents.push(historiqueAveantAdherant);
+
+     } 
+
+     if(historiqueAveantAdherant.selected <= 0){
+      this.selectedAdherents = this.selectedAdherents.filter(haa => haa.adherent.id != historiqueAveantAdherant.adherent.id);
+
+     } 
      if(this.selectedAdherents.length > 0) {
-      console.log("selectedAdherents", this.selectedAdherents);
+     const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
 
-      const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
-
-
-        historiqueAdherent.historiqueAvenantAdherentList = this.selectedAdherents;
-
-        console.log("historiqueAdherent", historiqueAdherent);
-
-      
+    historiqueAdherent.historiqueAvenantAdherent = historiqueAveantAdherant;
+    historiqueAdherent.historiqueAvenantAdherentList = this.selectedAdherents;
+    historiqueAdherent.historiqueAvenantAdherentList.forEach( (a: any)=> a.selected = true); 
+      this.onManageSelectionListe(historiqueAdherent);
      }
 
+    }
 
-      // historiqueAvenantAdherant.selected = value;
-      const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
-      historiqueAdherent.historiqueAvenantAdherent = historiqueAvenantAdherant;
-
-     // historiqueAdherent.historiqueAvenantAdherentList = this.historiqueAveantAdherantsByExercice;
-
-
-
-
+    onManageSelectionListe(historiqueAdherent: any){
       this.historiqueAvenantAdherantService.manageSelectionListe(historiqueAdherent).subscribe(
-          (res) => {
-            this.historiqueAveantAdherantsByExercice = res;
-
-                console.log('this.rest  rest res res ');
-                console.log(res);
-                console.log('res res res res  ', res);
-
-            console.log("*****historiqueAveantAdherantsByExercice****", this.historiqueAveantAdherantsByExercice);
-
-
-
-            this.historiqueAveantAdherantsByExercice.forEach(haa => {
-              haa.dateRetrait = this.myForm.get('dateAvenant').value;
-            });
-
-
-          }
-      );
+        (res) => {
+          this.isImport = 'NON';
+          this.historiqueAveantAdherantsByExercice = res;
+          this.adherentsListByPageRetrait = res;
+          this.adherentsListByPage = res;
+          this.historiqueAveantAdherantsByExercice.forEach(haa => {
+            haa.dateRetrait = this.myForm.get('dateAvenant').value;
+          });
+        }
+    );
     }
 
 }

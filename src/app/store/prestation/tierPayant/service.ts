@@ -137,6 +137,28 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT2)}${sinitreTierId}`, { params });
   }
 
+   // Bircof
+    // Rechercher les adhérants par Prestataire, numeroFacture, nom et exercice
+    searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(
+        exoId: string,
+        prestataireId?: string,
+        numeroFacture?: string,
+        prenom?: string,
+        page: number = 0,
+        size: number = 10): Observable<Page<Prestation[]>> {
+        let params = new HttpParams()
+            .set('exoId', exoId)
+            .set('prestataireId', prestataireId)
+            .set('numeroFacture', numeroFacture)
+            .set('prenom', prenom)
+            .set('page', page.toString())
+            .set('size', size.toString());
+        return this.http.get<Page<Prestation[]>>(
+            `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_PRESTAIRE_AND_NUMERO_FACTURE)}`, { params });
+    }
+
+    
+
 
     deleteTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         // @FIXME: post request

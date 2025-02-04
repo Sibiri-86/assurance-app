@@ -573,5 +573,10 @@ export class Endpoints {
         mock: `assets/mock/contrat/adherent.mock.json`
     };
 
+    static readonly ADHERANT_BY_EXERCICE_AND_PRESTAIRE_AND_NUMERO_FACTURE = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/prestation/by-exercice-and-prestataire-and-numero-facture-paginate`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
 
 }

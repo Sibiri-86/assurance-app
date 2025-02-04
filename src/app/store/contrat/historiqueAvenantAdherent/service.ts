@@ -138,12 +138,12 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         );
     }
 
-    manageSelectionListe(historiqueAdherent: HistoriqueAdherent): Observable<any> {
+    manageSelectionListe(historiqueAdherent: any): Observable<any> {
         return this.http.post<any>( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/manage-selection`,
             historiqueAdherent
         );
     }
-
+    
     getHistoriqueAvenantAdherentByPoliceAndUnsuspend(policeId: string): Observable<any> {
         return this.http.get<any>( `${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_ADHERENT)}/unsuspend`,
             {params: createRequestOption({policeId})}
