@@ -693,7 +693,6 @@ export class AvenantRetraitComponent implements OnInit {
 
       if(historiqueAveantAdherant.selected.length > 0 ){
       this.selectedAdherents.push(historiqueAveantAdherant);
-
      } 
 
      if(historiqueAveantAdherant.selected <= 0){
