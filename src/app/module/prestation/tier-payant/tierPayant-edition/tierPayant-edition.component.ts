@@ -227,8 +227,9 @@ export class TierPayantEditionComponent implements OnInit {
 
     exoId: string;
     prestataireId: string;
-    numeroFacture: string;
+    sinistreTierPayantNumeroFacture: string;
     prestataireSelectedId: string;
+    tierPayant: SinistreTierPayant = {};
 
     dateSoins: any;
 
@@ -2287,11 +2288,12 @@ export class TierPayantEditionComponent implements OnInit {
         //  this.prestationsList = tierPayant.prestation;
           this.displayFormPrefinancement = true;
       }
-      editerTierPayant2(tierPayant: SinistreTierPayant) {
+      editerTierPayant2(tierPayant: any) {
 
-        this.exoId = tierPayant?.adherent?.exercice?.id,
+         this.exoId = tierPayant?.adherent?.exercice?.id,
         this.prestataireSelectedId = tierPayant?.prestataire?.id,
-        this.numeroFacture = tierPayant?.numeroFacture,
+        this.sinistreTierPayantNumeroFacture = tierPayant?.numeroFacture,
+        this.tierPayant = tierPayant;
 
           this.isList = false;
           this.isToEdit = true;
@@ -2314,7 +2316,7 @@ export class TierPayantEditionComponent implements OnInit {
               }
     
           });
-          this.displayFormPrefinancement = true;
+          this.displayFormPrefinancement = true; 
       }
 
       voirTierPyant(tierPayant: SinistreTierPayant){
@@ -2340,8 +2342,11 @@ export class TierPayantEditionComponent implements OnInit {
 
         this.exoId = tierPayant?.adherent?.exercice?.id,
         this.prestataireSelectedId = tierPayant?.prestataire?.id,
-        this.numeroFacture = tierPayant?.numeroFacture,
+        this.sinistreTierPayantNumeroFacture = tierPayant?.numeroFacture,
 
+        console.log('this.exoId',  this.exoId);
+        console.log('this.prestataireSelectedId',  this.prestataireSelectedId);
+        console.log('this.sinistreTierPayantNumeroFacture',  this.sinistreTierPayantNumeroFacture);
         console.log('tierPayant',  tierPayant);
 
         this.prefinancementDetail = tierPayant;
@@ -2361,12 +2366,10 @@ export class TierPayantEditionComponent implements OnInit {
 
       onSearchAdherentByPrenom(prenom: string){
 
-        console.log('this.exoId ', this.exoId );
-        console.log('this.prestataireSelectedId ', this.prestataireSelectedId );
-        console.log('this.numeroFacture ', this.numeroFacture );
+
         const prestataireId = this.prestataireSelectedId;
          if(prenom) {
-          this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(this.exoId, prestataireId, this.numeroFacture, prenom).subscribe(
+          this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(prestataireId, this.sinistreTierPayantNumeroFacture, prenom).subscribe(
 
             (response: any)=> {
               console.log('response', response);
@@ -2656,6 +2659,7 @@ export class TierPayantEditionComponent implements OnInit {
           }
           
           SearchWithDebounceTime(){
+
             this.searchTerms
                 .pipe(
                   debounceTime(1000), // Attendre 1000ms après la dernière frappe.

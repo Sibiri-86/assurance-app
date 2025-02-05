@@ -173,6 +173,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
         isAdherantsMatricule = false;
         prenomToSearch: string;
         matriculeToSearch: string;
+        nomAdherent: string;
         dateSoins: string;
         nom: string = '';
         private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
@@ -841,9 +842,10 @@ rechercherPrefinancementByPeriode() {
                     .pipe(
                       debounceTime(1000), // Attendre 1000ms après la dernière frappe.
                       switchMap((prenom: string) =>
-                        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurBNomAndPrenom(
                           this.police.nom,
                           this.dateSoins,
+                          this.nomAdherent,
                           prenom,
                           this.page,
                           this.size
@@ -874,7 +876,7 @@ rechercherPrefinancementByPeriode() {
                 }
 
                 onGetNom(event: any){
-                  this.nom = event;
+                  this.nomAdherent = event;
                 }
           
 }

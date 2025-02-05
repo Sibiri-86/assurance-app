@@ -175,6 +175,7 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
   isAdherantsSearch = false;
   isAdherantsMatricule = false;
   prenomToSearch: string;
+  nomAdherent: string;
   matriculeToSearch: string;
   dateSoins: string;
   private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
@@ -2111,9 +2112,10 @@ prestationByBon(pres: BonPriseEnCharge) {
                     .pipe(
                       debounceTime(1000), // Attendre 1000ms après la dernière frappe.
                       switchMap((prenom: string) =>
-                        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                        this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurBNomAndPrenom(
                           this.police.nom,
                           this.dateSoins,
+                          this.nomAdherent,
                           prenom,
                           this.page,
                           this.size
@@ -2136,7 +2138,9 @@ prestationByBon(pres: BonPriseEnCharge) {
               }
 
               onGetNom(event: any){
-                this.nom = event;
+                if(event){
+                  this.nomAdherent = event;
+                }
               }
               
                 searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {

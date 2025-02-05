@@ -264,7 +264,6 @@
                                 </div>
                             </div>
 
-
                             <div class="p-field p-col-2"></div>
                             <div class="p-fluid p-formgrid p-grid">
                             <div class="p-field p-col-2">
@@ -293,10 +292,11 @@
                                         <h5 class="p-m-0"></h5>
                                         <span class="p-input-icon-left">
                                         <i class="pi pi-search"></i>
-                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
-  <!--                                     
- <input pInputText type="text" (input)="onSearchAdherentByPrenom($event.target.value)" placeholder="Prénom" />
-     -->                                     </span>
+
+<!--                                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+ -->                                    
+                                    <input pInputText type="text" (input)="onSearchAdherentByPrenom($event.target.value)" placeholder="Prénom" />
+                                 </span>
                                     </div>
                                     
                                 </ng-template>

@@ -476,6 +476,19 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
     return this.http.get<Page<Adherent[]>>(
       `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_BY_PRENOM)}`, { params });
   }
+  // Bircof
+  // Rechercher les adhérants par souscripteur, date, et par leur nom
+  searchAllAdherentByDateSoinsAndSouscripteurBNomAndPrenom(souscripteur: string, dateSoins: string, nomAdherent: string, prenom: string, page: number, size: number): Observable<Page<Adherent[]>> {
+    const params = new HttpParams()
+      .set('souscripteur', souscripteur)
+      .set('dateSoins', dateSoins)
+      .set('nomAdherent', nomAdherent)
+      .set('prenom', prenom)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<Page<Adherent[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_SOUSCRIPTEUR_BY_DATE_MEDICAL_NOM_BY_PRENOM)}`, { params });
+  }
 
   // Bircof
   // Rechercher les adhérants par souscripteur, date, et par leur nom
