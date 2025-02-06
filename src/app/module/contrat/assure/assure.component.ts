@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../store/contrat/adherent/actions';
 import * as adherentSelector from '../../../store/contrat/adherent/selector';
@@ -53,8 +53,14 @@ export class AssureComponent implements OnInit, OnDestroy {
   size = 10;
   nomAssure: string = '';
   prenomAssure: string = '';
+  nom: string = '';
   isToSearchNomAndPrenomList = false;
   isToSearchAllAssureList = false;
+  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
+  idPolice: string ='';
+  exoId: string ='';
+  idGarant: string ='';
+
 
   constructor(private formBuilder: FormBuilder,
               private breadcrumbService: BreadcrumbService,
@@ -65,6 +71,7 @@ export class AssureComponent implements OnInit, OnDestroy {
               }
 
   ngOnInit(): void {
+    this.searchWithDebounceTime();
 /*     this.adherentList$ = this.store.pipe(select(adherentSelector.adherentList));
     //this.store.dispatch(featureActionAdherent.loadAdherentAll({idGarantie: '', idPolice: ''}));
     this.adherentList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -191,8 +198,12 @@ export class AssureComponent implements OnInit, OnDestroy {
   }
 
   onGetNomAssure(nom: string){    
+    this.idPolice =  this.police.id;
+    this.exoId =  this.exercice.id;
+    this.idGarant =  this.police?.garant?.id
     if(nom){
       this.nomAssure = nom;
+      this.nom = nom;
     }
   }
 
@@ -200,6 +211,8 @@ export class AssureComponent implements OnInit, OnDestroy {
 
     if(prenom){
       this.prenomAssure = prenom;
+      this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
+
     }
   }
 
@@ -226,5 +239,31 @@ export class AssureComponent implements OnInit, OnDestroy {
     }
 
   }
+
+
+  searchWithDebounceTime(){
+  
+              this.searchTerms
+                  .pipe(
+                    debounceTime(1000), // Attendre 1000ms après la dernière frappe.
+                    switchMap((prenom: string) =>
+                      this.adherentService.searchAllAdherentByGanrantAndByPoliceAndExerciceAndByNomAndPrenomByPage(this.idPolice, this.exoId, this.idGarant, this.nom, prenom, this.page, this.size)
+                    )
+                  )
+                  .subscribe({
+                    next: (data: Page<Adherent[]>) => {
+                      this.adherentsListByPage = data.content;
+                      this.isToSearchNomAndPrenomList = true;
+                      this.isToSearchAllAssureList = false;
+                      this.totalElements = data.totalElements;
+                      this.totalPages = data.totalPages;
+                    },
+                    error: (err) => {
+                      console.error('Erreur lors du chargement des adhérents', err);
+                    },
+                  });
+            }
+
+  
 
 }
