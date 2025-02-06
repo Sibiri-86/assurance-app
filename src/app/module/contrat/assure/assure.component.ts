@@ -242,7 +242,6 @@ export class AssureComponent implements OnInit, OnDestroy {
 
 
   searchWithDebounceTime(){
-  
               this.searchTerms
                   .pipe(
                     debounceTime(1000), // Attendre 1000ms après la dernière frappe.
