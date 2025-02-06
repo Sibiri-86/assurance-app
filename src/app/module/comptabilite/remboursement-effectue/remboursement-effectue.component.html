@@ -75,9 +75,9 @@
                         <td><span class="p-column-title" style="min-width:200px; font-weight: bold; color: green;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
                         <td style="min-width:150px">
-                        <!-- <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
                         <button pButton icon="pi pi-times" pTooltip="Annuler" class="p-button-rounded p-button-info p-mr-2" (click)="deValiderPayement(ordre)"></button>
-                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button> -->
+                        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
                         </td>
                         
                         <!--
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     
-                    <p-table #dt [value]="prefinancement" [columns]="cols" [rows]="10" [paginator]="true"
+                    <p-table #dt [value]="sinistres" [columns]="cols" [rows]="10" [paginator]="true"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -159,7 +159,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{prefinancement ? prefinancement.length : 0 }} sinistre(s).
+                        {{sinistres ? sinistres.length : 0 }} sinistre(s).
                     </div>
                 </ng-template>
             </p-table>   
