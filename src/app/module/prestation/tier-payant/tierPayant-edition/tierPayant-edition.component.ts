@@ -2656,6 +2656,8 @@ export class TierPayantEditionComponent implements OnInit {
               this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
             }
 
+            
+
             searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime2(prenom: string): void {
               this.prenomToSearch = prenom;
               this.searchTermsPrenom.next(prenom); // Pousse le terme de recherche dans l'observable.
@@ -2665,7 +2667,6 @@ export class TierPayantEditionComponent implements OnInit {
               this.nomAdherent = event;
               this.nom = event;
             }
-
 
             SearchWithDebounceTime2(){
               this.searchTermsPrenom

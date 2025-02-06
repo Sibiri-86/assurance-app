@@ -486,7 +486,6 @@ if(this.adherentsearch.matriculeGarant && !this.police.nom) {
           }
         }
        
-
         console.log("==========rest==========", rest);
         console.log(this.montantConsomme);
     });
