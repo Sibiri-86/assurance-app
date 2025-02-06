@@ -221,6 +221,7 @@ export class TierPayantEditionComponent implements OnInit {
     isList = false;
     isToEdit = false;
     prenomToSearch: string;
+    nomAdherent: string;
     matriculeToSearch: string;
     private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
@@ -644,8 +645,7 @@ export class TierPayantEditionComponent implements OnInit {
                      
                     }
                    
-    
-           
+
                     
                   }
                 this.prestationAdd.matriculeAdherent = this.adherentSelected.numero.toString();
@@ -2664,9 +2664,10 @@ export class TierPayantEditionComponent implements OnInit {
                 .pipe(
                   debounceTime(1000), // Attendre 1000ms après la dernière frappe.
                   switchMap((prenom: string) =>
-                    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
+                    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurBNomAndPrenom(
                       this.police.nom,
                       this.dateSoins,
+                      this.nomAdherent,
                       prenom,
                       this.page,
                       this.size
@@ -2697,7 +2698,7 @@ export class TierPayantEditionComponent implements OnInit {
             }
 
             onGetNom(event: any){
-              this.nom = event;
+              this.nomAdherent = event;
             }
       
 
