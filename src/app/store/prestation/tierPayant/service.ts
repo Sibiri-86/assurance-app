@@ -142,12 +142,14 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(
         prestataireId?: string,
         sinistreTierPayantNumeroFacture?: string,
+        nom?: string,
         prenom?: string,
         page: number = 0,
         size: number = 10): Observable<Page<Prestation[]>> {
         let params = new HttpParams()
             .set('prestataireId', prestataireId)
             .set('sinistreTierPayantNumeroFacture', sinistreTierPayantNumeroFacture)
+            .set('nom', nom)
             .set('prenom', prenom)
             .set('page', page.toString())
             .set('size', size.toString());

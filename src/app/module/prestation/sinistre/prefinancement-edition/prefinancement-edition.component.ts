@@ -926,6 +926,25 @@ findMontantPlafond(event){
     });
   }
 
+  validerPrestation2(pref: Prefinancement) {
+    this.confirmationService.confirm({
+      message: 'voulez-vous valider le sinistre',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.prefinancementService.putUpdatePrefinancement(pref, TypeEtatSinistre.VALIDE).subscribe(
+            res => {
+              if(res){
+                const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+                const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                  this.getPrefinancementPeriode(dateD, dateF);
+              }
+            }
+        );
+      },
+    });
+  }
+
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
@@ -1702,6 +1721,16 @@ verifieDateSoins(event){
 
   // valider prefinancement
   validerPrefinancement() {
+    console.log(this.prefinancementList);
+    this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
+    dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')} ));
+    this.prefinancementList = [];
+    this.prestationList = [];
+    this.prestationForm.reset();
+  }
+
+  // valider prefinancement
+  validerPrefinancement2() {
     console.log(this.prefinancementList);
     this.store.dispatch(featureActionPrefinancement.createPrefinancement({prefinancement: this.prefinancementList,dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')} ));

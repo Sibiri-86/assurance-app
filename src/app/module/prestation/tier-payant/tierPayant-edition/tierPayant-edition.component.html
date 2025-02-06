@@ -288,16 +288,41 @@
                             selectionMode="multiple">
                                
                                 <ng-template pTemplate="caption">
+                                    <!-- 
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                                         <h5 class="p-m-0"></h5>
                                         <span class="p-input-icon-left">
                                         <i class="pi pi-search"></i>
 
-<!--                                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
- -->                                    
+                                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                                  
                                     <input pInputText type="text" (input)="onSearchAdherentByPrenom($event.target.value)" placeholder="Prénom" />
                                  </span>
-                                    </div>
+                                    </div> -->  
+
+                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
+                                                                     <div class="p-mr-3">
+                                                                        <h5 class="p-m-0"></h5>
+                                                                        <span class="p-input-icon-left">
+                                                                        <i class="pi pi-search"></i>
+                                                                        <input pInputText type="text"
+                                                                        
+                                                                        (input)="onGetNom($event.target.value)"
+                                                                        placeholder="Nom" />
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div>
+                                                                        <h5 class="p-m-0"></h5>
+                                                                        <span class="p-input-icon-left">
+                                                                        <i class="pi pi-search"></i>
+                                                                        <input pInputText type="text"
+                                                                        
+                                                                        (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime2($event.target.value)"
+                                                                        placeholder="Prénom" />
+                                                                        </span>
+                                                                    </div>
+                                                                    </div>
                                     
                                 </ng-template>
                                 <ng-template pTemplate="header">
@@ -892,13 +917,37 @@
                         'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']"
                          editMode="row" responsiveLayout="scroll" [rows]="10">
                             <ng-template pTemplate="caption">
-                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+<!--                                 <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                                     <h5 class="p-m-0"></h5>
                                     <span class="p-input-icon-left">
                                     <i class="pi pi-search"></i>
                                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                                     </span>
-                                </div>
+                                </div> -->
+
+                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
+                                    <div class="p-mr-3">
+                                       <h5 class="p-m-0"></h5>
+                                       <span class="p-input-icon-left">
+                                       <i class="pi pi-search"></i>
+                                       <input pInputText type="text"
+                                       
+                                       (input)="onGetNom($event.target.value)"
+                                       placeholder="Nom" />
+                                       </span>
+                                   </div>
+
+                                   <div>
+                                       <h5 class="p-m-0"></h5>
+                                       <span class="p-input-icon-left">
+                                       <i class="pi pi-search"></i>
+                                       <input pInputText type="text"
+                                       
+                                       (input)="searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime2($event.target.value)"
+                                       placeholder="Prénom" />
+                                       </span>
+                                   </div>
+                                   </div>
                             </ng-template>
                             <ng-template pTemplate="header">
                                 <tr>

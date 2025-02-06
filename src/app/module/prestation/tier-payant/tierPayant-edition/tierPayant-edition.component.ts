@@ -224,6 +224,7 @@ export class TierPayantEditionComponent implements OnInit {
     nomAdherent: string;
     matriculeToSearch: string;
     private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
+    private searchTermsPrenom = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
 
     exoId: string;
@@ -522,6 +523,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     ngOnInit(): void {
         this.SearchWithDebounceTime();
+        this.SearchWithDebounceTime2();
         this.dateDebut = new Date();
         this.dateFin = new Date();
         // this.prestationList = [];
@@ -2292,6 +2294,7 @@ export class TierPayantEditionComponent implements OnInit {
 
          this.exoId = tierPayant?.adherent?.exercice?.id,
         this.prestataireSelectedId = tierPayant?.prestataire?.id,
+        this.prestataireId = tierPayant?.prestataire?.id,
         this.sinistreTierPayantNumeroFacture = tierPayant?.numeroFacture,
         this.tierPayant = tierPayant;
 
@@ -2342,12 +2345,8 @@ export class TierPayantEditionComponent implements OnInit {
 
         this.exoId = tierPayant?.adherent?.exercice?.id,
         this.prestataireSelectedId = tierPayant?.prestataire?.id,
+        this.prestataireId = tierPayant?.prestataire?.id,
         this.sinistreTierPayantNumeroFacture = tierPayant?.numeroFacture,
-
-        console.log('this.exoId',  this.exoId);
-        console.log('this.prestataireSelectedId',  this.prestataireSelectedId);
-        console.log('this.sinistreTierPayantNumeroFacture',  this.sinistreTierPayantNumeroFacture);
-        console.log('tierPayant',  tierPayant);
 
         this.prefinancementDetail = tierPayant;
         this.prefinancementDetail.dateDeclaration = tierPayant.dateDeclaration;
@@ -2366,13 +2365,11 @@ export class TierPayantEditionComponent implements OnInit {
 
       onSearchAdherentByPrenom(prenom: string){
 
-
         const prestataireId = this.prestataireSelectedId;
          if(prenom) {
-          this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(prestataireId, this.sinistreTierPayantNumeroFacture, prenom).subscribe(
+          this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(prestataireId, this.sinistreTierPayantNumeroFacture, this.nom, prenom).subscribe(
 
             (response: any)=> {
-              console.log('response', response);
 
               if(response) {
                 const data = response?.content;
@@ -2385,44 +2382,6 @@ export class TierPayantEditionComponent implements OnInit {
           });
         }  
       }
-
-
-    /*   SearchWithDebounceTime(){
-        this.searchTerms
-            .pipe(
-              debounceTime(1000), // Attendre 1000ms après la dernière frappe.
-              switchMap((prenom: string) =>
-                this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
-                  this.police.nom,
-                  this.prestationPopForm.get('dateSoins').value,
-                  prenom,
-                  this.page,
-                  this.size
-                )
-              )
-            )
-            .subscribe({
-              next: (data: Page<Adherent[]>) => {
-                this.isAdherantsSearch = true;
-                this.isAdherantsList = false;
-                this.isAdherantsMatricule = false;
-                this.adherentsListByPage = data.content;
-                this.totalElements = data.totalElements;
-                this.totalPages = data.totalPages;
-              },
-              error: (err) => {
-                console.error('Erreur lors du chargement des adhérents', err);
-              },
-            });
-      }
-      
-        searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime(prenom: string): void {
-          this.prenomToSearch = prenom;
-          this.isAdherantsSearch = true;
-          this.isAdherantsList = false;
-          this.isAdherantsMatricule = false;
-          this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
-        } */
 
 
       imprimerPrestation(prestation: Prestation) {
@@ -2697,9 +2656,41 @@ export class TierPayantEditionComponent implements OnInit {
               this.searchTerms.next(prenom); // Pousse le terme de recherche dans l'observable.
             }
 
+            searchAllAdherentByDateSoinsAndSouscripteurByPrenomWithBebounceTime2(prenom: string): void {
+              this.prenomToSearch = prenom;
+              this.searchTermsPrenom.next(prenom); // Pousse le terme de recherche dans l'observable.
+            }
+
             onGetNom(event: any){
               this.nomAdherent = event;
+              this.nom = event;
             }
+
+
+            SearchWithDebounceTime2(){
+              this.searchTermsPrenom
+                  .pipe(
+                    debounceTime(1000), // Attendre 1000ms après la dernière frappe.
+                    switchMap((prenom: string) =>
+                      this.tierPayantService.searchAdherentByExerciceAndPrestataireAndByNumeroFactureAndByPrenom(this.prestataireId, this.sinistreTierPayantNumeroFacture, this.nom, prenom)
+                    )
+                  )
+                  .subscribe({
+                    next: (response: any) => {
+                      if(response) {
+                        const data = response?.content;
+                        this.prefinancementDetail.prestation = data;
+                        this.prestationsList = data;
+                        this.totalElements = data?.totalElements;
+                        this.totalPages = data?.totalPages;
+                      }
+                    },
+                    error: (err) => {
+                      console.error('Erreur lors du chargement des adhérents', err);
+                    },
+                  });
+            }
+            
       
 
 }
