@@ -93,7 +93,7 @@
                     </div>
                 </form>
             </p-fieldset>
-        <p-fieldset legend="Avenant" toggleable="true" *ngIf="!isRenouv">
+        <p-fieldset legend="Avenant" toggleable="true" *ngIf="!isRenouv" >
             <form [formGroup]="myForm">
                 <div class="p-fluid p-formgrid p-grid">
                     <div class="p-field p-col-6">
@@ -136,29 +136,34 @@
                      styleClass="p-datatable-customers">
                 <ng-template pTemplate="caption">
                     <form  (ngSubmit)="onSubmit()">
-                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-around table-header">
                             <h5 class="p-m-0"></h5>
                             <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #numero class="p-mr-2" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '80%'}" />
-                        <span>
+                            <input pInputText type="text" #numero class="p-mr-1" (input)="onGetNumero(numero.value)" placeholder="Numéro" [style]="{width: '70%'}" />
+<!--                         <span>
                         <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()" class="p-mr-2"></button>
-                        </span>    
+                        </span>   -->  
                         </span>
                             <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #nom class="p-mr-2" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '80%'}" />
-                                <span>
+                                <input pInputText type="text" #nom class="p-mr-1" (input)="onGetNom(nom.value)" placeholder="Nom" [style]="{width: '70%'}" />
+<!--                                 <span>
                                     <button type="submit" pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
-                                    </span>      
+                                    </span>    -->   
                             </span>
                                 <span class="p-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <input pInputText #prenom type="text" class="p-mr-2" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '80%'}" />
-                                    <span>
+                                    <input pInputText #prenom type="text" class="p-mr-3" (input)="onGetPrenom(prenom.value)"  placeholder="Prénom" [style]="{width: '70%'}" />
+<!--                                     <span>
                                         <button type="submit"  pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
-                                        </span>      
+                                        </span>    -->   
+
+                                        <span *ngIf="selectedAdherents.length" class="champVert p-mr-1">{{selectedAdherents.length}} </span>
+                                        <button *ngIf="selectedAdherents.length" type="submit" pTooltip="Afficher la sélection" pButton icon="pi pi-eye" (click)="onSeeAdherantToRetrieved()"></button>
+
                                 </span>
+
                     </div>
                 </form>
                 </ng-template>
@@ -253,4 +258,63 @@
             </div> -->
         </div>
     </div>
+
+    <p-dialog [maximizable]="true" [(visible)]="isToSeeListOfAdherantToRetreived" header="Les adhérants à retirer" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-table #dt [value]="selectedAdherents"
+                     [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
+                     dataKey="id" [(selection)]="adherantDeleteds"
+                     styleClass="p-datatable-customers">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nom">Matricule <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="prenom" style="width: 12rem">Prénom(s)<p-sortIcon field="prenom"></p-sortIcon></th>
+                        <th pSortableColumn="adresseEmail">Email<p-sortIcon field="adresseEmail"></p-sortIcon></th>
+                        <th pSortableColumn="genre" style="width: 12rem">Genre<p-sortIcon field="genre.libelle"></p-sortIcon></th>
+                        <th>Date de retrait</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-selectedAdherent >
+                    <tr [ngClass]="{'colorZone': !selectedAdherent?.adherent?.adherentPrincipal}">
+                        <td>{{selectedAdherent.adherent?.numero}}</td>
+                        <td><span class="p-column-title">{{selectedAdherent?.adherent?.nom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{selectedAdherent?.adherent?.prenom}}</span>
+
+                        </td>
+                        <td><span class="p-column-title">{{selectedAdherent?.adherent?.email}}</span>
+
+                        </td> 
+                        <td><span class="p-column-title">{{selectedAdherent?.adherent?.genre?.libelle}}</span></td>
+                        <td>
+                            <span class="p-column-title">
+                                       <input [id]="'dateIncor' + selectedAdherent.id" type="date" [(ngModel)]="selectedAdherent.dateRetrait"
+                                       [disabled]="selectedAdherent.selected === null || !selectedAdherent.selected" [disabled]="etat === 'VIEW'"  pInputText (change)="compareDateRetrait(historiqueAveantAdherant)">
+
+                                       
+                            </span>
+                        </td>
+                        <td>
+                            <span class="texte-danger" *ngIf="selectedAdherent.selected">{{retirer | upercase}} </span>
+                            <span class="texte-succes" *ngIf="!selectedAdherent.selected">{{nonRetirer | upercase}}</span>
+                        </td>
+                        <td>
+                            <button class="texte-danger" type="submit" pButton icon="pi pi-minus" pTooltip="Retier de la liste des retraits" (click)="onRetrieveAdherant(selectedAdherent)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+
+</p-dialog>
 </div>
+
