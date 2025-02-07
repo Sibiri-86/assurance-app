@@ -319,6 +319,42 @@ export class AvenantRetraitComponent implements OnInit {
     this.adherentFamilleEvent.emit(this.historiqueAvenant);
     this.init();
   }
+  addAdherentFamilleToList2(): void {
+    console.log('*********familleAdherants**********');
+    console.log(this.familleAdherants);
+    // const historiqueAvenant: HistoriqueAvenant = {};
+    if (!this.isRenouv) {
+      this.historiqueAvenant.dateAvenant = this.myForm.get('dateAvenant').value;
+      this.historiqueAvenant.numero = this.myForm.get('numero').value;
+      this.historiqueAvenant.observation = this.myForm.get('observation').value;
+      this.historiqueAvenant.dateEffet = this.myForm.get('dateAvenant').value;
+      this.historiqueAvenant.dateSaisie = this.myForm.get('dateSaisie').value;
+      this.historiqueAvenant.groupe = this.groupe;
+      this.historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+      this.historiqueAvenant.exercice = this.curentExercice;
+      this.historiqueAvenant.police = this.police;
+      switch (this.myForm.get('demandeur').value.value) {
+        case TypeDemandeur.GARANT:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.GARANT;
+          break;
+        case TypeDemandeur.SOUSCRIPTEUR:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.SOUSCRIPTEUR;
+          break;
+        case TypeDemandeur.VIMSO:
+          this.historiqueAvenant.typeDemandeur = TypeDemandeur.VIMSO;
+          break;
+        default:
+          break;
+      }
+      this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
+    } else {
+      this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
+    }
+    console.log('******* liste des adhérents à supprimer **************');
+    console.log(this.historiqueAvenant);
+    this.adherentFamilleEvent.emit(this.historiqueAvenant);
+    this.init();
+  }
 
   exportModel(): void {
     this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.RETRAIT).subscribe(
@@ -692,10 +728,14 @@ export class AvenantRetraitComponent implements OnInit {
     onSelect2(historiqueAveantAdherant: any): void {
 
       if(historiqueAveantAdherant.selected.length > 0 ){
+      historiqueAveantAdherant.selected = null;
+      historiqueAveantAdherant.selected = true;
       this.selectedAdherents.push(historiqueAveantAdherant);
      } 
 
      if(historiqueAveantAdherant.selected <= 0){
+      historiqueAveantAdherant.selected = null;
+      historiqueAveantAdherant.selected = false;
       this.selectedAdherents = this.selectedAdherents.filter(haa => haa.adherent.id != historiqueAveantAdherant.adherent.id);
 
      } 
@@ -704,8 +744,12 @@ export class AvenantRetraitComponent implements OnInit {
 
     historiqueAdherent.historiqueAvenantAdherent = historiqueAveantAdherant;
     historiqueAdherent.historiqueAvenantAdherentList = this.selectedAdherents;
-    historiqueAdherent.historiqueAvenantAdherentList.forEach( (a: any)=> a.selected = true); 
-      this.onManageSelectionListe(historiqueAdherent);
+    this.historiqueAvenant.historiqueAvenantAdherants = this.selectedAdherents;
+    this.adherentsListByPageRetrait = this.selectedAdherents;
+    // historiqueAdherent.historiqueAvenantAdherentList.forEach( (a: any)=> a.selected = true); 
+    // this.historiqueAvenant.historiqueAvenantAdherants.forEach( (a: any)=> a.selected = true); 
+    
+    this.onManageSelectionListe(historiqueAdherent);
      }
 
     }
@@ -716,7 +760,6 @@ export class AvenantRetraitComponent implements OnInit {
           this.isImport = 'NON';
           this.historiqueAveantAdherantsByExercice = res;
           this.adherentsListByPageRetrait = res;
-          this.adherentsListByPage = res;
           this.historiqueAveantAdherantsByExercice.forEach(haa => {
             haa.dateRetrait = this.myForm.get('dateAvenant').value;
           });

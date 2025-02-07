@@ -51,4 +51,5 @@ export interface HistoriqueAvenantAdherentList {
 export interface HistoriqueAdherent {
     historiqueAvenantAdherent?: any;
     historiqueAvenantAdherentList?: any;
+    historiqueAvenantAdherentList2?: HistoriqueAvenantAdherant[];
 }
