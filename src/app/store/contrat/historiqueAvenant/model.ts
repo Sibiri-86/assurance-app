@@ -91,7 +91,6 @@ export interface HistoriqueAvenantAdherant {
     adherent?: Adherent;
     deleted?: boolean;
     selected?: boolean;
-    selected2?: any;
     dateEcheance?: Date;
     singe?: string;
     dateReintegration?: Date;

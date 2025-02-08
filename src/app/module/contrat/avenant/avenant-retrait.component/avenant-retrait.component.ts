@@ -701,7 +701,12 @@ export class AvenantRetraitComponent implements OnInit {
      if(historiqueAveantAdherant.selected <= 0  || false ){
       historiqueAveantAdherant.selected = null;
       historiqueAveantAdherant.selected = false;
-      this.selectedAdherents = this.selectedAdherents.filter(haa => haa.adherent.id != historiqueAveantAdherant.adherent.id);
+      this.selectedAdherents = this.selectedAdherents
+                                            .filter(haa => haa.adherent.id != historiqueAveantAdherant.adherent.id)
+                                            .map(haa => {
+                                              haa.selected = true;
+                                              return haa;
+                                            });
 
      } 
      if(this.selectedAdherents.length > 0) {
@@ -711,6 +716,7 @@ export class AvenantRetraitComponent implements OnInit {
     historiqueAdherent.historiqueAvenantAdherentList = this.selectedAdherents;
     this.historiqueAvenant.historiqueAvenantAdherants = this.selectedAdherents;
     this.adherentsListByPageRetrait = this.selectedAdherents;
+
     this.onManageSelectionListe(historiqueAdherent);
      }
 
@@ -738,15 +744,13 @@ export class AvenantRetraitComponent implements OnInit {
     }
 
     onRetrieveAdherant(selectedAdherent: any){
-      selectedAdherent.selected = false;
-      this.selectedAdherents = this.selectedAdherents.filter(haa => haa.adherent.id != selectedAdherent.adherent.id);
-      this.historiqueAvenant.historiqueAvenantAdherants = this.selectedAdherents.filter(haa => haa.adherent.id != selectedAdherent.adherent.id);
-      this.adherentsListByPageRetrait = this.selectedAdherents.filter(haa => haa.adherent.id != selectedAdherent.adherent.id);
-
-      this.historiqueAveantAdherantsByExercice = this.selectedAdherents.filter(haa => haa.adherent.id != selectedAdherent.adherent.id);
-      this.adherentsListByPageRetrait = this.selectedAdherents.filter(haa => haa.adherent.id != selectedAdherent.adherent.id);
-
-      this.onSelect2(selectedAdherent);
+      this.selectedAdherents = this.selectedAdherents
+                                            .filter(haa => haa.adherent.id != selectedAdherent.adherent.id)
+                                            .map(haa => {
+                                              haa.selected = true;
+                                              return haa;
+                                            });
+    this.onSelect2(selectedAdherent);
     }
 
 }
