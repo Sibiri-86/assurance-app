@@ -108,7 +108,7 @@
 <!--                              <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-1" (click)="voirTierPyant(tierPayant)"></button>
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-1" (click)="editerTierPayant(tierPayant)"></button>
 
- -->                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-1" (click)="voirTierPyant2(tierPayant)"></button>
+ -->                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir prestation" class="p-button-rounded p-button-help p-mr-1" (click)="voirTierPyant(tierPayant)"></button>
                             <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-warning p-mr-1" (click)="editerTierPayant(tierPayant)"></button>
                             <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-1" (click)="validerPrestation(tierPayant)"></button>
                    </td>
@@ -283,12 +283,11 @@
                         <hr/>
 
                         <p-fieldset legend="Liste des Prestations" toggleable="true"> 
-                            <p-table #dt [value]="prestationsList" dataKey="id" editMode="row"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll"
-                            selectionMode="multiple">
+                            <p-table #dt [value]="prestationsList" dataKey="id" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [rowHover]="true">
                                
                                 <ng-template pTemplate="caption">
-                                    <!-- 
+                            
                                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
                                         <h5 class="p-m-0"></h5>
                                         <span class="p-input-icon-left">
@@ -296,11 +295,10 @@
 
                                         <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
                                   
-                                    <input pInputText type="text" (input)="onSearchAdherentByPrenom($event.target.value)" placeholder="Prénom" />
-                                 </span>
-                                    </div> -->  
+<!--  <input pInputText type="text" (input)="onSearchAdherentByPrenom($event.target.value)" placeholder="Prénom" />-->                                 </span>
+                                    </div>
 
-                                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
+                                    <!-- <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
                                                                      <div class="p-mr-3">
                                                                         <h5 class="p-m-0"></h5>
                                                                         <span class="p-input-icon-left">
@@ -322,7 +320,7 @@
                                                                         placeholder="Prénom" />
                                                                         </span>
                                                                     </div>
-                                                                    </div>
+                                                                    </div> -->
                                     
                                 </ng-template>
                                 <ng-template pTemplate="header">
@@ -366,13 +364,18 @@
                                 
                                     </tr>
                                 </ng-template>
-                                <ng-template pTemplate="summary">
+                                <!-- <ng-template pTemplate="summary">
                                     <div class="pagination">
                                         <span>Total: <span class="champVert">{{totalElements}} </span> </span>
                                         <button (click)="onPageChangeEditerTierPayant2(page - 1)" [disabled]="page === 0"> <span class="champVert">Précédent</span> </button>
                                         <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
                                         <button (click)="onPageChangeEditerTierPayant2(page + 1)" [disabled]="page + 1 === totalPages"> <span class="champVert">Suivant</span> </button>
                                       </div>
+                                </ng-template> -->
+                                <ng-template pTemplate="summary">
+                                    <div class="p-d-flex p-ai-center p-jc-between">
+                                        {{prestationsList ? prestationsList.length : 0 }} prestation(s).
+                                    </div>
                                 </ng-template>
                             </p-table>
                         </p-fieldset>
