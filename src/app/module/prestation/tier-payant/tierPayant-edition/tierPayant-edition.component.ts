@@ -523,7 +523,7 @@ export class TierPayantEditionComponent implements OnInit {
 
     ngOnInit(): void {
         this.SearchWithDebounceTime();
-        this.SearchWithDebounceTime2();
+       // this.SearchWithDebounceTime2();
         this.dateDebut = new Date();
         this.dateFin = new Date();
         // this.prestationList = [];
@@ -2623,10 +2623,9 @@ export class TierPayantEditionComponent implements OnInit {
                 .pipe(
                   debounceTime(1000), // Attendre 1000ms après la dernière frappe.
                   switchMap((prenom: string) =>
-                    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurBNomAndPrenom(
+                    this.adherentService.searchAllAdherentByDateSoinsAndSouscripteurByPrenom(
                       this.police.nom,
                       this.dateSoins,
-                      this.nomAdherent,
                       prenom,
                       this.page,
                       this.size
@@ -2691,6 +2690,7 @@ export class TierPayantEditionComponent implements OnInit {
                     },
                   });
             }
+            
             
       
 

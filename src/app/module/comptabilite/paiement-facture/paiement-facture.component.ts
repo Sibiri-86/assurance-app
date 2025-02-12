@@ -16,6 +16,9 @@ import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { formatDate } from '@angular/common';
+
 
 @Component({
   selector: 'app-paiement-facture',
@@ -38,14 +41,18 @@ export class PaiementFactureComponent implements OnInit {
   typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.ORANGE_MONEY && kj !== TypePaiement.MOOV_MONEY && kj !== TypePaiement.ESPECE).map(key => ({ label: TypePaiement[key], value: key }));
   type = TypePaiement.CHEQUE;
 
+  dateDebut: any;
+  dateFin: any;
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
+              private tierPayantService: TierPayantService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
 }
 
   ngOnInit(): void {
-    this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
+   /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
           if (bytes) {
@@ -63,15 +70,17 @@ export class PaiementFactureComponent implements OnInit {
             
            
           }
-        });
-    this.ordreReglementList$ = this.store.pipe(select(tierPayantSelector.ordreReglementTierPayantList));
+        }); */
+
+/*     this.ordreReglementList$ = this.store.pipe(select(tierPayantSelector.ordreReglementTierPayantList));
     this.store.dispatch(featureActionTierPayant.loadTierPayantOrdreReglementFactureInstance());
     this.ordreReglementList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       console.log(value);
       if (value) {
         this.ordreReglementList = value.slice();
     }
-    });
+    }); */
+
   }
   paiement(ordre: OrdreReglement) {
     this.displayPaiement = true;
@@ -94,6 +103,57 @@ export class PaiementFactureComponent implements OnInit {
       },
     });
   }
+  
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+  
+    rechercherPrefinancementByPeriode() {
+      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+        this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
+        .subscribe((response: any) => {
+          this.ordreReglementList = response;
+          this.ordreReglementList$ = response;
+        }, error => {
+          console.error('Erreur lors de la récupération des données', error);
+        });
+      }
+      
+    }
+
+    onGetSinistreByOrdreReglementId(idOrdreReglement: string){
+      let page = 0;
+      let size = 10;
+      if(idOrdreReglement)
+      this.tierPayantService.getSinistreByOrdreReglementId(idOrdreReglement, page, size).subscribe(
+        response => {
+          this.sinistreTierPayant = response.content;
+          this.displaySinistre = true;
+
+          console.log('response', this.sinistreTierPayant);
+        }
+      );
+    }
+
+    onGetPrestationBySinistreId(sinistrId: string){
+      let page = 0;
+      let size = 10;
+      if(sinistrId)
+      this.tierPayantService.getSinistreByOrdreReglementId(sinistrId, page, size).subscribe(
+        response => {
+          this.prestations = response.content;
+          this.displaySinistre = true;
+
+          console.log('response', this.prestations);
+        }
+      );
+    }
 
   imprimer(pref: OrdreReglementTierPayant) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;

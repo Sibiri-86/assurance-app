@@ -284,7 +284,8 @@
 
                         <p-fieldset legend="Liste des Prestations" toggleable="true"> 
                             <p-table #dt [value]="prestationsList" dataKey="id" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true"  [globalFilterFields]="['sinistreTierPayant.numeroSinistre','adherent.nom','familleActe.libelle', 
-                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" [rowHover]="true">
+                            'acte.libelle','sousActe.libelle','adherent.prenom','baseRemboursement','taux.taux','montantRembourse']" responsiveLayout="scroll" [rowHover]="true"
+                            selectionMode="multiple">
                                
                                 <ng-template pTemplate="caption">
                             
@@ -496,7 +497,7 @@
                 >
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-center table-header">
-                     <div class="p-mr-3">
+<!--                      <div class="p-mr-3">
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
@@ -505,7 +506,7 @@
                         (input)="onGetNom($event.target.value)"
                         placeholder="Nom" />
                         </span>
-                    </div> 
+                    </div>  -->
 
                     <div>
                         <h5 class="p-m-0"></h5>

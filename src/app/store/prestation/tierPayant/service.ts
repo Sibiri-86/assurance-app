@@ -70,6 +70,38 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    $getTierPayantOrdreReglementFactureIstance2(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-instance2?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
+
+
+  getSinistreByOrdreReglementId2(idOrdreReglement: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('idOrdreReglement', idOrdreReglement)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_ORDRE_REGLEMMENT), { params }}`).pipe(
+        map((response: SinistreTierPayant) => response),
+        catchError(this.handleError())
+    );
+  }
+
+  getSinistreByOrdreReglementId(idOrdreReglement: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('idOrdreReglement', idOrdreReglement)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_ORDRE_REGLEMMENT), { params });
+  }
+
+
     $getTierPayantOrdreReglementFacturePaye(): Observable<OrdreReglementTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-paye`).pipe(

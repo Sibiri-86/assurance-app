@@ -10,6 +10,27 @@
 					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
 				</ng-template>
                 -->
+
+
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <label for="matricule" class="p-sr-only"></label>
+                        <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                    <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
+                    -->                </div>
+                    
+                    <div class="p-field">
+                        <label for="dateSoins" class="p-sr-only"></label>
+                        <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"
+                        (click)="rechercherPrefinancementByPeriode()"
+                        ></p-calendar>
+                    </div>
+<!--                     <div class="p-field">
+                        <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+                    </div> -->
+                    
+                </div> 
+
 			</p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
@@ -32,7 +53,7 @@
                         <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
                         <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
@@ -43,22 +64,28 @@
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
                         </td>-->
 
-                        <td><span class="p-column-title" >{{ordre.numeroBordereau}}</span>
+                        <td><span class="p-column-title" >{{ordre?.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" >{{ordre.date | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title" >{{ordre?.date | formatTableValue : 'date'}}</span>
                         </td>
 
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
+                        </td> -->
+                        <td><span class="p-column-title">{{prestataire}}</span>
                         </td>
-                        <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
-                        </td>
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre.montantPaye | formatTableValue: 'number':true}}</span>
+                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
+                        </td> -->
+                        <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
 
                         <td style="min-width:150px">
-                            <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
+                            <!-- <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="voirSinistre(ordre)">
+                            </button> -->
+                            <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
+                                    class="p-button-rounded p-button-help p-mr-2"
+                                    (click)="onGetSinistreByOrdreReglementId(ordre.id)">
                             </button>
                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
@@ -131,7 +158,7 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistre" [modal]="true" styleClass="p-fluid" [style]="{width: '900px'}">
+        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistres" [modal]="true" styleClass="p-fluid" [style]="{width: '90%'}">
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt [value]="sinistreTierPayant" [columns]="cols" [rows]="10" [paginator]="true"
@@ -143,11 +170,14 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="numero" style="width: 150px">Soins<p-sortIcon field="numero"></p-sortIcon></th>
-                        <th pSortableColumn="nom" style="width: 150px">Déclaration<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="taux" style="width: 150px">Numero sinistre<p-sortIcon field="taux.taux"></p-sortIcon></th>
-                        <th pSortableColumn="territorialite" style="width: 150px">Nom<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="duree" style="width: 150px">Prenom<p-sortIcon field="duree"></p-sortIcon></th>
+                        <th pSortableColumn="prestataire.libelle" style="width: 150px">Prestaire<p-sortIcon field="prestataire.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="dateDeclaration" style="width: 150px">Déclaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
+                        <th pSortableColumn="numeroSinistre" style="width: 150px">Numero sinistre<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
+                        <th pSortableColumn="adherent.nom" style="width: 150px">Nom<p-sortIcon field="adherent.nom"></p-sortIcon></th>
+                        <th pSortableColumn="adherent.prenom" style="width: 150px">Prenom<p-sortIcon field="adherent.prenom"></p-sortIcon></th>
+                        <th pSortableColumn="montantReclame" style="width: 150px">montant Reclame<p-sortIcon field="montantReclame"></p-sortIcon></th>
+                        <th pSortableColumn="montantReclame" style="width: 150px">montant payé<p-sortIcon field="montantReclame"></p-sortIcon></th>
+                        <th pSortableColumn="montantRestant" style="width: 150px">Action<p-sortIcon field="montantRestant"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -156,16 +186,20 @@
                         <td>
                             <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
                         </td>
-                        <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span>
+                        <!-- <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span> -->
+                        <td><span class="p-column-title">{{prefinance?.prestataire?.libelle}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{prefinance?.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.numeroSinistre}}</span>
+                        <td><span class="p-column-title">{{prefinance?.numeroSinistre}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.adherent.nom}}</span>
+                        <td><span class="p-column-title">{{prefinance?.adherent?.nom}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance.adherent.prenom}}</span>
+                        <td><span class="p-column-title">{{prefinance?.adherent?.prenom}}</span>
                         </td>
+                        <td><span class="p-column-title">{{prefinance?.montantReclame}}</span></td>
+                        <td><span class="p-column-title">{{prefinance?.montantPaye}}</span></td>
+                        <td><button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="onGetPrestationBySinistreId(prefinance)"></button></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
