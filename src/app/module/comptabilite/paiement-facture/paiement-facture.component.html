@@ -15,7 +15,9 @@
                 <div class="p-formgroup-inline">
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
-                        <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                        <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"
+                        (click)="rechercherPrefinancementByPeriode()"
+                        ></p-calendar>
                     <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
                     -->                </div>
                     
@@ -32,7 +34,7 @@
                 </div> 
 
 			</p-toolbar>
-            <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -51,31 +53,36 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>-->
                         <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
                         <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
                         <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
                         <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
                         <th style="min-width:150px"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-ordre>
-                    <tr>
+                <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="ordre">
                         <!--<td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
                         </td>-->
 
                         <td><span class="p-column-title" >{{ordre?.numeroBordereau}}</span>
                         </td>
-                        <td><span class="p-column-title" >{{ordre?.date | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{ordre?.prestataire}}</span>
+                        </td>
+                        <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
 
-                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
-                        </td> -->
-                        <td><span class="p-column-title">{{prestataire}}</span>
-                        </td>
-                        <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
-                        </td> -->
-                        <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input id="dateSoins"   type="date" name="ordre" pInputText [(ngModel)]="ordre.date">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    {{ordre?.date | formatTableValue : 'date'}}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
 
                         <td style="min-width:150px">
@@ -83,15 +90,48 @@
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="voirSinistre(ordre)">
                             </button> -->
-                            <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
+                            <button pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="onGetSinistreByOrdreReglementId(ordre.id)">
                             </button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
+<!--                             <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
                             </button>
                             <button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiement(ordre)"></button>
-
+ -->
+                                <button 
+                                    *ngIf="!editing" 
+                                    pButton 
+                                    pRipple 
+                                    pTooltip="Payer"
+                                    type="button" 
+                                    pInitEditableRow 
+                                    icon="pi pi-pencil" 
+                                    pTooltip="Procéder au paiement de l'ordre"
+                                    (click)="onRowEditInit(ordre)" 
+                                    class="p-button-rounded p-button-success p-mr-2">
+                                </button>
+                                <button 
+                                    *ngIf="editing" 
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    pSaveEditableRow 
+                                    pTooltip="Êtes-vous sûr de vouloir payer cet ordre?"
+                                    icon="pi pi-check" 
+                                    (click)="onRowEditSave(ordre)" 
+                                    class="p-button-rounded p-button-success p-mr-2">
+                                </button>
+                                <button 
+                                    *ngIf="editing" 
+                                    pButton pRipple 
+                                    type="button" 
+                                    pCancelEditableRow 
+                                    pTooltip="Annuler le paiement de cet ordre"
+                                    icon="pi pi-times" 
+                                    (click)="onRowEditCancel(ordre, ri)" 
+                                    class="p-button-rounded p-button-danger p-mr-2">
+                                </button>
                         </td>
                         
                         <!--
@@ -159,52 +199,115 @@
         </p-dialog>
 
         <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistres" [modal]="true" styleClass="p-fluid" [style]="{width: '90%'}">
+
+
+
+            
             <ng-template pTemplate="content">
                 <div class="card">
-                    <p-table #dt [value]="sinistreTierPayant" [columns]="cols" [rows]="10" [paginator]="true"
-                     [rowHover]="true" dataKey="id"
-                     styleClass="p-datatable-customers"
-                     currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                    <p-table #dt           
+                     [value]="sinistreTierPayants" 
+                    [columns]="cols" 
+                    [paginator]="true"
+                    [rows]="10"
+                    [totalRecords]="totalRecordSinistreTierPayantsecords"
+                    [lazy]="true"
+                    [loading]="loading"
+                    (onPage)="onChangePageSinistreTierPayant($event)"
+                    styleClass="p-datatable-customers"
+                    currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} enregistrements"
+                    [showCurrentPageReport]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
+                        <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="prestataire.libelle" style="width: 150px">Prestaire<p-sortIcon field="prestataire.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="dateDeclaration" style="width: 150px">Déclaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
-                        <th pSortableColumn="numeroSinistre" style="width: 150px">Numero sinistre<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
-                        <th pSortableColumn="adherent.nom" style="width: 150px">Nom<p-sortIcon field="adherent.nom"></p-sortIcon></th>
-                        <th pSortableColumn="adherent.prenom" style="width: 150px">Prenom<p-sortIcon field="adherent.prenom"></p-sortIcon></th>
+                        </th> -->
+                        <th pSortableColumn="sinistreTierPayant.prestataire.libelle" style="width: 200px">Prestaire<p-sortIcon field="sinistreTierPayant.prestataire.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="dateDeclaration" style="width: 200px">Déclaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
+                        <th pSortableColumn="numeroSinistre" style="width: 200px">Numero sinistre<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
+                        <th pSortableColumn="adherent.prenom" style="width: 300px">Nom Prenom<p-sortIcon field="adherent.prenom"></p-sortIcon></th>
                         <th pSortableColumn="montantReclame" style="width: 150px">montant Reclame<p-sortIcon field="montantReclame"></p-sortIcon></th>
                         <th pSortableColumn="montantReclame" style="width: 150px">montant payé<p-sortIcon field="montantReclame"></p-sortIcon></th>
-                        <th pSortableColumn="montantRestant" style="width: 150px">Action<p-sortIcon field="montantRestant"></p-sortIcon></th>
+                        <th pSortableColumn="montantRestant" style="width: 200px">Action<p-sortIcon field="montantRestant"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-prefinance>
+                <ng-template pTemplate="body" let-sinistreTierPayant>
                     <tr>
-                        <td>
-                            <p-tableCheckbox [value]="prefinance"></p-tableCheckbox>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.prestataire?.libelle}}</span>
                         </td>
-                        <!-- <td><span class="p-column-title">{{prefinance?.prestation[0]?.dateSoins | formatTableValue : 'date'}}</span> -->
-                        <td><span class="p-column-title">{{prefinance?.prestataire?.libelle}}</span>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.dateDeclaration | formatTableValue : 'date'}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance?.dateDeclaration | formatTableValue : 'date'}}</span>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.numeroSinistre}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance?.numeroSinistre}}</span>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.adherent?.nom }} {{ sinistreTierPayant?.adherent?.prenom}}</span>
                         </td>
-                        <td><span class="p-column-title">{{prefinance?.adherent?.nom}}</span>
-                        </td>
-                        <td><span class="p-column-title">{{prefinance?.adherent?.prenom}}</span>
-                        </td>
-                        <td><span class="p-column-title">{{prefinance?.montantReclame}}</span></td>
-                        <td><span class="p-column-title">{{prefinance?.montantPaye}}</span></td>
-                        <td><button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="onGetPrestationBySinistreId(prefinance)"></button></td>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.montantReclame}}</span></td>
+                        <td><span class="p-column-title">{{sinistreTierPayant?.montantPaye}}</span></td>
+                        <td><button pButton icon="pi pi-search" pTooltip="Voir les prestations" class="p-button-rounded p-button-info p-mr-2" (click)="onGetPrestationBySinistreId(sinistreTierPayant.id)"></button></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{sinistreTierPayant ? sinistreTierPayant.length : 0 }} sinistre(s).
+                        {{totalRecordSinistreTierPayantsecords ? totalRecordSinistreTierPayantsecords : 0 }} sinistre(s).
+                    </div>
+                </ng-template>
+            </p-table>   
+                </div>
+            </ng-template>
+        </p-dialog>
+
+
+
+        <p-dialog [maximizable]="true"  [(visible)]="displayPrestation" header="Les prestations" [modal]="true" styleClass="p-fluid" [style]="{width: '90%'}">
+            <ng-template pTemplate="content">
+                <div class="card">
+
+                    <p-table #dt           
+                     [value]="prestations" 
+                    [columns]="cols" 
+                    [paginator]="true"
+                    [rows]="10"
+                    [totalRecords]="totalRecordPprestations"
+                    [lazy]="true"
+                    [loading]="loading"
+                    (onPage)="onChangePagePrestationBySinistre($event)"
+                    styleClass="p-datatable-customers"
+                    currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} enregistrements"
+                    [showCurrentPageReport]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="prestataire.libelle" style="width: 200px">Sous acte<p-sortIcon field="prestataire.libelle"></p-sortIcon></th>
+                        <th pSortableColumn="dateDeclaration" style="width: 200px">Date soins<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
+                        <th pSortableColumn="numeroSinistre" style="width: 200px">Numero bon<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
+                        <th pSortableColumn="adherent.prenom" style="width: 300px">Nom Prenom <p-sortIcon field="adherent.prenom"></p-sortIcon></th>
+                        <th pSortableColumn="montantReclame" style="width: 150px">montant Reclamé<p-sortIcon field="montantReclame"></p-sortIcon></th>
+                        <th pSortableColumn="montantReclame" style="width: 150px">montant payé<p-sortIcon field="montantReclame"></p-sortIcon></th>
+                        <th pSortableColumn="montantRestant" style="width: 200px">Action<p-sortIcon field="montantRestant"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prestation>
+                    <tr>
+                        <td><span class="p-column-title">{{prestation?.sousActe?.libelle}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation?.dateSoins | formatTableValue : 'date'}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation?.numeroBon}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation?.adherent?.nom  }} {{  prestation?.adherent?.prenom}}</span>
+                        </td>
+                        <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantReclame}}</span></td>
+                        <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantPaye}}</span></td>
+                        <td><button pButton icon="pi pi-search" pTooltip="Procéder au paiemment" class="p-button-rounded p-button-info p-mr-2" (click)="onGetPrestationBySinistreId(sinistreTierPayant)"></button></td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{totalRecordPprestations ? totalRecordPprestations: 0 }} sinistre(s).
                     </div>
                 </ng-template>
             </p-table>   

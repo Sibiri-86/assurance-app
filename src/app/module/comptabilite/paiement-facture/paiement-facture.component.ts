@@ -31,6 +31,7 @@ export class PaiementFactureComponent implements OnInit {
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
+  displayPrestation = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
   prestations: Array<Prestation>;
   report: Report = {};
@@ -43,6 +44,16 @@ export class PaiementFactureComponent implements OnInit {
 
   dateDebut: any;
   dateFin: any;
+  loading: false;
+  totalRecords: number;
+  totalRecordSinistreTierPayantsecords: number;
+  totalRecordPprestations: number;
+  idOrdreReglement: string;
+  sinistreTierPayants: SinistreTierPayant [] = [];
+
+  page : number = 0;
+  size : number = 10;
+  editing = false;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -116,41 +127,64 @@ export class PaiementFactureComponent implements OnInit {
 
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
-        this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
-        .subscribe((response: any) => {
-          this.ordreReglementList = response;
-          this.ordreReglementList$ = response;
-        }, error => {
-          console.error('Erreur lors de la récupération des données', error);
-        });
-      }
-      
+        if(dateD && dateF){
+
+          this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
+          .subscribe((response: any) => {
+            this.ordreReglementList = response;
+            this.ordreReglementList$ = response;
+            }, error => {
+            console.error('Erreur lors de la récupération des données', error);
+          });
+        }
+        }
+        
     }
 
-    onGetSinistreByOrdreReglementId(idOrdreReglement: string){
+   /*  onGetSinistreByOrdreReglementId(idOrdreReglement: string){
       let page = 0;
       let size = 10;
       if(idOrdreReglement)
       this.tierPayantService.getSinistreByOrdreReglementId(idOrdreReglement, page, size).subscribe(
         response => {
-          this.sinistreTierPayant = response.content;
+          this.sinistreTierPayants = response.content;
           this.displaySinistre = true;
-
-          console.log('response', this.sinistreTierPayant);
         }
       );
+    } */
+
+    onGetSinistreByOrdreReglementId(idOrdreReglement?: string) {      
+      this.idOrdreReglement = idOrdreReglement;    
+      if (idOrdreReglement) {
+        this.tierPayantService.getSinistreByOrdreReglementId(idOrdreReglement, this.page, this.size).subscribe(response => {
+          this.sinistreTierPayants = response.content;
+          this.totalRecordSinistreTierPayantsecords = response.totalElements;  // Nombre total d'enregistrements
+          this.displaySinistre = true;
+        });
+      }
     }
 
-    onGetPrestationBySinistreId(sinistrId: string){
-      let page = 0;
-      let size = 10;
-      if(sinistrId)
-      this.tierPayantService.getSinistreByOrdreReglementId(sinistrId, page, size).subscribe(
+    onChangePageSinistreTierPayant(event:any){
+      this.page = event ? event.first / event.rows : 0;
+      this.size = event ? event.rows : 10;
+      this.onGetSinistreByOrdreReglementId(this.idOrdreReglement);
+    }
+
+    onChangePagePrestationBySinistre(event:any){
+      this.page = event ? event.first / event.rows : 0;
+      this.size = event ? event.rows : 10;
+      this.onGetPrestationBySinistreId(this.idOrdreReglement);
+    }
+    
+
+    onGetPrestationBySinistreId(sinistreId: string){
+      if(sinistreId)
+      this.tierPayantService.getPrestationBySinistreId(sinistreId, this.page, this.size).subscribe(
         response => {
           this.prestations = response.content;
-          this.displaySinistre = true;
+          this.displayPrestation = true;
+          this.totalRecordPprestations = response.totalElements;
 
-          console.log('response', this.prestations);
         }
       );
     }
@@ -173,6 +207,30 @@ export class PaiementFactureComponent implements OnInit {
     this.displaySinistre = true;
     this.sinistreTierPayant = ordre.tierPayant;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
+  }
+
+  onRowEditInit(sinistre: any) {
+   // this.sinistre = sinistre;
+
+    console.log('sinistre', sinistre);
+}
+
+  onRowEditSave(sinistre: any){
+    console.log('sinistre', sinistre);
+    console.log('tierPayant', sinistre);
+  }
+  onRowEditCancel(){
+    this.getCancelInfo();
+  }
+
+  getSucessInfo(): void {
+    this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+  }
+  getCancelInfo(): void {
+    this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+  }
+  getErrorInfo(): void {
+    this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
   }
 
 }

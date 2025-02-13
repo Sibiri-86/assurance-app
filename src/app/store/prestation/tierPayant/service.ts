@@ -101,6 +101,15 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_ORDRE_REGLEMMENT), { params });
   }
 
+  getPrestationBySinistreId(sinistreId: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('sinistreId', sinistreId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PRESTATION_BY_SINSITRE), { params });
+  }
+
 
     $getTierPayantOrdreReglementFacturePaye(): Observable<OrdreReglementTierPayantList> {
         // @FIXME: get request
