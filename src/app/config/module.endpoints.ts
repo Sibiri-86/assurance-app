@@ -392,6 +392,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/sinistre-by-odrereglement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_TIER_PAYANT_PRESTATION_BY_SINSITRE = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/prestations-by-sinistre`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`

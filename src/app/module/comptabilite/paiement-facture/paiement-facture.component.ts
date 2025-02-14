@@ -31,6 +31,7 @@ export class PaiementFactureComponent implements OnInit {
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
+  isEditing = false;
   displayPrestation = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
   prestations: Array<Prestation>;
@@ -92,6 +93,9 @@ export class PaiementFactureComponent implements OnInit {
     }
     }); */
 
+
+   // this.initSearch();
+
   }
   paiement(ordre: OrdreReglement) {
     this.displayPaiement = true;
@@ -104,6 +108,7 @@ export class PaiementFactureComponent implements OnInit {
     }
     
   }
+
   deValiderOrdreReglement(ordre: OrdreReglementTierPayant) {
     this.confirmationService.confirm({
       message: 'voulez-vous annuler cet ordre de reglement',
@@ -118,15 +123,37 @@ export class PaiementFactureComponent implements OnInit {
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
+
+
+
+  initSearch(){
+
+  this.dateDebut = new Date();
+  this.dateFin = new Date();
+  const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+  const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+
+    if(dateD && dateF){
+      this.onSerByOdreReglementBhyPeriode2(dateD, dateF);
+    }
+
+  }
   
-    rechercherPrefinancementByPeriode() {
+    onSerByOdreReglementBhyPeriode2(dateDebut?: string, dateFin?:string) {
       if(this.dateDebut.getTime()> this.dateFin.getTime()) {
         this.addMessage('error', 'Dates  invalide',
         'La date de debut ne peut pas être supérieure à celle du de fin');
       } else {
 
-        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
-        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+        let dateD = ''
+        let dateF = ''
+        if((dateDebut && dateFin) && (!dateD && !dateF)){
+          dateD = formatDate(dateDebut, 'dd/MM/yyyy', 'en-fr');
+          dateF = formatDate(dateDebut, 'dd/MM/yyyy', 'en-fr');
+        } else {
+          dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          dateF = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        }
         if(dateD && dateF){
 
           this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
@@ -140,18 +167,23 @@ export class PaiementFactureComponent implements OnInit {
         }
         
     }
-
-   /*  onGetSinistreByOrdreReglementId(idOrdreReglement: string){
-      let page = 0;
-      let size = 10;
-      if(idOrdreReglement)
-      this.tierPayantService.getSinistreByOrdreReglementId(idOrdreReglement, page, size).subscribe(
-        response => {
-          this.sinistreTierPayants = response.content;
-          this.displaySinistre = true;
+    onSerByOdreReglementBhyPeriode() {
+      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+        this.addMessage('error', 'Dates  invalide',
+        'La date de debut ne peut pas être supérieure à celle du de fin');
+      } else {
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
+          .subscribe((response: any) => {
+            this.ordreReglementList = response;
+            this.ordreReglementList$ = response;
+            }, error => {
+            console.error('Erreur lors de la récupération des données', error);
+          });
         }
-      );
-    } */
+        
+    }
 
     onGetSinistreByOrdreReglementId(idOrdreReglement?: string) {      
       this.idOrdreReglement = idOrdreReglement;    
@@ -209,19 +241,53 @@ export class PaiementFactureComponent implements OnInit {
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
 
-  onRowEditInit(sinistre: any) {
-   // this.sinistre = sinistre;
-
-    console.log('sinistre', sinistre);
+  onRowEditInit() {
+   this.isEditing = true;
 }
 
-  onRowEditSave(sinistre: any){
-    console.log('sinistre', sinistre);
-    console.log('tierPayant', sinistre);
+  onRowEditSave(ordreReglement: OrdreReglementTierPayant){
+    const ordreReglementId = ordreReglement.id;
+    const numeroCheque = ordreReglement.numeroCheque;
+     this.confirmationService.confirm({
+      message: 'voulez-vous payer cet ordre de reglement ?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.confirmPaiemnt(ordreReglementId, numeroCheque);
+      },
+    });
+
   }
-  onRowEditCancel(){
+
+  confirmPaiemnt(ordreReglementId: string, numeroCheque: string){
+    if(ordreReglementId) {
+    
+          this.tierPayantService.payerOrdreReglemnt(ordreReglementId, numeroCheque).subscribe(
+            response => {
+              if(response){
+                const isPaye = response;
+                if(isPaye === true){
+
+                  this.getSucessInfo();
+                  this.onSerByOdreReglementBhyPeriode();
+                }
+                if(isPaye === false){
+
+                  this.getErrorInfo();
+                }
+              }
+            }
+          );
+    }
+
+  }
+
+  onRowEditCancel(): void{
+    this.isEditing = false;
     this.getCancelInfo();
   }
+
+
 
   getSucessInfo(): void {
     this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});

@@ -16,7 +16,7 @@
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
                         <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"
-                        (click)="rechercherPrefinancementByPeriode()"
+                        (click)="onSerByOdreReglementBhyPeriode()"
                         ></p-calendar>
                     <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
                     -->                </div>
@@ -24,7 +24,7 @@
                     <div class="p-field">
                         <label for="dateSoins" class="p-sr-only"></label>
                         <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"
-                        (click)="rechercherPrefinancementByPeriode()"
+                        (click)="onSerByOdreReglementBhyPeriode()"
                         ></p-calendar>
                     </div>
 <!--                     <div class="p-field">
@@ -34,7 +34,7 @@
                 </div> 
 
 			</p-toolbar>
-            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['garant.nom','intermediaire.nom','numero','taux.taux']"
+            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau' ]"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -43,7 +43,7 @@
                         <h5 class="p-m-0"></h5>
                         <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        <input style="width: 400px;" pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher des ordres de paiement" />
                         </span>
                     </div>
                 </ng-template>
@@ -52,12 +52,14 @@
                         <!--<th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>-->
-                        <th pSortableColumn="nom">Numéro bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Prestataire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="date" >Date de saisie<p-sortIcon field="date"></p-sortIcon></th>
+                        <th pSortableColumn="numeroBordereau">Numéro bodereau<p-sortIcon field="numeroBordereau"></p-sortIcon></th>
+                        <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
-                        <th pSortableColumn="territorialite" style="min-width:200px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th pSortableColumn="nom" >Date<p-sortIcon field="nom"></p-sortIcon></th>
-                        <th style="min-width:150px"></th>
+                        <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCheque" >Date de Paiement<p-sortIcon field="numeroCheque"></p-sortIcon></th>
+                        <th pSortableColumn="numeroCheque">Numéro chèque<p-sortIcon field="numeroCheque"></p-sortIcon></th>
+                        <th style="min-width:150px">Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
@@ -66,6 +68,8 @@
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
                         </td>-->
 
+                        <td><span class="p-column-title" > {{ordre?.date | formatTableValue : 'date'}}</span>
+                        </td>
                         <td><span class="p-column-title" >{{ordre?.numeroBordereau}}</span>
                         </td>
                         <td><span class="p-column-title">{{ordre?.prestataire}}</span>
@@ -80,12 +84,24 @@
                                 </ng-template>
 
                                 <ng-template pTemplate="output">
-                                    {{ordre?.date | formatTableValue : 'date'}}
+                                    {{ordre?.datePaiement | formatTableValue : 'date'}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
 
-                        <td style="min-width:150px">
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" name="numeroCheque" placeholder="Numéro de Chèque" pInputText [(ngModel)]="ordre.numeroCheque">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    {{ordre?.numeroCheque}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td>
                             <!-- <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="voirSinistre(ordre)">
@@ -116,6 +132,8 @@
                                     pButton 
                                     pRipple 
                                     type="button" 
+                                    [disabled]="!ordre.date || !ordre.numeroCheque"
+                               
                                     pSaveEditableRow 
                                     pTooltip="Êtes-vous sûr de vouloir payer cet ordre?"
                                     icon="pi pi-check" 
@@ -198,11 +216,10 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [maximizable]="true" [(visible)]="displaySinistre" header="Sinistres" [modal]="true" styleClass="p-fluid" [style]="{width: '90%'}">
+        <p-dialog [maximizable]="true" 
+        [(visible)]="displaySinistre" header="Sinistres" [modal]="true" styleClass="p-fluid" [style]="{width: '90%'}">
+    
 
-
-
-            
             <ng-template pTemplate="content">
                 <div class="card">
                     <p-table #dt           
@@ -215,8 +232,19 @@
                     [loading]="loading"
                     (onPage)="onChangePageSinistreTierPayant($event)"
                     styleClass="p-datatable-customers"
+                    [globalFilterFields]="['sinistreTierPayant.prestataire.libelle','numeroSinistre','dateDeclaration','montantReclame','montantPaye', 'adherent.nom', 'adherent.prenom' ]"
                     currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} enregistrements"
                     [showCurrentPageReport]="true">
+
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                            <h5 class="p-m-0"></h5>
+                            <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input style="width: 400px;" pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher des sinsitres" />
+                            </span>
+                        </div>
+                    </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <!-- <th style="width: 3rem">
