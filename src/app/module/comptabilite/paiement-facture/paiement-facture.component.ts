@@ -18,6 +18,7 @@ import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store//parametrage/Banques/actions';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { formatDate } from '@angular/common';
+import { error } from 'console';
 
 
 @Component({
@@ -172,8 +173,12 @@ export class PaiementFactureComponent implements OnInit {
         this.addMessage('error', 'Dates  invalide',
         'La date de debut ne peut pas être supérieure à celle du de fin');
       } else {
+
+
+        console.log('dateDebut', this.dateDebut);
+
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
-        const dateF = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
           this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
           .subscribe((response: any) => {
             this.ordreReglementList = response;
@@ -273,9 +278,11 @@ export class PaiementFactureComponent implements OnInit {
                 }
                 if(isPaye === false){
 
-                  this.getErrorInfo();
+                  this.getFailledInfo();
                 }
               }
+            }, error => {
+              this.getErrorInfo(error.error.message);
             }
           );
     }
@@ -288,15 +295,20 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-
   getSucessInfo(): void {
     this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
   }
   getCancelInfo(): void {
     this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
   }
-  getErrorInfo(): void {
+  getFailledInfo(): void {
     this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
   }
+  
+  getErrorInfo(message: string): void {
+    this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+  }
+
+
 
 }
