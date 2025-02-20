@@ -16,7 +16,7 @@
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
                         <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"
-                        (click)="onSerByOdreReglementBhyPeriode()"
+                        (click)="onSerByOdreReglementByPeriode()"
                         ></p-calendar>
                     <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
                     -->                </div>
@@ -24,7 +24,7 @@
                     <div class="p-field">
                         <label for="dateSoins" class="p-sr-only"></label>
                         <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"
-                        (click)="onSerByOdreReglementBhyPeriode()"
+                        (click)="onSerByOdreReglementByPeriode()"
                         ></p-calendar>
                     </div>
 <!--                     <div class="p-field">
@@ -57,8 +57,6 @@
                         <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
                         <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
-                        <th pSortableColumn="numeroCheque" >Date de Paiement<p-sortIcon field="numeroCheque"></p-sortIcon></th>
-                        <th pSortableColumn="numeroCheque">Numéro chèque<p-sortIcon field="numeroCheque"></p-sortIcon></th>
                         <th style="min-width:150px">Action</th>
                     </tr>
                 </ng-template>
@@ -78,30 +76,6 @@
                         </td>
 
                         <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input id="dateSoins"   type="date" name="ordre" pInputText [(ngModel)]="ordre.date">
-                                </ng-template>
-
-                                <ng-template pTemplate="output">
-                                    {{ordre?.datePaiement | formatTableValue : 'date'}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input type="text" name="numeroCheque" placeholder="Numéro de Chèque" pInputText [(ngModel)]="ordre.numeroCheque">
-                                </ng-template>
-
-                                <ng-template pTemplate="output">
-                                    {{ordre?.numeroCheque}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-
-                        <td>
                             <!-- <button pButton pRipple icon="pi pi-search" pTooltip="voir sinistre"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="voirSinistre(ordre)">
@@ -116,40 +90,16 @@
                             <button pButton icon="pi pi-eye" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiement(ordre)"></button>
  -->
                                 <button 
-                                    *ngIf="!editing" 
                                     pButton 
                                     pRipple 
-                                    pTooltip="Payer"
                                     type="button" 
-                                    pInitEditableRow 
-                                    icon="pi pi-pencil" 
+                                    icon="pi pi-cog" 
                                     pTooltip="Procéder au paiement de l'ordre"
-                                    (click)="onRowEditInit(ordre)" 
+                                    (click)="onInitPaiement(ordre)" 
                                     class="p-button-rounded p-button-success p-mr-2">
                                 </button>
-                                <button 
-                                    *ngIf="editing" 
-                                    pButton 
-                                    pRipple 
-                                    type="button" 
-                                    [disabled]="!ordre.date || !ordre.numeroCheque"
-                               
-                                    pSaveEditableRow 
-                                    pTooltip="Êtes-vous sûr de vouloir payer cet ordre?"
-                                    icon="pi pi-check" 
-                                    (click)="onRowEditSave(ordre)" 
-                                    class="p-button-rounded p-button-success p-mr-2">
-                                </button>
-                                <button 
-                                    *ngIf="editing" 
-                                    pButton pRipple 
-                                    type="button" 
-                                    pCancelEditableRow 
-                                    pTooltip="Annuler le paiement de cet ordre"
-                                    icon="pi pi-times" 
-                                    (click)="onRowEditCancel(ordre, ri)" 
-                                    class="p-button-rounded p-button-danger p-mr-2">
-                                </button>
+                                
+                                
                         </td>
                         
                         <!--
@@ -342,7 +292,106 @@
                 </div>
             </ng-template>
         </p-dialog>
+
+
+    
+
             
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
 </div>
+
+
+<p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
+    header="PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT" 
+    [style]="{width: '60%'}"
+    [modal]="true" styleClass="p-fluid">
+    
+    <ng-template pTemplate="content"> 
+        <div class="card p-d-flex">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <div class="p-grid p-fluid">
+                        
+                        <!-- Colonne Gauche -->
+                        <div class="p-col-6">
+                            <p-fieldset legend="Informations Générales">
+                                <div class="p-field">
+                                    <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compte" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="comptes"
+                                        [autoDisplayFirst]="true" 
+                                        placeholder="Sélectionnez le compte"
+                                        optionLabel="libelle" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="ordreReglementTierPayant.compte">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="compteTiers" class="font-bold">Compte Tiers<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="comptesTiers"
+                                        [autoDisplayFirst]="false" 
+                                        placeholder="Sélectionnez le compte tiers"
+                                        optionLabel="intitule" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="ordreReglementTierPayant.compteTiers">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="compteTiers" class="font-bold">Type journal<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="typeJournaux"
+                                        [autoDisplayFirst]="false" 
+                                        placeholder="Sélectionnez le type du journal"
+                                        optionLabel="libelle" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="ordreReglementTierPayant.typeJournaux">
+                                    </p-dropdown>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+
+                        <!-- Colonne Droite -->
+                        <div class="p-col-6">
+                            <p-fieldset legend="Détails du Paiement">
+
+                                <div class="p-field">
+                                    <label for="datePaiement" class="font-bold">Date paiement</label>
+                                    <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                        [(ngModel)]="ordreReglementTierPayant.date" 
+                                        name="datePaiement" pInputText>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
+                                    <input id="numeroCheque" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                        [(ngModel)]="ordreReglementTierPayant.numeroCheque" 
+                                        name="numeroCheque" pInputText required>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="montant" class="font-bold">Montant</label>
+                                    <input id="montant" type="text" class="p-inputtext p-mt-1 p-mb-1 p-fluid" 
+                                        [(ngModel)]="ordreReglementTierPayant.montantPaye" 
+                                        name="montantPaye" pInputText disabled>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="right" class="p-d-flex p-jc-center p-mt-2">
+                    <div class="p-d-flex p-jc-center p-mt-2">
+                        <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
+                            pButton icon="pi pi-check" label="Valider le paiement" 
+                            [disabled]="!ordreReglementTierPayant?.numeroCheque || !ordreReglementTierPayant.compte || !ordreReglementTierPayant.compteTiers  || !ordreReglementTierPayant.date  || !ordreReglementTierPayant.montantPaye" 
+                            class="p-button-success">
+                        </button>   
+                    </div> 
+                </ng-template>
+                
+            </p-toolbar>
+        </div>
+    </ng-template>
+</p-dialog>

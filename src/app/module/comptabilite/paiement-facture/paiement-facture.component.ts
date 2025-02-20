@@ -19,6 +19,12 @@ import * as featureActionBanque from '../../../store//parametrage/Banques/action
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { formatDate } from '@angular/common';
 import { error } from 'console';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { Compte, CompteList } from 'src/app/store/comptabilite/compte/model';
+import { TiersService } from 'src/app/store/comptabilite/tiers/service';
+import { Tiers } from 'src/app/store/comptabilite/tiers/model';
+import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
+import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/service';
 
 
 @Component({
@@ -33,6 +39,7 @@ export class PaiementFactureComponent implements OnInit {
   cols: any[];
   displaySinistre = false;
   isEditing = false;
+  isToPayeOrdreReglementTierPayant = false;
   displayPrestation = false;
   sinistreTierPayant: Array<SinistreTierPayant>;
   prestations: Array<Prestation>;
@@ -51,20 +58,32 @@ export class PaiementFactureComponent implements OnInit {
   totalRecordSinistreTierPayantsecords: number;
   totalRecordPprestations: number;
   idOrdreReglement: string;
+  ordreReglementTierPayant: OrdreReglementTierPayant = {};
   sinistreTierPayants: SinistreTierPayant [] = [];
 
   page : number = 0;
   size : number = 10;
   editing = false;
 
+  comptes: Compte[] = [];
+  comptesTiers: Tiers[] = [];
+  typeJournaux: TypeJournaux[] = [];
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private tierPayantService: TierPayantService,
+              private compteService: CompteService,
+              private compteTiersService: TiersService,
+              private typeJournauxService: TypeJournauxService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
 }
 
   ngOnInit(): void {
+
+    this.onGetComptes();
+    this.onGetComptesTiers();
+    this.onGetTypeJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -135,12 +154,12 @@ export class PaiementFactureComponent implements OnInit {
   const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
 
     if(dateD && dateF){
-      this.onSerByOdreReglementBhyPeriode2(dateD, dateF);
+      this.onSerByOdreReglementByPeriode2(dateD, dateF);
     }
 
   }
   
-    onSerByOdreReglementBhyPeriode2(dateDebut?: string, dateFin?:string) {
+    onSerByOdreReglementByPeriode2(dateDebut?: string, dateFin?:string) {
       if(this.dateDebut.getTime()> this.dateFin.getTime()) {
         this.addMessage('error', 'Dates  invalide',
         'La date de debut ne peut pas être supérieure à celle du de fin');
@@ -168,14 +187,11 @@ export class PaiementFactureComponent implements OnInit {
         }
         
     }
-    onSerByOdreReglementBhyPeriode() {
+    onSerByOdreReglementByPeriode() {
       if(this.dateDebut.getTime()> this.dateFin.getTime()) {
         this.addMessage('error', 'Dates  invalide',
         'La date de debut ne peut pas être supérieure à celle du de fin');
       } else {
-
-
-        console.log('dateDebut', this.dateDebut);
 
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
@@ -226,6 +242,31 @@ export class PaiementFactureComponent implements OnInit {
       );
     }
 
+    onGetComptes(){
+      this.compteService.$getComptes().subscribe(
+        res => {
+          this.comptes = res.compteDtoList;
+        }
+      );
+    }
+
+    onGetComptesTiers(){
+      this.compteTiersService.$getTierss().subscribe(
+        res => {
+          this.comptesTiers = res.tiersDTOList;
+        }
+      );
+    }
+
+    onGetTypeJournaux(){
+      this.typeJournauxService.$getTypeJournaux().subscribe(
+        res => {
+          this.typeJournaux = res.typeJournauxList;
+        }
+      );
+    }
+
+
   imprimer(pref: OrdreReglementTierPayant) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
     this.report.ordreReglementDto = pref;
@@ -250,31 +291,35 @@ export class PaiementFactureComponent implements OnInit {
    this.isEditing = true;
 }
 
-  onRowEditSave(ordreReglement: OrdreReglementTierPayant){
-    const ordreReglementId = ordreReglement.id;
-    const numeroCheque = ordreReglement.numeroCheque;
-     this.confirmationService.confirm({
-      message: 'voulez-vous payer cet ordre de reglement ?',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.confirmPaiemnt(ordreReglementId, numeroCheque);
-      },
-    });
+  onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+    if(ordreReglementTierPayant){
+      this.confirmationService.confirm({
+        message: 'voulez-vous payer cet ordre de reglement ?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.confirmPaiemnt(ordreReglementTierPayant);
+        },
+      });
+    }
 
   }
 
-  confirmPaiemnt(ordreReglementId: string, numeroCheque: string){
-    if(ordreReglementId) {
+
+  confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
+    if(ordreReglementTierPayant) {
     
-          this.tierPayantService.payerOrdreReglemnt(ordreReglementId, numeroCheque).subscribe(
+          this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
             response => {
               if(response){
                 const isPaye = response;
                 if(isPaye === true){
 
                   this.getSucessInfo();
-                  this.onSerByOdreReglementBhyPeriode();
+                  this.onSerByOdreReglementByPeriode();
+                  this.isToPayeOrdreReglementTierPayant = false;
+                  this.ordreReglementTierPayant = {};
                 }
                 if(isPaye === false){
 
@@ -289,10 +334,19 @@ export class PaiementFactureComponent implements OnInit {
 
   }
 
-  onRowEditCancel(): void{
-    this.isEditing = false;
+  onCancelPaiementOrdreReglement(): void{
     this.getCancelInfo();
   }
+
+
+
+  onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+    if(ordreReglementTierPayant){
+      this.isToPayeOrdreReglementTierPayant = true;
+      this.ordreReglementTierPayant = ordreReglementTierPayant;
+    }
+  }
+
 
 
   getSucessInfo(): void {
@@ -308,6 +362,8 @@ export class PaiementFactureComponent implements OnInit {
   getErrorInfo(message: string): void {
     this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
   }
+
+
 
 
 

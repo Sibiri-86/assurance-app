@@ -16,6 +16,8 @@ import { Exercice } from '../../contrat/exercice/model';
 import { Pathologie } from '../../parametrage/pathologie/model';
 import { BoundElementProperty } from '@angular/compiler';
 import { Banque } from '../../parametrage/Banques/model';
+import { Compte } from '../../comptabilite/compte/model';
+import { Tiers } from '../../comptabilite/tiers/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -42,6 +44,8 @@ export interface OrdreReglementTierPayant{
     date?: Date;
     datePaiement?:Date;
     numeroCheque?:string;
+    compte?: Compte;
+    compteTiers?: Tiers;
 }
 
 export interface SinistreTierPayant {
