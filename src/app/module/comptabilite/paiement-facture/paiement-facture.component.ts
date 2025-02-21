@@ -25,6 +25,8 @@ import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { Tiers } from 'src/app/store/comptabilite/tiers/model';
 import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/service';
+import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
+import { Journaux} from 'src/app/store/comptabilite/journaux/model';
 
 
 @Component({
@@ -68,6 +70,8 @@ export class PaiementFactureComponent implements OnInit {
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
   typeJournaux: TypeJournaux[] = [];
+  journaux: Array<Journaux>
+  compteCollectifId: string;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -75,6 +79,7 @@ export class PaiementFactureComponent implements OnInit {
               private compteService: CompteService,
               private compteTiersService: TiersService,
               private typeJournauxService: TypeJournauxService,
+              private journauxService: JournauxService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
 }
@@ -82,8 +87,9 @@ export class PaiementFactureComponent implements OnInit {
   ngOnInit(): void {
 
     this.onGetComptes();
-    this.onGetComptesTiers();
-    this.onGetTypeJournaux();
+    this.onGetComptesTiersByCompteCollectifAndGarand();
+    //this.onGetTypeJournaux();
+    this.onGetJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -243,25 +249,36 @@ export class PaiementFactureComponent implements OnInit {
     }
 
     onGetComptes(){
-      this.compteService.$getComptes().subscribe(
+      this.compteService.$getComptesBanquaires().subscribe(
         res => {
-          this.comptes = res.compteDtoList;
+          this.comptes = res;
         }
       );
     }
 
-    onGetComptesTiers(){
-      this.compteTiersService.$getTierss().subscribe(
-        res => {
-          this.comptesTiers = res.tiersDTOList;
-        }
-      );
+
+    onGetComptesTiersByCompteCollectifAndGarand(){
+
+        this.compteTiersService.$getTiersWithCompteCollectif().subscribe(
+          res => {
+            this.comptesTiers = res;
+          }
+        );
+      
     }
 
     onGetTypeJournaux(){
       this.typeJournauxService.$getTypeJournaux().subscribe(
         res => {
           this.typeJournaux = res.typeJournauxList;
+        }
+      );
+    }
+
+    onGetJournaux(){
+      this.journauxService.$getJournaux().subscribe(
+        res => {
+          this.journaux = res.journauxList;
         }
       );
     }
@@ -293,6 +310,7 @@ export class PaiementFactureComponent implements OnInit {
 
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
+    console.log("OrdreReglementTierPayant", ordreReglementTierPayant);
     if(ordreReglementTierPayant){
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
@@ -316,10 +334,10 @@ export class PaiementFactureComponent implements OnInit {
                 const isPaye = response;
                 if(isPaye === true){
 
-                  this.getSucessInfo();
-                  this.onSerByOdreReglementByPeriode();
                   this.isToPayeOrdreReglementTierPayant = false;
                   this.ordreReglementTierPayant = {};
+                  this.getSucessInfo();
+                  this.onSerByOdreReglementByPeriode();
                 }
                 if(isPaye === false){
 

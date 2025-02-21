@@ -305,7 +305,9 @@
 <p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
     header="PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT" 
     [style]="{width: '60%'}"
-    [modal]="true" styleClass="p-fluid">
+    [modal]="true" styleClass="p-fluid"
+    [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
+
     
     <ng-template pTemplate="content"> 
         <div class="card p-d-flex">
@@ -323,7 +325,10 @@
                                         [autoDisplayFirst]="true" 
                                         placeholder="Sélectionnez le compte"
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
-                                        [(ngModel)]="ordreReglementTierPayant.compte">
+                                        [(ngModel)]="ordreReglementTierPayant.compte"
+                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte.id)"
+
+                                        >
                                     </p-dropdown>
                                 </div>
 
@@ -339,13 +344,13 @@
                                 </div>
 
                                 <div class="p-field">
-                                    <label for="compteTiers" class="font-bold">Type journal<span class="required" style="color: red;">*</span></label>
+                                    <label for="compteTiers" class="font-bold"> Journal<span class="required" style="color: red;">*</span></label>
                                     <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
-                                        showClear="true" [options]="typeJournaux"
+                                        showClear="true" [options]="journaux"
                                         [autoDisplayFirst]="false" 
-                                        placeholder="Sélectionnez le type du journal"
+                                        placeholder="Sélectionnez le journal"
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
-                                        [(ngModel)]="ordreReglementTierPayant.typeJournaux">
+                                        [(ngModel)]="ordreReglementTierPayant.journaux">
                                     </p-dropdown>
                                 </div>
 
@@ -382,7 +387,7 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="right" class="p-d-flex p-jc-center p-mt-2">
-                    <div class="p-d-flex p-jc-center p-mt-2">
+                    <div class="p-d-block p-jc-center p-mt-2">
                         <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
                             pButton icon="pi pi-check" label="Valider le paiement" 
                             [disabled]="!ordreReglementTierPayant?.numeroCheque || !ordreReglementTierPayant.compte || !ordreReglementTierPayant.compteTiers  || !ordreReglementTierPayant.date  || !ordreReglementTierPayant.montantPaye" 

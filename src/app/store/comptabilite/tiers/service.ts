@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError, map, mergeMap } from "rxjs/operators";
@@ -27,6 +27,14 @@ $getTierss(): Observable<TiersList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_TIERS)}`).pipe(
     map((response: TiersList) => response),
+    catchError(this.handleError())
+  );
+}
+
+$getTiersWithCompteCollectif(): Observable<Tiers[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_TIERS_COLLECTIF)}`).pipe(
+    map((response: Tiers[]) => response),
     catchError(this.handleError())
   );
 }

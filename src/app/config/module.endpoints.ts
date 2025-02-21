@@ -449,6 +449,15 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/comptabilite/compte`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
+        static readonly COMPTABILITE_COMPTE_BANQUAIRE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-in-range`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+
+        static readonly COMPTABILITE_COMPTE_TIERS_COLLECTIF = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-with-compte-collectif`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
 
         static readonly PARAMETRAGE_TYPE_JOURNAUX = {
             prod: `${SERVICE_PREFIX}/parametrage/typeJournaux`,

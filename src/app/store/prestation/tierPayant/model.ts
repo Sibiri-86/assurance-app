@@ -18,6 +18,7 @@ import { BoundElementProperty } from '@angular/compiler';
 import { Banque } from '../../parametrage/Banques/model';
 import { Compte } from '../../comptabilite/compte/model';
 import { Tiers } from '../../comptabilite/tiers/model';
+import { Journaux } from '../../comptabilite/journaux/model';
 
 export interface Sinistre {
     referenceSinistreGarant?: string;
@@ -45,6 +46,7 @@ export interface OrdreReglementTierPayant{
     datePaiement?:Date;
     numeroCheque?:string;
     compte?: Compte;
+    journaux?: Journaux;
     compteTiers?: Tiers;
 }
 

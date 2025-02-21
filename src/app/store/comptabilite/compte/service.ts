@@ -39,6 +39,14 @@ $getComptes(): Observable<CompteList> {
   );
 }
 
+$getComptesBanquaires(): Observable<Compte[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BANQUAIRE)}`).pipe(
+    map((response: Compte[]) => response),
+    catchError(this.handleError())
+  );
+}
+
 $getComptesNoRacine(): Observable<CompteList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE)}/no-racine`).pipe(
