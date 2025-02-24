@@ -310,7 +310,6 @@ export class PaiementFactureComponent implements OnInit {
 
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
-    console.log("OrdreReglementTierPayant", ordreReglementTierPayant);
     if(ordreReglementTierPayant){
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
