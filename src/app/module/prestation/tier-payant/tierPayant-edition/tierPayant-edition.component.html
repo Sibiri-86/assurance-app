@@ -125,7 +125,7 @@
 
 
         <p-dialog [maximizable]="true" [(visible)]="displayPrestation" header="Prestation(s)" [modal]="true" styleClass="p-fluid" [style]="{width: '1500px'}">
-            <ng-template pTemplate="content">
+            <ng-template pTemplate="content" >
                 <div class="card">
                     <p-table #dt [value]="prestationListPrefinancementFilter" [columns]="cols" [rows]="10" [paginator]="true"
                      [rowHover]="true" dataKey="id"
