@@ -90,7 +90,8 @@ export class ApprovisionnementComponent implements OnInit {
       res => {
         if(res){
           this.getSucessInfo();
-          this.onGetComptes();
+          this.loadRecettes();
+          this.findfirst();
           this.isToApprov = false;
           this.compte = {};
         }
@@ -129,8 +130,6 @@ export class ApprovisionnementComponent implements OnInit {
   findfirst(): void {
     this.receteTotalDepenseTotalService.findfirst().subscribe(data => {
       this.firstOccurance = data;
-
-      console.log('firstOccurance', data);
     });
   }
 
