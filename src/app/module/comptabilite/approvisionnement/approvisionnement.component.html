@@ -5,76 +5,49 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
-                    <button pButton pRipple label="Effectuer un appro" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="onInitApprovionnement()"></button>
+                    <button pButton pRipple label="Effectuer un approvisionnement" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="onInitApprovionnement()"></button>
  			</ng-template>
-<!--              <ng-template pTemplate="right">
+             <ng-template pTemplate="right">
                 <div>
-                    <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
-                </div>
-             </ng-template> -->
+                    <span> Total des approvisionnements: <span class="textSuccess">{{firstOccurance?.recetteTotal}}</span> </span>
+<!--                     <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
+ -->                </div>
+             </ng-template>
 			</p-toolbar>
             
-            <p-table [value]="receteTotalDepenseTotals" dataKey="id" responsiveLayout="scroll">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Compte</th>
-                        <th>Solde debiteur</th>
-                        <th>Solde crediteur</th>
-                        <th>montant approvionné</th>
-                        <th>Date d'approvionnement</th>
-                        <!-- <th>Solde avant approvionnemnt</th> -->
-                       
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-recetteDepense let-ri="rowIndex">
-                    <tr>
-                        <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
-                               
-                        </td>
-                        <td>{{recetteDepense.compte?.libelle}}</td>
-                        <td>{{recetteDepense.compte.soldeDebiteur}} </td>
-                        <td>{{recetteDepense.compte.soldeCrediteur}} </td>
-                        <td>{{recetteDepense.montant}} </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0"></p-toolbar>
-            <p-toolbar styleClass="p-mb-4" *ngIf="operationList?.length > 0">
-				<ng-template pTemplate="left">
-                   
- 			</ng-template>
-            <ng-template pTemplate="right">
-                <div class="p-field p-col">
-                    <label for="journal">Total opération des dépenses:  {{operationSelected.montantDepense | formatTableValue: 'number':true}}</label>
-    
-                    
-                </div>
-
-                <div class="p-field p-col">
-                    <label for="journal">Total opération de recette: {{operationSelected.montantRecette | formatTableValue: 'number':true}} </label>
-               
-                    
-                   
-                </div>
-
-                <div class="p-field p-col">
-                    <label for="journal">Total solde : {{operationSelected.solde | formatTableValue: 'number':true}} </label>
-               
-                    
-                   
-                </div>
-            </ng-template>
-
-            <ng-template pTemplate="left">
-                <div class="p-field p-col">
-                    <label for="journal">Total opération journalier:  {{montantJournalier | formatTableValue: 'number':true}}</label>
-    
-                    
-                </div>
-            </ng-template>
-            
-            </p-toolbar>
+            <p-table 
+            [value]="receteTotalDepenseTotals" 
+            dataKey="id" 
+            responsiveLayout="scroll"
+            [paginator]="true"
+            [rows]="size"
+            [totalRecords]="totalElements"
+            [lazy]="true"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            (onPage)="onPageChange($event)">
+          
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Compte</th>
+                      <th>Solde débiteur</th>
+                      <th>Solde créditeur</th>
+                      <th>Montant approvisionné</th>
+                      <th>Date d'approvisionnement</th>
+                  </tr>
+              </ng-template>
+          
+              <ng-template pTemplate="body" let-recetteDepense>
+                  <tr>
+                      <td>{{recetteDepense.compte?.libelle}}</td>
+                      <td>{{recetteDepense.compte?.soldeDebiteur}}</td>
+                      <td>{{recetteDepense.compte?.soldeCrediteur}}</td>
+                      <td>{{recetteDepense.montant}}</td>
+                      <td>{{recetteDepense.date | formatTableValue : 'date'}}</td>
+                  </tr>
+              </ng-template>
+          
+          </p-table>
+          
         </div> 
         
         
@@ -130,5 +103,7 @@
         </div>
     </ng-template>
 </p-dialog>
+
+
 
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>

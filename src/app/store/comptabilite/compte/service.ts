@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError, map, mergeMap } from "rxjs/operators";
@@ -29,6 +29,13 @@ postCompte(Compte: Compte): Observable<any> {
 updateCompte(Compte: Compte): Observable<any> {
   // @FIXME: post request+
   return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE)}/${Compte.id}`, Compte);
+}
+
+approvisionnerCompte(compteId: string, montant: any): Observable<any> {
+  const params = new HttpParams()
+  .set('compteId', compteId)
+  .set('montant', montant)
+  return this.http.get(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_APPROVISIONNER), {params});
 }
 
 $getComptes(): Observable<CompteList> {

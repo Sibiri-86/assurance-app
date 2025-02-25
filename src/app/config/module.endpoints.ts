@@ -603,5 +603,17 @@ export class Endpoints {
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
 
+    
+    static readonly COMPTABILITE_COMPTE_APPROVISIONNER = {
+        prod: `${SERVICE_PREFIX}/comptabilite/compte/approvisionner`,
+        mock: `assets/mock/comptabilite/compte.mock.json`
+    };
+
+    
+    static readonly COMPTABILITE_APPROVISIONNEMENT = {
+        prod: `${SERVICE_PREFIX}/comptabilite/recette/depense`,
+        mock: `assets/mock/comptabilite/compte.mock.json`
+    };
+
 
 }
