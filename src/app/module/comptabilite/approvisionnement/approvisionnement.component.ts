@@ -15,6 +15,7 @@ export class ApprovisionnementComponent implements OnInit {
 
   comptes: Compte[] = [];
   compte : Compte = {};
+  compteSelected : Compte = {};
   compteId: string = '';
   receteTotalDepenseTotal: ReceteTotalDepenseTotalOrdreReglementTierPayant = {}
   receteTotalDepenseTotals: ReceteTotalDepenseTotalOrdreReglementTierPayant[] = [];
@@ -84,6 +85,7 @@ export class ApprovisionnementComponent implements OnInit {
       }
     }
   }
+
 
   onConfirmApprovionnement( compteId: string, montant: any){
     this.compteService.approvisionnerCompte(compteId, montant).subscribe(

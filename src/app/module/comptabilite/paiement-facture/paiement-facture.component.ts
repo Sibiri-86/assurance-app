@@ -72,6 +72,7 @@ export class PaiementFactureComponent implements OnInit {
   typeJournaux: TypeJournaux[] = [];
   journaux: Array<Journaux>
   compteCollectifId: string;
+  compteSelected: Compte;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -212,6 +213,10 @@ export class PaiementFactureComponent implements OnInit {
         
     }
 
+    onGetComptesTiersBySelectedCompteCollectifId(compteSelected: Compte){
+      this.compteSelected = compteSelected;
+    }
+
     onGetSinistreByOrdreReglementId(idOrdreReglement?: string) {      
       this.idOrdreReglement = idOrdreReglement;    
       if (idOrdreReglement) {
@@ -335,8 +340,10 @@ export class PaiementFactureComponent implements OnInit {
 
                   this.isToPayeOrdreReglementTierPayant = false;
                   this.ordreReglementTierPayant = {};
+                  this.compteSelected = {};
                   this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
+                  this.onGetComptes();
                 }
                 if(isPaye === false){
 

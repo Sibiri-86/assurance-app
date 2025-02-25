@@ -320,13 +320,15 @@
                             <p-fieldset legend="Informations Générales">
                                 <div class="p-field">
                                     <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
+                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span>
+                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> Solde restant:  <span class="textDanger"> Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
                                     <p-dropdown inputId="compte" dataKey="id" [filter]="true"
                                         showClear="true" [options]="comptes"
                                         [autoDisplayFirst]="true" 
                                         placeholder="Sélectionnez le compte"
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
                                         [(ngModel)]="ordreReglementTierPayant.compte"
-                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte.id)"
+                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte)"
 
                                         >
                                     </p-dropdown>
@@ -390,7 +392,14 @@
                     <div class="p-d-block p-jc-center p-mt-2">
                         <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
                             pButton icon="pi pi-check" label="Valider le paiement" 
-                            [disabled]="!ordreReglementTierPayant?.numeroCheque || !ordreReglementTierPayant.compte || !ordreReglementTierPayant.compteTiers  || !ordreReglementTierPayant.date  || !ordreReglementTierPayant.montantPaye" 
+                            [disabled]="
+                            compteSelected.soldeDebiteur < ordreReglementTierPayant.montantPaye ||
+                            !ordreReglementTierPayant?.numeroCheque ||
+                             !ordreReglementTierPayant.compte || 
+                             !ordreReglementTierPayant.compteTiers ||
+                              !ordreReglementTierPayant.journaux  ||
+                               !ordreReglementTierPayant.date  ||
+                                !ordreReglementTierPayant.montantPaye" 
                             class="p-button-success">
                         </button>   
                     </div> 
