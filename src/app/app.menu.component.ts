@@ -117,8 +117,8 @@ export class AppMenuComponent implements OnInit {
                       
                     {label: 'Opération', icon: 'pi pi-align-justify', routerLink: ['/comptabilite'], visible: true,
                          items: [
-                            {label: 'Approvisionnement', icon: 'pi pi-money-bill', routerLink: ['/comptabilite/compte/approvisionnement'], visible: true},
-                            {label: 'compte', icon: 'pi pi-pencil', routerLink: ['/comptabilite/compte'], visible: true},
+/*                             {label: 'Approvisionnement', icon: 'pi pi-money-bill', routerLink: ['/comptabilite/compte/approvisionnement'], visible: true},
+ */                            {label: 'compte', icon: 'pi pi-pencil', routerLink: ['/comptabilite/compte'], visible: true},
                             {label: 'Journal', icon: 'pi pi-book', routerLink: ['/comptabilite/journal'], visible: true},
                             {label: 'Exercice comptabilité', icon: 'pi pi-clock', routerLink: ['/comptabilite/exercice-comptable'], visible: true},
                             {label: 'Opération', icon: 'pi pi-fw pi-list', routerLink: ['/comptabilite/exercice-comptable-operation'], visible: true},
