@@ -320,8 +320,8 @@
                             <p-fieldset legend="Informations Générales">
                                 <div class="p-field">
                                     <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
-                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span>
-                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> Solde restant:  <span class="textDanger"> Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
+                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span> <br>
+                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> <span class="textDanger"> Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
                                     <p-dropdown inputId="compte" dataKey="id" [filter]="true"
                                         showClear="true" [options]="comptes"
                                         [autoDisplayFirst]="true" 
