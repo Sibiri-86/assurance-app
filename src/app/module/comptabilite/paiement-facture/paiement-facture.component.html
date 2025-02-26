@@ -318,19 +318,30 @@
                         <!-- Colonne Gauche -->
                         <div class="p-col-6">
                             <p-fieldset legend="Informations Générales">
+                                
                                 <div class="p-field">
-                                    <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
-                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span> <br>
-                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> <span class="textDanger"> Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
-                                    <p-dropdown inputId="compte" dataKey="id" [filter]="true"
+
+                                    <div class="p-field">
+                                        <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
+                                        <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                            [(ngModel)]="ordreReglementTierPayant.date" 
+                                            name="datePaiement" pInputText>
+                                    </div>
+
+                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span>
+                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> <span class="textDanger"> 
+                                        Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
+                                        
+                                        <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
+                                        <p-dropdown inputId="compte" dataKey="id" [filter]="true"
+                                    
+                                        [disabled]="!ordreReglementTierPayant.date"
                                         showClear="true" [options]="comptes"
                                         [autoDisplayFirst]="true" 
                                         placeholder="Sélectionnez le compte"
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
                                         [(ngModel)]="ordreReglementTierPayant.compte"
-                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte)"
-
-                                        >
+                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte)">
                                     </p-dropdown>
                                 </div>
 
@@ -345,7 +356,7 @@
                                     </p-dropdown>
                                 </div>
 
-                                <div class="p-field">
+<!--                                 <div class="p-field">
                                     <label for="compteTiers" class="font-bold"> Journal<span class="required" style="color: red;">*</span></label>
                                     <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
                                         showClear="true" [options]="journaux"
@@ -354,7 +365,7 @@
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
                                         [(ngModel)]="ordreReglementTierPayant.journaux">
                                     </p-dropdown>
-                                </div>
+                                </div> -->
 
                             </p-fieldset>
                         </div>
@@ -362,13 +373,6 @@
                         <!-- Colonne Droite -->
                         <div class="p-col-6">
                             <p-fieldset legend="Détails du Paiement">
-
-                                <div class="p-field">
-                                    <label for="datePaiement" class="font-bold">Date paiement</label>
-                                    <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                        [(ngModel)]="ordreReglementTierPayant.date" 
-                                        name="datePaiement" pInputText>
-                                </div>
 
                                 <div class="p-field">
                                     <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
@@ -384,16 +388,30 @@
                                         name="montantPaye" pInputText disabled>
                                 </div>
 
+                                <div class="p-d-block p-jc-center p-mt-2">
+                                    <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
+                                        pButton icon="pi pi-check" label="Valider le paiement" 
+                                        [disabled]="
+                                        compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye ||
+                                        !ordreReglementTierPayant?.numeroCheque ||
+                                         !ordreReglementTierPayant.compte || 
+                                         !ordreReglementTierPayant.compteTiers ||
+                                           !ordreReglementTierPayant.date  ||
+                                            !ordreReglementTierPayant.montantPaye" 
+                                        class="p-button-success">
+                                    </button>   
+                                </div>
+
                             </p-fieldset>
                         </div>
                     </div>
                 </ng-template>
-                <ng-template pTemplate="right" class="p-d-flex p-jc-center p-mt-2">
+<!--                 <ng-template pTemplate="right" class="p-d-flex p-jc-center p-mt-2">
                     <div class="p-d-block p-jc-center p-mt-2">
                         <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
                             pButton icon="pi pi-check" label="Valider le paiement" 
                             [disabled]="
-                            compteSelected.soldeDebiteur < ordreReglementTierPayant.montantPaye ||
+                            compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye ||
                             !ordreReglementTierPayant?.numeroCheque ||
                              !ordreReglementTierPayant.compte || 
                              !ordreReglementTierPayant.compteTiers ||
@@ -403,7 +421,7 @@
                             class="p-button-success">
                         </button>   
                     </div> 
-                </ng-template>
+                </ng-template> -->
                 
             </p-toolbar>
         </div>
