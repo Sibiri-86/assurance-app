@@ -29,7 +29,7 @@
                 </div> 
 
 			</p-toolbar>
-            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau' ]"
+            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau', 'numeroFactureSinistre' ]"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -44,7 +44,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="date" >Date de saisie<p-sortIcon field="date"></p-sortIcon></th>
+                        <th pSortableColumn="dateDeSaisie" >Date de saisie<p-sortIcon field="dateDeSaisie"></p-sortIcon></th>
                         <th pSortableColumn="datePaiement" >Date de paiement<p-sortIcon field="datePaiement"></p-sortIcon></th>
                         <th pSortableColumn="numeroBordereau">Numéro bodereau<p-sortIcon field="numeroBordereau"></p-sortIcon></th>
                         <th pSortableColumn="numeroFactureSinistre">Numéro Facture<p-sortIcon field="numeroFactureSinistre"></p-sortIcon></th>
