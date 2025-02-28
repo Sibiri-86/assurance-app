@@ -16,7 +16,6 @@
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
                         <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"
-                        (click)="onSerByOdreReglementByPeriode()"
                         ></p-calendar>
                     <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
                     -->                </div>
@@ -34,7 +33,7 @@
                 </div> 
 
 			</p-toolbar>
-            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau' ]"
+            <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau' ,'numeroFactureSinistre' ]"
                      [rowHover]="true" dataKey="id"
                      styleClass="p-datatable-customers"
                      currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -54,6 +53,7 @@
                         </th>-->
                         <th pSortableColumn="date" >Date de saisie<p-sortIcon field="date"></p-sortIcon></th>
                         <th pSortableColumn="numeroBordereau">Numéro bodereau<p-sortIcon field="numeroBordereau"></p-sortIcon></th>
+                        <th pSortableColumn="numeroFactureSinistre">Numéro Facture<p-sortIcon field="numeroFactureSinistre"></p-sortIcon></th>
                         <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <!-- <th pSortableColumn="nom" >Tel Prestataire<p-sortIcon field="nom"></p-sortIcon></th> -->
                         <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
@@ -69,6 +69,8 @@
                         <td><span class="p-column-title" > {{ordre?.date | formatTableValue : 'date'}}</span>
                         </td>
                         <td><span class="p-column-title" >{{ordre?.numeroBordereau}}</span>
+                        </td>
+                        <td><span class="p-column-title" >{{ordre?.numeroFactureSinistre}}</span>
                         </td>
                         <td><span class="p-column-title">{{ordre?.prestataire}}</span>
                         </td>
@@ -324,14 +326,9 @@
                                     <div class="p-field">
                                         <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
                                         <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                            [(ngModel)]="ordreReglementTierPayant.date" 
+                                            [(ngModel)]="ordreReglementTierPayant.datePaiement" 
                                             name="datePaiement" pInputText>
                                     </div>
-
-                                    <span *ngIf="compteSelected != null || undefined"> Solde restant:  <span class="textSuccess">{{compteSelected.soldeDebiteur}}</span> </span>
-                                    <span *ngIf=" compteSelected != null && compteSelected?.soldeDebiteur < ordreReglementTierPayant.montantPaye"> <span class="textDanger"> 
-                                        Paiement impossible, le solde banquaire est insuffisant pour payer cet ordre de reglement</span> </span>
-                                        
                                         <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
                                         <p-dropdown inputId="compte" dataKey="id" [filter]="true"
                                     
@@ -341,6 +338,7 @@
                                         placeholder="Sélectionnez le compte"
                                         optionLabel="libelle" class="p-mt-1 p-mb-3" 
                                         [(ngModel)]="ordreReglementTierPayant.compte"
+                                        [appendTo]="body"
                                         (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordreReglementTierPayant.compte)">
                                     </p-dropdown>
                                 </div>
@@ -389,14 +387,15 @@
                                 </div>
 
                                 <div class="p-d-block p-jc-center p-mt-2">
+                                    <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
+
                                     <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
                                         pButton icon="pi pi-check" label="Valider le paiement" 
                                         [disabled]="
-                                        compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye ||
                                         !ordreReglementTierPayant?.numeroCheque ||
                                          !ordreReglementTierPayant.compte || 
                                          !ordreReglementTierPayant.compteTiers ||
-                                           !ordreReglementTierPayant.date  ||
+                                           !ordreReglementTierPayant.datePaiement ||
                                             !ordreReglementTierPayant.montantPaye" 
                                         class="p-button-success">
                                     </button>   

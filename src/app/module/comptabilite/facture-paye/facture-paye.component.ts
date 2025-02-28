@@ -16,6 +16,9 @@ import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store/parametrage/Banques/actions';
+import { formatDate } from '@angular/common';
+import { TiersService } from 'src/app/store/comptabilite/tiers/service';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 @Component({
   selector: 'app-facture-paye',
@@ -37,15 +40,20 @@ export class FacturePayeComponent implements OnInit {
   banqueList: Array<Banque>;
   typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
 
+  dateDebut: any;
+  dateFin: any;
+
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
+              private tierPayantService: TierPayantService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
-    this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
+    this.onSerByOdreReglementPayeByPeriode();
+    /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
           if (bytes) {
@@ -71,7 +79,7 @@ export class FacturePayeComponent implements OnInit {
       if (value) {
         this.ordreReglementList = value.slice();
     }
-    });
+    }); */
   }
   paiement(ordre: OrdreReglement) {
     this.displayPaiement = true;
@@ -105,5 +113,29 @@ export class FacturePayeComponent implements OnInit {
     this.sinistreTierPayant = ordre.tierPayant;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+    onSerByOdreReglementPayeByPeriode() {
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPaye(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementList = response;
+              this.ordreReglementList$ = response;
+              console.log('response', response);
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
 
 }

@@ -315,6 +315,9 @@ export class PaiementFactureComponent implements OnInit {
 
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
+    console.log('ordreReglementTierPayantordreReglementTierPayant', ordreReglementTierPayant);
+
+
     if(ordreReglementTierPayant){
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
@@ -342,7 +345,7 @@ export class PaiementFactureComponent implements OnInit {
                   this.ordreReglementTierPayant = {};
                   this.compteSelected = {};
                   this.getSucessInfo();
-                  this.onSerByOdreReglementByPeriode();
+                  this.ordreReglementList = this.ordreReglementList.filter( ordre => ordre.id != ordreReglementTierPayant.id);
                   this.onGetComptes();
                 }
                 if(isPaye === false){
@@ -368,6 +371,8 @@ export class PaiementFactureComponent implements OnInit {
     if(ordreReglementTierPayant){
       this.isToPayeOrdreReglementTierPayant = true;
       this.ordreReglementTierPayant = ordreReglementTierPayant;
+
+      console.log('ordreReglementTierPayantordreReglementTierPayant', ordreReglementTierPayant);
     }
   }
 

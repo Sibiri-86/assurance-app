@@ -44,7 +44,9 @@ export interface OrdreReglementTierPayant{
     prestataire?: string;
     date?: Date;
     datePaiement?:Date;
+    dateDeSaisie?:Date;
     numeroCheque?:string;
+    numeroFactureSinistre?:string;
     compte?: Compte;
     journaux?: Journaux;
     compteTiers?: Tiers;
