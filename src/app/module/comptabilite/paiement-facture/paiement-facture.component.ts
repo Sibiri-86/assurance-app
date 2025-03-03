@@ -89,6 +89,7 @@ export class PaiementFactureComponent implements OnInit {
 
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
+    this.onSerByOdreReglementByPeriode();
     //this.onGetTypeJournaux();
     this.onGetJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
@@ -151,50 +152,12 @@ export class PaiementFactureComponent implements OnInit {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
-
-
-  initSearch(){
-
-  this.dateDebut = new Date();
-  this.dateFin = new Date();
-  const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
-  const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
-
-    if(dateD && dateF){
-      this.onSerByOdreReglementByPeriode2(dateD, dateF);
-    }
-
-  }
-  
-    onSerByOdreReglementByPeriode2(dateDebut?: string, dateFin?:string) {
-      if(this.dateDebut.getTime()> this.dateFin.getTime()) {
-        this.addMessage('error', 'Dates  invalide',
-        'La date de debut ne peut pas être supérieure à celle du de fin');
-      } else {
-
-        let dateD = ''
-        let dateF = ''
-        if((dateDebut && dateFin) && (!dateD && !dateF)){
-          dateD = formatDate(dateDebut, 'dd/MM/yyyy', 'en-fr');
-          dateF = formatDate(dateDebut, 'dd/MM/yyyy', 'en-fr');
-        } else {
-          dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
-          dateF = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
-        }
-        if(dateD && dateF){
-
-          this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
-          .subscribe((response: any) => {
-            this.ordreReglementList = response;
-            this.ordreReglementList$ = response;
-            }, error => {
-            console.error('Erreur lors de la récupération des données', error);
-          });
-        }
-        }
-        
-    }
+    
     onSerByOdreReglementByPeriode() {
+      if(!this.dateDebut || !this.dateFin){
+        this.dateDebut = new Date();
+        this.dateFin = new Date();
+    }
       if(this.dateDebut.getTime()> this.dateFin.getTime()) {
         this.addMessage('error', 'Dates  invalide',
         'La date de debut ne peut pas être supérieure à celle du de fin');

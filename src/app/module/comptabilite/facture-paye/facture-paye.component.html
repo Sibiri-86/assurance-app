@@ -51,8 +51,8 @@
                         <th pSortableColumn="montantPaye">Montant</th>
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
                         <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
+                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
                         
                     </tr>
                 </ng-template>
@@ -77,18 +77,8 @@
 
                         </td>
 
-                        <dt class=" p-d-flex p-justify-center"> 
-                            <div *ngIf="!ordre.isTakeCheque && isEditing">
-                                <button 
-                                (click)="onCancelTakingCheque()"
-                                pButton 
-                                pRipple 
-                                type="button" 
-                                icon="pi pi-times" 
-                                pTooltip="Annuler la prise de chèque"
-                                class="p-button-rounded p-button-danger p-mr-2">
-                            </button>
-                            </div>
+                        <dt class=" p-d-flex p-justify-center p-m-2"> 
+                           
                             <div *ngIf="!ordre.isTakeCheque && isEditing">
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
@@ -99,6 +89,18 @@
                                 icon="pi pi-check" 
                                 pTooltip="Enregistrer la prise de chèque"
                                 class="p-button-rounded p-button-success p-mr-2">
+                            </button>
+                            </div>
+
+                            <div *ngIf="!ordre.isTakeCheque && isEditing">
+                                <button 
+                                (click)="onCancelTakingCheque()"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-times" 
+                                pTooltip="Annuler la prise de chèque"
+                                class="p-button-rounded p-button-danger p-mr-2">
                             </button>
                             </div>
 
