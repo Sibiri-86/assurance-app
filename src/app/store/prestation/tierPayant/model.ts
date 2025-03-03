@@ -44,6 +44,7 @@ export interface OrdreReglementTierPayant{
     isTakeCheque?: Boolean;
     prestataire?: string;
     date?: Date;
+    datePriseCheque?: Date;
     datePaiement?:Date;
     dateDeSaisie?:Date;
     numeroCheque?:string;

@@ -52,6 +52,7 @@
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
                         
                     </tr>
                 </ng-template>
@@ -67,8 +68,40 @@
                         </td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.numeroCheque }}</span></td>
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.compte?.libelle }}</span></td>
+                        <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title" style="min-width:200px">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
+                        <td *ngIf="isEditing && ri === rowIndex">
+                            <input
+                                pInputText
+                                type="date"
+                                [(ngModel)]="ordre.datePriseCheque"/>
+
+                        </td>
 
                         <dt class=" p-d-flex p-justify-center"> 
+                            <div *ngIf="!ordre.isTakeCheque && isEditing">
+                                <button 
+                                (click)="onCancelTakingCheque()"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-times" 
+                                pTooltip="Annuler la prise de chèque"
+                                class="p-button-rounded p-button-danger p-mr-2">
+                            </button>
+                            </div>
+                            <div *ngIf="!ordre.isTakeCheque && isEditing">
+                                <button 
+                                (click)="onSaveOrdreReglementTakeCheque(ordre)"
+                                pButton 
+                                [disabled]="!ordre.datePriseCheque"
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-check" 
+                                pTooltip="Enregistrer la prise de chèque"
+                                class="p-button-rounded p-button-success p-mr-2">
+                            </button>
+                            </div>
+
                             <div *ngIf="ordre.isTakeCheque">
                                 <button 
                                 pButton 
@@ -82,7 +115,7 @@
                             </div>
                             <div *ngIf="!ordre.isTakeCheque">
                                 <button 
-                                (click)="onSaveOrdreReglementTakeCheque(ordre)"
+                                (click)="onInitTakingCheque(ri)"
                                 pButton 
                                 pRipple 
                                 type="button" 
@@ -100,11 +133,10 @@
                                 type="button" 
                                 icon="pi pi-eye" 
                                 pTooltip="Voir les détails du prestataire"
-                                class="p-button-rounded p-button-warning">
+                                class="p-button-rounded p-button-info">
                             </button>
                             </div>
                         </dt>
-                    
                         
                     </tr>
                 </ng-template>
@@ -140,6 +172,10 @@
             <p><strong>Chèque pris: </strong> 
                 <span *ngIf="selectedRowData.isTakeCheque">OUI</span> 
                 <span *ngIf="!selectedRowData.isTakeCheque">NON</span>
+            </p>
+
+            <p  *ngIf="selectedRowData.isTakeCheque"><strong>Date de prise de Chèque: </strong> 
+                <span> {{selectedRowData.datePriseCheque | formatTableValue : 'date'}} </span> 
             </p>
         </div>
     </div>

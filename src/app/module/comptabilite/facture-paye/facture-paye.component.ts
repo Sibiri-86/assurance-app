@@ -37,6 +37,8 @@ export class FacturePayeComponent implements OnInit {
   displayPaiement = false;
   selectedRowData : OrdreReglementTierPayant;
   displayDialog = false;
+  isEditing = false;
+  rowIndex: number;
   ordreReglementPaiement: OrdreReglementTierPayant = {};
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
@@ -126,7 +128,24 @@ export class FacturePayeComponent implements OnInit {
 
   }
 
+  onInitTakingCheque(ri: number){
+    this.rowIndex = ri;
+    this.isEditing = true;
+  }
+
+  onCancelTakingCheque(){
+    this.isEditing = false;
+
+    this.getCancelInfo();
+  }
+
     onSerByOdreReglementPayeByPeriode() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
         if(this.dateDebut.getTime()> this.dateFin.getTime()) {
           this.addMessage('error', 'Dates  invalide',
           'La date de debut ne peut pas être supérieure à celle du de fin');
@@ -138,7 +157,6 @@ export class FacturePayeComponent implements OnInit {
             .subscribe((response: any) => {
               this.ordreReglementList = response;
               this.ordreReglementList$ = response;
-              console.log('response', response);
             }, error => {
               console.error('Erreur lors de la récupération des données', error);
             });
@@ -170,6 +188,7 @@ export class FacturePayeComponent implements OnInit {
                     const isPaye = response;
                     if(isPaye === true){
                       this.getSucessInfo();
+                      this.isEditing = false;
                       this.ordreReglementList;
                     }
                     if(isPaye === false){
