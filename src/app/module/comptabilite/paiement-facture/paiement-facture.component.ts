@@ -331,7 +331,8 @@ export class PaiementFactureComponent implements OnInit {
 
   confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
     if(ordreReglementTierPayant) {
-    
+
+      ordreReglementTierPayant.isTakeCheque = false;
           this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
             response => {
               if(response){

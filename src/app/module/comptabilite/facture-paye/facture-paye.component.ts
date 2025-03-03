@@ -35,6 +35,8 @@ export class FacturePayeComponent implements OnInit {
   prestations: Array<Prestation>;
   report: Report = {};
   displayPaiement = false;
+  selectedRowData : OrdreReglementTierPayant;
+  displayDialog = false;
   ordreReglementPaiement: OrdreReglementTierPayant = {};
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
@@ -118,6 +120,12 @@ export class FacturePayeComponent implements OnInit {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
 
+  onSeeOdreReglementDetail(ordreReglementTierPayant: OrdreReglementTierPayant){
+    this.selectedRowData = ordreReglementTierPayant;
+    this.displayDialog = true;
+
+  }
+
     onSerByOdreReglementPayeByPeriode() {
         if(this.dateDebut.getTime()> this.dateFin.getTime()) {
           this.addMessage('error', 'Dates  invalide',
@@ -136,6 +144,60 @@ export class FacturePayeComponent implements OnInit {
             });
           }
           
+      }
+
+      onSaveOrdreReglementTakeCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPayant){
+          this.confirmationService.confirm({
+            message: "voulez-vous indiquer que ce prestataire a touché son chèque ?",
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmTakedCheque(ordreReglementTierPayant);
+            },
+          });
+        }
+    
+      }
+
+      confirmTakedCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+        if(ordreReglementTierPayant) {
+              ordreReglementTierPayant.isTakeCheque = true;
+              this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
+                response => {
+                  if(response){
+                    const isPaye = response;
+                    if(isPaye === true){
+                      this.getSucessInfo();
+                      this.ordreReglementList;
+                    }
+                    if(isPaye === false){
+    
+                      this.getFailledInfo();
+                    }
+                  }
+                }, error => {
+                  this.getErrorInfo(error.error.message);
+                }
+              );
+        }
+    
+      }
+
+
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
       }
 
 }
