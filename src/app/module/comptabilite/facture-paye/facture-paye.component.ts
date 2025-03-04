@@ -228,6 +228,9 @@ export class FacturePayeComponent implements OnInit {
           alert("Veuillez sélectionner une période !");
           return;
         }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
         this.tierPayantService.exportOrdreReglement(this.dateDebut, this.dateFin)
           .subscribe(response => {
@@ -235,7 +238,7 @@ export class FacturePayeComponent implements OnInit {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ordre_reglement_tier_payant_paye_du_${this.dateDebut}_au_${this.dateFin}.xlsx`;
+            a.download = `ordre_reglement_tier_payant_paye_du_${dateD}_au_${dateF}.xlsx`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
