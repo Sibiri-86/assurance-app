@@ -61,6 +61,7 @@
                     <tr>
                         <th pSortableColumn="dateDeSaisie" >Date de saisie</th>
                         <th pSortableColumn="datePaiement" >Date de paiement</th>
+                        <th pSortableColumn="numeroFactureSinistre">Numéro ordre</th>
                         <th pSortableColumn="numeroFactureSinistre">Numéro Facture</th>
                         <th pSortableColumn="prestataire" >Prestataire</th>
                         <th pSortableColumn="montantPaye">Montant</th>
@@ -75,6 +76,7 @@
                     <tr [pEditableRow]="ordre">
                         <td><span class="p-column-title" > {{ordre?.dateDeSaisie | formatTableValue : 'date'}}</span></td>
                         <td><span class="p-column-title" > {{ordre?.datePaiement | formatTableValue : 'date'}}</span></td>
+                        <td><span class="p-column-title" >{{ordre?.numero}}</span>
                         <td><span class="p-column-title" >{{ordre?.numeroFactureSinistre}}</span>
                         </td>
                         <td><span class="p-column-title">{{ordre?.prestataire}}</span>
@@ -173,9 +175,10 @@
     <div *ngIf="selectedRowData" class="p-grid p-fluid">
         <!-- Colonne 1 -->
         <div class="p-col-6">
-            <p><strong>Date de saisie:</strong> {{ selectedRowData.dateDeSaisie }}</p>
-            <p><strong>Date de paiement:</strong> {{ selectedRowData.datePaiement }}</p>
+            <p><strong>Date de saisie:</strong> {{ selectedRowData.dateDeSaisie | formatTableValue : 'date' }}</p>
+            <p><strong>Date de paiement:</strong> {{ selectedRowData.datePaiement | formatTableValue : 'date' }}</p>
             <p><strong>Numéro bordereau:</strong> {{ selectedRowData.numeroBordereau }}</p>
+            <p><strong>Numéro ordre:</strong> {{ selectedRowData.numero }}</p>
             <p><strong>Numéro Facture:</strong> {{ selectedRowData.numeroFactureSinistre }}</p>
             <p><strong>Prestataire:</strong> {{ selectedRowData.prestataire }}</p>
         </div>
