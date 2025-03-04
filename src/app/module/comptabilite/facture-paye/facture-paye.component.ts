@@ -159,7 +159,9 @@ export class FacturePayeComponent implements OnInit {
             this.tierPayantService.getTierPayantOrdreReglementFactureTiersPaye(dateD, dateF)
             .subscribe((response: any) => {
               this.ordreReglementList = response;
-              this.ordreReglementList$ = response;
+              //this.ordreReglementList$ = response;
+
+              console.log('ordreReglementList' , this.ordreReglementList);
             }, error => {
               console.error('Erreur lors de la récupération des données', error);
             });
