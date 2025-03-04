@@ -212,10 +212,10 @@ export class FacturePayeComponent implements OnInit {
         this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
       }
       getCancelInfo(): void {
-        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération annulé!'});
       }
       getFailledInfo(): void {
-        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération échouée!'});
       }
       
       getErrorInfo(message: string): void {
