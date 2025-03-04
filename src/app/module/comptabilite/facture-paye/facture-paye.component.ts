@@ -223,5 +223,25 @@ export class FacturePayeComponent implements OnInit {
       }
 
 
+      exportExcel() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+    
+        this.tierPayantService.exportOrdreReglement(this.dateDebut, this.dateFin)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_du_${this.dateDebut}_au_${this.dateFin}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
 
 }

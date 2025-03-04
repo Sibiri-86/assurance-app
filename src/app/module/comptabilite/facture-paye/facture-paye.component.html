@@ -11,7 +11,6 @@
 				</ng-template>
                 -->
 
-
                 <div class="p-formgroup-inline">
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
@@ -27,6 +26,22 @@
                         ></p-calendar>
                     </div>
                 </div> 
+
+                <div class="p-field">
+
+                    <div>
+                        <button 
+                        (click)="exportExcel()"
+                        pButton 
+                        [disabled]="!ordreReglementList"
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-file-excel" 
+                        pTooltip="Exporter la sélection"
+                        class="p-button-rounded p-button-success p-mr-2">
+                    </button>
+                    </div>
+                </div>
 
 			</p-toolbar>
             <p-table editMode="row" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau', 'numeroFactureSinistre' ]"

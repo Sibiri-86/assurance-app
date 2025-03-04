@@ -118,6 +118,21 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
   }
 
+  exportOrdreReglement(dateDebut: string, dateFin: string) {
+    
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    const params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+
   getPrestationBySinistreId(sinistreId: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('sinistreId', sinistreId)
