@@ -74,6 +74,9 @@ export class PaiementFactureComponent implements OnInit {
   compteCollectifId: string;
   compteSelected: Compte;
 
+  numeroCheque: string = '';
+  existe: boolean | null = null;
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private tierPayantService: TierPayantService,
@@ -353,6 +356,20 @@ export class PaiementFactureComponent implements OnInit {
 
 
 
+  verifierNumeroCheque(numeroCheque: string) {
+    if (numeroCheque.trim()) {
+      this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+        (result) => {
+          this.existe = result;
+          console.error('result', result);
 
+        },
+        (error) => {
+          console.error('Erreur lors de la vérification', error);
+          this.existe = null;
+        }
+      );
+    }
+  }
 
 }

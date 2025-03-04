@@ -47,6 +47,9 @@ export class FacturePayeComponent implements OnInit {
   dateDebut: any;
   dateFin: any;
 
+  numeroCheque: string = '';
+  existe: boolean | null = null;
+
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -218,5 +221,7 @@ export class FacturePayeComponent implements OnInit {
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
       }
+
+
 
 }

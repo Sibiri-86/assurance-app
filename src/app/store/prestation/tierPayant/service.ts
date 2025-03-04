@@ -111,6 +111,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT), ordreReglementTierPayant);
   }
 
+  verifierExistenceNumeroCheque(numeroCheque: string): Observable<boolean> {
+    const params = new HttpParams()
+        .set('numeroCheque', numeroCheque)
+
+    return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
+  }
+
   getPrestationBySinistreId(sinistreId: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('sinistreId', sinistreId)
