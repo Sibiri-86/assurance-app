@@ -16,6 +16,7 @@
                     <div class="p-field">
                         <label for="matricule" class="p-sr-only"></label>
                         <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"
+                        (click)="onSerByOdreReglementByPeriode()"
                         ></p-calendar>
                     <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
                     -->                </div>
