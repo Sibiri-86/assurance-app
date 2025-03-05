@@ -78,6 +78,12 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    getTierPayantOrdreReglementFactureTiersPaye(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
 
 
   getSinistreByOrdreReglementId2(idOrdreReglement: string, page: number, size: number): Observable<any> {
@@ -103,6 +109,28 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
 
   payerOrdreReglemnt(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT), ordreReglementTierPayant);
+  }
+
+  verifierExistenceNumeroCheque(numeroCheque: string): Observable<boolean> {
+    const params = new HttpParams()
+        .set('numeroCheque', numeroCheque)
+
+    return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
+  }
+
+  exportOrdreReglement(dateDebut: string, dateFin: string) {
+    
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    const params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION), { 
+      params,
+      responseType: 'blob'
+    });
   }
 
   getPrestationBySinistreId(sinistreId: string, page: number, size: number): Observable<any> {

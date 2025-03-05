@@ -130,6 +130,7 @@ import { MajPrestataireComponent } from './module/medical/majPrestataire/majPres
 import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
 import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
 import { CourrierPrestataireComponent } from './module/prestation/tier-payant/courrier-prestataire/courrier-prestataire.component';
+import { ApprovisionnementComponent } from './module/comptabilite/approvisionnement/approvisionnement.component';
 
 @NgModule({
     imports: [
@@ -276,6 +277,9 @@ import { CourrierPrestataireComponent } from './module/prestation/tier-payant/co
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production', 'sm_bulletin_adhesion']}},
                     {path: 'comptabilite/compte', component: CompteComponent,
+                    canActivate: [AuthGuard],
+                    data: { roles: ['sm_finance']}},
+                    {path: 'comptabilite/compte/approvisionnement', component: ApprovisionnementComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_finance']}},
                     {path: 'comptabilite/journal', component: JournalComponent,

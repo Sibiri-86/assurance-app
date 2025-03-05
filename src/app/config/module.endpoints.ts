@@ -396,6 +396,15 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE = {
+        prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_TIER_PAYANT_PRESTATION_BY_SINSITRE = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/prestations-by-sinistre`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
@@ -601,6 +610,18 @@ export class Endpoints {
     static readonly ADHERANT_BY_EXERCICE_AND_PRESTAIRE_AND_NUMERO_FACTURE = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/prestation/by-exercice-and-prestataire-and-numero-facture-paginate`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
+    
+    static readonly COMPTABILITE_COMPTE_APPROVISIONNER = {
+        prod: `${SERVICE_PREFIX}/comptabilite/compte/approvisionner`,
+        mock: `assets/mock/comptabilite/compte.mock.json`
+    };
+
+    
+    static readonly COMPTABILITE_APPROVISIONNEMENT = {
+        prod: `${SERVICE_PREFIX}/comptabilite/recette/depense`,
+        mock: `assets/mock/comptabilite/compte.mock.json`
     };
 
 
