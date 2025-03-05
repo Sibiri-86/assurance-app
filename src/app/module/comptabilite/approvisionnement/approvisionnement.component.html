@@ -1,0 +1,108 @@
+
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <button pButton pRipple label="Effectuer un approvisionnement" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="onInitApprovionnement()"></button>
+ 			</ng-template>
+             <ng-template pTemplate="right">
+                <div>
+                    <span> Total des approvisionnements: <span class="textSuccess">{{firstOccurance?.recetteTotal}}</span> </span>
+<!--                     <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer()"></button>
+ -->                </div>
+             </ng-template>
+			</p-toolbar>
+            
+            <p-table 
+            [value]="receteTotalDepenseTotals" 
+            dataKey="id" 
+            responsiveLayout="scroll"
+            [paginator]="true"
+            [rows]="size"
+            [totalRecords]="totalElements"
+            [lazy]="true"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            (onPage)="onPageChange($event)">
+          
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>Compte</th>
+                      <th>Solde débiteur</th>
+                      <th>Solde créditeur</th>
+                      <th>Montant approvisionné</th>
+                      <th>Date d'approvisionnement</th>
+                  </tr>
+              </ng-template>
+          
+              <ng-template pTemplate="body" let-recetteDepense>
+                  <tr>
+                      <td>{{recetteDepense.compte?.libelle}}</td>
+                      <td>{{recetteDepense.compte?.soldeDebiteur}}</td>
+                      <td>{{recetteDepense.compte?.soldeCrediteur}}</td>
+                      <td>{{recetteDepense.montant}}</td>
+                      <td>{{recetteDepense.date | formatTableValue : 'date'}}</td>
+                  </tr>
+              </ng-template>
+          
+          </p-table>
+          
+        </div> 
+    
+        </div>
+</div>
+
+
+
+<p-dialog [(visible)]="isToApprov" 
+    header="APPROVISIONNEMENT DE COMPTE" 
+    [style]="{width: '60%'}"
+    [modal]="true" styleClass="p-fluid"
+    [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
+
+    
+    <ng-template pTemplate="content"> 
+        <div class="card p-d-flex">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <div class="p-grid p-fluid">
+                        
+                        <div class="p-col-12">
+                                <div class="p-field">
+                                    <label for="compte" class="font-bold">Compte<span class="required" style="color: red;">*</span></label>
+                                        <p-dropdown inputId="compte" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="comptes"
+                                        [autoDisplayFirst]="true" 
+                                        placeholder="Sélectionnez le compte"
+                                        optionLabel="libelle" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="compte"
+
+                                        >
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="montant">Montant à approvionner </label>
+                                    <input  type="number" pInputText [(ngModel)]="compte.montant">
+                                </div>
+
+                                <div class="p-d-block p-jc-center p-mt-2">
+                                    <button (click)="onDoApprovionnement(compte)" 
+                                        pButton icon="pi pi-check" label="Valider le paiement" 
+                                        [disabled]="!compte?.libelle || !compte.montant" 
+                                        class="p-button-success">
+                                    </button>   
+                                </div> 
+                        </div>
+                    </div>
+                </ng-template>
+                
+            </p-toolbar>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>

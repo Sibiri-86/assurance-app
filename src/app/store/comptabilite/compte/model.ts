@@ -13,6 +13,7 @@ export interface Compte {
     isDeleted?: boolean;
     typePaiement?: TypePaiement;
     banque?: Banque;
+    montant?: number;
 
 }
 

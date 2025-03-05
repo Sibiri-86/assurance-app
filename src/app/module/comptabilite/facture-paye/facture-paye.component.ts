@@ -16,6 +16,9 @@ import {BreadcrumbService} from '../../../app.breadcrumb.service';
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import * as banqueSelector from '../../../store/parametrage/Banques/selector';
 import * as featureActionBanque from '../../../store/parametrage/Banques/actions';
+import { formatDate } from '@angular/common';
+import { TiersService } from 'src/app/store/comptabilite/tiers/service';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 @Component({
   selector: 'app-facture-paye',
@@ -32,20 +35,32 @@ export class FacturePayeComponent implements OnInit {
   prestations: Array<Prestation>;
   report: Report = {};
   displayPaiement = false;
+  selectedRowData : OrdreReglementTierPayant;
+  displayDialog = false;
+  isEditing = false;
+  rowIndex: number;
   ordreReglementPaiement: OrdreReglementTierPayant = {};
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
   typePaiement = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
 
+  dateDebut: any;
+  dateFin: any;
+
+  numeroCheque: string = '';
+  existe: boolean | null = null;
+
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
+              private tierPayantService: TierPayantService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
-    this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
+    this.onSerByOdreReglementPayeByPeriode();
+    /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
           if (bytes) {
@@ -71,7 +86,7 @@ export class FacturePayeComponent implements OnInit {
       if (value) {
         this.ordreReglementList = value.slice();
     }
-    });
+    }); */
   }
   paiement(ordre: OrdreReglement) {
     this.displayPaiement = true;
@@ -105,5 +120,133 @@ export class FacturePayeComponent implements OnInit {
     this.sinistreTierPayant = ordre.tierPayant;
     console.log('****************sinistreTierPayant****************', this.sinistreTierPayant);
   }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+    this.messageService.add({severity: severite, summary: resume, detail: detaile});
+  }
+
+  onSeeOdreReglementDetail(ordreReglementTierPayant: OrdreReglementTierPayant){
+    this.selectedRowData = ordreReglementTierPayant;
+    this.displayDialog = true;
+
+  }
+
+  onInitTakingCheque(ri: number){
+    this.rowIndex = ri;
+    this.isEditing = true;
+  }
+
+  onCancelTakingCheque(){
+    this.isEditing = false;
+
+    this.getCancelInfo();
+  }
+
+    onSerByOdreReglementPayeByPeriode() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPaye(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementList = response;
+              //this.ordreReglementList$ = response;
+
+              console.log('ordreReglementList' , this.ordreReglementList);
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
+
+      onSaveOrdreReglementTakeCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPayant){
+          this.confirmationService.confirm({
+            message: "voulez-vous indiquer que ce prestataire a touché son chèque ?",
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmTakedCheque(ordreReglementTierPayant);
+            },
+          });
+        }
+    
+      }
+
+      confirmTakedCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+        if(ordreReglementTierPayant) {
+              ordreReglementTierPayant.isTakeCheque = true;
+              this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
+                response => {
+                  if(response){
+                    const isPaye = response;
+                    if(isPaye === true){
+                      this.getSucessInfo();
+                      this.isEditing = false;
+                      this.ordreReglementList;
+                    }
+                    if(isPaye === false){
+    
+                      this.getFailledInfo();
+                    }
+                  }
+                }, error => {
+                  this.getErrorInfo(error.error.message);
+                }
+              );
+        }
+    
+      }
+
+
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+      }
+
+
+      exportExcel() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.exportOrdreReglement(this.dateDebut, this.dateFin)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
 
 }

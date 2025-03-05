@@ -353,6 +353,7 @@ import { BilanComponent } from './module/comptabilite/bilan/bilan.component';
 import { ConsommationPasseComponent } from './module/contrat/consommation-passe/consommation-passe.component';
 import { MajPlafondComponent } from './module/contrat/avenant/maj_plafond/maj_plafond.component';
 import { CourrierPrestataireComponent } from './module/prestation/tier-payant/courrier-prestataire/courrier-prestataire.component';
+import { ApprovisionnementComponent } from './module/comptabilite/approvisionnement/approvisionnement.component';
 
 @NgModule({
     imports: [
@@ -641,7 +642,8 @@ import { CourrierPrestataireComponent } from './module/prestation/tier-payant/co
         BilanComponent,
         ConsommationPasseComponent, 
         MajPlafondComponent,
-        CourrierPrestataireComponent
+        CourrierPrestataireComponent,
+        ApprovisionnementComponent
     ],
     providers: [
         {
