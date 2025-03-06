@@ -316,70 +316,75 @@
     </div>
 
 </p-dialog>
+
+
+
+<p-dialog [maximizable]="true" [(visible)]="isAdherantPrincipalWithFamily" header="Les adhérants à retirer" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+
+
+    <div class="card">
+        <p-table 
+            [value]="adherantPrincipalWithFamily"
+            dataKey="adherent.adherentPrincipal.id"
+            [expandedRowKeys]="expandedRows"
+            responsiveLayout="scroll">
+            
+            <ng-template pTemplate="header">
+                <tr>
+                    <th></th>
+                    <th>Matricule</th>
+                    <th>Nom</th>
+                    <th>Prénom(s)</th>
+                    <th>Genre</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+    
+            <!-- Lignes des adhérents principaux -->
+            <ng-template pTemplate="body" let-item let-expanded="expanded">
+                <tr class="font-bold champVert">
+                    <td>
+                        <button 
+                            type="button"
+                            pButton
+                            pRipple
+                            [pRowToggler]="item"
+                            class="p-button-text"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td>{{ item?.adherent?.adherentPrincipal?.numero }}</td>
+                    <td>{{ item?.adherent?.adherentPrincipal?.nom }}</td>
+                    <td>{{ item?.adherent?.adherentPrincipal?.prenom }}</td>
+                    <td>{{ item?.adherent?.adherentPrincipal?.genre?.libelle }}</td>
+                    <td>
+                        <button class="texte-danger" type="submit"
+                         pButton icon="pi pi-minus" 
+                         pTooltip="Retirer l'assuré principal et tout sa famille de la liste des retraits"
+                         (click)="getAdherentPrincipalAndFamily(item?.adherent?.adherentPrincipal?.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+    
+            <!-- Liste des membres de famille -->
+            <ng-template pTemplate="rowexpansion" let-item>
+                <tr *ngFor="let member of item.adherent.adherentFamily">
+                    <td></td>
+                    <td>{{ member?.numero }}</td>
+                    <td>{{ member?.nom }}</td>
+                    <td>{{ member?.prenom }}</td>
+                    <td>{{ member?.genre?.libelle }}</td>
+                    <td>
+                        <button class="texte-danger" type="submit" pButton icon="pi pi-minus" pTooltip="Retier ce membre de famille de la liste des retraits" (click)="onRetriveMemberOfAdherentPrincipal(member.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+    
+        </p-table>
+    </div>
+    
+
+</p-dialog>
+
 </div>
 
-<!-- 
-<div class="card">
-    <p-table [value]="customers" sortField="representative.name" sortMode="single" dataKey="representative.name" rowGroupMode="subheader" groupRowsBy="representative.name" [tableStyle]="{'min-width': '70rem'}">
-        <ng-template #header>
-            <tr>
-                <th style="width:20%">Name</th>
-                <th style="width:20%">Country</th>
-                <th style="width:20%">Company</th>
-                <th style="width:20%">Status</th>
-                <th style="width:20%">Date</th>
-            </tr>
-        </ng-template>
-        <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr>
-                <td colspan="5">
-                    <button
-                        type="button"
-                        pButton
-                        pRipple
-                        [pRowToggler]="customer"
-                        text
-                        rounded
-                        plain
-                        class="mr-2"
-                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
-                    </button>
-                    <img
-                        [alt]="customer.representative.name"
-                        src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}"
-                        width="32"
-                        style="vertical-align: middle; display: inline-block" />
-                    <span class="font-bold ml-2">{{customer.representative.name}}</span>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template #groupfooter let-customer>
-            <tr class="p-rowgroup-footer">
-                <td colspan="4" style="text-align: right">Total Customers</td>
-                <td>{{calculateCustomerTotal(customer.representative.name)}}</td>
-            </tr>
-        </ng-template>
-        <ng-template #expandedrow let-customer>
-            <tr>
-                <td>
-                    {{customer.name}}
-                </td>
-                <td>
-                    <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                        <span>{{ customer.country.name }}</span>
-                    </div>
-                </td>
-                <td>
-                    {{customer.company}}
-                </td>
-                <td>
-                    <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
-                </td>
-                <td>
-                    {{customer.date}}
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</div> -->

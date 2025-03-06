@@ -92,3 +92,10 @@ export interface AdherentList{
 export interface ConditionGeneraleList{
     conditionGeneraleDtoList: Array<ConditionGenerale>;
 }
+
+export interface MyNewModel { 
+    adherent: {
+      adherentPrincipal: Adherent
+      adherentFamily: Adherent[],
+    }
+  };

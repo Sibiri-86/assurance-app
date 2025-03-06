@@ -11,7 +11,7 @@ import {Groupe} from '../../../../store/contrat/groupe/model';
 import {AppState} from '../../../../store/app.state';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {loadGroupe} from '../../../../store/contrat/groupe/actions';
-import {Adherent, AdherentFamille, AdherentList} from '../../../../store/contrat/adherent/model';
+import {Adherent, AdherentFamille, AdherentList, MyNewModel} from '../../../../store/contrat/adherent/model';
 import * as featureActionAdherent from '../../../../store/contrat/adherent/actions';
 import {groupeList} from '../../../../store/contrat/groupe/selector';
 import {HistoriqueAvenantService} from '../../../../store/contrat/historiqueAvenant/service';
@@ -29,6 +29,7 @@ import * as featureExerciceAction from '../../../../store/contrat/exercice/actio
 import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/historiqueAvenantAdherent/service';
 import {HistoriqueAdherent} from '../../../../store/contrat/historiqueAvenantAdherent/model';
 import { Page } from 'src/app/module/util/pageable';
+import { log } from 'console';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -101,6 +102,9 @@ export class AvenantRetraitComponent implements OnInit {
   isToSeeListOfAdherantToRetreived = false;
 
   selectedAdherents: HistoriqueAvenantAdherant[] = [];
+  adherantPrincipalWithFamily: MyNewModel[] = [];
+  isAdherantPrincipalWithFamily = false;
+  expandedRows: { [key: string]: boolean } = {};
 
  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
 
@@ -566,7 +570,14 @@ export class AvenantRetraitComponent implements OnInit {
 
   onPageChange(newPage: number): void {
     this.page = newPage;
-    this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();    
+    this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+
+/*     if(this.isToSearchAllAssureList){
+      this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+    } else{
+
+      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();    
+    } */
     }
 
     onSearchAllAdherentByExerciceAndGroupeByPage(exoId: string, groupeId: string): void {
@@ -592,8 +603,7 @@ export class AvenantRetraitComponent implements OnInit {
     if(exoId){
 
       this.exoId = exoId;
-      this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
-
+      // this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
       // this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
     }
   }
@@ -692,8 +702,6 @@ export class AvenantRetraitComponent implements OnInit {
     }
 
 
-
-    
   onSelect3(historiqueAvenantAdherant: HistoriqueAvenantAdherant): void {
     // const value: boolean = !historiqueAvenantAdherant.selected;
     console.log(historiqueAvenantAdherant);
@@ -713,15 +721,83 @@ export class AvenantRetraitComponent implements OnInit {
     );
   }
 
-  getAdherentPrincipalAndFamily(adherentPrincipalId: string){
-    this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
-      res => {
-        const adherantPrincipalWithFamily = res;
-        console.log('adherantPrincipalWithFamily', adherantPrincipalWithFamily);
-      }
+  /* 
+
+  getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
+    if (!adherentPrincipalId) return;
+
+    const existingIndex = this.adherantPrincipalWithFamily.findIndex(
+        retrieve => retrieve.adherent.adherentPrincipal?.id === adherentPrincipalId
     );
 
-  }
+    if (existingIndex !== -1) {
+      this.adherantPrincipalWithFamily.splice(existingIndex, 1);
+
+    } else {
+        this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
+            res => {
+                if (!res) return;
+                const myNewModel = { 
+                    adherent: {
+                        adherentPrincipal: res.adherentPrincipal || null, 
+                        adherentFamily: res.adherentFamily || [],
+                    }
+                };
+                this.adherantPrincipalWithFamily.push(myNewModel);
+
+                console.log('adherantPrincipalWithFamily', this.adherantPrincipalWithFamily);
+            },
+            error => {
+                console.error('Erreur lors de la récupération de l\'adhérent principal et sa famille', error);
+            }
+        );
+    }
+}
+ */
+
+onRetriveMemberOfAdherentPrincipal(memberId : string){
+
+    if(!memberId) return;
+    this.adherantPrincipalWithFamily.map(family => family.adherent.adherentFamily);
+
+}
+
+
+getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
+    if (!adherentPrincipalId) return;
+
+    const existingIndex = this.adherantPrincipalWithFamily.findIndex(
+        retrieve => retrieve.adherent.adherentPrincipal?.id === adherentPrincipalId
+    );
+
+    if (existingIndex !== -1) {
+        this.adherantPrincipalWithFamily.splice(existingIndex, 1);
+        delete this.expandedRows[adherentPrincipalId];
+    } else {
+        this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
+            res => {
+                if (!res) return;
+
+                const adherentPrincipal = res.adherentPrincipal;
+                const adherentFamily = res.adherentFamily || [];
+
+                const adherentData = {
+                    adherent: {
+                        adherentPrincipal,
+                        adherentFamily
+                    }
+                };
+
+                this.adherantPrincipalWithFamily.push(adherentData);
+                console.log('adherantPrincipalWithFamily', this.adherantPrincipalWithFamily);
+                this.expandedRows[adherentPrincipal.id] = true;
+            },
+            error => {
+                console.error('Erreur lors de la récupération des données', error);
+            }
+        );
+    }
+}
 
     onSelect2(historiqueAveantAdherant: any): void {
 
@@ -770,10 +846,12 @@ export class AvenantRetraitComponent implements OnInit {
 
     onSeeAdherantToRetrieved(){
       this.isToSeeListOfAdherantToRetreived = true;
+      this.isAdherantPrincipalWithFamily = true;
     }
 
     onLeaveSeeAdherantToRetrieved(){
       this.isToSeeListOfAdherantToRetreived = false;
+      this.isAdherantPrincipalWithFamily = false;
     }
 
     onRetrieveAdherant(selectedAdherent: any){
