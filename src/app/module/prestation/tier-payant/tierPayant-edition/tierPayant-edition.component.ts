@@ -2454,6 +2454,9 @@ export class TierPayantEditionComponent implements OnInit {
             }
             this.updateView();
         }
+        console.log("===================bon rattacher===avant===",this.prestationsListWithBon);
+        this.prestationsListWithBon =[];
+        console.log("===================bon rattacher===apres===",this.prestationsListWithBon);
         this.prestationBon = {};
         this.displayPrestationbon = false;
       }
