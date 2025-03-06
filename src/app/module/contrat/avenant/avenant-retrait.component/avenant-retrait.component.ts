@@ -590,14 +590,19 @@ export class AvenantRetraitComponent implements OnInit {
 
   onGetExoId(exoId: string){
     if(exoId){
+
       this.exoId = exoId;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+      this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+
+      // this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
     }
   }
   onGetGroupeId(groupeId: string){
     if(groupeId){
+
       this.groupeId = groupeId;
-      this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
+      this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+      //  this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage();
     }
   }
 
@@ -626,8 +631,26 @@ export class AvenantRetraitComponent implements OnInit {
 
     this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterByPage(this.exoId, this.groupeId, this.numero, this.nom, this.prenom, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+
+        const response =  data.content as HistoriqueAvenantAdherant[];
+        this.adherentsListByPage = response;
+        this.adherentsListByPageRetrait = response;
+        this.isToSearchAllAssureList = true;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des adhérents', err);
+      },
+    });
+  }
+
+  searchAllAdherentPrincipalByExerciceAndGroupeByPage(): void {
+
+    this.adherentService.searchAllAdherentPrincipalByExerciceAndGroupeByPage(this.exoId, this.groupeId, this.page, this.size).subscribe({
+      next: (data: Page<HistoriqueAvenantAdherant[]>) => {
             this.adherentsListByPage = data.content as any; 
-            this.adherentsListByPageRetrait = data.content as any; 
+            this.adherentsListByPageRetrait = data.content as any;
 
         this.isToSearchAllAssureList = true;
         this.totalElements = data.totalElements;
@@ -688,6 +711,16 @@ export class AvenantRetraitComponent implements OnInit {
           });
         }
     );
+  }
+
+  getAdherentPrincipalAndFamily(adherentPrincipalId: string){
+    this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
+      res => {
+        const adherantPrincipalWithFamily = res;
+        console.log('adherantPrincipalWithFamily', adherantPrincipalWithFamily);
+      }
+    );
+
   }
 
     onSelect2(historiqueAveantAdherant: any): void {

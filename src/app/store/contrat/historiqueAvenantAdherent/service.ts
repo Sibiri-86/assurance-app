@@ -190,6 +190,16 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICEAND_GROUPE)}`, { params });
         }
 
+
+        // Bircof
+        // Rechercher UN adhérent principal et ses membres de famille
+        adherentPrincipalWithFamily (adherentPrincipalId?: string): Observable<any> {
+            const params = new HttpParams()
+              .set('adherentPrincipalId', adherentPrincipalId)
+            return this.http.get<any>(
+              `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_ADHERENT_PRINCIPAL_WITH_FAMILY)}`, { params });
+          }
+
 private handleError<T>() {
     return (error: HttpErrorResponse) => {
       return throwError(error.message || 'Something went wrong');

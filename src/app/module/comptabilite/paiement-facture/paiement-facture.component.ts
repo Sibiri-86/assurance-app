@@ -361,8 +361,6 @@ export class PaiementFactureComponent implements OnInit {
       this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
         (result) => {
           this.existe = result;
-          console.error('result', result);
-
         },
         (error) => {
           console.error('Erreur lors de la vérification', error);

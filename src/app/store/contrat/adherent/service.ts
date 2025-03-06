@@ -597,6 +597,26 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
     return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
       `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER)}`, { params });
     }
+
+  // Bircof
+  // Rechercher les adhérants princiapux par excercice et groupe
+  searchAllAdherentPrincipalByExerciceAndGroupeByPage(
+    exoId: string,
+    groupeId?: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<Page<HistoriqueAvenantAdherant[]>> {
+    let params = new HttpParams()
+      .set('exoId', exoId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (groupeId) params = params.set('groupeId', groupeId);
+
+    return this.http.get<Page<HistoriqueAvenantAdherant[]>>(
+      `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_PRINCIPAL_BY_EXERCICE_AND_GROUPE)}`, { params });
+    }
+
   // Bircof
   // Rechercher les adhérants par Garand, Police et exercice
   searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(

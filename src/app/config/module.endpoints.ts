@@ -593,8 +593,16 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-paginate`,
             mock: `assets/mock/contrat/adherent.mock.json`
         };
+        static readonly ADHERANT_BY_ADHERENT_PRINCIPAL_WITH_FAMILY = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/by-adherent-principal-with-family`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
         static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER = {
             prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-by-mulitple-filter-paginate`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+    };
+        static readonly ADHERANT_PRINCIPAL_BY_EXERCICE_AND_GROUPE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/find-adherent-principal-by-exercice-and-groupe`,
             mock: `assets/mock/contrat/adherent.mock.json`
     };
         static readonly ADHERANT_BY_EXERCICE_AND_GROUPE_MULTIPE_FILTER_ADHERENTDTO = {
