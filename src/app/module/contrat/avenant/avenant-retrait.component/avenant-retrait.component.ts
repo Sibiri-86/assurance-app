@@ -320,17 +320,16 @@ export class AvenantRetraitComponent implements OnInit {
       }
       // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
-
-      console.log('this.historiqueAvenant.historiqueAvenantAdherants', this.historiqueAvenant.historiqueAvenantAdherants)
     } else {
       // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
-      console.log('this.historiqueAvenant.historiqueAvenantAdherants ', this.historiqueAvenant.historiqueAvenantAdherants )
 
     }
     console.log('******* liste des adhérents à supprimer **************');
     console.log(this.historiqueAvenant);
     this.adherentFamilleEvent.emit(this.historiqueAvenant);
+    this.adherentsList = [];
+    this.adherentsListByPageRetrait = [];
     this.init();
   }
 
@@ -796,7 +795,34 @@ getAllAdherentsAsList(): Adherent[] {
     isSuspendu: false
 }));
 
+  this.adherentsListByPageRetrait = this.adherentsListByPageRetrait.filter(
+    (adherent, index, self) => index === self.findIndex((a) => a.id === adherent.id)
+  );
+
   return this.adherentsList;
+}
+
+memberFilterFuction(memberId: string){
+  this.adherentsList = this.adherentsList.filter(ahe => ahe.id != memberId);
+  this.adherentsListByPageRetrait = this.adherentsListByPageRetrait.filter(ahe => ahe.id != memberId);
+  this.getAllAdherentsAsList();
+}
+
+removeAdherentAndFamily(adherentPrincipalId: string): void {
+  if (!adherentPrincipalId) return;
+
+  this.adherantPrincipalWithFamily = this.adherantPrincipalWithFamily.filter(
+      item => item.adherent.adherentPrincipal?.id !== adherentPrincipalId
+  );
+
+  this.adherentsList = this.adherentsList.filter(
+      adherent => adherent.adherentPrincipal?.id !== adherentPrincipalId && adherent.id !== adherentPrincipalId
+  );
+
+  if (this.expandedRows) {
+      delete this.expandedRows[adherentPrincipalId];
+  }
+
 }
 
 
@@ -808,11 +834,11 @@ onRetriveMemberOfAdherentPrincipal(memberId: string) {
 
       if (familyIndex !== -1) {
           item.adherent.adherentFamily.splice(familyIndex, 1);
+          this.memberFilterFuction(memberId);
       }
   });
 
 }
-
 
 
 getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
@@ -824,8 +850,8 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
 
     if (existingIndex !== -1) {
         this.adherantPrincipalWithFamily.splice(existingIndex, 1);
+        this.removeAdherentAndFamily(adherentPrincipalId);
         delete this.expandedRows[adherentPrincipalId];
-
     } else {
         this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
             res => {
@@ -842,8 +868,7 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
                 };
 
                 this.adherantPrincipalWithFamily.push(adherentData);
-                this.expandedRows[adherentPrincipal.id] = true;                
-
+                this.expandedRows[adherentPrincipal.id] = true;
                 const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
                 historiqueAdherent.historiqueAvenantAdherent = res.adherentPrincipal;
                 historiqueAdherent.historiqueAvenantAdherentList =  res.adherentFamily || [];
@@ -854,6 +879,8 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
             }
         );
     }
+
+    this.getAllAdherentsAsList();
 
 }
 

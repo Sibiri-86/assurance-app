@@ -249,7 +249,7 @@
             <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false && etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm?.invalid || historiqueAveantAdherantsByExercice?.length === null || !groupeId || etat === 'VIEW'">
+                [disabled]="myForm?.invalid && adherentsListByPageRetrait?.length !== null || !groupeId || etat === 'VIEW'">
                 </button>
             </div>
             <!-- <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true && etat=== 'CREATE'">
