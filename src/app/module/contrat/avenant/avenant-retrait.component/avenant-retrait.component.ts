@@ -755,12 +755,24 @@ export class AvenantRetraitComponent implements OnInit {
 }
  */
 
-onRetriveMemberOfAdherentPrincipal(memberId : string){
+onRetriveMemberOfAdherentPrincipal(memberId: string) {
+  if (!memberId) return;
 
-    if(!memberId) return;
-    this.adherantPrincipalWithFamily.map(family => family.adherent.adherentFamily);
+  this.adherantPrincipalWithFamily.forEach((item, index) => {
+      const familyIndex = item.adherent.adherentFamily.findIndex(member => member.id === memberId);
 
+      if (familyIndex !== -1) {
+          item.adherent.adherentFamily.splice(familyIndex, 1);
+          
+/*           if (item.adherent.adherentFamily.length === 0) {
+              this.adherantPrincipalWithFamily.splice(index, 1);
+          } */
+      }
+  });
+
+  console.log('Membre retiré avec succès:', memberId);
 }
+
 
 
 getAdherentPrincipalAndFamily(adherentPrincipalId: string) {

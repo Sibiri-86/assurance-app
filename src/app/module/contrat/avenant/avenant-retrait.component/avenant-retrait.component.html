@@ -319,7 +319,7 @@
 
 
 
-<p-dialog [maximizable]="true" [(visible)]="isAdherantPrincipalWithFamily" header="Les adhérants à retirer" [modal]="true" styleClass="p-fluid" [style]="{width: '1000px'}">
+<p-dialog [maximizable]="true" [(visible)]="isAdherantPrincipalWithFamily" header="Les adhérants à retirer" [modal]="true" styleClass="p-fluid" [style]="{width: '80%'}">
 
 
     <div class="card">
@@ -358,7 +358,7 @@
                     <td>{{ item?.adherent?.adherentPrincipal?.prenom }}</td>
                     <td>{{ item?.adherent?.adherentPrincipal?.genre?.libelle }}</td>
                     <td>
-                        <button class="texte-danger" type="submit"
+                        <button severity="success" class="texte-with p-button-danger" type="submit"
                          pButton icon="pi pi-minus" 
                          pTooltip="Retirer l'assuré principal et tout sa famille de la liste des retraits"
                          (click)="getAdherentPrincipalAndFamily(item?.adherent?.adherentPrincipal?.id)"></button>
@@ -375,7 +375,7 @@
                     <td>{{ member?.prenom }}</td>
                     <td>{{ member?.genre?.libelle }}</td>
                     <td>
-                        <button class="texte-danger" type="submit" pButton icon="pi pi-minus" pTooltip="Retier ce membre de famille de la liste des retraits" (click)="onRetriveMemberOfAdherentPrincipal(member.id)"></button>
+                        <button class="texte-with p-button-warning" type="submit" pButton icon="pi pi-minus" pTooltip="Retier ce membre de famille de la liste des retraits" (click)="onRetriveMemberOfAdherentPrincipal(member.id)"></button>
                     </td>
                 </tr>
             </ng-template>

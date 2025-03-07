@@ -3,6 +3,11 @@
   size: 1.5em;
   font-weight: bold;
 }
+.texte-with {
+  color: white;
+  size: 1.5em;
+  font-weight: bold;
+}
 
 .texte-info {
   color: greenyellow;
@@ -27,6 +32,11 @@
   font-weight: bold;
   color: green !important;
 }
+
+.champJaune {
+  font-weight: bold;
+  color: yellow !important;
+}
 .close {
   display: flex;
   justify-content: center;
@@ -37,4 +47,8 @@
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+.font-bold {
+  background-color: #f0f0f0;
 }
