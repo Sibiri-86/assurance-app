@@ -103,6 +103,8 @@ export class AvenantRetraitComponent implements OnInit {
 
   selectedAdherents: HistoriqueAvenantAdherant[] = [];
   adherantPrincipalWithFamily: MyNewModel[] = [];
+  adherentsList: Adherent[] = [];
+
   isAdherantPrincipalWithFamily = false;
   expandedRows: { [key: string]: boolean } = {};
 
@@ -289,6 +291,7 @@ export class AvenantRetraitComponent implements OnInit {
   }
 
   addAdherentFamilleToList(): void {
+    this.getAllAdherentsAsList();
     console.log('*********familleAdherants**********');
     console.log(this.familleAdherants);
     // const historiqueAvenant: HistoriqueAvenant = {};
@@ -315,9 +318,15 @@ export class AvenantRetraitComponent implements OnInit {
         default:
           break;
       }
+      // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
+
+      console.log('this.historiqueAvenant.historiqueAvenantAdherants', this.historiqueAvenant.historiqueAvenantAdherants)
     } else {
+      // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
+      console.log('this.historiqueAvenant.historiqueAvenantAdherants ', this.historiqueAvenant.historiqueAvenantAdherants )
+
     }
     console.log('******* liste des adhérents à supprimer **************');
     console.log(this.historiqueAvenant);
@@ -755,6 +764,42 @@ export class AvenantRetraitComponent implements OnInit {
 }
  */
 
+getAllAdherentsAsList(): Adherent[] {
+  this.adherantPrincipalWithFamily.forEach(item => {
+      if (item.adherent.adherentPrincipal) {
+          this.adherentsList.push(item.adherent.adherentPrincipal);
+      }
+
+      if (item.adherent.adherentFamily && item.adherent.adherentFamily?.length > 0) {
+          this.adherentsList = this.adherentsList.concat(item.adherent.adherentFamily);
+      }
+  });
+
+  this.adherentsList = this.adherentsList.filter(
+    (adherent, index, self) => index === self.findIndex((a) => a.id === adherent.id)
+);
+
+  this.adherentsListByPageRetrait = this.adherentsList.map(adherent => ({
+    id: adherent.id, // L'ID de l'adhérent est utilisé comme ID historique (ou undefined)
+    adherent: adherent,
+    dateEntree: adherent.dateEntree || undefined,
+    dateIncorporation: adherent.dateIncor || undefined,
+    dateRetrait: undefined,
+    dateModification: undefined,
+    dateRenouvellement: undefined,
+    historiqueAvenant: undefined,
+    deleted: false,
+    selected: true,
+    dateEcheance: undefined,
+    singe: undefined,
+    dateReintegration: undefined,
+    isSuspendu: false
+}));
+
+  return this.adherentsList;
+}
+
+
 onRetriveMemberOfAdherentPrincipal(memberId: string) {
   if (!memberId) return;
 
@@ -763,14 +808,9 @@ onRetriveMemberOfAdherentPrincipal(memberId: string) {
 
       if (familyIndex !== -1) {
           item.adherent.adherentFamily.splice(familyIndex, 1);
-          
-/*           if (item.adherent.adherentFamily.length === 0) {
-              this.adherantPrincipalWithFamily.splice(index, 1);
-          } */
       }
   });
 
-  console.log('Membre retiré avec succès:', memberId);
 }
 
 
@@ -785,6 +825,7 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
     if (existingIndex !== -1) {
         this.adherantPrincipalWithFamily.splice(existingIndex, 1);
         delete this.expandedRows[adherentPrincipalId];
+
     } else {
         this.historiqueAvenantAdherantService.adherentPrincipalWithFamily(adherentPrincipalId).subscribe(
             res => {
@@ -801,14 +842,19 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
                 };
 
                 this.adherantPrincipalWithFamily.push(adherentData);
-                console.log('adherantPrincipalWithFamily', this.adherantPrincipalWithFamily);
-                this.expandedRows[adherentPrincipal.id] = true;
+                this.expandedRows[adherentPrincipal.id] = true;                
+
+                const historiqueAdherent: HistoriqueAdherent = {historiqueAvenantAdherent: null, historiqueAvenantAdherentList: null};
+                historiqueAdherent.historiqueAvenantAdherent = res.adherentPrincipal;
+                historiqueAdherent.historiqueAvenantAdherentList =  res.adherentFamily || [];
+                this.onManageSelectionListe(historiqueAdherent);
             },
             error => {
                 console.error('Erreur lors de la récupération des données', error);
             }
         );
     }
+
 }
 
     onSelect2(historiqueAveantAdherant: any): void {
@@ -857,8 +903,10 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
     }
 
     onSeeAdherantToRetrieved(){
-      this.isToSeeListOfAdherantToRetreived = true;
+     // this.isToSeeListOfAdherantToRetreived = true;
       this.isAdherantPrincipalWithFamily = true;
+      this.getAllAdherentsAsList();
+
     }
 
     onLeaveSeeAdherantToRetrieved(){

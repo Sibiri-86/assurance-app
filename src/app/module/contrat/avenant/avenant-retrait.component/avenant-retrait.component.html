@@ -159,8 +159,8 @@
                                         <button type="submit"  pButton icon="pi pi-search" (click)="onSubmit()"  class="p-mr-2"></button>
                                         </span>    -->   
 
-                                        <span *ngIf="selectedAdherents.length" class="champVert p-mr-1">{{selectedAdherents.length}} </span>
-                                        <button *ngIf="selectedAdherents.length" type="submit" pTooltip="Afficher la sélection" pButton icon="pi pi-eye" (click)="onSeeAdherantToRetrieved()"></button>
+                                        <span *ngIf="adherantPrincipalWithFamily.length" class="champVert p-mr-1">{{adherantPrincipalWithFamily.length}} </span>
+                                        <button *ngIf="adherantPrincipalWithFamily.length" type="submit" pTooltip="Afficher la sélection" pButton icon="pi pi-eye" (click)="onSeeAdherantToRetrieved()"></button>
 
                                 </span>
 
@@ -184,7 +184,9 @@
                 <ng-template pTemplate="body" let-historiqueAveantAdherant >
                     <tr [ngClass]="{'colorZone': !historiqueAveantAdherant?.adherent?.adherentPrincipal}">
                         <td>
-                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect2(historiqueAveantAdherant); getAdherentPrincipalAndFamily(historiqueAveantAdherant.adherent.id)"
+<!--                             <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect2(historiqueAveantAdherant); getAdherentPrincipalAndFamily(historiqueAveantAdherant.adherent.id)"
+                            [disabled]="etat === 'VIEW'"></p-checkbox> -->
+                            <p-checkbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="getAdherentPrincipalAndFamily(historiqueAveantAdherant.adherent.id)"
                             [disabled]="etat === 'VIEW'"></p-checkbox>
                             <!--<p-tableCheckbox [(ngModel)]="historiqueAveantAdherant.selected" [value]="historiqueAveantAdherant" (click)="onSelect(historiqueAveantAdherant)"></p-tableCheckbox>-->
                         </td>
@@ -247,7 +249,7 @@
             <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === false && etat=== 'CREATE'">
                 <button pButton pRipple icon="pi pi-save" pTooltip="Enregistrer la selection de retrait" label="Enregistrer"
                         class="p-button p-button-success" type="button" (click)="addAdherentFamilleToList()"
-                [disabled]="myForm.invalid || historiqueAveantAdherantsByExercice.length === null || !groupeId || etat === 'VIEW'">
+                [disabled]="myForm?.invalid || historiqueAveantAdherantsByExercice?.length === null || !groupeId || etat === 'VIEW'">
                 </button>
             </div>
             <!-- <div class="p-field p-col-2 p-ac-center" *ngIf="isRenouv === true && etat=== 'CREATE'">
@@ -296,7 +298,7 @@
                         <td>
                             <span class="p-column-title">
                                        <input [id]="'dateIncor' + selectedAdherent.id" type="date" [(ngModel)]="selectedAdherent.dateRetrait"
-                                       [disabled]="selectedAdherent.selected === null || !selectedAdherent.selected" [disabled]="etat === 'VIEW'"  pInputText (change)="compareDateRetrait(historiqueAveantAdherant)">
+                                       [disabled]="selectedAdherent.selected === null || !selectedAdherent?.selected" [disabled]="etat === 'VIEW'"  pInputText (change)="compareDateRetrait(historiqueAveantAdherant)">
 
                                        
                             </span>
