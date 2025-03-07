@@ -30,6 +30,7 @@ import {HistoriqueAvenantAdherentService} from '../../../../store/contrat/histor
 import {HistoriqueAdherent} from '../../../../store/contrat/historiqueAvenantAdherent/model';
 import { Page } from 'src/app/module/util/pageable';
 import { log } from 'console';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-avenant-retrait',
@@ -100,6 +101,7 @@ export class AvenantRetraitComponent implements OnInit {
   prenom: string = undefined;
   isToSearchAllAssureList = false;
   isToSeeListOfAdherantToRetreived = false;
+  dateRetrait:any;
 
   selectedAdherents: HistoriqueAvenantAdherant[] = [];
   adherantPrincipalWithFamily: MyNewModel[] = [];
@@ -779,19 +781,13 @@ getAllAdherentsAsList(): Adherent[] {
 );
 
   this.adherentsListByPageRetrait = this.adherentsList.map(adherent => ({
-    id: adherent.id, // L'ID de l'adhérent est utilisé comme ID historique (ou undefined)
+    id: adherent.id,
     adherent: adherent,
-    dateEntree: adherent.dateEntree || undefined,
-    dateIncorporation: adherent.dateIncor || undefined,
-    dateRetrait: undefined,
-    dateModification: undefined,
-    dateRenouvellement: undefined,
-    historiqueAvenant: undefined,
+    dateEntree: adherent.dateEntree,
+    dateIncorporation: adherent.dateIncor,
+    dateRetrait: this.dateRetrait,
     deleted: false,
     selected: true,
-    dateEcheance: undefined,
-    singe: undefined,
-    dateReintegration: undefined,
     isSuspendu: false
 }));
 
@@ -882,6 +878,11 @@ getAdherentPrincipalAndFamily(adherentPrincipalId: string) {
 
     this.getAllAdherentsAsList();
 
+}
+
+getDateRetrait(dateRetrait: any){
+  this.dateRetrait = dateRetrait;
+  // this.dateRetrait = formatDate(dateRetrait, 'dd/MM/yyyy', 'en-fr');
 }
 
     onSelect2(historiqueAveantAdherant: any): void {
