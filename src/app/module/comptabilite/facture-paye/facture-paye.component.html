@@ -33,7 +33,7 @@
                         <button 
                         (click)="exportExcel()"
                         pButton 
-                        [disabled]="!ordreReglementList"
+                        [disabled]="ordreReglementList.length <= 0"
                         pRipple 
                         type="button" 
                         icon="pi pi-file-excel" 
