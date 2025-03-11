@@ -358,8 +358,12 @@
                     <td>{{ item?.adherent?.adherentPrincipal?.numero }}</td>
                     <td>{{ item?.adherent?.adherentPrincipal?.nom }}</td>
                     <td>{{ item?.adherent?.adherentPrincipal?.prenom }}</td>
-                    <td>{{ item?.adherent?.adherentPrincipal?.genre?.libelle }}</td>
                     <td>
+                        <span>{{ item?.adherent?.adherentPrincipal?.genre?.libelle }}</span>
+                        <span> ({{ item.adherent.adherentFamily.length + 1}} membres ) </span>
+                    </td>
+                    <td>
+
                         <button severity="success" class="texte-with p-button-danger" type="submit"
                          pButton icon="pi pi-minus" 
                          pTooltip="Retirer l'assuré principal et tout sa famille de la liste des retraits"

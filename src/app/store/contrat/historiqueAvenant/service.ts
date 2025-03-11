@@ -13,7 +13,7 @@ import {
     HistoriquePlafondSousActe,
     TypeHistoriqueAvenant
 } from './model';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {throwError, Observable, of} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -302,6 +302,17 @@ private handleError<T>() {
         // @FIXME: post request
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-by-id`,
             {params: createRequestOption({avenantId})});
+    }
+
+    getsHistoriqueAvenantById1(avenantId: string, page: number, size: number): Observable<any> {
+        
+            let params = new HttpParams()
+              .set('avenantId', avenantId.toString())
+              .set('page', page.toString())
+              .set('size', size.toString());
+        
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-by-id/by-page-3`,
+            {params: params});
     }
 
     getsHistoriqueAvenantModifReview(avenantId: string): Observable<Avenant> {
