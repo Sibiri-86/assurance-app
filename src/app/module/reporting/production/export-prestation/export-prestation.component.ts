@@ -48,6 +48,8 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.dateDebut = '';
+              this.dateFin = '';
 
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
@@ -74,6 +76,8 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.dateDebut = '';
+              this.dateFin = '';
 
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
@@ -99,6 +103,8 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.dateDebut = '';
+              this.dateFin = '';
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
             });
