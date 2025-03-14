@@ -503,6 +503,11 @@ export class Endpoints {
             mock: `assets/mock/comptabilite/tiers.mock.json`
         };
 
+        static readonly REPORTING_EXPORT_DONNEES_PRESTATIONS = {
+            prod: `${SERVICE_PREFIX}/reporting/production/export-donnees-prestations`,
+            mock: `assets/mock/reporting/production.mock.json`
+        };
+
         static readonly REPORTING_PRODUCTION = {
             prod: `${SERVICE_PREFIX}/reporting/production`,
             mock: `assets/mock/reporting/production.mock.json`
