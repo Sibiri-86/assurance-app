@@ -44,7 +44,7 @@
                         <div class="p-field p-col-12 p-d-flex p-justify-center">
 
                             <button 
-                            [disabled]="!dateDebut || dateDebut > dateFin"
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
                             (click)="exportPrestationPrefincementToExcel()"
                             pButton 
                             pRipple 
@@ -55,7 +55,7 @@
                         </button>    
 
                             <button 
-                            [disabled]="!dateDebut || dateDebut > dateFin"
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
                             (click)="exportPrestationTierPayantToExcel()"
                             pButton 
                             pRipple 
@@ -66,7 +66,7 @@
                         </button>    
 
                             <button 
-                            [disabled]="!dateDebut || dateDebut > dateFin"
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
                             (click)="exportPrestationPrefinancementAndTierPayantToExcel()"
                             pButton 
                             pRipple 
