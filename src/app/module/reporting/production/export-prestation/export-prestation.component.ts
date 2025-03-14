@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExportPrestationService } from './export-prestation.service';
 import { formatDate } from '@angular/common';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-export-prestation',
@@ -17,7 +18,10 @@ export class ExportPrestationComponent implements OnInit {
   PREFINANCEMENT = 'PREFINANCEMENT';
   TIERSPAYANT = 'TIERSPAYANT';
 
-  constructor(private exportPrestationService: ExportPrestationService) { }
+  constructor(
+    private exportPrestationService: ExportPrestationService,
+    private messageService: MessageService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -48,10 +52,12 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.getSucessInfo();
               this.dateDebut = '';
               this.dateFin = '';
 
             }, error => {
+              this.getErrorInfo(error.error.message);
               console.error("Erreur lors de l'exportation :", error);
             });
         } 
@@ -76,10 +82,12 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.getSucessInfo();
               this.dateDebut = '';
               this.dateFin = '';
 
             }, error => {
+              this.getErrorInfo(error.error.message);
               console.error("Erreur lors de l'exportation :", error);
             });
         } 
@@ -103,11 +111,28 @@ export class ExportPrestationComponent implements OnInit {
               a.click();
               document.body.removeChild(a);
               this.displayExportDialogue = false;
+              this.getSucessInfo();
               this.dateDebut = '';
               this.dateFin = '';
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
+              this.getErrorInfo(error.error.message);
             });
         } 
 
+
+        getSucessInfo(): void {
+          this.messageService.add({severity: 'success', summary: 'EXPORTATION', detail: 'Opération réussie!'});
+        }
+        getCancelInfo(): void {
+          this.messageService.add({severity: 'info', summary: 'EXPORTATION', detail: 'Paiement annulé!'});
+        }
+        getFailledInfo(): void {
+          this.messageService.add({severity: 'error', summary: 'EXPORTATION', detail: 'Paiement échouée!'});
+        }
+        
+        getErrorInfo(message: string): void {
+          this.messageService.add({severity: 'error', summary: 'EXPORTATION', detail: message});
+        }
+      
 }
