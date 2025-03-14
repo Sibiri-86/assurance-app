@@ -47,6 +47,8 @@ export class ExportPrestationComponent implements OnInit {
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
+              this.displayExportDialogue = false;
+
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
             });
@@ -71,6 +73,8 @@ export class ExportPrestationComponent implements OnInit {
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
+              this.displayExportDialogue = false;
+
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
             });
@@ -94,6 +98,7 @@ export class ExportPrestationComponent implements OnInit {
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
+              this.displayExportDialogue = false;
             }, error => {
               console.error("Erreur lors de l'exportation :", error);
             });
