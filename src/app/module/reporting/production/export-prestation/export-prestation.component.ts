@@ -90,7 +90,7 @@ export class ExportPrestationComponent implements OnInit {
               const url = window.URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
-              a.download = `prestation_tiers_payant_du_${dateD}_au_${dateF}.xlsx`;
+              a.download = `prestation_prefinancement_et_tiers_payant_du_${dateD}_au_${dateF}.xlsx`;
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);

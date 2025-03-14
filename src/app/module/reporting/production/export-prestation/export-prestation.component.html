@@ -4,14 +4,14 @@
 		<div class="card">
 			<p-toolbar styleClass="p-mb-4">
 				<ng-template pTemplate="left">
-                    <button pButton pRipple icon="pi pi-print" label="Export des prestations" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="onInitExportation()"></button>
+                    <button pButton pRipple icon="pi pi-file-excel" label="Export des prestations" pTooltip="Cliquer pour procéder à l'exportation" class="p-button-rounded p-button-info" (click)="onInitExportation()"></button>
 
                 </ng-template>
              
-                <ng-template pTemplate="right" >
+<!--                 <ng-template pTemplate="right" >
                     <button pButton pRipple icon="pi pi-file-excel" label="Dépense famille" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
 
-                </ng-template>
+                </ng-template> -->
 			</p-toolbar>
             
  
@@ -44,6 +44,7 @@
                         <div class="p-field p-col-12 p-d-flex p-justify-center">
 
                             <button 
+                            [disabled]="!dateDebut || dateDebut > dateFin"
                             (click)="exportPrestationPrefincementToExcel()"
                             pButton 
                             pRipple 
@@ -54,6 +55,7 @@
                         </button>    
 
                             <button 
+                            [disabled]="!dateDebut || dateDebut > dateFin"
                             (click)="exportPrestationTierPayantToExcel()"
                             pButton 
                             pRipple 
@@ -64,6 +66,7 @@
                         </button>    
 
                             <button 
+                            [disabled]="!dateDebut || dateDebut > dateFin"
                             (click)="exportPrestationPrefinancementAndTierPayantToExcel()"
                             pButton 
                             pRipple 
