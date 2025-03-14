@@ -70,7 +70,7 @@ $getOperationByExerciceOperationLeutree(exerciceOperationId: string): Observable
 }
 
 $getReport(report: Report): Observable<ArrayBuffer> {
-  // @FIXME: get request
+  // @FIXME: get request  
   return this.http.post( `${GlobalConfig.getEndpoint(Endpoints.COMTABILITE_OPERATION)}/report`, report, {responseType: 'arraybuffer'});
 }
 

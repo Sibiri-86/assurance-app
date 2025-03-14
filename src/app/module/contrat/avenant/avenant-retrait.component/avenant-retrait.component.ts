@@ -93,9 +93,11 @@ export class AvenantRetraitComponent implements OnInit {
   page = 0;
   size = 10;
   adherentsListByPage:  any;
+  isUpdate: boolean;
   adherentsListByPageRetrait: any;
   exoId: string;
   groupeId: string = undefined;
+  avenantId2: string;
   numero: number;
   nom: string = undefined;
   prenom: string = undefined;
@@ -162,7 +164,7 @@ export class AvenantRetraitComponent implements OnInit {
     }
     // this.findListeActualisee(this.police);
     if(this.etat !== 'CREATE' || this.isRenouv) {
-      this.updateAvenant(this.avenantId);
+      this.updateAvenant2(this.avenantId);
     }
   }
 
@@ -320,10 +322,8 @@ export class AvenantRetraitComponent implements OnInit {
         default:
           break;
       }
-      // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait.filter(e => e.selected);
     } else {
-      // this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
       this.historiqueAvenant.historiqueAvenantAdherants = this.adherentsListByPageRetrait;
 
     }
@@ -532,15 +532,24 @@ export class AvenantRetraitComponent implements OnInit {
 
   updateAvenant2(avenantId: string): void {
     if (avenantId && avenantId !== undefined) {
-      this.historiqueAvenantService.getsHistoriqueAvenantById(avenantId).subscribe(
-          (res: HistoriqueAvenant) => {
-              this.historiqueAvenant = res;
-              console.log('*********this.historiqueAvenant*********', this.historiqueAvenant);
-              this.police = res.police;
-              console.log('*********this.police*********', this.police);
-              this.historiqueAveantAdherantsByExercice = res.historiqueAvenantAdherants;
-              this.adherentsListByPage = res.historiqueAvenantAdherants;
-              console.log('*********this.historiqueAveantAdherantsByExercice*********', this.historiqueAveantAdherantsByExercice);
+      this.avenantId2 = avenantId;
+      this.historiqueAvenantService.getsHistoriqueAvenantById1(avenantId, this.page, this.size).subscribe(
+          (res: any) => {
+              const data = res.content;
+              this.historiqueAvenant = data;
+
+              console.log('datadata', data);
+              this.police = data[0]?.avenant?.police;
+              this.exoId = data[0]?.avenant?.exercice?.id;
+              this.historiqueAveantAdherantsByExercice = data;
+              console.log('exoId, ', this.exoId);
+              console.log('this.police, ', this.police);
+
+              this.isUpdate = true
+              this.isToSearchAllAssureList = false
+              this.adherentsListByPage = data;
+              this.totalElements = res.totalElements;
+              this.totalPages = res.totalPages;
               this.historiqueAveantAdherantsByExercice.forEach(haa => {
                 if(haa.id) {
                   haa.dateRetrait = haa.dateRetrait;
@@ -550,25 +559,25 @@ export class AvenantRetraitComponent implements OnInit {
               });
               this.myForm.setValue({
                   id: avenantId,
-                  numero: res.numero,
-                  dateSaisie: new Date(res.dateSaisie),
-                  dateAvenant: res.dateAvenant,
-                  observation: res.observation,
-                  demandeur: res.typeDemandeur,
+                  numero: data.numero,
+                  dateSaisie: new Date(data.dateSaisie),
+                  dateAvenant: data.dateAvenant,
+                  observation: data.observation,
+                  demandeur: data.typeDemandeur,
                   fraisBadges: 0,
-                  fraisAccessoires: 0,
-                  // dateEffet: new Date(res.dateAvenant),
+                  fraisAccessoidata: 0,
+                  // dateEffet: new Date(data.dateAvenant),
               });
               if(this.etat === 'VIEW') {
                 this.myForm.disable();
               }
-              this.exercice = res.exercice;
+              this.exercice = data.exercice;
               console.log('*********this.exercice*********', this.exercice);
               this.lastExerciceForm.patchValue({
-                  id: res.exercice.id,
-                  debut: res.exercice.debut,
-                  fin: res.exercice.fin,
-                  // actived: res.exercice.actived
+                  id: data.exercice.id,
+                  debut: data.exercice.debut,
+                  fin: data.exercice.fin,
+                  // actived: data.exercice.actived
               });
               this.loadExerciceByPolice(this.police);
               console.log('avenant de retrait ==== ', this.historiqueAvenant);
@@ -580,7 +589,12 @@ export class AvenantRetraitComponent implements OnInit {
 
   onPageChange(newPage: number): void {
     this.page = newPage;
-    this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+    if(this.isToSearchAllAssureList){
+      this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
+    }
+    if(this.isUpdate){
+      this.updateAvenant2(this.avenantId2);
+    }
 
 /*     if(this.isToSearchAllAssureList){
       this.searchAllAdherentPrincipalByExerciceAndGroupeByPage();
@@ -673,6 +687,7 @@ export class AvenantRetraitComponent implements OnInit {
             this.adherentsListByPageRetrait = data.content as any;
 
         this.isToSearchAllAssureList = true;
+        this.isUpdate = false;
         this.totalElements = data.totalElements;
         this.totalPages = data.totalPages;
       },
