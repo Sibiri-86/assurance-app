@@ -133,6 +133,22 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     });
   }
 
+  exportPrestationPrefincementTierPayantToExcel(dateDebut: string, dateFin: string, choose: string) {
+    
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    const params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin)
+      .set('choose', choose);
+
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_EXPORT_PREFINANCEMENT_TIER_PAYANT), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+
   getPrestationBySinistreId(sinistreId: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('sinistreId', sinistreId)

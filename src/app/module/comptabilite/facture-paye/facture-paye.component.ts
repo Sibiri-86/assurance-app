@@ -50,6 +50,7 @@ export class FacturePayeComponent implements OnInit {
   numeroCheque: string = '';
   existe: boolean | null = null;
 
+  choose: string = '';
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -241,6 +242,34 @@ export class FacturePayeComponent implements OnInit {
             const a = document.createElement('a');
             a.href = url;
             a.download = `ordre_reglement_tier_payant_paye_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+      
+      exportPrestationPrefincementToExcel() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+
+        console.log('dateDebut', dateD);
+        console.log('dateFin', dateF);
+        
+    
+        this.tierPayantService.exportPrestationPrefincementTierPayantToExcel(this.dateDebut, this.dateFin, this.choose)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `prestation_prefinancement_du_${dateD}_au_${dateF}.xlsx`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
