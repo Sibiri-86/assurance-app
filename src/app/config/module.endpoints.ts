@@ -507,6 +507,11 @@ export class Endpoints {
             mock: `assets/mock/comptabilite/tiers.mock.json`
         };
 
+        static readonly REPORTING_EXPORT_DONNEES_PRESTATIONS = {
+            prod: `${SERVICE_PREFIX}/reporting/production/export-donnees-prestations`,
+            mock: `assets/mock/reporting/production.mock.json`
+        };
+
         static readonly REPORTING_PRODUCTION = {
             prod: `${SERVICE_PREFIX}/reporting/production`,
             mock: `assets/mock/reporting/production.mock.json`
@@ -558,6 +563,11 @@ export class Endpoints {
 
         static readonly HISTORIQUE_AVENANT_MAJ_ADHERENT_NUMERO = {
             prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload_majAdherentNumero`,
+            mock: `assets/mock/contrat/historique-avenant.mock.json`
+        };
+
+        static readonly HISTORIQUE_AVENANT_SUPPRESSION_DOUBLON_PRESTATIONS = {
+            prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload_supprimerDoublonPrestation`,
             mock: `assets/mock/contrat/historique-avenant.mock.json`
         };
 

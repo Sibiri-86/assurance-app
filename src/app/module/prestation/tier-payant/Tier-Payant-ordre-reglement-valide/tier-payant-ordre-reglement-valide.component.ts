@@ -15,6 +15,8 @@ import {TypeEtatOrdreReglement} from '../../../common/models/emum.etat.ordre-reg
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
 import { formatDate } from '@angular/common';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from 'src/app/module/common/config/role.user';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -32,11 +34,12 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
   report: Report = {};
   dateDebut: any;
   dateFin: any;
+  roleDevaliderOrdre = this.keycloak.isUserInRole(Function.sm_devalider_ordre);
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private sinistreTiersPayantService: TierPayantService,
-              private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+              private messageService: MessageService, private breadcrumbService: BreadcrumbService, private keycloak: KeycloakService,) {
   this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT VALIDE' }]);
 }
 
