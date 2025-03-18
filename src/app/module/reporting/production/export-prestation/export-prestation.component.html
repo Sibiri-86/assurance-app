@@ -48,6 +48,16 @@
 
                             <button 
                             [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
+                            (click)="exportBonDePriseEnChargeToExcel()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-file-excel" 
+                            pTooltip="Exporter les bons de prise en charge"
+                            class="p-button-rounded p-button-success p-mr-2">
+                        </button>    
+                            <button 
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
                             (click)="exportPrestationPrefincementToExcel()"
                             pButton 
                             pRipple 

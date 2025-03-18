@@ -120,6 +120,35 @@ export class ExportPrestationComponent implements OnInit {
             });
         } 
 
+   exportBonDePriseEnChargeToExcel() {
+          if (!this.dateDebut || !this.dateFin) {
+            alert("Veuillez sélectionner une période !");
+            return;
+          }
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+          const choose ='BONDEPRISENECHARGE';
+          this.exportPrestationService.exportPrestationPrefincementTierPayantToExcel(this.dateDebut, this.dateFin, choose)
+            .subscribe(response => {
+              const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `bon_de_prise_en_charge_du_${dateD}_au_${dateF}.xlsx`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              this.displayExportDialogue = false;
+              this.getSucessInfo();
+              this.dateDebut = '';
+              this.dateFin = '';
+            }, error => {
+              console.error("Erreur lors de l'exportation :", error);
+              this.getErrorInfo(error.error.message);
+            });
+        } 
+
 
         getSucessInfo(): void {
           this.messageService.add({severity: 'success', summary: 'EXPORTATION', detail: 'Opération réussie!'});
