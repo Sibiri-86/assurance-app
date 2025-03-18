@@ -562,6 +562,11 @@ export class Endpoints {
             mock: `assets/mock/contrat/historique-avenant.mock.json`
         };
 
+        static readonly HISTORIQUE_AVENANT_SUPPRESSION_DOUBLON_PRESTATIONS = {
+            prod: `${SERVICE_PREFIX}/contrat/historique-avenant/upload_supprimerDoublonPrestation`,
+            mock: `assets/mock/contrat/historique-avenant.mock.json`
+        };
+
 
         static readonly ADHERANT_BY_SOUSCRIPTEUR_BY_DATE = {
             prod: `${SERVICE_PREFIX}/contrat/adherent/getAssureBySouscripteur-adherent/paginate`,

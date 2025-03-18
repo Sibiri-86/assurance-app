@@ -126,6 +126,7 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
   prestataire2: Array<Prestataire>;
   prestataireToSave: Array<Prestataire> = [];
   isImport = 'NON';
+  response: string;
 
 
   constructor( private store: Store<AppState>,
@@ -468,10 +469,26 @@ exportModel(): void {
   );
 }
 
-getAdherentFiles(event: any): void {
+/**getAdherentFiles(event: any): void {
   console.log(event);
   this.historiqueAvenantService.postMisAJoursAdherentNumero(event).subscribe(
       (res) => {
+        console.log('liste des adhérents === ');
+        console.log(res);
+      }
+  );
+}*/
+
+getAdherentFiles(event: any): void {
+  console.log(event);
+  this.historiqueAvenantService.postSuppressionDoublonPrestation(event).subscribe(
+      (res) => {
+
+        this.response = res;
+        this.messageService.add({severity:'success', summary: 'Success', detail: res});
+
+        console.log('this.response', this.response);
+
         console.log('liste des adhérents === ');
         console.log(res);
         /* res.forEach(adherentFamille => {

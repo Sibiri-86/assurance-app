@@ -56,6 +56,8 @@ import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from 'src/app/module/common/config/role.user';
 
 @Component({
   selector: 'app-ordre-reglement-valide',
@@ -74,12 +76,13 @@ export class OrdreReglementValideComponent implements OnInit {
   dateFin: Date;
   sinistres: Array<Prefinancement> = [];
   prestations: Array<Prestation>;
+  roleDevaliderOrdre = this.keycloak.isUserInRole(Function.sm_devalider_ordre);
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
                private prefinancementService: PrefinancementService,
-               private router: Router) {
+               private router: Router, private keycloak: KeycloakService,) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement valide' }]);
 }
 
