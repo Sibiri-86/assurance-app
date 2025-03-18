@@ -13,7 +13,7 @@ import {
     HistoriquePlafondSousActe,
     TypeHistoriqueAvenant
 } from './model';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {throwError, Observable, of} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -304,6 +304,17 @@ private handleError<T>() {
             {params: createRequestOption({avenantId})});
     }
 
+    getsHistoriqueAvenantById1(avenantId: string, page: number, size: number): Observable<any> {
+        
+            let params = new HttpParams()
+              .set('avenantId', avenantId.toString())
+              .set('page', page.toString())
+              .set('size', size.toString());
+        
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-by-id/by-page-3`,
+            {params: params});
+    }
+
     getsHistoriqueAvenantModifReview(avenantId: string): Observable<Avenant> {
         // @FIXME: post request
         return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT)}/get-avenant-by-id`,
@@ -437,5 +448,17 @@ private handleError<T>() {
         console.log('++++++++++++++++++data++++++++++++++++++++++');
         console.log(data.append);
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_MAJ_ADHERENT_NUMERO)}`, data, {headers: headers});
+    }
+
+    postSuppressionDoublonPrestation(file: File): Observable<any> {
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
+        console.log('++++++++++++++++++data++++++++++++++++++++++');
+        console.log(data.append);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_SUPPRESSION_DOUBLON_PRESTATIONS)}`, data, {headers: headers});
     }
 }

@@ -126,6 +126,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   dysplayGarant = false;
   adherentPrincipaux : Array<Adherent>;
   role1 = this.keycloak.isUserInRole(Function.sm_export_depense_excel);
+  dateDebut: any;
+  dateFin: any;
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -473,7 +475,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   }
 
   findOperationGrandLivre() {
-    if(this.displayExcel) {
+    /* if(this.displayExcel) {
       this.check.garantId = this.check.garant.id;
       this.check.policeId = this.check?.police?.id;
       this.check.adherentPrincipalId = this.check?.adherent?.id;
@@ -495,7 +497,9 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       console.log("=========22222222============",this.report)
       console.log("=========22222222222============",this.report)
       this.store.dispatch(featureActionDepense.FetchReportDepenseFamille(this.report));
-    }
+    } */
+
+      this.exportExcel();
     
     //this.displayExcel= false;
     //this.store.dispatch(featureActionDepense.updateDepenseFamille(this.check));
@@ -540,6 +544,30 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   deleteOperation(operation: Operation) {
     this.store.dispatch(featureActionOperation.deleteOperation(operation));
 
+  }
+
+  exportExcel() {
+    if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    }
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+
+    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin)
+      .subscribe(response => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, error => {
+        console.error("Erreur lors de l'exportation :", error);
+      });
   }
 
   annuleaddOperation() {

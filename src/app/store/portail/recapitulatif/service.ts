@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -144,6 +144,7 @@ findMessageBienvenuByNumeroLong(numero: string): Observable<any> {
   return this.http.post<any>(`${GlobalConfig.getEndpoint(Endpoints.PORTAIL)}/find-message-long`, numero,
   {params: createRequestOption({numero}), observe: 'response'});
 }
+
 
   private handleError<T>() {
     return (error: HttpErrorResponse) => {

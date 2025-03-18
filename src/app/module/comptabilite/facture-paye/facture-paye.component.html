@@ -33,7 +33,7 @@
                         <button 
                         (click)="exportExcel()"
                         pButton 
-                        [disabled]="!ordreReglementList"
+                        [disabled]="ordreReglementList.length <= 0"
                         pRipple 
                         type="button" 
                         icon="pi pi-file-excel" 
@@ -108,7 +108,7 @@
 
                         <dt class=" p-d-flex p-justify-center p-m-2"> 
                            
-                            <div *ngIf="!ordre.isTakeCheque && isEditing">
+                            <div *ngIf="!ordre.isTakeCheque && isEditing && rowIndex === ri">
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
@@ -121,7 +121,7 @@
                             </button>
                             </div>
 
-                            <div *ngIf="!ordre.isTakeCheque && isEditing">
+                            <div *ngIf="!ordre.isTakeCheque && isEditing && rowIndex === ri">
                                 <button 
                                 (click)="onCancelTakingCheque()"
                                 pButton 
