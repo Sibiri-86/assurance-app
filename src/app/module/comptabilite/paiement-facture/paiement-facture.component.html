@@ -268,7 +268,6 @@
                         <th pSortableColumn="montantReclame" style="width: 150px">montant Reclamé<p-sortIcon field="montantReclame"></p-sortIcon></th>
                         <th pSortableColumn="montantReclame" style="width: 150px">montant payé<p-sortIcon field="montantReclame"></p-sortIcon></th>
                         <th pSortableColumn="montantRestant" style="width: 200px">Action<p-sortIcon field="montantRestant"></p-sortIcon></th>
-                        <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prestation>
@@ -283,7 +282,6 @@
                         </td>
                         <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantReclame}}</span></td>
                         <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantPaye}}</span></td>
-                        <td><button pButton icon="pi pi-search" pTooltip="Procéder au paiemment" class="p-button-rounded p-button-info p-mr-2" (click)="onGetPrestationBySinistreId(sinistreTierPayant)"></button></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">

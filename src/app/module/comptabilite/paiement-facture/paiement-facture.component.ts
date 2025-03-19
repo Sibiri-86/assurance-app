@@ -27,6 +27,8 @@ import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/service';
 import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
 import { Journaux} from 'src/app/store/comptabilite/journaux/model';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from '../../common/config/role.user';
 
 
 @Component({
@@ -52,6 +54,8 @@ export class PaiementFactureComponent implements OnInit {
   banqueList: Array<Banque>;
   typePaiement = Object.keys(TypePaiement).filter(kj=>kj !==TypePaiement.ORANGE_MONEY && kj !== TypePaiement.MOOV_MONEY && kj !== TypePaiement.ESPECE).map(key => ({ label: TypePaiement[key], value: key }));
   type = TypePaiement.CHEQUE;
+  sm_finance_voir_detail_ordre = this.keycloak.isUserInRole(Function.sm_finance_voir_detail_ordre);
+  sm_finance_payer_ordreTiersPayant = this.keycloak.isUserInRole(Function.sm_finance_payer_ordreTiersPayant);
 
   dateDebut: any;
   dateFin: any;
@@ -80,6 +84,7 @@ export class PaiementFactureComponent implements OnInit {
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private tierPayantService: TierPayantService,
+              private keycloak: KeycloakService,
               private compteService: CompteService,
               private compteTiersService: TiersService,
               private typeJournauxService: TypeJournauxService,

@@ -132,6 +132,7 @@ import { ConsommationPasseComponent } from './module/contrat/consommation-passe/
 import { CourrierPrestataireComponent } from './module/prestation/tier-payant/courrier-prestataire/courrier-prestataire.component';
 import { ApprovisionnementComponent } from './module/comptabilite/approvisionnement/approvisionnement.component';
 import { ExportPrestationComponent } from './module/reporting/production/export-prestation/export-prestation.component';
+import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-payant/consulation-ordre-tier-payant/consulation-ordre-tier-payant.component';
 
 @NgModule({
     imports: [
@@ -268,9 +269,15 @@ import { ExportPrestationComponent } from './module/reporting/production/export-
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_prestation', 'sm_tiers_payant', 'sm_tiers_payant_consultation']}},
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
+                   
                     {path: 'prestation/tierPayant/courrier-prestataire', component: CourrierPrestataireComponent,
                       canActivate: [AuthGuard],
                       data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+                   
+                      {path: 'prestation/tierPayant/consultation-tiers-payant', component: ConsulationOrdreTierPayantComponent,
+                      canActivate: [AuthGuard],
+                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_medical','sm_medical_tout']}},
