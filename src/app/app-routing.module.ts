@@ -280,7 +280,7 @@ import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-pa
 
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent,
                     canActivate: [AuthGuard],
-                    data: { roles: ['sm_medical','sm_medical_tout']}},
+                    data: { roles: ['sm_medical','sm_medical_tout', 'sm_ordonnance_medical']}},
                     {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production', 'sm_bulletin_adhesion']}},
