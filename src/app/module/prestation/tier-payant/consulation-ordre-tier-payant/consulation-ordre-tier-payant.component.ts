@@ -13,6 +13,14 @@ import { OrdreReglementTierPayant, Prestation, SinistreTierPayant } from 'src/ap
 import { Function } from 'src/app/module/common/config/role.user';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { MessageService } from 'primeng/api';
+import { TypeReport } from 'src/app/store/contrat/enum/model';
+import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
+import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { takeUntil } from 'rxjs/operators';
+import { printPdfFile } from 'src/app/module/util/common-util';
+import * as flatted from 'flatted';
 
 @Component({
   selector: 'app-consulation-ordre-tier-payant',
@@ -62,8 +70,10 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
 
   numeroCheque: string = '';
   existe: boolean | null = null;
+  tierpayantToPrint: SinistreTierPayant = {};
 
   constructor(
+              private store: Store<AppState>,
               private tierPayantService: TierPayantService,
               private keycloak: KeycloakService,
               private messageService: MessageService,
@@ -74,13 +84,22 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
   ngOnInit(): void {
     this.onSerByOdreReglementByPeriode();
 
+    
+    this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
+        this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+            .subscribe(bytes => {
+              if (bytes) {
+                printPdfFile(bytes);
+              }
+            });
+
+
   }
 
 
   addMessage(severite: string, resume: string, detaile: string): void {
     this.messageService.add({severity: severite, summary: resume, detail: detaile});
   }
-
     
     onSerByOdreReglementByPeriode() {
       if(!this.dateDebut || !this.dateFin){
@@ -134,12 +153,32 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
       this.tierPayantService.getPrestationBySinistreId(sinistreId, this.page, this.size).subscribe(
         response => {
           this.prestations = response.content;
+          console.log('this.prestations', this.prestations);
           this.displayPrestation = true;
           this.totalRecordPprestations = response.totalElements;
-
         }
       );
     }
+    
+    imprimerPrestation(prestation: Prestation) {
 
+        this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+        this.report.sinistreTierPayantDTO.prestation = [];
+
+        this.report.sinistreTierPayantDTO.prestation.push(prestation);
+        delete this.report.sinistreTierPayantDTO.prestation[0].sinistreTierPayant;
+      
+        this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
+        this.tierPayantService.$getReport(this.report).subscribe();
+
+        // this.tierPayantService.$getReport(this.report).subscribe();
+        // const safeJson = flatted.stringify(this.report);
+        // console.log('safeJson', safeJson);
+
+        this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+        this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
+
+      }
+    
 
 }

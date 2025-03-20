@@ -182,6 +182,9 @@
                         </td>
                         <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantReclame}}</span></td>
                         <td><span class="p-column-title">{{prestation?.sinistreTierPayant?.montantPaye}}</span></td>
+                        <td style="text-align:center">
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerPrestation(prestation)"></button>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
