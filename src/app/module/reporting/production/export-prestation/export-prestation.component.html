@@ -1,0 +1,104 @@
+<div class="p-grid">
+	<div class="p-col-12">
+		<p-toast></p-toast>
+		<div class="card">
+			<p-toolbar styleClass="p-mb-4">
+				<ng-template pTemplate="left">
+                    <button pButton pRipple icon="pi pi-file-excel" label="Exporter des prestations" pTooltip="Cliquer pour procéder à l'exportation" class="p-button-rounded p-button-info" (click)="onInitExportation()"></button>
+
+                </ng-template>
+             
+<!--                 <ng-template pTemplate="right" >
+                    <button pButton pRipple icon="pi pi-file-excel" label="Dépense famille" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerFormulaireExcel()"></button>
+
+                </ng-template> -->
+			</p-toolbar>
+            
+ 
+        </div> 
+        
+      
+        
+        <p-dialog [maximizable]="true" [(visible)]="displayExportDialogue" header="Exportation de prestation" [modal]="true" styleClass="p-fluid" 
+        [style]="{width: '60%'}">
+
+        <ng-template pTemplate="content">
+            <div class="card">
+
+                <form>
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-6">
+                            <span class="textColorRed" *ngIf=" dateDebut && dateFin && dateDebut > dateFin">La date de debut doit être inférieure à la date de fin</span>
+
+                            <label class="dateDebut" for="dateDebut">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                       
+                            
+                            <input  type="date" pInputText [(ngModel)]="dateDebut" name="dateDebut">
+                        </div>
+                        <div class="p-field p-col-6">
+
+                            <label class="dateFin" for="dateFin">Date fin<span style="color: red !important; size: 1.4em;" class="required"></span> </label>
+                       
+                            
+                            <input  type="date" pInputText [(ngModel)]="dateFin" name="dateFin">
+                        </div>
+
+                        <div class="p-field p-col-12 p-d-flex p-justify-center">
+
+                            <button 
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
+                            (click)="exportBonDePriseEnChargeToExcel()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-file-excel" 
+                            pTooltip="Exporter les bons de prise en charge"
+                            class="p-button-rounded p-button-success p-mr-2">
+                        </button>    
+                            <button 
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
+                            (click)="exportPrestationPrefincementToExcel()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-file-excel" 
+                            pTooltip="Exporter les prestaions des préfinancements"
+                            class="p-button-rounded p-button-success p-mr-2">
+                        </button>    
+
+                            <button 
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
+                            (click)="exportPrestationTierPayantToExcel()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-file-excel" 
+                            pTooltip="Exporter les prestations des tiers payants"
+                            class="p-button-rounded p-button-success p-mr-2">
+                        </button>    
+
+                            <button 
+                            [disabled]="!dateDebut || !dateFin || dateDebut > dateFin"
+                            (click)="exportPrestationPrefinancementAndTierPayantToExcel()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-file-excel" 
+                            pTooltip="Exporter les prestations des préfinancements et  des tiers payants"
+                            class="p-button-rounded p-button-success p-mr-2">
+                        </button>    
+
+                        </div>
+                            
+                        </div>
+                    
+                </form>
+            </div>
+        </ng-template>
+        </p-dialog>
+
+<p-toast></p-toast>  
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+</div>
+</div>

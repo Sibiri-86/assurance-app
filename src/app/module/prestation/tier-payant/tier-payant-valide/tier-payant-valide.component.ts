@@ -313,6 +313,7 @@ export class TierPayantValideComponent implements OnInit {
     this.report.sinistreTierPayantDTO.prestation.push(prestation);
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT; */
     
+    console.log('this.reportthis.report', this.report);
     
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
     this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;

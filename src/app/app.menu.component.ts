@@ -75,7 +75,9 @@ export class AppMenuComponent implements OnInit {
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_edition)},
                                     {label: 'Ordre de paiement | Valide', icon: '', routerLink: ['/prestation/tierPayant/ordre-reglement/valide'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_valide)},
-                                    {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
+                                    // {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/ord-reglement/consultation'],
+                                    // visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)},
+                                    {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/consultation-tiers-payant'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)},
                                     {label: 'Courrier Prestataire', icon: '', routerLink: ['prestation/tierPayant/courrier-prestataire'],
                                         visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)}
@@ -164,6 +166,9 @@ export class AppMenuComponent implements OnInit {
                       
                             {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/recapitulatif'], visible: true},
                             {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille'], visible: true},
+                           
+                            
+                           
                             {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-acte'], visible: true},
                             {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/repartition-depense-statut'], visible: true},
                             {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/depense-famille-prestataire'], visible: true},
@@ -261,6 +266,7 @@ export class AppMenuComponent implements OnInit {
                                 items: [
                                     {label: 'récapitulatif', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/recapitulatif'], visible: true},
                                     {label: 'Dép. familiale', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille'], visible: true},
+                                    {label: 'Prestation-préfinacement-Tiers-Payant', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting/export-prestation'], visible: true},
                                     {label: 'Dép. famille acte', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille-acte'], visible: true},
                                     {label: 'Dépense Statut', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/repartition-depense-statut'], visible: true},
                                     {label: 'Dép. Cen. Prescrip.', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reporting_AG_DGA/depense-famille-prestataire'], visible: true},
