@@ -55,6 +55,7 @@ export const Function = {
     sm_medical_pretataire: 'sm_medical_pretataire',
     sm_medical_tout: 'sm_medical_tout',
     sm_devalider_ordre: 'sm_devalider_ordre',
+    sm_ordonnance_medical: 'sm_ordonnance_medical',
 };
 
 export const UsersRoles = {
@@ -71,5 +72,5 @@ export const UsersRoles = {
     Function.sm_workflow_prefinancement_finance_valider, Function.sm_workflow_prefinancement_direction_valider, Function.sm_workflow_prefinancement_prestation_devalider, Function.sm_workflow_prefinancement_Medical_devalider, 
     Function.sm_workflow_prefinancement_finance_devalider, Function.sm_workflow_prefinancement_direction_devalider, 
     Function.VUE_ASSURE, Function.sm_portail, Function.sm_reporting_AG_DGA, Function.vue_maj_assuere, Function.vue_maj_prestataire, Function.vue_maj_paiement,
-    Function.sm_export_depense_excel, Function.sm_medical_pretataire, Function.sm_medical_tout, Function.sm_devalider_ordre]
+    Function.sm_export_depense_excel, Function.sm_medical_pretataire, Function.sm_medical_tout, Function.sm_devalider_ordre, Function.sm_ordonnance_medical ]
 };

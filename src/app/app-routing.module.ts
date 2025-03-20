@@ -269,7 +269,7 @@ import { ApprovisionnementComponent } from './module/comptabilite/approvisionnem
                     {path: 'prestation/tierPayant/ord-reglement/consultation', component: TierPayantOrdreReglementSearchComponent},
                     {path: 'prestation/tierPayant/courrier-prestataire', component: CourrierPrestataireComponent,
                       canActivate: [AuthGuard],
-                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide', 'sm_ordonnance_medical']}},
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_medical','sm_medical_tout']}},

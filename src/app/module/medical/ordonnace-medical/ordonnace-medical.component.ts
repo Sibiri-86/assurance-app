@@ -75,6 +75,8 @@ import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { formatDate } from '@angular/common';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 import { Page } from '../../util/pageable';
+import { KeycloakService } from 'keycloak-angular';
+import { Function } from '../../common/config/role.user';
 
 
 
@@ -177,13 +179,14 @@ export class OrdonnaceMedicalComponent implements OnInit {
         dateSoins: string;
         nom: string = '';
         private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.
+        roleOrdonnanceMedical = this.keycloak.isUserInRole(Function.sm_devalider_ordre);
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
                 private adherentService: AdherentService,
                 private formBuilder: FormBuilder, private messageService: MessageService,
                 private prefinancementService: PrefinancementService,
-                private breadcrumbService: BreadcrumbService) {
+                private breadcrumbService: BreadcrumbService,  private keycloak: KeycloakService) {
         this.breadcrumbService.setItems([{ label: 'Bon de prise en charge Pharmacie' }]);
     }
 
@@ -332,6 +335,7 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.prestationForm.reset();
         this.displayFormPrefinancement = false;
     }
+    
 
     selectActe(){
         
