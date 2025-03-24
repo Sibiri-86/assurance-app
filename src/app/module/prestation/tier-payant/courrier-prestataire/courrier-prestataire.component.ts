@@ -141,6 +141,7 @@ export class CourrierPrestataireComponent implements OnInit {
     sousActeEnCours: Array<PlafondSousActe>;
     checkControl = true;
     displayAssure = false;
+    displayCourrierEditing = false;
     tab: number[] = [];
     checkTierPayantResult: Array<CheckTierPayantResult>;
     isDetail: boolean;
@@ -161,6 +162,7 @@ export class CourrierPrestataireComponent implements OnInit {
     adherentsearch:  Adherent = {};
     adherentsList: Array<Adherent> = [];
     adherentsSelected: Adherent = {};
+    courrierToEdit : any;
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
         {label: 'PAQUET', value: TypeQuantite.PAQUET},
@@ -809,6 +811,50 @@ rechercherPrefinancementByPeriode() {
     } */
     
   }
+
+  
+  updateCourrier() {
+    const courrierPrestataire = this.courrierForm.value;
+    console.log('updatedData', courrierPrestataire);
+
+    this.tierPayantService.updateCourrierPrestataire(courrierPrestataire).subscribe(() => {
+      this.displayCourrierEditing = false;
+      this.rechercherPrefinancementByPeriode();
+    });
+  }
+  
+
+
+  editCourrier1(courrier: any) {
+    this.displayCourrierEditing = true;
+    
+    console.log('courrier', courrier);
+
+    this.courrierToEdit = courrier;
+    this.courrierForm.patchValue({...courrier});
+
+  
+    // Met à jour les chèques
+    const chequesFormArray = this.courrierForm.get('cheques') as FormArray;
+    chequesFormArray.clear(); // Supprime les anciens éléments
+  
+    courrier.cheques.forEach((cheque: any) => {
+      chequesFormArray.push(this.createChequeFormGroup(cheque));
+    });
+  }
+  
+  // Fonction pour créer un chèque avec ses valeurs
+  createChequeFormGroup(cheque: any): FormGroup {
+    return this.formBuilder.group({
+      numeroCheque: [cheque.numeroCheque, Validators.required],
+      numeroFacture: [cheque.numeroFacture, Validators.required],
+      montantReclame: [cheque.montantReclame, Validators.required],
+      montantPaye: [cheque.montantPaye, Validators.required],
+      isDifferent: [cheque.isDifferent],
+      differenceMontant: [cheque.differenceMontant],
+    });
+  }
+  
 
 }
 
