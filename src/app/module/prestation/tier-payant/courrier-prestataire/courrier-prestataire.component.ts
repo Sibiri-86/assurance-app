@@ -827,23 +827,16 @@ rechercherPrefinancementByPeriode() {
 
   editCourrier1(courrier: any) {
     this.displayCourrierEditing = true;
-    
-    console.log('courrier', courrier);
-
+  
     this.courrierToEdit = courrier;
     this.courrierForm.patchValue({...courrier});
-
-  
-    // Met à jour les chèques
     const chequesFormArray = this.courrierForm.get('cheques') as FormArray;
-    chequesFormArray.clear(); // Supprime les anciens éléments
-  
+    chequesFormArray.clear(); 
     courrier.cheques.forEach((cheque: any) => {
       chequesFormArray.push(this.createChequeFormGroup(cheque));
     });
   }
   
-  // Fonction pour créer un chèque avec ses valeurs
   createChequeFormGroup(cheque: any): FormGroup {
     return this.formBuilder.group({
       numeroCheque: [cheque.numeroCheque, Validators.required],
