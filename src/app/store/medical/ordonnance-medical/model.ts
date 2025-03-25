@@ -74,5 +74,6 @@ export interface Cheque {
     montantReclame?: number;
     differenceMontant?: number;
     dateSaisie?: Date;
+    isDifferent?: boolean;
 }
 

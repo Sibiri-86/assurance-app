@@ -66,7 +66,7 @@ import {loadFamilleActeEnCours} from '../../../../store/contrat/plafond/action';
 import * as prefinancementSelector from '../../../../store/prestation/prefinancement/selector';
 import {CheckPrefinancementResult} from '../../../../store/prestation/prefinancement/model';
 import {BreadcrumbService} from '../../../../app.breadcrumb.service';
-import { CourrierPrestataire, OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, TypeQuantite } from 'src/app/store/medical/ordonnance-medical/model';
+import { Cheque, CourrierPrestataire, OrdonnanceMedical, OrdonnanceMedicalProduitPharmaceutique, TypeQuantite } from 'src/app/store/medical/ordonnance-medical/model';
 import * as featureActionOrdonnanceMedical from '../../../../store/medical/ordonnance-medical/actions';
 import * as selectorsOrdonnanceMedicale from '../../../../store/medical/ordonnance-medical/selector';
 import * as featureActionOrdonnanceMedicale from '../../../../store/medical/ordonnance-medical/actions';
@@ -141,6 +141,7 @@ export class CourrierPrestataireComponent implements OnInit {
     sousActeEnCours: Array<PlafondSousActe>;
     checkControl = true;
     displayAssure = false;
+    displayCourrierEditing = false;
     tab: number[] = [];
     checkTierPayantResult: Array<CheckTierPayantResult>;
     isDetail: boolean;
@@ -161,6 +162,8 @@ export class CourrierPrestataireComponent implements OnInit {
     adherentsearch:  Adherent = {};
     adherentsList: Array<Adherent> = [];
     adherentsSelected: Adherent = {};
+    courrierToEdit : any;
+    isMontantDifferent: boolean = false;
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
         {label: 'PAQUET', value: TypeQuantite.PAQUET},
@@ -809,6 +812,44 @@ rechercherPrefinancementByPeriode() {
     } */
     
   }
+
+  
+  updateCourrier() {
+    const courrierPrestataire = this.courrierForm.value;
+    this.tierPayantService.updateCourrierPrestataire(courrierPrestataire).subscribe(() => {
+      this.displayCourrierEditing = false;
+      this.rechercherPrefinancementByPeriode();
+    });
+  }
+  
+  onEditCourrier(courrier: CourrierPrestataire) {
+    this.displayCourrierEditing = true;
+  
+    this.courrierToEdit = courrier;
+    this.courrierForm.patchValue({...courrier});
+    const chequesFormArray = this.courrierForm.get('cheques') as FormArray;
+    chequesFormArray.clear(); 
+    courrier.cheques.forEach((cheque: Cheque) => {
+      if(cheque.montantPaye != cheque.montantReclame){
+        cheque.isDifferent = true;
+      }
+      chequesFormArray.push(this.createChequeFormGroup(cheque));
+    });
+  }
+  
+  createChequeFormGroup(cheque: Cheque): FormGroup {
+
+      return this.formBuilder.group({
+        numeroCheque: [cheque.numeroCheque, Validators.required],
+        numeroFacture: [cheque.numeroFacture, Validators.required],
+        montantReclame: [cheque.montantReclame, Validators.required],
+        montantPaye: [cheque.montantPaye, Validators.required],
+        isDifferent: [cheque.isDifferent],
+        differenceMontant: [cheque.differenceMontant],
+      });
+
+  }
+  
 
 }
 

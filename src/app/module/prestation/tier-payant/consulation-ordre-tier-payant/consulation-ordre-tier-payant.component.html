@@ -108,7 +108,7 @@
                     <tr>
                         <th pSortableColumn="sinistreTierPayant.prestataire.libelle" style="width: 200px">Prestaire<p-sortIcon field="sinistreTierPayant.prestataire.libelle"></p-sortIcon></th>
                         <th pSortableColumn="dateDeclaration" style="width: 200px">Déclaration<p-sortIcon field="dateDeclaration"></p-sortIcon></th>
-                        <th pSortableColumn="numeroSinistre" style="width: 200px">Numero sinistre<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
+                        <th pSortableColumn="numeroSinistre" style="width: 200px">Numero Facture<p-sortIcon field="numeroSinistre"></p-sortIcon></th>
                         <th pSortableColumn="adherent.prenom" style="width: 300px">Nom Prenom<p-sortIcon field="adherent.prenom"></p-sortIcon></th>
                         <th pSortableColumn="montantReclame" style="width: 150px">montant Reclame<p-sortIcon field="montantReclame"></p-sortIcon></th>
                         <th pSortableColumn="montantPaye" style="width: 150px">montant payé<p-sortIcon field="montantPaye"></p-sortIcon></th>
@@ -189,7 +189,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="p-d-flex p-ai-center p-jc-between">
-                        {{totalRecordPprestations ? totalRecordPprestations: 0 }} sinistre(s).
+                        {{totalRecordPprestations ? totalRecordPprestations: 0 }} prestation(s).
                     </div>
                 </ng-template>
             </p-table>   

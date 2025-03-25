@@ -334,6 +334,11 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
             return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/courrier/save`, courrier);
           }
 
+        updateCourrierPrestataire(courrierPrestataire: CourrierPrestataire): Observable<any> {
+            // @FIXME: post request
+            return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/courrier/save-update`, courrierPrestataire);
+          }
+
           $getCourriersByPeriode(dateD: string, dateF: string): Observable<Array<CourrierPrestataire>> {
             // @FIXME: get request
             return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/courrier/by_periode` ,{params :
