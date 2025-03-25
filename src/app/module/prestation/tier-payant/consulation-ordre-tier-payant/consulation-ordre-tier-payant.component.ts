@@ -129,7 +129,7 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
       if (idOrdreReglement) {
         this.tierPayantService.getSinistreByOrdreReglementId(idOrdreReglement, this.page, this.size).subscribe(response => {
           this.sinistreTierPayants = response.content;
-          this.totalRecordSinistreTierPayantsecords = response.totalElements;  // Nombre total d'enregistrements
+          this.totalRecordSinistreTierPayantsecords = response.totalElements;
           this.displaySinistre = true;
         });
       }
@@ -149,15 +149,17 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
     
 
     onGetPrestationBySinistreId(sinistreId: string){
-      if(sinistreId)
-      this.tierPayantService.getPrestationBySinistreId(sinistreId, this.page, this.size).subscribe(
-        response => {
-          this.prestations = response.content;
-          console.log('this.prestations', this.prestations);
-          this.displayPrestation = true;
-          this.totalRecordPprestations = response.totalElements;
-        }
-      );
+      if(sinistreId){
+        const page = 0;
+        this.tierPayantService.getPrestationBySinistreId(sinistreId, page, this.size).subscribe(
+          response => {
+            this.prestations = response.content;
+            console.log('response', response);
+            this.displayPrestation = true;
+            this.totalRecordPprestations = response.totalElements;
+          }
+        );
+      }
     }
     
     imprimerPrestation(prestation: Prestation) {

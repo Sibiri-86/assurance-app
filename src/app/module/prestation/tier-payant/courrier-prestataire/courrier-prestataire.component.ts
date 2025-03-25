@@ -821,8 +821,6 @@ rechercherPrefinancementByPeriode() {
     });
   }
   
-
-
   onEditCourrier(courrier: CourrierPrestataire) {
     this.displayCourrierEditing = true;
   
