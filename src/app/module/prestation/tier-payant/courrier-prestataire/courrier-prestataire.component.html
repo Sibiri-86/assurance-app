@@ -264,7 +264,7 @@
                                             <p-inputSwitch formControlName="isDifferent" (onChange)="handleChange(i)"></p-inputSwitch>
                                         </div>
 
-                                        <div class="p-field p-col-4" *ngIf="isDifferent" >
+                                        <div class="p-field p-col-4" *ngIf="montantReclame != montantPaye || isDifferent" >
                                             <label for="differenceMontant" id="differenceMontant">Différence Montant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                             <p-inputNumber formControlName="differenceMontant" mode="decimal" locale="fr-FR" placeholder="differenceMontant"></p-inputNumber>
                                         </div>
@@ -414,7 +414,7 @@
                                             <p-inputSwitch formControlName="isDifferent" (onChange)="handleChange(i)"></p-inputSwitch>
                                         </div>
 
-                                        <div class="p-field p-col-4" *ngIf="isDifferent" >
+                                        <div class="p-field p-col-4" *ngIf="montantReclame != montantPaye || isDifferent" >
                                             <label for="differenceMontant" id="differenceMontant">Différence Montant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                             <p-inputNumber formControlName="differenceMontant" mode="decimal" locale="fr-FR" placeholder="differenceMontant"></p-inputNumber>
                                         </div>
