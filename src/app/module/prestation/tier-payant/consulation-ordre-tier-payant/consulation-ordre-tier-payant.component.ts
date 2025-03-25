@@ -154,7 +154,6 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         this.tierPayantService.getPrestationBySinistreId(sinistreId, page, this.size).subscribe(
           response => {
             this.prestations = response.content;
-            console.log('response', response);
             this.displayPrestation = true;
             this.totalRecordPprestations = response.totalElements;
           }
