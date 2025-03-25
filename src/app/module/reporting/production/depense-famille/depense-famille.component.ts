@@ -128,6 +128,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   role1 = this.keycloak.isUserInRole(Function.sm_export_depense_excel);
   dateDebut: any;
   dateFin: any;
+  garantId:Garant = {};
+  policeId:Police = {};
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -263,7 +265,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   }
 
   loadPoliceByGarant() {
-       this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.check.garant.id}));
+       this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.garantId.id}));
 
   }
   loadAdherentByGroupe(){
@@ -554,8 +556,10 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
 
     const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
     const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    console.log("this.garantId =====> ", this.garantId.id);
+    console.log("this.policeId =====> ", this.policeId.id);
 
-    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin)
+    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
       .subscribe(response => {
         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);

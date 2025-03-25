@@ -57,14 +57,16 @@ constructor(private http: HttpClient) {
         check, {responseType: 'arraybuffer'});
       }
 
-      exportDonneePrestations(dateDebut: string, dateFin: string) {
+      exportDonneePrestations(dateDebut: string, dateFin: string, garantId:string, policeId:string) {
     
         const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
         const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
       
         const params = new HttpParams()
           .set('dateDebut', formattedDateDebut)
-          .set('dateFin', formattedDateFin);
+          .set('dateFin', formattedDateFin)
+          .set('garantId', garantId)
+          .set('policeId', policeId);
     
         return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_PRESTATIONS), { 
           params,

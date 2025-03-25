@@ -115,17 +115,6 @@
 
                 <form>
                     <div class="p-fluid p-formgrid p-grid">
-                        <!-- <div class="p-field p-col-4">
-                            <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
-                            <p-dropdown [filter]="true" 
-                            showClear="true" [options]="garantList"
-                            name="garant"
-                            optionLabel="nom" 
-                            [autoDisplayFirst]="false" [(ngModel)]="check.garant" (onChange)="loadPoliceByGarant()" >
-                            </p-dropdown>
-    
-                        </div> -->
-
                         <div class="p-field p-col-4">
                             <label class="espace1" for="journal">Date debut <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                        
@@ -142,7 +131,18 @@
                         </div>
 
                         
-                        <!-- <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col-4">
+                                <label class="espace1" for="numCompte">Garant <span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                                <p-dropdown [filter]="true" 
+                                showClear="true" [options]="garantList"
+                                name="garant"
+                                optionLabel="nom" 
+                                [autoDisplayFirst]="false" [(ngModel)]="garantId" (onChange)="loadPoliceByGarant()" >
+                                </p-dropdown>
+        
+                            </div>
                             
                             <div class="p-field p-col-4">
                                 <label class="espace1" for="numCompte2"> Police <span style="color: red !important; size: 1.4em;" class="required"></span></label>
@@ -150,10 +150,10 @@
                                 showClear="true" [options]="policeList"
                                 name="police"
                                 optionLabel="nom" 
-                                [autoDisplayFirst]="false" [(ngModel)]="check.police" (onChange)="loadGroupeByPolice()">
+                                [autoDisplayFirst]="false" [(ngModel)]="policeId" (onChange)="loadGroupeByPolice()">
                                 </p-dropdown>
                             </div>
-                            <div class="p-field p-col-4">
+                            <!-- <div class="p-field p-col-4">
                                 <label  class="espace1" for="numCompte2"> Groupe <span style="color: red !important; size: 1.4em;" class="required"></span></label>
                                 <p-dropdown [filter]="true" 
                                 showClear="true" [options]="groupeListes"
@@ -171,9 +171,9 @@
                                 optionLabel="nom"  appendTo="body"
                                 [autoDisplayFirst]="false" [(ngModel)]="check.adherent">
                                 </p-dropdown>
-                            </div> 
+                            </div>  -->
     
-                        </div> -->
+                        </div>
     
                         
 
@@ -183,7 +183,7 @@
                                 <button pButton pRipple label="Quitter" type="button" (click)="closeDialog()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                             </div>
                             <div>
-                                <button pButton pRipple    (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                <button pButton pRipple [disabled]="!garantId"   (click)="findOperationGrandLivre()"  label="Visualiser" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
                             </div>
                         </div>
                     
