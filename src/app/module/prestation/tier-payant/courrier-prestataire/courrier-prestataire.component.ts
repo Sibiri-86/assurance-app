@@ -832,7 +832,6 @@ rechercherPrefinancementByPeriode() {
     courrier.cheques.forEach((cheque: Cheque) => {
       if(cheque.montantPaye != cheque.montantReclame){
         cheque.isDifferent = true;
-        this.isDifferent = true;
       }
       chequesFormArray.push(this.createChequeFormGroup(cheque));
     });
