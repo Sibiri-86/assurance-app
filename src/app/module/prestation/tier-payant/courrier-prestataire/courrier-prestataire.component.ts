@@ -815,8 +815,6 @@ rechercherPrefinancementByPeriode() {
   
   updateCourrier() {
     const courrierPrestataire = this.courrierForm.value;
-    console.log('updatedData', courrierPrestataire);
-
     this.tierPayantService.updateCourrierPrestataire(courrierPrestataire).subscribe(() => {
       this.displayCourrierEditing = false;
       this.rechercherPrefinancementByPeriode();
@@ -825,10 +823,10 @@ rechercherPrefinancementByPeriode() {
   
 
 
-  editCourrier1(courrier: any) {
+  onEditCourrier(courrier: CourrierPrestataire) {
     this.displayCourrierEditing = true;
   
-    this.courrierToEdit = courrier;
+    this.courrierToEdit = courrier.cheques.filter(chequeNotDeleted => chequeNotDeleted.deleted === false);
     this.courrierForm.patchValue({...courrier});
     const chequesFormArray = this.courrierForm.get('cheques') as FormArray;
     chequesFormArray.clear(); 
