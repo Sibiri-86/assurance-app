@@ -163,6 +163,7 @@ export class CourrierPrestataireComponent implements OnInit {
     adherentsList: Array<Adherent> = [];
     adherentsSelected: Adherent = {};
     courrierToEdit : any;
+    isMontantDifferent: boolean = false;
     typeQuantiteList: Array<SelectItem> = [
         {label: 'BOÎTE', value: TypeQuantite.BOITE},
         {label: 'PAQUET', value: TypeQuantite.PAQUET},
@@ -828,7 +829,11 @@ rechercherPrefinancementByPeriode() {
     this.courrierForm.patchValue({...courrier});
     const chequesFormArray = this.courrierForm.get('cheques') as FormArray;
     chequesFormArray.clear(); 
-    courrier.cheques.forEach((cheque: any) => {
+    courrier.cheques.forEach((cheque: Cheque) => {
+      if(cheque.montantPaye != cheque.montantReclame){
+        cheque.isDifferent = true;
+        this.isDifferent = true;
+      }
       chequesFormArray.push(this.createChequeFormGroup(cheque));
     });
   }
