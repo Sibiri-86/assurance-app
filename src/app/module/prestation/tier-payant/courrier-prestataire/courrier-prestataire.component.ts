@@ -332,6 +332,9 @@ export class CourrierPrestataireComponent implements OnInit {
           if(rest) {
             //this.courrierPrestataires = rest;
             this.rechercherPrefinancementByPeriode();
+              this.displayCourrierEditing = false;
+              this.imprimer(rest);
+            
           }
           });
         
