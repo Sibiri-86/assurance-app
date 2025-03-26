@@ -128,6 +128,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   role1 = this.keycloak.isUserInRole(Function.sm_export_depense_excel);
   dateDebut: any;
   dateFin: any;
+  garantId:Garant = {};
+  policeId:Police = {};
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -263,7 +265,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   }
 
   loadPoliceByGarant() {
-       this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.check.garant.id}));
+       this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.garantId.id}));
 
   }
   loadAdherentByGroupe(){
@@ -554,14 +556,23 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
 
     const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
     const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    console.log("this.garantId =====> ", this.garantId.id);
+    console.log("this.policeId =====> ", this.policeId.id);
 
-    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin)
+    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
       .subscribe(response => {
         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        if(this.garantId != null || this.garantId != undefined && this.policeId == null || this.policeId == undefined) {
+          a.download = `Prestations du Garant_${this.garantId.libelle}_du_${dateD}_au_${dateF}.xlsx`;
+        } else if(this.garantId != null || this.garantId != undefined && this.policeId != null || this.policeId != undefined) {
+          a.download = `Prestations du Souscripteur_${this.policeId.nom}_du_${dateD}_au_${dateF}.xlsx`;
+        } else {
+          a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        }
+        
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

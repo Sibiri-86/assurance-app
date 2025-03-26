@@ -274,13 +274,13 @@ import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-pa
                       canActivate: [AuthGuard],
                       data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
                    
-                      {path: 'prestation/tierPayant/consultation-tiers-payant', component: ConsulationOrdreTierPayantComponent,
-                      canActivate: [AuthGuard],
-                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+                    {path: 'prestation/tierPayant/consultation-tiers-payant', component: ConsulationOrdreTierPayantComponent,
+                    canActivate: [AuthGuard],
+                    data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
 
                     {path: 'medical/ordonnace-medical', component: OrdonnaceMedicalComponent,
                     canActivate: [AuthGuard],
-                    data: { roles: ['sm_medical','sm_medical_tout']}},
+                    data: { roles: ['sm_medical','sm_medical_tout', 'sm_ordonnance_medical']}},
                     {path: 'contrat/bulletin-adhesion', component: BulletinAdhesionComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production', 'sm_bulletin_adhesion']}},
