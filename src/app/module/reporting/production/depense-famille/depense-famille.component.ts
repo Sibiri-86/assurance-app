@@ -565,7 +565,14 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        if(this.garantId != null || this.garantId != undefined && this.policeId == null || this.policeId == undefined) {
+          a.download = `Prestations du Garant_${this.garantId.libelle}_du_${dateD}_au_${dateF}.xlsx`;
+        } else if(this.garantId != null || this.garantId != undefined && this.policeId != null || this.policeId != undefined) {
+          a.download = `Prestations du Souscripteur_${this.policeId.nom}_du_${dateD}_au_${dateF}.xlsx`;
+        } else {
+          a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        }
+        
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

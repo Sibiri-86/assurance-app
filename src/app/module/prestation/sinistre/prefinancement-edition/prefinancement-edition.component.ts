@@ -1965,7 +1965,7 @@ verifieDateSoins(event){
 
   myStyle(): object {
     return {"background-color":"red"};
-  } 
+  }
 
 
   addPrestation1() {
@@ -1977,20 +1977,63 @@ verifieDateSoins(event){
     prestat.sousActe = this.prestationPopForm.get('sousActe').value?.sousActe;
     prestat.familleActe = this.prestationPopForm.get('familleActe').value?.garantie;
     prestat.adherent = this.adherentSelected;
+
+    //Controle de l'existance des familles d'actes, actes et sous actes avant l'ajout de la prestation.
+    if(this.prestationPopForm.get('familleActe').value == null || this.prestationPopForm.get('familleActe').value == "undefined"
+      || prestat.familleActe == null ) {
+      this.addMessage('error', 'Famille d\'acte non présente', 'Veuillez selectionner une famille d\'acte');
+    } else if(this.prestationPopForm.get('acte').value == null || this.prestationPopForm.get('acte').value == "undefined"
+     || prestat.acte == null ) {
+      this.addMessage('error', 'Acte non présent', 'Veuillez selectionner un acte');
+    } else if(this.prestationPopForm.get('sousActe').value == null || this.prestationPopForm.get('sousActe').value == "undefined"
+     || prestat.sousActe == null ) {
+      this.addMessage('error', 'Sous Acte non présent', 'Veuillez selectionner un sous acte');
+    }
+
+    
+    
     if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
       console.log("PREST1", prestat);
     } else {
       //for(let i = 0; i < 10; i++) {
-        this.prestationsList.push(prestat);
+      //Verification si la meme saisie n'a pas deja été éffectuée
+      for(let i = 0; i < this.prestationsList.length; i++) {
+        if(this.prestationsList[i].sousActe.code == prestat.sousActe.code && this.prestationsList[i].montantRembourse == prestat.montantRembourse
+          && this.prestationsList[i].dateSoins == prestat.dateSoins && this.prestationsList[i].adherent.numero == prestat.adherent.numero
+          && this.prestationsList[i].adherent.nom == prestat.adherent.nom && this.prestationsList[i].adherent.prenom == prestat.adherent.prenom
+          && this.prestationsList[i].prestataire == prestat.prestataire && this.prestationsList[i].nombreActe == prestat.nombreActe
+          && this.prestationsList[i].debours == prestat.debours) {
+
+            this.confirmationService.confirm({
+              message: 'Confirmez-vous l\'ajout de ce sinistre malgré le fait qu\'il pourrait être un doublon dans la facture',
+              header: 'Confirmation',
+              icon: 'pi pi-exclamation-triangle',
+              accept: () => {
+                this.prestationsList.push(prestat);
+              },
+            });
+          } else {
+            console.log('dans le elseeeeee');
+            this.prestationsList.push(prestat);
+          }
+        
+      }
+      
+        
         if(this.prestationsList.length >5) {
           this.updateView();
         //}
       }
+      if(this.prestationsList.length == 0) {
+        this.prestationsList.push(prestat);
+      }
       //this.prestationsList.push(prestat);
       console.log("PREST2", prestat);
     }
+
+    
    
    this.prestationPopForm.reset();
    this.displayFP =false;
@@ -2002,17 +2045,12 @@ verifieDateSoins(event){
     this.prestationPopForm.get('nomGroupeAdherent').setValue(this.adherentSelected.groupe.libelle);
     if (this.adherentSelected.adherentPrincipal !== null) {
       this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.adherentPrincipal.nom+" "+this.adherentSelected.adherentPrincipal.prenom);
-  } else {
-      this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    } else {
+        this.prestationPopForm.get('prenomAdherent').setValue(this.adherentSelected.nom+" "+this.adherentSelected.prenom);
+    }
+      console.log( "999999999999999", this.prestationsList);
+      this.prestationPopForm.get('montantPlafond').setValue(0); 
   }
-    console.log( "999999999999999", this.prestationsList);
-    this.prestationPopForm.get('montantPlafond').setValue(0);
-   
-    
-    
-    
-    
-}
 updateView() {
   this.prestationsList = [...this.prestationsList];
 }
