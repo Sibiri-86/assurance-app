@@ -816,9 +816,13 @@ rechercherPrefinancementByPeriode() {
   
   updateCourrier() {
     const courrierPrestataire = this.courrierForm.value;
-    this.tierPayantService.updateCourrierPrestataire(courrierPrestataire).subscribe(() => {
-      this.displayCourrierEditing = false;
-      this.rechercherPrefinancementByPeriode();
+    this.tierPayantService.updateCourrierPrestataire(courrierPrestataire).subscribe((res) => {
+    
+      if(res) {
+        this.displayCourrierEditing = false;
+        this.rechercherPrefinancementByPeriode();
+        this.imprimer(res);
+      }
     });
   }
   
