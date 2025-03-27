@@ -172,14 +172,17 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
         this.tierPayantService.$getReport(this.report).subscribe();
 
-        // this.tierPayantService.$getReport(this.report).subscribe();
-        // const safeJson = flatted.stringify(this.report);
-        // console.log('safeJson', safeJson);
-
         this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
         this.report.sinistreTierPayantDTO = prestation.sinistreTierPayant;
 
       }
+
+        imprimerOrdreReglementTierPayant(ordre: OrdreReglementTierPayant) {
+          this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
+          this.report.ordreReglementDto = ordre;
+          this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+        }
+      
     
 
 }

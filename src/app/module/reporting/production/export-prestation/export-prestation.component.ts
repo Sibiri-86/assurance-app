@@ -128,7 +128,7 @@ export class ExportPrestationComponent implements OnInit {
   
           const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
           const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
-          const choose ='BONDEPRISENECHARGE';
+          const choose ='BON_PRISE_EN_ECHARGE';
           this.exportPrestationService.exportPrestationPrefincementTierPayantToExcel(this.dateDebut, this.dateFin, choose)
             .subscribe(response => {
               const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
