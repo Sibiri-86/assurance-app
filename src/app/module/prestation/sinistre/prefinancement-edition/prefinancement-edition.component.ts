@@ -1992,19 +1992,44 @@ verifieDateSoins(event){
 
     
     
-    if(this.compteur !==null) {
+    /* if(this.compteur !==null) {
       this.prestationsList[this.compteur] = prestat;
       this.compteur = null;
       console.log("PREST1", prestat);
-    } else {
+    } else { */
       //for(let i = 0; i < 10; i++) {
       //Verification si la meme saisie n'a pas deja été éffectuée
+      /**if(this.prestationsList.length == 0 ) {
+        this.prestationsList.push(prestat);
+      } else {
+        console.log("this.prestationsList.length 1111" , this.prestationsList.length);
       for(let i = 0; i < this.prestationsList.length; i++) {
+        console.log("this.prestationsList.length 2222" , this.prestationsList.length);
+        console.log("i" , i);
+        console.log("this.prestationsList[i].sousActe.code ", this.prestationsList[i].sousActe.code);
+        console.log("prestat.sousActe.code ", prestat.sousActe.code);
+        console.log("this.prestationsList[i].montantRembourse ", this.prestationsList[i].montantRembourse);
+        console.log("prestat.montantRembourse ", prestat.montantRembourse);
+        console.log("this.prestationsList[i].dateSoins ", this.prestationsList[i].dateSoins);
+        console.log("prestat.dateSoins ", prestat.dateSoins);
+        console.log("this.prestationsList[i].adherent.numero ", this.prestationsList[i].adherent.numero );
+        console.log("prestat.adherent.numero ", prestat.adherent.numero);
+        console.log("this.prestationsList[i].adherent.nom ", this.prestationsList[i].adherent.nom);
+        console.log(" prestat.adherent.nom ",  prestat.adherent.nom);
+        console.log(" this.prestationsList[i].adherent.prenom ", this.prestationsList[i].adherent.prenom);
+        console.log(" prestat.adherent.prenom ", prestat.adherent.prenom);
+        console.log(" this.prestationsList[i].prestataire ", this.prestationsList[i].prestataire.libelle);
+        console.log("prestat.prestataire.libelle ", prestat.prestataire.libelle);
+        console.log("this.prestationsList[i].nombreActe ", this.prestationsList[i].nombreActe);
+        console.log("prestat.nombreActe ", prestat.nombreActe);
+        console.log("this.prestationsList[i].debours ", this.prestationsList[i].debours);
+        console.log("prestat.debours ", prestat.debours);
         if(this.prestationsList[i].sousActe.code == prestat.sousActe.code && this.prestationsList[i].montantRembourse == prestat.montantRembourse
           && this.prestationsList[i].dateSoins == prestat.dateSoins && this.prestationsList[i].adherent.numero == prestat.adherent.numero
           && this.prestationsList[i].adherent.nom == prestat.adherent.nom && this.prestationsList[i].adherent.prenom == prestat.adherent.prenom
-          && this.prestationsList[i].prestataire == prestat.prestataire && this.prestationsList[i].nombreActe == prestat.nombreActe
-          && this.prestationsList[i].debours == prestat.debours) {
+          && this.prestationsList[i].prestataire.libelle == prestat.prestataire.libelle && this.prestationsList[i].nombreActe == prestat.nombreActe
+          && this.prestationsList[i].debours == prestat.debours && this.prestationsList[i].medecin.nom == prestat.medecin.nom
+          && this.prestationsList[i].medecin.prenom == prestat.medecin.prenom) {
 
             this.confirmationService.confirm({
               message: 'Confirmez-vous l\'ajout de ce sinistre malgré le fait qu\'il pourrait être un doublon dans la facture',
@@ -2014,24 +2039,37 @@ verifieDateSoins(event){
                 this.prestationsList.push(prestat);
               },
             });
-          } else {
-            console.log('dans le elseeeeee');
-            this.prestationsList.push(prestat);
           }
         
       }
+
+    this.prestationsList.forEach(p=> {
+        if(p.sousActe.code == prestat.sousActe.code && p.montantRembourse == prestat.montantRembourse
+          && p.dateSoins == prestat.dateSoins && p.adherent.numero == prestat.adherent.numero
+          && p.adherent.nom == prestat.adherent.nom && p.adherent.prenom == prestat.adherent.prenom
+          && p.prestataire.libelle == prestat.prestataire.libelle && p.nombreActe == prestat.nombreActe
+          && p.debours == prestat.debours && p.medecin.nom == prestat.medecin.nom
+          && p.medecin.prenom == prestat.medecin.prenom) {
+            this.prestationsList
+          }
+      })
+       
+      }*/
+      
+      /**if(this.prestationsList.length == 0) {
+        console.log("this.prestationsList.length 3333" , this.prestationsList.length);
+        this.prestationsList.push(prestat);
+      }*/
       
         
         if(this.prestationsList.length >5) {
           this.updateView();
         //}
       }
-      if(this.prestationsList.length == 0) {
-        this.prestationsList.push(prestat);
-      }
-      //this.prestationsList.push(prestat);
+      
+      this.prestationsList.push(prestat);
       console.log("PREST2", prestat);
-    }
+    //}
 
     
    
