@@ -80,6 +80,8 @@ export class PaiementFactureComponent implements OnInit {
 
   numeroCheque: string = '';
   existe: boolean | null = null;
+  sticker: string = '';
+  stickerConfimartion: boolean = false;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -296,6 +298,28 @@ export class PaiementFactureComponent implements OnInit {
         },
       });
     }
+
+  }
+
+
+  getStickerConfirmation(ordreReglementTierPayantId, sticker){
+
+    this.tierPayantService.getStickerConfirmation(ordreReglementTierPayantId, sticker).subscribe( 
+       response => {
+        if(response){
+          this.sticker = response;
+          if(sticker != ''){
+
+            this.stickerConfimartion = true;
+          }
+          if(sticker == ''){
+
+            this.stickerConfimartion = false;
+          }
+        }
+
+       }
+    );
 
   }
 

@@ -42,6 +42,8 @@ export interface OrdreReglementTierPayant{
     montantPaye?: number;
     isPaiement?: Boolean;
     isTakeCheque?: Boolean;
+    sticker?: string;
+    devalider?: Boolean;
     prestataire?: string;
     date?: Date;
     datePriseCheque?: Date;

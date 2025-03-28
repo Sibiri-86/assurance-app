@@ -396,6 +396,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_TIER_PAYANT_GET_STICKER = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/get-sticker-for-confirmation`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
 
     static readonly PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE = {
         prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque`,
