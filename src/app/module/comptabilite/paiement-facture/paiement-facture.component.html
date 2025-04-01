@@ -371,7 +371,7 @@
                         <div class="p-col-6">
                             <p-fieldset legend="Détails du Paiement">
 
-                                <div class="p-field">
+                                <!-- <div class="p-field">
                                     
                                     <label for="numeroCheque" class="font-bold">Confirmer le sticker</label>
                                     
@@ -384,7 +384,7 @@
                                 name="sticker" pInputText required 
                                 (blur)="getStickerConfirmation(ordreReglementTierPayant.id, sticker)">
                             
-                                </div>
+                                </div> -->
 
                                 <div class="p-field">
                                     
@@ -413,7 +413,6 @@
                                     <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
                                         pButton icon="pi pi-check" label="Valider le paiement" 
                                         [disabled]=" existe ||
-                                        stickerConfimartion == false ||
                                         !ordreReglementTierPayant?.numeroCheque ||
                                          !ordreReglementTierPayant.compte || 
                                          !ordreReglementTierPayant.compteTiers ||

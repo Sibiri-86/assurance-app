@@ -19,6 +19,7 @@ import * as featureActionBanque from '../../../store/parametrage/Banques/actions
 import { formatDate } from '@angular/common';
 import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-facture-paye',
@@ -132,6 +133,40 @@ export class FacturePayeComponent implements OnInit {
 
   }
 
+  onInitDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+    if(ordreReglementTierPayant){
+      this.confirmationService.confirm({
+        message: 'voulez-vous dévalider le paiement de cet ordre de reglement ?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.confirmDevalidation(ordreReglementTierPayant);
+        },
+      });
+    }
+
+  }
+
+  confirmDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+        this.tierPayantService.devaliderPaiementOrdreReglemnt(ordreReglementTierPayant).subscribe(
+          response => {            
+            if(response && response === true){
+              
+              this.ordreReglementList = this.ordreReglementList.filter( ordre => ordre.id != ordreReglementTierPayant.id);
+              this.getSucessInfo();
+            }
+            if(response && response === false){
+              
+              this.getFailledInfo();
+            }
+          }, error => {
+            this.getErrorInfo(error.message.message);
+          }
+        );
+  }
+
+
   onInitTakingCheque(ri: number){
     this.rowIndex = ri;
     this.isEditing = true;
@@ -196,10 +231,6 @@ export class FacturePayeComponent implements OnInit {
                       this.getSucessInfo();
                       this.isEditing = false;
                       this.ordreReglementList;
-                    }
-                    if(isPaye === false){
-    
-                      this.getFailledInfo();
                     }
                   }
                 }, error => {

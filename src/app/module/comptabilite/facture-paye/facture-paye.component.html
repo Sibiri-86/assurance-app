@@ -152,7 +152,18 @@
                                 type="button" 
                                 icon="pi pi-eye" 
                                 pTooltip="Voir les détails du prestataire"
-                                class="p-button-rounded p-button-info">
+                                class="p-button-rounded p-button-info p-mr-2">
+                            </button>
+                            </div>
+                            <div>
+                                <button 
+                                (click)="onInitDevalidation(ordre)"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-undo" 
+                                pTooltip="Voir les détails du prestataire"
+                                class="p-button-rounded p-button-danger p-mr-2">
                             </button>
                             </div>
                         </dt>

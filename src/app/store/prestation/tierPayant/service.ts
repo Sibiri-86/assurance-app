@@ -111,6 +111,10 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT), ordreReglementTierPayant);
   }
 
+  devaliderPaiementOrdreReglemnt(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
+    return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
+  }
+
   getStickerConfirmation(ordreReglementTierPayantId: string, sticker: string ): Observable<any> {
     const params = new HttpParams()
     .set('ordreReglementTierPayantId', ordreReglementTierPayantId)
