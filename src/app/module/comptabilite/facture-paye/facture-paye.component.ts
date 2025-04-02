@@ -153,8 +153,8 @@ export class FacturePayeComponent implements OnInit {
           response => {            
             if(response && response === true){
               
-              this.ordreReglementList = this.ordreReglementList.filter( ordre => ordre.id != ordreReglementTierPayant.id);
               this.getSucessInfo();
+              this.onSerByOdreReglementPayeByPeriode();
             }
             if(response && response === false){
               
@@ -164,6 +164,9 @@ export class FacturePayeComponent implements OnInit {
             this.getErrorInfo(error.message.message);
           }
         );
+
+        this.onSerByOdreReglementPayeByPeriode();
+
   }
 
 
@@ -230,7 +233,7 @@ export class FacturePayeComponent implements OnInit {
                     if(isPaye === true){
                       this.getSucessInfo();
                       this.isEditing = false;
-                      this.ordreReglementList;
+                      this.onSerByOdreReglementPayeByPeriode();
                     }
                   }
                 }, error => {

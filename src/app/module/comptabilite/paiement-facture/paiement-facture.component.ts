@@ -338,7 +338,7 @@ export class PaiementFactureComponent implements OnInit {
                   this.ordreReglementTierPayant = {};
                   this.compteSelected = {};
                   this.getSucessInfo();
-                  this.ordreReglementList = this.ordreReglementList.filter( ordre => ordre.id != ordreReglementTierPayant.id);
+                  this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
                 }
                 if(isPaye === false){
@@ -351,6 +351,9 @@ export class PaiementFactureComponent implements OnInit {
             }
           );
     }
+
+    this.onSerByOdreReglementByPeriode();
+
 
   }
 
