@@ -1,5 +1,6 @@
 import { Garant } from "../../contrat/garant/model";
 import { Pays } from "../../parametrage/pays/model";
+import { Prestataire } from "../../parametrage/prestataire/model";
 import { Region } from "../../parametrage/region/model";
 import { Ville } from "../../parametrage/ville/model";
 import { Compte } from "../compte/model";
@@ -22,6 +23,7 @@ export interface Tiers {
     ville?: Ville; */
     numTel?: string;
     garant?: Garant;
+    prestataire?: Prestataire;
 
 }
 
