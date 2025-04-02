@@ -316,9 +316,9 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-  getStickerConfirmation(ordreReglementTierPayantId, sticker){
+  getStickerConfirmation(sticker){
 
-    this.tierPayantService.getStickerConfirmation(ordreReglementTierPayantId, sticker).subscribe( 
+    this.tierPayantService.getStickerConfirmation(sticker).subscribe( 
        response => {
         if(response){
           this.sticker = response;
