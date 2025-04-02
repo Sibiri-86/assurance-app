@@ -304,7 +304,8 @@
 
 
 <p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
-    [style]="{width: '70%'}"
+    [header]="    "
+    [style]="{width: '80%'}"
     [modal]="true" styleClass="p-fluid"
     [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
 
@@ -314,7 +315,7 @@
             <p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
                     <div class="p-grid p-fluid">
-                        <div class="justifyContent"> <h5>PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT DE : <span class="textSuccess">{{prestataire}}</span> </h5> </div>
+                        <div class="justifyContent"> <h5>PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT DU PRESTATAIRE : <span class="textSuccess">{{prestataire}}</span> </h5> </div>
                         <!-- Colonne Gauche -->
                         <div class="p-col-6">
                             <p-fieldset legend="Informations Générales">
@@ -453,6 +454,7 @@
                 label="Valider le paiement" 
                 [disabled]=" existe ||
                 !ordreReglementTierPayant?.numeroCheque ||
+                !ordreReglementTierPayant?.compteTiersPrestataire ||
                  !ordreReglementTierPayant.compte || 
                  !ordreReglementTierPayant.compteTiers ||
                    !ordreReglementTierPayant.datePaiement ||
