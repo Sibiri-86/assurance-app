@@ -54,6 +54,7 @@ export interface OrdreReglementTierPayant{
     compte?: Compte;
     journaux?: Journaux;
     compteTiers?: Tiers;
+    compteTiersPrestataire?: Tiers;
 }
 
 export interface SinistreTierPayant {

@@ -39,6 +39,14 @@ $getTiersWithCompteCollectif(): Observable<Tiers[]> {
   );
 }
 
+getComptesTiersPrestataire(): Observable<Tiers[]> {
+  // @FIXME: get request
+  return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_TIERS_PRESTATAIRE)}`).pipe(
+    map((response: Tiers[]) => response),
+    catchError(this.handleError())
+  );
+}
+
 $findCompteTierByCode(compteTier: number): Observable<any> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_TIERS)}/find-by-compte`,{params: createRequestOption({compteTier})}).pipe(

@@ -304,8 +304,7 @@
 
 
 <p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
-    header="PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT" 
-    [style]="{width: '60%'}"
+    [style]="{width: '70%'}"
     [modal]="true" styleClass="p-fluid"
     [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
 
@@ -315,19 +314,13 @@
             <p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
                     <div class="p-grid p-fluid">
-                        
+                        <div class="justifyContent"> <h5>PAIEMENT D'UN ORDRE DE REGLEMENT TIERS PAYANT DE : <span class="textSuccess">{{prestataire}}</span> </h5> </div>
                         <!-- Colonne Gauche -->
                         <div class="p-col-6">
                             <p-fieldset legend="Informations Générales">
                                 
                                 <div class="p-field">
 
-                                    <div class="p-field">
-                                        <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
-                                        <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                            [(ngModel)]="ordreReglementTierPayant.datePaiement" 
-                                            name="datePaiement" pInputText>
-                                    </div>
                                         <label for="compte" class="font-bold">Compte banquaire<span class="required" style="color: red;">*</span></label>
                                         <p-dropdown inputId="compte" dataKey="id" [filter]="true"
                                     
@@ -353,6 +346,17 @@
                                     </p-dropdown>
                                 </div>
 
+                                <div class="p-field">
+                                    <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="comptesTiersPrestataire"
+                                        [autoDisplayFirst]="false" 
+                                        placeholder="Sélectionnez le compte tiers Prestataire"
+                                        optionLabel="intitule" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="ordreReglementTierPayant.compteTiersPrestataire">
+                                    </p-dropdown>
+                                </div>
+
 <!--                                 <div class="p-field">
                                     <label for="compteTiers" class="font-bold"> Journal<span class="required" style="color: red;">*</span></label>
                                     <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
@@ -370,6 +374,13 @@
                         <!-- Colonne Droite -->
                         <div class="p-col-6">
                             <p-fieldset legend="Détails du Paiement">
+
+                            <div class="p-field">
+                                <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
+                                <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                    [(ngModel)]="ordreReglementTierPayant.datePaiement" 
+                                    name="datePaiement" pInputText>
+                            </div>
 
                                 <!-- <div class="p-field">
                                     
@@ -407,21 +418,6 @@
                                         name="montantPaye" pInputText disabled>
                                 </div>
 
-                                <div class="p-d-block p-jc-center p-mt-2">
-                                    <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
-
-                                    <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
-                                        pButton icon="pi pi-check" label="Valider le paiement" 
-                                        [disabled]=" existe ||
-                                        !ordreReglementTierPayant?.numeroCheque ||
-                                         !ordreReglementTierPayant.compte || 
-                                         !ordreReglementTierPayant.compteTiers ||
-                                           !ordreReglementTierPayant.datePaiement ||
-                                            !ordreReglementTierPayant.montantPaye" 
-                                        class="p-button-success">
-                                    </button>   
-                                </div>
-
                             </p-fieldset>
                         </div>
                     </div>
@@ -442,8 +438,27 @@
                         </button>   
                     </div> 
                 </ng-template> -->
+
+
+
                 
             </p-toolbar>
+        </div>
+
+        <div class="p-d-block p-jc-center p-mt-2">
+            <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
+
+            <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
+                pButton icon="pi pi-check"
+                label="Valider le paiement" 
+                [disabled]=" existe ||
+                !ordreReglementTierPayant?.numeroCheque ||
+                 !ordreReglementTierPayant.compte || 
+                 !ordreReglementTierPayant.compteTiers ||
+                   !ordreReglementTierPayant.datePaiement ||
+                    !ordreReglementTierPayant.montantPaye" 
+                class="p-button-success">
+            </button>   
         </div>
     </ng-template>
 </p-dialog>

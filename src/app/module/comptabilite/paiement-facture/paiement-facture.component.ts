@@ -29,6 +29,7 @@ import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
 import { Journaux} from 'src/app/store/comptabilite/journaux/model';
 import { KeycloakService } from 'keycloak-angular';
 import { Function } from '../../common/config/role.user';
+import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 
 
 @Component({
@@ -65,6 +66,7 @@ export class PaiementFactureComponent implements OnInit {
   totalRecordPprestations: number;
   idOrdreReglement: string;
   ordreReglementTierPayant: OrdreReglementTierPayant = {};
+  prestataire: string = '';
   sinistreTierPayants: SinistreTierPayant [] = [];
 
   page : number = 0;
@@ -73,6 +75,7 @@ export class PaiementFactureComponent implements OnInit {
 
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
+  comptesTiersPrestataire: Tiers[] = [];
   typeJournaux: TypeJournaux[] = [];
   journaux: Array<Journaux>
   compteCollectifId: string;
@@ -100,6 +103,7 @@ export class PaiementFactureComponent implements OnInit {
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
     this.onSerByOdreReglementByPeriode();
+    this.onGetComptesTiersPrestataires();
     //this.onGetTypeJournaux();
     this.onGetJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
@@ -245,6 +249,16 @@ export class PaiementFactureComponent implements OnInit {
       
     }
 
+    onGetComptesTiersPrestataires(){
+
+        this.compteTiersService.getComptesTiersPrestataire().subscribe(
+          res => {
+            this.comptesTiersPrestataire = res;
+          }
+        );
+      
+    }
+
     onGetTypeJournaux(){
       this.typeJournauxService.$getTypeJournaux().subscribe(
         res => {
@@ -367,6 +381,7 @@ export class PaiementFactureComponent implements OnInit {
     if(ordreReglementTierPayant){
       this.isToPayeOrdreReglementTierPayant = true;
       this.ordreReglementTierPayant = ordreReglementTierPayant;
+      this.prestataire = ordreReglementTierPayant.prestataire;
     }
   }
 
