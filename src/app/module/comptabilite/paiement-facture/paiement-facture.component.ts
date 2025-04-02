@@ -337,6 +337,11 @@ export class PaiementFactureComponent implements OnInit {
 
   }
 
+    onCancelPaiement(){
+      this.isToPayeOrdreReglementTierPayant = false;
+      this.ordreReglementTierPayant = null;
+    }
+
 
   confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
     if(ordreReglementTierPayant) {

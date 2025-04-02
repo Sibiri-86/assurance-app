@@ -446,21 +446,33 @@
             </p-toolbar>
         </div>
 
-        <div class="p-d-block p-jc-center p-mt-2">
-            <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
-
-            <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
-                pButton icon="pi pi-check"
-                label="Valider le paiement" 
-                [disabled]=" existe ||
-                !ordreReglementTierPayant?.numeroCheque ||
-                !ordreReglementTierPayant?.compteTiersPrestataire ||
-                 !ordreReglementTierPayant.compte || 
-                 !ordreReglementTierPayant.compteTiers ||
-                   !ordreReglementTierPayant.datePaiement ||
-                    !ordreReglementTierPayant.montantPaye" 
-                class="p-button-success">
-            </button>   
+        <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">
+                <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
+    
+                <button (click)="onCancelPaiement()" 
+                    pButton icon="pi pi-check"
+                    label="Quitter le paiement"
+                    class="p-button-danger">
+                </button>  
+            </div>
+            <div class="col col-6">
+                <!-- compteSelected?.soldeDebiteur < ordreReglementTierPayant?.montantPaye || -->
+                <button (click)="onSaveOrdreReglementPaiement(ordreReglementTierPayant)" 
+                    pButton icon="pi pi-check"
+                    label="Valider le paiement" 
+                    [disabled]=" existe ||
+                    !ordreReglementTierPayant?.numeroCheque ||
+                    !ordreReglementTierPayant?.compteTiersPrestataire ||
+                     !ordreReglementTierPayant.compte || 
+                     !ordreReglementTierPayant.compteTiers ||
+                       !ordreReglementTierPayant.datePaiement ||
+                        !ordreReglementTierPayant.montantPaye" 
+                    class="p-button-success">
+                </button>   
+            </div>
         </div>
+        
+        
     </ng-template>
 </p-dialog>
