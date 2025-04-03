@@ -50,8 +50,13 @@
                         
                         
                         
-                        <td style="min-width:150px">
+<!--                         <td style="min-width:150px">
                             <button  pButton pRipple type="button"  icon="pi pi-plus" (click)="addOperation(exerciceComptableOperation)" class="p-button-rounded p-button-text"></button>
+
+                        </td> -->
+                        
+                        <td style="min-width:150px">
+                            <button  pButton pRipple type="button"  icon="pi pi-plus" (click)="onGetOperationByExerciceComptableOperation(exerciceComptableOperation.id)" class="p-button-rounded p-button-text"></button>
 
                         </td>
                     </tr>
@@ -207,20 +212,20 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-operation let-ri="rowIndex">
                             <tr>
-                                <td>   {{operation.dateSaisieJour | formatTableValue : 'date'}}
+                                <td>   {{operation?.dateSaisieJour | formatTableValue : 'date'}}
                                        
                                 </td>
-                                <td>   {{operation.dateSaisie | formatTableValue : 'date'}}
+                                <td>   {{operation?.dateSaisie | formatTableValue : 'date'}}
                                        
                                 </td>
                                 <td>{{operation.numFacture}}</td>
                                 <td>{{operation.reference}} </td>
-                                <td>{{operation.compte.compte | formatTableValue: 'number':true}}</td>
+                                <td>{{operation?.compte?.compte | formatTableValue: 'number':true}}</td>
                                 <td >{{operation?.compteAuxiliaire?.intitule}}
                                 </td>
-                                <td>{{operation.libelle}} </td>
-                                <td >{{operation.montantDebit | formatTableValue: 'number':true}}</td>
-                                <td>{{operation.montantCredit | formatTableValue: 'number':true}} </td>
+                                <td>{{operation?.libelle}} </td>
+                                <td >{{operation?.montantDebit | formatTableValue: 'number':true}}</td>
+                                <td>{{operation?.montantCredit | formatTableValue: 'number':true}} </td>
                                 <td >
                                     <button pButton pRipple icon="pi pi-pencil" pTooltip="editer" class="p-button-rounded p-button-success p-mr-2" (click)="editOperationList(operation, ri)"></button>
                                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="deleteOperationList(operation, ri)"></button>

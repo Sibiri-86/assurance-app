@@ -214,7 +214,20 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     this.displayAddOperationListe = true;
     this.findExerciceOperationAjour();
   }
+
+
+onGetOperationByExerciceComptableOperation(exerciceComptableOperationId: string){
+  this.operationService.$getOperationByExerciceOperation(exerciceComptableOperationId).subscribe(
+      response => {
+        this.operationAddList = response.operationList;
+        this.displayAddOperationListe = true;
+      }
+  );
+}
+
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
+    console.log("exerciceComptableOperationexerciceComptableOperation", exerciceComptableOperation);
+
     this.exerciceComptableOperation = exerciceComptableOperation;
     this.exerciceComptableService.findExerciceComptableActif(exerciceComptableOperation?.exercice).subscribe((res)=>{
       if(res) {
@@ -226,6 +239,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperationLeutree({exerciceOperationId: exerciceComptableOperation.id}));
+    
     console.log("=========1========= ",this.exerciceComptableOperationList[0].isPartie, "=========2========= ",exerciceComptableOperation.id);
     this.isClasse5 = false;
     if(this.exerciceComptableOperationList[0].isPartie) {
