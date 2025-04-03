@@ -162,7 +162,7 @@
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-undo" 
-                                pTooltip="Voir les détails du prestataire"
+                                pTooltip="Dévalider le paiement"
                                 class="p-button-rounded p-button-danger p-mr-2">
                             </button>
                             </div>
@@ -213,3 +213,49 @@
 </p-dialog>
 
   
+<p-dialog 
+    [(visible)]="isToDisplayMotifDevalidation" 
+    [header]="'MOTIF DE DAVALIDATION'" 
+    [style]="{width: '50vw'}"
+    [modal]="true" 
+    styleClass="p-fluid"
+    [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'"
+    [closable]="false">
+
+    <ng-template pTemplate="content">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <label class="p-mb-4" for="motifDevalidation" class="font-bold">
+                    <span><span>Motif de dévalidation</span> <span class="required" style="color: red;">*</span></span> <br>
+                    <span>: Prestataire : </span> <span class="successColor">{{ prestataire }}</span>
+                </label>
+                <textarea class="p-mt-3" id="motifDevalidation" 
+                    pInputTextarea 
+                    name="motifDevalidation" 
+                    [(ngModel)]="ordreReglementTierPayantToDevalide.motifDevalidation"
+                    rows="5"
+                    class="p-inputtext p-fluid"
+                    placeholder="Saisir le motif ici..."
+                    [pTooltip]="'Veuillez entrer un motif de dévalidation'" 
+                    tooltipPosition="top">
+                </textarea>
+            </div>
+        </div>
+
+        <div class="p-d-flex p-jc-between p-mt-3">
+            <button (click)="onCancelTakingCheque()" 
+                pButton 
+                icon="pi pi-times"
+                label="Quitter"
+                class="p-button-danger p-mr-3">
+            </button>  
+
+            <button (click)="onAcceptDevalidation(ordreReglementTierPayantToDevalide)" 
+                pButton 
+                icon="pi pi-check"
+                label="Valider la dévalidation"
+                class="p-button-success">
+            </button>   
+        </div>
+    </ng-template>
+</p-dialog>

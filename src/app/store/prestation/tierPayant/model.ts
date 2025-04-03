@@ -51,6 +51,7 @@ export interface OrdreReglementTierPayant{
     dateDeSaisie?:Date;
     numeroCheque?:string;
     numeroFactureSinistre?:string;
+    motifDevalidation?:string;
     compte?: Compte;
     journaux?: Journaux;
     compteTiers?: Tiers;

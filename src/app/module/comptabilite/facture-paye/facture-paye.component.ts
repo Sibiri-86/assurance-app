@@ -47,6 +47,9 @@ export class FacturePayeComponent implements OnInit {
 
   dateDebut: any;
   dateFin: any;
+  prestataire: string;
+  ordreReglementTierPayantToDevalide: OrdreReglementTierPayant = {};;
+  isToDisplayMotifDevalidation: boolean = false;
 
   numeroCheque: string = '';
   existe: boolean | null = null;
@@ -133,7 +136,17 @@ export class FacturePayeComponent implements OnInit {
 
   }
 
+
   onInitDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+    this.ordreReglementTierPayantToDevalide = ordreReglementTierPayant;
+    
+    this.prestataire = ordreReglementTierPayant.prestataire;
+    this.isToDisplayMotifDevalidation = true;
+
+  }
+
+  onAcceptDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
 
     if(ordreReglementTierPayant){
       this.confirmationService.confirm({
@@ -176,9 +189,12 @@ export class FacturePayeComponent implements OnInit {
   }
 
   onCancelTakingCheque(){
+
     this.isEditing = false;
+    this.isToDisplayMotifDevalidation = false;
 
     this.getCancelInfo();
+    this.onSerByOdreReglementPayeByPeriode();
   }
 
     onSerByOdreReglementPayeByPeriode() {
@@ -293,10 +309,6 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
 
-        console.log('dateDebut', dateD);
-        console.log('dateFin', dateF);
-        
-    
         this.tierPayantService.exportPrestationPrefincementTierPayantToExcel(this.dateDebut, this.dateFin, this.choose)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
