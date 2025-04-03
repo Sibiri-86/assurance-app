@@ -444,7 +444,8 @@
                         <th pSortableColumn="annee" >Reférence<p-sortIcon field="annee"></p-sortIcon></th>
                         
                         <th pSortableColumn="annee" >N° compte<p-sortIcon field="annee"></p-sortIcon></th>
-                        <th pSortableColumn="annee" >N° compte tier<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >N° compte tier Garant<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >N° compte tier Prestataire<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Libellé d'écriture<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
@@ -465,8 +466,12 @@
                              <td><span class="p-column-title" >{{operation?.numFacture}}</span></td>
 
                              <td><span class="p-column-title" >{{operation?.reference}}</span></td>
-                             <td><span class="p-column-title" >{{operation.compte.compte | formatTableValue: 'number':true}}</span></td>
+                             <td>
+                                <span class="p-column-title" >{{operation?.compte?.compte | formatTableValue: 'number':true}}</span>
+                            </td>
                              <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span>
+                             </td>
+                             <td ><span class="p-column-title" >{{operation?.compteTiersPrestataire?.intitule}}</span>
                              </td>
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>

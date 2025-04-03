@@ -217,10 +217,12 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
 
 
 onGetOperationByExerciceComptableOperation(exerciceComptableOperationId: string){
+
   this.operationService.$getOperationByExerciceOperation(exerciceComptableOperationId).subscribe(
       response => {
-        this.operationAddList = response.operationList;
-        this.displayAddOperationListe = true;
+        this.operationList = response.operationList;
+        this.displayOperation = true;
+        this.isClasse5 = false;
       }
   );
 }
