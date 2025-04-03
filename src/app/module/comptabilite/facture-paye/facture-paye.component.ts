@@ -167,6 +167,7 @@ export class FacturePayeComponent implements OnInit {
             if(response && response === true){
               
               this.getSucessInfo();
+              this.isToDisplayMotifDevalidation = false;
               this.onSerByOdreReglementPayeByPeriode();
             }
             if(response && response === false){
