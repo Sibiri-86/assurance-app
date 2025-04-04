@@ -324,8 +324,6 @@
 
                                         <label for="compte" class="font-bold">Compte banquaire<span class="required" style="color: red;">*</span></label>
                                         <p-dropdown inputId="compte" dataKey="id" [filter]="true"
-                                    
-                                        [disabled]="!ordreReglementTierPayant.date"
                                         showClear="true" [options]="comptes"
                                         [autoDisplayFirst]="true" 
                                         placeholder="Sélectionnez le compte"

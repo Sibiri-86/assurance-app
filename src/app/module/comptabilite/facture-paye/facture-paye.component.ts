@@ -20,6 +20,14 @@ import { formatDate } from '@angular/common';
 import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { error } from 'console';
+import { KeycloakService } from 'keycloak-angular';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
+import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/service';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import { Journaux } from 'src/app/store/comptabilite/journaux/model';
+import { Tiers } from 'src/app/store/comptabilite/tiers/model';
+import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 
 @Component({
   selector: 'app-facture-paye',
@@ -63,14 +71,38 @@ export class FacturePayeComponent implements OnInit {
 
   choose: string = '';
 
+  isToPayeOrdreReglementTierPayant = false;
+  ordreReglementTierPayant: OrdreReglementTierPayant = {};
+
+    comptes: Compte[] = [];
+    comptesTiers: Tiers[] = [];
+    comptesTiersPrestataire: Tiers[] = [];
+    typeJournaux: TypeJournaux[] = [];
+    journaux: Array<Journaux>
+    compteCollectifId: string;
+    compteSelected: Compte;
+  
+    sticker: string = '';
+    stickerConfimartion: boolean = false;
+
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private tierPayantService: TierPayantService,
+              private compteService: CompteService,
+              private compteTiersService: TiersService,
+              private typeJournauxService: TypeJournauxService,
+              private journauxService: JournauxService,
               private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
+
+    this.onGetComptes();
+    this.onGetComptesTiersByCompteCollectifAndGarand();
+    this.onGetComptesTiersPrestataires();
+
     this.onSearByOdreReglementPayeByPeriode();
     this.getRefreshfunctions();
     /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
@@ -455,5 +487,120 @@ export class FacturePayeComponent implements OnInit {
             console.error("Erreur lors de l'exportation :", error);
           });
       }
+
+
+      onGetComptes(){
+        this.compteService.$getComptesBanquaires().subscribe(
+          res => {
+            this.comptes = res;
+          }
+        );
+      }
+  
+  
+      onGetComptesTiersByCompteCollectifAndGarand(){
+  
+          this.compteTiersService.$getTiersWithCompteCollectif().subscribe(
+            res => {
+              this.comptesTiers = res;
+            }
+          );
+        
+      }
+  
+      onGetComptesTiersPrestataires(){
+  
+          this.compteTiersService.getComptesTiersPrestataire().subscribe(
+            res => {
+              this.comptesTiersPrestataire = res;
+            }
+          );
+        
+      }
+  
+      onGetTypeJournaux(){
+        this.typeJournauxService.$getTypeJournaux().subscribe(
+          res => {
+            this.typeJournaux = res.typeJournauxList;
+          }
+        );
+      }
+  
+      onGetJournaux(){
+        this.journauxService.$getJournaux().subscribe(
+          res => {
+            this.journaux = res.journauxList;
+          }
+        );
+      }
+  
+
+
+
+      onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+        if(ordreReglementTierPayant){
+          this.isToPayeOrdreReglementTierPayant = true;
+          this.ordreReglementTierPayant = ordreReglementTierPayant;
+          this.prestataire = ordreReglementTierPayant.prestataire;
+        }
+      }
+
+      onCancelPaiement(){
+        this.isToPayeOrdreReglementTierPayant = false;
+        this.ordreReglementTierPayant = null;
+      }
+
+      onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPayant){
+          this.confirmationService.confirm({
+            message: 'voulez-vous payer cet ordre de reglement ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmPaiemnt(ordreReglementTierPayant);
+            },
+          });
+        }
+    
+      }
+
+      confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
+        if(ordreReglementTierPayant) {
+    
+          ordreReglementTierPayant.isTakeCheque = false;
+              this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
+                response => {
+                  if(response){
+                    const isPaye = response;
+                    if(isPaye === true){
+    
+                      this.isToPayeOrdreReglementTierPayant = false;
+                      this.ordreReglementTierPayant = {};
+                      this.compteSelected = {};
+                      this.getSucessInfo();
+                      this.onSearByOdreReglementPayeByPeriode();
+                      this.onGetComptes();
+                    }
+                    if(isPaye === false){
+    
+                      this.getFailledInfo();
+                    }
+                  }
+                }, error => {
+                  this.getErrorInfo(error.error.message);
+                }
+              );
+        }
+    
+        this.onSearByOdreReglementPayeByPeriode();
+    
+    
+      }
+    
+      onCancelPaiementOrdreReglement(): void{
+        this.getCancelInfo();
+      }
+  
 
 }
