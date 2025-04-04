@@ -213,9 +213,11 @@ export class FacturePayeComponent implements OnInit {
               this.rowIndex = null;
             }
             if(response && response === false){
-              
               this.getFailledInfo();
             }
+            this.getRefreshfunctions();
+            this.getSucessInfo();
+
           }, error => {
             this.getErrorInfo(error.message.message);
           }
@@ -400,8 +402,10 @@ export class FacturePayeComponent implements OnInit {
                   if(response){
                     const isPaye = response;
                     if(isPaye === true){
-                      this.getSucessInfo();
                       this.isEditing = false;
+                      this.rowIndex = null;
+                      this.getSucessInfo();
+                      this.getRefreshfunctions();
                     }
                   }
                 }, error => {
@@ -415,20 +419,16 @@ export class FacturePayeComponent implements OnInit {
 
       getSucessInfo(): void {
         this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
-        this.getRefreshfunctions();
       }
       getCancelInfo(): void {
         this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération annulé!'});
-        this.getRefreshfunctions();
       }
       getFailledInfo(): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération échouée!'});
-        this.getRefreshfunctions();
       }
       
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
-        this.getRefreshfunctions();
       }
 
 
@@ -535,8 +535,6 @@ export class FacturePayeComponent implements OnInit {
       }
   
 
-
-
       onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
         if(ordreReglementTierPayant){
           this.isToPayeOrdreReglementTierPayant = true;
@@ -549,6 +547,21 @@ export class FacturePayeComponent implements OnInit {
         this.isToPayeOrdreReglementTierPayant = false;
         this.ordreReglementTierPayant = null;
       }
+
+      
+  verifierNumeroCheque(numeroCheque: string) {
+    if (numeroCheque.trim()) {
+      this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+        (result) => {
+          this.existe = result;
+        },
+        (error) => {
+          console.error('Erreur lors de la vérification', error);
+          this.existe = null;
+        }
+      );
+    }
+  }
 
       onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
@@ -571,7 +584,6 @@ export class FacturePayeComponent implements OnInit {
           ordreReglementTierPayant.isTakeCheque = false;
               this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
                 response => {
-                  if(response){
                     const isPaye = response;
                     if(isPaye === true){
     
@@ -579,27 +591,27 @@ export class FacturePayeComponent implements OnInit {
                       this.ordreReglementTierPayant = {};
                       this.compteSelected = {};
                       this.getSucessInfo();
-                      this.searByOdreReglementPayeByPeriodeAndDevalider();
-                    }
-                    if(isPaye === false){
-    
-                      this.getFailledInfo();
-                    }
+                      this.getRefreshfunctions();
                   }
                 }, error => {
                   this.getErrorInfo(error.error.message);
                 }
               );
         }
-    
-        this.searByOdreReglementPayeByPeriodeAndDevalider();
-    
+      
     
       }
     
       onCancelPaiementOrdreReglement(): void{
         this.getCancelInfo();
+        this.getRefreshfunctions();
       }
+
+      isMotifValid(): boolean {
+        const motif = this.ordreReglementTierPayantToDevalide?.motifDevalidation || '';
+        return motif.trim().length >= 50;
+      }
+      
   
 
 }
