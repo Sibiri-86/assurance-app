@@ -93,7 +93,8 @@ export class FacturePayeComponent implements OnInit {
               private compteTiersService: TiersService,
               private typeJournauxService: TypeJournauxService,
               private journauxService: JournauxService,
-              private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+              private messageService: MessageService, 
+              private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 

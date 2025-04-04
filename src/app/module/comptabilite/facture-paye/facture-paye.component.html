@@ -539,6 +539,7 @@
                         <th pSortableColumn="montantPaye">Montant</th>
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
+                        <th pSortableColumn="motifDevalidation">Motif</th>
                         <th>Actions</th>
                         
                     </tr>
@@ -556,6 +557,7 @@
                         </td>
                         <td class="p-mt-2"><span class="p-column-title" style="min-width:200px">{{ordre?.numeroCheque }}</span></td>
                         <td class="p-mt-2"><span class="p-column-title" style="min-width:200px">{{ordre?.compte?.libelle }}</span></td>
+                        <td class="p-mt-2"><span class="p-column-title" style="min-width:200px">{{ordre?.motifDevalidation }}</span></td>
 
                         <dt class="p-mt-2">
                             <button 
