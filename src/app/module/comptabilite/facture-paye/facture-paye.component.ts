@@ -32,6 +32,10 @@ export class FacturePayeComponent implements OnInit {
   ordreReglementListTakedCheque: OrdreReglementTierPayant[] = [];
   ordreReglementListNotTakedCheque: OrdreReglementTierPayant[] = [];
   ordreReglementListDevalider: OrdreReglementTierPayant[] = [];
+  isOrdreReglementListTakedCheque: boolean = false;
+  isOrdreReglementListNotTakedCheque: boolean = false;
+  isOrdreReglementList: boolean = false;
+  isOrdreReglementListDevalider: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
@@ -67,10 +71,10 @@ export class FacturePayeComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.onSerByOdreReglementPayeByPeriode();
-    this.onSerByOdreReglementPayeByPeriodeAndByTakeCheque();
-    this.onSerByOdreReglementPayeByPeriodeAndByNotTakeCheque();
-    this.onSerByOdreReglementPayeByPeriodeAndDevalider();
+    this.onSearByOdreReglementPayeByPeriode();
+    this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndDevalider();
     /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -174,7 +178,7 @@ export class FacturePayeComponent implements OnInit {
               
               this.getSucessInfo();
               this.isToDisplayMotifDevalidation = false;
-              this.onSerByOdreReglementPayeByPeriode();
+              this.onSearByOdreReglementPayeByPeriode();
             }
             if(response && response === false){
               
@@ -185,7 +189,7 @@ export class FacturePayeComponent implements OnInit {
           }
         );
 
-        this.onSerByOdreReglementPayeByPeriode();
+        this.onSearByOdreReglementPayeByPeriode();
 
   }
 
@@ -201,10 +205,10 @@ export class FacturePayeComponent implements OnInit {
     this.isToDisplayMotifDevalidation = false;
 
     this.getCancelInfo();
-    this.onSerByOdreReglementPayeByPeriode();
+    this.onSearByOdreReglementPayeByPeriode();
   }
 
-    onSerByOdreReglementPayeByPeriode() {
+  searByOdreReglementPayeByPeriode() {
 
       if(!this.dateDebut || !this.dateFin){
           this.dateDebut = new Date();
@@ -229,7 +233,41 @@ export class FacturePayeComponent implements OnInit {
           
       }
 
-    onSerByOdreReglementPayeByPeriodeAndByTakeCheque() {
+      onSearByOdreReglementPayeByPeriode(){
+        this.searByOdreReglementPayeByPeriode();
+        this.isOrdreReglementList = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndByTakeCheque(){
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.isOrdreReglementListTakedCheque = true;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+        this.isOrdreReglementList = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque(){
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.isOrdreReglementListNotTakedCheque = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+        this.isOrdreReglementList = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndDevalider(){
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
+        this.isOrdreReglementListDevalider = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementList = false;
+        
+      }
+      
+
+    searByOdreReglementPayeByPeriodeAndByTakeCheque() {
 
       if(!this.dateDebut || !this.dateFin){
           this.dateDebut = new Date();
@@ -254,7 +292,7 @@ export class FacturePayeComponent implements OnInit {
           
       }
 
-    onSerByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
+      searByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
 
       if(!this.dateDebut || !this.dateFin){
           this.dateDebut = new Date();
@@ -279,7 +317,7 @@ export class FacturePayeComponent implements OnInit {
           
       }
 
-    onSerByOdreReglementPayeByPeriodeAndDevalider() {
+      searByOdreReglementPayeByPeriodeAndDevalider() {
 
       if(!this.dateDebut || !this.dateFin){
           this.dateDebut = new Date();
@@ -329,7 +367,7 @@ export class FacturePayeComponent implements OnInit {
                     if(isPaye === true){
                       this.getSucessInfo();
                       this.isEditing = false;
-                      this.onSerByOdreReglementPayeByPeriode();
+                      this.onSearByOdreReglementPayeByPeriode();
                     }
                   }
                 }, error => {
