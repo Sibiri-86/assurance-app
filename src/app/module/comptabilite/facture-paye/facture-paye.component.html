@@ -151,7 +151,11 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.compte?.libelle }}</span></td>
                         <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title" style="min-width:200px">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
                         <td *ngIf="isEditing && ri === rowIndex">
+                            <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
+                                La date de paiement doit être antérieure à celle de prise de chèque
+                            </span>
                             <input
+                                [disabled]="ordre.isTakeCheque"
                                 pInputText
                                 type="date"
                                 [(ngModel)]="ordre.datePriseCheque"/>
@@ -164,7 +168,7 @@
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
-                                [disabled]="!ordre.datePriseCheque"
+                                [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-check" 
@@ -221,6 +225,7 @@
                             </div>
                             <div>
                                 <button 
+                                [disabled]="ordre.isTakeCheque"
                                 (click)="onInitDevalidation(ordre)"
                                 pButton 
                                 pRipple 
@@ -397,7 +402,7 @@
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th>Actions</th>
                         
                     </tr>
                 </ng-template>
@@ -416,7 +421,11 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.compte?.libelle }}</span></td>
                         <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title" style="min-width:200px">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
                         <td *ngIf="isEditing && ri === rowIndex">
+                            <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
+                                La date de paiement doit être antérieure à celle de prise de chèque
+                            </span>
                             <input
+                                [disabled]="ordre.isTakeCheque"
                                 pInputText
                                 type="date"
                                 [(ngModel)]="ordre.datePriseCheque"/>
@@ -429,7 +438,7 @@
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
-                                [disabled]="!ordre.datePriseCheque"
+                                [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-check" 

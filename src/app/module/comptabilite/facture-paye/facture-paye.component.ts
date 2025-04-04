@@ -175,8 +175,10 @@ export class FacturePayeComponent implements OnInit {
             if(response && response === true){
               
               this.getSucessInfo();
+              this.getRefreshfunctions();
               this.isToDisplayMotifDevalidation = false;
               this.isEditing = false;
+              this.rowIndex = null;
             }
             if(response && response === false){
               
