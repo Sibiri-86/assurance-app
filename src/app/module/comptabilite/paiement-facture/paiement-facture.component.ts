@@ -302,6 +302,8 @@ export class PaiementFactureComponent implements OnInit {
 
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
+    console.log('ordreReglementTierPayant', ordreReglementTierPayant);
+
     if(ordreReglementTierPayant){
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
@@ -342,7 +344,6 @@ export class PaiementFactureComponent implements OnInit {
       this.ordreReglementTierPayant = null;
     }
 
-
   confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
     if(ordreReglementTierPayant) {
 
@@ -373,13 +374,11 @@ export class PaiementFactureComponent implements OnInit {
 
     this.onSerByOdreReglementByPeriode();
 
-
   }
 
   onCancelPaiementOrdreReglement(): void{
     this.getCancelInfo();
   }
-
 
 
   onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
