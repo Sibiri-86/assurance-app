@@ -72,9 +72,7 @@ export class FacturePayeComponent implements OnInit {
 
   ngOnInit(): void {
     this.onSearByOdreReglementPayeByPeriode();
-    this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-    this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
-    this.searByOdreReglementPayeByPeriodeAndDevalider();
+    this.getRefreshfunctions();
     /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -178,6 +176,7 @@ export class FacturePayeComponent implements OnInit {
               
               this.getSucessInfo();
               this.isToDisplayMotifDevalidation = false;
+              this.isEditing = false;
             }
             if(response && response === false){
               
@@ -234,6 +233,9 @@ export class FacturePayeComponent implements OnInit {
 
       onSearByOdreReglementPayeByPeriode(){
         this.searByOdreReglementPayeByPeriode();
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
         this.isOrdreReglementList = true;
         this.isOrdreReglementListTakedCheque = false;
         this.isOrdreReglementListNotTakedCheque = false;
