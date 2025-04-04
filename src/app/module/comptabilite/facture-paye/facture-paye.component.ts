@@ -579,8 +579,7 @@ export class FacturePayeComponent implements OnInit {
                       this.ordreReglementTierPayant = {};
                       this.compteSelected = {};
                       this.getSucessInfo();
-                      this.onSearByOdreReglementPayeByPeriode();
-                      this.onGetComptes();
+                      this.searByOdreReglementPayeByPeriodeAndDevalider();
                     }
                     if(isPaye === false){
     
@@ -593,7 +592,7 @@ export class FacturePayeComponent implements OnInit {
               );
         }
     
-        this.onSearByOdreReglementPayeByPeriode();
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
     
     
       }

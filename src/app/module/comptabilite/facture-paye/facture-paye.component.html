@@ -651,7 +651,9 @@
                 class="p-button-danger p-mr-3">
             </button>  
 
-            <button (click)="onAcceptDevalidation(ordreReglementTierPayantToDevalide)" 
+            <button
+            [disabled]="!ordreReglementTierPayantToDevalide.motifDevalidation"
+            (click)="onAcceptDevalidation(ordreReglementTierPayantToDevalide)" 
                 pButton 
                 icon="pi pi-check"
                 label="Valider la dévalidation"
