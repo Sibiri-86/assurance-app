@@ -31,13 +31,28 @@
                     <div class="p-field">
                     <div>
                         <button 
+                        [disabled]="!ordreReglementList.length"
+                        (click)="onSerByOdreReglementPayeByPeriode()"
+                        pButton 
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-check-circle" 
+                        pTooltip="Tous les paiements: {{ ordreReglementList?.length}} "
+                        class="p-button-rounded p-button-info p-mr-2">
+                    </button>
+                    </div>
+                    </div>
+
+                    <div class="p-field">
+                    <div>
+                        <button 
                         [disabled]="!ordreReglementListTakedCheque.length"
                         (click)="onSerByOdreReglementPayeByPeriodeAndByTakeCheque()"
                         pButton 
                         pRipple 
                         type="button" 
                         icon="pi pi-check-circle" 
-                        pTooltip="Les prestataires ayant touché leur chèque: {{ ordreReglementList.length}} "
+                        pTooltip="Les prestataires ayant touché leur chèque: {{ ordreReglementListTakedCheque?.length}} "
                         class="p-button-rounded p-button-success p-mr-2">
                     </button>
                     </div>
@@ -52,7 +67,7 @@
                         pRipple 
                         type="button" 
                         icon="pi pi-check-circle" 
-                        pTooltip="Les prestataires n'ayant pas touché leur chèque"
+                        pTooltip="Les prestataires n'ayant pas touché leur chèque: {{ ordreReglementListNotTakedCheque?.length}}"
                         class="p-button-rounded p-button-warning p-mr-2">
                     </button>
                     </div>
@@ -67,7 +82,7 @@
                         pRipple 
                         type="button" 
                         icon="pi pi-undo" 
-                        pTooltip="Les paiement dévalidés"
+                        pTooltip="Les paiement dévalidés: {{ ordreReglementListDevalider?.length}}"
                         class="p-button-rounded p-button-danger p-mr-2">
                     </button>
                     </div>
@@ -80,7 +95,7 @@
                         <button 
                         (click)="exportExcel()"
                         pButton 
-                        [disabled]="ordreReglementList.length <= 0"
+                        [disabled]="ordreReglementList?.length <= 0"
                         pRipple 
                         type="button" 
                         icon="pi pi-file-excel" 

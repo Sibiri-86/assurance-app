@@ -29,9 +29,9 @@ import { error } from 'console';
 export class FacturePayeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
-  ordreReglementListTakedCheque: Array<OrdreReglementTierPayant>;
-  ordreReglementListNotTakedCheque: Array<OrdreReglementTierPayant>;
-  ordreReglementListDevalider: Array<OrdreReglementTierPayant>;
+  ordreReglementListTakedCheque: OrdreReglementTierPayant[] = [];
+  ordreReglementListNotTakedCheque: OrdreReglementTierPayant[] = [];
+  ordreReglementListDevalider: OrdreReglementTierPayant[] = [];
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
@@ -68,6 +68,9 @@ export class FacturePayeComponent implements OnInit {
 
   ngOnInit(): void {
     this.onSerByOdreReglementPayeByPeriode();
+    this.onSerByOdreReglementPayeByPeriodeAndByTakeCheque();
+    this.onSerByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    this.onSerByOdreReglementPayeByPeriodeAndDevalider();
     /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
