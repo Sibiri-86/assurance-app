@@ -178,7 +178,6 @@ export class FacturePayeComponent implements OnInit {
               
               this.getSucessInfo();
               this.isToDisplayMotifDevalidation = false;
-              this.onSearByOdreReglementPayeByPeriode();
             }
             if(response && response === false){
               
@@ -189,7 +188,7 @@ export class FacturePayeComponent implements OnInit {
           }
         );
 
-        this.onSearByOdreReglementPayeByPeriode();
+        this.getRefreshfunctions();
 
   }
 
@@ -205,7 +204,7 @@ export class FacturePayeComponent implements OnInit {
     this.isToDisplayMotifDevalidation = false;
 
     this.getCancelInfo();
-    this.onSearByOdreReglementPayeByPeriode();
+    this.getRefreshfunctions();
   }
 
   searByOdreReglementPayeByPeriode() {
@@ -367,7 +366,6 @@ export class FacturePayeComponent implements OnInit {
                     if(isPaye === true){
                       this.getSucessInfo();
                       this.isEditing = false;
-                      this.onSearByOdreReglementPayeByPeriode();
                     }
                   }
                 }, error => {
@@ -381,16 +379,28 @@ export class FacturePayeComponent implements OnInit {
 
       getSucessInfo(): void {
         this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+        this.getRefreshfunctions();
       }
       getCancelInfo(): void {
         this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération annulé!'});
+        this.getRefreshfunctions();
       }
       getFailledInfo(): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération échouée!'});
+        this.getRefreshfunctions();
       }
       
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+        this.getRefreshfunctions();
+      }
+
+
+      getRefreshfunctions(){
+        this.searByOdreReglementPayeByPeriode();
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
       }
 
 
