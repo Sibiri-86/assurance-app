@@ -9,3 +9,37 @@
     font-weight: bold;
 }
 
+.infoColor{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: #0288D1;
+    font-weight: bold;
+    margin-left: 25%;
+}
+.warningColor{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: #FBC02D;
+    font-weight: bold;
+    margin-left: 25%;
+}
+.dangerColor{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: #D32F2F;
+    font-weight: bold;
+    margin-left: 25%;
+}
+
+.successGrayColor{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: #689F38;
+    font-weight: bold;
+    margin-left: 25%;
+}
+
