@@ -25,6 +25,53 @@
                         (click)="onSerByOdreReglementPayeByPeriode()"
                         ></p-calendar>
                     </div>
+
+                    
+
+                    <div class="p-field">
+                    <div>
+                        <button 
+                        [disabled]="!ordreReglementListTakedCheque.length"
+                        (click)="onSerByOdreReglementPayeByPeriodeAndByTakeCheque()"
+                        pButton 
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-check-circle" 
+                        pTooltip="Les prestataires ayant touché leur chèque: {{ ordreReglementList.length}} "
+                        class="p-button-rounded p-button-success p-mr-2">
+                    </button>
+                    </div>
+                    </div>
+
+                    <div class="p-field">
+                    <div>
+                        <button 
+                        [disabled]="!ordreReglementListNotTakedCheque.length"
+                        (click)="onSerByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
+                        pButton 
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-check-circle" 
+                        pTooltip="Les prestataires n'ayant pas touché leur chèque"
+                        class="p-button-rounded p-button-warning p-mr-2">
+                    </button>
+                    </div>
+                    </div>
+
+                    <div class="p-field">
+                    <div>
+                        <button 
+                        [disabled]="!ordreReglementListDevalider.length"
+                        (click)="onSerByOdreReglementPayeByPeriodeAndDevalider()"
+                        pButton 
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-undo" 
+                        pTooltip="Les paiement dévalidés"
+                        class="p-button-rounded p-button-danger p-mr-2">
+                    </button>
+                    </div>
+                    </div>
                 </div> 
 
                 <div class="p-field">

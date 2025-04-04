@@ -85,6 +85,26 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    getTierPayantOrdreReglementFactureTiersPayeAndTackedCheque(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getTierPayantOrdreReglementFactureTiersPayeAndNotTackedCheque(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye-not-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+    getTierPayantOrdreReglementFactureTiersPayeDevalider(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-devalider?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
 
   getSinistreByOrdreReglementId2(idOrdreReglement: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()

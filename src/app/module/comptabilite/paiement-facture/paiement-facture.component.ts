@@ -407,7 +407,6 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-
   verifierNumeroCheque(numeroCheque: string) {
     if (numeroCheque.trim()) {
       this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(

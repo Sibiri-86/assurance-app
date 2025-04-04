@@ -29,6 +29,9 @@ import { error } from 'console';
 export class FacturePayeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
+  ordreReglementListTakedCheque: Array<OrdreReglementTierPayant>;
+  ordreReglementListNotTakedCheque: Array<OrdreReglementTierPayant>;
+  ordreReglementListDevalider: Array<OrdreReglementTierPayant>;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
@@ -216,8 +219,81 @@ export class FacturePayeComponent implements OnInit {
             .subscribe((response: any) => {
               this.ordreReglementList = response;
               //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
 
-              console.log('ordreReglementList' , this.ordreReglementList);
+    onSerByOdreReglementPayeByPeriodeAndByTakeCheque() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeAndTackedCheque(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListTakedCheque = response;
+              //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
+
+    onSerByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeAndNotTackedCheque(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListNotTakedCheque = response;
+              //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
+
+    onSerByOdreReglementPayeByPeriodeAndDevalider() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeDevalider(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListDevalider = response;
+              //this.ordreReglementList$ = response;
             }, error => {
               console.error('Erreur lors de la récupération des données', error);
             });
