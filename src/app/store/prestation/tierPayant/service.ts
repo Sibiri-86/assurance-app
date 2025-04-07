@@ -82,6 +82,14 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    getTierPayantOrdreReglementFactureIstanceWitSticker(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-instance-with-sticker?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
     getTierPayantOrdreReglementFactureTiersPaye(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye?dateD=${dateD}&dateF=${dateF}`).pipe(
             map((response: OrdreReglementTierPayantList) => response),
