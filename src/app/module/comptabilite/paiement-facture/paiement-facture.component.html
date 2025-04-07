@@ -385,15 +385,21 @@
                                  <div class="p-field">
                                     
                                     <label for="numeroCheque" class="font-bold">Confirmer le sticker</label>
-                                    
-                                <div *ngIf="stickerConfimartion == null" class="mt-3">
-                                    <p *ngIf="!stickerConfimartion" class="textDanger">❌ Confirmation de Sticker échouée.</p>
-                                    <p *ngIf="stickerConfimartion" class="textSuccess">  Confirmation de Sticker réussie.</p>
+                                
+                                <div class="mt-3">
+                                    <p *ngIf="isStickerConfimartion === false" class="textDanger">❌ Confirmation de Sticker échouée.</p>
+                                    <p *ngIf="isStickerConfimartion === true" class="textSuccess"> 
+                                        <span> sticker enregistré: {{sticker}} </span> <br>
+                                        <span> sticker confirmé: {{stickerConfirmation}} </span>
+                                        </p>
                                 </div>
-                                <input id="sticker" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                [(ngModel)]="ordreReglementTierPayant.sticker" 
-                                name="sticker" pInputText required 
-                                (blur)="getStickerConfirmation(ordreReglementTierPayant.id, sticker)">
+                                <input
+                                minlength="9"
+                                maxlength="9"
+                                id="stickerConfirmation" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                [(ngModel)]="ordreReglementTierPayant.stickerConfirmation" 
+                                name="stickerConfirmation" pInputText required 
+                                (blur)="getStickerConfirmation(ordreReglementTierPayant)">
                             
                                 </div> 
 

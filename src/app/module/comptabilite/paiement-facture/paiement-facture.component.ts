@@ -84,7 +84,8 @@ export class PaiementFactureComponent implements OnInit {
   numeroCheque: string = '';
   existe: boolean | null = null;
   sticker: string = '';
-  stickerConfimartion: boolean = false;
+  stickerConfirmation: string = '';
+  isStickerConfimartion: boolean = null;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -316,7 +317,8 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-  getStickerConfirmation(sticker){
+
+  getStickerConfirmation1(sticker){
 
     this.tierPayantService.getStickerConfirmation(sticker).subscribe( 
        response => {
@@ -324,11 +326,11 @@ export class PaiementFactureComponent implements OnInit {
           this.sticker = response;
           if(sticker != ''){
 
-            this.stickerConfimartion = true;
+            this.isStickerConfimartion = true;
           }
           if(sticker == ''){
 
-            this.stickerConfimartion = false;
+            this.isStickerConfimartion = false;
           }
         }
 
@@ -336,6 +338,42 @@ export class PaiementFactureComponent implements OnInit {
     );
 
   }
+
+  getStickerConfirmation2(ordreReglementTierPayant: OrdreReglementTierPayant){
+    
+    this.isStickerConfimartion = true;
+    this.sticker = ordreReglementTierPayant.sticker.trim().toString();
+    console.log('sticker', this.sticker);
+
+    this.stickerConfirmation = ordreReglementTierPayant.stickerConfirmation.trim().toString();
+    console.log('stickerConfirmation', this.stickerConfirmation);
+
+    if(this.sticker === this.stickerConfirmation){
+      this.isStickerConfimartion = true;
+    }
+    if(this.sticker !== this.stickerConfirmation){
+      this.isStickerConfimartion = false;
+    }
+    
+
+  }
+
+
+  getStickerConfirmation(ordreReglementTierPayant: OrdreReglementTierPayant): void {
+     this.sticker = ordreReglementTierPayant.sticker?.trim();
+     this.stickerConfirmation = ordreReglementTierPayant.stickerConfirmation?.trim();
+
+    if(this.sticker == this.stickerConfirmation){
+      this.isStickerConfimartion = true;
+
+    }
+    if(this.sticker != this.stickerConfirmation){
+      this.isStickerConfimartion = false;
+    }
+
+
+  }
+  
 
     onCancelPaiement(){
       this.isToPayeOrdreReglementTierPayant = false;
