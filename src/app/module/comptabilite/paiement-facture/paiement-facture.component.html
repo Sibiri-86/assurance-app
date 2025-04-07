@@ -345,7 +345,7 @@
                                     </p-dropdown>
                                 </div>
 
-                                <div class="p-field">
+                                <div class="p-field col col-3">
                                     <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire<span class="required" style="color: red;">*</span></label>
                                     <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
                                         showClear="true" [options]="comptesTiersPrestataire"
@@ -354,6 +354,14 @@
                                         optionLabel="intitule" class="p-mt-1 p-mb-3" 
                                         [(ngModel)]="ordreReglementTierPayant.compteTiersPrestataire">
                                     </p-dropdown>
+                                </div>
+
+
+                                <div class="p-field col col-3">
+                                    <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
+                                    <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                        [(ngModel)]="ordreReglementTierPayant.datePaiement" 
+                                        name="datePaiement" pInputText>
                                 </div>
 
 <!--                                 <div class="p-field">
@@ -374,14 +382,7 @@
                         <div class="p-col-6">
                             <p-fieldset legend="Détails du Paiement">
 
-                            <div class="p-field">
-                                <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
-                                <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                    [(ngModel)]="ordreReglementTierPayant.datePaiement" 
-                                    name="datePaiement" pInputText>
-                            </div>
-
-                                <!-- <div class="p-field">
+                                 <div class="p-field">
                                     
                                     <label for="numeroCheque" class="font-bold">Confirmer le sticker</label>
                                     
@@ -394,7 +395,7 @@
                                 name="sticker" pInputText required 
                                 (blur)="getStickerConfirmation(ordreReglementTierPayant.id, sticker)">
                             
-                                </div> -->
+                                </div> 
 
                                 <div class="p-field">
                                     

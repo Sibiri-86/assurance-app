@@ -34,6 +34,10 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/enregistrer-noList`, tierPayant);
   }
 
+  updatedOrdreTierTierPayantSticker(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/update-ordre-tiers-payant-sticker`, ordreReglementTierPayant);
+  }
+
     $getTierPayant(): Observable<SinistreTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}`).pipe(

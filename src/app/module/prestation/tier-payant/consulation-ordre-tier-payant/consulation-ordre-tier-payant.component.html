@@ -41,6 +41,7 @@
                         <th pSortableColumn="numeroFactureSinistre">Numéro Facture<p-sortIcon field="numeroFactureSinistre"></p-sortIcon></th>
                         <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
+                        <th *ngIf="isEditing">N° Sticker</th>
                         <th style="min-width:150px">Action</th>
                     </tr>
                 </ng-template>
@@ -57,13 +58,48 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
 
+                        <td  *ngIf="isEditing && ri !== rowIndex">
+                        </td>
+
+                        <td *ngIf="isEditing && ri === rowIndex">
+                            <input
+                                #sticker="ngModel"
+                                type="text"
+                                pInputText
+                                minlength="9"
+                                maxlength="9"
+                                [(ngModel)]="ordre.sticker"
+                                (blur)="isStickerValid(sticker)"
+                                [ngClass]="{'ng-invalid': sticker.invalid && sticker.touched}"
+                                required
+                            />
+                        </td>
+                        
+
                         <td>
-                            <button pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
+                            <button *ngIf="!isEditing" pButton pRipple icon="pi pi-pencil" pTooltip="Mèttre à jour le sticker"
+                                    class="p-button-rounded p-button-success p-mr-2"
+                                    (click)="onIniteStickerUpdate(ordre, ri)">
+                            </button>
+
+                            <button
+                                [disabled]="!ordre?.sticker || ordre?.sticker?.length !== 9"
+                                *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-check" pTooltip="Enregistrer le sticker"
+                                    class="p-button-rounded p-button-success p-mr-2"
+                                    (click)="onUpdateSticker(ordre)">
+                            </button>
+
+                            <button *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-times" pTooltip="Abandonner la mise à jour du sticker"
+                                    class="p-button-rounded p-button-danger p-mr-2"
+                                    (click)="onCancelStickerUpdated()">
+                            </button>
+
+                            <button *ngIf="rowIndex !== ri" pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="onGetSinistreByOrdreReglementId(ordre.id)">
                             </button>
 
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerOrdreReglementTierPayant(ordre)"></button>
+                            <button *ngIf="rowIndex !== ri"  pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerOrdreReglementTierPayant(ordre)"></button>
 
                                      
                         </td>

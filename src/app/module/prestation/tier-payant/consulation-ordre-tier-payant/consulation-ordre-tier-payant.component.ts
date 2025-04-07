@@ -12,7 +12,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { OrdreReglementTierPayant, Prestation, SinistreTierPayant } from 'src/app/store/prestation/tierPayant/model';
 import { Function } from 'src/app/module/common/config/role.user';
 import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TypeReport } from 'src/app/store/contrat/enum/model';
 import * as tierPayantSelector from '../../../../store/prestation/tierPayant/selector';
 import * as featureActionTierPayant from '../../../../store/prestation/tierPayant/action';
@@ -21,6 +21,8 @@ import { AppState } from 'src/app/store/app.state';
 import { takeUntil } from 'rxjs/operators';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import * as flatted from 'flatted';
+import { NgModel } from '@angular/forms';
+import { error } from 'console';
 
 @Component({
   selector: 'app-consulation-ordre-tier-payant',
@@ -59,6 +61,7 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
 
   page : number = 0;
   size : number = 10;
+  rowIndex : number = null;
   editing = false;
 
   comptes: Compte[] = [];
@@ -77,6 +80,7 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
               private tierPayantService: TierPayantService,
               private keycloak: KeycloakService,
               private messageService: MessageService,
+              private confirmationService: ConfirmationService,
               private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures impayées' }]);
 }
@@ -183,6 +187,73 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
           this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
         }
       
+
+      onIniteStickerUpdate(ordre: OrdreReglementTierPayant, rowIndex: number){
+        this.rowIndex = rowIndex;
+        this.isEditing = true;
+        this.ordreReglementTierPayant = ordre;
+      }
+
+      isStickerValid(sticker: string): boolean {
+        return sticker.trim().length == 9;
+      }
+
+      onUpdateSticker(ordreReglementTierPyant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPyant){
+          this.confirmationService.confirm({
+            message: 'voulez-vous payer cet ordre de reglement ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.onConfirmStickerUpdating(ordreReglementTierPyant);
+            },
+          });
+        }
     
 
+      }
+
+
+      onConfirmStickerUpdating(ordreReglementTierPyant : OrdreReglementTierPayant){
+        if(ordreReglementTierPyant && ordreReglementTierPyant.sticker){
+          ordreReglementTierPyant.sticker.trim();
+          this.tierPayantService.updatedOrdreTierTierPayantSticker(ordreReglementTierPyant).subscribe(
+              response => {
+                if(response){
+                  this.getSucessInfo();
+                  this.onSerByOdreReglementByPeriode();
+                }
+              }, 
+              error => {
+                this.getErrorInfo(error.error.message);
+              }
+          );
+        }
+      }
+
+
+      onCancelStickerUpdated(){
+        this.rowIndex = null;
+        this.isEditing = false;
+        this.ordreReglementTierPayant = {};
+        this.getCancelInfo();
+      }
+
+
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+      }
+
+    
 }
