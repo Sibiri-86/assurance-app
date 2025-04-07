@@ -41,7 +41,7 @@
                         <th pSortableColumn="numeroFactureSinistre">Numéro Facture<p-sortIcon field="numeroFactureSinistre"></p-sortIcon></th>
                         <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
-                        <th *ngIf="isEditing">N° Sticker</th>
+                        <th>N° Sticker</th>
                         <th style="min-width:150px">Action</th>
                     </tr>
                 </ng-template>
@@ -58,6 +58,9 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
 
+                        <td *ngIf="!isEditing"><span class="p-column-title" style="min-width:200px">{{ordre?.sticker }}</span>
+                        </td>
+
                         <td  *ngIf="isEditing && ri !== rowIndex">
                         </td>
 
@@ -69,7 +72,6 @@
                                 minlength="9"
                                 maxlength="9"
                                 [(ngModel)]="ordre.sticker"
-                                (blur)="isStickerValid(sticker)"
                                 [ngClass]="{'ng-invalid': sticker.invalid && sticker.touched}"
                                 required
                             />

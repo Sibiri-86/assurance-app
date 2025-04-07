@@ -194,10 +194,6 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         this.ordreReglementTierPayant = ordre;
       }
 
-      isStickerValid(sticker: string): boolean {
-        return sticker.trim().length == 9;
-      }
-
       onUpdateSticker(ordreReglementTierPyant: OrdreReglementTierPayant){
 
         if(ordreReglementTierPyant){
@@ -216,11 +212,14 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
 
 
       onConfirmStickerUpdating(ordreReglementTierPyant : OrdreReglementTierPayant){
+
         if(ordreReglementTierPyant && ordreReglementTierPyant.sticker){
           ordreReglementTierPyant.sticker.trim();
           this.tierPayantService.updatedOrdreTierTierPayantSticker(ordreReglementTierPyant).subscribe(
               response => {
                 if(response){
+                  this.rowIndex = null;
+                  this.isEditing = false;
                   this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
                 }
@@ -231,7 +230,6 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
           );
         }
       }
-
 
       onCancelStickerUpdated(){
         this.rowIndex = null;
