@@ -323,7 +323,7 @@ export class PaiementFactureComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.confirmPaiemnt(ordreReglementTierPayant);
+          this.confirmPaiement(ordreReglementTierPayant);
         },
       });
     }
@@ -357,10 +357,8 @@ export class PaiementFactureComponent implements OnInit {
     
     this.isStickerConfimartion = true;
     this.sticker = ordreReglementTierPayant.sticker.trim().toString();
-    console.log('sticker', this.sticker);
 
     this.stickerConfirmation = ordreReglementTierPayant.stickerConfirmation.trim().toString();
-    console.log('stickerConfirmation', this.stickerConfirmation);
 
     if(this.sticker === this.stickerConfirmation){
       this.isStickerConfimartion = true;
@@ -388,13 +386,17 @@ export class PaiementFactureComponent implements OnInit {
 
   }
   
-
     onCancelPaiement(){
       this.isToPayeOrdreReglementTierPayant = false;
       this.ordreReglementTierPayant = null;
+      this.comptesTiersPrestataire = null;
+      this.comptesTiersPrestataireContact = null;
+      this.sticker = '';
+      this.stickerConfirmation = '';
+      this.isStickerConfimartion = null;
     }
 
-  confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
+  confirmPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
     if(ordreReglementTierPayant && ordreReglementTierPayant.compteTiersPrestataire != null) {
 
       ordreReglementTierPayant.isTakeCheque = false;
@@ -407,6 +409,12 @@ export class PaiementFactureComponent implements OnInit {
                   this.isToPayeOrdreReglementTierPayant = false;
                   this.ordreReglementTierPayant = {};
                   this.compteSelected = {};
+                  this.comptesTiersPrestataire = null;
+                  this.comptesTiersPrestataireContact = null;
+                  this.sticker = '';
+                  this.stickerConfirmation = '';
+                  this.isStickerConfimartion = null;
+
                   this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
@@ -432,6 +440,7 @@ export class PaiementFactureComponent implements OnInit {
 
 
   onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
     if(ordreReglementTierPayant){
       this.isToPayeOrdreReglementTierPayant = true;
       this.ordreReglementTierPayant = ordreReglementTierPayant;
