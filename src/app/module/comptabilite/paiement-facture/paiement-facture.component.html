@@ -356,18 +356,28 @@
                     <div class="p-grid">
                         <!-- Compte Tiers Prestataire -->
                         <div class="p-col-6">
+
                             <div class="p-field">
+                                <label for="compteTiersPrestataire" class="font-bold">Compte Tiers Prestataire
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <input disabled id="compteTiersPrestataire" type="text"
+                                    class="p-inputtext p-mb-3 p-fluid"
+                                    [(ngModel)]="comptesTiersPrestataireContact"
+                                    name="compteTiersPrestataire" pInputText>
+                            </div>
+                            <!-- <div class="p-field">
                                 <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire
                                     <span class="required" style="color: red;">*</span>
                                 </label>
                                 <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
-                                    showClear="true" [options]="comptesTiersPrestataire"
+                                    showClear="true" [options]="comptesTiersPrestataires"
                                     [autoDisplayFirst]="false"
                                     placeholder="Sélectionnez le compte tiers Prestataire"
                                     optionLabel="intitule" class="p-mt-1 p-mb-3"
                                     [(ngModel)]="ordreReglementTierPayant.compteTiersPrestataire">
                                 </p-dropdown>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- Date Paiement -->
@@ -377,7 +387,7 @@
                                     <span class="required" style="color: red;">*</span>
                                 </label>
                                 <input id="datePaiement" type="date"
-                                    class="p-inputtext p-mb-3 p-fluid"
+                                    class="p-inputtext  p-mb-4 p-fluid"
                                     [(ngModel)]="ordreReglementTierPayant.datePaiement"
                                     name="datePaiement" pInputText>
                             </div>

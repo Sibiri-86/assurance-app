@@ -75,7 +75,9 @@ export class PaiementFactureComponent implements OnInit {
 
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
-  comptesTiersPrestataire: Tiers[] = [];
+  comptesTiersPrestataires: Tiers[] = [];
+  comptesTiersPrestataire: Tiers;
+  comptesTiersPrestataireContact: string;
   typeJournaux: TypeJournaux[] = [];
   journaux: Array<Journaux>
   compteCollectifId: string;
@@ -104,7 +106,7 @@ export class PaiementFactureComponent implements OnInit {
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
     this.onSerByOdreReglementByPeriode();
-    this.onGetComptesTiersPrestataires();
+   this.onGetComptesTiersPrestataires();
     //this.onGetTypeJournaux();
     this.onGetJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
@@ -254,7 +256,18 @@ export class PaiementFactureComponent implements OnInit {
 
         this.compteTiersService.getComptesTiersPrestataire().subscribe(
           res => {
+            this.comptesTiersPrestataires = res;
+          }
+        );
+      
+    }
+
+    onFindCompteTiersByPrestataire(prestataireLibelle: string){
+
+        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle).subscribe(
+          res => {
             this.comptesTiersPrestataire = res;
+            this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
           }
         );
       
@@ -304,6 +317,7 @@ export class PaiementFactureComponent implements OnInit {
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
     if(ordreReglementTierPayant){
+      ordreReglementTierPayant.compteTiersPrestataire = this.comptesTiersPrestataire;
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
         header: 'Confirmation',
@@ -381,7 +395,7 @@ export class PaiementFactureComponent implements OnInit {
     }
 
   confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
-    if(ordreReglementTierPayant) {
+    if(ordreReglementTierPayant && ordreReglementTierPayant.compteTiersPrestataire != null) {
 
       ordreReglementTierPayant.isTakeCheque = false;
           this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
@@ -422,6 +436,7 @@ export class PaiementFactureComponent implements OnInit {
       this.isToPayeOrdreReglementTierPayant = true;
       this.ordreReglementTierPayant = ordreReglementTierPayant;
       this.prestataire = ordreReglementTierPayant.prestataire;
+      this.onFindCompteTiersByPrestataire(ordreReglementTierPayant.prestataire);
     }
   }
 

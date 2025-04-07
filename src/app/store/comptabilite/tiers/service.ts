@@ -55,6 +55,13 @@ $findCompteTierByCode(compteTier: number): Observable<any> {
   );
 }
 
+findCompteTiersByPrestataire(prestataireLibelle: string): Observable<any> {
+  const params = new HttpParams()
+  .set('prestataireLibelle', prestataireLibelle)
+
+  return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PRESTATAIRE),  {params});
+}
+
 $findCompteTierByCompteCollectif(compte: string): Observable<TiersList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_TIERS)}/find-by-compte-collectif`,{params: createRequestOption({compte})}).pipe(

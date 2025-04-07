@@ -46,6 +46,7 @@ export interface OrdreReglementTierPayant{
     stickerConfirmation?: string;
     devalider?: Boolean;
     prestataire?: string;
+    prestataireId?: string;
     date?: Date;
     datePriseCheque?: Date;
     datePaiement?:Date;

@@ -484,6 +484,10 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-with-compte-prestataire`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
+        static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
 
         static readonly PARAMETRAGE_TYPE_JOURNAUX = {
             prod: `${SERVICE_PREFIX}/parametrage/typeJournaux`,
