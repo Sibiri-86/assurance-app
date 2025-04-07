@@ -231,10 +231,11 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         }
       }
 
-      onCancelStickerUpdated(){
+      onCancelStickerUpdated(ordre?: OrdreReglementTierPayant, sticker? : string){
         this.rowIndex = null;
         this.isEditing = false;
-        this.ordreReglementTierPayant = {};
+        ordre.sticker = null;
+        this.ordreReglementTierPayant = ordre;
         this.getCancelInfo();
       }
 

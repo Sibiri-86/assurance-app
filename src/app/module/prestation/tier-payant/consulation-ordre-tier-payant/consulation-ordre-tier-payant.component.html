@@ -64,7 +64,7 @@
                         <td  *ngIf="isEditing && ri !== rowIndex">
                         </td>
 
-                        <td *ngIf="isEditing && ri === rowIndex">
+                        <td *ngIf="isEditing && rowIndex === ri">
                             <input
                                 #sticker="ngModel"
                                 type="text"
@@ -93,7 +93,7 @@
 
                             <button *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-times" pTooltip="Abandonner la mise à jour du sticker"
                                     class="p-button-rounded p-button-danger p-mr-2"
-                                    (click)="onCancelStickerUpdated()">
+                                    (click)="onCancelStickerUpdated(ordre, ordre.sticker = null)">
                             </button>
 
                             <button *ngIf="rowIndex !== ri" pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
