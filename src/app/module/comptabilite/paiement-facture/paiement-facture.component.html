@@ -303,6 +303,12 @@
 </div>
 
 
+
+
+
+
+
+
 <p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
     [header]="    "
     [style]="{width: '80%'}"
@@ -345,24 +351,39 @@
                                     </p-dropdown>
                                 </div>
 
-                                <div class="p-field col col-3">
-                                    <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire<span class="required" style="color: red;">*</span></label>
-                                    <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
-                                        showClear="true" [options]="comptesTiersPrestataire"
-                                        [autoDisplayFirst]="false" 
-                                        placeholder="Sélectionnez le compte tiers Prestataire"
-                                        optionLabel="intitule" class="p-mt-1 p-mb-3" 
-                                        [(ngModel)]="ordreReglementTierPayant.compteTiersPrestataire">
-                                    </p-dropdown>
-                                </div>
 
+                    <!-- Ligne contenant compteTiersPrestataire et datePaiement -->
+                    <div class="p-grid">
+                        <!-- Compte Tiers Prestataire -->
+                        <div class="p-col-6">
+                            <div class="p-field">
+                                <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
+                                    showClear="true" [options]="comptesTiersPrestataire"
+                                    [autoDisplayFirst]="false"
+                                    placeholder="Sélectionnez le compte tiers Prestataire"
+                                    optionLabel="intitule" class="p-mt-1 p-mb-3"
+                                    [(ngModel)]="ordreReglementTierPayant.compteTiersPrestataire">
+                                </p-dropdown>
+                            </div>
+                        </div>
 
-                                <div class="p-field col col-3">
-                                    <label for="datePaiement" class="font-bold">Date paiement<span class="required" style="color: red;">*</span></label>
-                                    <input id="datePaiement" type="date" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                        [(ngModel)]="ordreReglementTierPayant.datePaiement" 
-                                        name="datePaiement" pInputText>
-                                </div>
+                        <!-- Date Paiement -->
+                        <div class="p-col-6">
+                            <div class="p-field">
+                                <label for="datePaiement" class="font-bold">Date paiement
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <input id="datePaiement" type="date"
+                                    class="p-inputtext p-mb-3 p-fluid"
+                                    [(ngModel)]="ordreReglementTierPayant.datePaiement"
+                                    name="datePaiement" pInputText>
+                            </div>
+                        </div>
+                    </div>
+
 
 <!--                                 <div class="p-field">
                                     <label for="compteTiers" class="font-bold"> Journal<span class="required" style="color: red;">*</span></label>
