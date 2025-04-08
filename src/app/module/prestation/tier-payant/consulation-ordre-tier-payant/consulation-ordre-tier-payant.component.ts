@@ -75,6 +75,10 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
   existe: boolean | null = null;
   tierpayantToPrint: SinistreTierPayant = {};
 
+  sticker: string = '';
+  stickerConfirmation: string = '';
+  isStickerConfimartion: boolean = null;
+
   constructor(
               private store: Store<AppState>,
               private tierPayantService: TierPayantService,
@@ -208,6 +212,26 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         }
     
 
+      }
+
+      getStickerConfirmation(sticker){
+
+        this.tierPayantService.getStickerConfirmation(sticker).subscribe( 
+           response => {
+            if(response){
+              this.sticker = response;
+              if(sticker != ''){
+                this.isStickerConfimartion = true;
+              }
+
+            }
+            if(!response){
+              this.isStickerConfimartion = false;
+            }
+    
+           }
+        );
+    
       }
 
 

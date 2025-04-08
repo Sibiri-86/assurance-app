@@ -58,13 +58,12 @@
                         <td><span class="p-column-title" style="min-width:200px">{{ordre?.montantPaye | formatTableValue: 'number':true}}</span>
                         </td>
 
-                        <td *ngIf="!isEditing"><span class="p-column-title" style="min-width:200px">{{ordre?.sticker }}</span>
+                        <td ><span class="p-column-title" style="min-width:200px">{{ordre?.sticker }}</span>
                         </td>
 
-                        <td  *ngIf="isEditing && ri !== rowIndex">
-                        </td>
 
                         <td *ngIf="isEditing && rowIndex === ri">
+                            <span class="textDanger" *ngIf="isStickerConfimartion === true">Ce sticker est déjà utilisé</span>
                             <input
                                 #sticker="ngModel"
                                 type="text"
@@ -74,6 +73,7 @@
                                 [(ngModel)]="ordre.sticker"
                                 [ngClass]="{'ng-invalid': sticker.invalid && sticker.touched}"
                                 required
+                                (blur)="getStickerConfirmation(ordre.sticker)"
                             />
                         </td>
                         
@@ -85,7 +85,7 @@
                             </button>
 
                             <button
-                                [disabled]="!ordre?.sticker || ordre?.sticker?.length !== 9"
+                                [disabled]="!ordre?.sticker || ordre?.sticker?.length !== 9 || isStickerConfimartion === true"
                                 *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-check" pTooltip="Enregistrer le sticker"
                                     class="p-button-rounded p-button-success p-mr-2"
                                     (click)="onUpdateSticker(ordre)">
