@@ -556,6 +556,8 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
@@ -580,6 +582,8 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
@@ -604,6 +608,8 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
@@ -628,6 +634,8 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
@@ -652,6 +660,8 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
