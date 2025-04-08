@@ -862,6 +862,10 @@
                 <ng-template pTemplate="left">
                     <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
 
+                            <span class="infoColor" *ngIf="isAllExport">L'export se fera sur tous les ordres payés</span>
+                            <span class="successGrayColor" *ngIf="isTackedChequeExport">L'export se fera sur les ordres payés avec prise de chèque</span>
+                            <span class="warningColor" *ngIf="isWithoutTakedChequeExport">L'export se fera sur les ordres payés sans prise de chèque</span>
+                            <span class="dangerColor" *ngIf="isDevalideChequeExport">L'export se fera sur les ordres dévalidés</span>
 
                         <!-- Groupe des boutons -->
                         <div class="p-d-flex p-ai-center p-flex-wrap" style="gap: 1rem; flex: 1;">

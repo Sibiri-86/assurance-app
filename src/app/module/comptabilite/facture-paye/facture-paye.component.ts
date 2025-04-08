@@ -572,7 +572,7 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
-        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin, this.prestataireSelected)
+        this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.prestataireSelected)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
@@ -598,7 +598,7 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
-        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin, this.prestataireSelected)
+        this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.prestataireSelected)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
@@ -624,7 +624,7 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
-        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin, this.prestataireSelected)
+        this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.prestataireSelected)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
