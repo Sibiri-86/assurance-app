@@ -9,7 +9,7 @@ import * as featureActionTierPayant from '../../../store/prestation/tierPayant/a
 import { OrdreReglement, Prefinancement, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
-import {OrdreReglementTierPayant, Prestation, SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
+import {CustumPrestatire, OrdreReglementTierPayant, Prestation, SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
 import {TypeEtatOrdreReglement} from '../../common/models/emum.etat.ordre-reglement';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
@@ -85,6 +85,12 @@ export class FacturePayeComponent implements OnInit {
     sticker: string = '';
     stickerConfimartion: boolean = false;
     isToEporteExcel: boolean = false;
+    isWithoutTakedChequeExport = false;
+    isAllExport = false;
+    isTackedChequeExport = false;
+    isDevalideChequeExport = false;
+    messageToDisplay: string = '';
+    ordreReglementListPrestataire: CustumPrestatire[] = [];
 
 
   constructor(private store: Store<AppState>,
@@ -442,7 +448,91 @@ export class FacturePayeComponent implements OnInit {
       }
 
 
-      exportExcel() {
+      onExportOrdreReglement(){
+
+          this.confirmationService.confirm({
+            message: this.messageToDisplay,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              if(this.isAllExport){
+
+                this.exportAllOrdre();
+              }
+              if(this.isTackedChequeExport){
+
+                this.onExportAllOrdreWithCheque();
+              }
+              if(this.isWithoutTakedChequeExport){
+
+                this.onExportAllOrdreWithoutCheque();
+              }
+              if(this.isDevalideChequeExport){
+
+                this.onExportAllOrdreDevalide();
+              }
+            },
+          });
+        
+      }
+
+      onExportAllOrdre(){
+        this.ordreReglementListPrestataire = [];
+        this.isAllExport = true;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
+        let prestataires = this.ordreReglementList.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithTakeCheque(){
+        this.ordreReglementListPrestataire = [];
+        this.isTackedChequeExport = true;
+        this.isAllExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'
+        let prestataires = this.ordreReglementListTakedCheque.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithoutTakeCheque(){
+        this.ordreReglementListPrestataire = [];
+        this.isWithoutTakedChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
+        let prestataires = this.ordreReglementListNotTakedCheque.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreDevalide(){
+        this.ordreReglementListPrestataire = [];
+        this.isDevalideChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
+        let prestataires = this.ordreReglementListDevalider.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+
+      exportAllOrdre() {
         if (!this.dateDebut || !this.dateFin) {
           alert("Veuillez sélectionner une période !");
           return;
@@ -451,13 +541,85 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
-        this.tierPayantService.exportOrdreReglement(this.dateDebut, this.dateFin)
+        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `ordre_reglement_tier_payant_paye_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreWithCheque() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_avec_cheque_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreWithoutCheque() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_sans_cheque_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreDevalide() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_devalide_du_${dateD}_au_${dateF}.xlsx`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

@@ -863,28 +863,13 @@
                     <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
 
 
-                        <!-- Dropdown Prestataire -->
-                        <div style="min-width: 200px;">
-                            <p-dropdown inputId="prestataire"
-                                [filter]="true"
-                                showClear="true"
-                                [options]="banqueList"
-                                [(ngModel)]="ordreReglementPaiement.banque"
-                                placeholder="Prestataire"
-                                optionLabel="libelle"
-                                [autoDisplayFirst]="false"
-                                appendTo="body"
-                                class="p-inputtext-sm w-full">
-                            </p-dropdown>
-                        </div>
-
                         <!-- Groupe des boutons -->
                         <div class="p-d-flex p-ai-center p-flex-wrap" style="gap: 1rem; flex: 1;">
                             <!-- Tous les paiements -->
                             <div class="p-d-flex p-ai-center">
                                 <button 
                                     [disabled]="!ordreReglementList.length"
-                                    (click)="onSearByOdreReglementPayeByPeriode()"
+                                    (click)="onExportAllOrdre()"
                                     pButton 
                                     pRipple 
                                     pTooltip="Tous les paiements tiers payants"
@@ -901,7 +886,7 @@
                             <div class="p-d-flex p-ai-center">
                                 <button 
                                     [disabled]="!ordreReglementListTakedCheque.length"
-                                    (click)="onSearByOdreReglementPayeByPeriodeAndByTakeCheque()"
+                                    (click)="onExportOrdreWithTakeCheque()"
                                     pButton 
                                     pRipple 
                                     type="button" 
@@ -918,7 +903,7 @@
                             <div class="p-d-flex p-ai-center">
                                 <button 
                                     [disabled]="!ordreReglementListNotTakedCheque.length"
-                                    (click)="onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
+                                    (click)="onExportOrdreWithoutTakeCheque()"
                                     pButton 
                                     pRipple 
                                     type="button" 
@@ -935,7 +920,7 @@
                             <div class="p-d-flex p-ai-center">
                                 <button 
                                     [disabled]="!ordreReglementListDevalider.length"
-                                    (click)="onSearByOdreReglementPayeByPeriodeAndDevalider()"
+                                    (click)="onExportOrdreDevalide()"
                                     pButton 
                                     pRipple 
                                     type="button" 
@@ -947,9 +932,37 @@
                                     {{ ordreReglementListDevalider.length }}
                                 </small>
                             </div>
-                        </div>
 
-            
+                                <!-- Dropdown Prestataire -->
+                            <div style="min-width: 200px;">
+                                <p-dropdown 
+                                    inputId="prestataire"
+                                    [filter]="true"
+                                    showClear="true"
+                                    [options]="ordreReglementListPrestataire"
+                                    [disabled]="ordreReglementListPrestataire?.length <= 0"
+                                    placeholder="Prestataire"
+                                    [optionLabel]="'libelle'"
+                                    [autoDisplayFirst]="false"
+                                    appendTo="body"
+                                    class="p-inputtext-sm w-full">
+                                </p-dropdown>
+                            </div>
+
+                            <div class="p-toolbar-group-right p-d-flex p-ai-center p-ml-auto">
+                                <!-- Export Excel -->
+                                <button 
+                                    (click)="onExportOrdreReglement()"
+                                    [disabled]="ordreReglementListPrestataire?.length <= 0"
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    icon="pi pi-file-excel" 
+                                    class="p-button-rounded p-button-success"
+                                    pTooltip="Exporter la sélection">
+                                </button>
+                            </div>
+                            </div>
 
                     </div>
                 </ng-template>

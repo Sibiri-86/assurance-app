@@ -59,6 +59,9 @@ export interface OrdreReglementTierPayant{
     compteTiers?: Tiers;
     compteTiersPrestataire?: Tiers;
 }
+export interface CustumPrestatire{
+    libelle?: string;
+}
 
 export interface SinistreTierPayant {
     id?: string;

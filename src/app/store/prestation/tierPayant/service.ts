@@ -161,20 +161,24 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
   }
 
-  exportOrdreReglement(dateDebut: string, dateFin: string) {
-    
-    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+  exportAllOrdreReglement(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
   
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('dateDebut', formattedDateDebut)
       .set('dateFin', formattedDateFin);
-
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION), { 
       params,
       responseType: 'blob'
     });
   }
+  
 
   exportPrestationPrefincementTierPayantToExcel(dateDebut: string, dateFin: string, choose: string) {
     
