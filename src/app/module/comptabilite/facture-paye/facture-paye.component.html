@@ -936,6 +936,7 @@
                                 <!-- Dropdown Prestataire -->
                             <div style="min-width: 200px;">
                                 <p-dropdown 
+                                    (onChange)="onSelectedPrestaire($event.value)"
                                     inputId="prestataire"
                                     [filter]="true"
                                     showClear="true"
