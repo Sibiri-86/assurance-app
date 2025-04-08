@@ -182,7 +182,7 @@ export class PaiementFactureComponent implements OnInit {
 
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
-          this.tierPayantService.getTierPayantOrdreReglementFactureIstanceWitSticker(dateD, dateF)
+          this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
           .subscribe((response: any) => {
             this.ordreReglementList = response;
             this.ordreReglementList$ = response;
