@@ -410,6 +410,20 @@
                         <div class="p-col-6">
                             <p-fieldset legend="Détails du Paiement">
 
+                                <div class="p-field">
+                                    
+                                    <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
+                                    
+                                <div *ngIf="existe !== null" class="mt-3">
+                                    <p *ngIf="existe" class="textDanger">❌ Le numéro de chèque existe déjà.</p>
+                                </div>
+                                <input id="numeroCheque" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                [(ngModel)]="ordreReglementTierPayant.numeroCheque" 
+                                name="numeroCheque" pInputText required 
+                                (blur)="verifierNumeroCheque(ordreReglementTierPayant.numeroCheque)">
+                            
+                                </div>
+
                                  <div class="p-field">
                                     <label for="numeroCheque" class="font-bold">Confirmer le sticker</label>
                                 <div class="mt-3">
@@ -429,19 +443,7 @@
                             
                                 </div> 
 
-                                <div class="p-field">
-                                    
-                                    <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
-                                    
-                                <div *ngIf="existe !== null" class="mt-3">
-                                    <p *ngIf="existe" class="textDanger">❌ Le numéro de chèque existe déjà.</p>
-                                </div>
-                                <input id="numeroCheque" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
-                                [(ngModel)]="ordreReglementTierPayant.numeroCheque" 
-                                name="numeroCheque" pInputText required 
-                                (blur)="verifierNumeroCheque(ordreReglementTierPayant.numeroCheque)">
-                            
-                                </div>
+                                
 
                                 <div class="p-field">
                                     <label for="montant" class="font-bold">Montant</label>
