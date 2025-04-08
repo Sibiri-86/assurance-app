@@ -84,6 +84,7 @@ export class FacturePayeComponent implements OnInit {
   
     sticker: string = '';
     stickerConfimartion: boolean = false;
+    isToEporteExcel: boolean = false;
 
 
   constructor(private store: Store<AppState>,
@@ -611,6 +612,10 @@ export class FacturePayeComponent implements OnInit {
       isMotifValid(): boolean {
         const motif = this.ordreReglementTierPayantToDevalide?.motifDevalidation || '';
         return motif.trim().length >= 50;
+      }
+
+      onInitExcelExport(){
+        this.isToEporteExcel = true;
       }
       
   

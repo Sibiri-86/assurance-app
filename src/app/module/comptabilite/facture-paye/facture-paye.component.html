@@ -103,7 +103,7 @@
                 <div class="p-toolbar-group-right p-d-flex p-ai-center p-ml-auto">
                     <!-- Export Excel -->
                     <button 
-                        (click)="exportExcel()"
+                        (click)="onInitExcelExport()"
                         [disabled]="ordreReglementList?.length <= 0"
                         pButton 
                         pRipple 
@@ -850,5 +850,112 @@
     </ng-template>
 </p-dialog>
 
+<p-dialog [(visible)]="isToEporteExcel" 
+    [header]="'EXPORTATION DES ORDRES DE REGLEMENT TIERS PAYANT'"
+    [style]="{width: '40%'}"
+    [modal]="true" styleClass="p-fluid"
+    [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <p-toolbar styleClass="p-mb-3">
+                <ng-template pTemplate="left">
+                    <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
+
+
+                        <!-- Dropdown Prestataire -->
+                        <div style="min-width: 200px;">
+                            <p-dropdown inputId="prestataire"
+                                [filter]="true"
+                                showClear="true"
+                                [options]="banqueList"
+                                [(ngModel)]="ordreReglementPaiement.banque"
+                                placeholder="Prestataire"
+                                optionLabel="libelle"
+                                [autoDisplayFirst]="false"
+                                appendTo="body"
+                                class="p-inputtext-sm w-full">
+                            </p-dropdown>
+                        </div>
+
+                        <!-- Groupe des boutons -->
+                        <div class="p-d-flex p-ai-center p-flex-wrap" style="gap: 1rem; flex: 1;">
+                            <!-- Tous les paiements -->
+                            <div class="p-d-flex p-ai-center">
+                                <button 
+                                    [disabled]="!ordreReglementList.length"
+                                    (click)="onSearByOdreReglementPayeByPeriode()"
+                                    pButton 
+                                    pRipple 
+                                    pTooltip="Tous les paiements tiers payants"
+                                    type="button" 
+                                    icon="pi pi-check-circle" 
+                                    class="p-button-rounded p-button-info">
+                                </button>
+                                <small class="infoColor p-ml-2" *ngIf="ordreReglementList?.length">
+                                    {{ ordreReglementList.length }}
+                                </small>
+                            </div>
+
+                            <!-- Chèques encaissés -->
+                            <div class="p-d-flex p-ai-center">
+                                <button 
+                                    [disabled]="!ordreReglementListTakedCheque.length"
+                                    (click)="onSearByOdreReglementPayeByPeriodeAndByTakeCheque()"
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    icon="pi pi-check-circle" 
+                                    pTooltip="Prestataires ayant encaissé"
+                                    class="p-button-rounded p-button-success">
+                                </button>
+                                <small class="successGrayColor p-ml-2" *ngIf="ordreReglementListTakedCheque?.length">
+                                    {{ ordreReglementListTakedCheque.length }}
+                                </small>
+                            </div>
+
+                            <!-- Chèques non encaissés -->
+                            <div class="p-d-flex p-ai-center">
+                                <button 
+                                    [disabled]="!ordreReglementListNotTakedCheque.length"
+                                    (click)="onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    icon="pi pi-check-circle" 
+                                    pTooltip="Prestataires n'ayant pas encaissé"
+                                    class="p-button-rounded p-button-warning">
+                                </button>
+                                <small class="warningColor p-ml-2" *ngIf="ordreReglementListNotTakedCheque?.length">
+                                    {{ ordreReglementListNotTakedCheque.length }}
+                                </small>
+                            </div>
+
+                            <!-- Paiements dévalidés -->
+                            <div class="p-d-flex p-ai-center">
+                                <button 
+                                    [disabled]="!ordreReglementListDevalider.length"
+                                    (click)="onSearByOdreReglementPayeByPeriodeAndDevalider()"
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    icon="pi pi-undo" 
+                                    pTooltip="Paiements dévalidés"
+                                    class="p-button-rounded p-button-danger">
+                                </button>
+                                <small class="dangerColor p-ml-2" *ngIf="ordreReglementListDevalider?.length">
+                                    {{ ordreReglementListDevalider.length }}
+                                </small>
+                            </div>
+                        </div>
+
+            
+
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+    </ng-template>
+</p-dialog>
 
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
