@@ -91,6 +91,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   exercice: ExerciceComptable = {};
   operationSoldeAnterieur: OperationSoldeAnterieur = {};
   isClasse5 =  false;
+  PRESTATAIRES_SANTE: string = '';
 
   
   
@@ -216,13 +217,13 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   }
 
 
-onGetOperationByExerciceComptableOperation(exerciceComptableOperationId: string){
+onGetOperationByExerciceComptableOperation(exerciceComptableOperation: ExerciceComptableOperation){
+  
+  this.PRESTATAIRES_SANTE = exerciceComptableOperation.journaux.typeJournaux.libelle;
 
-  this.operationService.$getOperationByExerciceOperation(exerciceComptableOperationId).subscribe(
+  this.operationService.$getOperationByExerciceOperation(exerciceComptableOperation.id).subscribe(
       response => {
         this.operationList = response.operationList;
-
-        console.log('operationList', this.operationList);
         this.displayOperation = true;
         this.isClasse5 = false;
       }
