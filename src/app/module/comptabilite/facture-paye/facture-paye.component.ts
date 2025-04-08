@@ -788,7 +788,7 @@ export class FacturePayeComponent implements OnInit {
 
       isMotifValid(): boolean {
         const motif = this.ordreReglementTierPayantToDevalide?.motifDevalidation || '';
-        return motif.trim().length >= 50;
+        return motif.trim().length >= 10;
       }
 
       onInitExcelExport(){

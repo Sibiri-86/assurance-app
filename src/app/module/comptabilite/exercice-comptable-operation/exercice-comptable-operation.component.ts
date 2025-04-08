@@ -221,6 +221,8 @@ onGetOperationByExerciceComptableOperation(exerciceComptableOperationId: string)
   this.operationService.$getOperationByExerciceOperation(exerciceComptableOperationId).subscribe(
       response => {
         this.operationList = response.operationList;
+
+        console.log('operationList', this.operationList);
         this.displayOperation = true;
         this.isClasse5 = false;
       }

@@ -305,10 +305,6 @@
 
 
 
-
-
-
-
 <p-dialog [(visible)]="isToPayeOrdreReglementTierPayant" 
     [header]="    "
     [style]="{width: '80%'}"
@@ -328,7 +324,7 @@
                                 
                                 <div class="p-field">
 
-                                        <label for="compte" class="font-bold">Compte banquaire<span class="required" style="color: red;">*</span></label>
+                                        <label for="compte" class="font-bold">Compte bancaire<span class="required" style="color: red;">*</span></label>
                                         <p-dropdown inputId="compte" dataKey="id" [filter]="true"
                                         showClear="true" [options]="comptes"
                                         [autoDisplayFirst]="true" 
@@ -500,7 +496,6 @@
                     !ordreReglementTierPayant?.numeroCheque ||
                     !comptesTiersPrestataireContact ||
                      !ordreReglementTierPayant.compte || 
-                     !ordreReglementTierPayant?.stickerConfirmation || 
                      !ordreReglementTierPayant.compteTiers ||
                        !ordreReglementTierPayant.datePaiement ||
                         !ordreReglementTierPayant.montantPaye" 

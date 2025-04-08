@@ -541,7 +541,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="dateDeSaisie" >Date de saisie</th>
+                        <th pSortableColumn="dateDeSaisie" >Date de dévalidation</th>
                         <th pSortableColumn="datePaiement" >Date de paiement</th>
                         <th pSortableColumn="numeroFactureSinistre">Numéro ordre</th>
                         <th pSortableColumn="numeroFactureSinistre">Numéro Facture</th>
@@ -646,7 +646,7 @@
                     name="motifDevalidation" 
                     [(ngModel)]="ordreReglementTierPayantToDevalide.motifDevalidation"
                     rows="5"
-                    minlength="50"
+                    minlength="10"
                     required
                     class="p-inputtext p-fluid"
                     placeholder="Saisir le motif ici..."
