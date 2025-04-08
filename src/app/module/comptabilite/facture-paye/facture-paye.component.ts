@@ -73,10 +73,13 @@ export class FacturePayeComponent implements OnInit {
 
   isToPayeOrdreReglementTierPayant = false;
   ordreReglementTierPayant: OrdreReglementTierPayant = {};
+  oldNumeroCheque: string = '';
 
     comptes: Compte[] = [];
     comptesTiers: Tiers[] = [];
-    comptesTiersPrestataire: Tiers[] = [];
+    comptesTiersPrestataires: Tiers[] = [];
+    comptesTiersPrestataire: Tiers;
+    comptesTiersPrestataireContact: string;
     typeJournaux: TypeJournaux[] = [];
     journaux: Array<Journaux>
     compteCollectifId: string;
@@ -691,7 +694,7 @@ export class FacturePayeComponent implements OnInit {
   
           this.compteTiersService.getComptesTiersPrestataire().subscribe(
             res => {
-              this.comptesTiersPrestataire = res;
+              this.comptesTiersPrestataires = res;
             }
           );
         
@@ -713,12 +716,14 @@ export class FacturePayeComponent implements OnInit {
         );
       }
   
-
       onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
         if(ordreReglementTierPayant){
           this.isToPayeOrdreReglementTierPayant = true;
           this.ordreReglementTierPayant = ordreReglementTierPayant;
+          this.oldNumeroCheque = ordreReglementTierPayant.numeroCheque;
           this.prestataire = ordreReglementTierPayant.prestataire;
+          this.onFindCompteTiersByPrestataire(ordreReglementTierPayant.prestataire);
         }
       }
 
@@ -728,6 +733,16 @@ export class FacturePayeComponent implements OnInit {
       }
 
       
+    verifierOldNumeroCheque(numeroCheque: string){
+      if (numeroCheque){
+         const isMath = this.oldNumeroCheque.trim() === numeroCheque.trim();
+
+         if(isMath === false){
+          this.verifierNumeroCheque(numeroCheque);
+         }
+      }
+    }
+
   verifierNumeroCheque(numeroCheque: string) {
     if (numeroCheque.trim()) {
       this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
@@ -745,6 +760,7 @@ export class FacturePayeComponent implements OnInit {
       onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
         if(ordreReglementTierPayant){
+          ordreReglementTierPayant.compteTiersPrestataire = this.comptesTiersPrestataire;
           this.confirmationService.confirm({
             message: 'voulez-vous payer cet ordre de reglement ?',
             header: 'Confirmation',
@@ -794,6 +810,18 @@ export class FacturePayeComponent implements OnInit {
       onInitExcelExport(){
         this.isToEporteExcel = true;
       }
+
+      onFindCompteTiersByPrestataire(prestataireLibelle: string){
+
+        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle).subscribe(
+          res => {
+            this.comptesTiersPrestataire = res;
+            this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
+          }
+        );
+      
+    }
+
       
   
 
