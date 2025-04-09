@@ -82,7 +82,7 @@
                             <span *ngIf="ordre?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{ordre?.etat}}</span>
                         </td>
 
-                         <td><span class="p-column-title">{{ordre?.sticker}}</span></td>
+                         <!-- <td><span class="p-column-title">{{ordre?.sticker}}</span></td> -->
 
                         <td *ngIf="isEditing">
                             <span class="textDanger" *ngIf="isStickerConfimartion === true && rowIndex === ri">Ce sticker est déjà utilisé <br></span> 
