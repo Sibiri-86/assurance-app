@@ -42,6 +42,7 @@
                         <th pSortableColumn="prestataire" >Prestataire<p-sortIcon field="prestataire"></p-sortIcon></th>
                         <th pSortableColumn="montantPaye">Montant<p-sortIcon field="montantPaye"></p-sortIcon></th>
                         <th>N° Sticker</th>
+                        <th *ngIf="isEditing">Saisie sticker</th>
                         <th style="min-width:150px">Action</th>
                     </tr>
                 </ng-template>
@@ -62,9 +63,10 @@
                         </td>
 
 
-                        <td *ngIf="isEditing && rowIndex === ri">
-                            <span class="textDanger" *ngIf="isStickerConfimartion === true">Ce sticker est déjà utilisé</span>
+                        <td *ngIf="isEditing">
+                            <span class="textDanger" *ngIf="isStickerConfimartion === true && rowIndex === ri">Ce sticker est déjà utilisé <br></span> 
                             <input
+                                [disabled]="rowIndex !== ri"
                                 #sticker="ngModel"
                                 type="text"
                                 pInputText
@@ -79,7 +81,7 @@
                         
 
                         <td>
-                            <button *ngIf="!isEditing" pButton pRipple icon="pi pi-pencil" pTooltip="Mèttre à jour le sticker"
+                            <button *ngIf="!isEditing" pButton pRipple icon="pi pi-pencil" pTooltip="Renseigner à jour le sticker"
                                     class="p-button-rounded p-button-success p-mr-2"
                                     (click)="onIniteStickerUpdate(ordre, ri)">
                             </button>
@@ -96,12 +98,12 @@
                                     (click)="onCancelStickerUpdated(ordre, ordre.sticker = null)">
                             </button>
 
-                            <button *ngIf="rowIndex !== ri" pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
+                            <button pButton pRipple icon="pi pi-search" pTooltip="voir les sinistres"
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="onGetSinistreByOrdreReglementId(ordre.id)">
                             </button>
 
-                            <button *ngIf="rowIndex !== ri"  pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerOrdreReglementTierPayant(ordre)"></button>
+                            <button  pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimerOrdreReglementTierPayant(ordre)"></button>
 
                                      
                         </td>

@@ -83,6 +83,7 @@ export interface SinistreTierPayant {
     montantRestant?:number;
     statSaisie?: Saisie;
     operateur?: string;
+    sticker?: string;
     sinistreTierPayantPrincipal?: SinistreTierPayant;
     
 }

@@ -244,6 +244,7 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
                 if(response){
                   this.rowIndex = null;
                   this.isEditing = false;
+                  this.isStickerConfimartion = false;
                   this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
                 }
@@ -260,22 +261,23 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         this.isEditing = false;
         ordre.sticker = null;
         this.ordreReglementTierPayant = ordre;
+        this.isStickerConfimartion = false;
         this.getCancelInfo();
       }
 
 
       getSucessInfo(): void {
-        this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+        this.messageService.add({severity: 'success', summary: 'CONSULTATION TIERS PAYANT', detail: 'Opération réussie!'});
       }
       getCancelInfo(): void {
-        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+        this.messageService.add({severity: 'info', summary: 'CONSULTATION TIERS PAYANT', detail: 'Opération annulé!'});
       }
       getFailledInfo(): void {
-        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
+        this.messageService.add({severity: 'error', summary: 'CONSULTATION TIERS PAYANT', detail: 'Opération échouée!'});
       }
       
       getErrorInfo(message: string): void {
-        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+        this.messageService.add({severity: 'error', summary: 'CONSULTATION TIERS PAYANT', detail: message});
       }
 
     
