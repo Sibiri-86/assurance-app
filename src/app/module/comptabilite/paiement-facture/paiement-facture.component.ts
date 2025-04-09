@@ -29,6 +29,7 @@ import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
 import { Journaux} from 'src/app/store/comptabilite/journaux/model';
 import { KeycloakService } from 'keycloak-angular';
 import { Function } from '../../common/config/role.user';
+import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 
 
 @Component({
@@ -65,6 +66,7 @@ export class PaiementFactureComponent implements OnInit {
   totalRecordPprestations: number;
   idOrdreReglement: string;
   ordreReglementTierPayant: OrdreReglementTierPayant = {};
+  prestataire: string = '';
   sinistreTierPayants: SinistreTierPayant [] = [];
 
   page : number = 0;
@@ -73,6 +75,9 @@ export class PaiementFactureComponent implements OnInit {
 
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
+  comptesTiersPrestataires: Tiers[] = [];
+  comptesTiersPrestataire: Tiers;
+  comptesTiersPrestataireContact: string;
   typeJournaux: TypeJournaux[] = [];
   journaux: Array<Journaux>
   compteCollectifId: string;
@@ -80,6 +85,9 @@ export class PaiementFactureComponent implements OnInit {
 
   numeroCheque: string = '';
   existe: boolean | null = null;
+  sticker: string = '';
+  stickerConfirmation: string = '';
+  isStickerConfimartion: boolean = null;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -98,6 +106,7 @@ export class PaiementFactureComponent implements OnInit {
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
     this.onSerByOdreReglementByPeriode();
+   this.onGetComptesTiersPrestataires();
     //this.onGetTypeJournaux();
     this.onGetJournaux();
    /*  this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
@@ -243,6 +252,27 @@ export class PaiementFactureComponent implements OnInit {
       
     }
 
+    onGetComptesTiersPrestataires(){
+
+        this.compteTiersService.getComptesTiersPrestataire().subscribe(
+          res => {
+            this.comptesTiersPrestataires = res;
+          }
+        );
+      
+    }
+
+    onFindCompteTiersByPrestataire(prestataireLibelle: string){
+
+        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle).subscribe(
+          res => {
+            this.comptesTiersPrestataire = res;
+            this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
+          }
+        );
+      
+    }
+
     onGetTypeJournaux(){
       this.typeJournauxService.$getTypeJournaux().subscribe(
         res => {
@@ -287,12 +317,13 @@ export class PaiementFactureComponent implements OnInit {
   onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
 
     if(ordreReglementTierPayant){
+      ordreReglementTierPayant.compteTiersPrestataire = this.comptesTiersPrestataire;
       this.confirmationService.confirm({
         message: 'voulez-vous payer cet ordre de reglement ?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.confirmPaiemnt(ordreReglementTierPayant);
+          this.confirmPaiement(ordreReglementTierPayant);
         },
       });
     }
@@ -300,8 +331,73 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-  confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
-    if(ordreReglementTierPayant) {
+
+  getStickerConfirmation1(sticker){
+
+    this.tierPayantService.getStickerConfirmation(sticker).subscribe( 
+       response => {
+        if(response){
+          this.sticker = response;
+          if(sticker != ''){
+
+            this.isStickerConfimartion = true;
+          }
+          if(sticker == ''){
+
+            this.isStickerConfimartion = false;
+          }
+        }
+
+       }
+    );
+
+  }
+
+  getStickerConfirmation2(ordreReglementTierPayant: OrdreReglementTierPayant){
+    
+    this.isStickerConfimartion = true;
+    this.sticker = ordreReglementTierPayant.sticker.trim().toString();
+
+    this.stickerConfirmation = ordreReglementTierPayant.stickerConfirmation.trim().toString();
+
+    if(this.sticker === this.stickerConfirmation){
+      this.isStickerConfimartion = true;
+    }
+    if(this.sticker !== this.stickerConfirmation){
+      this.isStickerConfimartion = false;
+    }
+    
+
+  }
+
+
+  getStickerConfirmation(ordreReglementTierPayant: OrdreReglementTierPayant): void {
+     this.sticker = ordreReglementTierPayant.sticker?.trim();
+     this.stickerConfirmation = ordreReglementTierPayant.stickerConfirmation?.trim();
+
+    if(this.sticker == this.stickerConfirmation){
+      this.isStickerConfimartion = true;
+
+    }
+    if(this.sticker != this.stickerConfirmation){
+      this.isStickerConfimartion = false;
+    }
+
+
+  }
+  
+    onCancelPaiement(){
+      this.isToPayeOrdreReglementTierPayant = false;
+      this.ordreReglementTierPayant = null;
+      this.comptesTiersPrestataire = null;
+      this.comptesTiersPrestataireContact = null;
+      this.sticker = '';
+      this.stickerConfirmation = '';
+      this.isStickerConfimartion = null;
+    }
+
+  confirmPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+    if(ordreReglementTierPayant && ordreReglementTierPayant.compteTiersPrestataire != null) {
 
       ordreReglementTierPayant.isTakeCheque = false;
           this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
@@ -313,8 +409,14 @@ export class PaiementFactureComponent implements OnInit {
                   this.isToPayeOrdreReglementTierPayant = false;
                   this.ordreReglementTierPayant = {};
                   this.compteSelected = {};
+                  this.comptesTiersPrestataire = null;
+                  this.comptesTiersPrestataireContact = null;
+                  this.sticker = '';
+                  this.stickerConfirmation = '';
+                  this.isStickerConfimartion = null;
+
                   this.getSucessInfo();
-                  this.ordreReglementList = this.ordreReglementList.filter( ordre => ordre.id != ordreReglementTierPayant.id);
+                  this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
                 }
                 if(isPaye === false){
@@ -328,6 +430,8 @@ export class PaiementFactureComponent implements OnInit {
           );
     }
 
+    this.onSerByOdreReglementByPeriode();
+
   }
 
   onCancelPaiementOrdreReglement(): void{
@@ -335,11 +439,13 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-
   onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
     if(ordreReglementTierPayant){
       this.isToPayeOrdreReglementTierPayant = true;
       this.ordreReglementTierPayant = ordreReglementTierPayant;
+      this.prestataire = ordreReglementTierPayant.prestataire;
+      this.onFindCompteTiersByPrestataire(ordreReglementTierPayant.prestataire);
     }
   }
 
@@ -358,7 +464,6 @@ export class PaiementFactureComponent implements OnInit {
   getErrorInfo(message: string): void {
     this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
   }
-
 
 
   verifierNumeroCheque(numeroCheque: string) {

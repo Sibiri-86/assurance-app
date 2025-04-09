@@ -42,16 +42,25 @@ export interface OrdreReglementTierPayant{
     montantPaye?: number;
     isPaiement?: Boolean;
     isTakeCheque?: Boolean;
+    sticker?: string;
+    stickerConfirmation?: string;
+    devalider?: Boolean;
     prestataire?: string;
+    prestataireId?: string;
     date?: Date;
     datePriseCheque?: Date;
     datePaiement?:Date;
     dateDeSaisie?:Date;
     numeroCheque?:string;
     numeroFactureSinistre?:string;
+    motifDevalidation?:string;
     compte?: Compte;
     journaux?: Journaux;
     compteTiers?: Tiers;
+    compteTiersPrestataire?: Tiers;
+}
+export interface CustumPrestatire{
+    libelle?: string;
 }
 
 export interface SinistreTierPayant {
@@ -74,6 +83,7 @@ export interface SinistreTierPayant {
     montantRestant?:number;
     statSaisie?: Saisie;
     operateur?: string;
+    sticker?: string;
     sinistreTierPayantPrincipal?: SinistreTierPayant;
     
 }

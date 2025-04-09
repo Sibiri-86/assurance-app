@@ -40,6 +40,8 @@ import * as tiersAction from 'src/app/store/comptabilite/tiers/actions';
 import * as tiersSelector from '../../../store/comptabilite/tiers/selector';
 import *as garantAction from '../../../store/contrat/garant/actions';
 import *as garantSelector from '../../../store/contrat/garant/selector';
+import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
+import { Prestataire } from 'src/app/store/parametrage/prestataire/model';
 
 
 
@@ -118,6 +120,7 @@ export class TiersComponent implements OnInit, OnDestroy {
   appelFondTotal: AppelFond;
   tiersForm: FormGroup;
   tiers: Tiers;
+  prestataires: Prestataire[] = [];
   tiersList$: Observable<Array<Tiers>>;
   tiersList: Array<Tiers>;
   tiersPrintForm: FormGroup;
@@ -126,7 +129,9 @@ export class TiersComponent implements OnInit, OnDestroy {
 
 
   constructor(private formBuilder: FormBuilder,
-              private store: Store<AppState>, private messageService: MessageService,
+              private store: Store<AppState>, 
+              private messageService: MessageService,
+              private prestataireService: PrestataireService,
               private confirmationService: ConfirmationService, private breadcrumbService: BreadcrumbService,
               private appelFondService: AppelFondService) {
 
@@ -142,6 +147,7 @@ export class TiersComponent implements OnInit, OnDestroy {
         adresse: new FormControl(''),
         codePostal: new FormControl(''),
         garant: new FormControl(''),
+        prestataire: new FormControl(''),
         /* pays: new FormControl(''),
         region: new FormControl(''),
         ville: new FormControl(''), */
@@ -181,6 +187,7 @@ export class TiersComponent implements OnInit, OnDestroy {
 
 ngOnInit(): void {
   this.compteList = [];
+  this.onGetAllPrestataires();
   // this.loading = true;
   this.entityValidations = [
     {
@@ -416,6 +423,14 @@ annulerAppelFond() {
   this.tiersPrintForm.get('typeCompteTiers').setValue = null; */
   // this.etatAppel = false;
 }
+
+onGetAllPrestataires(){
+    this.prestataireService.$getPrestataires().subscribe(
+      response => {
+          this.prestataires = response.prestataireDtoList;
+      }
+    );
+  }
 }
 
 

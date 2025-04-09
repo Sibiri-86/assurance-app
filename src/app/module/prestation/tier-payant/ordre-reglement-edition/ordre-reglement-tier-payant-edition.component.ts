@@ -39,8 +39,17 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
   ordreReglement: OrdreReglementTierPayant;
   showDetailOrdreReglement = false;
 
+  sticker: string = '';
+  stickerConfirmation: string = '';
+  isStickerConfimartion: boolean = null;
+  rowIndex : number = null;
+  editing = false;
+  isEditing = false;
+  ordreReglementTierPayant: OrdreReglementTierPayant = {};
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,private router: Router,
+              private tierPayantService: TierPayantService,
               private formBuilder: FormBuilder,  private messageService: MessageService, 
               private breadcrumbService: BreadcrumbService,private sinistreTiersPayantService: TierPayantService) {
     this.breadcrumbService.setItems([{ label: 'TIERS PAYANT | ORDRE DE PAIEMENT EDITION' }]);
@@ -74,14 +83,46 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
       this.prestations = this.sinistreTierPayants[0].prestation;
       //this.prestations = this.prestations.prestation;
     }));  */
-    this.confirmationService.confirm({
-      message: 'voulez-vous valider cet ordre de reglement',
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.store.dispatch(featureActionTierPayant.validerTierPayantOrdreReglement({ordre, etat: TypeEtatOrdreReglement.VALIDE}));
-      },
-    });
+
+        this.confirmationService.confirm({
+          message: 'voulez-vous valider cet ordre de reglement',
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.store.dispatch(featureActionTierPayant.validerTierPayantOrdreReglement({ordre, etat: TypeEtatOrdreReglement.VALIDE}));
+          },
+        });
+    
+    
+  }
+
+  validerOrdreReglementTiersPayant(ordre: OrdreReglementTierPayant){
+    
+    if(ordre && ordre.sticker){
+
+      this.confirmationService.confirm({
+        message: 'voulez-vous valider cet ordre de reglement',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          ordre.sticker.trim();
+          this.tierPayantService.putUpdateTierPayantOrdreReglement(ordre, TypeEtatOrdreReglement.VALIDE).subscribe(
+            res => {
+              if(res){
+                this.rowIndex = null;
+                this.isEditing = false;
+                this.isStickerConfimartion = false;
+                this.ordreReglementList = this.ordreReglementList.filter( notIn => notIn.id != ordre.id);
+                this.getSucessInfo();
+              }
+            }
+          )
+            },
+      });
+  
+  
+    }
+
   }
 
   supprimerOrdreReglement() {
@@ -151,6 +192,93 @@ export class OrdreReglementTierPayantEditionComponent implements OnInit {
 
   navigateSinistre2() {
     this.router.navigateByUrl('/prestation/tierPayant/valide');
+  }
+  onIniteStickerUpdate(ordre: OrdreReglementTierPayant, rowIndex: number){
+    this.rowIndex = rowIndex;
+    this.isEditing = true;
+    this.ordreReglementTierPayant = ordre;
+  }
+
+  onUpdateSticker(ordreReglementTierPyant: OrdreReglementTierPayant){
+
+    if(ordreReglementTierPyant){
+      this.confirmationService.confirm({
+        message: 'voulez-vous payer cet ordre de reglement ?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.onConfirmStickerUpdating(ordreReglementTierPyant);
+        },
+      });
+    }
+
+
+  }
+
+  getStickerConfirmation(sticker){
+
+    this.tierPayantService.getStickerConfirmation(sticker).subscribe( 
+       response => {
+        if(response){
+          this.sticker = response;
+          if(sticker != ''){
+            this.isStickerConfimartion = true;
+          }
+
+        }
+        if(!response){
+          this.isStickerConfimartion = false;
+        }
+
+       }
+    );
+
+  }
+
+
+  onConfirmStickerUpdating(ordreReglementTierPyant : OrdreReglementTierPayant){
+
+    if(ordreReglementTierPyant && ordreReglementTierPyant.sticker){
+      ordreReglementTierPyant.sticker.trim();
+      this.tierPayantService.updatedOrdreTierTierPayantSticker(ordreReglementTierPyant).subscribe(
+          response => {
+            if(response){
+              this.rowIndex = null;
+              this.isEditing = false;
+              this.isStickerConfimartion = false;
+              this.ordreReglementList$;
+              // this.validerOrdreReglementTiersPayant(ordreReglementTierPyant);
+            }
+          }, 
+          error => {
+            this.getErrorInfo(error.error.message);
+          }
+      );
+    }
+  }
+
+  onCancelStickerUpdated(ordre?: OrdreReglementTierPayant, sticker? : string){
+    this.rowIndex = null;
+    this.isEditing = false;
+    ordre.sticker = null;
+    this.ordreReglementTierPayant = ordre;
+    this.isStickerConfimartion = false;
+    this.getCancelInfo();
+  }
+
+
+  getSucessInfo(): void {
+    this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS EDITION', detail: 'Opération réussie!'});
+  }
+  getCancelInfo(): void {
+    this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS EDITION', detail: 'Opération annulé!'});
+  }
+  getFailledInfo(): void {
+    this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS EDITION', detail: 'Opération échouée!'});
+  }
+  
+  getErrorInfo(message: string): void {
+    this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS EDITION', detail: message});
   }
 
 }

@@ -388,12 +388,21 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    
     static readonly PRESTATION_TIER_PAYANT_ORDRE_REGLEMMENT = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/sinistre-by-odrereglement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
     static readonly PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-devalidation`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_GET_STICKER = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/get-sticker-for-confirmation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
 
@@ -403,6 +412,18 @@ export class Endpoints {
     };
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-with-cheque`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITHOUT_CHEQUE = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-without-cheque`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_DEVALIDE = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
     static readonly PRESTATION_EXPORT_PREFINANCEMENT_TIER_PAYANT = {
@@ -469,6 +490,14 @@ export class Endpoints {
 
         static readonly COMPTABILITE_COMPTE_TIERS_COLLECTIF = {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-with-compte-collectif`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+        static readonly COMPTABILITE_COMPTE_TIERS_PRESTATAIRE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-with-compte-prestataire`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+        static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
 

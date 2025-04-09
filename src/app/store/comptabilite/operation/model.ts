@@ -19,6 +19,7 @@ export interface Operation {
     montantCredit?: number;
     compte?: Compte;
     compteAuxiliaire?: Tiers;
+    compteTiersPrestataire?: Tiers;
     compteSelected?: Compte;
     journauxId?: string;
     ordreReglement?: OrdreReglement;

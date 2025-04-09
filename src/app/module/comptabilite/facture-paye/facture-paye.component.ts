@@ -9,7 +9,7 @@ import * as featureActionTierPayant from '../../../store/prestation/tierPayant/a
 import { OrdreReglement, Prefinancement, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 import { printPdfFile } from 'src/app/module/util/common-util';
 import { Report } from 'src/app/store/contrat/police/model';
-import {OrdreReglementTierPayant, Prestation, SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
+import {CustumPrestatire, OrdreReglementTierPayant, Prestation, SinistreTierPayant} from '../../../store/prestation/tierPayant/model';
 import {TypeReport} from '../../../store/contrat/enum/model';
 import {TypeEtatOrdreReglement} from '../../common/models/emum.etat.ordre-reglement';
 import {BreadcrumbService} from '../../../app.breadcrumb.service';
@@ -19,6 +19,15 @@ import * as featureActionBanque from '../../../store/parametrage/Banques/actions
 import { formatDate } from '@angular/common';
 import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { error } from 'console';
+import { KeycloakService } from 'keycloak-angular';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { JournauxService } from 'src/app/store/comptabilite/journaux/service';
+import { TypeJournauxService } from 'src/app/store/parametrage/typeJournaux/service';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import { Journaux } from 'src/app/store/comptabilite/journaux/model';
+import { Tiers } from 'src/app/store/comptabilite/tiers/model';
+import { TypeJournaux } from 'src/app/store/parametrage/typeJournaux/model';
 
 @Component({
   selector: 'app-facture-paye',
@@ -28,6 +37,13 @@ import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 export class FacturePayeComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglementTierPayant>;
+  ordreReglementListTakedCheque: OrdreReglementTierPayant[] = [];
+  ordreReglementListNotTakedCheque: OrdreReglementTierPayant[] = [];
+  ordreReglementListDevalider: OrdreReglementTierPayant[] = [];
+  isOrdreReglementListTakedCheque: boolean = false;
+  isOrdreReglementListNotTakedCheque: boolean = false;
+  isOrdreReglementList: boolean = false;
+  isOrdreReglementListDevalider: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglementTierPayant>>;
   cols: any[];
   displaySinistre = false;
@@ -46,21 +62,61 @@ export class FacturePayeComponent implements OnInit {
 
   dateDebut: any;
   dateFin: any;
+  prestataire: string;
+  ordreReglementTierPayantToDevalide: OrdreReglementTierPayant = {};;
+  isToDisplayMotifDevalidation: boolean = false;
 
   numeroCheque: string = '';
   existe: boolean | null = null;
 
   choose: string = '';
 
+  isToPayeOrdreReglementTierPayant = false;
+  ordreReglementTierPayant: OrdreReglementTierPayant = {};
+  oldNumeroCheque: string = '';
+
+    comptes: Compte[] = [];
+    comptesTiers: Tiers[] = [];
+    comptesTiersPrestataires: Tiers[] = [];
+    comptesTiersPrestataire: Tiers;
+    comptesTiersPrestataireContact: string;
+    typeJournaux: TypeJournaux[] = [];
+    journaux: Array<Journaux>
+    compteCollectifId: string;
+    compteSelected: Compte;
+  
+    sticker: string = '';
+    stickerConfimartion: boolean = false;
+    isToEporteExcel: boolean = false;
+    isWithoutTakedChequeExport = false;
+    isAllExport = false;
+    isTackedChequeExport = false;
+    isDevalideChequeExport = false;
+    messageToDisplay: string = '';
+    prestataireSelected: string = '';
+    ordreReglementListPrestataire: CustumPrestatire[] = [];
+
+
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
               private tierPayantService: TierPayantService,
-              private messageService: MessageService, private breadcrumbService: BreadcrumbService) {
+              private compteService: CompteService,
+              private compteTiersService: TiersService,
+              private typeJournauxService: TypeJournauxService,
+              private journauxService: JournauxService,
+              private messageService: MessageService, 
+              private breadcrumbService: BreadcrumbService) {
   this.breadcrumbService.setItems([{ label: 'Factures payés' }]);
 }
 
   ngOnInit(): void {
-    this.onSerByOdreReglementPayeByPeriode();
+
+    this.onGetComptes();
+    this.onGetComptesTiersByCompteCollectifAndGarand();
+    this.onGetComptesTiersPrestataires();
+
+    this.onSearByOdreReglementPayeByPeriode();
+    this.getRefreshfunctions();
     /* this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
         .subscribe(bytes => {
@@ -132,18 +188,73 @@ export class FacturePayeComponent implements OnInit {
 
   }
 
+
+  onInitDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+    this.ordreReglementTierPayantToDevalide = ordreReglementTierPayant;
+    
+    this.prestataire = ordreReglementTierPayant.prestataire;
+    this.isToDisplayMotifDevalidation = true;
+
+  }
+
+  onAcceptDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+    if(ordreReglementTierPayant){
+      this.confirmationService.confirm({
+        message: 'voulez-vous dévalider le paiement de cet ordre de reglement ?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.confirmDevalidation(ordreReglementTierPayant);
+        },
+      });
+    }
+
+  }
+
+  confirmDevalidation(ordreReglementTierPayant: OrdreReglementTierPayant){
+        this.tierPayantService.devaliderPaiementOrdreReglemnt(ordreReglementTierPayant).subscribe(
+          response => {            
+
+            console.log('response', response);
+            if(response && response === true){
+              
+              this.getSucessInfo();
+              this.getRefreshfunctions();
+              this.isToDisplayMotifDevalidation = false;
+              this.isEditing = false;
+              this.rowIndex = null;
+            }
+            if(response && response === false){
+              this.getFailledInfo();
+            }
+
+          }, error => {
+            this.getErrorInfo(error.message.message);
+          }
+        );
+
+        this.getRefreshfunctions();
+
+  }
+
+
   onInitTakingCheque(ri: number){
     this.rowIndex = ri;
     this.isEditing = true;
   }
 
   onCancelTakingCheque(){
+
     this.isEditing = false;
+    this.isToDisplayMotifDevalidation = false;
 
     this.getCancelInfo();
+    this.getRefreshfunctions();
   }
 
-    onSerByOdreReglementPayeByPeriode() {
+  searByOdreReglementPayeByPeriode() {
 
       if(!this.dateDebut || !this.dateFin){
           this.dateDebut = new Date();
@@ -161,8 +272,118 @@ export class FacturePayeComponent implements OnInit {
             .subscribe((response: any) => {
               this.ordreReglementList = response;
               //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
 
-              console.log('ordreReglementList' , this.ordreReglementList);
+      onSearByOdreReglementPayeByPeriode(){
+        this.searByOdreReglementPayeByPeriode();
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
+        this.isOrdreReglementList = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndByTakeCheque(){
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.isOrdreReglementListTakedCheque = true;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+        this.isOrdreReglementList = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque(){
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.isOrdreReglementListNotTakedCheque = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListDevalider = false;
+        this.isOrdreReglementList = false;
+      }
+
+      onSearByOdreReglementPayeByPeriodeAndDevalider(){
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
+        this.isOrdreReglementListDevalider = true;
+        this.isOrdreReglementListTakedCheque = false;
+        this.isOrdreReglementListNotTakedCheque = false;
+        this.isOrdreReglementList = false;
+        
+      }
+      
+
+    searByOdreReglementPayeByPeriodeAndByTakeCheque() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeAndTackedCheque(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListTakedCheque = response;
+              //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
+
+      searByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeAndNotTackedCheque(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListNotTakedCheque = response;
+              //this.ordreReglementList$ = response;
+            }, error => {
+              console.error('Erreur lors de la récupération des données', error);
+            });
+          }
+          
+      }
+
+      searByOdreReglementPayeByPeriodeAndDevalider() {
+
+      if(!this.dateDebut || !this.dateFin){
+          this.dateDebut = new Date();
+          this.dateFin = new Date();
+      }
+
+        if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+          this.addMessage('error', 'Dates  invalide',
+          'La date de debut ne peut pas être supérieure à celle du de fin');
+        } else {
+  
+          const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+          const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+            this.tierPayantService.getTierPayantOrdreReglementFactureTiersPayeDevalider(dateD, dateF)
+            .subscribe((response: any) => {
+              this.ordreReglementListDevalider = response;
+              //this.ordreReglementList$ = response;
             }, error => {
               console.error('Erreur lors de la récupération des données', error);
             });
@@ -193,13 +414,10 @@ export class FacturePayeComponent implements OnInit {
                   if(response){
                     const isPaye = response;
                     if(isPaye === true){
-                      this.getSucessInfo();
                       this.isEditing = false;
-                      this.ordreReglementList;
-                    }
-                    if(isPaye === false){
-    
-                      this.getFailledInfo();
+                      this.rowIndex = null;
+                      this.getSucessInfo();
+                      this.getRefreshfunctions();
                     }
                   }
                 }, error => {
@@ -226,7 +444,103 @@ export class FacturePayeComponent implements OnInit {
       }
 
 
-      exportExcel() {
+      getRefreshfunctions(){
+        this.searByOdreReglementPayeByPeriode();
+        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+        this.searByOdreReglementPayeByPeriodeAndDevalider();
+      }
+
+
+      onExportOrdreReglement(){
+
+          this.confirmationService.confirm({
+            message: this.messageToDisplay,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              if(this.isAllExport){
+
+                this.exportAllOrdre();
+              }
+              if(this.isTackedChequeExport){
+
+                this.onExportAllOrdreWithCheque();
+              }
+              if(this.isWithoutTakedChequeExport){
+
+                this.onExportAllOrdreWithoutCheque();
+              }
+              if(this.isDevalideChequeExport){
+
+                this.onExportAllOrdreDevalide();
+              }
+            },
+          });
+        
+      }
+
+      onSelectedPrestaire(prestataire: CustumPrestatire){
+        this.prestataireSelected = prestataire.libelle;
+      }
+
+      onExportAllOrdre(){
+        this.ordreReglementListPrestataire = [];
+        this.isAllExport = true;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
+        let prestataires = this.ordreReglementList.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithTakeCheque(){
+        this.ordreReglementListPrestataire = [];
+        this.isTackedChequeExport = true;
+        this.isAllExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'
+        let prestataires = this.ordreReglementListTakedCheque.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithoutTakeCheque(){
+        this.ordreReglementListPrestataire = [];
+        this.isWithoutTakedChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
+        let prestataires = this.ordreReglementListNotTakedCheque.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreDevalide(){
+        this.ordreReglementListPrestataire = [];
+        this.isDevalideChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
+        let prestataires = this.ordreReglementListDevalider.map(prestataire => prestataire.prestataire);
+        this.ordreReglementListPrestataire = prestataires.map(libelle => ({ libelle }));
+
+      }
+
+
+      exportAllOrdre() {
         if (!this.dateDebut || !this.dateFin) {
           alert("Veuillez sélectionner une période !");
           return;
@@ -235,7 +549,7 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     
-        this.tierPayantService.exportOrdreReglement(this.dateDebut, this.dateFin)
+        this.tierPayantService.exportAllOrdreReglement(this.dateDebut, this.dateFin, this.prestataireSelected)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const url = window.URL.createObjectURL(blob);
@@ -245,6 +559,90 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
+            this.prestataireSelected = '';
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreWithCheque() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.prestataireSelected)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_avec_cheque_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
+            this.prestataireSelected = '';
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreWithoutCheque() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.prestataireSelected)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_sans_cheque_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
+            this.prestataireSelected = '';
+          }, error => {
+            console.error("Erreur lors de l'exportation :", error);
+          });
+      }
+
+      onExportAllOrdreDevalide() {
+        if (!this.dateDebut || !this.dateFin) {
+          alert("Veuillez sélectionner une période !");
+          return;
+        }
+
+        const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+        const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    
+        this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.prestataireSelected)
+          .subscribe(response => {
+            const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ordre_reglement_tier_payant_paye_devalide_du_${dateD}_au_${dateF}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
+            this.prestataireSelected = '';
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
@@ -259,10 +657,6 @@ export class FacturePayeComponent implements OnInit {
         const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
 
-        console.log('dateDebut', dateD);
-        console.log('dateFin', dateF);
-        
-    
         this.tierPayantService.exportPrestationPrefincementTierPayantToExcel(this.dateDebut, this.dateFin, this.choose)
           .subscribe(response => {
             const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -273,9 +667,168 @@ export class FacturePayeComponent implements OnInit {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            this.isToEporteExcel = false;
+            this.getSucessInfo();
+            this.prestataireSelected = '';
           }, error => {
             console.error("Erreur lors de l'exportation :", error);
           });
       }
+
+
+      onGetComptes(){
+        this.compteService.$getComptesBanquaires().subscribe(
+          res => {
+            this.comptes = res;
+          }
+        );
+      }
+  
+  
+      onGetComptesTiersByCompteCollectifAndGarand(){
+  
+          this.compteTiersService.$getTiersWithCompteCollectif().subscribe(
+            res => {
+              this.comptesTiers = res;
+            }
+          );
+        
+      }
+  
+      onGetComptesTiersPrestataires(){
+  
+          this.compteTiersService.getComptesTiersPrestataire().subscribe(
+            res => {
+              this.comptesTiersPrestataires = res;
+            }
+          );
+        
+      }
+  
+      onGetTypeJournaux(){
+        this.typeJournauxService.$getTypeJournaux().subscribe(
+          res => {
+            this.typeJournaux = res.typeJournauxList;
+          }
+        );
+      }
+  
+      onGetJournaux(){
+        this.journauxService.$getJournaux().subscribe(
+          res => {
+            this.journaux = res.journauxList;
+          }
+        );
+      }
+  
+      onInitPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPayant){
+          this.isToPayeOrdreReglementTierPayant = true;
+          this.ordreReglementTierPayant = ordreReglementTierPayant;
+          this.oldNumeroCheque = ordreReglementTierPayant.numeroCheque;
+          this.prestataire = ordreReglementTierPayant.prestataire;
+          this.onFindCompteTiersByPrestataire(ordreReglementTierPayant.prestataire);
+        }
+      }
+
+      onCancelPaiement(){
+        this.isToPayeOrdreReglementTierPayant = false;
+        this.ordreReglementTierPayant = null;
+        this.prestataireSelected = '';
+      }
+
+      
+    verifierOldNumeroCheque(numeroCheque: string){
+      if (numeroCheque){
+         const isMath = this.oldNumeroCheque.trim() === numeroCheque.trim();
+
+         if(isMath === false){
+          this.verifierNumeroCheque(numeroCheque);
+         }
+      }
+    }
+
+  verifierNumeroCheque(numeroCheque: string) {
+    if (numeroCheque.trim()) {
+      this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+        (result) => {
+          this.existe = result;
+        },
+        (error) => {
+          console.error('Erreur lors de la vérification', error);
+          this.existe = null;
+        }
+      );
+    }
+  }
+
+      onSaveOrdreReglementPaiement(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+        if(ordreReglementTierPayant){
+          ordreReglementTierPayant.compteTiersPrestataire = this.comptesTiersPrestataire;
+          this.confirmationService.confirm({
+            message: 'voulez-vous payer cet ordre de reglement ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmPaiemnt(ordreReglementTierPayant);
+            },
+          });
+        }
+    
+      }
+
+      confirmPaiemnt(ordreReglementTierPayant: OrdreReglementTierPayant){
+        if(ordreReglementTierPayant) {
+    
+          ordreReglementTierPayant.isTakeCheque = false;
+              this.tierPayantService.payerOrdreReglemnt(ordreReglementTierPayant).subscribe(
+                response => {
+                    const isPaye = response;
+                    if(isPaye === true){
+    
+                      this.isToPayeOrdreReglementTierPayant = false;
+                      this.ordreReglementTierPayant = {};
+                      this.compteSelected = {};
+                      this.getSucessInfo();
+                      this.getRefreshfunctions();
+                  }
+                }, error => {
+                  this.getErrorInfo(error.error.message);
+                }
+              );
+        }
+      
+    
+      }
+    
+      onCancelPaiementOrdreReglement(): void{
+        this.getCancelInfo();
+        this.getRefreshfunctions();
+      }
+
+      isMotifValid(): boolean {
+        const motif = this.ordreReglementTierPayantToDevalide?.motifDevalidation || '';
+        return motif.trim().length >= 10;
+      }
+
+      onInitExcelExport(){
+        this.isToEporteExcel = true;
+      }
+
+      onFindCompteTiersByPrestataire(prestataireLibelle: string){
+
+        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle).subscribe(
+          res => {
+            this.comptesTiersPrestataire = res;
+            this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
+          }
+        );
+      
+    }
+
+      
+  
 
 }

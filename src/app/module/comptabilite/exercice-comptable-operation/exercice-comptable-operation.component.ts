@@ -91,6 +91,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
   exercice: ExerciceComptable = {};
   operationSoldeAnterieur: OperationSoldeAnterieur = {};
   isClasse5 =  false;
+  PRESTATAIRES_SANTE: string = '';
 
   
   
@@ -214,7 +215,24 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     this.displayAddOperationListe = true;
     this.findExerciceOperationAjour();
   }
+
+
+onGetOperationByExerciceComptableOperation(exerciceComptableOperation: ExerciceComptableOperation){
+  
+  this.PRESTATAIRES_SANTE = exerciceComptableOperation.journaux.typeJournaux.libelle;
+
+  this.operationService.$getOperationByExerciceOperation(exerciceComptableOperation.id).subscribe(
+      response => {
+        this.operationList = response.operationList;
+        this.displayOperation = true;
+        this.isClasse5 = false;
+      }
+  );
+}
+
   addOperation(exerciceComptableOperation: ExerciceComptableOperation) {
+    console.log("exerciceComptableOperationexerciceComptableOperation", exerciceComptableOperation);
+
     this.exerciceComptableOperation = exerciceComptableOperation;
     this.exerciceComptableService.findExerciceComptableActif(exerciceComptableOperation?.exercice).subscribe((res)=>{
       if(res) {
@@ -226,6 +244,7 @@ export class ExerciceComptableOperationComponent implements OnInit, OnDestroy {
     
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperation({exerciceOperationId: exerciceComptableOperation.id}));
     this.store.dispatch(featureActionOperation.loadOperationByExerciceOperationLeutree({exerciceOperationId: exerciceComptableOperation.id}));
+    
     console.log("=========1========= ",this.exerciceComptableOperationList[0].isPartie, "=========2========= ",exerciceComptableOperation.id);
     this.isClasse5 = false;
     if(this.exerciceComptableOperationList[0].isPartie) {

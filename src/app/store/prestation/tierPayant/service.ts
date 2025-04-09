@@ -34,6 +34,10 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/enregistrer-noList`, tierPayant);
   }
 
+  updatedOrdreTierTierPayantSticker(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
+    return this.http.patch(`${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/update-ordre-tiers-payant-sticker`, ordreReglementTierPayant);
+  }
+
     $getTierPayant(): Observable<SinistreTierPayantList> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}`).pipe(
@@ -78,8 +82,38 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
         );
     }
 
+    getTierPayantOrdreReglementFactureIstanceWitSticker(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-instance-with-sticker?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
+
+
     getTierPayantOrdreReglementFactureTiersPaye(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getTierPayantOrdreReglementFactureTiersPayeAndTackedCheque(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+
+    getTierPayantOrdreReglementFactureTiersPayeAndNotTackedCheque(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-paye-not-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+            map((response: OrdreReglementTierPayantList) => response),
+            catchError(this.handleError())
+        );
+    }
+    getTierPayantOrdreReglementFactureTiersPayeDevalider(dateD: string, dateF: string): Observable<OrdreReglementTierPayantList> {
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT)}/ordreReglement/facture-tiers-payant-devalider?dateD=${dateD}&dateF=${dateF}`).pipe(
             map((response: OrdreReglementTierPayantList) => response),
             catchError(this.handleError())
         );
@@ -111,6 +145,17 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT), ordreReglementTierPayant);
   }
 
+  devaliderPaiementOrdreReglemnt(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
+    return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
+  }
+
+  getStickerConfirmation(sticker: string): Observable<any> {
+    const params = new HttpParams()
+    .set('sticker', sticker)
+
+    return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_GET_STICKER),  {params});
+  }
+
   verifierExistenceNumeroCheque(numeroCheque: string): Observable<boolean> {
     const params = new HttpParams()
         .set('numeroCheque', numeroCheque)
@@ -118,20 +163,78 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
   }
 
-  exportOrdreReglement(dateDebut: string, dateFin: string) {
-    
-    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+  exportAllOrdreReglement(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
   
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('dateDebut', formattedDateDebut)
       .set('dateFin', formattedDateFin);
-
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION), { 
       params,
       responseType: 'blob'
     });
   }
+
+  getExportAllOrdreWithCheque(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  getExportAllOrdreWithoutCheque(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITHOUT_CHEQUE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  
+
+  getExportAllOrdreDevalide(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_DEVALIDE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  
 
   exportPrestationPrefincementTierPayantToExcel(dateDebut: string, dateFin: string, choose: string) {
     

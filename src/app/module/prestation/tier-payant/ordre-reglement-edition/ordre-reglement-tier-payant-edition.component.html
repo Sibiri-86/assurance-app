@@ -53,10 +53,12 @@
                        <!-- <th pSortableColumn="taux" style="min-width:200px">Numéro police<p-sortIcon field="taux.taux"></p-sortIcon></th>
                          <th pSortableColumn="territorialite" style="min-width:200px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th> -->
                         <th pSortableColumn="territorialite" style="min-width:150px">Etat<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-                        <th style="min-width:150px"></th>
+<!--                         <th>N° Sticker</th>
+                        <th *ngIf="isEditing">Saisie sticker</th> -->
+                        <th style="min-width:150px">Actions</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-ordre>
+                <ng-template pTemplate="body" let-ordre let-ri="rowIndex">
                     <tr>
                         <td>
                             <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
@@ -70,8 +72,7 @@
 
                         <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.libelle}}</span>
                         </td> -->
-                        <td><span class="p-column-title">{{ordre?.prestataire}}</span>
-                        </td>
+                        <td><span class="p-column-title">{{ordre?.prestataire}}</span></td>
                         <!-- <td><span class="p-column-title">{{ordre?.tierPayant[0]?.prestataire?.telephone}}</span>
                         </td> -->
                        
@@ -80,13 +81,49 @@
                             <span *ngIf="ordre?.etat ==='ENCOURS'" class="p-badge p-badge-warning">EN ATTENTE..</span>
                             <span *ngIf="ordre?.etat ==='DEVALIDE'" class="p-badge p-badge-danger">{{ordre?.etat}}</span>
                         </td>
+
+                         <!-- <td><span class="p-column-title">{{ordre?.sticker}}</span></td> -->
+
+                        <td *ngIf="isEditing">
+                            <span class="textDanger" *ngIf="isStickerConfimartion === true && rowIndex === ri">Ce sticker est déjà utilisé <br></span> 
+                            <input
+                                [disabled]="rowIndex !== ri"
+                                #sticker="ngModel"
+                                type="text"
+                                pInputText
+                                placeholder="Saisir le sticker"
+                                minlength="9"
+                                maxlength="9"
+                                [(ngModel)]="ordre.sticker"
+                                [ngClass]="{'ng-invalid': sticker.invalid && sticker.touched}"
+                                required
+                                (blur)="getStickerConfirmation(ordre.sticker)"
+                            />
+                        </td>
                         
                         <td style="min-width:150px">
-                        <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
-                            <button pButton  pRipple icon="pi pi-eye" pTooltip="voir Ordre de règlement" class="p-button-rounded p-button-help p-mr-2" (click)="consulter(ordre)"></button>
-                        <button pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerOrdreReglement(ordre)"></button>
-                        <!-- <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button> -->
-                        </td>
+                        <!--    <button *ngIf="!isEditing" pButton pRipple icon="pi pi-check" pTooltip="Renseigner le sticker pour validation"
+                            class="p-button-rounded p-button-success p-mr-2"
+                            (click)="onIniteStickerUpdate(ordre, ri)">
+                            </button>-->
+
+                    <button
+                        [disabled]="!ordre?.sticker || ordre?.sticker?.length !== 9 || isStickerConfimartion === true"
+                        *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-check" pTooltip="Valider l'ordre"
+                            class="p-button-rounded p-button-success p-mr-2"
+                            (click)="validerOrdreReglementTiersPayant(ordre)">
+                    </button>
+
+                    <button *ngIf="isEditing && ri === rowIndex" pButton pRipple icon="pi pi-times" pTooltip="Abandonner la mise à jour du sticker"
+                            class="p-button-rounded p-button-danger p-mr-2"
+                            (click)="onCancelStickerUpdated(ordre, ordre.sticker = null)">
+                    </button>
+
+                        <button  pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button>
+                        <button   pButton  pRipple icon="pi pi-eye" pTooltip="voir Ordre de règlement" class="p-button-rounded p-button-help p-mr-2" (click)="consulter(ordre)"></button>
+                        <button  pButton icon="pi pi-check" pTooltip="Valider" class="p-button-rounded p-button-success p-mr-2" (click)="validerOrdreReglement(ordre)"></button> 
+<!--                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
+ -->                        </td>
                         
                         <!--
                         <td>

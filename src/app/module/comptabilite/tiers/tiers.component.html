@@ -14,7 +14,7 @@
 
 			</p-toolbar>
 
-			<p-table #dt [value]="tiersList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['compte','poste','libelle']"
+			<p-table #dt [value]="tiersList" [loading]="false" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['compte','poste','libelle', 'prestataire.libelle']"
 					 [(selection)]="selectedGarants" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rowHover]="true" dataKey="id"
 					 styleClass="p-datatable-customers"
 					 currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -41,6 +41,7 @@
                         <th pSortableColumn="numeroCompteBancaire1" >Adresse <p-sortIcon field="numeroCompteBancaire1"></p-sortIcon></th>
                         <th pSortableColumn="commissionPrime.taux"> N° Téléphone <p-sortIcon field="commissionPrime.taux"></p-sortIcon></th>
                         <th pSortableColumn="garant.nom"> Garant <p-sortIcon field="garant.nom"></p-sortIcon></th>
+                        <th pSortableColumn="prestataire.libelle"> Prestataire <p-sortIcon field="prestataire.libelle"></p-sortIcon></th>
                         <th></th>
 					</tr>
 				</ng-template>
@@ -58,6 +59,7 @@
 						<td><span class="p-column-title">{{garant?.adresse}}</span></td>
                         <td><span class="p-column-title">{{garant?.numTel}}</span></td>
                         <td><span class="p-column-title">{{garant?.garant?.nom}}</span></td>
+                        <td><span class="p-column-title">{{garant?.prestataire?.libelle}}</span></td>
 						<td>
 							<button pButton pRipple icon="pi pi-pencil" pTooltip="Modifier" class="p-button-rounded p-button-success p-mr-1" (click)="editGarant(garant)"></button>
 							<button pButton pRipple icon="pi pi-trash"  pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-1" (click)="deleteGarant(garant)"></button>
@@ -139,7 +141,7 @@
 
 
         <p-dialog [maximizable]="true" [(visible)]="displayDialogFormGarant" header="Ajouter un Compte Tiers" [modal]="true" styleClass="p-fluid" (onHide)="annulerSaisie()"
-        [style]="{width: '10 00px'}">
+        [style]="{width: '70%'}">
             <ng-template pTemplate="content">
             <form (ngSubmit)="onCreate()"  [formGroup]="tiersForm">
                 <div class="card">
@@ -232,18 +234,26 @@
                 </div>
 
                 <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-field p-col-3">
+                    <div class="p-field p-col-4">
                         <label for="firstname2">Code Postal <span style="color: red !important; font-size: 1.4em"></span></label>
                         <input id="codePostal" type="text" required formControlName="codePostal"  pInputText>
                         <app-entity-validation [entityValidations]="entityValidations"
                                       [formGroup]="tiersForm" [entityField]="'codePostal'">
                         </app-entity-validation>
                     </div>
-                    <div class="p-field p-col-9">
+                    <div class="p-field p-col-4">
                         <label for="firstname2">Lier à un garant <span style="color: red !important; font-size: 1.4em"></span></label>
                         <p-dropdown inputId="garant" [filter]="true" optionLabel="nom"
                                                 showClear="true" [options]="garantList"
                                                 formControlName="garant"
+                                                [autoDisplayFirst]="false">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-4">
+                        <label for="firstname2">Lier à un prestataire <span style="color: red !important; font-size: 1.4em"></span></label>
+                        <p-dropdown inputId="prestataire" [filter]="true" optionLabel="libelle"
+                                                showClear="true" [options]="prestataires"
+                                                formControlName="prestataire"
                                                 [autoDisplayFirst]="false">
                         </p-dropdown>
                     </div>
