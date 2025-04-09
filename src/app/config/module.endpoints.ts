@@ -646,5 +646,10 @@ export class Endpoints {
         mock: `assets/mock/comptabilite/compte.mock.json`
     };
 
+    static readonly CONTROLE_DONNEES_PRESTATIONS = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/findAdherentPrestationsForControle`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
 
 }

@@ -659,5 +659,12 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
             `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICE_AND_GROUPE_AND_ASSURE_PRINCIPAL)}`, { params });
     }
 
+   controleDonneePrestations(ad: string) {
+      const params = new HttpParams()
+        .set('ad', ad)
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.CONTROLE_DONNEES_PRESTATIONS)}`, { params });
+      //return this.http.get(GlobalConfig.getEndpoint(Endpoints.CONTROLE_DONNEES_PRESTATIONS), {params});
+    }
+
   
 }

@@ -205,6 +205,9 @@ export class OrdonnaceMedicalComponent implements OnInit {
         this.prestationForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
         
         if (this.adherentsSelected) {
+          this.adherentService.controleDonneePrestations(this.adherentsSelected.id).subscribe((res) =>{
+            console.log("effctuéééééééééééééé====== >");
+          });
            
             this.adherentSelected = this.adherentsSelected;
             this.prestationForm.get('nomAdherent').setValue(this.adherentSelected.nom);

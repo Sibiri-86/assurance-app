@@ -303,6 +303,9 @@ export class TierPayantEditionComponent implements OnInit {
             console.log("==========this.adherentsSelected========================");
         
             if (this.adherentsSelected) {
+              this.adherentService.controleDonneePrestations(this.adherentsSelected.id).subscribe((res) =>{
+                console.log("effctuéééééééééééééé====== >", this.listFamilleActe);
+              });
 
                 this.plafondService.findPlafondGroupeFamilleActeByPlafondGroupeActeIdAndDomaine(this.adherentsSelected).
                 subscribe((res) =>{
