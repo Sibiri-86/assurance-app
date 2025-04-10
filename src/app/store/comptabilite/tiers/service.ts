@@ -62,6 +62,10 @@ findCompteTiersByPrestataire(prestataireLibelle: string): Observable<any> {
   return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PRESTATAIRE),  {params});
 }
 
+findCompteTiersByPrefinence(): Observable<any> {
+  return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PREFINENCE));
+}
+
 $findCompteTierByCompteCollectif(compte: string): Observable<TiersList> {
   // @FIXME: get request
   return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_TIERS)}/find-by-compte-collectif`,{params: createRequestOption({compte})}).pipe(

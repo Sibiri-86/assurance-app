@@ -100,7 +100,8 @@
                        
                         
                         <!-- <button pButton  pRipple icon="pi pi-search" pTooltip="voir sinistre" class="p-button-rounded p-button-help p-mr-2" (click)="voirSinistre(ordre)"></button> -->
-                        <button pButton [disabled]="editing1" icon="pi pi-check" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiemrntEspece(ordre)"></button>
+                        <button *ngIf="ordre.typePaiement !== 'CHEQUE' " pButton [disabled]="editing1" icon="pi pi-check" pTooltip="Payer" class="p-button-rounded p-button-info p-mr-2" (click)="paiemrntEspece(ordre)"></button>
+                        <button *ngIf="ordre.typePaiement === 'CHEQUE' "  pButton [disabled]="editing1" icon="pi pi-euro" pTooltip="Effectuer un paiment par chèque" class="p-button-rounded p-button-success p-mr-2" (click)="onInitChequePaiment(ordre)"></button>
                         <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
                         </td>
                         
@@ -210,3 +211,213 @@
 <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 </div>
 </div>
+
+
+
+<p-dialog [(visible)]="isToDisplayChequePaiment" 
+    [header]="    "
+    [style]="{width: '80%'}"
+    [modal]="true" styleClass="p-fluid"
+    [transitionOptions]="'200ms cubic-bezier(0.25, 0.8, 0.25, 1)'">
+
+    
+    <ng-template pTemplate="content"> 
+        <div class="card p-d-flex">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <div class="p-grid p-fluid">
+                        <div class="justifyContent"> <h5>PAIEMENT D'UN ORDRE DE REGLEMENT PREFINENCE DE : <span class="textSuccess"> {{assureBeneficaireNom }}  {{assureBeneficairePrenom}} <span></span> </span> </h5> </div>
+                        <!-- Colonne Gauche -->
+                        <div class="p-col-6">
+                            <p-fieldset legend="Informations Générales">
+                                
+                                <div class="p-field">
+
+                                        <label for="compte" class="font-bold">Compte bancaire<span class="required" style="color: red;">*</span></label>
+                                        <p-dropdown dataKey="id" [filter]="true"
+                                        showClear="true"
+                                        [options]="comptes"
+                                        [autoDisplayFirst]="true" 
+                                        placeholder="Sélectionnez le compte"
+                                        [(ngModel)]="ordrePrefinencement.compte"
+                                        optionLabel="libelle" class="p-mt-1 p-mb-3" 
+                                        [appendTo]="body"
+                                        (onChange)="onGetComptesTiersBySelectedCompteCollectifId(ordrePrefinencement.compte)">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field">
+                                    <label for="compteTiers" class="font-bold">Compte Tiers Garant<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
+                                        showClear="true"
+                                         [options]="comptesTiers"
+                                         [(ngModel)]="ordrePrefinencement.compteTiers"
+                                        [autoDisplayFirst]="false" 
+                                        placeholder="Sélectionnez le compte tiers"
+                                        optionLabel="intitule" class="p-mt-1 p-mb-3" 
+                                        >
+                                    </p-dropdown>
+                                </div>
+
+
+                    <!-- Ligne contenant compteTiersBeneficaire et datePaiement -->
+                    <div class="p-grid">
+                        <!-- Compte Tiers Prestataire -->
+                        <div class="p-col-8">
+
+                            <div class="p-field">
+                                <div *ngIf="!comptesTiersPrefinenceContact" > <span class="textDanger">Veuillez créer un compte tiers préfinencement (471120) pour le paiement par chèque</span></div>
+                                <label for="comptesTiersPrefinenceContact" class="font-bold">Compte Tiers préfinencement
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <input disabled id="comptesTiersPrefinenceContact" type="text"
+                                    class="p-inputtext p-mb-3 p-fluid"
+                                    [(ngModel)]="comptesTiersPrefinenceContact"
+                                    name="comptesTiersPrefinenceContact" pInputText>
+                            </div>
+                            <!-- <div class="p-field">
+                                <label for="compteTiersPresataire" class="font-bold">Compte Tiers Prestataire
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <p-dropdown inputId="compteTiersPresataire" dataKey="id" [filter]="true"
+                                    showClear="true" [options]="comptesTiersPrestataires"
+                                    [autoDisplayFirst]="false"
+                                    placeholder="Sélectionnez le compte tiers Prestataire"
+                                    optionLabel="intitule" class="p-mt-1 p-mb-3"
+                                    [(ngModel)]="ordrePrefinencement.compteTiersPrestataire">
+                                </p-dropdown>
+                            </div> -->
+                        </div>
+
+                        <!-- Date Paiement -->
+                        <div class="p-col-4">
+                            <div class="p-field">
+                                <label for="datePaiement" class="font-bold">Date paiement
+                                    <span class="required" style="color: red;">*</span>
+                                </label>
+                                <input id="datePaiement" type="date"
+                                    class="p-inputtext  p-mb-4 p-fluid"
+                                    [(ngModel)]="ordrePrefinencement.datePaiement"
+                                    name="datePaiement" pInputText>
+                            </div>
+                        </div>
+                    </div>
+
+
+<!--                                 <div class="p-field">
+                                    <label for="compteTiers" class="font-bold"> Journal<span class="required" style="color: red;">*</span></label>
+                                    <p-dropdown inputId="compteTiers" dataKey="id" [filter]="true"
+                                        showClear="true" [options]="journaux"
+                                        [autoDisplayFirst]="false" 
+                                        placeholder="Sélectionnez le journal"
+                                        optionLabel="libelle" class="p-mt-1 p-mb-3" 
+                                        [(ngModel)]="ordrePrefinencement.journaux">
+                                    </p-dropdown>
+                                </div> -->
+
+                            </p-fieldset>
+                        </div>
+
+                        <!-- Colonne Droite -->
+                        <div class="p-col-6">
+                            <p-fieldset legend="Détails du Paiement">
+
+                                <div class="p-field">
+                                    
+                                    <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
+                                    
+                                <div *ngIf="existe !== null" class="mt-3">
+                                    <p *ngIf="existe" class="textDanger">❌ Le numéro de chèque existe déjà.</p>
+                                </div>
+                                <input id="numeroCheque" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                [(ngModel)]="ordrePrefinencement.numeroCheque" 
+                                name="numeroCheque" pInputText required 
+                                (blur)="verifierNumeroCheque(ordrePrefinencement.numeroCheque)">
+                            
+                                </div>
+
+                                 <div class="p-field">
+                                    <label for="numeroCheque" class="font-bold">Confirmer le sticker</label>
+                                <div class="mt-3">
+                                    <p *ngIf="isStickerConfimartion === false" class="textDanger">❌ Confirmation de Sticker échouée.</p>
+                                    <p *ngIf="isStickerConfimartion === true" class="textSuccess"> 
+                                        <span> sticker enregistré: {{sticker}} </span> <br>
+                                        <span> sticker confirmé: {{stickerConfirmation}} </span>
+                                        </p>
+                                </div>
+                                <input
+                                minlength="9"
+                                maxlength="9"
+                                id="stickerConfirmation" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
+                                [(ngModel)]="ordrePrefinencement.stickerConfirmation" 
+                                name="stickerConfirmation" pInputText required 
+                                (blur)="getStickerConfirmation(ordrePrefinencement)">
+                            
+                                </div> 
+
+                                
+
+                                <div class="p-field">
+                                    <label for="montant" class="font-bold">Montant</label>
+                                    <input id="montant" type="text" class="p-inputtext p-mt-1 p-mb-1 p-fluid" 
+                                        [(ngModel)]="ordrePrefinencement.montantPaye" 
+                                        name="montantPaye" pInputText disabled>
+                                </div>
+
+                            </p-fieldset>
+                        </div>
+                    </div>
+                </ng-template>
+<!--                 <ng-template pTemplate="right" class="p-d-flex p-jc-center p-mt-2">
+                    <div class="p-d-block p-jc-center p-mt-2">
+                        <button (click)="onSaveOrdreReglementPaiement(ordrePrefinencement)" 
+                            pButton icon="pi pi-check" label="Valider le paiement" 
+                            [disabled]="
+                            compteSelected?.soldeDebiteur < ordrePrefinencement?.montantPaye ||
+                            !ordrePrefinencement?.numeroCheque ||
+                             !ordrePrefinencement.compte || 
+                             !ordrePrefinencement.compteTiers ||
+                              !ordrePrefinencement.journaux  ||
+                               !ordrePrefinencement.date  ||
+                                !ordrePrefinencement.montantPaye" 
+                            class="p-button-success">
+                        </button>   
+                    </div> 
+                </ng-template> -->
+
+
+
+                
+            </p-toolbar>
+        </div>
+
+        <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">
+                <!-- compteSelected?.soldeDebiteur < ordrePrefinencement?.montantPaye || -->
+    
+                <button (click)="onCancelPaiement()" 
+                    pButton icon="pi pi-check"
+                    label="Quitter le paiement"
+                    class="p-button-danger">
+                </button>  
+            </div>
+            <div class="col col-6">
+                <!-- compteSelected?.soldeDebiteur < ordrePrefinencement?.montantPaye || -->
+                <button (click)="onSaveOrdreReglementPaiement(ordrePrefinencement)" 
+                    pButton icon="pi pi-check"
+                    label="Valider le paiement" 
+                    [disabled]=" existe ||
+                    !ordrePrefinencement?.numeroCheque ||
+                    !comptesTiersPrefinenceContact ||
+                     !ordrePrefinencement.compte || 
+                     !ordrePrefinencement.compteTiers ||
+                       !ordrePrefinencement.datePaiement ||
+                        !ordrePrefinencement.montantPaye" 
+                    class="p-button-success">
+                </button>   
+            </div>
+        </div>
+        
+        
+    </ng-template>
+</p-dialog>

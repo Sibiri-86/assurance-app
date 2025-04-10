@@ -292,7 +292,7 @@ export class PaiementFactureComponent implements OnInit {
 
   imprimer(pref: OrdreReglementTierPayant) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
-    this.report.ordreReglementDto = pref;
+    this.report.ordreReglementTierPayant = pref;
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
   }
 

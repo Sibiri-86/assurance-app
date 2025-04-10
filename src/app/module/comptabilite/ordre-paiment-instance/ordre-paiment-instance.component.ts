@@ -36,6 +36,11 @@ import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/s
 import * as featureActionDepense from '../../../store/reporting/depense-famille/action';
 import { Check } from 'src/app/store/reporting/depense-famille/model';
 import * as depenseListSelector from '../../../store/reporting/depense-famille/selector';
+import { Compte } from 'src/app/store/comptabilite/compte/model';
+import { CompteService } from 'src/app/store/comptabilite/compte/service';
+import { TiersService } from 'src/app/store/comptabilite/tiers/service';
+import { Tiers } from 'src/app/store/comptabilite/tiers/model';
+import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 
 
 @Component({
@@ -55,16 +60,40 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   dateDebut: any;
   dateFin: any;
   check: Check = {};
+  isToDisplayChequePaiment: boolean = false;
+  assureBeneficaireNom: string = '';
+  assureBeneficairePrenom: string = '';
   displayTypeFichier = false;
-  constructor( private store: Store<AppState>,
-               private confirmationService: ConfirmationService,
-               private formBuilder: FormBuilder,  private messageService: MessageService,
-                 private breadcrumbService: BreadcrumbService,
-                 private depenseFamilleService: DepenseFamilleService) {
+  ordrePrefinencement: OrdreReglement = {};
+  compteSelected: Compte;
+  comptes: Compte[] = [];
+  comptesTiers: Tiers[] = [];
+  numeroCheque: string = '';
+  existe: boolean | null = null;
+  sticker: string = '';
+  stickerConfirmation: string = '';
+  isStickerConfimartion: boolean = null;
+
+  comptesTiersPrefinenceContact: string;
+  compteTiersPrefinencement: Tiers;
+
+  constructor( 
+          private store: Store<AppState>,
+          private confirmationService: ConfirmationService,
+          private formBuilder: FormBuilder,  private messageService: MessageService,
+          private breadcrumbService: BreadcrumbService,
+          private depenseFamilleService: DepenseFamilleService,
+          private compteService: CompteService,
+          private compteTiersService: TiersService,
+          private tierPayantService: TierPayantService,
+          
+                ) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement en espèce instance' }]);
 }
 
   ngOnInit(): void {
+    this.onGetComptes();
+    this.onGetComptesTiersByCompteCollectifAndGarand();
     this.dateDebut = new Date();
     this.dateFin = new Date();
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -218,4 +247,155 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.displayTypeFichier = false;
     }
 }
+
+
+
+    onGetComptesTiersBySelectedCompteCollectifId(compteSelected: Compte){
+      this.compteSelected = compteSelected;
+    }
+
+    onGetComptes(){
+      this.compteService.$getComptesBanquaires().subscribe(
+        res => {
+          this.comptes = res;
+        }
+      );
+    }
+
+
+    onGetComptesTiersByCompteCollectifAndGarand(){
+
+        this.compteTiersService.$getTiersWithCompteCollectif().subscribe(
+          res => {
+            this.comptesTiers = res;
+          }
+        );
+      
+    }
+
+    verifierNumeroCheque(numeroCheque: string) {
+      if (numeroCheque.trim()) {
+        this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+          (result) => {
+            this.existe = result;
+          },
+          (error) => {
+            console.error('Erreur lors de la vérification', error);
+            this.existe = null;
+          }
+        );
+      }
+    }
+
+     onCancelPaiementOrdreReglement(): void{
+        this.getCancelInfo();
+      }
+    
+      onInitChequePaiment(ordrePrefinencement: OrdreReglement){
+  
+        if(ordrePrefinencement){
+      
+          this.ordrePrefinencement = ordrePrefinencement;
+          this.assureBeneficaireNom = ordrePrefinencement.assurePrinc?.nom.trim();
+          
+          const rawPrenom = ordrePrefinencement.assurePrinc?.prenom.trim().toLowerCase() || '';
+          this.assureBeneficairePrenom = rawPrenom
+          .split(/[-\s]/)
+          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+          .join(rawPrenom.includes('-') ? '-' : ' ');
+
+          this.onFindCompteTiersByPrestataire();
+      
+          this.isToDisplayChequePaiment = true;
+        }
+
+      }
+
+      onCancelPaiement(){
+        this.isToDisplayChequePaiment = false;
+        this.ordrePrefinencement = null;
+        this.compteTiersPrefinencement = null;
+        this.comptesTiersPrefinenceContact = null;
+        this.sticker = '';
+        this.stickerConfirmation = '';
+        this.isStickerConfimartion = null;
+      }
+
+      onFindCompteTiersByPrestataire(){
+
+        this.compteTiersService.findCompteTiersByPrefinence().subscribe(
+          res => {
+            this.compteTiersPrefinencement = res;
+            this.comptesTiersPrefinenceContact = res.compteTiers + ' - ' + res.intitule;
+          }
+        );
+      
+    }
+
+      onSaveOrdreReglementPaiement(ordrePrefinencement: OrdreReglement){
+    
+        if(ordrePrefinencement){
+          ordrePrefinencement.compteTiersPrefinencement = this.compteTiersPrefinencement;
+          this.confirmationService.confirm({
+            message: 'voulez-vous payer par chèque à ' + ' ' +  this.assureBeneficaireNom.toUpperCase() + this.assureBeneficairePrenom + ' ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              // this.confirmPaiement(ordrePrefinencement);
+            },
+          });
+        }
+    
+      }
+
+      
+        confirmPaiement(ordrePrefinencement: OrdreReglement){
+          if(ordrePrefinencement && ordrePrefinencement.compteTiersPrefinencement != null) {
+      
+            ordrePrefinencement.isTakeCheque = false;
+                this.tierPayantService.payerOrdreReglemnt(ordrePrefinencement).subscribe(
+                  response => {
+                    if(response){
+                      const isPaye = response;
+                      if(isPaye === true){
+      
+                        this.isToDisplayChequePaiment = true;
+                        this.ordrePrefinencement = {};
+                        this.compteSelected = {};
+                        this.compteTiersPrefinencement = null;
+                        this.comptesTiersPrefinenceContact = null;
+                        this.sticker = '';
+                        this.stickerConfirmation = '';
+                        this.isStickerConfimartion = null;
+      
+                        this.getSucessInfo();
+                        this.onGetComptes();
+                      }
+                      if(isPaye === false){
+      
+                        this.getFailledInfo();
+                      }
+                    }
+                  }, error => {
+                    this.getErrorInfo(error.error.message);
+                  }
+                );
+          }
+            
+        }
+    
+    
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
+      }
 }

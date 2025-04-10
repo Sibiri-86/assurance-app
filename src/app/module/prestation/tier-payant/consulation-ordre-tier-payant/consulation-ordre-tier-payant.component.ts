@@ -187,7 +187,8 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
 
         imprimerOrdreReglementTierPayant(ordre: OrdreReglementTierPayant) {
           this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
-          this.report.ordreReglementDto = ordre;
+         // this.report.ordreReglementDto = ordre;
+          this.report.ordreReglementTierPayant = ordre;
           this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
         }
       
