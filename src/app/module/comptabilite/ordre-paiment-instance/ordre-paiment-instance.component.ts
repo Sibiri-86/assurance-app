@@ -341,7 +341,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-              // this.confirmPaiement(ordrePrefinencement);
+              this.confirmPaiement(ordrePrefinencement);
             },
           });
         }
@@ -359,7 +359,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                       const isPaye = response;
                       if(isPaye === true){
       
-                        this.isToDisplayChequePaiment = true;
+                        this.isToDisplayChequePaiment = false;
                         this.ordrePrefinencement = {};
                         this.compteSelected = {};
                         this.compteTiersPrefinencement = null;
