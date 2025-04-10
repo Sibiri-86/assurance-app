@@ -405,14 +405,15 @@
                 <!-- compteSelected?.soldeDebiteur < ordrePrefinencement?.montantPaye || -->
                 <button (click)="onSaveOrdreReglementPaiement(ordrePrefinencement)" 
                     pButton icon="pi pi-check"
-                    label="Valider le paiement" 
-                    [disabled]=" existe ||
+                    label="Valider le paiement indivuduel par chèque" 
+                    [disabled]=" 
+                    existe ||
                     !ordrePrefinencement?.numeroCheque ||
                     !comptesTiersPrefinenceContact ||
-                     !ordrePrefinencement.compte || 
-                     !ordrePrefinencement.compteTiers ||
-                       !ordrePrefinencement.datePaiement ||
-                        !ordrePrefinencement.montantPaye" 
+                    !ordrePrefinencement.compte || 
+                    !ordrePrefinencement.compteTiersGarant ||
+                    !ordrePrefinencement.datePaiement ||
+                    !ordrePrefinencement.montantPaye " 
                     class="p-button-success">
                 </button>   
             </div>
