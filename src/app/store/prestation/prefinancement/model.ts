@@ -66,6 +66,9 @@ export interface OrdreReglement {
     compteTiers?: Tiers;
     compteTiersPrefinencement?: Tiers;
     isTakeCheque?: boolean;
+    devalider?: boolean;
+    motifDevalidation?: string;
+    datePriseCheque?: Date;
 
 }
 
