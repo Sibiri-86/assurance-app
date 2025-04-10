@@ -63,7 +63,7 @@ export interface OrdreReglement {
     numeroCheque?:string;
     compte?: Compte;
     journaux?: Journaux;
-    compteTiers?: Tiers;
+    compteTiersGarant?: Tiers;
     compteTiersPrefinencement?: Tiers;
     isTakeCheque?: boolean;
     devalider?: boolean;

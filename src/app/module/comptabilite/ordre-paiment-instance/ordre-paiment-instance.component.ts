@@ -353,7 +353,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           if(ordrePrefinencement && ordrePrefinencement.compteTiersPrefinencement != null) {
       
             ordrePrefinencement.isTakeCheque = false;
-                this.tierPayantService.payerOrdreReglemnt(ordrePrefinencement).subscribe(
+                this.tierPayantService.payerOrdreReglementPrefinencement(ordrePrefinencement).subscribe(
                   response => {
                     if(response){
                       const isPaye = response;
