@@ -93,13 +93,13 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
     this.onSerByOdreReglementByPeriode();
 
     
-    // this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
-    //     this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
-    //         .subscribe(bytes => {
-    //           if (bytes) {
-    //             printPdfFile(bytes);
-    //           }
-    //         });
+    this.store.dispatch(featureActionTierPayant.setReportTierPayant(null));
+        this.store.pipe(select(tierPayantSelector.selectByteFile)).pipe(takeUntil(this.destroy$))
+            .subscribe(bytes => {
+              if (bytes) {
+                printPdfFile(bytes);
+              }
+            });
 
 
   }
