@@ -151,6 +151,9 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
   devaliderPaiementOrdreReglemnt(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
     return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
   }
+  devaliderPaiementOrdreReglementPrefinencement(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
+    return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
+  }
 
   getStickerConfirmation(sticker: string): Observable<any> {
     const params = new HttpParams()
@@ -158,6 +161,8 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
 
     return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_GET_STICKER),  {params});
   }
+
+  
 
   verifierExistenceNumeroCheque(numeroCheque: string): Observable<boolean> {
     const params = new HttpParams()

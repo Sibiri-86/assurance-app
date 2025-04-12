@@ -443,9 +443,10 @@
 
                         <th pSortableColumn="annee" >Reférence<p-sortIcon field="annee"></p-sortIcon></th>
                         
-                        <th pSortableColumn="annee" >N° compte<p-sortIcon field="annee"></p-sortIcon></th>
-                        <th pSortableColumn="annee" >Compte tier Garant<p-sortIcon field="annee"></p-sortIcon></th>
-                        <th pSortableColumn="annee" >Compte tier Prestataire<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="numCompte" >N° compte<p-sortIcon field="numCompte"></p-sortIcon></th>
+                        <th pSortableColumn="compteAuxiliaire" >Compte tier Garant<p-sortIcon field="compteAuxiliaire"></p-sortIcon></th>
+                        <th pSortableColumn="compteTiersPrestataire" >Compte tier Prestataire<p-sortIcon field="compteTiersPrestataire"></p-sortIcon></th>
+                        <th pSortableColumn="compteTiersPrefinencement" >Compte tier Bénéficiaire<p-sortIcon field="compteTiersPrefinencement"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Libellé d'écriture<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
@@ -470,11 +471,14 @@
                                 <span *ngIf="operation?.compteAuxiliaire"class="p-column-title" >{{operation?.compteAuxiliaire?.compteTiers | formatTableValue: 'number':true}}</span> 
                                 <span *ngIf="operation?.compteTiersPrestataire" class="p-column-title" >{{operation?.numCompte | formatTableValue: 'number':true}}</span> 
                                 <span *ngIf="operation?.compte && operation?.montantCredit != null && operation?.montantDebit == null && PRESTATAIRES_SANTE != 'PRESTATAIRES SANTE'" class="p-column-title" >{{operation?.compte?.compte | formatTableValue: 'number':true}}</span> 
+                                <span *ngIf="operation?.compteTiersPrefinencement" class="p-column-title" >{{operation?.compteTiersPrefinencement?.compteTiers | formatTableValue: 'number':true}}</span> 
                             </td>
-                             <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span>
+                             <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span></td>
+                             <td >
+                                <span *ngIf="operation?.compteTiersPrestataire" class="p-column-title" >{{operation?.compteTiersPrestataire?.intitule}}</span>
                              </td>
-                             <td ><span class="p-column-title" >{{operation?.compteTiersPrestataire?.intitule}}</span>
-                             </td>
+                             <td ><span  *ngIf="operation?.compteTiersPrefinencement"  class="p-column-title" >{{operation?.compteTiersPrefinencement?.intitule}}</span></td>
+
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantCredit | formatTableValue: 'number':true}}</span></td>

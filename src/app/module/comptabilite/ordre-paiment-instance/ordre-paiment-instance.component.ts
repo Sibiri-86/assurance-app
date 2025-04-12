@@ -41,6 +41,7 @@ import { CompteService } from 'src/app/store/comptabilite/compte/service';
 import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { Tiers } from 'src/app/store/comptabilite/tiers/model';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
+import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
 
 
 @Component({
@@ -86,6 +87,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           private compteService: CompteService,
           private compteTiersService: TiersService,
           private tierPayantService: TierPayantService,
+          private prefinencementService: PrefinancementService,
           
                 ) {
      this.breadcrumbService.setItems([{ label: 'Ordre de paiement en espèce instance' }]);
@@ -398,4 +400,30 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
       }
+
+
+      searByOdreReglementPrefincementPayeByPeriode() {
+
+        if(!this.dateDebut || !this.dateFin){
+            this.dateDebut = new Date();
+            this.dateFin = new Date();
+        }
+  
+          if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+            this.addMessage('error', 'Dates  invalide',
+            'La date de debut ne peut pas être supérieure à celle du de fin');
+          } else {
+    
+            const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+            const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+              this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
+              .subscribe((response: any) => {
+                this.ordreReglementList = response;
+                console.log('this.responseresponseresponse', response);
+              }, error => {
+                console.error('Erreur lors de la récupération des données', error);
+              });
+            }
+            
+        }
 }
