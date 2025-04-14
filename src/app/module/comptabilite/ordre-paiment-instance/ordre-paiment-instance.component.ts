@@ -836,7 +836,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.messageToDisplay = '';
         this.beneficiaireSelected = '';
         this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
-        let beneficiaires = this.ordreReglementListByCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        let beneficiaires = this.ordreReglementListByCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
@@ -850,7 +850,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.isDevalideChequeExport = false;
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'
-        let beneficiaires = this.ordreReglementListTakedCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        let beneficiaires = this.ordreReglementListTakedCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
@@ -865,7 +865,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
-        let beneficiaires = this.ordreReglementListNotTakedCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        let beneficiaires = this.ordreReglementListNotTakedCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
@@ -881,7 +881,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
-        let beneficiaires = this.ordreReglementListDevalider.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        let beneficiaires = this.ordreReglementListDevalider.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
