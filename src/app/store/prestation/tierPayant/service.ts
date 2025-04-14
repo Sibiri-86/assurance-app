@@ -196,6 +196,23 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       responseType: 'blob'
     });
   }
+  exportAllOrdreReglementPrefinencement(dateDebut?: string, dateFin?: string, prestataire?: string) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (prestataire) {
+      params = params.set('prestataire', prestataire);
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_PREFINENCEMENT), { 
+      params,
+      responseType: 'blob'
+    });
+  }
 
   getExportAllOrdreWithCheque(dateDebut?: string, dateFin?: string, prestataire?: string) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];

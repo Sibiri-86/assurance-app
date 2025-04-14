@@ -106,8 +106,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   ordreReglementListBeneficiaire: CustumBeneficiare[] = [];
   beneficiaireSelected : string = '';
-  
-
+  choose: string = '';
 
   constructor( 
           private store: Store<AppState>,
@@ -885,5 +884,142 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
+
+      onExportOrdreReglement(){
+
+        this.confirmationService.confirm({
+          message: this.messageToDisplay,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            if(this.isAllExport){
+
+              this.exportAllOrdre();
+            }
+            if(this.isTackedChequeExport){
+
+              this.onExportAllOrdreWithCheque();
+            }
+            if(this.isWithoutTakedChequeExport){
+
+              this.onExportAllOrdreWithoutCheque();
+            }
+            if(this.isDevalideChequeExport){
+
+              this.onExportAllOrdreDevalide();
+            }
+          },
+        });
+      
+    }
+
+    exportAllOrdre() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_paye_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreWithCheque() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_tier_prefinencement_paye_avec_cheque_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreWithoutCheque() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_paye_sans_cheque_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreDevalide() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_devalide_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+    
 
 }
