@@ -834,6 +834,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.isWithoutTakedChequeExport = false;
         this.isDevalideChequeExport = false;
         this.messageToDisplay = '';
+        this.beneficiaireSelected = '';
         this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
         let beneficiaires = this.ordreReglementListByCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
@@ -842,6 +843,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       onExportOrdreWithTakeCheque(){
         this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
         this.isTackedChequeExport = true;
         this.isAllExport = false;
         this.isWithoutTakedChequeExport = false;
@@ -855,6 +857,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       onExportOrdreWithoutTakeCheque(){
         this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
         this.isWithoutTakedChequeExport = true;
         this.isAllExport = false;
         this.isTackedChequeExport = false;
@@ -869,6 +872,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       onExportOrdreDevalide(){
         this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
         this.isDevalideChequeExport = true;
         this.isAllExport = false;
         this.isTackedChequeExport = false;
