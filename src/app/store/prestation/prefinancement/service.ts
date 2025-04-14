@@ -279,7 +279,26 @@ private handleError<T>() {
 }
 
   getOrdreReglementPrefinencementPaye(dateD: string, dateF: string): Observable<OrdreReglement> {
-      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/all-paye-by-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/all-paye-by-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+          map((response: OrdreReglement) => response),
+          catchError(this.handleError())
+      );
+  }
+
+  getOrdreReglementPayeAndNotTackedCheque(dateD: string, dateF: string): Observable<OrdreReglement> {
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paye-not-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+          map((response: OrdreReglement) => response),
+          catchError(this.handleError())
+      );
+  }
+  getOrdreReglementPayeAndTackedCheque(dateD: string, dateF: string): Observable<OrdreReglement> {
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paye-tacked-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+          map((response: OrdreReglement) => response),
+          catchError(this.handleError())
+      );
+  }
+  getOrdreReglementPayeAndDevalider(dateD: string, dateF: string): Observable<OrdreReglement> {
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paye-cheque-devalider?dateD=${dateD}&dateF=${dateF}`).pipe(
           map((response: OrdreReglement) => response),
           catchError(this.handleError())
       );

@@ -224,6 +224,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       this.isOrdreReglementList = false;
       this.isOrdreReglementListByCheque = false;
+      this.isOrdreReglementListTakedCheque = false;
+      this.isOrdreReglementListNotTakedCheque = false;
+      this.isOrdreReglementListDevalider = false;
       this.isByCheque = false;
     }
     
@@ -231,7 +234,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   onSechercherPrefinancementByPeriod(){
       this.rechercherPrefinancementByPeriode();
-      this.searByOdreReglementPrefincementPayeByPeriode();
     }
 
   imprimerFormulaireExcel(ordre?: OrdreReglement){
@@ -451,6 +453,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               .subscribe((response: any) => {
                 this.ordreReglementListByCheque = response;
                  this.isOrdreReglementListByCheque = true;
+                 this.isOrdreReglementListTakedCheque = false;
                  this.isByCheque = true;
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
@@ -500,8 +503,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   getRefreshfunctions(){
     // this.searByOdreReglementPayeByPeriode();
-    // this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-    // this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+     this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
     // this.searByOdreReglementPayeByPeriodeAndDevalider();
   }
 
@@ -542,13 +545,83 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       
         }
 
-    onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque(){
+        searByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
 
-    }
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndNotTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListNotTakedCheque = response;
+                  //this.ordreReglementList$ = response;
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
 
-    onSearByOdreReglementPayeByPeriodeAndDevalider(){
 
-    }
+          searByOdreReglementPayeByPeriodeAndByTakeCheque() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListTakedCheque = response;
+                  this.isOrdreReglementListTakedCheque = true;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isByCheque = true;
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
+
+          searByOdreReglementPayeByPeriodeAndDevalider() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListTakedCheque = response;
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
+
 
     onInitExcelExport(){
       this.isToEporteExcel = true;
