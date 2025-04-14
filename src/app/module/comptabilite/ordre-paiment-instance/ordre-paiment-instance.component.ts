@@ -54,6 +54,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementListByCheque: Array<OrdreReglement>;
   isToDisplayOrdreReglementListByCheque: boolean = false;
+  isOrdreReglementListTakedCheque: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
   cols: any[];
   displaySinistre = false;
@@ -80,6 +81,19 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   comptesTiersPrefinenceContact: string;
   compteTiersPrefinencement: Tiers;
 
+
+  isToEporteExcel: boolean = false;
+  isWithoutTakedChequeExport = false;
+  isAllExport = false;
+  isTackedChequeExport = false;
+  isDevalideChequeExport = false;
+  isOrdreReglementListNotTakedCheque = false;
+  isOrdreReglementListDevalider = false;
+  isOrdreReglementList = false;
+  isEditing = false;
+  isToDisplayMotifDevalidation = false;
+  rowIndex: number;
+
   constructor( 
           private store: Store<AppState>,
           private confirmationService: ConfirmationService,
@@ -98,6 +112,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   ngOnInit(): void {
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
+    this.searByOdreReglementPrefincementPayeByPeriode();
     this.dateDebut = new Date();
     this.dateFin = new Date();
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -201,10 +216,15 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     } else {
       this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
       dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
-      this.isToDisplayOrdreReglementListByCheque = false;
+      this.isOrdreReglementList = false;
     }
     
   }
+
+  onSechercherPrefinancementByPeriod(){
+      this.rechercherPrefinancementByPeriode();
+      this.searByOdreReglementPrefincementPayeByPeriode();
+    }
 
   imprimerFormulaireExcel(ordre: OrdreReglement){
     this.displayTypeFichier = true;
@@ -405,6 +425,31 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       }
 
 
+      OnSearByOdreReglementPrefincementPayeByPeriode() {
+
+        if(!this.dateDebut || !this.dateFin){
+            this.dateDebut = new Date();
+            this.dateFin = new Date();
+        }
+  
+          if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+            this.addMessage('error', 'Dates  invalide',
+            'La date de debut ne peut pas être supérieure à celle du de fin');
+          } else {
+    
+            const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+            const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+              this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
+              .subscribe((response: any) => {
+                this.ordreReglementListByCheque = response;
+                 this.isOrdreReglementList = true;
+              }, error => {
+                console.error('Erreur lors de la récupération des données', error);
+              });
+            }
+            
+        }
+
       searByOdreReglementPrefincementPayeByPeriode() {
 
         if(!this.dateDebut || !this.dateFin){
@@ -422,11 +467,26 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
               .subscribe((response: any) => {
                 this.ordreReglementListByCheque = response;
-                this.isToDisplayOrdreReglementListByCheque = true;
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
             }
             
         }
+
+        
+  onInitTakingCheque(ri: number){
+    this.rowIndex = ri;
+    this.isEditing = true;
+  }
+
+  onCancelTakingCheque(){
+
+    this.isEditing = false;
+    this.isToDisplayMotifDevalidation = false;
+
+    this.getCancelInfo();
+   //  this.getRefreshfunctions();
+  }
+
 }
