@@ -106,6 +106,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
   ordreReglementListBeneficiaire: CustumBeneficiare[] = [];
   beneficiaireSelected : string = '';
+  numeroAdherent : number;
   choose: string = '';
 
   constructor( 
@@ -760,6 +761,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
      onInitDevalidation(ordreReglement: OrdreReglement){
     
         this.ordreReglementToDevalide = ordreReglement;
+        this.numeroAdherent = ordreReglement.assurePrinc.numero;
         
         this.isToDisplayMotifDevalidation = true;
               
@@ -922,7 +924,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);
@@ -949,7 +951,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+      this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);
@@ -976,7 +978,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+      this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);
@@ -1003,7 +1005,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.beneficiaireSelected)
+      this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);
