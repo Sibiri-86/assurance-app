@@ -349,6 +349,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         if(ordrePrefinencement){
       
           this.ordrePrefinencement = ordrePrefinencement;
+          this.oldNumeroCheque = ordrePrefinencement.numeroCheque;
+
           this.assureBeneficaireNom = ordrePrefinencement.assurePrinc?.nom.trim();
           
           const rawPrenom = ordrePrefinencement.assurePrinc?.prenom.trim().toLowerCase() || '';
