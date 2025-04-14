@@ -42,6 +42,7 @@ import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { Tiers } from 'src/app/store/comptabilite/tiers/model';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { CustumBeneficiare } from 'src/app/store/prestation/tierPayant/model';
 
 
 @Component({
@@ -101,6 +102,11 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   ordreReglementListDevalider: OrdreReglement[] = [];
   ordreReglementToDevalide: OrdreReglement = {};
   oldNumeroCheque: string = '';
+  messageToDisplay: string = '';
+
+  ordreReglementListBeneficiaire: CustumBeneficiare[] = [];
+  beneficiaireSelected : string = '';
+  
 
 
   constructor( 
@@ -814,6 +820,66 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         const motif = this.ordreReglementToDevalide?.motifDevalidation || '';
         return motif.trim().length >= 10;
       }
+
+      
+    onSelectedBeneficiaire(beneficiaire: CustumBeneficiare){
+      this.beneficiaireSelected = beneficiaire.libelle;
+    }
     
+      
+      onExportAllOrdre(){
+        this.ordreReglementListBeneficiaire = [];
+        this.isAllExport = true;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
+        let beneficiaires = this.ordreReglementList.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithTakeCheque(){
+        this.ordreReglementListBeneficiaire = [];
+        this.isTackedChequeExport = true;
+        this.isAllExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'
+        let beneficiaires = this.ordreReglementListTakedCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreWithoutTakeCheque(){
+        this.ordreReglementListBeneficiaire = [];
+        this.isWithoutTakedChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
+        let beneficiaires = this.ordreReglementListNotTakedCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+
+      }
+
+      onExportOrdreDevalide(){
+        this.ordreReglementListBeneficiaire = [];
+        this.isDevalideChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
+        let beneficiaires = this.ordreReglementListDevalider.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+
+      }
 
 }
