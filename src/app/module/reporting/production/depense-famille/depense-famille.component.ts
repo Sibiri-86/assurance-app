@@ -118,6 +118,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   depenseFamilleList:Array<DepenseFamille> = [];
   depenseFamilleList$: Observable<Array<DepenseFamille>>;
   display = false;
+  displayDepensesFamilleDateSoins = false;
   displayExcel = false;
   groupeListes: Array<Groupe>;
   groupeList$: Observable<Array<Groupe>>;
@@ -465,7 +466,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.check = {};
    }
    imprimerFormulaire() {
-    this.display = true;
+    this.displayDepensesFamilleDateSoins = true;
   }
 
   imprimerFormulaireExcel() {
@@ -560,6 +561,39 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     console.log("this.policeId =====> ", this.policeId.id);
 
     this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
+      .subscribe(response => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        if(this.garantId != null || this.garantId != undefined && this.policeId == null || this.policeId == undefined) {
+          a.download = `Prestations du Garant_${this.garantId.libelle}_du_${dateD}_au_${dateF}.xlsx`;
+        } else if(this.garantId != null || this.garantId != undefined && this.policeId != null || this.policeId != undefined) {
+          a.download = `Prestations du Souscripteur_${this.policeId.nom}_du_${dateD}_au_${dateF}.xlsx`;
+        } else {
+          a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
+        }
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, error => {
+        console.error("Erreur lors de l'exportation :", error);
+      });
+  }
+
+  exportExcelDonneePrestationsAvecDateSoins() {
+    if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    }
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    console.log("this.garantId =====> ", this.garantId.id);
+    console.log("this.policeId =====> ", this.policeId.id);
+
+    this.depenseService.exportDonneePrestationsAvecDateSoins(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
       .subscribe(response => {
         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);

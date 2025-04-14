@@ -74,6 +74,23 @@ constructor(private http: HttpClient) {
         });
       }
 
+      exportDonneePrestationsAvecDateSoins(dateDebut: string, dateFin: string, garantId:string, policeId:string) {
+    
+        const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+        const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+      
+        const params = new HttpParams()
+          .set('dateDebut', formattedDateDebut)
+          .set('dateFin', formattedDateFin)
+          .set('garantId', garantId)
+          .set('policeId', policeId);
+    
+        return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_PRESTATIONS_AVEC_DATE_SOINS), { 
+          params,
+          responseType: 'blob'
+        });
+      }
+
       /* $getReportConsommationWaveExcel(dateD: string, dateF: string): Observable<Byte> {
         // @FIXME: get request
         return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/consommation-wave/report-excel`,{params :

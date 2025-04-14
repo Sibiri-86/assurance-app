@@ -680,5 +680,10 @@ export class Endpoints {
         mock: `assets/mock/contrat/adherent.mock.json`
     };
 
+    static readonly REPORTING_EXPORT_DONNEES_PRESTATIONS_AVEC_DATE_SOINS = {
+        prod: `${SERVICE_PREFIX}/reporting/production/export-donnees-prestations-avec-date-soins`,
+        mock: `assets/mock/reporting/production.mock.json`
+    };
+
 
 }
