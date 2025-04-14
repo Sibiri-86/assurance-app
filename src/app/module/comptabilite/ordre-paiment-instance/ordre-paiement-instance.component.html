@@ -3,41 +3,132 @@
 	<div class="p-col-12">
 		<p-toast></p-toast>
 		<div class="card">
-			<p-toolbar styleClass="p-mb-4">
-                <!--
-				<ng-template pTemplate="right">
-					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-mb-2 p-d-inline-block" ></p-fileUpload>
-					<button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help p-mb-2" (click)="dt.exportCSV()"></button>
-				</ng-template>
-                -->
-                <div class="p-formgroup-inline">
-                    <div class="p-field">
-                        <label for="matricule" class="p-sr-only"></label>
-                        <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
-                    <!--                 <input style="min-width:300px" id="numero" type="text" pInputText placeholder="numero" [(ngModel)]="numero">
-                    -->                </div>
-                    
-                    <div class="p-field">
-                        <label for="dateSoins" class="p-sr-only"></label>
-                        <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
-                    </div>
 
-                    <div class="p-field">
-                        <button pButton pRipple type="button" (click)="onSechercherPrefinancementByPeriod()" label="Ordres à payer"></button>
-                    </div>
+            <p-toolbar class="p-mb-4">
+                <div class="p-toolbar-group-left p-d-flex p-ai-center p-gap-3">
+                    <!-- Date Début -->
+                    <p-calendar 
+                        style="min-width: 180px;" 
+                        [showIcon]="true" 
+                        inputId="dateDebut" 
+                        dateFormat="dd/mm/yy"
+                        [(ngModel)]="dateDebut" 
+                        placeholder="Date début"
+                        class="p-my-1 p-mr-2">
+                    </p-calendar>
+            
+                    <!-- Date Fin -->
+                    <p-calendar 
+                        style="min-width: 180px;" 
+                        [showIcon]="true" 
+                        inputId="dateFin" 
+                        dateFormat="dd/mm/yy"
+                        [(ngModel)]="dateFin" 
+                        placeholder="Date fin"
+                        class="p-my-1 p-mr-4">
+                    </p-calendar>
 
-                    <div class="p-field">
+                    <div class="p-field p-mt-3">
+                        <button class="p-button-rounded p-button-success p-mr-2" pButton pRipple type="button" (click)="onSechercherPrefinancementByPeriod()" label="Ordres à payer"></button>
+                    </div>
+    
+                    <div *ngIf="isByCheque === false" class="p-field p-mt-3">
                         <button class="p-button-rounded p-button-warning p-mr-2" icon="pi pi-dollar"pButton pRipple type="button" (click)="OnSearByOdreReglementPrefincementPayeByPeriode()" label="Ordres payés par chèque"></button>
                     </div>
-                    
-                </div> 
-                <ng-template pTemplate="right">
-                    <button pButton pRipple icon="pi pi-file-excel" label="Consommations Excel" pTooltip="Consommations Excel" class="p-button-rounded p-button-secondary" (click)="imprimerFormulaireExcel()"></button>
+                </div>
 
-                </ng-template>
+            
+                <div *ngIf="isByCheque === true" class="p-toolbar-group-center p-d-flex p-flex-wrap p-jc-start p-gap-3 p-mr-auto">
 
-			</p-toolbar>
-            <p-table *ngIf="isOrdreReglementList === false" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','assurePrinc.nom','assurePrinc.prenom','police.nom','typePaiement']"
+                    <!-- Tous les paiements -->
+                    <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
+                        <button 
+                            [disabled]="!ordreReglementListByCheque.length"
+                            (click)="OnSearByOdreReglementPrefincementPayeByPeriode()"
+                            pButton 
+                            pRipple 
+                            pTooltip="Tous les paiements par chèque"
+                            type="button" 
+                            icon="pi pi-check-circle" 
+                            class="p-button-rounded p-button-info">
+                        </button>
+                        <small class="infoColor p-ml-2" *ngIf="ordreReglementListByCheque?.length">
+                            {{ ordreReglementListByCheque.length }}
+                        </small>
+                    </div>
+            
+                    <!-- Chèques encaissés -->
+                    <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
+                        <button 
+                            [disabled]="!ordreReglementListTakedCheque.length"
+                            (click)="onSechercherPrefinancementByPeriod()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-check-circle" 
+                            pTooltip="Les bénéficiaires ayant encaissé leur chèque"
+                            class="p-button-rounded p-button-success">
+                        </button>
+                        <small class="successGrayColor p-ml-2" *ngIf="ordreReglementListTakedCheque?.length">
+                            {{ ordreReglementListTakedCheque.length }}
+                        </small>
+                    </div>
+            
+                    <!-- Chèques non encaissés -->
+                    <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
+                        <button 
+                            [disabled]="!ordreReglementListNotTakedCheque.length"
+                            (click)="onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-check-circle" 
+                            pTooltip="Les bénéficiaires n'ayant pas encaissé leur chèque"
+                            class="p-button-rounded p-button-warning">
+                        </button>
+                        <small class="warningColor p-ml-2" *ngIf="ordreReglementListNotTakedCheque?.length">
+                            {{ ordreReglementListNotTakedCheque.length }}
+                        </small>
+                    </div>
+            
+                    <!-- Paiements dévalidés -->
+                    <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
+                        <button 
+                            [disabled]="!ordreReglementListDevalider.length"
+                            (click)="onSearByOdreReglementPayeByPeriodeAndDevalider()"
+                            pButton 
+                            pRipple 
+                            type="button" 
+                            icon="pi pi-undo" 
+                            pTooltip="Les paiements par chèque dévalidés"
+                            class="p-button-rounded p-button-danger">
+                        </button>
+                        <small class="dangerColor p-ml-2" *ngIf="ordreReglementListDevalider?.length">
+                            {{ ordreReglementListDevalider.length }}
+                        </small>
+                    </div>
+                </div>
+            
+                <div class="p-toolbar-group-right p-d-flex p-ai-center p-ml-auto">
+                    <!-- Export Excel -->
+                    <button 
+                        *ngIf="isByCheque === true" 
+                        (click)="onInitExcelExport()"
+                        [disabled]="ordreReglementList?.length <= 0"
+                        pButton 
+                        pRipple 
+                        type="button" 
+                        icon="pi pi-file-excel" 
+                        class="p-button-rounded p-button-success"
+                        pTooltip="Exporter la sélection">
+                    </button>
+
+                    <button *ngIf="isByCheque === false"  pButton pRipple icon="pi pi-file-excel" label="Consommations Excel" pTooltip="Consommations Excel" class="p-button-rounded p-button-secondary" (click)="imprimerFormulaireExcel()"></button>
+
+                </div>
+            </p-toolbar>
+     
+            <p-table *ngIf="isOrdreReglementListByCheque === false" #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','assurePrinc.nom','assurePrinc.prenom','police.nom','typePaiement']"
                      [rowHover]="true" dataKey="id"
                      editMode="row"
                      styleClass="p-datatable-striped"
@@ -131,7 +222,7 @@
             </p-table>
 
 
-            <p-table *ngIf="isOrdreReglementList === true" editMode="row" #dt [value]="ordreReglementListByCheque" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau', 'numeroFactureSinistre' ]"
+            <p-table *ngIf="isOrdreReglementListByCheque === true" editMode="row" #dt [value]="ordreReglementListByCheque" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['prestataire','montantPaye','date','numeroCheque','numeroBordereau', 'numeroFactureSinistre' ]"
             [rowHover]="true" dataKey="id"
             styleClass="p-datatable-customers"
             currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
@@ -217,7 +308,7 @@
                        pRipple 
                        type="button" 
                        icon="pi pi-check-circle" 
-                       pTooltip="Ce prestataire a touché son chèque"
+                       pTooltip="Ce bénéficiaire a touché son chèque"
                        class="p-button-rounded p-button-success p-mr-2">
                    </button>
                    </div>
@@ -228,7 +319,7 @@
                        pRipple 
                        type="button" 
                        icon="pi pi-check-circle" 
-                       pTooltip="Ce prestataire n'a pas encore touché son chèque"
+                       pTooltip="Ce bénéficiaire n'a pas encore touché son chèque"
                        class="p-button-rounded p-button-warning p-mr-2">
                    </button>
                    </div>

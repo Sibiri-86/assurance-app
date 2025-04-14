@@ -69,6 +69,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   assureBeneficairePrenom: string = '';
   displayTypeFichier = false;
   ordrePrefinencement: OrdreReglement = {};
+
   compteSelected: Compte;
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
@@ -90,9 +91,14 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   isOrdreReglementListNotTakedCheque = false;
   isOrdreReglementListDevalider = false;
   isOrdreReglementList = false;
+  isOrdreReglementListByCheque = false;
+  isByCheque = false;
   isEditing = false;
   isToDisplayMotifDevalidation = false;
   rowIndex: number;
+  ordreReglementListTakedCheque: OrdreReglement[] = [];
+  ordreReglementListNotTakedCheque: OrdreReglement[] = [];
+  ordreReglementListDevalider: OrdreReglement[] = [];
 
   constructor( 
           private store: Store<AppState>,
@@ -217,6 +223,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
       dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       this.isOrdreReglementList = false;
+      this.isOrdreReglementListByCheque = false;
+      this.isByCheque = false;
     }
     
   }
@@ -226,7 +234,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.searByOdreReglementPrefincementPayeByPeriode();
     }
 
-  imprimerFormulaireExcel(ordre: OrdreReglement){
+  imprimerFormulaireExcel(ordre?: OrdreReglement){
     this.displayTypeFichier = true;
     /**if(this.dateDebut.getTime()> this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
@@ -442,7 +450,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
               .subscribe((response: any) => {
                 this.ordreReglementListByCheque = response;
-                 this.isOrdreReglementList = true;
+                 this.isOrdreReglementListByCheque = true;
+                 this.isByCheque = true;
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
@@ -532,5 +541,17 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           }
       
         }
+
+    onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque(){
+
+    }
+
+    onSearByOdreReglementPayeByPeriodeAndDevalider(){
+
+    }
+
+    onInitExcelExport(){
+      this.isToEporteExcel = true;
+    }
 
 }
