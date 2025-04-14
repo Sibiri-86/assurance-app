@@ -990,7 +990,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreWithoutCheque(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
+      this.tierPayantService.getExportAllOrdreWithoutChequePrefinencenent(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);

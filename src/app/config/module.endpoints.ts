@@ -446,6 +446,12 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-without-cheque`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_EXPORTATION_WITHOUT_CHEQUE_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-without-cheque-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_DEVALIDE = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
