@@ -244,7 +244,7 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       params = params.set('numeroAdherent', numeroAdherent.toString());
     }
   
-    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT), { 
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT), { 
       params,
       responseType: 'blob'
     });

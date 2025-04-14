@@ -438,7 +438,7 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-with-cheque`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
-    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT = {
+    static readonly PRESTATION_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-with-cheque-prefinencement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };

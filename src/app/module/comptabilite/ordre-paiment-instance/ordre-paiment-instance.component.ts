@@ -933,8 +933,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
-
-      console.log(' this.numeroAdherent',  this.numeroAdherent);
   
       this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
         .subscribe(response => {
@@ -962,6 +960,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+      console.log(' this.numeroAdherent',  this.numeroAdherent);
+
   
       this.tierPayantService.getExportAllOrdreWithChequePrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
         .subscribe(response => {
