@@ -172,6 +172,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
   }
 
+  verifierExistenceNumeroChequePrefinencement(numeroCheque: string): Observable<boolean> {
+    const params = new HttpParams()
+        .set('numeroCheque', numeroCheque)
+
+    return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE_PREFINENCEMENT), {params});
+  }
+
   exportAllOrdreReglement(dateDebut?: string, dateFin?: string, prestataire?: string) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];

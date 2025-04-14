@@ -100,6 +100,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   ordreReglementListNotTakedCheque: OrdreReglement[] = [];
   ordreReglementListDevalider: OrdreReglement[] = [];
   ordreReglementToDevalide: OrdreReglement = {};
+  oldNumeroCheque: string = '';
+
 
   constructor( 
           private store: Store<AppState>,
@@ -314,9 +316,19 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       
     }
 
+    verifierOldNumeroCheque(numeroCheque: string){
+      if (numeroCheque){
+         const isMath = this.oldNumeroCheque.trim() === numeroCheque.trim();
+
+         if(isMath === false){
+          this.verifierNumeroCheque(numeroCheque);
+         }
+      }
+    }
+
     verifierNumeroCheque(numeroCheque: string) {
       if (numeroCheque.trim()) {
-        this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+        this.tierPayantService.verifierExistenceNumeroChequePrefinencement(numeroCheque).subscribe(
           (result) => {
             this.existe = result;
           },

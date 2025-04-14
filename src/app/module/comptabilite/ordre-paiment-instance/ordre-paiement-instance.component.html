@@ -604,65 +604,8 @@
 
       <dt class=" p-d-flex p-justify-center p-m-2"> 
          
-          <div *ngIf="!ordre.isTakeCheque && isEditing && rowIndex === ri">
-              <button 
-              (click)="onSaveOrdreReglementTakeCheque(ordre)"
-              pButton 
-              [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
-              pRipple 
-              type="button" 
-              icon="pi pi-check" 
-              pTooltip="Enregistrer l'encaissement de chèque"
-              class="p-button-rounded p-button-success p-mr-2">
-          </button>
-          </div>
-
-          <div *ngIf="!ordre.isTakeCheque && isEditing && rowIndex === ri">
-              <button 
-              (click)="onCancelTakingCheque()"
-              pButton 
-              pRipple 
-              type="button" 
-              icon="pi pi-times" 
-              pTooltip="Annuler l'encaissement de chèque"
-              class="p-button-rounded p-button-danger p-mr-2">
-          </button>
-          </div>
-
-          <div *ngIf="ordre.isTakeCheque">
-              <button 
-              pButton 
-              disabled
-              pRipple 
-              type="button" 
-              icon="pi pi-check-circle" 
-              pTooltip="Ce bénéficiaire a encaissé son chèque"
-              class="p-button-rounded p-button-success p-mr-2">
-          </button>
-          </div>
-          <div *ngIf="!ordre.isTakeCheque">
-              <button 
-              (click)="onInitTakingCheque(ri)"
-              pButton 
-              pRipple 
-              type="button" 
-              icon="pi pi-check-circle" 
-              pTooltip="Ce bénéficiaire n'a pas encore encaissé son chèque"
-              class="p-button-rounded p-button-warning p-mr-2">
-          </button>
-          </div>
-          <div>
-              <button 
-              [disabled]="ordre.isTakeCheque"
-              (click)="onInitDevalidation(ordre)"
-              pButton 
-              pRipple 
-              type="button" 
-              icon="pi pi-undo" 
-              pTooltip="Dévalider le paiement"
-              class="p-button-rounded p-button-danger p-mr-2">
-          </button>
-          </div>
+        <button *ngIf="ordre.typePaiement === 'CHEQUE' "  pButton [disabled]="editing1" icon="pi pi-dollar" pTooltip="Effectuer un paiment par chèque" class="p-button-rounded p-button-warning p-mr-2" (click)="onInitChequePaiment(ordre)"></button>
+        <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer" class="p-button-rounded p-button-info" (click)="imprimer(ordre)"></button>
       </dt>
       
   </tr>
@@ -878,7 +821,7 @@
                                 <input id="numeroCheque" type="text" class="p-inputtext p-mt-1 p-mb-2 p-fluid"
                                 [(ngModel)]="ordrePrefinencement.numeroCheque" 
                                 name="numeroCheque" pInputText required 
-                                (blur)="verifierNumeroCheque(ordrePrefinencement.numeroCheque)">
+                                (blur)="verifierOldNumeroCheque(ordrePrefinencement.numeroCheque)">
                             
                                 </div>
 

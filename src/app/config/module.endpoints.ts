@@ -418,6 +418,12 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
