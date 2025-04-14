@@ -218,7 +218,6 @@ export class FacturePayeComponent implements OnInit {
         this.tierPayantService.devaliderPaiementOrdreReglemnt(ordreReglementTierPayant).subscribe(
           response => {            
 
-            console.log('response', response);
             if(response && response === true){
               
               this.getSucessInfo();

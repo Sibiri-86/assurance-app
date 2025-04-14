@@ -99,6 +99,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   ordreReglementListTakedCheque: OrdreReglement[] = [];
   ordreReglementListNotTakedCheque: OrdreReglement[] = [];
   ordreReglementListDevalider: OrdreReglement[] = [];
+  ordreReglementToDevalide: OrdreReglement = {};
 
   constructor( 
           private store: Store<AppState>,
@@ -638,5 +639,69 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     onInitExcelExport(){
       this.isToEporteExcel = true;
     }
+
+     onInitDevalidation(ordreReglement: OrdreReglement){
+    
+        this.ordreReglementToDevalide = ordreReglement;
+        
+        this.isToDisplayMotifDevalidation = true;
+              
+        this.ordrePrefinencement = ordreReglement;
+        this.assureBeneficaireNom = ordreReglement.assurePrinc?.nom.trim();
+        
+        const rawPrenom = ordreReglement.assurePrinc?.prenom.trim().toLowerCase() || '';
+        this.assureBeneficairePrenom = rawPrenom
+        .split(/[-\s]/)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(rawPrenom.includes('-') ? '-' : ' ');
+
+    
+      }
+    
+      onAcceptDevalidation(ordreReglement: OrdreReglement){
+    
+        if(ordreReglement){
+          this.confirmationService.confirm({
+            message: 'voulez-vous dévalider le paiement de cet ordre de reglement ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmDevalidation(ordreReglement);
+            },
+          });
+        }
+    
+      }
+    
+      confirmDevalidation(ordreReglement: OrdreReglement){
+            this.tierPayantService.devaliderPaiementOrdreReglementPrefinencement(ordreReglement).subscribe(
+              response => {            
+    
+                if(response && response === true){
+                  
+                  this.getSucessInfo();
+                  this.getRefreshfunctions();
+                  this.isToDisplayMotifDevalidation = false;
+                  this.isEditing = false;
+                  this.rowIndex = null;
+                }
+                if(response && response === false){
+                  this.getFailledInfo();
+                }
+    
+              }, error => {
+                this.getErrorInfo(error.message.message);
+              }
+            );
+    
+            this.getRefreshfunctions();
+    
+      }
+
+      isMotifValid(): boolean {
+        const motif = this.ordreReglementToDevalide?.motifDevalidation || '';
+        return motif.trim().length >= 10;
+      }
+    
 
 }

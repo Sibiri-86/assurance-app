@@ -405,6 +405,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-devalidation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-prefinencement-devalidation`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_TIER_PAYANT_GET_STICKER = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/get-sticker-for-confirmation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
