@@ -761,7 +761,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
      onInitDevalidation(ordreReglement: OrdreReglement){
     
         this.ordreReglementToDevalide = ordreReglement;
-        this.numeroAdherent = ordreReglement.assurePrinc.numero;
         
         this.isToDisplayMotifDevalidation = true;
               
@@ -825,6 +824,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       
     onSelectedBeneficiaire(beneficiaire: CustumBeneficiare){
       this.beneficiaireSelected = beneficiaire.libelle;
+      this.numeroAdherent = beneficiaire.numero;
     }
     
       
@@ -837,8 +837,12 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.messageToDisplay = '';
         this.beneficiaireSelected = '';
         this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
-        let beneficiaires = this.ordreReglementListByCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
-        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+
+      this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+        libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+        numero: nomAssure.assurePrinc.numero
+      }));
+        
 
       }
 
@@ -850,9 +854,11 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.isWithoutTakedChequeExport = false;
         this.isDevalideChequeExport = false;
         this.messageToDisplay = '';
-        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'
-        let beneficiaires = this.ordreReglementListTakedCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
-        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'    
+         this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
 
       }
 
@@ -866,8 +872,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
-        let beneficiaires = this.ordreReglementListNotTakedCheque.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
-        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+        this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
 
       }
 
@@ -882,8 +890,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
-        let beneficiaires = this.ordreReglementListDevalider.map(nomAssure => nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom +  ' - ' + nomAssure.assurePrinc.prenom );
-        this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
+        this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
 
       }
 
@@ -923,8 +933,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+
+      console.log(' this.numeroAdherent',  this.numeroAdherent);
   
-      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
+      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);
@@ -951,7 +963,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreWithCheque(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
+      this.tierPayantService.getExportAllOrdreWithChequePrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);

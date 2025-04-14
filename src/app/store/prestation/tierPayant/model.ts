@@ -65,6 +65,7 @@ export interface CustumPrestatire{
 
 export interface CustumBeneficiare{
     libelle?: string;
+    numero?: number;
 }
 
 export interface SinistreTierPayant {

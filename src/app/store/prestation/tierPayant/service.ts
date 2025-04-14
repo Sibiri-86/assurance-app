@@ -196,7 +196,7 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       responseType: 'blob'
     });
   }
-  exportAllOrdreReglementPrefinencement(dateDebut?: string, dateFin?: string, prestataire?: string) {
+  exportAllOrdreReglementPrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
   
@@ -204,8 +204,8 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       .set('dateDebut', formattedDateDebut)
       .set('dateFin', formattedDateFin);
   
-    if (prestataire) {
-      params = params.set('prestataire', prestataire);
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
     }
   
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_PREFINENCEMENT), { 
@@ -231,6 +231,25 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       responseType: 'blob'
     });
   }
+
+  getExportAllOrdreWithChequePrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+
   getExportAllOrdreWithoutCheque(dateDebut?: string, dateFin?: string, prestataire?: string) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
