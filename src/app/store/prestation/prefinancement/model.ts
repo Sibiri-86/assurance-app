@@ -13,6 +13,9 @@ import { ProduitPharmaceutique } from '../../parametrage/produit-pharmaceutique/
 import { SousActe } from '../../parametrage/sous-acte/model';
 import { Taux } from '../../parametrage/taux/model';
 import { SinistreTierPayant } from '../tierPayant/model';
+import { Compte } from '../../comptabilite/compte/model';
+import { Tiers } from '../../comptabilite/tiers/model';
+import { Journaux } from '../../comptabilite/journaux/model';
 
 
 export interface Sinistre {
@@ -57,6 +60,17 @@ export interface OrdreReglement {
     montantReclame?: number;
     datePaiement?: Date;
     assurePrinc?: Adherent;
+    numeroCheque?:string;
+    compte?: Compte;
+    journaux?: Journaux;
+    compteTiersGarant?: Tiers;
+    compteTiersPrefinencement?: Tiers;
+    isTakeCheque?: boolean;
+    devalider?: boolean;
+    motifDevalidation?: string;
+    datePriseCheque?: Date;
+    dateDeSaisie?: Date;
+
 }
 
 export interface Prefinancement {

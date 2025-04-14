@@ -277,4 +277,11 @@ private handleError<T>() {
         return throwError(error.message || 'Something went wrong');
     };
 }
+
+  getOrdreReglementPrefinencementPaye(dateD: string, dateF: string): Observable<OrdreReglement> {
+      return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/all-paye-by-cheque?dateD=${dateD}&dateF=${dateF}`).pipe(
+          map((response: OrdreReglement) => response),
+          catchError(this.handleError())
+      );
+  }
 }

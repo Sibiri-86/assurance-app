@@ -123,7 +123,8 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
         const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
           this.tierPayantService.$getTierPayantOrdreReglementFactureIstance2(dateD, dateF)
           .subscribe((response: any) => {
-            this.ordreReglementList = response;
+            this.ordreReglementList = response.filter(isDevalier => !isDevalier.devalider);
+
             this.ordreReglementList$ = response;
             }, error => {
             console.error('Erreur lors de la récupération des données', error);
@@ -187,7 +188,8 @@ export class ConsulationOrdreTierPayantComponent implements OnInit {
 
         imprimerOrdreReglementTierPayant(ordre: OrdreReglementTierPayant) {
           this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
-          this.report.ordreReglementDto = ordre;
+         // this.report.ordreReglementDto = ordre;
+          this.report.ordreReglementTierPayant = ordre;
           this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
         }
       

@@ -397,6 +397,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_TIER_PAYANT_PAYER_ORDRE_REGLEMENT_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-devalidation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
@@ -498,6 +502,11 @@ export class Endpoints {
         };
         static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE = {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+
+        static readonly COMPTABILITE_COMPTE_BY_PREFINENCE = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prefinence`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
 
