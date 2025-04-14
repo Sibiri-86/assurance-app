@@ -835,7 +835,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         this.isDevalideChequeExport = false;
         this.messageToDisplay = '';
         this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
-        let beneficiaires = this.ordreReglementList.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
+        let beneficiaires = this.ordreReglementListByCheque.map(nomAssure => nomAssure.numero + ' ' + nomAssure.assurePrinc.nom +  ' ' + nomAssure.assurePrinc.prenom );
         this.ordreReglementListBeneficiaire = beneficiaires.map(libelle => ({ libelle }));
 
       }
