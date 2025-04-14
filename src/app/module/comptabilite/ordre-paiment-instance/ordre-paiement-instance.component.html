@@ -60,7 +60,8 @@
                     <!-- Chèques encaissés -->
                     <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
                         <button 
-                            (click)="searByOdreReglementPayeByPeriodeAndByTakeCheque()"
+                            [disabled]="!ordreReglementListTakedCheque.length"
+                            (click)="onSearByOdreReglementPayeByPeriodeAndByTakeCheque()"
                             pButton 
                             pRipple 
                             type="button" 
@@ -76,7 +77,8 @@
                     <!-- Chèques non encaissés -->
                     <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
                         <button 
-                            (click)="searByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
+                            [disabled]="!ordreReglementListNotTakedCheque.length"
+                            (click)="onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque()"
                             pButton 
                             pRipple 
                             type="button" 
@@ -92,7 +94,8 @@
                     <!-- Paiements dévalidés -->
                     <div class="p-d-flex p-ai-center p-mr-3 p-ml-3">
                         <button 
-                            (click)="searByOdreReglementPayeByPeriodeAndDevalider()"
+                            [disabled]="!ordreReglementListDevalider.length"
+                            (click)="onSearByOdreReglementPayeByPeriodeAndDevalider()"
                             pButton 
                             pRipple 
                             type="button" 
@@ -351,7 +354,7 @@
        </ng-template>
        <ng-template pTemplate="summary">
            <div class="p-d-flex p-ai-center p-jc-between">
-               {{ordreReglementList ? ordreReglementList.length : 0 }} reglements(s).
+               {{ordreReglementListByCheque ? ordreReglementListByCheque.length : 0 }} reglements(s).
            </div>
        </ng-template>
    </p-table>
@@ -575,16 +578,15 @@
 </ng-template>
 <ng-template pTemplate="header">
 <tr>
-   <th pSortableColumn="numero">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
-   <th pSortableColumn="territorialite">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+   <th pSortableColumn="numero">Date de dévalidation<p-sortIcon field="numero"></p-sortIcon></th>
    <th pSortableColumn="numero">Numero<p-sortIcon field="numero"></p-sortIcon></th>
    <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
    <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
    <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
    <th pSortableColumn="territorialite">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
    <th pSortableColumn="territorialite">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-      <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
-      <th pSortableColumn="isTakeCheque">Chèque pris</th>
+    <th pSortableColumn="isTakeCheque">Motif</th>
+    <th pSortableColumn="isTakeCheque">Action</th>
       
   </tr>
 </ng-template>
@@ -592,25 +594,13 @@
   <tr [pEditableRow]="ordre">
 
    <td><span class="p-column-title" style="font-weight: bold;">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
-   <td><span class="p-column-title" style="font-weight: bold;">{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
    <td><span class="p-column-title">{{ordre.numero}}</span></td>
    <td><span class="p-column-title">{{ordre.numeroBordereau}}</span></td>
    <td><span class="p-column-title" style="font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
    <td><span class="p-column-title">{{ordre.police.nom}}</span></td>
    <td><span class="p-column-title">{{ordre.typePaiement}}</span></td>
    <td><span class="p-column-title" style="font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
-   <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
-    <td *ngIf="isEditing && ri === rowIndex">
-          <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
-              La date de paiement doit être antérieure à celle de prise de chèque
-          </span>
-          <input
-              [disabled]="ordre.isTakeCheque"
-              pInputText
-              type="date"
-              [(ngModel)]="ordre.datePriseCheque"/>
-
-      </td>
+   <td><span class="p-column-title">{{ordre?.motifDevalidation}}</span></td>
 
       <dt class=" p-d-flex p-justify-center p-m-2"> 
          
