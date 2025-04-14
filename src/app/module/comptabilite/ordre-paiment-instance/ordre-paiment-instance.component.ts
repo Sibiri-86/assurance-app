@@ -53,8 +53,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementListByCheque: Array<OrdreReglement>;
-  isToDisplayOrdreReglementListByCheque: boolean = false;
-  isOrdreReglementListTakedCheque: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
   cols: any[];
   displaySinistre = false;
@@ -88,8 +86,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   isAllExport = false;
   isTackedChequeExport = false;
   isDevalideChequeExport = false;
-  isOrdreReglementListNotTakedCheque = false;
-  isOrdreReglementListDevalider = false;
+  isOrdreReglementListNotTakedCheque : boolean = false;
+  isToDisplayOrdreReglementListByCheque: boolean = false;
+  isOrdreReglementListTakedCheque: boolean = false;
+  isOrdreReglementListDevalider : boolean = false;
   isOrdreReglementList = false;
   isOrdreReglementListByCheque = false;
   isByCheque = false;
@@ -561,8 +561,14 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
                 this.prefinencementService.getOrdreReglementPayeAndNotTackedCheque(dateD, dateF)
                 .subscribe((response: any) => {
+
                   this.ordreReglementListNotTakedCheque = response;
-                  //this.ordreReglementList$ = response;
+
+                  this.isOrdreReglementListNotTakedCheque = true;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListTakedCheque = false;
+                  this.isOrdreReglementListDevalider = false;
+
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
@@ -590,6 +596,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.ordreReglementListTakedCheque = response;
                   this.isOrdreReglementListTakedCheque = true;
                   this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListNotTakedCheque = false;
+                  this.isOrdreReglementListDevalider = false;
                   this.isByCheque = true;
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
@@ -614,7 +622,11 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
                 this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
                 .subscribe((response: any) => {
-                  this.ordreReglementListTakedCheque = response;
+                  this.ordreReglementListDevalider = response;
+                  this.isOrdreReglementListDevalider = true;
+                  this.isOrdreReglementListTakedCheque = false;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListNotTakedCheque = false;
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
