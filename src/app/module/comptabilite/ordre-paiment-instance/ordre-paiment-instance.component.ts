@@ -489,4 +489,48 @@ export class OrdrePaimentInstanceComponent implements OnInit {
    //  this.getRefreshfunctions();
   }
 
+  getRefreshfunctions(){
+    // this.searByOdreReglementPayeByPeriode();
+    // this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+    // this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    // this.searByOdreReglementPayeByPeriodeAndDevalider();
+  }
+
+  onSaveOrdreReglementTakeCheque(ordreReglement: OrdreReglement){
+  
+          if(ordreReglement){
+            this.confirmationService.confirm({
+              message: "voulez-vous indiquer que ce prestataire a touché son chèque ?",
+              header: 'Confirmation',
+              icon: 'pi pi-exclamation-triangle',
+              accept: () => {
+                this.confirmTakedCheque(ordreReglement);
+              },
+            });
+          }
+      
+        }
+  
+        confirmTakedCheque(ordreReglement: OrdreReglement){
+          if(ordreReglement) {
+                ordreReglement.isTakeCheque = true;
+                this.tierPayantService.payerOrdreReglementPrefinencement(ordreReglement).subscribe(
+                  response => {
+                    if(response){
+                      const isPaye = response;
+                      if(isPaye === true){
+                        this.isEditing = false;
+                        this.rowIndex = null;
+                        this.getSucessInfo();
+                        // this.getRefreshfunctions();
+                      }
+                    }
+                  }, error => {
+                    this.getErrorInfo(error.error.message);
+                  }
+                );
+          }
+      
+        }
+
 }
