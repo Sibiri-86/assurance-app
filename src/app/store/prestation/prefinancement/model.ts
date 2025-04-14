@@ -69,6 +69,7 @@ export interface OrdreReglement {
     devalider?: boolean;
     motifDevalidation?: string;
     datePriseCheque?: Date;
+    dateDeSaisie?: Date;
 
 }
 

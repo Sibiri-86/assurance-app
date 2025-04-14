@@ -52,6 +52,8 @@ import { PrefinancementService } from 'src/app/store/prestation/prefinancement/s
 export class OrdrePaimentInstanceComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
+  ordreReglementListByCheque: Array<OrdreReglement>;
+  isToDisplayOrdreReglementListByCheque: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
   cols: any[];
   displaySinistre = false;
@@ -199,6 +201,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     } else {
       this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
       dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
+      this.isToDisplayOrdreReglementListByCheque = false;
     }
     
   }
@@ -418,8 +421,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
             const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
               this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
               .subscribe((response: any) => {
-                this.ordreReglementList = response;
-                console.log('this.responseresponseresponse', response);
+                this.ordreReglementListByCheque = response;
+                this.isToDisplayOrdreReglementListByCheque = true;
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
