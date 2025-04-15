@@ -477,7 +477,7 @@
                              <td >
                                 <span *ngIf="operation?.compteTiersPrestataire" class="p-column-title" >{{operation?.compteTiersPrestataire?.intitule}}</span>
                              </td>
-                             <td ><span  *ngIf="operation?.compteTiersPrefinencement"  class="p-column-title" >{{operation?.compteTiersPrefinencement?.intitule}}</span></td>
+                             <td ><span  *ngIf="operation?.compteTiersPrefinencement"  class="p-column-title" > <span>{{operation?.compteTiersPrefinencement?.intitule}}</span> <br> <span class="p-mt-4">{{ operation?.assure}}</span> </span></td>
 
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>
