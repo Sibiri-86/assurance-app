@@ -291,7 +291,9 @@ export class BonPriseEnChargeComponent implements OnInit, OnDestroy {
     this.prestationPopForm.get('matriculeAdherent').setValue(this.adherentsSelected?.numero);
     
     if (this.adherentsSelected) {
-      
+      this.adherentService.controleDonneePrestations(this.adherentsSelected.id).subscribe((res) =>{
+        console.log("controleDonneePrestations===");
+      });
 
       if(this.adherentSelectedfinal && this.prestationsList.length > 0) {
         /* console.log(this.prestationsList.length);
