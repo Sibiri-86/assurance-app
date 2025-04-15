@@ -268,7 +268,7 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     });
   }
 
-  getExportAllOrdreWithoutChequePrefinencenent(dateDebut?: string, dateFin?: string, prestataire?: string) {
+  getExportAllOrdreWithoutChequePrefinencenent(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
   
@@ -276,8 +276,8 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       .set('dateDebut', formattedDateDebut)
       .set('dateFin', formattedDateFin);
   
-    if (prestataire) {
-      params = params.set('prestataire', prestataire);
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
     }
   
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_EXPORTATION_WITHOUT_CHEQUE_PREFINENCEMENT), { 
