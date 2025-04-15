@@ -428,6 +428,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                         this.sticker = '';
                         this.stickerConfirmation = '';
                         this.isStickerConfimartion = null;
+
+                        this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
       
                         this.getSucessInfo();
                         this.onGetComptes();
@@ -442,7 +444,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   }
                 );
           }
-            
+
+          this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
+          this.rechercherPrefinancementByPeriode();
         }
     
     
@@ -483,14 +487,15 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                  this.isOrdreReglementListNotTakedCheque = false;
                  this.isOrdreReglementListDevalider = false;
                  this.isByCheque = true;
+                 this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                 this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                 this.searByOdreReglementPayeByPeriodeAndDevalider();
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
             }
 
-            this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-            this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
-            this.searByOdreReglementPayeByPeriodeAndDevalider();
+
             
         }
 
@@ -629,14 +634,15 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.isOrdreReglementListTakedCheque = false;
                   this.isOrdreReglementListDevalider = false;
 
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndDevalider();
+
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
               }
 
-              this.searByOdreReglementPrefincementPayeByPeriode();
-              this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-              this.searByOdreReglementPayeByPeriodeAndDevalider();
               
           }
 
@@ -687,13 +693,15 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.isOrdreReglementListNotTakedCheque = false;
                   this.isOrdreReglementListDevalider = false;
                   this.isByCheque = true;
+
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndDevalider();
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
               }
-              this.searByOdreReglementPrefincementPayeByPeriode();
-              this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
-              this.searByOdreReglementPayeByPeriodeAndDevalider();
+
               
           }
 
@@ -745,13 +753,15 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.isOrdreReglementListByCheque = false;
                   this.isOrdreReglementListNotTakedCheque = false;
                   this.isByCheque = true;
+                  
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
               }
-              this.searByOdreReglementPrefincementPayeByPeriode();
-              this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-              this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+
               
           }
 
