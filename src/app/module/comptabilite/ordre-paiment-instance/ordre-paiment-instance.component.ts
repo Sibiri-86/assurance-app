@@ -890,7 +890,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         
         this.messageToDisplay = '';
         this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
-        this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+        this.ordreReglementListBeneficiaire = this.ordreReglementListDevalider.map(nomAssure => ({
           libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
           numero: nomAssure.assurePrinc.numero
         }));
@@ -1017,7 +1017,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
       const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
   
-      this.tierPayantService.getExportAllOrdreDevalide(this.dateDebut, this.dateFin, this.numeroAdherent.toString())
+      this.tierPayantService.getExportAllOrdreDevalidePrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
         .subscribe(response => {
           const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           const url = window.URL.createObjectURL(blob);

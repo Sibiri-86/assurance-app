@@ -456,6 +456,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_PREFINENCEMENT_EXPORTATION_DEVALIDE = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_EXPORT_PREFINANCEMENT_TIER_PAYANT = {
         prod: `${SERVICE_PREFIX}/sinistre/export-prestation-prefinancement-tier-payant`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`

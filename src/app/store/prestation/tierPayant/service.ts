@@ -305,6 +305,26 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     });
   }
   
+  
+
+  getExportAllOrdreDevalidePrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINENCEMENT_EXPORTATION_DEVALIDE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  
 
   exportPrestationPrefincementTierPayantToExcel(dateDebut: string, dateFin: string, choose: string) {
     
