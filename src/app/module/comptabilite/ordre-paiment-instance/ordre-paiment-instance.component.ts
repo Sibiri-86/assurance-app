@@ -480,6 +480,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                 this.ordreReglementListByCheque = response;
                  this.isOrdreReglementListByCheque = true;
                  this.isOrdreReglementListTakedCheque = false;
+                 this.isOrdreReglementListNotTakedCheque = false;
+                 this.isOrdreReglementListDevalider = false;
                  this.isByCheque = true;
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
