@@ -114,9 +114,9 @@ export class TierPayantOrdreReglementValideComponent implements OnInit {
     
   }
 
-  imprimer(pref: OrdreReglementTierPayant) {
+  imprimer(pref: any) {
     this.report.typeReporting = TypeReport.ORDRE_REGLEMENT_TIER_PAYANT;
-    this.report.ordreReglementTierPayant = pref;
+    this.report.ordreReglementDto = pref;
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
   }
 

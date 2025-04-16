@@ -753,7 +753,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.isOrdreReglementListByCheque = false;
                   this.isOrdreReglementListNotTakedCheque = false;
                   this.isByCheque = true;
-                  
+
                   this.searByOdreReglementPrefincementPayeByPeriode();
                   this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
                   this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
@@ -838,7 +838,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.beneficiaireSelected = beneficiaire.libelle;
       this.numeroAdherent = beneficiaire.numero;
     }
-    
       
       onExportAllOrdre(){
         this.ordreReglementListBeneficiaire = [];
