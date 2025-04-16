@@ -5,6 +5,7 @@ import { Operation } from "../operation/model";
 export interface ExerciceComptableOperation {
     id?: string,
     exercice?: ExerciceComptable;
+    assure?: string;
     mois?: string;
     dateDebut?:Date;
     dateFin?: Date;

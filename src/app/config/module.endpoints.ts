@@ -405,6 +405,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-devalidation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+    static readonly PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/tier-payant/payer-ordre-reglement-prefinencement-devalidation`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
     static readonly PRESTATION_TIER_PAYANT_GET_STICKER = {
         prod: `${SERVICE_PREFIX}/sinistre/tier-payant/get-sticker-for-confirmation`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
@@ -414,20 +418,46 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/existe-numero-cheque-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITH_CHEQUE = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-with-cheque`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-with-cheque-prefinencement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITHOUT_CHEQUE = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-without-cheque`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
+
+    static readonly PRESTATION_EXPORTATION_WITHOUT_CHEQUE_PREFINENCEMENT = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-paye-export-without-cheque-prefinencement`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+
     static readonly PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_DEVALIDE = {
         prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide`,
+        mock: `assets/mock/sinistre/tier-payant.mock.json`
+    };
+    static readonly PRESTATION_PREFINENCEMENT_EXPORTATION_DEVALIDE = {
+        prod: `${SERVICE_PREFIX}/sinistre/ordre-reglement-export-devalide-prefinencement`,
         mock: `assets/mock/sinistre/tier-payant.mock.json`
     };
     static readonly PRESTATION_EXPORT_PREFINANCEMENT_TIER_PAYANT = {
@@ -502,6 +532,10 @@ export class Endpoints {
         };
         static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE = {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+        static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE_BY_ID = {
+            prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire-by-id`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
 

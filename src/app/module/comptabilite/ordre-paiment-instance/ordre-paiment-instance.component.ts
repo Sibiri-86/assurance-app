@@ -42,6 +42,7 @@ import { TiersService } from 'src/app/store/comptabilite/tiers/service';
 import { Tiers } from 'src/app/store/comptabilite/tiers/model';
 import { TierPayantService } from 'src/app/store/prestation/tierPayant/service';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { CustumBeneficiare } from 'src/app/store/prestation/tierPayant/model';
 
 
 @Component({
@@ -53,8 +54,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementListByCheque: Array<OrdreReglement>;
-  isToDisplayOrdreReglementListByCheque: boolean = false;
-  isOrdreReglementListTakedCheque: boolean = false;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
   cols: any[];
   displaySinistre = false;
@@ -69,6 +68,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   assureBeneficairePrenom: string = '';
   displayTypeFichier = false;
   ordrePrefinencement: OrdreReglement = {};
+
   compteSelected: Compte;
   comptes: Compte[] = [];
   comptesTiers: Tiers[] = [];
@@ -87,12 +87,27 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   isAllExport = false;
   isTackedChequeExport = false;
   isDevalideChequeExport = false;
-  isOrdreReglementListNotTakedCheque = false;
-  isOrdreReglementListDevalider = false;
+  isOrdreReglementListNotTakedCheque : boolean = false;
+  isToDisplayOrdreReglementListByCheque: boolean = false;
+  isOrdreReglementListTakedCheque: boolean = false;
+  isOrdreReglementListDevalider : boolean = false;
   isOrdreReglementList = false;
+  isOrdreReglementListByCheque = false;
+  isByCheque = false;
   isEditing = false;
   isToDisplayMotifDevalidation = false;
   rowIndex: number;
+  ordreReglementListTakedCheque: OrdreReglement[] = [];
+  ordreReglementListNotTakedCheque: OrdreReglement[] = [];
+  ordreReglementListDevalider: OrdreReglement[] = [];
+  ordreReglementToDevalide: OrdreReglement = {};
+  oldNumeroCheque: string = '';
+  messageToDisplay: string = '';
+
+  ordreReglementListBeneficiaire: CustumBeneficiare[] = [];
+  beneficiaireSelected : string = '';
+  numeroAdherent : number;
+  choose: string = '';
 
   constructor( 
           private store: Store<AppState>,
@@ -110,9 +125,10 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 }
 
   ngOnInit(): void {
+    this.isByCheque = false;
     this.onGetComptes();
     this.onGetComptesTiersByCompteCollectifAndGarand();
-    this.searByOdreReglementPrefincementPayeByPeriode();
+    this.getRefreshfunctions();
     this.dateDebut = new Date();
     this.dateFin = new Date();
     this.store.dispatch(featureActionPrefinancement.setReportPrestation(null));
@@ -217,16 +233,24 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementInstanceByperiode({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
       dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
       this.isOrdreReglementList = false;
+      this.isOrdreReglementListByCheque = false;
+      this.isOrdreReglementListTakedCheque = false;
+      this.isOrdreReglementListNotTakedCheque = false;
+      this.isOrdreReglementListDevalider = false;
+      this.isByCheque = false;
     }
+
+    this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndDevalider();
     
   }
 
   onSechercherPrefinancementByPeriod(){
       this.rechercherPrefinancementByPeriode();
-      this.searByOdreReglementPrefincementPayeByPeriode();
     }
 
-  imprimerFormulaireExcel(ordre: OrdreReglement){
+  imprimerFormulaireExcel(ordre?: OrdreReglement){
     this.displayTypeFichier = true;
     /**if(this.dateDebut.getTime()> this.dateFin.getTime()) {
       this.addMessage('error', 'Dates  invalide',
@@ -298,9 +322,19 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       
     }
 
+    verifierOldNumeroCheque(numeroCheque: string){
+      if (numeroCheque){
+         const isMath = this.oldNumeroCheque.trim() === numeroCheque.trim();
+
+         if(isMath === false){
+          this.verifierNumeroCheque(numeroCheque);
+         }
+      }
+    }
+
     verifierNumeroCheque(numeroCheque: string) {
       if (numeroCheque.trim()) {
-        this.tierPayantService.verifierExistenceNumeroCheque(numeroCheque).subscribe(
+        this.tierPayantService.verifierExistenceNumeroChequePrefinencement(numeroCheque).subscribe(
           (result) => {
             this.existe = result;
           },
@@ -321,6 +355,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
         if(ordrePrefinencement){
       
           this.ordrePrefinencement = ordrePrefinencement;
+          this.oldNumeroCheque = ordrePrefinencement.numeroCheque;
+
           this.assureBeneficaireNom = ordrePrefinencement.assurePrinc?.nom.trim();
           
           const rawPrenom = ordrePrefinencement.assurePrinc?.prenom.trim().toLowerCase() || '';
@@ -392,6 +428,8 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                         this.sticker = '';
                         this.stickerConfirmation = '';
                         this.isStickerConfimartion = null;
+
+                        this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
       
                         this.getSucessInfo();
                         this.onGetComptes();
@@ -406,7 +444,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   }
                 );
           }
-            
+
+          this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
+          this.rechercherPrefinancementByPeriode();
         }
     
     
@@ -442,11 +482,20 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
               .subscribe((response: any) => {
                 this.ordreReglementListByCheque = response;
-                 this.isOrdreReglementList = true;
+                 this.isOrdreReglementListByCheque = true;
+                 this.isOrdreReglementListTakedCheque = false;
+                 this.isOrdreReglementListNotTakedCheque = false;
+                 this.isOrdreReglementListDevalider = false;
+                 this.isByCheque = true;
+                 this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                 this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                 this.searByOdreReglementPayeByPeriodeAndDevalider();
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
             }
+
+
             
         }
 
@@ -467,12 +516,14 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               this.prefinencementService.getOrdreReglementPrefinencementPaye(dateD, dateF)
               .subscribe((response: any) => {
                 this.ordreReglementListByCheque = response;
+
               }, error => {
                 console.error('Erreur lors de la récupération des données', error);
               });
             }
             
         }
+        
 
         
   onInitTakingCheque(ri: number){
@@ -486,14 +537,14 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     this.isToDisplayMotifDevalidation = false;
 
     this.getCancelInfo();
-   //  this.getRefreshfunctions();
+    this.getRefreshfunctions();
   }
 
   getRefreshfunctions(){
-    // this.searByOdreReglementPayeByPeriode();
-    // this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
-    // this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
-    // this.searByOdreReglementPayeByPeriodeAndDevalider();
+    this.searByOdreReglementPrefincementPayeByPeriode();
+    this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+    this.searByOdreReglementPayeByPeriodeAndDevalider();
   }
 
   onSaveOrdreReglementTakeCheque(ordreReglement: OrdreReglement){
@@ -532,5 +583,469 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           }
       
         }
+
+        searByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndNotTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+
+                  this.ordreReglementListNotTakedCheque = response;
+
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
+
+        onSearByOdreReglementPayeByPeriodeAndByNotTakeCheque() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndNotTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+
+                  this.ordreReglementListNotTakedCheque = response;
+
+                  this.isOrdreReglementListNotTakedCheque = true;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListTakedCheque = false;
+                  this.isOrdreReglementListDevalider = false;
+
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndDevalider();
+
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+
+              
+          }
+
+
+          searByOdreReglementPayeByPeriodeAndByTakeCheque() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListTakedCheque = response;
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
+
+          onSearByOdreReglementPayeByPeriodeAndByTakeCheque() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndTackedCheque(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListTakedCheque = response;
+                  this.isOrdreReglementListTakedCheque = true;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListNotTakedCheque = false;
+                  this.isOrdreReglementListDevalider = false;
+                  this.isByCheque = true;
+
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndDevalider();
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+
+              
+          }
+
+
+          searByOdreReglementPayeByPeriodeAndDevalider() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListDevalider = response;
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+              
+          }
+
+          onSearByOdreReglementPayeByPeriodeAndDevalider() {
+
+          if(!this.dateDebut || !this.dateFin){
+              this.dateDebut = new Date();
+              this.dateFin = new Date();
+          }
+    
+            if(this.dateDebut.getTime()> this.dateFin.getTime()) {
+              this.addMessage('error', 'Dates  invalide',
+              'La date de debut ne peut pas être supérieure à celle du de fin');
+            } else {
+      
+              const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+              const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+                this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
+                .subscribe((response: any) => {
+                  this.ordreReglementListDevalider = response;
+                  
+                  this.isOrdreReglementListDevalider = true;
+                  this.isOrdreReglementListTakedCheque = false;
+                  this.isOrdreReglementListByCheque = false;
+                  this.isOrdreReglementListNotTakedCheque = false;
+                  this.isByCheque = true;
+                  
+                  this.searByOdreReglementPrefincementPayeByPeriode();
+                  this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                  this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                }, error => {
+                  console.error('Erreur lors de la récupération des données', error);
+                });
+              }
+
+              
+          }
+
+
+    onInitExcelExport(){
+      this.isToEporteExcel = true;
+    }
+
+     onInitDevalidation(ordreReglement: OrdreReglement){
+    
+        this.ordreReglementToDevalide = ordreReglement;
+        
+        this.isToDisplayMotifDevalidation = true;
+              
+        this.ordrePrefinencement = ordreReglement;
+        this.assureBeneficaireNom = ordreReglement.assurePrinc?.nom.trim();
+        
+        const rawPrenom = ordreReglement.assurePrinc?.prenom.trim().toLowerCase() || '';
+        this.assureBeneficairePrenom = rawPrenom
+        .split(/[-\s]/)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(rawPrenom.includes('-') ? '-' : ' ');
+
+    
+      }
+    
+      onAcceptDevalidation(ordreReglement: OrdreReglement){
+    
+        if(ordreReglement){
+          this.confirmationService.confirm({
+            message: 'voulez-vous dévalider le paiement de cet ordre de reglement ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+              this.confirmDevalidation(ordreReglement);
+            },
+          });
+        }
+    
+      }
+    
+      confirmDevalidation(ordreReglement: OrdreReglement){
+            this.tierPayantService.devaliderPaiementOrdreReglementPrefinencement(ordreReglement).subscribe(
+              response => {            
+    
+                if(response && response === true){
+                  
+                  this.getSucessInfo();
+                  this.getRefreshfunctions();
+                  this.isToDisplayMotifDevalidation = false;
+                  this.isEditing = false;
+                  this.rowIndex = null;
+                }
+                if(response && response === false){
+                  this.getFailledInfo();
+                }
+    
+              }, error => {
+                this.getErrorInfo(error.message.message);
+              }
+            );
+    
+            this.getRefreshfunctions();
+    
+      }
+
+      isMotifValid(): boolean {
+        const motif = this.ordreReglementToDevalide?.motifDevalidation || '';
+        return motif.trim().length >= 10;
+      }
+
+      
+    onSelectedBeneficiaire(beneficiaire: CustumBeneficiare){
+      this.beneficiaireSelected = beneficiaire.libelle;
+      this.numeroAdherent = beneficiaire.numero;
+    }
+    
+      
+      onExportAllOrdre(){
+        this.ordreReglementListBeneficiaire = [];
+        this.isAllExport = true;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.beneficiaireSelected = '';
+        this.messageToDisplay = 'Êtes-vous sûr de vouloir exportez toutes les ordres?'
+
+      this.ordreReglementListBeneficiaire = this.ordreReglementListByCheque.map(nomAssure => ({
+        libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+        numero: nomAssure.assurePrinc.numero
+      }));
+        
+
+      }
+
+      onExportOrdreWithTakeCheque(){
+        this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
+        this.isTackedChequeExport = true;
+        this.isAllExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres avec prise de chèque?'    
+         this.ordreReglementListBeneficiaire = this.ordreReglementListTakedCheque.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
+
+      }
+
+      onExportOrdreWithoutTakeCheque(){
+        this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
+        this.isWithoutTakedChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isDevalideChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres sans prise de chèque?'
+        this.ordreReglementListBeneficiaire = this.ordreReglementListNotTakedCheque.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
+
+      }
+
+      onExportOrdreDevalide(){
+        this.ordreReglementListBeneficiaire = [];
+        this.beneficiaireSelected = '';
+        this.isDevalideChequeExport = true;
+        this.isAllExport = false;
+        this.isTackedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        this.isWithoutTakedChequeExport = false;
+        
+        this.messageToDisplay = '';
+        this.messageToDisplay =  'Êtes-vous sûr de vouloir exportez les ordres dévalidés?'
+        this.ordreReglementListBeneficiaire = this.ordreReglementListDevalider.map(nomAssure => ({
+          libelle: nomAssure.assurePrinc.numero + ' - ' + nomAssure.assurePrinc.nom + ' - ' + nomAssure.assurePrinc.prenom,
+          numero: nomAssure.assurePrinc.numero
+        }));
+
+      }
+
+      onExportOrdreReglement(){
+
+        this.confirmationService.confirm({
+          message: this.messageToDisplay,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            if(this.isAllExport){
+
+              this.exportAllOrdre();
+            }
+            if(this.isTackedChequeExport){
+
+              this.onExportAllOrdreWithCheque();
+            }
+            if(this.isWithoutTakedChequeExport){
+
+              this.onExportAllOrdreWithoutCheque();
+            }
+            if(this.isDevalideChequeExport){
+
+              this.onExportAllOrdreDevalide();
+            }
+          },
+        });
+      
+    }
+
+    exportAllOrdre() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.exportAllOrdreReglementPrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_paye_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreWithCheque() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+      console.log(' this.numeroAdherent',  this.numeroAdherent);
+
+  
+      this.tierPayantService.getExportAllOrdreWithChequePrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_tier_prefinencement_paye_avec_cheque_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreWithoutCheque() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.getExportAllOrdreWithoutChequePrefinencenent(this.dateDebut, this.dateFin, this.numeroAdherent)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_paye_sans_cheque_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+
+    onExportAllOrdreDevalide() {
+      if (!this.dateDebut || !this.dateFin) {
+        alert("Veuillez sélectionner une période !");
+        return;
+      }
+
+      const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+      const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+  
+      this.tierPayantService.getExportAllOrdreDevalidePrefinencement(this.dateDebut, this.dateFin, this.numeroAdherent)
+        .subscribe(response => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ordre_reglement_prefinencement_devalide_du_${dateD}_au_${dateF}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          this.isToEporteExcel = false;
+          this.getSucessInfo();
+          this.beneficiaireSelected = '';
+        }, error => {
+          console.error("Erreur lors de l'exportation :", error);
+        });
+    }
+    
 
 }

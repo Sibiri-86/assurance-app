@@ -218,7 +218,6 @@ export class FacturePayeComponent implements OnInit {
         this.tierPayantService.devaliderPaiementOrdreReglemnt(ordreReglementTierPayant).subscribe(
           response => {            
 
-            console.log('response', response);
             if(response && response === true){
               
               this.getSucessInfo();
@@ -487,6 +486,7 @@ export class FacturePayeComponent implements OnInit {
 
       onExportAllOrdre(){
         this.ordreReglementListPrestataire = [];
+        this.prestataireSelected = '';
         this.isAllExport = true;
         this.isTackedChequeExport = false;
         this.isWithoutTakedChequeExport = false;
@@ -500,6 +500,7 @@ export class FacturePayeComponent implements OnInit {
 
       onExportOrdreWithTakeCheque(){
         this.ordreReglementListPrestataire = [];
+        this.prestataireSelected = '';
         this.isTackedChequeExport = true;
         this.isAllExport = false;
         this.isWithoutTakedChequeExport = false;
@@ -513,6 +514,7 @@ export class FacturePayeComponent implements OnInit {
 
       onExportOrdreWithoutTakeCheque(){
         this.ordreReglementListPrestataire = [];
+        this.prestataireSelected = '';
         this.isWithoutTakedChequeExport = true;
         this.isAllExport = false;
         this.isTackedChequeExport = false;
@@ -527,6 +529,7 @@ export class FacturePayeComponent implements OnInit {
 
       onExportOrdreDevalide(){
         this.ordreReglementListPrestataire = [];
+        this.prestataireSelected = '';
         this.isDevalideChequeExport = true;
         this.isAllExport = false;
         this.isTackedChequeExport = false;

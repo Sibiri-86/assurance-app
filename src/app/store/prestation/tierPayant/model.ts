@@ -63,6 +63,11 @@ export interface CustumPrestatire{
     libelle?: string;
 }
 
+export interface CustumBeneficiare{
+    libelle?: string;
+    numero?: number;
+}
+
 export interface SinistreTierPayant {
     id?: string;
     dateSoins?: Date;

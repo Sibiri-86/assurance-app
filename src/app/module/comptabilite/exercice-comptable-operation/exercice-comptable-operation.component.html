@@ -470,14 +470,14 @@
                              <td>
                                 <span *ngIf="operation?.compteAuxiliaire"class="p-column-title" >{{operation?.compteAuxiliaire?.compteTiers | formatTableValue: 'number':true}}</span> 
                                 <span *ngIf="operation?.compteTiersPrestataire" class="p-column-title" >{{operation?.numCompte | formatTableValue: 'number':true}}</span> 
-                                <span *ngIf="operation?.compte && operation?.montantCredit != null && operation?.montantDebit == null && PRESTATAIRES_SANTE != 'PRESTATAIRES SANTE'" class="p-column-title" >{{operation?.compte?.compte | formatTableValue: 'number':true}}</span> 
+                                <span *ngIf="operation?.compte && operation?.montantCredit != null && operation?.montantDebit == null && NUMERO_COMPTE_SELECTED != NUMERO_COMPTE_PRESTATAIRE " class="p-column-title" >{{operation?.compte?.compte | formatTableValue: 'number':true}}</span> 
                                 <span *ngIf="operation?.compteTiersPrefinencement" class="p-column-title" >{{operation?.compteTiersPrefinencement?.compteTiers | formatTableValue: 'number':true}}</span> 
                             </td>
                              <td ><span class="p-column-title" >{{operation?.compteAuxiliaire?.intitule}}</span></td>
                              <td >
                                 <span *ngIf="operation?.compteTiersPrestataire" class="p-column-title" >{{operation?.compteTiersPrestataire?.intitule}}</span>
                              </td>
-                             <td ><span  *ngIf="operation?.compteTiersPrefinencement"  class="p-column-title" >{{operation?.compteTiersPrefinencement?.intitule}}</span></td>
+                             <td ><span  *ngIf="operation?.compteTiersPrefinencement"  class="p-column-title" > <span>{{operation?.compteTiersPrefinencement?.intitule}}</span> <br> <span class="p-mt-4">{{ operation?.assure}}</span> </span></td>
 
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>

@@ -151,8 +151,9 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
   devaliderPaiementOrdreReglemnt(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
     return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
   }
-  devaliderPaiementOrdreReglementPrefinencement(ordreReglementTierPayant: OrdreReglementTierPayant): Observable<any> {
-    return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT), ordreReglementTierPayant);
+
+  devaliderPaiementOrdreReglementPrefinencement(ordreReglement: OrdreReglement): Observable<any> {
+    return this.http.patch<any>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_DEVALIDER_PAIEMENT_ORDRE_REGLEMENT_PREFINENCEMENT), ordreReglement);
   }
 
   getStickerConfirmation(sticker: string): Observable<any> {
@@ -171,6 +172,13 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE), {params});
   }
 
+  verifierExistenceNumeroChequePrefinencement(numeroCheque: string): Observable<boolean> {
+    const params = new HttpParams()
+        .set('numeroCheque', numeroCheque)
+
+    return this.http.get<boolean>(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_EXISTANCE_NUMERO_CHEQUE_PREFINENCEMENT), {params});
+  }
+
   exportAllOrdreReglement(dateDebut?: string, dateFin?: string, prestataire?: string) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
@@ -184,6 +192,23 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     }
   
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  exportAllOrdreReglementPrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_PREFINENCEMENT), { 
       params,
       responseType: 'blob'
     });
@@ -206,6 +231,25 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
       responseType: 'blob'
     });
   }
+
+  getExportAllOrdreWithChequePrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_EXPORTATION_WITH_CHEQUE_PREFINENCEMENT), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+
   getExportAllOrdreWithoutCheque(dateDebut?: string, dateFin?: string, prestataire?: string) {
     const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
     const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
@@ -219,6 +263,24 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     }
   
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_WITHOUT_CHEQUE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+
+  getExportAllOrdreWithoutChequePrefinencenent(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_EXPORTATION_WITHOUT_CHEQUE_PREFINENCEMENT), { 
       params,
       responseType: 'blob'
     });
@@ -238,6 +300,26 @@ posTierPayant(tierPayant: Array<SinistreTierPayant>): Observable<any> {
     }
   
     return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_TIER_PAYANT_PAYE_EXPORTATION_DEVALIDE), { 
+      params,
+      responseType: 'blob'
+    });
+  }
+  
+  
+
+  getExportAllOrdreDevalidePrefinencement(dateDebut?: string, dateFin?: string, numeroAdherent?: number) {
+    const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0];
+    const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+  
+    let params = new HttpParams()
+      .set('dateDebut', formattedDateDebut)
+      .set('dateFin', formattedDateFin);
+  
+    if (numeroAdherent) {
+      params = params.set('numeroAdherent', numeroAdherent.toString());
+    }
+  
+    return this.http.get(GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINENCEMENT_EXPORTATION_DEVALIDE), { 
       params,
       responseType: 'blob'
     });

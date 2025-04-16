@@ -61,6 +61,12 @@ findCompteTiersByPrestataire(prestataireLibelle: string): Observable<any> {
 
   return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PRESTATAIRE),  {params});
 }
+findCompteTiersByPrestataireId(prestataireLibelle: string): Observable<any> {
+  const params = new HttpParams()
+  .set('prestataireLibelle', prestataireLibelle)
+
+  return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PRESTATAIRE_BY_ID),  {params});
+}
 
 findCompteTiersByPrefinence(): Observable<any> {
   return this.http.get<any>(GlobalConfig.getEndpoint(Endpoints.COMPTABILITE_COMPTE_BY_PREFINENCE));

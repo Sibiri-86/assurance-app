@@ -264,7 +264,7 @@ export class PaiementFactureComponent implements OnInit {
 
     onFindCompteTiersByPrestataire(prestataireLibelle: string){
 
-        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle).subscribe(
+        this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle.trim()).subscribe(
           res => {
             this.comptesTiersPrestataire = res;
             this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
