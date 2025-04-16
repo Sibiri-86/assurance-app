@@ -375,14 +375,18 @@ export const DATA_DEFINITION = [
     cols: [
       {
         field: 'libelle', header: 'Libelle', type: 'string', width: 1, text_center: false,
-        validators: [Validators.required, Validators.maxLength(50)]
+        validators: [Validators.required, Validators.maxLength(75)]
       },
       {
         field: 'code', header: 'Code', type: 'string', width: 1, text_center: false,
-        validators: [Validators.required, Validators.maxLength(50)]
+        validators: [Validators.required, Validators.maxLength(25)]
       },
       {
         field: 'description', header: 'Description', type: 'string', width: 1, text_center: false,
+        validators: [Validators.required, Validators.maxLength(50)]
+      },
+      {
+        field: 'tauxReel', header: 'Taux', type: 'string', width: 1, text_center: false,
         validators: [Validators.required, Validators.maxLength(50)]
       }
     ],
