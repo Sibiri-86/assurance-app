@@ -801,12 +801,14 @@
                                 <label for="datePaiement" class="font-bold">Date paiement
                                     <span class="required" style="color: red;">*</span>
                                 </label>
+                                <span class="textDanger" *ngIf="isInValidateDate">La date de paiement ne doit être antérieure ou égale à celle du jour</span>
                                 <input
                                 required
                                 id="datePaiement" type="date"
                                     class="p-inputtext  p-mb-4 p-fluid"
                                     [(ngModel)]="ordrePrefinencement.datePaiement"
-                                    name="datePaiement" pInputText>
+                                    name="datePaiement" pInputText
+                                    (blur)="onCompareDate(ordreReglementTierPayant)">
                             </div>
 
                                 <div class="p-field">
@@ -901,6 +903,7 @@
                     !ordrePrefinencement.compte || 
                     !ordrePrefinencement.compteTiersGarant ||
                     !ordrePrefinencement.datePaiement ||
+                    isInValidateDate === true ||
                     !ordrePrefinencement.montantPaye " 
                     class="p-button-success">
                 </button>   

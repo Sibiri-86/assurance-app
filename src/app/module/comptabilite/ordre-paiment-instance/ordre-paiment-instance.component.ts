@@ -108,6 +108,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   beneficiaireSelected : string = '';
   numeroAdherent : number;
   choose: string = '';
+  isInValidateDate: boolean = false;
 
   constructor( 
           private store: Store<AppState>,
@@ -728,7 +729,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                 this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
                 .subscribe((response: any) => {
                   this.ordreReglementListDevalider = response;
-                  
+
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
@@ -1053,4 +1054,22 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     }
     
 
+
+      onCompareDate(ordreReglement: OrdreReglement){
+    
+          console.log(ordreReglement);
+          const selectedDate = ordreReglement.datePaiement;
+          const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+          const todayDate = new Date();
+          const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+    
+          if(todayDateFormate >= selectedDateFormate){
+            this.isInValidateDate = false;
+          }
+          if(todayDateFormate < selectedDateFormate){
+            this.isInValidateDate = true;
+          }
+    
+    
+        }
 }
