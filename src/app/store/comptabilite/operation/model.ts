@@ -35,6 +35,8 @@ export interface Operation {
     isSoldeAnterieur?: boolean;
     numeroLeutrage?: string;
     leutrage?: boolean;
+    motifDevalidation?: string;
+    numeroCheque?: string;
    
 }
 

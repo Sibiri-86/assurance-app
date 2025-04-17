@@ -446,7 +446,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           }
 
           this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
-          this.rechercherPrefinancementByPeriode();
         }
     
     
@@ -495,7 +494,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               });
             }
 
-
+            this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+            this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+            this.searByOdreReglementPayeByPeriodeAndDevalider();
             
         }
 
@@ -573,6 +574,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                         this.isEditing = false;
                         this.rowIndex = null;
                         this.getSucessInfo();
+                        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                        this.searByOdreReglementPayeByPeriodeAndDevalider();
                         // this.getRefreshfunctions();
                       }
                     }
@@ -581,6 +585,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   }
                 );
           }
+          
       
         }
 
@@ -723,6 +728,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                 this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
                 .subscribe((response: any) => {
                   this.ordreReglementListDevalider = response;
+                  
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });

@@ -801,7 +801,9 @@
                                 <label for="datePaiement" class="font-bold">Date paiement
                                     <span class="required" style="color: red;">*</span>
                                 </label>
-                                <input id="datePaiement" type="date"
+                                <input
+                                required
+                                id="datePaiement" type="date"
                                     class="p-inputtext  p-mb-4 p-fluid"
                                     [(ngModel)]="ordrePrefinencement.datePaiement"
                                     name="datePaiement" pInputText>
@@ -894,7 +896,7 @@
                     label="Valider le paiement indivuduel par chèque" 
                     [disabled]=" 
                     existe ||
-                    !ordrePrefinencement?.numeroCheque ||
+                    !ordrePrefinencement.numeroCheque ||
                     !comptesTiersPrefinenceContact ||
                     !ordrePrefinencement.compte || 
                     !ordrePrefinencement.compteTiersGarant ||

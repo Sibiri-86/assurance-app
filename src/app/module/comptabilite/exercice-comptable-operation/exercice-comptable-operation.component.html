@@ -450,6 +450,8 @@
                         <th pSortableColumn="annee" >Libellé d'écriture<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Débit<p-sortIcon field="annee"></p-sortIcon></th>
                         <th pSortableColumn="annee" >Crédit<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Chèque<p-sortIcon field="annee"></p-sortIcon></th>
+                        <th pSortableColumn="annee" >Dévalidation<p-sortIcon field="annee"></p-sortIcon></th>
                         
                         
                         
@@ -461,7 +463,10 @@
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
                         </td> -->
                             <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
-                            <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >
+                                 <span *ngIf="operation.datePaiement">{{operation?.datePaiement | formatTableValue : 'date'}}</span> 
+                                 <span *ngIf="!operation.datePaiement">---</span> 
+                            </span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
 
                              <td><span class="p-column-title" >{{operation?.numFacture}}</span></td>
@@ -482,6 +487,9 @@
                              <td><span class="p-column-title" >{{operation?.libelle}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantDebit | formatTableValue: 'number':true}}</span></td>
                              <td><span class="p-column-title" >{{operation?.montantCredit | formatTableValue: 'number':true}}</span></td>
+                             <!-- <td><span *ngIf="operation?.compte && operation?.montantCredit != null && operation?.montantDebit == null && NUMERO_COMPTE_SELECTED != NUMERO_COMPTE_PRESTATAIRE " class="p-column-title" >{{operation?.numeroCheque}}</span> </td> -->
+                             <td><span class="p-column-title" >{{operation?.numeroCheque}}</span> </td>
+                             <td><span class="p-column-title" >{{operation?.motifDevalidation}}</span></td>
 
                         
                         
