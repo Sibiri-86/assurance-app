@@ -835,7 +835,6 @@ export class FacturePayeComponent implements OnInit {
 
     onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
 
-      console.log(ordreReglementTierPayant);
       const selectedDate = ordreReglementTierPayant.datePaiement;
       const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
       const todayDate = new Date();
@@ -848,6 +847,22 @@ export class FacturePayeComponent implements OnInit {
         this.isInValidateDate = true;
       }
 
+
+    }
+
+    onCompareDateCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+    
+      const selectedDate = ordreReglementTierPayant.datePriseCheque;
+      const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+      const todayDate = new Date();
+      const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+      if(todayDateFormate >= selectedDateFormate){
+        this.isInValidateDate = false;
+      }
+      if(todayDateFormate < selectedDateFormate){
+        this.isInValidateDate = true;
+      }
 
     }
 

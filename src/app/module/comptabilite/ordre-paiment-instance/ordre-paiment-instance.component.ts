@@ -1057,12 +1057,11 @@ export class OrdrePaimentInstanceComponent implements OnInit {
 
       onCompareDate(ordreReglement: OrdreReglement){
     
-          console.log(ordreReglement);
           const selectedDate = ordreReglement.datePaiement;
           const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
           const todayDate = new Date();
           const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
-    
+
           if(todayDateFormate >= selectedDateFormate){
             this.isInValidateDate = false;
           }
@@ -1071,5 +1070,21 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           }
     
     
+        }
+
+        onCompareDateCheque(ordreReglement: OrdreReglement){
+    
+          const selectedDate = ordreReglement.datePriseCheque;
+          const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+          const todayDate = new Date();
+          const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+          if(todayDateFormate >= selectedDateFormate){
+            this.isInValidateDate = false;
+          }
+          if(todayDateFormate < selectedDateFormate){
+            this.isInValidateDate = true;
+          }
+
         }
 }
