@@ -240,9 +240,10 @@
             <th pSortableColumn="numero">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="numero">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="nom" >N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="taux">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="taux">N° Assuré<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="territorialite" >Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
@@ -253,14 +254,15 @@
        <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
            <tr [pEditableRow]="ordre">
 
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
+            <td><span >{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
+            <td><span >{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
             <td><span class="p-column-title">{{ordre.numero}}</span></td>
             <td><span class="p-column-title">{{ordre.numeroBordereau}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+            <td><span >{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+            <td><span >{{ordre?.assurePrinc?.numero }}</span></td>
             <td><span class="p-column-title">{{ordre.police.nom}}</span></td>
             <td><span class="p-column-title">{{ordre.typePaiement}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
+            <td><span >{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
             <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
              <td *ngIf="isEditing && ri === rowIndex">
                    <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
@@ -377,30 +379,33 @@
        </ng-template>
        <ng-template pTemplate="header">
            <tr>
-            <th pSortableColumn="numero" style="min-width:10px">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:10px">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th pSortableColumn="numero" style="min-width:10px">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:10px">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:10px">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:10px">Chèque encaissé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:10px">Date encaissement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
-            <th style="min-width:20px">Action</th>
+            <th pSortableColumn="numero">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="numero">Numero<p-sortIcon field="numero"></p-sortIcon></th>
+            <th pSortableColumn="nom">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="taux">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="taux">N° Assuré.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Chèque encaissé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Date encaissement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th>Action</th>
                
            </tr>
        </ng-template>
        <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
            <tr [pEditableRow]="ordre">
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
+            <td><span class="p-column-title">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
+            <td><span class="p-column-title">{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
             <td><span class="p-column-title">{{ordre.numero}}</span></td>
             <td><span class="p-column-title">{{ordre.numeroBordereau}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+            <td><span class="p-column-title">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+            <td><span class="p-column-title">{{ordre?.assurePrinc?.numero }}</span></td>
+
             <td><span class="p-column-title">{{ordre.police.nom}}</span></td>
             <td><span class="p-column-title">{{ordre.typePaiement}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
+            <td><span class="p-column-title">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
             <td><span class="p-column-title" *ngIf="ordre.isTakeCheque"></span> OUI </td>
             <td><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
 
@@ -459,9 +464,10 @@
             <th pSortableColumn="numero">Date Saisie<p-sortIcon field="numero"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Date Paiement <p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="numero">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
-            <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+            <th pSortableColumn="nom">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="taux">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="taux">N° Assuré.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+            <th pSortableColumn="territorialite">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
             <th pSortableColumn="territorialite">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
                <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
@@ -472,14 +478,16 @@
        <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
            <tr [pEditableRow]="ordre">
 
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
-            <td><span class="p-column-title">{{ordre.numero}}</span></td>
-            <td><span class="p-column-title">{{ordre.numeroBordereau}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
-            <td><span class="p-column-title">{{ordre.police.nom}}</span></td>
-            <td><span class="p-column-title">{{ordre.typePaiement}}</span></td>
-            <td><span class="p-column-title" style="font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
+            <td><span>{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
+            <td><span>{{ordre.datePaiement | formatTableValue : 'date'}}</span></td>
+            <td><span>{{ordre.numero}}</span></td>
+            <td><span>{{ordre.numeroBordereau}}</span></td>
+            <td><span>{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+            <td><span>{{ordre?.assurePrinc?.numero }}</span></td>
+
+            <td><span>{{ordre.police.nom}}</span></td>
+            <td><span>{{ordre.typePaiement}}</span></td>
+            <td><span>{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
             <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
              <td *ngIf="isEditing && ri === rowIndex">
                    <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
@@ -586,9 +594,10 @@
 <tr>
    <th pSortableColumn="numero">Date de dévalidation<p-sortIcon field="numero"></p-sortIcon></th>
    <th pSortableColumn="numero">Numero<p-sortIcon field="numero"></p-sortIcon></th>
-   <th pSortableColumn="nom" style="min-width:12px">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
-   <th pSortableColumn="taux" style="min-width:17px">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
-   <th pSortableColumn="territorialite" style="min-width:12px">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
+   <th pSortableColumn="nom">N° Bodereau<p-sortIcon field="nom"></p-sortIcon></th>
+   <th pSortableColumn="taux">Assuré Princ.<p-sortIcon field="taux.taux"></p-sortIcon></th>
+   <th pSortableColumn="taux">N° Assuré<p-sortIcon field="taux.taux"></p-sortIcon></th>
+   <th pSortableColumn="territorialite">Souscripteur<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
    <th pSortableColumn="territorialite">Mode de paiement<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
    <th pSortableColumn="territorialite">Montant remboursé<p-sortIcon field="territorialite.libelle"></p-sortIcon></th>
     <th pSortableColumn="isTakeCheque">Motif</th>
@@ -599,13 +608,14 @@
 <ng-template pTemplate="body" let-ordre   let-editing="editing" let-ri="rowIndex">
   <tr [pEditableRow]="ordre">
 
-   <td><span class="p-column-title" style="font-weight: bold;">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
+   <td><span class="p-column-title">{{ordre.dateDeSaisie | formatTableValue : 'date'}}</span></td>
    <td><span class="p-column-title">{{ordre.numero}}</span></td>
    <td><span class="p-column-title">{{ordre.numeroBordereau}}</span></td>
-   <td><span class="p-column-title" style="font-weight: bold;">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+   <td><span class="p-column-title">{{ordre?.assurePrinc?.nom }} {{ordre?.assurePrinc?.prenom}}</span></td>
+   <td><span class="p-column-title">{{ordre?.assurePrinc?.numero }}</span></td>
    <td><span class="p-column-title">{{ordre.police.nom}}</span></td>
    <td><span class="p-column-title">{{ordre.typePaiement}}</span></td>
-   <td><span class="p-column-title" style="font-weight: bold;">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
+   <td><span class="p-column-title">{{ordre.montantPaye | formatTableValue: 'number':true}}</span></td>
    <td><span class="p-column-title">{{ordre?.motifDevalidation}}</span></td>
 
       <dt class=" p-d-flex p-justify-center p-m-2"> 
