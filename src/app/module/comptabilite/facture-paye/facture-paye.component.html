@@ -164,7 +164,7 @@
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
                                 La date de paiement doit être antérieure à celle de prise de chèque
                             </span>
-                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque ne doit être antérieure ou égale à celle du jour</span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
 
                             <input
                                 [disabled]="ordre.isTakeCheque"
@@ -437,7 +437,7 @@
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
                                 La date de paiement doit être antérieure à celle de prise de chèque
                             </span>
-                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque ne doit être antérieure ou égale à celle du jour</span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
                             <input
                                 [disabled]="ordre.isTakeCheque"
                                 pInputText
