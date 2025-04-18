@@ -142,7 +142,7 @@
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th pSortableColumn="isTakeCheque">Chèque encaissé</th>
                         
                     </tr>
                 </ng-template>
@@ -282,7 +282,7 @@
                         <th pSortableColumn="montantPaye">Montant</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th pSortableColumn="isTakeCheque">Chèque encaissé</th>
                         <th pSortableColumn="datePriseCheque">Date chèque</th>
                         <th>Actions</th>
                         
@@ -902,8 +902,8 @@
                     <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
 
                             <span class="infoColor" *ngIf="isAllExport">L'export se fera sur tous les ordres payés</span>
-                            <span class="successGrayColor" *ngIf="isTackedChequeExport">L'export se fera sur les ordres payés avec prise de chèque</span>
-                            <span class="warningColor" *ngIf="isWithoutTakedChequeExport">L'export se fera sur les ordres payés sans prise de chèque</span>
+                            <span class="successGrayColor" *ngIf="isTackedChequeExport">L'export se fera sur les ordres payés avec encaissement de chèque</span>
+                            <span class="warningColor" *ngIf="isWithoutTakedChequeExport">L'export se fera sur les ordres payés sans encaissement de chèque</span>
                             <span class="dangerColor" *ngIf="isDevalideChequeExport">L'export se fera sur les ordres dévalidés</span>
 
                         <!-- Groupe des boutons -->
