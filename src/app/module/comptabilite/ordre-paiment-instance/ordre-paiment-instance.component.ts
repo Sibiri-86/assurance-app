@@ -1072,9 +1072,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     
         }
 
-        onCompareDateCheque(ordreReglement: OrdreReglement){
+        onCompareDateCheque(ordre: OrdreReglement){
     
-          const selectedDate = ordreReglement.datePriseCheque;
+          const selectedDate = ordre.datePriseCheque;
           const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
           const todayDate = new Date();
           const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');

@@ -850,9 +850,9 @@ export class FacturePayeComponent implements OnInit {
 
     }
 
-    onCompareDateCheque(ordreReglementTierPayant: OrdreReglementTierPayant){
+    onCompareDateCheque(ordre: OrdreReglementTierPayant){
     
-      const selectedDate = ordreReglementTierPayant.datePriseCheque;
+      const selectedDate = ordre.datePriseCheque;
       const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
       const todayDate = new Date();
       const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');

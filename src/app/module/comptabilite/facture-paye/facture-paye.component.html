@@ -164,11 +164,14 @@
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
                                 La date de paiement doit être antérieure à celle de prise de chèque
                             </span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque ne doit être antérieure ou égale à celle du jour</span>
+
                             <input
                                 [disabled]="ordre.isTakeCheque"
                                 pInputText
                                 type="date"
-                                [(ngModel)]="ordre.datePriseCheque"/>
+                                [(ngModel)]="ordre.datePriseCheque"
+                                (blur)="onCompareDateCheque(ordre)"/>
 
                         </td>
 
@@ -178,7 +181,7 @@
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
-                                [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
+                                [disabled]="!ordre.datePriseCheque || isInValidateDate === true || ordre.datePriseCheque < ordre.datePaiement"
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-check" 
@@ -434,7 +437,7 @@
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
                                 La date de paiement doit être antérieure à celle de prise de chèque
                             </span>
-                            <span class="textDanger" *ngIf="isInValidateDate">La date de paiement ne doit être antérieure ou égale à celle du jour</span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque ne doit être antérieure ou égale à celle du jour</span>
                             <input
                                 [disabled]="ordre.isTakeCheque"
                                 pInputText
