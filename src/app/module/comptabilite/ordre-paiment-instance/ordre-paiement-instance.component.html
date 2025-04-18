@@ -264,7 +264,7 @@
             <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
              <td *ngIf="isEditing && ri === rowIndex">
                    <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
-                       La date de paiement doit être antérieure à celle de prise de chèque
+                       La date de paiement doit être antérieure à celle d'encaissement de chèque
                    </span>
                    <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
 
@@ -483,7 +483,7 @@
             <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
              <td *ngIf="isEditing && ri === rowIndex">
                    <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
-                       La date de paiement doit être antérieure à celle de prise de chèque
+                       La date de paiement doit être antérieure à celle d'encaissement de chèque
                    </span>
                    <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
                    <input
