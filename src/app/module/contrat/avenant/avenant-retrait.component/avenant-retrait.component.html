@@ -130,7 +130,7 @@
     </div>
     <div class="p-grid" *ngIf="isImport === 'NON'">
         <div class="p-col-12">
-            <p-table #dt [value]="adherentsListByPage" [(selection)]="selectedAdherents" 
+            <p-table #dt [value]="adherentsListByPage" [(selection)]="selectedAdherents"  
                      [globalFilterFields]="['adherent.numero', 'adherent.prenom', 'adherent.nom']"
                      dataKey="id" [(selection)]="adherantDeleteds"
                      styleClass="p-datatable-customers">

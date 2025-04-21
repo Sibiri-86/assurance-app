@@ -356,6 +356,7 @@ import { CourrierPrestataireComponent } from './module/prestation/tier-payant/co
 import { ApprovisionnementComponent } from './module/comptabilite/approvisionnement/approvisionnement.component';
 import { ExportPrestationComponent } from './module/reporting/production/export-prestation/export-prestation.component';
 import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-payant/consulation-ordre-tier-payant/consulation-ordre-tier-payant.component';
+import { ParametrageMailComponent } from './module/prestation/tier-payant/parametrage-mail/parametrage-mail.component';
 
 @NgModule({
     imports: [
@@ -647,7 +648,8 @@ import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-pa
         CourrierPrestataireComponent,
         ApprovisionnementComponent,
         ExportPrestationComponent,
-        ConsulationOrdreTierPayantComponent
+        ConsulationOrdreTierPayantComponent, 
+        ParametrageMailComponent
     ],
     providers: [
         {

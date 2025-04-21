@@ -40,6 +40,18 @@ import { Commune } from 'src/app/store/parametrage/commune/model';
 import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
 import { TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
+import { AlerteService } from 'src/app/store/parametrage/Alerte/service';
+import { formatDate } from '@angular/common';
+import { Alerte, AlerteAdresseMail } from 'src/app/store/parametrage/Alerte/model';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { Garant } from 'src/app/store/parametrage/garant/model';
+import * as garantListSelector from '../../../../store/contrat/garant/selector';
+import * as featureActionGarant from '../../../../store/contrat/garant/actions';
+import * as featureActionPolice from '../../../../store/contrat/police/actions';
+import * as policeListSelector from '../../../../store/contrat/police/selector';
+import { Police } from 'src/app/store/contrat/police/model';
+
+
 
 
 @Component({
@@ -47,7 +59,7 @@ import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenan
   templateUrl: './parametrage-mail.component.html',
   styleUrls: ['./parametrage-mail.component.scss']
 })
-export class MajPrestataireComponent implements OnInit, OnDestroy {
+export class ParametrageMailComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<boolean>();
   sousActeList$: Observable<Array<SousActe>>;
   sousActeList: Array<SousActe>;
@@ -98,6 +110,19 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
   prestataireToSave: Array<Prestataire> = [];
   isImport = 'NON';
   response: string;
+  dateDebut: any;
+  dateFin: any;
+  alertes: Alerte[] = [];
+  garantList:Array<Garant> = [];
+  garantList$: Observable<Array<Garant>>;
+  garantId:Garant = {};
+  policeList:Array<Police> = [];
+  policeList$: Observable<Array<Police>>;
+  adresseMail: string;
+  selectedPolices: Police[] = [];
+  police:{};
+  alerteAdresseMail: AlerteAdresseMail = {};
+  alerteAdresseMails: AlerteAdresseMail[] = [];
 
 
   constructor( private store: Store<AppState>,
@@ -107,8 +132,9 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
                private garantieService: GarantieService,
                private breadcrumbService: BreadcrumbService,
                private prestataireService: PrestataireService,
-               private historiqueAvenantService: HistoriqueAvenantService) {
-     this.breadcrumbService.setItems([{ label: 'Mis à jours des données des prestataires (écran à caché après cette maj)' }]);
+               private historiqueAvenantService: HistoriqueAvenantService, 
+              private alerteService: AlerteService, private adherentService: AdherentService) {
+     this.breadcrumbService.setItems([{ label: 'Gestion des alertes' }]);
 }
 
   ngOnInit(): void {
@@ -131,7 +157,7 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
       prestataires: new FormControl(),
     });
 
-    this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
+    /* this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
     this.store.dispatch(conventionAction.loadConvention());
     this.conventionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
@@ -188,7 +214,26 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
         console.log(this.communeList);
         console.log("===============commune=============");
       }
-    });
+    }); */
+    this.garantList$ = this.store.pipe(select(garantListSelector.garantList));
+        this.store.dispatch(featureActionGarant.loadGarant());
+        this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.garantList = value.slice();
+          }
+        });
+
+      this.policeList$ = this.store.pipe(select(policeListSelector.policeList));
+          this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+              this.policeList = value.slice();
+            }
+          });
+            this.loadPoliceByGarant();
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
+    this.getAlertesByDate();
+    
     this.statusObject$ = this.store.pipe(select(status));
     this.checkStatus();
   }
@@ -215,34 +260,25 @@ export class MajPrestataireComponent implements OnInit, OnDestroy {
     this.displayEdit = false;
   }
 
-  onCreate(){
-    /* this.convention = this.conventionForm.value;
-    this.convention.sousActes = this.sousActeListFinal;
-    if (this.convention.id){
-      console.log('=========================',this.convention);
-      this.store.dispatch(conventionAction.updateConvention(this.convention));
-    }else{
-    this.store.dispatch(conventionAction.createConvention(this.convention));
-    }
-    this.conventionForm.reset();
-    this.displayActe = false;
-    this.displaySousActe = false;
-    this.convention = {};
-    this.sousActeListFinal = [];
+  closeDialogAdd(){
+    this.adresseMail = null;
+    this.selectedPolices = [];
+    this.garantId.id = null; 
     this.displayFormConvention = false;
-    this.displayFormConventionUpdate = false; */
+  }
 
-    this.majPrestataireDto.commune = this.majPrestationForm.get("commune").value;
-    this.majPrestataireDto.quartier = this.majPrestationForm.get("quartier").value;
-    this.majPrestataireDto.situationGeographique = this.majPrestationForm.get("situationGeographique").value;
-    this.majPrestataireDto.prestataires = this.prestataireToSave;
-    console.log('=============majPrestataireDto============',this.majPrestataireDto);
-    this.prestataireService.majPrestataires(this.majPrestataireDto).subscribe((value) => {
-      this.messageService.add({severity:'success', summary: 'Success', detail:'enregistrement éffectuer avec succès'});
+  onCreate(){
+    this.alerteAdresseMail.adresseMail = this.adresseMail;
+    this.alerteAdresseMail.policeId = this.selectedPolices;
+    
+    console.log('selectedPolices============ >',this.selectedPolices);
+    console.log('alerteAdresseMail============ >',this.alerteAdresseMail);
+    this.alerteService.createAlerteAdresseMail( this.alerteAdresseMail).subscribe((value) => {
+        this.messageService.add({severity:'success', summary: 'Success', detail:'enregistrement éffectuer avec succès'});
     });
-    this.majPrestataireDto = {};
-    this.majPrestataireDto.prestataires = [];
-    this.displayFormConvention = false;
+
+    this.fetchAlerteAdresseMail();
+
   }
   changeGarantie($event) {
     this.acteListFilter = this.acteList.filter(ele => ele.idTypeGarantie === $event.value.id);
@@ -479,5 +515,90 @@ getAdherentFiles(event: any): void {
       }
   );
 }
+
+getAlertesByDate() {
+    /* if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    } */
+      console.log('entrer dedans  ===> ', this.dateDebut);
+      console.log('entrer dedans  ===> ', this.dateFin);
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    this.alerteService.getAlertesByDate().subscribe(
+      (res) => {
+        this.alertes = res;
+        console.log('liste des alertes ===> ', this.alertes);
+      }
+    );
+  }
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        
+        break;
+      }
+      case 1: {
+        this.fetchAlerteAdresseMail();
+        break;
+      }
+      case 2: {
+        
+        break;
+      }
+      case 3: {
+        
+        break;
+      }
+      case 4: {
+        
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
+  }  
+
+  renvoyerMail(ordre: Alerte) {
+    this.adherentService.renvoieDeMail(ordre.adherent.id).subscribe((res) =>{
+      this.messageService.add({severity:'success', summary: 'Success', detail:'Mail renvoyer avec succès'});
+      console.log("renvoieDeMail===");
+    });
+  }
+
+  loadPoliceByGarant() {
+    console.log("garantId===> ", this.garantId.id);
+         this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.garantId.id}));
+    }
+
+    onSelect2(convention: Alerte) {
+      console.log("convention===", convention);
+      if(this.policeList.length > 0) {
+        this.policeList.forEach(p => {
+          this.alerteAdresseMail.adresseMail
+        });
+      }
+    }
+
+    fetchAlerteAdresseMail() {
+      this.alerteService.fetchAlerteAdresseMail().subscribe((res) =>{
+        this.alerteAdresseMails = res;
+        console.log("renvoieDeMail===");
+      });
+    }
+
+    fetchMailListeByAdresseMail(convention: Alerte) {
+      this.alerteService.fetchMailListeByAdresseMail(convention.adresseMail).subscribe((res) =>{
+        this.alerteAdresseMails = res;
+        console.log("renvoieDeMail===");
+      });
+    }
 
 }

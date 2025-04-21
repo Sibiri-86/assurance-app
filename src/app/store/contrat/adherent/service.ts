@@ -666,5 +666,12 @@ $getExerciceByPoliceId(idPolice: string): Observable<Exercice[]> {
       //return this.http.get(GlobalConfig.getEndpoint(Endpoints.CONTROLE_DONNEES_PRESTATIONS), {params});
     }
 
+    renvoieDeMail(ad: string) {
+      const params = new HttpParams()
+        .set('ad', ad)
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.RENVOIE_MAIL)}`, { params });
+      //return this.http.get(GlobalConfig.getEndpoint(Endpoints.CONTROLE_DONNEES_PRESTATIONS), {params});
+    }
+
   
 }

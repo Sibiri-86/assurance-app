@@ -79,7 +79,7 @@
                                     class="p-button-rounded p-button-help p-mr-2"
                                     (click)="voirSinistre(ordre)">
                             </button>
-                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer"
+                            <button pButton pRipple icon="pi pi-print" pTooltip="Imprimer ordre de règlement tiers payant"
                                     class="p-button-rounded p-button-info p-mr-2" (click)="imprimer(ordre)">
                             </button>
                             <button *ngIf="roleDevaliderOrdre" pButton icon="pi pi-times" [disabled]="ordre.isPaiement" pTooltip="Devalider"

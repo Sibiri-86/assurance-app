@@ -313,6 +313,8 @@ export class AvenantIncorporationComponent implements OnInit{
         ); */
 
         this.onSearchWithDebounceTime();
+        this.curentGroupe = {};
+        this.curentGroupe = {};
         
     }
 

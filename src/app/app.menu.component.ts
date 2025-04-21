@@ -80,6 +80,8 @@ export class AppMenuComponent implements OnInit {
                                     {label: 'Ordre de paiement | Consultation', icon: '', routerLink: ['prestation/tierPayant/consultation-tiers-payant'],
                                     visible: this.keycloak.isUserInRole(Function.sm_tiers_payant_ordre_reglement_consultation)},
                                     {label: 'Courrier Prestataire', icon: '', routerLink: ['prestation/tierPayant/courrier-prestataire'],
+                                        visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)},
+                                    {label: 'Parametrage Mail', icon: '', routerLink: ['prestation/tierPayant/parametrage-mail'],
                                         visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)}
                                 ]
                             },
