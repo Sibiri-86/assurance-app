@@ -108,6 +108,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
   beneficiaireSelected : string = '';
   numeroAdherent : number;
   choose: string = '';
+  isInValidateDate: boolean = false;
 
   constructor( 
           private store: Store<AppState>,
@@ -446,7 +447,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           }
 
           this.ordreReglementList = this.ordreReglementList.filter(notIn => notIn.id != ordrePrefinencement.id);
-          this.rechercherPrefinancementByPeriode();
         }
     
     
@@ -495,7 +495,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
               });
             }
 
-
+            this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+            this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+            this.searByOdreReglementPayeByPeriodeAndDevalider();
             
         }
 
@@ -573,6 +575,9 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                         this.isEditing = false;
                         this.rowIndex = null;
                         this.getSucessInfo();
+                        this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
+                        this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
+                        this.searByOdreReglementPayeByPeriodeAndDevalider();
                         // this.getRefreshfunctions();
                       }
                     }
@@ -581,6 +586,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   }
                 );
           }
+          
       
         }
 
@@ -723,6 +729,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                 this.prefinencementService.getOrdreReglementPayeAndDevalider(dateD, dateF)
                 .subscribe((response: any) => {
                   this.ordreReglementListDevalider = response;
+
                 }, error => {
                   console.error('Erreur lors de la récupération des données', error);
                 });
@@ -753,7 +760,7 @@ export class OrdrePaimentInstanceComponent implements OnInit {
                   this.isOrdreReglementListByCheque = false;
                   this.isOrdreReglementListNotTakedCheque = false;
                   this.isByCheque = true;
-                  
+
                   this.searByOdreReglementPrefincementPayeByPeriode();
                   this.searByOdreReglementPayeByPeriodeAndByTakeCheque();
                   this.searByOdreReglementPayeByPeriodeAndByNotTakeCheque();
@@ -838,7 +845,6 @@ export class OrdrePaimentInstanceComponent implements OnInit {
       this.beneficiaireSelected = beneficiaire.libelle;
       this.numeroAdherent = beneficiaire.numero;
     }
-    
       
       onExportAllOrdre(){
         this.ordreReglementListBeneficiaire = [];
@@ -1048,4 +1054,37 @@ export class OrdrePaimentInstanceComponent implements OnInit {
     }
     
 
+
+      onCompareDate(ordreReglement: OrdreReglement){
+    
+          const selectedDate = ordreReglement.datePaiement;
+          const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+          const todayDate = new Date();
+          const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+          if(todayDateFormate >= selectedDateFormate){
+            this.isInValidateDate = false;
+          }
+          if(todayDateFormate < selectedDateFormate){
+            this.isInValidateDate = true;
+          }
+    
+    
+        }
+
+        onCompareDateCheque(ordre: OrdreReglement){
+    
+          const selectedDate = ordre.datePriseCheque;
+          const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+          const todayDate = new Date();
+          const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+          if(todayDateFormate >= selectedDateFormate){
+            this.isInValidateDate = false;
+          }
+          if(todayDateFormate < selectedDateFormate){
+            this.isInValidateDate = true;
+          }
+
+        }
 }

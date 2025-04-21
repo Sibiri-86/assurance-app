@@ -88,6 +88,7 @@ export class PaiementFactureComponent implements OnInit {
   sticker: string = '';
   stickerConfirmation: string = '';
   isStickerConfimartion: boolean = null;
+  isInValidateDate: boolean = false;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -287,6 +288,25 @@ export class PaiementFactureComponent implements OnInit {
           this.journaux = res.journauxList;
         }
       );
+    }
+
+
+    onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+      console.log(ordreReglementTierPayant);
+      const selectedDate = ordreReglementTierPayant.datePaiement;
+      const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+      const todayDate = new Date();
+      const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+      if(todayDateFormate >= selectedDateFormate){
+        this.isInValidateDate = false;
+      }
+      if(todayDateFormate < selectedDateFormate){
+        this.isInValidateDate = true;
+      }
+
+
     }
 
 

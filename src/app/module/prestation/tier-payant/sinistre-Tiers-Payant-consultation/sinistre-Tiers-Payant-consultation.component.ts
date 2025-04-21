@@ -156,9 +156,15 @@ createItem(): FormGroup {
     this.prestationForm.disable();
   }
 
-  imprimer(pref: SinistreTierPayant) {
+  imprimer1(pref: SinistreTierPayant) {
     this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
     this.report.sinistreTierPayantDTO = pref;
+    this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
+  }
+
+  imprimer(pref: any) {
+    this.report.typeReporting = TypeReport.TIERPAYANT_FICHE_DETAIL_REMBOURSEMENT;
+    this.report.ordreReglementDto = pref;
     this.store.dispatch(featureActionTierPayant.FetchReportTierPayant(this.report));
   }
 

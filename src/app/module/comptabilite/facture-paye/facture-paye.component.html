@@ -142,7 +142,7 @@
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th *ngIf="isEditing" pSortableColumn="datePriseCheque">Date chèque</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th pSortableColumn="isTakeCheque">Chèque encaissé</th>
                         
                     </tr>
                 </ng-template>
@@ -162,13 +162,16 @@
                         <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title" style="min-width:200px">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
                         <td *ngIf="isEditing && ri === rowIndex">
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
-                                La date de paiement doit être antérieure à celle de prise de chèque
+                                La date de paiement doit être antérieure à celle d'encaissement de chèque
                             </span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
+
                             <input
                                 [disabled]="ordre.isTakeCheque"
                                 pInputText
                                 type="date"
-                                [(ngModel)]="ordre.datePriseCheque"/>
+                                [(ngModel)]="ordre.datePriseCheque"
+                                (blur)="onCompareDateCheque(ordre)"/>
 
                         </td>
 
@@ -178,7 +181,7 @@
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
-                                [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
+                                [disabled]="!ordre.datePriseCheque || isInValidateDate === true || ordre.datePriseCheque < ordre.datePaiement"
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-check" 
@@ -279,7 +282,7 @@
                         <th pSortableColumn="montantPaye">Montant</th>
                         <th pSortableColumn="compte">Compte</th>
                         <th pSortableColumn="numeroCheque">N° Chèque</th>
-                        <th pSortableColumn="isTakeCheque">Chèque pris</th>
+                        <th pSortableColumn="isTakeCheque">Chèque encaissé</th>
                         <th pSortableColumn="datePriseCheque">Date chèque</th>
                         <th>Actions</th>
                         
@@ -432,13 +435,16 @@
                         <td *ngIf="isEditing && ri !== rowIndex"><span class="p-column-title" style="min-width:200px">{{ordre?.datePriseCheque | formatTableValue : 'date'}}</span></td>
                         <td *ngIf="isEditing && ri === rowIndex">
                             <span class="dangerColor" *ngIf="ordre.datePriseCheque < ordre.datePaiement">
-                                La date de paiement doit être antérieure à celle de prise de chèque
+                                La date de paiement doit être antérieure à celle d'encaissement de chèque
                             </span>
+                            <span class="textDanger" *ngIf="isInValidateDate">La date d'encaissement de chèque doit être antérieure ou égale à celle du jour</span>
                             <input
                                 [disabled]="ordre.isTakeCheque"
                                 pInputText
                                 type="date"
-                                [(ngModel)]="ordre.datePriseCheque"/>
+                                [(ngModel)]="ordre.datePriseCheque"
+                                (blur)="onCompareDateCheque(ordre)"
+                                />
 
                         </td>
 
@@ -448,7 +454,7 @@
                                 <button 
                                 (click)="onSaveOrdreReglementTakeCheque(ordre)"
                                 pButton 
-                                [disabled]="!ordre.datePriseCheque || ordre.datePriseCheque < ordre.datePaiement"
+                                [disabled]="!ordre.datePriseCheque || isInValidateDate === true || ordre.datePriseCheque < ordre.datePaiement"
                                 pRipple 
                                 type="button" 
                                 icon="pi pi-check" 
@@ -755,10 +761,11 @@
                                 <label for="datePaiement" class="font-bold">Date paiement
                                     <span class="required" style="color: red;">*</span>
                                 </label>
+                                <span class="textDanger" *ngIf="isInValidateDate">La date de paiement ne doit être antérieure ou égale à celle du jour</span>
                                 <input id="datePaiement" type="date"
                                     class="p-inputtext  p-mb-4 p-fluid"
                                     [(ngModel)]="ordreReglementTierPayant.datePaiement"
-                                    name="datePaiement" pInputText>
+                                    name="datePaiement" pInputText (blur)="onCompareDate(ordreReglementTierPayant)">
                             </div>
                         </div>
                     </div>
@@ -870,6 +877,7 @@
                      !ordreReglementTierPayant.compte || 
                      !ordreReglementTierPayant.compteTiers ||
                        !ordreReglementTierPayant.datePaiement ||
+                       isInValidateDate === true ||
                         !ordreReglementTierPayant.montantPaye" 
                     class="p-button-success">
                 </button>   
@@ -894,8 +902,8 @@
                     <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
 
                             <span class="infoColor" *ngIf="isAllExport">L'export se fera sur tous les ordres payés</span>
-                            <span class="successGrayColor" *ngIf="isTackedChequeExport">L'export se fera sur les ordres payés avec prise de chèque</span>
-                            <span class="warningColor" *ngIf="isWithoutTakedChequeExport">L'export se fera sur les ordres payés sans prise de chèque</span>
+                            <span class="successGrayColor" *ngIf="isTackedChequeExport">L'export se fera sur les ordres payés avec encaissement de chèque</span>
+                            <span class="warningColor" *ngIf="isWithoutTakedChequeExport">L'export se fera sur les ordres payés sans encaissement de chèque</span>
                             <span class="dangerColor" *ngIf="isDevalideChequeExport">L'export se fera sur les ordres dévalidés</span>
 
                         <!-- Groupe des boutons -->

@@ -92,6 +92,7 @@ export class FacturePayeComponent implements OnInit {
     isAllExport = false;
     isTackedChequeExport = false;
     isDevalideChequeExport = false;
+    isInValidateDate: boolean = false;
     messageToDisplay: string = '';
     prestataireSelected: string = '';
     ordreReglementListPrestataire: CustumPrestatire[] = [];
@@ -830,6 +831,39 @@ export class FacturePayeComponent implements OnInit {
           }
         );
       
+    }
+
+    onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
+
+      const selectedDate = ordreReglementTierPayant.datePaiement;
+      const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+      const todayDate = new Date();
+      const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+      if(todayDateFormate >= selectedDateFormate){
+        this.isInValidateDate = false;
+      }
+      if(todayDateFormate < selectedDateFormate){
+        this.isInValidateDate = true;
+      }
+
+
+    }
+
+    onCompareDateCheque(ordre: OrdreReglementTierPayant){
+    
+      const selectedDate = ordre.datePriseCheque;
+      const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+      const todayDate = new Date();
+      const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+
+      if(todayDateFormate >= selectedDateFormate){
+        this.isInValidateDate = false;
+      }
+      if(todayDateFormate < selectedDateFormate){
+        this.isInValidateDate = true;
+      }
+
     }
 
       
