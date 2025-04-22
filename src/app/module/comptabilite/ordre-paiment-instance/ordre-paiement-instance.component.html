@@ -829,7 +829,7 @@
 
                                 <div class="p-field">
                                     
-                                    <label for="numeroCheque" class="font-bold">Numéro Chèque</label>
+                                    <label for="numeroCheque" class="font-bold">Numéro Chèque <span class="required" style="color: red;">*</span></label>
                                     
                                 <div *ngIf="existe !== null" class="mt-3">
                                     <p *ngIf="existe" class="textDanger">❌ Le numéro de chèque existe déjà.</p>
@@ -864,7 +864,7 @@
                                 
 
                                 <div class="p-field">
-                                    <label for="montant" class="font-bold">Montant</label>
+                                    <label for="montant" class="font-bold">Montant <span class="required" style="color: red;">*</span></label>
                                     <input id="montant" type="text" class="p-inputtext p-mt-1 p-mb-1 p-fluid" 
                                         [(ngModel)]="ordrePrefinencement.montantPaye" 
                                         name="montantPaye" pInputText disabled>
