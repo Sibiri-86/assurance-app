@@ -57,7 +57,7 @@ constructor(private http: HttpClient) {
         check, {responseType: 'arraybuffer'});
       }
 
-      exportDonneePrestations(dateDebut: string, dateFin: string, garantId:string, policeId:string) {
+      exportDonneePrestations(dateDebut: string, dateFin: string, garantId:string, policeId:string, adresseMail:string) {
     
         const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
         const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
@@ -66,7 +66,8 @@ constructor(private http: HttpClient) {
           .set('dateDebut', formattedDateDebut)
           .set('dateFin', formattedDateFin)
           .set('garantId', garantId)
-          .set('policeId', policeId);
+          .set('policeId', policeId)
+          .set('adresseMail', adresseMail);
     
         return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_PRESTATIONS), { 
           params,
@@ -74,7 +75,7 @@ constructor(private http: HttpClient) {
         });
       }
 
-      exportDonneePrestationsAvecDateSoins(dateDebut: string, dateFin: string, garantId:string, policeId:string) {
+      exportDonneePrestationsAvecDateSoins(dateDebut: string, dateFin: string, garantId:string, policeId:string, adresseMail:string) {
     
         const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
         const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
@@ -83,7 +84,8 @@ constructor(private http: HttpClient) {
           .set('dateDebut', formattedDateDebut)
           .set('dateFin', formattedDateFin)
           .set('garantId', garantId)
-          .set('policeId', policeId);
+          .set('policeId', policeId)
+          .set('adresseMail', adresseMail);
     
         return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_PRESTATIONS_AVEC_DATE_SOINS), { 
           params,

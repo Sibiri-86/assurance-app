@@ -276,7 +276,7 @@ import { ParametrageMailComponent } from './module/prestation/tier-payant/parame
                       data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
                     {path: 'prestation/tierPayant/parametrage-mail', component: ParametrageMailComponent,
                       canActivate: [AuthGuard],
-                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide', 'parametrage_mail']}},
                    
                     {path: 'prestation/tierPayant/consultation-tiers-payant', component: ConsulationOrdreTierPayantComponent,
                     canActivate: [AuthGuard],

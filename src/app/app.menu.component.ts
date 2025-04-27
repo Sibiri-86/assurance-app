@@ -82,7 +82,7 @@ export class AppMenuComponent implements OnInit {
                                     {label: 'Courrier Prestataire', icon: '', routerLink: ['prestation/tierPayant/courrier-prestataire'],
                                         visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)},
                                     {label: 'Parametrage Mail', icon: '', routerLink: ['prestation/tierPayant/parametrage-mail'],
-                                        visible: this.keycloak.isUserInRole(Function.sm_tiers_payant)}
+                                        visible: this.keycloak.isUserInRole(Function.parametrage_mail)}
                                 ]
                             },
                             {
