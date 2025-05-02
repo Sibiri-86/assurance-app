@@ -753,5 +753,11 @@ export class Endpoints {
         mock: `assets/mock/parametrage/alerte.mock.json`
     };
 
+    static readonly REPORTING_EXPORT_DONNEES_PRESTATIONS_AVEC_DATE_SAISIE = {
+        prod: `${SERVICE_PREFIX}/reporting/production/export-donnees-prestations-avec-date-saisie`,
+        mock: `assets/mock/reporting/production.mock.json`
+    };
+
+
 
 }

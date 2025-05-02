@@ -132,6 +132,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   garantId:Garant = {};
   policeId:Police = {};
   mailSurvenance: any;
+  reporting_by_date_saisie = this.keycloak.isUserInRole(Function.reporting_by_date_saisie);
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -573,7 +574,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
     .subscribe(response => {
       this.addMessage('success', 'Extraction de consommations',
-        'Un mail vous sera envoyé une fois l\'extraction terminée sur l\'adresse: '.concat(this.mailSurvenance));
+        'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
         this.displayDepensesFamilleDateSoins = false;
         /** Vider tous les champs */
         this.dateDebut = null;
@@ -603,7 +604,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.depenseService.exportDonneePrestationsAvecDateSoins(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
       .subscribe(response => {
         this.addMessage('success', 'Extraction de consommations',
-          'Un mail vous sera envoyé une fois l\'extraction terminée sur l\'adresse: '.concat(this.mailSurvenance));
+          'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
           this.displayDepensesFamilleDateSoins = false;
           /** Vider tous les champs */
           this.dateDebut = null;
@@ -629,6 +630,35 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
       },/** error => {
         console.error("Erreur lors de l'exportation :", error);
       }*/
+    );
+  }
+
+  exportDonneesPrestationsAvecDateDeSaisie() {
+    if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    }
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    console.log("this.garantId =====> ", this.garantId.id);
+    console.log("this.policeId =====> ", this.policeId.id);
+    console.log("this.dateDebut =====> ", this.dateDebut);
+    console.log("this.dateFin =====> ", this.dateFin);
+    console.log("this.mailSurvenance =====> ", this.mailSurvenance);
+
+    this.depenseService.exportDonneesPrestationsAvecDateDeSaisie(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
+      .subscribe(response => {
+        this.addMessage('success', 'Extraction de consommations',
+          'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
+          this.displayDepensesFamilleDateSoins = false;
+          /** Vider tous les champs */
+          this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+      },
     );
   }
 

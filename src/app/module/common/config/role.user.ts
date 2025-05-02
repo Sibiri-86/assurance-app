@@ -58,7 +58,8 @@ export const Function = {
     sm_ordonnance_medical: 'sm_ordonnance_medical',
     sm_finance_voir_detail_ordre: 'sm_finance_voir_detail_ordre',
     sm_finance_payer_ordreTiersPayant: 'sm_finance_payer_ordreTiersPayant',
-    parametrage_mail:'parametrage_mail'
+    parametrage_mail:'parametrage_mail',
+    reporting_by_date_saisie:'reporting_by_date_saisie'
 };
 
 export const UsersRoles = {
@@ -76,5 +77,5 @@ export const UsersRoles = {
     Function.sm_workflow_prefinancement_finance_devalider, Function.sm_workflow_prefinancement_direction_devalider, 
     Function.VUE_ASSURE, Function.sm_portail, Function.sm_reporting_AG_DGA, Function.vue_maj_assuere, Function.vue_maj_prestataire, Function.vue_maj_paiement,
     Function.sm_export_depense_excel, Function.sm_medical_pretataire, Function.sm_medical_tout, Function.sm_devalider_ordre,Function.sm_ordonnance_medical, Function.sm_finance_voir_detail_ordre,
-    Function.sm_finance_payer_ordreTiersPayant, Function.parametrage_mail]
+    Function.sm_finance_payer_ordreTiersPayant, Function.parametrage_mail, Function.reporting_by_date_saisie]
 };

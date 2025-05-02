@@ -376,8 +376,8 @@
                     </div>
                 </ng-template>
             </p-tabPanel>
-            <!-- <p-tabPanel header="DATE DE SAISIE"leftIcon="pi pi-file-excel" tooltip="EXTRACTION PAR DATE DE SAISIE" [style]="{'width': '100%'}">
-                <span style="font-size: 15px; font-weight: bold; color: blue;">TOUS LES SINISTRES SAISIES DANS LA PERIODE CONSIDEREE (CAS DU GARANT GA)</span>   
+            <p-tabPanel *ngIf="reporting_by_date_saisie" header="DATE DE SAISIE"leftIcon="pi pi-file-excel" tooltip="EXTRACTION PAR DATE DE SAISIE" [style]="{'width': '100%'}">
+                <!-- <span style="font-size: 15px; font-weight: bold; color: blue;">TOUS LES SINISTRES SAISIES DANS LA PERIODE CONSIDEREE (CAS DU GARANT GA)</span>    -->
                 <ng-template pTemplate="content">
                     <div class="card">
                         <form>
@@ -433,14 +433,14 @@
                                         <button pButton pRipple label="Quitter" type="button" (click)="closeDialog1()" icon="pi pi-times"  class="p-button-danger p-mr-2 p-mb-2" ></button>
                                     </div>
                                     <div>
-                                        <button pButton pRipple *ngIf="garantId.id != null"   (click)="exportExcelDonneePrestationsAvecDateSoins()"  label="Exporter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
+                                        <button pButton pRipple *ngIf="garantId.id != null"   (click)="exportDonneesPrestationsAvecDateDeSaisie()"  label="Exporter" icon="pi pi-check" type="button" class="p-button-success p-mr-2 p-mb-2" ></button>
                                     </div>
                                 </div>
                             
                         </form>
                     </div>
                 </ng-template>
-            </p-tabPanel> -->
+            </p-tabPanel>
             <!-- <p-tabPanel header="DATE DE PAIEMENT"leftIcon="pi pi-file-excel" tooltip="EXTRACTION PAR DATE DE PAIEMENT" [style]="{'width': '100%'}">
                 <span style="font-size: 15px; font-weight: bold; color: blue;">TOUS LES SINISTRES DONT LES ORDRES ONT ETE PAYES DANS LA PERIODE CONSIDEREE</span>   
                 <ng-template pTemplate="content">
