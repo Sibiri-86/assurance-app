@@ -293,16 +293,15 @@ export class PaiementFactureComponent implements OnInit {
 
     onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
 
-      console.log(ordreReglementTierPayant);
       const selectedDate = ordreReglementTierPayant.datePaiement;
       const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
       const todayDate = new Date();
       const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-      if(todayDateFormate >= selectedDateFormate){
+      if(todayDateFormate <= selectedDateFormate){
         this.isInValidateDate = false;
       }
-      if(todayDateFormate < selectedDateFormate){
+      if(todayDateFormate > selectedDateFormate){
         this.isInValidateDate = true;
       }
 

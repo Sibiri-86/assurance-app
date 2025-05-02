@@ -1062,7 +1062,6 @@ export class AvenantIncorporationComponent implements OnInit{
     });
   }
 
-
   onGetNumero(numero?: number){
     this.numero = numero;
     this.onSearchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(this.exoId, this.groupeId, numero,this.nom, this.prenom);
@@ -1080,13 +1079,12 @@ onGetPrenom(prenom?: string){
   
 }
 
-
 searchNumeroWithDebounceTime(){
     this.adherentPrincipaux2 = [];
     const localPage = 0;
     this.numeroToSearch
         .pipe(
-          debounceTime(2000), // Attendre 2000ms après la dernière frappe.
+          debounceTime(2000),
           switchMap((numeroToSearch: any) =>
 
             this.adherentService.searchAllAdherentByExerciceAndGroupeAndMultipleFilterAdherentDTOByPage(
