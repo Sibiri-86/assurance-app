@@ -111,14 +111,20 @@ constructor(private http: HttpClient) {
         });
       }
 
-      /* $getReportConsommationWaveExcel(dateD: string, dateF: string): Observable<Byte> {
-        // @FIXME: get request
-        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.REPORTING_PRODUCTION)}/consommation-wave/report-excel`,{params :
-            this.createRequestOption({dateD, dateF})}).pipe(
-              map((response: arraybuffer) => response),
-              catchError(this.handleError())
-          );
-        } */
+      findOrdreReglementJournanlier(dateDebut: string, dateFin: string) {
+    
+        const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
+        const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
+      
+        const params = new HttpParams()
+          .set('dateDebut', formattedDateDebut)
+          .set('dateFin', formattedDateFin)
+    
+        return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_ORDRE_JOURNALIER), { 
+          params,
+          responseType: 'blob'
+        });
+      }
 
    
     private createRequestOption = (req?: any): HttpParams => {

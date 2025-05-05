@@ -758,6 +758,11 @@ export class Endpoints {
         mock: `assets/mock/reporting/production.mock.json`
     };
 
+    static readonly REPORTING_EXPORT_DONNEES_ORDRE_JOURNALIER = {
+        prod: `${SERVICE_PREFIX}/reporting/production/export-by-ordreReglement-journanlier`,
+        mock: `assets/mock/reporting/production.mock.json`
+    };
+
 
 
 }

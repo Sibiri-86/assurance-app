@@ -36,6 +36,7 @@ import * as featureActionBanque from '../../../store/parametrage/Banques/actions
 import { Banque } from 'src/app/store/parametrage/Banques/model';
 import { formatDate } from '@angular/common';
 import { PrefinancementService } from 'src/app/store/prestation/prefinancement/service';
+import { DepenseFamilleService } from 'src/app/store/reporting/depense-famille/service';
 
 @Component({
   selector: 'app-remboursement-effectue',
@@ -54,15 +55,16 @@ export class RemboursementEffectueComponent implements OnInit {
   ordreReglementPaiement: OrdreReglement;
   banqueList$: Observable<Array<Banque>>;
   banqueList: Array<Banque>;
-  dateDebut: Date;
-  dateFin: Date;
+  dateDebut: any;
+  dateFin: any;
   sinistres: Array<Prefinancement> = [];
   prestations: Array<Prestation>;
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
                private formBuilder: FormBuilder,  private messageService: MessageService,  private breadcrumbService: BreadcrumbService,
-              private prefinancementService: PrefinancementService,) {
+              private prefinancementService: PrefinancementService,
+              private depenseService: DepenseFamilleService,) {
      this.breadcrumbService.setItems([{ label: 'Remboursement effectué' }]);
 }
 
@@ -145,4 +147,20 @@ addMessage(severite: string, resume: string, detaile: string): void {
     //this.prefinancement = ordre.prefinancement;
   }
 
+  findOrdreReglementJournanlier() {
+    console.log('*******this.dateDebut.toLocaleDateString()*********', this.dateDebut.toString());
+    console.log('*******this.dateFin.toLocaleDateString()*********', this.dateFin.toString());
+    this.depenseService.findOrdreReglementJournanlier(this.dateDebut, this.dateFin)
+      .subscribe(response => {  
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Paiements du_${this.dateDebut.toString()}_au_${this.dateFin.toString()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      },
+    );
+  }
 }
