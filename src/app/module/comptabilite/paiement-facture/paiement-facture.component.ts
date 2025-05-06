@@ -89,6 +89,7 @@ export class PaiementFactureComponent implements OnInit {
   stickerConfirmation: string = '';
   isStickerConfimartion: boolean = null;
   isInValidateDate: boolean = false;
+  operation: any;
 
   constructor(private store: Store<AppState>,
               private confirmationService: ConfirmationService,
@@ -264,10 +265,10 @@ export class PaiementFactureComponent implements OnInit {
     }
 
     onFindCompteTiersByPrestataire(prestataireLibelle: string){
-
         this.compteTiersService.findCompteTiersByPrestataire(prestataireLibelle.trim()).subscribe(
           res => {
             this.comptesTiersPrestataire = res;
+
             this.comptesTiersPrestataireContact = res.compteTiers + ' - ' + res.intitule;
           }
         );
@@ -434,7 +435,9 @@ export class PaiementFactureComponent implements OnInit {
                   this.stickerConfirmation = '';
                   this.isStickerConfimartion = null;
 
-                  this.getSucessInfo();
+                  this.onGetOperation(ordreReglementTierPayant.id);
+
+                  // this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
                 }
@@ -451,6 +454,18 @@ export class PaiementFactureComponent implements OnInit {
 
     this.onSerByOdreReglementByPeriode();
 
+  }
+
+  onGetOperation(tierPayantId : string){
+    this.compteTiersService.getOperation(tierPayantId).subscribe(
+
+      res => {
+       // this.operation = res;
+        this.getSucessInfoWithParam(res.numPiece);
+
+      }
+      
+    );
   }
 
   onCancelPaiementOrdreReglement(): void{
@@ -472,6 +487,9 @@ export class PaiementFactureComponent implements OnInit {
 
   getSucessInfo(): void {
     this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
+  }
+  getSucessInfoWithParam(detail: string): void {
+    this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: ` Numéro de pièce :  ${detail}` });
   }
   getCancelInfo(): void {
     this.messageService.add({severity: 'info', summary: 'PAIEMENT TIERS PAYANT', detail: 'Paiement annulé!'});
