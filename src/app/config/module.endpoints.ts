@@ -530,10 +530,17 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-with-compte-prestataire`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
+
         static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE = {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
+
+        static readonly COMPTABILITE_OPERATION_GET_GENERATED_OPERATION = {
+            prod: `${SERVICE_PREFIX}/comptabilite//operation/liste-get-operation`,
+            mock: `assets/mock/comptabilite/compte.mock.json`
+        };
+
         static readonly COMPTABILITE_COMPTE_BY_PRESTATAIRE_BY_ID = {
             prod: `${SERVICE_PREFIX}/comptabilite/compte/find-compte-tiers-by-prestataire-by-id`,
             mock: `assets/mock/comptabilite/compte.mock.json`
