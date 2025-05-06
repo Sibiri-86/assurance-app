@@ -763,6 +763,11 @@ export class Endpoints {
         mock: `assets/mock/reporting/production.mock.json`
     };
 
+    static readonly PAIEMENT_VALIDE_BY_TYPEPAIEMENT = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement/ordreReglement/paiement-valide-by-typePaiement`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
+
 
 
 }

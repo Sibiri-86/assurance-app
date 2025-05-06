@@ -19,12 +19,39 @@
                             <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
                         </div>
 
+                        <!-- <div class="p-field">
+                            <button pButton pRipple (click)="findOrdreReglementJournanlier()"  label="Exporter" icon="pi pi-file-excel" type="button" class="p-button-help p-mr-2 p-mb-2" ></button>
+                        </div>      -->              
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <div class="p-formgroup-inline">
+                        <!-- <div class="p-field">
+                            <label for="matricule" class="p-sr-only"></label>
+                            <p-calendar style="min-width:300px" [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateDebut" placeholder="date debut"></p-calendar>
+                        </div>
+                        
+                        <div class="p-field">
+                            <label for="dateSoins" class="p-sr-only"></label>
+                            <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy" [(ngModel)]="dateFin" placeholder="date fin"></p-calendar>
+                        </div>
+                        <div class="p-field">
+                            <button pButton pRipple type="button" (click)="rechercherPrefinancementByPeriode()" label="Rechercher"></button>
+                        </div> -->
+                        <div class="p-field">
+                            <label for="typePaiement"><span class="required" style="font-weight: bold;">Type de Paiement:</span></label>
+                            <p-dropdown inputId="typePaiement" [filter]="true"
+                                                    showClear="true" [options]="typePaiement2"
+                                                    [(ngModel)]="typePaiement"
+                                                     [autoDisplayFirst]="false" (onChange)="changeType(typePaiement)"></p-dropdown>
+                        </div>
+
                         <div class="p-field">
                             <button pButton pRipple (click)="findOrdreReglementJournanlier()"  label="Exporter" icon="pi pi-file-excel" type="button" class="p-button-help p-mr-2 p-mb-2" ></button>
                         </div>                   
                     </div>
-        </ng-template>
-        </p-toolbar>
+                </ng-template>
+            </p-toolbar>
             <p-table #dt [value]="ordreReglementList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['numero','numeroBordereau','police.nom', 'police.numero',
             'assurePrinc.nom', 'assurePrinc.prenom', 'typePaiement', 'montantPaye']"
                      [rowHover]="true" dataKey="id"

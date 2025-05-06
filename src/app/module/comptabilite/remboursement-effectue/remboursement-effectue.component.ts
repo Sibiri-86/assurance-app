@@ -23,7 +23,7 @@ import { Medecin } from 'src/app/store/parametrage/medecin/model';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Adherent } from 'src/app/store/contrat/adherent/model';
 
-import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation } from 'src/app/store/prestation/prefinancement/model';
+import { OrdreReglement, OrdreReglementList, Prefinancement, Prestation, TypePaiement } from 'src/app/store/prestation/prefinancement/model';
 
 import { TypeEtatOrdreReglement } from 'src/app/module/common/models/emum.etat.ordre-reglement';
 import { printPdfFile } from 'src/app/module/util/common-util';
@@ -47,6 +47,7 @@ export class RemboursementEffectueComponent implements OnInit {
   destroy$ = new Subject<boolean>();
   ordreReglementList: Array<OrdreReglement>;
   ordreReglementList$: Observable<Array<OrdreReglement>>;
+  ordreReglementLists: Array<OrdreReglement>;
   cols: any[];
   displaySinistre = false;
   prefinancement: Array<Prefinancement>;
@@ -59,6 +60,8 @@ export class RemboursementEffectueComponent implements OnInit {
   dateFin: any;
   sinistres: Array<Prefinancement> = [];
   prestations: Array<Prestation>;
+  typePaiement2 = Object.keys(TypePaiement).map(key => ({ label: TypePaiement[key], value: key }));
+  typePaiement: string = 'nonDefini';
 
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -77,6 +80,7 @@ rechercherPrefinancementByPeriode() {
     this.store.dispatch(featureActionPrefinancement.loadOrdrePaiementValide({dateD: formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'),
     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
   }
+  this.typePaiement = null;
   
 }
 
@@ -150,7 +154,8 @@ addMessage(severite: string, resume: string, detaile: string): void {
   findOrdreReglementJournanlier() {
     console.log('*******this.dateDebut.toLocaleDateString()*********', this.dateDebut.toString());
     console.log('*******this.dateFin.toLocaleDateString()*********', this.dateFin.toString());
-    this.depenseService.findOrdreReglementJournanlier(this.dateDebut, this.dateFin)
+    console.log('this.typePaiement*********', this.typePaiement);
+    this.depenseService.findOrdreReglementJournanlier(this.dateDebut, this.dateFin, this.typePaiement)
       .subscribe(response => {  
         const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
@@ -160,6 +165,26 @@ addMessage(severite: string, resume: string, detaile: string): void {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+      },
+    );
+  }
+
+  /* findValideByTypePaiement() {
+    console.log('*******this.dateDebut.toLocaleDateString()*********', this.dateDebut.toString());
+    console.log('*******this.dateFin.toLocaleDateString()*********', this.dateFin.toString());
+    this.depenseService.findValideByTypePaiement(this.dateDebut, this.dateFin, this.typePaiement)
+      .subscribe(response => {  
+        this.ordreReglementLists = response;
+      },
+    );
+  } */
+
+  changeType(typePaiement: string) {
+    console.log('*******this.dateDebut.toLocaleDateString()*********', this.dateDebut.toString());
+    console.log('*******this.dateFin.toLocaleDateString()*********', this.dateFin.toString());
+    this.depenseService.findValideByTypePaiement(formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr'), formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr'), typePaiement)
+      .subscribe(response => {  
+        this.ordreReglementList = response;
       },
     );
   }

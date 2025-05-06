@@ -111,7 +111,7 @@ constructor(private http: HttpClient) {
         });
       }
 
-      findOrdreReglementJournanlier(dateDebut: string, dateFin: string) {
+      findOrdreReglementJournanlier(dateDebut: string, dateFin: string, typePaiement: string) {
     
         const formattedDateDebut = new Date(dateDebut).toISOString().split('T')[0]; // Convertit en YYYY-MM-DD
         const formattedDateFin = new Date(dateFin).toISOString().split('T')[0];
@@ -119,12 +119,38 @@ constructor(private http: HttpClient) {
         const params = new HttpParams()
           .set('dateDebut', formattedDateDebut)
           .set('dateFin', formattedDateFin)
+          .set('typePaiement', typePaiement)
     
         return this.http.get(GlobalConfig.getEndpoint(Endpoints.REPORTING_EXPORT_DONNEES_ORDRE_JOURNALIER), { 
           params,
           responseType: 'blob'
         });
       }
+
+      findValideByTypePaiement(dateD: string, dateF: string, typePaiement: string ):Observable< Array<OrdreReglement>>  {
+        return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.PAIEMENT_VALIDE_BY_TYPEPAIEMENT)}`, {params :
+          this.createRequestOption({dateD, dateF, typePaiement})}).pipe(
+          map((response: Array<OrdreReglement>) => response),
+          catchError(this.handleError())
+        );
+      }
+
+      /* $getOrdrePaiementValide(dateD: string, dateF: string): Observable<OrdreReglementList> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/paiement-valide`, {params :
+          this.createRequestOption({dateD, dateF})}).pipe(
+            map((response: OrdreReglementList) => response),
+            catchError(this.handleError())
+        );
+      } */
+
+      /* $getOrdreReglementValideAndWorkFlowDirection(): Observable<OrdreReglementListDirection> {
+        // @FIXME: get request
+        return this.http.get( `${GlobalConfig.getEndpoint(Endpoints.PRESTATION_PREFINANCEMENT)}/ordreReglement/valide/direction`).pipe(
+            map((response: OrdreReglementListDirection) => response),
+            catchError(this.handleError())
+        );
+      } */
 
    
     private createRequestOption = (req?: any): HttpParams => {
