@@ -1,0 +1,604 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import {
+  ControlContainer,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormArray
+} from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { loadSousActe } from 'src/app/store/parametrage/sous-acte/actions';
+import * as sousActeSelector from 'src/app/store/parametrage/sous-acte/selector';
+import { takeUntil } from 'rxjs/operators';
+import { SousActe } from 'src/app/store/parametrage/sous-acte/model';
+import { loadGarantie, loadGaranties, loadGarantiesMontant, loadGarantiesMontantDetail } from 'src/app/store/parametrage/garantie/actions';
+import * as garantieSelector from 'src/app/store/parametrage/garantie/selector';
+import { loadPrestataire} from 'src/app/store/parametrage/prestataire/actions';
+import * as prestataireSelector from 'src/app/store/parametrage/prestataire/selector';
+import { loadActe } from 'src/app/store/parametrage/acte/actions';
+import * as acteSelector from 'src/app/store/parametrage/acte/selector';
+import { Acte } from 'src/app/store/parametrage/acte/model';
+import { Garantie } from 'src/app/store/parametrage/garantie/model';
+import { MajPrestataireDto, Prestataire } from 'src/app/store/parametrage/prestataire/model';
+import { Medecin } from 'src/app/store/parametrage/medecin/model';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Status } from 'src/app/store/global-config/model';
+import { status } from 'src/app/store/global-config/selector';
+import { Pathologie } from 'src/app/store/parametrage/pathologie/model';
+import { ProduitPharmaceutique } from 'src/app/store/parametrage/produit-pharmaceutique/model';
+import { BreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { Convention } from 'src/app/store/medical/convention/model';
+import * as conventionSelector from 'src/app/store/medical/convention/selector';
+import * as conventionAction from 'src/app/store/medical/convention/actions';
+import { GarantieService } from 'src/app/store/parametrage/garantie/service';
+import { loadCommune } from 'src/app/store/parametrage/commune/actions';
+import * as communeSelector from "src/app/store/parametrage/commune/selector";
+import { Commune } from 'src/app/store/parametrage/commune/model';
+import { PrestataireService } from 'src/app/store/parametrage/prestataire/service';
+import { TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
+import { AlerteService } from 'src/app/store/parametrage/Alerte/service';
+import { formatDate } from '@angular/common';
+import { Alerte, AlerteAdresseMail } from 'src/app/store/parametrage/Alerte/model';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
+import { Garant } from 'src/app/store/parametrage/garant/model';
+import * as garantListSelector from '../../../../store/contrat/garant/selector';
+import * as featureActionGarant from '../../../../store/contrat/garant/actions';
+import * as featureActionPolice from '../../../../store/contrat/police/actions';
+import * as policeListSelector from '../../../../store/contrat/police/selector';
+import { Police } from 'src/app/store/contrat/police/model';
+
+
+
+
+@Component({
+  selector: 'app-parametrage-mail',
+  templateUrl: './parametrage-mail.component.html',
+  styleUrls: ['./parametrage-mail.component.scss']
+})
+export class ParametrageMailComponent implements OnInit, OnDestroy {
+  destroy$ = new Subject<boolean>();
+  sousActeList$: Observable<Array<SousActe>>;
+  sousActeList: Array<SousActe>;
+  sousActeListFilter: Array<SousActe>;
+  acteList$: Observable<Array<Acte>>;
+  acteList: Array<Acte>;
+  prestataireList$: Observable<Array<Prestataire>>;
+  prestataireList: Array<Prestataire>;
+  prestatairePrescripteur: Array<Prestataire>;
+  prestataireExecutant: Array<Prestataire>;
+  medecinList$: Observable<Array<Medecin>>;
+  medecinList: Array<Medecin>;
+  pathologieList$: Observable<Array<Pathologie>>;
+  pathologieList: Array<Pathologie>;
+  produitPharmaceutiqueList$: Observable<Array<ProduitPharmaceutique>>;
+  produitPharmaceutiqueList: Array<ProduitPharmaceutique>;
+  acteListFilter: Array<Acte>;
+  garanties: Array<Garantie>;
+  garantieListDetail: Array<Garantie>;
+  garantieList$: Observable<Array<Garantie>>;
+  garantieList1$: Observable<Array<Garantie>>;
+  conventionForm: FormGroup;
+  majPrestationForm: FormGroup;
+  cols: any[];
+  conventionList$: Observable<Array<Convention>>;
+  conventionList: Array<Convention>;
+  conventionListFilter: Array<Convention>;
+  displayFormConvention = false;
+  convention: Convention = {};
+  statusObject$: Observable<Status>;
+  displayActe = false;
+  displaySousActe = false;
+  displayEdit = false;
+  displayFormConventionUpdate = false;
+  private clonedSousActe: { [s: string]: SousActe; } = {};
+  sousActes: Array<SousActe>;
+  sousActeListFinal: SousActe[] = [];
+  sousA: SousActe = {};
+  conventionDetail: Convention = {};
+  displayFDetailConvention = false;
+  communeList$: Observable<Array<Commune>>;
+  communeList: Array<Commune>;
+  prestataires: Array<Prestataire>;
+  majPrestataireDto: MajPrestataireDto = {};
+  clonedProducts: { [s: string]: Prestataire; } = {};
+  prestataire: Prestataire = {};
+  prestataire2: Array<Prestataire>;
+  prestataireToSave: Array<Prestataire> = [];
+  isImport = 'NON';
+  response: string;
+  dateDebut: any;
+  dateFin: any;
+  alertes: Alerte[] = [];
+  garantList:Array<Garant> = [];
+  garantList$: Observable<Array<Garant>>;
+  garantId:Garant = {};
+  policeList:Array<Police> = [];
+  policeList$: Observable<Array<Police>>;
+  adresseMail: string;
+  selectedPolices: Police[] = [];
+  police:{};
+  alerteAdresseMail: AlerteAdresseMail = {};
+  alerteAdresseMails: AlerteAdresseMail[] = [];
+
+
+  constructor( private store: Store<AppState>,
+               private confirmation: ConfirmationService,
+               private formBuilder: FormBuilder,
+               private messageService: MessageService,
+               private garantieService: GarantieService,
+               private breadcrumbService: BreadcrumbService,
+               private prestataireService: PrestataireService,
+               private historiqueAvenantService: HistoriqueAvenantService, 
+              private alerteService: AlerteService, private adherentService: AdherentService) {
+     this.breadcrumbService.setItems([{ label: 'Gestion des alertes' }]);
+}
+
+  ngOnInit(): void {
+    this.conventionForm = this.formBuilder.group({
+      id: new FormControl(),
+      montant: new FormControl(''),
+      sousActe: new FormControl(),
+      acte: new FormControl(),
+      garantie: new FormControl(),
+      prestataire: new FormControl(),
+      dateEffet: new FormControl(null, Validators.required),
+      delai: new FormControl('', Validators.required),
+    });
+
+    this.majPrestationForm = this.formBuilder.group({
+      id: new FormControl(),
+      commune: new FormControl(''),
+      quartier: new FormControl(),
+      situationGeographique: new FormControl(),
+      prestataires: new FormControl(),
+    });
+
+    /* this.conventionList$ = this.store.pipe(select(conventionSelector.conventionList));
+    this.store.dispatch(conventionAction.loadConvention());
+    this.conventionList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.conventionList = value.slice();
+        this.conventionListFilter = this.conventionList;
+      }
+    });
+
+    this.prestataireList$ = this.store.pipe(select(prestataireSelector.prestataireList));
+    this.store.dispatch(loadPrestataire());
+    this.prestataireList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.prestataireList = value.slice();
+      }
+    });
+
+    this.sousActeList$ = this.store.pipe(select(sousActeSelector.sousacteList));
+    this.store.dispatch(loadSousActe());
+    this.sousActeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        console.log("===sous======",this.sousActeList);
+        this.sousActeList = value.slice();
+        this.sousActeListFilter = this.sousActeList;
+        //this.sousActeListFilter = this.sousActeList;
+      }
+    });
+
+    this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
+    this.store.dispatch(loadGaranties());
+    this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.garanties = value.slice();
+        console.log('=====garanties===============', this.garanties);
+        
+      }
+    });
+
+    this.acteList$ = this.store.pipe(select(acteSelector.acteList));
+    this.store.dispatch(loadActe());
+    this.acteList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.acteList = value.slice();
+        this.acteListFilter = this.acteList;
+        console.log('=======acteList=============', this.acteList);
+      }
+    });
+
+    this.communeList$ = this.store.pipe(select(communeSelector.communeList));
+    this.store.dispatch(loadCommune());
+    this.communeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.communeList = value.slice();
+        console.log("===============commune=============");
+        console.log(this.communeList);
+        console.log("===============commune=============");
+      }
+    }); */
+    this.garantList$ = this.store.pipe(select(garantListSelector.garantList));
+        this.store.dispatch(featureActionGarant.loadGarant());
+        this.garantList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+          if (value) {
+            this.garantList = value.slice();
+          }
+        });
+
+      this.policeList$ = this.store.pipe(select(policeListSelector.policeList));
+          this.policeList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+            if (value) {
+              this.policeList = value.slice();
+            }
+          });
+            this.loadPoliceByGarant();
+    this.dateDebut = new Date();
+    this.dateFin = new Date();
+    this.getAlertesByDate();
+    
+    this.statusObject$ = this.store.pipe(select(status));
+    this.checkStatus();
+  }
+
+
+
+  addConvention() {
+    this.displayFormConvention = true;
+    this.displayEdit = false;
+    this.conventionForm.reset();
+  }
+
+  annulerSaisie() {
+    this.closeDialog();
+    this.displaySousActe = false;
+    this.displayActe = false;
+  }
+
+  closeDialog(){
+    this.conventionForm.reset();
+    this.displayFormConvention = false;
+    this.displaySousActe = false;
+    this.displayActe = false;
+    this.displayEdit = false;
+  }
+
+  closeDialogAdd(){
+    this.adresseMail = null;
+    this.selectedPolices = [];
+    this.garantId.id = null; 
+    this.displayFormConvention = false;
+  }
+
+  onCreate(){
+    this.alerteAdresseMail.adresseMail = this.adresseMail;
+    this.alerteAdresseMail.policeId = this.selectedPolices;
+    
+    console.log('selectedPolices============ >',this.selectedPolices);
+    console.log('alerteAdresseMail============ >',this.alerteAdresseMail);
+    this.alerteService.createAlerteAdresseMail( this.alerteAdresseMail).subscribe((value) => {
+        this.messageService.add({severity:'success', summary: 'Success', detail:'enregistrement éffectuer avec succès'});
+    });
+
+    this.fetchAlerteAdresseMail();
+
+  }
+  changeGarantie($event) {
+    this.acteListFilter = this.acteList.filter(ele => ele.idTypeGarantie === $event.value.id);
+    this.displayActe = true;
+  }
+
+  selectActe($event) {
+    this.sousActeListFilter = this.sousActeList.filter(el => el.idTypeActe === $event.value.id);
+    this.displaySousActe = true;
+  }
+
+  selectPrestataire($event) {
+    console.log($event.value);
+    this.conventionListFilter = this.conventionList.filter(element1 => element1.prestataire.id === $event.value.id);
+  }
+  detail(convention: Convention) {
+    this.conventionDetail = convention;
+    this.sousActeListFilter = convention.sousActes;
+    console.log("=========convention==========", convention);
+    this.displayFDetailConvention = true;
+    this.garantieService.$findFamilleActeSousActeMontantDetail(this.sousActeListFilter).subscribe((value) => {
+      if (value) {
+        this.garantieListDetail = value.typeGarantieDtoList;
+        console.log("=========value==========", value);
+        
+        
+      }
+    });
+
+   
+  }
+
+  editer(convention: Convention) {
+  this.displayEdit = true;
+    this.sousActeListFilter = convention.sousActes;
+   // this.sousActeListFinal = convention.sousActes;
+    console.log("=========convention==========", convention);
+  
+  
+    this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
+    this.store.dispatch(loadGarantiesMontant({sousActes:this.sousActeListFilter}));
+    this.garantieList$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.garanties = value.slice();
+        console.log('=====garanties===============', this.garanties);
+        
+      }
+    });
+  // this.displayFormConventionUpdate = true;
+  //this.conventionForm.patchValue(convention);
+   const acte: Acte = this.acteList.filter(element1 => element1.id === convention.sousActe.idTypeActe)[0];
+  const garantie: Garantie = this.garanties.filter(element1 => element1.id === acte.idTypeGarantie)[0];
+  this.conventionForm.patchValue({delai: convention.delai, montant: convention.montant,
+    prestataire: convention.prestataire, sousActe: convention.sousActe, id: convention.id,
+  dateEffet: convention.dateEffet, acte, garantie}); 
+ // this.displayFormConvention = true;
+  this.displaySousActe = true;
+  this.displayActe = true;
+  this.displayFormConvention = true;
+  }
+
+  supprimer(convention: Convention){
+    this.confirmation.confirm({
+      message: "voulez-vous supprimer la convention?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.store.dispatch(conventionAction.deleteConvention(convention));
+      },
+    });
+
+  }
+
+  onBasicUpload(event, form) {
+    console.log("===============", this.conventionListFilter)
+    if(!this.conventionListFilter || this.conventionListFilter.length >= 2){
+      this.showToast("error", "INFORMATION", "Veuillez selectionner la photo de l'adherent");
+   } else {
+  this.confirmation.confirm({
+      message: 'Etes vous sur d\'importer le fichier de convention',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log(event.files[0]);
+        this.store.dispatch(conventionAction.importCondition({file:event.files[0], idConvention:this.conventionListFilter[0].id}));
+        form.clear();
+      },
+    });
+   }
+  }
+
+  supprimerConvention(){
+    this.confirmation.confirm({
+      message: 'voulez-vous supprimer la convention?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        //this.store.dispatch(conventionAction.deleteConvention(convention));
+      },
+    });
+
+  }
+
+  showToast(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity, summary, detail });
+  }
+
+  checkStatus() {
+    this.statusObject$.pipe(takeUntil(this.destroy$)).subscribe((statusObj) => {
+      if (statusObj) {
+        // this.loading = false;
+        this.showToast(statusObj.status, 'INFORMATION', statusObj.message);
+        /*
+          if (this.isAdding && statusObj.status === StatusEnum.success) {
+            this.display = false;
+            this.isAdding = false;
+          }
+          this.loading = false;
+          */
+      }
+    });
+  }
+
+  onRowEditInitPrime(sousActe: SousActe) {
+    this.clonedSousActe[sousActe.id] = {...sousActe};
+
+   
+  }
+
+  onRowEditSavePrime(sousActe: SousActe) {
+    console.log(sousActe);
+    delete this.clonedSousActe[sousActe.id];
+    
+    this.sousA = this.sousActeListFinal.find(sous=>sous.id === sousActe.id);
+    console.log(this.sousA);
+    if(this.sousA?.id) {
+      this.sousActeListFinal.forEach(sous=>{
+        if(sous.id == sousActe.id) {
+          sous = sousActe;
+        }
+      });
+    } else {
+      this.sousActeListFinal.push(sousActe);
+    }
+      
+    
+    
+}
+
+ onRowEditCancelSousActe(sousActe: SousActe, index: number) {
+  sousActe.montantConvantion = null;
+  sousActe.dateEffet = null;
+  // this.clonedSousActe[sousActe.id].dateEffet = new Date();
+  // this.clonedSousActe[sousActe.id].montantConvantion = null;
+  // this.sousActes[index] = this.clonedSousActe[sousActe.id];
+  delete this.clonedSousActe[sousActe.id];
+  this.sousActeListFinal = this.sousActeListFinal.filter(sous=>sous.id !== sousActe.id);
+} 
+
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    // Now let's also unsubscribe from the subject itself:
+    this.destroy$.unsubscribe();
+  }
+
+  onRowEditInit(prestataire: Prestataire) {
+    this.clonedProducts[prestataire.id] = {...prestataire};
+}
+
+onRowEditSave(prestataire: Prestataire) {
+    if (prestataire.telephone != null) {
+        delete this.clonedProducts[prestataire.id];
+        this.prestataireToSave.push(prestataire);
+        this.messageService.add({severity:'success', summary: 'Success', detail:'info du prestataire mis à jour'});
+    }
+    else {
+        this.messageService.add({severity:'error', summary: 'Error', detail:'Renseignez le contact'});
+    }
+}
+
+onRowEditCancel(prestataire: Prestataire, index: number) {
+    this.prestataire2[index] = this.clonedProducts[prestataire.id];
+    delete this.clonedProducts[prestataire.id];
+}
+
+exportModel(): void {
+  // this.historiqueAvenantService.exportExcelModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+  this.historiqueAvenantService.getModel(TypeHistoriqueAvenant.AFAIRE_NOUVELLE).subscribe(
+      (res) => {
+        const file = new Blob([res], {type: 'application/vnd.ms-excel'});
+        const  fileUrl = URL.createObjectURL(file);
+        window.open(fileUrl);
+      }
+  );
+}
+
+/**getAdherentFiles(event: any): void {
+  console.log(event);
+  this.historiqueAvenantService.postMisAJoursAdherentNumero(event).subscribe(
+      (res) => {
+        console.log('liste des adhérents === ');
+        console.log(res);
+      }
+  );
+}*/
+
+getAdherentFiles(event: any): void {
+  console.log(event);
+  this.historiqueAvenantService.postSuppressionDoublonPrestation(event).subscribe(
+      (res) => {
+
+        this.response = res;
+        this.messageService.add({severity:'success', summary: 'Success', detail: res});
+
+        console.log('this.response', this.response);
+
+        console.log('liste des adhérents === ');
+        console.log(res);
+        /* res.forEach(adherentFamille => {
+          console.log(adherentFamille.adherent.profession);
+          console.log(adherentFamille.famille);
+          if (!adherentFamille.adherent && adherentFamille.adherent.profession === '') {
+            adherentFamille.adherent.profession = {};
+          }
+          if (adherentFamille.famille) {
+            adherentFamille.famille.forEach(adFam => {
+              if (adFam.profession === '') {
+                adFam.profession = {};
+              }
+            });
+          }
+        }); */
+      }
+  );
+}
+
+getAlertesByDate() {
+    /* if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    } */
+      console.log('entrer dedans  ===> ', this.dateDebut);
+      console.log('entrer dedans  ===> ', this.dateFin);
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    this.alerteService.getAlertesByDate().subscribe(
+      (res) => {
+        this.alertes = res;
+        console.log('liste des alertes ===> ', this.alertes);
+      }
+    );
+  }
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        
+        break;
+      }
+      case 1: {
+        this.fetchAlerteAdresseMail();
+        break;
+      }
+      case 2: {
+        
+        break;
+      }
+      case 3: {
+        
+        break;
+      }
+      case 4: {
+        
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
+  }  
+
+  renvoyerMail(ordre: Alerte) {
+    this.adherentService.renvoieDeMail(ordre.adherent.id).subscribe((res) =>{
+      this.messageService.add({severity:'success', summary: 'Success', detail:'Mail renvoyer avec succès'});
+      console.log("renvoieDeMail===");
+    });
+  }
+
+  loadPoliceByGarant() {
+    console.log("garantId===> ", this.garantId.id);
+         this.store.dispatch(featureActionPolice.getPoliceByGarant({garantId: this.garantId.id}));
+    }
+
+    onSelect2(convention: Alerte) {
+      console.log("convention===", convention);
+      if(this.policeList.length > 0) {
+        this.policeList.forEach(p => {
+          this.alerteAdresseMail.adresseMail
+        });
+      }
+    }
+
+    fetchAlerteAdresseMail() {
+      this.alerteService.fetchAlerteAdresseMail().subscribe((res) =>{
+        this.alerteAdresseMails = res;
+        console.log("renvoieDeMail===");
+      });
+    }
+
+    fetchMailListeByAdresseMail(convention: Alerte) {
+      this.alerteService.fetchMailListeByAdresseMail(convention.adresseMail).subscribe((res) =>{
+        this.alerteAdresseMails = res;
+        console.log("renvoieDeMail===");
+      });
+    }
+
+}

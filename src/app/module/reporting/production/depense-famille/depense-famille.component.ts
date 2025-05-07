@@ -131,6 +131,8 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
   dateFin: any;
   garantId:Garant = {};
   policeId:Police = {};
+  mailSurvenance: any;
+  reporting_by_date_saisie = this.keycloak.isUserInRole(Function.reporting_by_date_saisie);
   
   constructor( private store: Store<AppState>,
                private confirmationService: ConfirmationService,
@@ -143,7 +145,7 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
                private formBuilder: FormBuilder,  private messageService: MessageService,  
                private breadcrumbService: BreadcrumbService, private keycloak: KeycloakService,
                private adherentService: AdherentService) {
-                this.breadcrumbService.setItems([{ label: 'Depense  Familiale'}]);
+                this.breadcrumbService.setItems([{ label: 'EXTRACTION DE DONNEES'}]);
    }
 
   
@@ -465,6 +467,15 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     this.display = false;
     this.check = {};
    }
+
+   closeDialog1() {
+    this.displayDepensesFamilleDateSoins = false;
+    this.dateDebut = null;
+    this.dateFin = null;
+    this.garantId = {};
+    this.policeId = {};
+    this.mailSurvenance = null;
+   }
    imprimerFormulaire() {
     this.displayDepensesFamilleDateSoins = true;
   }
@@ -560,23 +571,17 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     console.log("this.garantId =====> ", this.garantId.id);
     console.log("this.policeId =====> ", this.policeId.id);
 
-    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
-      .subscribe(response => {
-        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        if(this.garantId != null || this.garantId != undefined && this.policeId == null || this.policeId == undefined) {
-          a.download = `Prestations du Garant_${this.garantId.libelle}_du_${dateD}_au_${dateF}.xlsx`;
-        } else if(this.garantId != null || this.garantId != undefined && this.policeId != null || this.policeId != undefined) {
-          a.download = `Prestations du Souscripteur_${this.policeId.nom}_du_${dateD}_au_${dateF}.xlsx`;
-        } else {
-          a.download = `Prestations du_${dateD}_au_${dateF}.xlsx`;
-        }
-        
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    this.depenseService.exportDonneePrestations(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
+    .subscribe(response => {
+      this.addMessage('success', 'Extraction de consommations',
+        'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
+        this.displayDepensesFamilleDateSoins = false;
+        /** Vider tous les champs */
+        this.dateDebut = null;
+      this.dateFin = null;
+      this.garantId = {};
+      this.policeId = {};
+      this.mailSurvenance = null;
       }, error => {
         console.error("Erreur lors de l'exportation :", error);
       });
@@ -592,10 +597,22 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
     console.log("this.garantId =====> ", this.garantId.id);
     console.log("this.policeId =====> ", this.policeId.id);
+    console.log("this.dateDebut =====> ", this.dateDebut);
+    console.log("this.dateFin =====> ", this.dateFin);
+    console.log("this.mailSurvenance =====> ", this.mailSurvenance);
 
-    this.depenseService.exportDonneePrestationsAvecDateSoins(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id)
+    this.depenseService.exportDonneePrestationsAvecDateSoins(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
       .subscribe(response => {
-        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        this.addMessage('success', 'Extraction de consommations',
+          'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
+          this.displayDepensesFamilleDateSoins = false;
+          /** Vider tous les champs */
+          this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+        /**const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -609,10 +626,40 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
         
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-      }, error => {
+        document.body.removeChild(a);*/
+      },/** error => {
         console.error("Erreur lors de l'exportation :", error);
-      });
+      }*/
+    );
+  }
+
+  exportDonneesPrestationsAvecDateDeSaisie() {
+    if (!this.dateDebut || !this.dateFin) {
+      alert("Veuillez sélectionner une période !");
+      return;
+    }
+
+    const dateD = formatDate(this.dateDebut, 'dd/MM/yyyy', 'en-fr');
+    const dateF = formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr');
+    console.log("this.garantId =====> ", this.garantId.id);
+    console.log("this.policeId =====> ", this.policeId.id);
+    console.log("this.dateDebut =====> ", this.dateDebut);
+    console.log("this.dateFin =====> ", this.dateFin);
+    console.log("this.mailSurvenance =====> ", this.mailSurvenance);
+
+    this.depenseService.exportDonneesPrestationsAvecDateDeSaisie(this.dateDebut, this.dateFin, this.garantId.id, this.policeId.id, this.mailSurvenance)
+      .subscribe(response => {
+        this.addMessage('success', 'Extraction de consommations',
+          'Les consommations vous seront envoyées par mail une fois l\'extraction terminée à l\'adresse suivante: '.concat(this.mailSurvenance));
+          this.displayDepensesFamilleDateSoins = false;
+          /** Vider tous les champs */
+          this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+      },
+    );
   }
 
   annuleaddOperation() {
@@ -625,5 +672,49 @@ export class DepenseFamilleComponent implements OnInit, OnDestroy {
     // Now let's also unsubscribe from the subject itself:
     this.destroy$.unsubscribe();
   }
+
+  onTabChange(event): void {
+    var index = event.index;
+    console.log('****index****', index);
+    switch (index) {
+      case 0: {
+        this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+        break;
+      }
+      case 1: {
+        this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+        break;
+      }
+      case 2: {
+        this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+        break;
+      }
+      case 3: {
+        this.dateDebut = null;
+        this.dateFin = null;
+        this.garantId = {};
+        this.policeId = {};
+        this.mailSurvenance = null;
+        break;
+      }
+      default: {
+        console.log("We are in default case !!!")
+        break;
+      }
+    }
+    
+  }  
 
 }

@@ -133,6 +133,7 @@ import { CourrierPrestataireComponent } from './module/prestation/tier-payant/co
 import { ApprovisionnementComponent } from './module/comptabilite/approvisionnement/approvisionnement.component';
 import { ExportPrestationComponent } from './module/reporting/production/export-prestation/export-prestation.component';
 import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-payant/consulation-ordre-tier-payant/consulation-ordre-tier-payant.component';
+import { ParametrageMailComponent } from './module/prestation/tier-payant/parametrage-mail/parametrage-mail.component';
 
 @NgModule({
     imports: [
@@ -273,6 +274,9 @@ import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-pa
                     {path: 'prestation/tierPayant/courrier-prestataire', component: CourrierPrestataireComponent,
                       canActivate: [AuthGuard],
                       data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide']}},
+                    {path: 'prestation/tierPayant/parametrage-mail', component: ParametrageMailComponent,
+                      canActivate: [AuthGuard],
+                      data: { roles: ['sm_prestation', 'sm_prefinancement', 'sm_sinistre_valide', 'parametrage_mail']}},
                    
                     {path: 'prestation/tierPayant/consultation-tiers-payant', component: ConsulationOrdreTierPayantComponent,
                     canActivate: [AuthGuard],

@@ -735,5 +735,46 @@ export class Endpoints {
         mock: `assets/mock/reporting/production.mock.json`
     };
 
+    static readonly PARAMETRAGE_ALERTE_BY_DATE = {
+        prod: `${SERVICE_PREFIX}/parametrage/alerte/fetchAlertesByDateSaisie`,
+        mock: `assets/mock/parametrage/alerte.mock.json`
+    };
+
+    static readonly RENVOIE_MAIL = {
+        prod: `${SERVICE_PREFIX}/contrat/adherent/renvoieDeMail`,
+        mock: `assets/mock/contrat/adherent.mock.json`
+    };
+
+    static readonly PARAMETRAGE_ALERTE_ADRESSE_MAIL = {
+        prod: `${SERVICE_PREFIX}/parametrage/createAlerteAdresseMail`,
+        mock: `assets/mock/parametrage/alerte.mock.json`
+    };
+
+    static readonly PARAMETRAGE_FETCH_ALERTE_ADRESSE_MAIL = {
+        prod: `${SERVICE_PREFIX}/parametrage/alerte/fetchAlerteAdresseMail`,
+        mock: `assets/mock/parametrage/alerte.mock.json`
+    };
+
+    static readonly PARAMETRAGE_FETCH_MAIL_LISTE_BY_ADRESSE_MAIL = {
+        prod: `${SERVICE_PREFIX}/parametrage/alerte/fetchMailListeByAdresseMail`,
+        mock: `assets/mock/parametrage/alerte.mock.json`
+    };
+
+    static readonly REPORTING_EXPORT_DONNEES_PRESTATIONS_AVEC_DATE_SAISIE = {
+        prod: `${SERVICE_PREFIX}/reporting/production/export-donnees-prestations-avec-date-saisie`,
+        mock: `assets/mock/reporting/production.mock.json`
+    };
+
+    static readonly REPORTING_EXPORT_DONNEES_ORDRE_JOURNALIER = {
+        prod: `${SERVICE_PREFIX}/reporting/production/export-by-ordreReglement-journanlier`,
+        mock: `assets/mock/reporting/production.mock.json`
+    };
+
+    static readonly PAIEMENT_VALIDE_BY_TYPEPAIEMENT = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement/ordreReglement/paiement-valide-by-typePaiement`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
+
+
 
 }
