@@ -683,6 +683,9 @@ export class AvenantRetraitComponent implements OnInit {
 
     this.adherentService.searchAllAdherentPrincipalByExerciceAndGroupeByPage(this.exoId, this.groupeId, this.page, this.size).subscribe({
       next: (data: Page<HistoriqueAvenantAdherant[]>) => {
+            this.adherentsListByPage = []; 
+            this.adherentsListByPageRetrait = [];
+
             this.adherentsListByPage = data.content as any; 
             this.adherentsListByPageRetrait = data.content as any;
 

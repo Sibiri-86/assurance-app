@@ -484,7 +484,6 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-
   getSucessInfo(): void {
     this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
   }
