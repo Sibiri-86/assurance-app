@@ -81,6 +81,7 @@ rechercherPrefinancementByPeriode() {
     dateF: formatDate(this.dateFin, 'dd/MM/yyyy', 'en-fr')}));
   }
   this.typePaiement = null;
+  this.typePaiement = "nonDefini";
   
 }
 
