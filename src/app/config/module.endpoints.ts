@@ -775,6 +775,11 @@ export class Endpoints {
         mock: `assets/mock/prestation/prefinancement.mock.json`
     };
 
+    static readonly MAJ_TIERSPAYANT_FACTURE = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement/recherchePrestationsByNumeroOrdreReglement`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
+
 
 
 }

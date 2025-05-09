@@ -461,4 +461,16 @@ private handleError<T>() {
         console.log(data.append);
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_SUPPRESSION_DOUBLON_PRESTATIONS)}`, data, {headers: headers});
     }
+
+    postMajTiersPayantFactures(file: File): Observable<any> {
+        // @FIXME: post request
+        const data: FormData = new FormData();
+        data.append('file', file);
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
+        console.log('++++++++++++++++++data++++++++++++++++++++++');
+        console.log(data.append);
+        return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.MAJ_TIERSPAYANT_FACTURE)}`, data, {headers: headers});
+    }
 }
