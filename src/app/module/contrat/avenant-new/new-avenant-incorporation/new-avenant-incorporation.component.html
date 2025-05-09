@@ -1,0 +1,137 @@
+<p-tabView>
+    <p-tabPanel header="INCORPORATION">
+
+
+        <div>
+            
+
+<p-dialog [(visible)]="isToImporteExcelFile" 
+[header]="'INCORPORATION'"
+[style]="{width: '40%'}"
+[modal]="true" styleClass="p-fluid">
+
+<ng-template pTemplate="content">
+    <div class="card">
+        <p-toolbar styleClass="p-mb-3">
+            <ng-template pTemplate="left">
+                <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
+                    <!-- Groupe des boutons -->
+                    <div class="p-d-flex p-ai-center p-flex-wrap" style="gap: 1rem; flex: 1;">
+                        <!-- Tous les paiements -->
+                        <div class="p-d-flex p-ai-center">
+                            <button 
+                                [disabled]="!ordreReglementList.length"
+                                (click)="onExportAllOrdre()"
+                                pButton 
+                                pRipple 
+                                pTooltip="Tous les paiements tiers payants"
+                                type="button" 
+                                icon="pi pi-check-circle" 
+                                class="p-button-rounded p-button-info">
+                            </button>
+                            <small class="infoColor p-ml-2" *ngIf="ordreReglementList?.length">
+                                {{ ordreReglementList.length }}
+                            </small>
+                        </div>
+
+                        
+
+                        <!-- Chèques non encaissés -->
+                        <div class="p-d-flex p-ai-center">
+                            <button 
+                                [disabled]="!ordreReglementListNotTakedCheque.length"
+                                (click)="onExportOrdreWithoutTakeCheque()"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-check-circle" 
+                                pTooltip="Prestataires n'ayant pas encaissé"
+                                class="p-button-rounded p-button-warning">
+                            </button>
+                            <small class="warningColor p-ml-2" *ngIf="ordreReglementListNotTakedCheque?.length">
+                                {{ ordreReglementListNotTakedCheque.length }}
+                            </small>
+                        </div>
+
+                        <!-- Paiements dévalidés -->
+                        <div class="p-d-flex p-ai-center">
+                            <button 
+                                [disabled]="!ordreReglementListDevalider.length"
+                                (click)="onExportOrdreDevalide()"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-undo" 
+                                pTooltip="Paiements dévalidés"
+                                class="p-button-rounded p-button-danger">
+                            </button>
+                            <small class="dangerColor p-ml-2" *ngIf="ordreReglementListDevalider?.length">
+                                {{ ordreReglementListDevalider.length }}
+                            </small>
+                        </div>
+
+                            <!-- Dropdown Prestataire -->
+                        <div style="min-width: 200px;">
+                            <p-dropdown 
+                                (onChange)="onSelectedPrestaire($event.value)"
+                                inputId="prestataire"
+                                [filter]="true"
+                                showClear="true"
+                                [options]="ordreReglementListPrestataire"
+                                [disabled]="ordreReglementListPrestataire?.length <= 0"
+                                placeholder="Prestataire"
+                                [optionLabel]="'libelle'"
+                                [autoDisplayFirst]="false"
+                                appendTo="body"
+                                class="p-inputtext-sm w-full">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="p-toolbar-group-right p-d-flex p-ai-center p-ml-auto">
+                            <!-- Export Excel -->
+                            <button 
+                                (click)="onExportOrdreReglement()"
+                                [disabled]="ordreReglementListPrestataire?.length <= 0"
+                                pButton 
+                                pRipple 
+                                type="button" 
+                                icon="pi pi-file-excel" 
+                                class="p-button-rounded p-button-success"
+                                pTooltip="Exporter la sélection">
+                            </button>
+                        </div>
+                        </div>
+
+                </div>
+            </ng-template>
+        </p-toolbar>
+    </div>
+</ng-template>
+</p-dialog>
+
+        </div>
+
+    </p-tabPanel>
+    <p-tabPanel header="AUTOFINANCEMENT">
+        <p>
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+        </p>
+    </p-tabPanel>
+    <p-tabPanel header="MUTUELLE">
+        <p>
+            At vero eos et accusamus et iusto odio dignissimos...
+        </p>
+    </p-tabPanel>
+    <p-tabPanel header="PARTICULIER">
+        <p>
+            At vero eos et accusamus et iusto odio dignissimos...
+        </p>
+    </p-tabPanel>
+    <p-tabPanel header="AUTRE">
+        <p>
+            At vero eos et accusamus et iusto odio dignissimos...
+        </p>
+    </p-tabPanel>
+</p-tabView>
+
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>

@@ -840,10 +840,10 @@ export class FacturePayeComponent implements OnInit {
       const todayDate = new Date();
       const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-      if(todayDateFormate <=  selectedDateFormate){
+      if( selectedDateFormate <= todayDateFormate ){
         this.isInValidateDate = false;
       }
-      if(todayDateFormate > selectedDateFormate){
+      if(selectedDateFormate > todayDateFormate){
         this.isInValidateDate = true;
       }
 
@@ -857,15 +857,13 @@ export class FacturePayeComponent implements OnInit {
       const todayDate = new Date();
       const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-      if(todayDateFormate <= selectedDateFormate){
+      if( selectedDateFormate <= todayDateFormate ){
         this.isInValidateDate = false;
       }
-      if(todayDateFormate > selectedDateFormate){
+      if(selectedDateFormate > todayDateFormate){
         this.isInValidateDate = true;
       }
 
-
-      
 
     }
 
