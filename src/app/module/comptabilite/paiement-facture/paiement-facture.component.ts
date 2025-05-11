@@ -299,10 +299,10 @@ export class PaiementFactureComponent implements OnInit {
       const todayDate = new Date();
       const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-      if(todayDateFormate <= selectedDateFormate){
+      if( selectedDateFormate <= todayDateFormate ){
         this.isInValidateDate = false;
       }
-      if(todayDateFormate > selectedDateFormate){
+      if(selectedDateFormate > todayDateFormate){
         this.isInValidateDate = true;
       }
 
@@ -426,6 +426,7 @@ export class PaiementFactureComponent implements OnInit {
                 const isPaye = response;
                 if(isPaye === true){
 
+                  this.onGetOperation(ordreReglementTierPayant.id);
                   this.isToPayeOrdreReglementTierPayant = false;
                   this.ordreReglementTierPayant = {};
                   this.compteSelected = {};
@@ -435,7 +436,6 @@ export class PaiementFactureComponent implements OnInit {
                   this.stickerConfirmation = '';
                   this.isStickerConfimartion = null;
 
-                  this.onGetOperation(ordreReglementTierPayant.id);
 
                   // this.getSucessInfo();
                   this.onSerByOdreReglementByPeriode();
@@ -484,7 +484,6 @@ export class PaiementFactureComponent implements OnInit {
   }
 
 
-
   getSucessInfo(): void {
     this.messageService.add({severity: 'success', summary: 'PAIEMENT TIERS PAYANT', detail: 'Opération réussie!'});
   }
@@ -501,7 +500,6 @@ export class PaiementFactureComponent implements OnInit {
   getErrorInfo(message: string): void {
     this.messageService.add({severity: 'error', summary: 'PAIEMENT TIERS PAYANT', detail: message});
   }
-
 
   verifierNumeroCheque(numeroCheque: string) {
     if (numeroCheque.trim()) {
