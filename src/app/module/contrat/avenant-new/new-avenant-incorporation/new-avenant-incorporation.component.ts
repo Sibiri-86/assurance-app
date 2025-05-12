@@ -34,8 +34,18 @@ export class NewAvenantIncorporationComponent implements OnInit {
       });
   }
 
-  incorporer(){
+  onInitIncorporation(){
     this.isToImporteExcelFile = true;
   }
+  onCancelIncorporation(){
+    this.isToImporteExcelFile = false;
+  }
+
+  onTabChange(event: any) {
+    if (event.index === 0) {
+        this.onInitIncorporation();
+    }
+}
+
 
 }
