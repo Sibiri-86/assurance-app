@@ -34,4 +34,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
       });
   }
 
+  incorporer(){
+    this.isToImporteExcelFile = true;
+  }
+
 }

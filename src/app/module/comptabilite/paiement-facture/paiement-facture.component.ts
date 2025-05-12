@@ -456,8 +456,8 @@ export class PaiementFactureComponent implements OnInit {
 
   }
 
-  onGetOperation(tierPayantId : string){
-    this.compteTiersService.getOperation(tierPayantId).subscribe(
+  onGetOperation(tiersPayantId : string){
+    this.compteTiersService.getOperation(tiersPayantId).subscribe(
 
       res => {
        // this.operation = res;
