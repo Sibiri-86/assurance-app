@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { TypeDemandeur } from 'src/app/store/contrat/historiqueAvenant/model';
 
 @Component({
   selector: 'app-new-avenant-incorporation',
@@ -11,9 +12,16 @@ export class NewAvenantIncorporationComponent implements OnInit {
   selectedFile?: File;
   isToImporteExcelFile: boolean = true;
 
+  demandeursList: any = [
+      {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+      {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+      {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+      ];
+
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+
   }
 
 
