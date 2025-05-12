@@ -54,9 +54,26 @@
                     </p-dropdown>
                 </div>
 
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="typeDemanteur">Souscripteur <sup style="color: red;">*</sup></label>
+                    <p-dropdown 
+                        inputId="typeDemanteur" 
+                        dataKey="id" 
+                        [filter]="true" 
+                        showClear="true"
+                        [options]="demandeursList" 
+                        formControlName="demandeur" 
+                        (onChange)="onDemandeurChange()"
+                        placeholder="Sélectionner" 
+                        optionLabel="libelle" 
+                        [disabled]="etat === 'VIEW'"
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
 
                         <div class="p-field p-col-12 p-md-6">
-                            <label for="fraisBadge">Groupe<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
                            
                                 <p-dropdown [options]="groupePolicy" optionLabel="libelle"
                                             name="selectedGroup"
@@ -67,25 +84,25 @@
                         </div>
 
                          <div class="p-field p-col-12 p-md-6">
-                            <label for="nom">Date d'Avenant<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
                             <input  id="dateAvenant" type="date"  pInputText (change)="compareDateavenant()">
 
                            
                         </div>
 
                          <div class="p-field p-col-12 p-md-6">
-                            <label for="nom">Date d'Incorporation<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                            <label for="nom">Date d'Incorporation<sup style="color: red !important;">*</sup></label>
                             <input  id="dateIncorparation" type="date"  pInputText (change)="compareDate()">
 
                         </div>
 
-                         <div class="p-field p-col-12 p-md-6">
-                            <label for="nom">Numéro de l'avenant chez le garant<sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                         <div class="p-field p-col-12 p-md-4">
+                            <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
                             <input id="numero" type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
                         </div>
 
                 <!-- Frais Badges -->
-                <div class="p-field p-col-12 p-md-6">
+                <div class="p-field p-col-12 p-md-4">
                     <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
                     <p-inputNumber 
                         inputId="fraisBadges" 
@@ -96,7 +113,7 @@
                 </div>
 
                 <!-- Frais Accessoires -->
-                <div class="p-field p-col-12 p-md-6">
+                <div class="p-field p-col-12 p-md-4">
                     <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
                     <p-inputNumber 
                         inputId="fraisAccessoires" 
