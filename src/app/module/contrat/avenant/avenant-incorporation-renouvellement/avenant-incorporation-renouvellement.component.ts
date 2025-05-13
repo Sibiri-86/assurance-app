@@ -103,6 +103,9 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
     exerciceOfLast : Exercice;
     compteur: number = null; 
     viewFamille = false;
+
+    isToImporteExcelFile = false;
+    
     init(): void {
         this.historiqueAvenant1.file = new FormData();
         // this.historiqueAvenant1.fileToLoad = {};
@@ -659,6 +662,7 @@ export class AvenantIncorporationRenouvellementComponent implements OnInit{
             });
         }
     }
+    
     addGroupeNew(groupe: FormGroup): Groupe {
         console.log(groupe);
         this.curentGroupe = groupe as Groupe;

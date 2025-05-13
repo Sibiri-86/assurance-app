@@ -1,14 +1,9 @@
 <div class="p-card">
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
-
-<p-tabView (onChange)="onTabChange($event)">
-    <p-tabPanel header="INCORPORATION">
-
-<div>
 <p-dialog [(visible)]="isToImporteExcelFile" 
     [header]="'INCORPORATION'"
-    [style]="{width: '50%'}"
+    [style]="{width: '80%'}"
     [modal]="true" 
     styleClass="p-fluid">
 
@@ -30,7 +25,6 @@
                         (onChange)="onDemandeurChange()"
                         placeholder="Sélectionner" 
                         optionLabel="libelle" 
-                        [disabled]="etat === 'VIEW'"
                         class="w-full">
                     </p-dropdown>
                 </div>
@@ -49,33 +43,15 @@
                         [autoDisplayFirst]="true" 
                         appendTo="body"
                         placeholder="Sélectionnez l'exercice"
-                        optionLabel="exercice"
+                        optionLabel="nomExo"
                         class="w-full">
                     </p-dropdown>
                 </div>
-
-                <div class="p-field p-col-12 p-md-6">
-                    <label for="typeDemanteur">Souscripteur <sup style="color: red;">*</sup></label>
-                    <p-dropdown 
-                        inputId="typeDemanteur" 
-                        dataKey="id" 
-                        [filter]="true" 
-                        showClear="true"
-                        [options]="demandeursList" 
-                        formControlName="demandeur" 
-                        (onChange)="onDemandeurChange()"
-                        placeholder="Sélectionner" 
-                        optionLabel="libelle" 
-                        [disabled]="etat === 'VIEW'"
-                        class="w-full">
-                    </p-dropdown>
-                </div>
-
 
                         <div class="p-field p-col-12 p-md-6">
                             <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
                            
-                                <p-dropdown [options]="groupePolicy" optionLabel="libelle"
+                                <p-dropdown  [options]="groupesByPolicy" optionLabel="libelle"
                                             name="selectedGroup"
                                             [filter]="true" filterBy="libelle" [showClear]="true"
                                             placeholder="Choisir un groupe"
@@ -96,13 +72,13 @@
 
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-6">
                             <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
                             <input id="numero" type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
                         </div>
 
                 <!-- Frais Badges -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-6">
                     <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
                     <p-inputNumber 
                         inputId="fraisBadges" 
@@ -113,7 +89,7 @@
                 </div>
 
                 <!-- Frais Accessoires -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-6">
                     <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
                     <p-inputNumber 
                         inputId="fraisAccessoires" 
@@ -169,36 +145,6 @@
 
     </ng-template>
 </p-dialog>
-
-
-
-        </div>
-
-    </p-tabPanel>
-    <p-tabPanel header="AUTOFINANCEMENT">
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="MUTUELLE">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="PARTICULIER">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="AUTRE">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-</p-tabView>
-
 </div>
 </div>
 </div>
-
-<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>

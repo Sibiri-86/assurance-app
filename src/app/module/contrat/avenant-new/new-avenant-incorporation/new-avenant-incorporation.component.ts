@@ -1,6 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Exercice } from 'src/app/store/contrat/exercice/model';
+import { ExerciceService } from 'src/app/store/contrat/exercice/service';
+import { Groupe, GroupeList } from 'src/app/store/contrat/groupe/model';
+import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { TypeDemandeur } from 'src/app/store/contrat/historiqueAvenant/model';
+import { Police } from 'src/app/store/contrat/police/model';
 
 @Component({
   selector: 'app-new-avenant-incorporation',
@@ -11,6 +17,10 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
   selectedFile?: File;
   isToImporteExcelFile: boolean = true;
+  exercices: Exercice[] = [];
+  groupesByPolicy: Groupe [] = [];
+
+  @Input() policeSelected: Police;
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -18,10 +28,39 @@ export class NewAvenantIncorporationComponent implements OnInit {
       {libelle: 'GARANT', value: TypeDemandeur.GARANT}
       ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+      private http: HttpClient,
+      private router : Router,
+      private exerciceService: ExerciceService,
+      private groupeService: GroupeService,
+    ) {}
 
   ngOnInit(): void {
 
+    this.loadExerciceByPolice();
+    this.loadGroupeByPolice();
+
+  }
+
+
+  loadExerciceByPolice(){
+    if(this.policeSelected && this.policeSelected.id){
+        this.exerciceService.$getExercices(this.policeSelected.id).subscribe(
+         res => {
+           this.exercices = res;
+         }
+        );
+    }
+  }
+
+  loadGroupeByPolice(){
+    if(this.policeSelected && this.policeSelected.id){
+        this.groupeService.$getGroupes(this.policeSelected.id).subscribe(
+         res => {
+           this.groupesByPolicy = res.groupeDtoList;
+         }
+        );
+    }
   }
 
 
@@ -47,6 +86,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
   }
   onCancelIncorporation(){
     this.isToImporteExcelFile = false;
+    this.router.navigateByUrl('/contrat/avenant');
   }
 
   onTabChange(event: any) {

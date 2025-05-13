@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {takeUntil} from 'rxjs/operators';
 import {Police, Rapport, Report} from '../../../store/contrat/police/model';
 import {Exercice} from '../../../store/contrat/exercice/model';
@@ -354,6 +354,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
   qa:QualiteAssure = {};
   dateDebut: any;
   dateFin: any;
+
+  isToImporteExcelFile = false;
+  isToDisplayAvenantIncorporation = false;
+
+  policeSelected : any;
+
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
       private formBuilder: FormBuilder,
@@ -808,6 +814,58 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+
+          console.log("$event$event", $event);
+
+          this.policeSelected = this.policeItem;
+
+          this.onDisplayNewAvenantComposant();
+          this.entete = 'Avenant d\'Incorporation';
+      }},
+      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
+          this.initDisplayAvenant();
+          this.addAvenantRetrait();
+          this.isAvenantRetrait = true;
+          this.entete = 'Avenant de Retrait';
+          this.etat = 'CREATE';
+      }},
+      {label: 'Modification', icon: 'pi pi-pencil', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantModification = true;
+          this.entete = 'Avenant de Modification';
+          this.addAvenantModification();
+          this.etat = 'CREATE';
+      }},
+      {label: 'Renouvellement', icon: 'pi pi-undo', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantRenouvellement = true;
+          this.entete = 'Avenant de Renouvellement';
+          this.addAvenantRenouvellement();
+          this.etat = 'CREATE';
+      }},
+     {label: 'Prorogation', icon: 'pi pi-euro', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantProrogation = true;
+          this.entete = 'Avenant de Prorogation';
+          this.addAvenantProrogation();
+      }},
+      {label: 'Suspension', icon: 'pi pi-pause', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantSuspension = true;
+          this.entete = 'Avenant de Suspension';
+          this.addAvenantRenouvellement();
+          this.etat = 'CREATE';
+      }},
+      {label: 'Résiliation', icon: 'pi pi-sign-out', command: () => {
+          this.initDisplayAvenant();
+          this.isAvenantResiliation = true;
+          this.entete = 'Avenant de Résiliation';
+          this.addAvenantModification();
+          this.etat = 'CREATE';
+      }},
+    ];
+    /* this.typeActions = [
+      {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
           this.addAvenant();
           console.log($event);
@@ -856,7 +914,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantModification();
           this.etat = 'CREATE';
       }},
-    ];
+    ]; */
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
@@ -3295,5 +3353,22 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     }
     
+  }
+
+
+  onInitIncorporation(){
+    this.isToImporteExcelFile = true;
+  }
+  onCancelIncorporation(){
+    this.isToImporteExcelFile = false;
+  }
+
+  onDisplayNewAvenantComposant() {
+    this.isToDisplayAvenantIncorporation = true;
+  }
+
+  getPolice(police: Police){
+
+   // this.monMessage = police;
   }
 }
