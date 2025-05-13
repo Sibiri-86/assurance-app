@@ -509,4 +509,34 @@ getAdherentFiles(event: any): void {
   );
 }
 
+getTiersPayantFiles(event: any): void {
+  console.log(event);
+  this.historiqueAvenantService.postMajTiersPayantFactures(event).subscribe(
+      (res) => {
+
+        this.response = res;
+        this.messageService.add({severity:'success', summary: 'Success', detail: res});
+
+        console.log('this.response', this.response);
+
+        console.log('liste des adhérents === ');
+        console.log(res);
+        /* res.forEach(adherentFamille => {
+          console.log(adherentFamille.adherent.profession);
+          console.log(adherentFamille.famille);
+          if (!adherentFamille.adherent && adherentFamille.adherent.profession === '') {
+            adherentFamille.adherent.profession = {};
+          }
+          if (adherentFamille.famille) {
+            adherentFamille.famille.forEach(adFam => {
+              if (adFam.profession === '') {
+                adFam.profession = {};
+              }
+            });
+          }
+        }); */
+      }
+  );
+}
+
 }
