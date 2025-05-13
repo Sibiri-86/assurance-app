@@ -1,12 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { AdherentFamille } from 'src/app/store/contrat/adherent/model';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { ExerciceService } from 'src/app/store/contrat/exercice/service';
-import { Groupe, GroupeList } from 'src/app/store/contrat/groupe/model';
+import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
-import { TypeDemandeur } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriqueAvenant, TypeDemandeur } from 'src/app/store/contrat/historiqueAvenant/model';
+import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 import { Police } from 'src/app/store/contrat/police/model';
+import { PoliceService } from 'src/app/store/contrat/police/service';
 
 @Component({
   selector: 'app-new-avenant-incorporation',
@@ -21,6 +25,12 @@ export class NewAvenantIncorporationComponent implements OnInit {
   groupesByPolicy: Groupe [] = [];
   incorporationDate: any;
   avenantDate: any;
+  historiqueAvenant: HistoriqueAvenant;
+  file:any;
+  curentGroupe: Groupe = {};
+  curentExercice: Exercice = {};
+  adherentFamilleListe: AdherentFamille[] = [];
+  
 
   @Input() policeSelected: Police;
 
@@ -35,6 +45,9 @@ export class NewAvenantIncorporationComponent implements OnInit {
       private router : Router,
       private exerciceService: ExerciceService,
       private groupeService: GroupeService,
+      private historiqueAvenantService: HistoriqueAvenantService,
+      private policeService: PoliceService,
+      private messageService: MessageService,
     ) {}
 
   ngOnInit(): void {
@@ -104,6 +117,56 @@ export class NewAvenantIncorporationComponent implements OnInit {
   onSelectedIncorporationDateDate(avenantDate: any){
     this.incorporationDate = avenantDate;
   }
+
+  addMessage(severite: string, resume: string, detaile: string): void {
+        this.messageService.add({severity: severite, summary: resume, detail: detaile});
+    }
+
+
+  getFiles(event: File) {
+       //  this.historiqueAvenant1.fileToLoad = event;
+        this.historiqueAvenant.fileToLoad = event;
+        this.selectedFile = event;
+        this.policeService.loadAdherentsByExcelFile(event).subscribe(
+            (res) => {
+                if(res) {
+                    if(this.curentGroupe.id !== undefined && this.curentExercice.id !== undefined) {
+                        console.log('***************1111111111 ');
+                        console.log('***************1111111111 ', this.curentGroupe.id);
+                        console.log('***************1111111111 ', this.curentExercice.id);
+                        this.adherentFamilleListe = res.slice();
+                        this.adherentFamilleListe.forEach(p=> {
+                            p.groupeFamille = this.curentGroupe;
+                        });
+                    } else {
+                        console.log('***************222222222 ');
+                        this.addMessage('error', 'Groupe ou Exercice non sélectionnés',
+                            'Veuillez selectionner un groupe et un exercice avant de faire cette action !!');
+                    }
+                    
+                }
+            }
+        );
+    }
+
+
+   addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
+      console.log('**************HistoriqueAvenan-----t***------*************');
+      console.log(historiqueAvenant);
+      if (historiqueAvenant.id == null) {
+        this.historiqueAvenant = historiqueAvenant;
+        this.historiqueAvenant.id = null;
+        this.historiqueAvenant.file.append('file', this.historiqueAvenant.fileToLoad);
+        console.log('**************HistoriqueAvenan-----t****************');
+
+        if (this.historiqueAvenant.fileToLoad !== null && this.historiqueAvenant.fileToLoad !== undefined
+            && this.historiqueAvenant.fileToLoad.size > 0) {
+              this.historiqueAvenantService.postHistoriqueAvenantFile(historiqueAvenant, this.file).subscribe();
+        } else {
+          this.historiqueAvenantService.postHistoriqueAvenant(historiqueAvenant).subscribe();
+        }
+      }
+    }
 
 
 }

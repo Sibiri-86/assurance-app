@@ -812,7 +812,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     ];
 
-    /* this.typeActions = [
+     /* this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
 
           console.log("$event$event", $event);
@@ -864,6 +864,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.etat = 'CREATE';
       }},
     ]; */
+
     this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
