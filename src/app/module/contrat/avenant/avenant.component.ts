@@ -812,7 +812,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.typeActions = [
+    /* this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
 
           console.log("$event$event", $event);
@@ -863,8 +863,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantModification();
           this.etat = 'CREATE';
       }},
-    ];
-    /* this.typeActions = [
+    ]; */
+     this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
           this.addAvenant();
@@ -914,7 +914,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantModification();
           this.etat = 'CREATE';
       }},
-    ]; */
+    ]; 
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
