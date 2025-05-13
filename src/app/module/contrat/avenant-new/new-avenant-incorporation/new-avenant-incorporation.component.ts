@@ -19,6 +19,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
   isToImporteExcelFile: boolean = true;
   exercices: Exercice[] = [];
   groupesByPolicy: Groupe [] = [];
+  incorporationDate: any;
+  avenantDate: any;
 
   @Input() policeSelected: Police;
 
@@ -89,11 +91,19 @@ export class NewAvenantIncorporationComponent implements OnInit {
     this.router.navigateByUrl('/contrat/avenant');
   }
 
-  onTabChange(event: any) {
-    if (event.index === 0) {
-        this.onInitIncorporation();
-    }
-}
+    onTabChange(event: any) {
+      if (event.index === 0) {
+          this.onInitIncorporation();
+      }
+  }
+
+  onSelectedAvenatDate(avenantDate: any){
+    this.avenantDate = avenantDate;
+  }
+
+  onSelectedIncorporationDateDate(avenantDate: any){
+    this.incorporationDate = avenantDate;
+  }
 
 
 }
