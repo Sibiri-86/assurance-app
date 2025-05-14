@@ -292,22 +292,33 @@ export class PaiementFactureComponent implements OnInit {
     }
 
 
-    onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
+    // onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
 
-      const selectedDate = ordreReglementTierPayant.datePaiement;
-      const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
-      const todayDate = new Date();
-      const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
+    //   const selectedDate = ordreReglementTierPayant.datePaiement;
+    //   const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
+    //   const todayDate = new Date();
+    //   const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-      if( selectedDateFormate <= todayDateFormate ){
-        this.isInValidateDate = false;
-      }
-      if(selectedDateFormate > todayDateFormate){
-        this.isInValidateDate = true;
-      }
+    //   if( selectedDateFormate <= todayDateFormate ){
+    //     this.isInValidateDate = false;
+    //   }
+    //   if(selectedDateFormate > todayDateFormate){
+    //     this.isInValidateDate = true;
+    //   }
 
 
-    }
+    // }
+
+  onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant) {
+  const selectedDate = new Date(ordreReglementTierPayant.datePaiement);
+  const today = new Date();
+
+  selectedDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  this.isInValidateDate = selectedDate > today;
+}
+
 
 
   imprimer(pref: OrdreReglementTierPayant) {
