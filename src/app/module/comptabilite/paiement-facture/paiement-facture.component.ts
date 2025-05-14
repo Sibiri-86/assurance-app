@@ -449,6 +449,7 @@ export class PaiementFactureComponent implements OnInit {
 
 
                   // this.getSucessInfo();
+                  this.onGetOperation(ordreReglementTierPayant.id);
                   this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
                 }
