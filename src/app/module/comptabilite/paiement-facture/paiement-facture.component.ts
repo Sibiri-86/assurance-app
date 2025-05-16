@@ -447,8 +447,6 @@ export class PaiementFactureComponent implements OnInit {
                   this.stickerConfirmation = '';
                   this.isStickerConfimartion = null;
 
-
-                  // this.getSucessInfo();
                   this.onGetOperation(ordreReglementTierPayant.id);
                   this.onSerByOdreReglementByPeriode();
                   this.onGetComptes();
