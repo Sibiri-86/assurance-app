@@ -811,8 +811,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
         sousActe: {}
       }
     ];
-
-     /* this.typeActions = [
+    
+/*
+      this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
 
           console.log("$event$event", $event);
@@ -1839,6 +1840,39 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   /** afficher les details de la police */
   onRowSelectPolice(police: Police) {
+
+    console.log('policepolice', police);
+
+    this.police = {...police};
+    this.loadExerciceByPolice(police);
+    this.infosPolice = true;
+    this.policeForm.patchValue(this.police);
+    this.historiqueAvenants1$ = this.store.pipe(select(historiqueAvenantSelector.historiqueAvenantList));
+    this.store.dispatch(featureActionHistoriqueAdherant.loadHistoriqueAvenant({policeId: police.id}));
+    this.historiqueAvenants1$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        // this.loading = false;
+        this.historiqueAvenants1 = value.slice();
+        console.log('..this.historiqueAvenants1....', this.historiqueAvenants1);
+        this.historiqueAvenants1.forEach(element => {
+          console.log('.........1........', element.validePrime);
+          element.isPossible = this.calculePossible(element);
+          console.log('.........2........', element.isPossible);
+        });
+        console.log('................historiqueAvenantListWithoutActiveList............................');
+        console.log(this.historiqueAvenants1);
+      }
+    });
+    /* this.historiqueAvenantService.getHistoriqueAvenants(this.police.id).subscribe(
+        (res: HistoriqueAvenantList) => {
+          this.historiqueAvenants1 = res;
+          console.log('==================================', this.historiqueAvenants1);
+        }
+    ); */
+    this.getPrimeTotalByPoliceId();
+  }
+
+  onRowSelectPolice2(police: Police) {
     this.police = {...police};
     this.loadExerciceByPolice(police);
     this.infosPolice = true;
