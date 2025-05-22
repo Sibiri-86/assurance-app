@@ -833,7 +833,7 @@ export class FacturePayeComponent implements OnInit {
       
     }
 
-    onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
+/*     onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant){
 
       const selectedDate = ordreReglementTierPayant.datePaiement;
       const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
@@ -848,9 +848,31 @@ export class FacturePayeComponent implements OnInit {
       }
 
 
-    }
+    } */
+
+  onCompareDate(ordreReglementTierPayant: OrdreReglementTierPayant) {
+  const selectedDate = new Date(ordreReglementTierPayant.datePaiement);
+  const today = new Date();
+
+  selectedDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  this.isInValidateDate = selectedDate > today;
+}
 
     onCompareDateCheque(ordre: OrdreReglementTierPayant){
+  
+      const selectedDate = new Date(ordre.datePaiement);
+      const today = new Date();
+
+      selectedDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+  this.isInValidateDate = selectedDate > today;
+    
+}
+
+/*     onCompareDateCheque(ordre: OrdreReglementTierPayant){
     
       const selectedDate = ordre.datePriseCheque;
       const selectedDateFormate = formatDate(selectedDate, 'dd/MM/yyyy', 'en-fr');
@@ -864,8 +886,7 @@ export class FacturePayeComponent implements OnInit {
         this.isInValidateDate = true;
       }
 
-
-    }
+    } */
 
       
   

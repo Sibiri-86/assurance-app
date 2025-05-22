@@ -537,7 +537,7 @@ export class Endpoints {
         };
 
         static readonly COMPTABILITE_OPERATION_GET_GENERATED_OPERATION = {
-            prod: `${SERVICE_PREFIX}/comptabilite//operation/liste-get-operation`,
+            prod: `${SERVICE_PREFIX}/comptabilite/operation/liste-one-operation`,
             mock: `assets/mock/comptabilite/compte.mock.json`
         };
 

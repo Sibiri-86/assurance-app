@@ -1,137 +1,173 @@
-<p-tabView>
-    <p-tabPanel header="INCORPORATION">
-
-
-        <div>
-            
-
+<div class="p-card">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12">
 <p-dialog [(visible)]="isToImporteExcelFile" 
-[header]="'INCORPORATION'"
-[style]="{width: '40%'}"
-[modal]="true" styleClass="p-fluid">
+    [header]="'INCORPORATION'"
+    [style]="{width: '80%'}"
+    [modal]="true" 
+    styleClass="p-fluid">
 
-<ng-template pTemplate="content">
-    <div class="card">
-        <p-toolbar styleClass="p-mb-3">
-            <ng-template pTemplate="left">
-                <div class="p-d-flex p-jc-between p-ai-center p-flex-wrap" style="width: 100%; gap: 1rem;">
-                    <!-- Groupe des boutons -->
-                    <div class="p-d-flex p-ai-center p-flex-wrap" style="gap: 1rem; flex: 1;">
-                        <!-- Tous les paiements -->
-                        <div class="p-d-flex p-ai-center">
-                            <button 
-                                [disabled]="!ordreReglementList.length"
-                                (click)="onExportAllOrdre()"
-                                pButton 
-                                pRipple 
-                                pTooltip="Tous les paiements tiers payants"
-                                type="button" 
-                                icon="pi pi-check-circle" 
-                                class="p-button-rounded p-button-info">
-                            </button>
-                            <small class="infoColor p-ml-2" *ngIf="ordreReglementList?.length">
-                                {{ ordreReglementList.length }}
-                            </small>
-                        </div>
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
 
-                        
 
-                        <!-- Chèques non encaissés -->
-                        <div class="p-d-flex p-ai-center">
-                            <button 
-                                [disabled]="!ordreReglementListNotTakedCheque.length"
-                                (click)="onExportOrdreWithoutTakeCheque()"
-                                pButton 
-                                pRipple 
-                                type="button" 
-                                icon="pi pi-check-circle" 
-                                pTooltip="Prestataires n'ayant pas encaissé"
-                                class="p-button-rounded p-button-warning">
-                            </button>
-                            <small class="warningColor p-ml-2" *ngIf="ordreReglementListNotTakedCheque?.length">
-                                {{ ordreReglementListNotTakedCheque.length }}
-                            </small>
-                        </div>
-
-                        <!-- Paiements dévalidés -->
-                        <div class="p-d-flex p-ai-center">
-                            <button 
-                                [disabled]="!ordreReglementListDevalider.length"
-                                (click)="onExportOrdreDevalide()"
-                                pButton 
-                                pRipple 
-                                type="button" 
-                                icon="pi pi-undo" 
-                                pTooltip="Paiements dévalidés"
-                                class="p-button-rounded p-button-danger">
-                            </button>
-                            <small class="dangerColor p-ml-2" *ngIf="ordreReglementListDevalider?.length">
-                                {{ ordreReglementListDevalider.length }}
-                            </small>
-                        </div>
-
-                            <!-- Dropdown Prestataire -->
-                        <div style="min-width: 200px;">
-                            <p-dropdown 
-                                (onChange)="onSelectedPrestaire($event.value)"
-                                inputId="prestataire"
-                                [filter]="true"
-                                showClear="true"
-                                [options]="ordreReglementListPrestataire"
-                                [disabled]="ordreReglementListPrestataire?.length <= 0"
-                                placeholder="Prestataire"
-                                [optionLabel]="'libelle'"
-                                [autoDisplayFirst]="false"
-                                appendTo="body"
-                                class="p-inputtext-sm w-full">
-                            </p-dropdown>
-                        </div>
-
-                        <div class="p-toolbar-group-right p-d-flex p-ai-center p-ml-auto">
-                            <!-- Export Excel -->
-                            <button 
-                                (click)="onExportOrdreReglement()"
-                                [disabled]="ordreReglementListPrestataire?.length <= 0"
-                                pButton 
-                                pRipple 
-                                type="button" 
-                                icon="pi pi-file-excel" 
-                                class="p-button-rounded p-button-success"
-                                pTooltip="Exporter la sélection">
-                            </button>
-                        </div>
-                        </div>
-
+                <!-- Initiateur -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
+                    <p-dropdown 
+                        inputId="typeDemanteur" 
+                        dataKey="id" 
+                        [filter]="true" 
+                        showClear="true"
+                        [options]="demandeursList" 
+                        [(ngModel)]="historiqueAvenant.demandeur"
+                        placeholder="Sélectionner" 
+                        optionLabel="libelle" 
+                        class="w-full">
+                    </p-dropdown>
                 </div>
-            </ng-template>
-        </p-toolbar>
-    </div>
-</ng-template>
-</p-dialog>
 
+                <!-- Exercice -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="compteTiers" class="font-bold">
+                        Sélectionner l'exercice <span style="color: red;">*</span>
+                    </label>
+                    <p-dropdown 
+                        inputId="compteTiers" 
+                        dataKey="id" 
+                        [filter]="true"
+                        showClear="true" 
+                        [options]="exercices"
+                        name="exercice"
+                        [(ngModel)]="historiqueAvenant.exercice"
+                        [autoDisplayFirst]="true" 
+                        appendTo="body"
+                        placeholder="Sélectionnez l'exercice"
+                        optionLabel="nomExo"
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
+                           
+                                <p-dropdown  [options]="groupesByPolicy" optionLabel="libelle"
+                                            name="groupe"
+                                            [(ngModel)]="historiqueAvenant.groupe"
+                                            [filter]="true" filterBy="libelle" [showClear]="true"
+                                            placeholder="Choisir un groupe"
+                                            >
+                                </p-dropdown>
+                        </div>
+
+                                        <!-- Motif -->
+                <div class="p-field p-col-12 p-md-6">
+                <label for="observation">Motif<sup style="color: red;">*</sup></label>
+                <input 
+                    id="observation"
+                    type="text"
+                    name="observation"
+                    [(ngModel)]="historiqueAvenant.observation"
+                    [disabled]="true"
+                    pInputText
+                    class="p-inputtext w-full"
+                    
+                />
+                </div>
+
+                         <div class="p-field p-col-12 p-md-3">
+                            <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
+                            <input  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+
+                           
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-3">
+                                <span class="textDanger" *ngIf="isInValidateDate">La date de paiement doit être antérieure ou égale à celle du jour</span>
+
+                            <label for="nom">Date d'Incorporation<sup style="color: red !important;">*</sup></label>
+                            <input  id="dateIncorparation" name="dateIncorparation" [(ngModel)]="historiqueAvenant.dateIncorparation" type="date"  pInputText (change)="onCompareDateAvenant()">
+
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                                <span class="textDanger" *ngIf="isInValidateDate">La date de paiement doit être antérieure ou égale à celle du jour</span>
+
+                            <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
+                            <input  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
+
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
+                            <input id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
+                        </div>
+
+                <!-- Frais Badges -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
+                    <input 
+                        pInputText
+                        type="number"
+                        inputId="fraisBadges" 
+                        name="fraisBadges"
+                        [(ngModel)]="historiqueAvenant.fraisBadges"
+                        class="w-full"/>
+                </div>
+
+                <!-- Frais Accessoires -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
+                    <input 
+                        pInputText
+                        type="number"
+                        inputId="fraisAccessoires" 
+                        name="fraisAccessoires" 
+                         [(ngModel)]="historiqueAvenant.fraisAccessoires"
+                        class="w-full"/>
+                    
+                </div>
+
+
+                <!-- Import Excel -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="excelFile">Importer le fichier Excel</label>
+                    <input 
+                    (change)="getFiles($event)"
+                        id="excelFile" 
+                        type="file" 
+                        pInputText 
+                        class="w-full">
+                </div>
+
+            </div>
         </div>
 
-    </p-tabPanel>
-    <p-tabPanel header="AUTOFINANCEMENT">
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="MUTUELLE">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="PARTICULIER">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="AUTRE">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos...
-        </p>
-    </p-tabPanel>
-</p-tabView>
+        <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">    
+                <button
+                (click)="onCancelIncorporation()"
+                    pButton icon="pi pi-check"
+                    label="Quitter"
+                    class="p-button-danger">
+                </button>  
+            </div>
 
-<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
+            <div class="col col-6">
+                <button 
+                    (click)="onSaveIncorporation(historiqueAvenant)"
+                    pButton icon="pi pi-check"
+                    label="Incorporer"
+                    class="p-button-success">
+                </button>   
+            </div>
+        </div>
+
+    </ng-template>
+</p-dialog>
+</div>
+</div>
+</div>
+
+<p-toast></p-toast>

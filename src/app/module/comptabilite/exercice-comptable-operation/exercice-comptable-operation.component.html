@@ -462,11 +462,15 @@
                         <!-- <td>
                             <p-tableCheckbox [value]="operation"></p-tableCheckbox>
                         </td> -->
-                            <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
+<!--                             <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >
                                  <span *ngIf="operation.datePaiement">{{operation?.datePaiement | formatTableValue : 'date'}}</span> 
                                  <span *ngIf="!operation.datePaiement">---</span> 
                             </span></td>
+                            <td><span class="p-column-title" >{{operation?.numPiece}}</span></td> -->
+
+                            <td><span class="p-column-title" >{{operation?.dateSaisieJour | formatTableValue : 'date'}}</span></td>
+                            <td><span class="p-column-title" >{{operation?.dateSaisie | formatTableValue : 'date'}}</span></td>
                             <td><span class="p-column-title" >{{operation?.numPiece}}</span></td>
 
                              <td><span class="p-column-title" >{{operation?.numFacture}}</span></td>
