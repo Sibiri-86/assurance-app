@@ -780,6 +780,19 @@ export class Endpoints {
         mock: `assets/mock/prestation/prefinancement.mock.json`
     };
 
+    static readonly BON_BY_NUMERO_PRESTATAIRE_DATE_SOINS = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement/bonDePriseEnCharge/AssureNumeroEtPrestataireEtDateSoins`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
 
+    static readonly ORDONNANCE_BY_NUMERO_PRESTATAIRE_DATE_SOINS = {
+        prod: `${SERVICE_PREFIX}/prestation/ordonnaceMedicalProduitPharmaceutique/ordonnanceAssureNumeroEtPrestataireEtDateSoins`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
+
+    static readonly DEVALIDER_BON_APRES_RATTACHEMENT = {
+        prod: `${SERVICE_PREFIX}/prestation/prefinancement/bonDePriseEnCharge/devaliderBonPriseEnCharge_apresRatachement`,
+        mock: `assets/mock/prestation/prefinancement.mock.json`
+    };
 
 }

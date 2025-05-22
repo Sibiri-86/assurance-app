@@ -274,9 +274,14 @@
 
                             <div class="p-field p-col-2">
                                 <button pButton  [disabled]="!prefinancement.montantReclame"
-                                        pRipple icon="pi pi-plus" pTooltip="Rattacher un bon" label="Rattacher un bon"
-                                        class="p-button-success" type="button" (click)="addBon()"></button>
+                                        pRipple icon="pi pi-paperclip" pTooltip="Rattacher un bon de prise en charge" label="Rattacher un bon de prise en charge"
+                                        class="p-button-info" type="button" (click)="addBon()"></button>
                             </div>
+                            <!-- <div class="p-field p-col-2">
+                                <button pButton  [disabled]="!prefinancement.montantReclame"
+                                        pRipple icon="pi pi-paperclip" pTooltip="Rattacher un bon pharmacie" label="Rattacher un bon pharmacie"
+                                        class="p-button-secondary" type="button" (click)="addBonPharmacie()"></button>
+                            </div> -->
 
                         </div>
                         </p-fieldset>
@@ -408,12 +413,21 @@
 </div>
 </div>
 
-<p-dialog [(visible)]="displayPrestationbon"  header="Veuillez rattaché un bon de prise en charge"  [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="displayPrestationbon" [style]="{width: '1000px'}"  header="Veuillez rattaché un bon de prise en charge"  [modal]="true" styleClass="p-fluid" (onHide)="closeDialogBon()">
 
     <ng-template pTemplate="content">
         <div class="card">
         <form>
             <div class="p-fluid p-formgrid p-grid">
+                <!-- <div class="p-field p-col-12">
+                    <label for="bonPriseEnCharge">Type de Bon<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                                showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationBon.matriculeAdherent"
+                                [(ngModel)]="prestationBon.bonPriseEnCharge"
+                                 [autoDisplayFirst]="false"  name="bonPriseEnCharge"
+                                optionLabel="numeros">
+                     </p-dropdown>
+                </div> -->
                 <div class="p-field p-col-12">
                     <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationBon.dateSoins">
@@ -422,26 +436,86 @@
                     <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <input id="matriculeAdherent" [disabled]="!prestationBon.dateSoins" type="text"  [(ngModel)]="prestationBon.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherentBon($event)" pInputText>
                 </div>
-                <div class="p-field p-col-12">
-                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required"></span></label>
+                <!-- <div class="p-field p-col-12">
+                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
                     <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
                                 showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationBon.matriculeAdherent"
                                 [(ngModel)]="prestationBon.bonPriseEnCharge"
                                  [autoDisplayFirst]="false"  name="bonPriseEnCharge"
                                 optionLabel="numeros">
                             </p-dropdown>
-                </div>
+                </div> -->
             </div>
+            <span *ngIf="bonPriseEnChargeList.length !== 0" style="font-size: 20px; font-weight: bold;"> Liste des bons retrouvés</span>
+            <p-table *ngIf="bonPriseEnChargeList.length !== 0" #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['tauxReel','adherent.nom','adherent.prenom','adherent.groupe.police.nom','libelle']"
+                [rowHover]="true" dataKey="id" [(selection)]="selectedProduct" selectionMode="multiple"
+                styleClass="p-datatable-customers"
+                currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngIf="!ordre?.isRatache === true" style="width: 3rem">
+                        
+                        </th>
+                        <th  pSortableColumn="nom" >Numéro de bon<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Bénéficiaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Matricule<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Assuré(e) principal<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Date de saisie<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th style="min-width:15px"  pSortableColumn="nom" >Rataché ?<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th style="min-width:15px"></th>
+                        
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ordre>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox *ngIf="!ordre?.isRatache === true" [value]="ordre"></p-tableCheckbox>
+                        </td>
+                        <td><span style="font-weight: bold;color: green;" class="p-column-title" >{{ordre.numeros}}</span>
+                        <td><span  class="p-column-title" >{{ordre.adherent.nom}} {{ordre.adherent.prenom}}</span>
+                        <td><span  class="p-column-title" >{{ordre.adherent.numero}}</span>
+                        <td><span  class="p-column-title" >{{ordre?.adherentPrincipal?.nom}} {{ordre?.adherentPrincipal?.prenom}}</span>
+                        <td><span  class="p-column-title" >{{ordre?.dateSaisie }}</span></td>
+                        <td><span *ngIf="ordre?.isRatache === null" style="color: white; font-weight: bold;"  class="p-badge p-badge-danger" >Non</span>
+                        <span *ngIf="ordre?.isRatache === false" style="color: white; font-weight: bold;"  class="p-badge p-badge-danger" >Non</span>
+                        <span *ngIf="ordre?.isRatache === true" style="color: white; font-weight: bold;"  class="p-badge p-badge-success" >Oui</span></td>
+                        <td style="min-width:15px">
+                                    <button *ngIf="ordre?.isRatache === true" pButton pRipple icon="pi pi-replay" label="Détacher"  pTooltip="Détacher le bon ?"
+                                            class="p-button p-button-info p-mr-2"
+                                            (click)="devaliderBonPriseEnCharge(ordre)">
+                                    </button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon(s).
+                    </div>
+                </ng-template>
+            </p-table>
         </form>
-        <div class="p-grid p-justify-between">
-            <div>
-            </div>
-            <div>
-                <button pButton  [disabled]="!prefinancement.montantReclame"
-                pRipple icon="pi pi-plus" pTooltip="Ajouter bon" label="Ajouter"
-                class="p-button-success" type="button" (click)="saveBon()"></button>
-            </div>
         </div>
+        <div class="p-grid p-justify-between">
+            
+                <div class="p-field p-col-4">
+                    <button pButton  [disabled]="selectedProduct.length === 0"
+                    pRipple icon="pi pi-plus" pTooltip="Rattacher un bon" label="Rattacher"
+                    class="p-button-success" type="button" (click)="saveBon($event)"></button>
+                </div>
+                <div class="p-field p-col-4">
+                    <button pButton
+                    pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                    class="p-button-danger" type="button" (click)="closeDialogBon()"></button>
+                </div>
         
         </div>
 
@@ -450,6 +524,165 @@
         
      </ng-template>
 </p-dialog>
+
+<p-dialog [(visible)]="displayPrestationbonPharmacie" [style]="{width: '1000px'}"  header="Veuillez rattaché un bon de prise en charge pharmacie"  [modal]="true" styleClass="p-fluid" (onHide)="closeDialogBon()">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+        <form>
+            <div class="p-fluid p-formgrid p-grid">
+                <!-- <div class="p-field p-col-12">
+                    <label for="bonPriseEnCharge">Type de Bon<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                                showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationBon.matriculeAdherent"
+                                [(ngModel)]="prestationBon.bonPriseEnCharge"
+                                 [autoDisplayFirst]="false"  name="bonPriseEnCharge"
+                                optionLabel="numeros">
+                     </p-dropdown>
+                </div> -->
+                <div class="p-field p-col-12">
+                    <label for="dateSoins">Date de soins <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <input id="dateSoins"   type="date" name="dateSoins" pInputText [(ngModel)]="prestationBon.dateSoins">
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="matriculeAdherent">Matricule adhérent <span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <input id="matriculeAdherent" [disabled]="!prestationBon.dateSoins" type="text"  [(ngModel)]="prestationBon.matriculeAdherent" name="matriculeAdherent"  (blur)="rechercherAdherentBon($event)" pInputText>
+                </div>
+                <!-- <div class="p-field p-col-12">
+                    <label for="bonPriseEnCharge">Bon de prise en charge<span style="color: red !important; size: 1.4em;" class="required">*</span></label>
+                    <p-dropdown inputId="bonPriseEnCharge" dataKey="id" [filter]="true"
+                                showClear="true" [options]="bonPriseEnChargeList"  [disabled]="!prestationBon.matriculeAdherent"
+                                [(ngModel)]="prestationBon.bonPriseEnCharge"
+                                 [autoDisplayFirst]="false"  name="bonPriseEnCharge"
+                                optionLabel="numeros">
+                            </p-dropdown>
+                </div> -->
+            </div>
+            <span *ngIf="bonPriseEnChargeList.length !== 0" style="font-size: 20px; font-weight: bold;"> Liste des bons pharmacies retrouvés</span>
+            <p-table *ngIf="bonPriseEnChargeList.length !== 0" #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['tauxReel','adherent.nom','adherent.prenom','adherent.groupe.police.nom','libelle']"
+                [rowHover]="true" dataKey="id" [(selection)]="selectedProduct" selectionMode="multiple"
+                styleClass="p-datatable-customers"
+                currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                        <h5 class="p-m-0"></h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th *ngIf="!ordre?.isRatache === true" style="width: 3rem">
+                        
+                        </th>
+                        <th  pSortableColumn="nom" >Numéro de bon<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Bénéficiaire<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Matricule<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Assuré(e) principal<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th   pSortableColumn="nom" >Date de saisie<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th style="min-width:15px"  pSortableColumn="nom" >Rataché ?<p-sortIcon field="nom"></p-sortIcon></th>
+                        <th style="min-width:15px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ordre>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox *ngIf="!ordre?.isRatache === true" [value]="ordre"></p-tableCheckbox>
+                        </td>
+                        <td><span style="font-weight: bold;color: green;" class="p-column-title" >{{ordre.numeros}}</span>
+                        <td><span  class="p-column-title" >{{ordre.adherent.nom}} {{ordre.adherent.prenom}}</span>
+                        <td><span  class="p-column-title" >{{ordre.adherent.numero}}</span>
+                        <td><span  class="p-column-title" >{{ordre?.adherentPrincipal?.nom}} {{ordre?.adherentPrincipal?.prenom}}</span>
+                        <td><span  class="p-column-title" >{{ordre?.dateSaisie }}</span></td>
+                        <td><span *ngIf="ordre?.isRatache === null" style="color: white; font-weight: bold;"  class="p-badge p-badge-danger" >Non</span>
+                        <span *ngIf="ordre?.isRatache === false" style="color: white; font-weight: bold;"  class="p-badge p-badge-danger" >Non</span>
+                        <span *ngIf="ordre?.isRatache === true" style="color: white; font-weight: bold;"  class="p-badge p-badge-success" >Oui</span></td>
+                        <td style="min-width:15px">
+                                    <button *ngIf="ordre?.isRatache === true" pButton pRipple icon="pi pi-replay" label="Détacher"  pTooltip="Détacher le bon ?"
+                                            class="p-button p-button-secondary p-mr-2"
+                                            (click)="devaliderBonPriseEnCharge(ordre)">
+                                    </button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon(s).
+                    </div>
+                </ng-template>
+            </p-table>
+        </form>
+        </div>
+        <div class="p-grid p-justify-between">
+            
+                <div class="p-field p-col-4">
+                    <button pButton  [disabled]="selectedProduct.length === 0"
+                    pRipple icon="pi pi-plus"pTooltip="Rattacher un bon" label="Rattacher"
+                    class="p-button-success" type="button" (click)="saveBon($event)"></button>
+                </div>
+                <div class="p-field p-col-4">
+                    <button pButton
+                    pRipple icon="pi pi-times" pTooltip="Annuler" label="Annuler"
+                    class="p-button-danger" type="button" (click)="closeDialogBon()"></button>
+                </div>
+        
+        </div>
+
+
+         
+        
+     </ng-template>
+</p-dialog>
+
+<!-- <p-dialog [(visible)]="displayPrestationbonChoose"  header="Choississez le bon que vous voulez rattacher"  [modal]="true" styleClass="p-fluid" (onHide)="closeDialogBon()">
+
+    <p-table #dt [value]="bonPriseEnChargeList" [autoLayout]="true" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['tauxReel','adherent.nom','adherent.prenom','adherent.groupe.police.nom','libelle']"
+        [rowHover]="true" dataKey="id" [(selection)]="selectedProduct"
+        styleClass="p-datatable-customers"
+        currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
+                <h5 class="p-m-0"></h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                   
+                </th>
+                <th  pSortableColumn="nom" >Numéro<p-sortIcon field="nom"></p-sortIcon></th>
+                <th   pSortableColumn="nom" >Bénéficiaire<p-sortIcon field="nom"></p-sortIcon></th>
+                <th   pSortableColumn="nom" >Matricule<p-sortIcon field="nom"></p-sortIcon></th>
+                <th   pSortableColumn="nom" >Assuré(e) principal<p-sortIcon field="nom"></p-sortIcon></th>
+                
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ordre>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="ordre"></p-tableCheckbox>
+                </td>
+                <td><span style="font-weight: bold;" class="p-column-title" >{{ordre.numeros}}</span>
+                <td><span  class="p-column-title" >{{ordre.adherent.nom}} {{ordre.adherent.prenom}}</span>
+                <td><span  class="p-column-title" >{{ordre.adherent.numero}}</span>
+                <td><span  class="p-column-title" >{{ordre?.adherentPrincipal?.nom}} {{ordre?.adherentPrincipal?.prenom}}</span>
+                </td>
+                
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                {{bonPriseEnChargeList ? bonPriseEnChargeList.length : 0 }} bon(s).
+            </div>
+        </ng-template>
+    </p-table>
+</p-dialog> -->
 
 <p-dialog [(visible)]="displayAssure"  header="Veuillez rechercher un assuré" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content"> 

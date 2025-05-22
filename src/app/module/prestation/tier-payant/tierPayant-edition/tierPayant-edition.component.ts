@@ -189,6 +189,8 @@ export class TierPayantEditionComponent implements OnInit {
     showMessage = false;
     showAlert = false;
     displayPrestationbon = false;
+    displayPrestationbonChoose = false;
+    displayPrestationbonPharmacie = false;
     displayAssure = false;
     adherentsearch:  Adherent = {};
     adherentsList: Array<Adherent> = [];
@@ -234,6 +236,7 @@ export class TierPayantEditionComponent implements OnInit {
     tierPayant: SinistreTierPayant = {};
 
     dateSoins: any;
+    selectedProduct: BonPriseEnCharge[] = [];
 
     constructor(private store: Store<AppState>,
                 private confirmationService: ConfirmationService,
@@ -817,7 +820,13 @@ export class TierPayantEditionComponent implements OnInit {
           console.log(value);
           if (value) {
             this.bonPriseEnChargeList = value.slice();
-          }
+            //this.displayPrestationbonChoose = true;
+              if(this.bonPriseEnChargeList.length == 0) {
+              this.addMessage('error', 'Bon non retrouvé',
+              'Aucun bon de prise en charge ne correspond aux infos que vous avez renseigné');
+              }
+          } 
+          
     }); 
 
         this.statusObject$ = this.store.pipe(select(status));
@@ -1059,7 +1068,8 @@ export class TierPayantEditionComponent implements OnInit {
             event.target.value = this.prestationBon.matriculeAdherent;
         }        
         
-        this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
+        this.bonParAssureNumeroEtPrestataireEtDateSoins(event);
+        ///this.store.dispatch(featureActionAdherent.searchAdherentByDateSoinsAndMatricule({dateSoins:this.prestationBon.dateSoins, matricule: event.target.value}));;
       /*   this.adherentSelected$.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             console.log(value);
             if (value) {
@@ -1809,6 +1819,13 @@ export class TierPayantEditionComponent implements OnInit {
 
     addBon(): void {
         this.displayPrestationbon = true;
+        this.bonPriseEnChargeList = [];
+     
+    }
+
+    addBonPharmacie(): void {
+        this.displayPrestationbonPharmacie = true;
+        this.bonPriseEnChargeList = [];
      
     }
 
@@ -2427,7 +2444,7 @@ export class TierPayantEditionComponent implements OnInit {
       }
       
 
-      saveBon() {
+      saveBon(event) {
         if(this.prefinancement.montantRestant == null) {
             this.prefinancement.montantRestant = this.prefinancement.montantReclame;
 
@@ -2436,15 +2453,20 @@ export class TierPayantEditionComponent implements OnInit {
             this.prefinancement.montantRestant = 0;
 
         }
+        this.prestationBon.bonPriseEnCharge = {};
+        this.prestationBon.bonPriseEnCharge.prestation = [];
+        console.log("this.selectedProduct ===>", this.selectedProduct);
+        this.prestationBon.bonPriseEnCharge = this.selectedProduct[0];
+        console.log("this.selectedProduct[0] ===>", this.selectedProduct[0]);
+        console.log("this.prestationBon.bonPriseEnCharge ===>", this.prestationBon.bonPriseEnCharge);
         if(this.prestationBon.bonPriseEnCharge) {
-            for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i ++) {
-             //   this.prestationBon.bonPriseEnCharge.prestation[i].id = null;
+          console.log("Entrerrrrrrrrrrrrr ===> "+this.prestationBon.bonPriseEnCharge.prestation.length);
+            for(let i =0 ; i< this.prestationBon.bonPriseEnCharge.prestation.length; i++) {
+              console.log("this.prestations ===>", i);
                 this.prestationBon.bonPriseEnCharge.isRatache = true;
-                //this.prestationBon.bonPriseEnCharge.prestation[i]
                 this.prefinancement.montantPaye = this.prefinancement.montantPaye + this.prestationBon.bonPriseEnCharge.prestation[i].montantRembourse;
                 this.prefinancement.montantRestant = this.prefinancement.montantRestant - this.prefinancement.montantPaye;
                 this.prestationsListWithBon.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
-                //this.prestationsList.push(this.prestationBon.bonPriseEnCharge.prestation[i]);
                 console.log("this.prestationsList ===>", this.prestationsList);
             }
 
@@ -2462,7 +2484,10 @@ export class TierPayantEditionComponent implements OnInit {
         console.log("===================bon rattacher===apres===",this.prestationsListWithBon);
         this.prestationBon = {};
         this.displayPrestationbon = false;
+        this.closeDialogBon();
+        this.selectedProduct = [];
       }
+      
 
       updateView() {
         this.prestationsList = [...this.prestationsList];
@@ -2696,10 +2721,51 @@ export class TierPayantEditionComponent implements OnInit {
                     },
                   });
             }
-            
-            
-      
 
+            closeDialogBon() {
+            this.prestationBon = {};
+            this.displayPrestationbon = false;
+            this.selectedProduct = [];
+          }
+
+          bonParAssureNumeroEtPrestataireEtDateSoins (event) {
+            console.log("event", event.target.value);
+            console.log("this.prestationBon", this.prestationBon);
+            this.bonPriseEnChargeList = [];
+            this.prefinancementService.bonParAssureNumeroEtPrestataireEtDateSoins(event.target.value, this.prefinancement.prestataire.id, formatDate(this.prestationBon.dateSoins, 'dd/MM/yyyy', 'en-fr'))
+            .subscribe((rest)=>{
+            if(rest) {
+              this.bonPriseEnChargeList = rest;
+              console.log("bonParAssureNumeroEtPrestataireEtDateSoins", this.bonPriseEnChargeList);
+              if(this.bonPriseEnChargeList.length == 0) {
+              this.addMessage('error', 'Bon non retrouvé',
+              'Aucun bon de prise en charge ne correspond aux infos que vous avez renseigné');
+              }
+            }
+            });
+          }
+
+          devaliderBonPriseEnCharge(bon: BonPriseEnCharge) {
+            this.confirmationService.confirm({
+            message: 'voulez-vous dévalider le bon de prise en charge',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+               this.prefinancementService.devaliderBonPriseEnCharge(bon.id).subscribe((rest)=>{
+                if(rest) {
+                  this.addMessage('succes', 'succès',
+                  'Bon dévalidé avec succès');
+                  if(bon.prestation.length != 0 ) {
+                    
+                  }
+                  this.bonPriseEnChargeList = [];
+                }
+                });
+            },
+          });
+            
+          }
+           
 }
 
 export interface FraisReels {

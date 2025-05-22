@@ -12,6 +12,8 @@ import { TypeEtatOrdreReglement, Workflow } from 'src/app/module/common/models/e
 import { Report } from '../../contrat/police/model';
 import {formatDate} from '@angular/common';
 import { Taux } from '../../parametrage/taux/model';
+import { BonPriseEnCharge } from '../../medical/bon-prise-en-charge/model';
+import { OrdonnanceMedicalProduitPharmaceutique } from '../../medical/ordonnance-medical/model';
 
 @Injectable({providedIn: 'root'})
 export class PrefinancementService {
@@ -302,5 +304,29 @@ private handleError<T>() {
           map((response: OrdreReglement) => response),
           catchError(this.handleError())
       );
+  }
+
+  bonParAssureNumeroEtPrestataireEtDateSoins(assureNumero: number, prestataireId: string, dateSoins: string ):Observable< Array<BonPriseEnCharge>>  {
+          return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.BON_BY_NUMERO_PRESTATAIRE_DATE_SOINS)}`, {params :
+            this.createRequestOption({assureNumero, prestataireId, dateSoins})}).pipe(
+            map((response: Array<BonPriseEnCharge>) => response),
+            catchError(this.handleError())
+          );
+  }
+
+  findOrdonnaceMedicalProduitPharmaceutiqueParAssureNumeroEtPrestataireEtDateSoins(assureNumero: number, prestataireId: string, dateSoins: string ):Observable< Array<OrdonnanceMedicalProduitPharmaceutique>>  {
+          return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.ORDONNANCE_BY_NUMERO_PRESTATAIRE_DATE_SOINS)}`, {params :
+            this.createRequestOption({assureNumero, prestataireId, dateSoins})}).pipe(
+            map((response: Array<OrdonnanceMedicalProduitPharmaceutique>) => response),
+            catchError(this.handleError())
+          );
+  }
+
+  devaliderBonPriseEnCharge(bonId: string ):Observable< Array<boolean>>  {
+          return this.http.get(`${GlobalConfig.getEndpoint(Endpoints.DEVALIDER_BON_APRES_RATTACHEMENT)}`, {params :
+            this.createRequestOption({bonId})}).pipe(
+            map((response: Array<boolean>) => response),
+            catchError(this.handleError())
+          );
   }
 }
