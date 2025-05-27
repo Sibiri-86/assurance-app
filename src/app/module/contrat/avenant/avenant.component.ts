@@ -359,6 +359,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
   isToDisplayAvenantIncorporation = false;
 
   policeSelected : any;
+  reponseDeA = "";
 
   // historiquePlafondActeList$: Observable<HistoriquePlafondActe[]>
   constructor(
@@ -532,6 +533,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.gererReponse(this.reponseDeA);
+    console.log('this.reponseDeA', this.reponseDeA);
     this.majPoliceName = {};
     this.policeName;
     this.dateDebut = new Date();
@@ -547,6 +551,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.historiqueAvenant = {};
     this.exercice = {};
+
+
 
     this.items = [
       {label: 'Home', icon: 'pi pi-fw pi-home'},
@@ -811,18 +817,29 @@ export class AvenantComponent implements OnInit, OnDestroy {
         sousActe: {}
       }
     ];
-    
-/*
+
+
       this.typeActions = [
-      {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+
+        {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+          this.initDisplayAvenant();
+          this.addAvenant();
+          console.log($event);
+          this.isAvenantIncorporation = true;
+          this.entete = 'Avenant d\'Incorporation';
+          this.etat = 'CREATE';
+      }},
+
+/*       {label: 'Incorporation new', icon: 'pi pi-user-plus', command: ($event) => {
 
           console.log("$event$event", $event);
 
+          this.etat = 'CREATE';
           this.policeSelected = this.policeItem;
 
           this.onDisplayNewAvenantComposant();
           this.entete = 'Avenant d\'Incorporation';
-      }},
+      }}, */
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
           this.addAvenantRetrait();
@@ -864,9 +881,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantModification();
           this.etat = 'CREATE';
       }},
-    ]; */
+    ]; 
 
-    this.typeActions = [
+    /*this.typeActions = [
       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
           this.addAvenant();
@@ -916,7 +933,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.addAvenantModification();
           this.etat = 'CREATE';
       }},
-    ];
+    ];*/
 
     this.garantieList$ = this.store.pipe(select(garantieSelector.garantieList));
     this.store.dispatch(loadGarantie());
@@ -1736,7 +1753,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
-    console.log('**************HistoriqueAvenan-----t***------*************');
+    console.log('************** historiqueAvenant*************');
+    console.log('historiqueAvenant', historiqueAvenant);
     console.log(historiqueAvenant);
     if (historiqueAvenant.id == null) {
       this.historiqueAvenant = historiqueAvenant;
@@ -1840,9 +1858,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   /** afficher les details de la police */
   onRowSelectPolice(police: Police) {
-
-    console.log('policepolice', police);
-
     this.police = {...police};
     this.loadExerciceByPolice(police);
     this.infosPolice = true;
@@ -3207,6 +3222,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
   getGroupeByPolice(historique :HistoriqueAvenant) {
+    
+  console.log("=============================Birrrrrrrrrr =============");
+  console.log('historique', historique);
+
     this.groupeService.getGroupewithSameId(historique.police.id).subscribe(
       (res) => {
         this.listGroupe = res;
@@ -3405,5 +3424,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
   getPolice(police: Police){
 
    // this.monMessage = police;
+  }
+
+    gererReponse(reponse: string) {
+    this.reponseDeA = reponse;
   }
 }

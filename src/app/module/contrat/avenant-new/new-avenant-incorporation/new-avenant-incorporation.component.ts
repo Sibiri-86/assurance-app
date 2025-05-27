@@ -1,9 +1,11 @@
+import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { error } from 'console';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AdherentFamille } from 'src/app/store/contrat/adherent/model';
+import { Adherent, AdherentFamille } from 'src/app/store/contrat/adherent/model';
+import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
@@ -12,6 +14,7 @@ import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 import { Police } from 'src/app/store/contrat/police/model';
 import { PoliceService } from 'src/app/store/contrat/police/service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-new-avenant-incorporation',
@@ -33,16 +36,32 @@ export class NewAvenantIncorporationComponent implements OnInit {
   adherentFamilleListe: AdherentFamille[] = [];
 
   isInValidateDateAvenant = false;
-  isInValidateDateEffect = false;
+  isInValidateDateEffect = false; 
   
-
   @Input() policeSelected: Police;
+  @Output() reponseEnvoyee = new EventEmitter<string>();
+  adhrentAJourToSave: Adherent[] = [];
+  displayViewContrat = false;
+  isToViewImporteExcelFile = false;
+
+  adherents: any[] = [];
+  families: any[][] = [];
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
       {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
       {libelle: 'GARANT', value: TypeDemandeur.GARANT}
       ];
+
+  genreOptions = [
+    { label: 'Masculin', value: 'M' },
+    { label: 'Féminin', value: 'F' }
+  ];
+  qualiteOptions = [
+    { label: 'ADHERENT', value: 'ADHERENT' },
+    { label: 'CONJOINT', value: 'CONJOINT' },
+    { label: 'ENFANT', value: 'ENFANT' }
+  ];
 
   constructor(
       private http: HttpClient,
@@ -53,6 +72,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
       private policeService: PoliceService,
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
+      private adherentService: AdherentService,
     ) {}
 
   ngOnInit(): void {
@@ -174,7 +194,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
       dateAvenant.setHours(0, 0, 0, 0);
       dateIncorparation.setHours(0, 0, 0, 0);
-        this.isInValidateDateAvenant = dateAvenant > dateIncorparation;
+      this.isInValidateDateAvenant = dateAvenant > dateIncorparation;
     }
 
     onCompareDateEffect(historiqueAvenant: any) {
@@ -183,10 +203,11 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
       dateIncorparation.setHours(0, 0, 0, 0);
       dateEffet.setHours(0, 0, 0, 0);
-        this.isInValidateDateEffect = dateIncorparation > dateEffet;
+      this.isInValidateDateEffect = dateIncorparation > dateEffet;
+
     }
 
-   addAdherentFamille(historiqueAvenant: HistoriqueAvenant): void {
+   onConfirmIncorporation(historiqueAvenant: HistoriqueAvenant): void {
       if (historiqueAvenant.id == null) {
         this.historiqueAvenant = historiqueAvenant;
         this.historiqueAvenant.id = null;
@@ -213,24 +234,89 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
     onCancelIncorporation(){
     this.isToImporteExcelFile = false;
+    this.isToViewImporteExcelFile = true;
     this.router.navigateByUrl('/contrat/avenant');
   }
 
-    onSaveIncorporation(historiqueAvenant: HistoriqueAvenant){
+  onNextStepp(historiqueAvenant: HistoriqueAvenant){
 
+    historiqueAvenant.police = this.policeSelected;
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    historiqueAvenant.dateSaisie = new Date();
+    this.historiqueAvenant = historiqueAvenant;
+
+    this.isToViewImporteExcelFile = true;
+    this.isToImporteExcelFile = false;
+
+  }
+
+  onBackStepp(){
+
+    this.isToImporteExcelFile = true;
+    this.isToViewImporteExcelFile = false;
+  }
+
+
+    saveMajAdherent() {
+    if(this.adhrentAJourToSave.length != 0) {
+      this.adherentService.putAdherentMatriculeGarant(this.adhrentAJourToSave).subscribe(
+        (res) => {
+          this.getSucessInfo();
+          this.displayViewContrat = false;
+        }
+      );
+    }
+  }
+
+    generateRandomNumeroGarant(): string {
+      const prefix = "GAR-";
+      const randomPart = Math.floor(100000 + Math.random() * 900000);
+      return prefix + randomPart;
+    }
+
+
+    onSaveIncorporation(data: any) {
+
+      console.log('this.historiqueAvenant', this.historiqueAvenant);
+      console.log('this.families', this.families);
+
+    //  const payload = this.families.flat(); // tous les assurés
+    const payload = this.families.reduce((acc, cur) => acc.concat(cur), []);
+
+    console.log('payload', payload);
+    
+    this.historiqueAvenant.aderants = payload;
+    console.log('historiqueAvenant', this.historiqueAvenant);
+
+
+    }
+
+
+
+
+
+    onSaveIncorporation2(historiqueAvenant: HistoriqueAvenant){
+    
         if(historiqueAvenant){
+        historiqueAvenant.police = this.policeSelected;
         historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+        historiqueAvenant.dateSaisie = new Date();
+        console.log("historiqueAvenant", historiqueAvenant);
         this.confirmationService.confirm({
           message: 'Voulez-vous procéder à l’incorporation ?',
           header: 'Confirmation',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
-            this.addAdherentFamille(historiqueAvenant);
+            this.onConfirmIncorporation(historiqueAvenant);
           },
         });
   }
 
 }
+
+  envoyerReponse() {
+    this.reponseEnvoyee.emit("Salut B, j'ai bien reçu ton message !");
+  }
 
       getSucessInfo(): void {
         this.messageService.add({severity: 'success', summary: 'AVENANT INCORPORATION', detail: 'Opération réussie!'});
@@ -245,6 +331,136 @@ export class NewAvenantIncorporationComponent implements OnInit {
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: message});
       }
+
+  onGetFiles1(event: any): void {
+  const target: DataTransfer = <DataTransfer>(event.target);
+  if (target.files.length !== 1) return;
+
+  const reader: FileReader = new FileReader();
+  reader.onload = (e: any) => {
+    const bstr: string = e.target.result;
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    
+    this.adherents = data;
+    this.groupByOrdre();
+  };
+  reader.readAsBinaryString(target.files[0]);
+
+}
+
+groupByOrdre() {
+  const grouped = new Map<number, any[]>();
+  this.adherents.forEach(item => {
+    const ordre = item['ordre'];
+    if (!grouped.has(ordre)) grouped.set(ordre, []);
+    grouped.get(ordre)!.push(item);
+  });
+
+  this.families = Array.from(grouped.values());
+
+}
+
+transformImportData1(rawData: any[]): Adherent[] {
+  return rawData.map(row => {
+    return {
+      nom: row['Nom']?.trim(),
+      prenom: row['Prénom']?.trim(),
+      genre: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
+      qualiteAssure: this.mapQualite(row['qualité assuré (ADHERENT, CONJOINT ou ENFANF)']),
+      dateNaissance: this.toDate(row['date de naissance']),
+      dateIncorporation: row["Date d'incorporation"],
+      dateIncor: this.toDate(row["Date d'incorporation"]),
+      dateEntree: this.toDate(row["Date d'entrée"]),
+      matricule: row['matricule chez le souscripteur'],
+      matriculeGarant: row['matricule de chez le garant'],
+      numeroTelephone: row['Numéro téléphone'] || null,
+      adresseEmail: row['Email'] || null,
+      adresse: row['Adresse'] || null,
+      // ajouter d’autres conversions si besoin...
+      fullName: `${row['Nom']} ${row['Prénom']}`,
+      // actif: true,
+      deleted: false
+    } as Adherent;
+
+  });
+
+}
+
+toDate(dateStr: string): Date | null {
+  if (!dateStr) return null;
+  const parsed = new Date(dateStr);
+  return isNaN(parsed.getTime()) ? null : parsed;
+}
+
+mapQualite(qualite: string): any {
+  switch (qualite?.toUpperCase()) {
+    case 'ADHERENT':
+      return 'ADHERENT';
+    case 'CONJOINT':
+      return 'CONJOINT';
+    case 'ENFANT':
+      return 'ENFANT';
+    default:
+      return null;
+  }
+}
+
+onGetFiles(event: any): void {
+  const target: DataTransfer = <DataTransfer>(event.target);
+  if (target.files.length !== 1) return;
+
+  const reader: FileReader = new FileReader();
+  reader.onload = (e: any) => {
+    const bstr: string = e.target.result;
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    const rawData = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+  
+    this.adherents = this.transformImportData(rawData);
+    this.groupByOrdre();
+  };
+  reader.readAsBinaryString(target.files[0]);
+}
+
+
+transformImportData(rawData: any[]): Adherent[] {
+  return rawData.map(row => {
+    const nom = row['Nom']?.trim() || '';
+    const prenom = row['Prénom']?.trim() || '';
+
+    return {
+      nom,
+      prenom,
+      genre: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
+      qualiteAssure: this.mapQualite(row['qualité assuré (ADHERENT, CONJOINT ou ENFANF)']),
+      dateNaissance: row['date de naissance'],
+      dateIncorporation: row["Date d'incorporation"],
+      dateIncor: this.toDate(row["Date d'incorporation"]),
+      dateEntree: this.toDate(row["Date d'entrée"]),
+      matricule: row['matricule chez le souscripteur'],
+      matriculeGarant: row['matricule de chez le garant'],
+      numeroTelephone: row['Numéro téléphone'] || null,
+      adresseEmail: row['Email'] || null,
+      lieuNaissance: row['lieu de naissance'] || null,
+      adresse: row['Adresse'] || null,
+      profession: row['profession'] || null,
+      referenceBancaire: row['référence bancaire'] || null,
+      ordre: Number(row['Ordre']) || 0,
+      numeroPrincipal: row['NUMERO PRINCIPAL'] || null,
+      adherentPrincipal: row['ADHERENT principal'] || null,
+      fullName: `${nom} ${prenom}`,
+      deleted: false
+    } as Adherent;
+  });
+}
+
+
+
 
 
 }

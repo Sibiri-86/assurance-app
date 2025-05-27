@@ -165,6 +165,8 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
         headers.append('Content-Type', 'multipart/form-data');
         headers.set('Accept', 'application/vnd.ms.excel; charset=utf-8');
         console.log('++++++++++++++++++data++++++++++++++++++++++');
+        console.log(data);
+        console.log('++++++++++++++++++data++++++++++++++++++++++');
         console.log(data.append);
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.HISTORIQUE_AVENANT_FILE)}`, data, {headers: headers});
     }
