@@ -830,16 +830,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.etat = 'CREATE';
       }},
 
-       {label: 'Incorporation new', icon: 'pi pi-user-plus', command: ($event) => {
 
-          console.log("$event$event", $event);
-
-          this.etat = 'CREATE';
-          this.policeSelected = this.policeItem;
-
-          this.onDisplayNewAvenantComposant();
-          this.entete = 'Avenant d\'Incorporation';
-      }}, 
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
           this.addAvenantRetrait();
