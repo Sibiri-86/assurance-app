@@ -1,5 +1,5 @@
 import {Police, PoliceList, Report, SMS, Statistique} from "./model";
-import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -178,4 +178,20 @@ export class PoliceService {
         // @FIXME: post request
         return this.http.post(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/majPoliceName`, Police);
     }
+
+
+    getPoliceByTypeGarant(typeGarandCode?: string): Observable<any> {
+        
+        let params = new HttpParams();
+
+        if (typeGarandCode) {
+            params = params.set('typeGarandCode', typeGarandCode);
+        }
+
+        return this.http.get(
+            `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_GET_BY_GARAND_CODE)}`,
+            { params }
+        );
+}
+
 }

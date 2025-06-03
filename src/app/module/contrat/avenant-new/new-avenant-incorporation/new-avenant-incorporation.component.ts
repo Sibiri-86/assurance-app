@@ -1,9 +1,7 @@
-import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { error } from 'console';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Adherent, AdherentFamille } from 'src/app/store/contrat/adherent/model';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
@@ -25,7 +23,7 @@ import * as XLSX from 'xlsx';
 export class NewAvenantIncorporationComponent implements OnInit {
 
   selectedFile?: File;
-  isToImporteExcelFile: boolean = true;
+  isToImporteExcelFile: boolean = false;
   exercices: Exercice[] = [];
   groupesByPolicy: Groupe [] = [];
   incorporationDate: any;
@@ -48,6 +46,17 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
   adherents: any[] = [];
   families: any[][] = [];
+  typeActions: MenuItem[] = [];
+  cols: any[];
+  entete = '';
+
+  policeByTypeGarand: Police [] = [];
+
+  totalAssure = 0;
+  nbAdherents = 0;
+  nbConjoints = 0; 
+  nbEnfants = 0;
+
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -80,19 +89,44 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.typeActions = [
+
+       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+
+          // this.policeSelected = this.policeItem;
+
+          this.onDisplayNewAvenantComposant();
+          this.entete = 'Avenant d\'Incorporation';
+      }}, 
+      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
+          // this.isAvenantRetrait = true;
+          this.entete = 'Avenant de Retrait';
+      }},
+
+    ]; 
+
     this.historiqueAvenant = {
         observation: 'INCORPORATION'
       };
 
     this.loadExerciceByPolice();
     this.loadGroupeByPolice();
+    this.onGetPolice();
 
   }
 
 
-  loadExerciceByPolice(){
-    if(this.policeSelected && this.policeSelected.id){
-        this.exerciceService.$getExercices(this.policeSelected.id).subscribe(
+   onGetPoliceSelected(police){
+
+      this.policeSelected = police;
+      this.loadExerciceByPolice(police)
+      this.loadGroupeByPolice(police)
+   }
+
+
+  loadExerciceByPolice(police?: Police){
+    if(police && police.id){
+        this.exerciceService.$getExercices(police.id).subscribe(
          res => {
            this.exercices = res;
          }
@@ -100,9 +134,9 @@ export class NewAvenantIncorporationComponent implements OnInit {
     }
   }
 
-  loadGroupeByPolice(){
-    if(this.policeSelected && this.policeSelected.id){
-        this.groupeService.$getGroupes(this.policeSelected.id).subscribe(
+  loadGroupeByPolice(police?: Police){
+    if(police && police.id){
+        this.groupeService.$getGroupes(police.id).subscribe(
          res => {
            this.groupesByPolicy = res.groupeDtoList;
          }
@@ -210,7 +244,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
     }
 
-   onConfirmIncorporation(historiqueAvenant: HistoriqueAvenant): void {
+/*    onConfirmIncorporation(historiqueAvenant: HistoriqueAvenant): void {
       if (historiqueAvenant.id == null) {
         this.historiqueAvenant = historiqueAvenant;
         this.historiqueAvenant.id = null;
@@ -234,11 +268,16 @@ export class NewAvenantIncorporationComponent implements OnInit {
         }
       }
     }
+ */
 
     onCancelIncorporation(){
     this.isToImporteExcelFile = false;
-    this.isToViewImporteExcelFile = true;
-    this.router.navigateByUrl('/contrat/avenant');
+    this.isToViewImporteExcelFile = false;
+    this.groupesByPolicy = [];
+    this.exercices = [];
+    this.policeSelected = {};
+
+   // this.router.navigateByUrl('/contrat/avenant');
   }
 
   onNextStepp(historiqueAvenant: any){
@@ -256,11 +295,9 @@ export class NewAvenantIncorporationComponent implements OnInit {
   }
 
   onBackStepp(){
-
     this.isToImporteExcelFile = true;
     this.isToViewImporteExcelFile = false;
   }
-
 
     saveMajAdherent() {
     if(this.adhrentAJourToSave.length != 0) {
@@ -299,6 +336,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
           this.isToViewImporteExcelFile = false;
           this.isToImporteExcelFile = false;
+          this.onGetPolice();
         }
       }
     );
@@ -307,11 +345,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
     }
 
 
-
-
-
     onSaveIncorporation(){
-      
+
         this.confirmationService.confirm({
           message: 'Voulez-vous procéder à l’incorporation ?',
           header: 'Confirmation',
@@ -360,7 +395,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
 }
 
-groupByOrdre() {
+groupByOrdre1() {
   const grouped = new Map<number, any[]>();
   this.adherents.forEach(item => {
     const ordre = item['ordre'];
@@ -371,6 +406,40 @@ groupByOrdre() {
   this.families = Array.from(grouped.values());
 
 }
+
+groupByOrdre() {
+  const grouped = new Map<number, any[]>();
+
+  this.adherents.forEach(item => {
+    const ordre = item['ordre'];
+    if (!grouped.has(ordre)) grouped.set(ordre, []);
+    grouped.get(ordre)!.push(item);
+  });
+
+  this.families = Array.from(grouped.values());
+
+  this.nbAdherents = 0;
+  this.nbConjoints = 0;
+  this.nbEnfants = 0;
+
+  this.families.forEach(family => {
+    family.forEach(member => {
+      const qualite = member['qualiteAssureNew']?.toLowerCase?.();
+
+      if (qualite === 'adherent') {
+        this.nbAdherents++;
+      } else if (qualite === 'conjoint') {
+        this.nbConjoints++;
+      } else if (qualite === 'enfant') {
+        this.nbEnfants++;
+      }
+    });
+  });
+
+   this.totalAssure = this.nbAdherents + this.nbConjoints + this.nbEnfants;
+}
+
+
 
 toDate(dateStr: string): Date | null {
   if (!dateStr) return null;
@@ -442,8 +511,22 @@ transformImportData(rawData: any[]): Adherent[] {
   });
 }
 
+  onDisplayNewAvenantComposant() {
+    this.isToImporteExcelFile = true;
+  }
 
+  onGetPolice(typeGarandCode?: string){
 
+       this.policeService.getPoliceByTypeGarant(typeGarandCode).subscribe(
+        resp => {
+          if(resp){
 
+            this.policeByTypeGarand = resp;
+
+            console.log('policeByTypeGarand', this.policeByTypeGarand);
+          }
+        }
+       );
+  }
 
 }

@@ -785,6 +785,12 @@ export class Endpoints {
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 
+        
+    static readonly CONTRAT_POLICE_GET_BY_GARAND_CODE = {
+        prod: `${SERVICE_PREFIX}/contrat/police/get-type-garant-code`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+
 
 
 }
