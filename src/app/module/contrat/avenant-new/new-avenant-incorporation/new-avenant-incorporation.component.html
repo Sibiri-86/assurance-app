@@ -199,7 +199,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
-        <tr [ngClass]="{'principal-row': row['qualiteAssure']?.toUpperCase() === 'ADHERENT'}">
+        <tr [ngClass]="{'principal-row': row['qualiteAssureNew']?.toUpperCase() === 'ADHERENT'}">
 
 
           <td pEditableColumn>
@@ -227,13 +227,13 @@
                 <ng-template pTemplate="input">
                   <p-dropdown 
                     [options]="genreOptions"
-                    [(ngModel)]="row['genre']"
+                    [(ngModel)]="row['genreNew']"
                     optionLabel="label"
                     optionValue="value">
                   </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{ row['genre'] }}
+                  {{ row['genreNew'] }}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -243,13 +243,13 @@
                 <ng-template pTemplate="input">
                   <p-dropdown 
                     [options]="qualiteOptions"
-                    [(ngModel)]="row['qualiteAssure']"
+                    [(ngModel)]="row['qualiteAssureNew']"
                     optionLabel="label"
                     optionValue="value">
                   </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="output">
-                {{ row['qualiteAssure'] }}
+                {{ row['qualiteAssureNew'] }}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -278,10 +278,10 @@
             <td pEditableColumn>
                 <p-cellEditor>
                 <ng-template pTemplate="input">
-                    <input [(ngModel)]="row['dateNaissance']" type="date" pInputText />
+                    <input [(ngModel)]="row['dateNaissanceNew']" type="date" pInputText />
                 </ng-template>
                 <ng-template pTemplate="output">
-                    {{ row['dateNaissance']   }}
+                    {{ row['dateNaissanceNew']   }}
                 </ng-template>
                 </p-cellEditor>
             </td>
@@ -289,10 +289,10 @@
             <td pEditableColumn>
             <p-cellEditor>
                 <ng-template pTemplate="input">
-                <input [(ngModel)]="row['dateIncorporation']" type="date" pInputText />
+                <input [(ngModel)]="row['dateIncorporationNew']" type="date" pInputText />
                 </ng-template>
                 <ng-template pTemplate="output">
-                {{ row['dateIncorporation']  | formatTableValue : 'date' }}
+                {{ row['dateIncorporationNew']  | formatTableValue : 'date' }}
                 </ng-template>
             </p-cellEditor>
             </td>
@@ -333,7 +333,7 @@
 
             <div class="col col-6">
                 <button 
-                    (click)="onSaveIncorporation(historiqueAvenant)"
+                    (click)="onSaveIncorporation()"
                     pButton icon="pi pi-check"
                     label="Incorporer"
                     class="p-button-success">

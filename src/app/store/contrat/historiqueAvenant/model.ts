@@ -21,6 +21,7 @@ export interface HistoriqueAvenant {
     typeHistoriqueAvenant?: TypeHistoriqueAvenant;
     aderants?: Array<AdherentFamille>;
     groupe?: Groupe;
+    aderantsNew?: any;
     historiqueAvenantAdherants?: Array<HistoriqueAvenantAdherant>;
     historiqueAvenantAdherant1s?: Array<HistoriqueAvenantAdherant>;
     numero?: number;

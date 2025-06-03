@@ -177,6 +177,16 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
              {params: createRequestOption({typeHistoriqueAvenant}), responseType: 'arraybuffer' as 'json'});
     }
 
+
+
+
+
+    saveIncorporationService(historiqueAvenantNewDTO: any): Observable<any> {
+    return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_INCORPORATION_NEW), historiqueAvenantNewDTO);
+}
+
+
+
     compareDate(debut?: Date, fin?: Date): Observable<any> {
         // console.log('date = ' + debut.getMonth());
         const avenant: HistoriqueAvenant = {};

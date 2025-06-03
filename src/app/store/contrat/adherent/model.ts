@@ -22,12 +22,16 @@ export interface Adherent{
     profession?: Profession;
     referenceBancaire?: string;
     qualiteAssure?: QualiteAssure;
+    qualiteAssureNew?: string;
     genre?: Genre;
-    dateIncorporation?: string;
+    genreNew?: string;
+    dateIncorporationNew?: string;
+    dateIncorporation?: Date;
     dateIncor?: Date;
     dateEntree?: Date;
     groupe?: Groupe;
     adherentPrincipal?: Adherent;
+    adherentPrincipalNew?: string;
     plafondGroupeSousActe?: PlafondSousActe;
     plafondGroupeSousActeCSG?: PlafondSousActe;
     plafondGroupeSousActeCSS?: PlafondSousActe;

@@ -14,6 +14,7 @@ import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
 import { Police } from 'src/app/store/contrat/police/model';
 import { PoliceService } from 'src/app/store/contrat/police/service';
+import { GenreService } from 'src/app/store/parametrage/genre/service';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -30,6 +31,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
   incorporationDate: any;
   avenantDate: any;
   historiqueAvenant: HistoriqueAvenant = {};
+  historiqueAvenantNewDTO: any = {};
   file:any;
   curentGroupe: Groupe = {};
   curentExercice: Exercice = {};
@@ -73,6 +75,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
       private adherentService: AdherentService,
+      private genreService: GenreService,
     ) {}
 
   ngOnInit(): void {
@@ -238,12 +241,14 @@ export class NewAvenantIncorporationComponent implements OnInit {
     this.router.navigateByUrl('/contrat/avenant');
   }
 
-  onNextStepp(historiqueAvenant: HistoriqueAvenant){
+  onNextStepp(historiqueAvenant: any){
 
     historiqueAvenant.police = this.policeSelected;
     historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     historiqueAvenant.dateSaisie = new Date();
+
     this.historiqueAvenant = historiqueAvenant;
+    this.historiqueAvenantNewDTO = historiqueAvenant;
 
     this.isToViewImporteExcelFile = true;
     this.isToImporteExcelFile = false;
@@ -274,19 +279,29 @@ export class NewAvenantIncorporationComponent implements OnInit {
       return prefix + randomPart;
     }
 
-
-    onSaveIncorporation(data: any) {
-
-      console.log('this.historiqueAvenant', this.historiqueAvenant);
-      console.log('this.families', this.families);
+    onConfirmIncorporationSaved() {
 
     //  const payload = this.families.flat(); // tous les assurés
-    const payload = this.families.reduce((acc, cur) => acc.concat(cur), []);
+    const payload = this.families.reduce((acc, cur) => acc.concat(cur), []);    
+    this.historiqueAvenantNewDTO.aderantsNew = payload;
 
-    console.log('payload', payload);
-    
-    this.historiqueAvenant.aderants = payload;
-    console.log('historiqueAvenant', this.historiqueAvenant);
+    this.historiqueAvenantNewDTO.police = this.policeSelected;
+    this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    this.historiqueAvenantNewDTO.dateSaisie = new Date();
+
+    this.historiqueAvenantService.saveIncorporationService(this.historiqueAvenantNewDTO).subscribe(
+      resp => {
+        
+        if(resp == true){
+          this.getSucessInfo();
+          this.historiqueAvenant = {};
+          this.historiqueAvenantNewDTO = {};
+
+          this.isToViewImporteExcelFile = false;
+          this.isToImporteExcelFile = false;
+        }
+      }
+    );
 
 
     }
@@ -295,22 +310,16 @@ export class NewAvenantIncorporationComponent implements OnInit {
 
 
 
-    onSaveIncorporation2(historiqueAvenant: HistoriqueAvenant){
-    
-        if(historiqueAvenant){
-        historiqueAvenant.police = this.policeSelected;
-        historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
-        historiqueAvenant.dateSaisie = new Date();
-        console.log("historiqueAvenant", historiqueAvenant);
+    onSaveIncorporation(){
+      
         this.confirmationService.confirm({
           message: 'Voulez-vous procéder à l’incorporation ?',
           header: 'Confirmation',
           icon: 'pi pi-exclamation-triangle',
           accept: () => {
-            this.onConfirmIncorporation(historiqueAvenant);
+            this.onConfirmIncorporationSaved();
           },
         });
-  }
 
 }
 
@@ -363,32 +372,6 @@ groupByOrdre() {
 
 }
 
-transformImportData1(rawData: any[]): Adherent[] {
-  return rawData.map(row => {
-    return {
-      nom: row['Nom']?.trim(),
-      prenom: row['Prénom']?.trim(),
-      genre: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
-      qualiteAssure: this.mapQualite(row['qualité assuré (ADHERENT, CONJOINT ou ENFANF)']),
-      dateNaissance: this.toDate(row['date de naissance']),
-      dateIncorporation: row["Date d'incorporation"],
-      dateIncor: this.toDate(row["Date d'incorporation"]),
-      dateEntree: this.toDate(row["Date d'entrée"]),
-      matricule: row['matricule chez le souscripteur'],
-      matriculeGarant: row['matricule de chez le garant'],
-      numeroTelephone: row['Numéro téléphone'] || null,
-      adresseEmail: row['Email'] || null,
-      adresse: row['Adresse'] || null,
-      // ajouter d’autres conversions si besoin...
-      fullName: `${row['Nom']} ${row['Prénom']}`,
-      // actif: true,
-      deleted: false
-    } as Adherent;
-
-  });
-
-}
-
 toDate(dateStr: string): Date | null {
   if (!dateStr) return null;
   const parsed = new Date(dateStr);
@@ -436,10 +419,10 @@ transformImportData(rawData: any[]): Adherent[] {
     return {
       nom,
       prenom,
-      genre: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
-      qualiteAssure: this.mapQualite(row['qualité assuré (ADHERENT, CONJOINT ou ENFANF)']),
-      dateNaissance: row['date de naissance'],
-      dateIncorporation: row["Date d'incorporation"],
+      genreNew: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
+      qualiteAssureNew: this.mapQualite(row['qualité assuré (ADHERENT, CONJOINT ou ENFANF)']),
+      dateNaissanceNew: row['date de naissance'],
+      dateIncorporationNew: row["Date d'incorporation"],
       dateIncor: this.toDate(row["Date d'incorporation"]),
       dateEntree: this.toDate(row["Date d'entrée"]),
       matricule: row['matricule chez le souscripteur'],
@@ -451,9 +434,9 @@ transformImportData(rawData: any[]): Adherent[] {
       profession: row['profession'] || null,
       referenceBancaire: row['référence bancaire'] || null,
       ordre: Number(row['Ordre']) || 0,
-      numeroPrincipal: row['NUMERO PRINCIPAL'] || null,
-      adherentPrincipal: row['ADHERENT principal'] || null,
+      adherentPrincipalNew: row['ADHERENT principal'] || null,
       fullName: `${nom} ${prenom}`,
+      actif: true,
       deleted: false
     } as Adherent;
   });

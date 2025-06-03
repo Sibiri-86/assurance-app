@@ -780,6 +780,11 @@ export class Endpoints {
         mock: `assets/mock/prestation/prefinancement.mock.json`
     };
 
+    static readonly SAVE_INCORPORATION_NEW = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-incorporation-new`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+
 
 
 }
