@@ -133,6 +133,7 @@ export class PoliceService {
             catchError(this.handleError())
         );
     }
+
     deValiderPolice(Police: Police): Observable<any> {
         // @FIXME: post request
         return this.http.put(`${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE)}/deValider`, Police);

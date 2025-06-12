@@ -1,8 +1,9 @@
 <div class="p-card">
     <div class="p-fluid p-formgrid p-grid">
         <div class="p-field p-col-12">
+
 <p-dialog [(visible)]="isToImporteExcelFile" 
-    [header]="'INCORPORATION'"
+    [header]="'INCORPORATION PAR IMPORATION DE FICHIER'"
     [style]="{width: '80%'}"
      position="top" [transitionOptions]="'2000ms'" 
     [modal]="true" 
@@ -71,7 +72,6 @@
                     type="text"
                     name="observation"
                     [(ngModel)]="historiqueAvenant.observation"
-                    [disabled]="true"
                     pInputText
                     class="p-inputtext w-full"
                     
@@ -178,15 +178,15 @@
     position="right" [transitionOptions]="'2000ms'" 
     [header]="'APERCU DES ASSURES PAR FAMILLE'"
     [style]="{width: '100%'}"
-    [modal]="true" 
+    [modal]="true"
     styleClass="p-fluid">
 
     <ng-template pTemplate="header">
       <div class="assureCss">
-        <span class="p-mr-2">- Assurés principaux: {{ nbAdherents }} -</span>
+        <span class="p-mr-2">. Assurés principaux: {{ nbAdherents }} -</span>
         <span class="p-mr-2">Conjoints: {{ nbConjoints }} -</span>
         <span class="p-mr-2">Enfants: {{ nbEnfants }} -</span>
-        <span class="p-mr-2">Total: {{ totalAssure }} -</span>
+        <span class="p-mr-2">Total: {{ totalAssure }} .</span>
       </div>
     </ng-template>
 
@@ -354,7 +354,7 @@
 </p-dialog>
 
 
-      <p-table #dt [value]="policeByTypeGarand" [columns]="cols" [rows]="10" [paginator]="true"
+      <p-table #dt [value]="policeByAffaireNouvelles" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                 [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
@@ -477,3 +477,121 @@
       </p-table>
 
   <p-toast></p-toast>
+
+
+
+  <p-dialog [(visible)]="isIncorporationByWrite" [modal]="true" [style]="{ width: '80vw' }" [header]="'Avenant d\'Incorporation par saisie'" styleClass="p-fluid">
+
+  <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
+
+          <!-- Ligne de recherche -->
+        <div class="p-field p-col-12 p-md-4">
+          <label>Numéro</label>
+          <input pInputText  placeholder="Numéro">
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label>Nom</label>
+          <input pInputText  placeholder="Nom">
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label>Prénom</label>
+          <input pInputText  placeholder="Prénom">
+        </div>
+
+    <!-- Infos personnelles -->
+    <div class="p-field  p-col-12 p-md-4">
+      <label>Nom *</label>
+      <input pInputText [(ngModel)]="adherent.nom" required>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Prénom(s) *</label>
+      <input pInputText [(ngModel)]="adherent.prenom" required>
+    </div>
+        <!-- Sélections -->
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Qualité assuré *</label>
+      <p-dropdown [options]="qualiteAssures"
+       [(ngModel)]="adherent.qualiteAssure"
+        optionLabel="code" 
+        [disabled]="true"
+        required></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Genre *</label>
+      <p-dropdown
+       [options]="genres"
+        [(ngModel)]="adherent.genre"
+         placeholder="Select"
+         optionLabel="libelle"
+        required></p-dropdown>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Profession</label>
+      <p-dropdown [options]="professions"
+       [(ngModel)]="adherent.profession"
+       filter="true"
+       optionLabel="libelle"></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Numéro de l'exercice postérieur</label>
+      <input pInputText [(ngModel)]="adherent.numeroExercicePost">
+    </div>
+
+        <div class="p-field p-col-12 p-md-4">
+      <label>Matricule chez le garant</label>
+      <input pInputText [(ngModel)]="adherent.matriculeGarant">
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Matricule chez le souscripteur</label>
+      <input pInputText [(ngModel)]="adherent.matriculeSouscripteur">
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Téléphone *</label>
+      <input pInputText [(ngModel)]="adherent.telephone" required>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Email</label>
+      <input pInputText [(ngModel)]="adherent.email">
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Adresse</label>
+      <input pInputText [(ngModel)]="adherent.adresse">
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Référence bancaire</label>
+      <input pInputText [(ngModel)]="adherent.referenceBancaire">
+    </div>
+
+    <!-- Dates -->
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date de naissance *</label>
+      <p-calendar [(ngModel)]="adherent.dateNaissance" dateFormat="dd/mm/yy" showIcon required></p-calendar>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Lieu de naissance *</label>
+      <input pInputText [(ngModel)]="adherent.lieuNaissance" required>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date d'entrée</label>
+      <p-calendar [(ngModel)]="adherent.dateEntree" dateFormat="dd/mm/yy" showIcon></p-calendar>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date d'incorporation *</label>
+      <p-calendar [(ngModel)]="adherent.dateIncorporation" dateFormat="dd/mm/yy" showIcon required></p-calendar>
+    </div>
+
+
+
+    <!-- Bouton famille -->
+    <div class="p-field p-col-12 p-text-center">
+      <button pButton type="button" icon="pi pi-plus" label="Famille" class="p-button-success" (click)="ajouterFamille()"></button>
+    </div>
+  </div>
+</p-dialog>
+

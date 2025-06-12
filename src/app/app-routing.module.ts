@@ -135,6 +135,7 @@ import { ExportPrestationComponent } from './module/reporting/production/export-
 import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-payant/consulation-ordre-tier-payant/consulation-ordre-tier-payant.component';
 import { ParametrageMailComponent } from './module/prestation/tier-payant/parametrage-mail/parametrage-mail.component';
 import { NewAvenantIncorporationComponent } from './module/contrat/avenant-new/new-avenant-incorporation/new-avenant-incorporation.component';
+import { NewAvenantRetraitComponent } from './module/contrat/avenant-new/new-avenant-retrait/new-avenant-retrait.component';
 
 @NgModule({
     imports: [
@@ -191,6 +192,7 @@ import { NewAvenantIncorporationComponent } from './module/contrat/avenant-new/n
                     data: { roles: ['sm_production', 'sm_exercice']}},
                     {path: 'contrat/avenant', component: AvenantComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/avenant-new', component: NewAvenantIncorporationComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
+                    {path: 'contrat/new-avenant-retrait', component: NewAvenantRetraitComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/condition-generale', component: ConditionGeneraleComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production']}},

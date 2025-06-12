@@ -358,6 +358,7 @@ import { ExportPrestationComponent } from './module/reporting/production/export-
 import { ConsulationOrdreTierPayantComponent } from './module/prestation/tier-payant/consulation-ordre-tier-payant/consulation-ordre-tier-payant.component';
 import { ParametrageMailComponent } from './module/prestation/tier-payant/parametrage-mail/parametrage-mail.component';
 import { NewAvenantIncorporationComponent } from './module/contrat/avenant-new/new-avenant-incorporation/new-avenant-incorporation.component';
+import { NewAvenantRetraitComponent } from './module/contrat/avenant-new/new-avenant-retrait/new-avenant-retrait.component';
 
 @NgModule({
     imports: [
@@ -650,7 +651,7 @@ import { NewAvenantIncorporationComponent } from './module/contrat/avenant-new/n
         ApprovisionnementComponent,
         ExportPrestationComponent,
         ConsulationOrdreTierPayantComponent, 
-        ParametrageMailComponent, NewAvenantIncorporationComponent
+        ParametrageMailComponent, NewAvenantIncorporationComponent, NewAvenantRetraitComponent
     ],
     providers: [
         {

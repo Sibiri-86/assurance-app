@@ -1,0 +1,75 @@
+<p-dialog [(visible)]="displayChoose" 
+    [header]="'AVENENT DE RETRAIT'"
+    [style]="{width: '40%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid p-justify-between" style="padding: 1rem;">
+
+            <div class="col col-6">
+                <button 
+                    
+                (click)="showChoooseFileDialog()"
+                    pButton icon="pi pi-file-excel"
+                    label="Par fichier"
+                    class="p-button-success">
+                </button>   
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    (click)="showChoooseWriteDialog()"
+                    pButton icon="pi pi-pencil"
+                    label="Par saisie"
+                    class="p-button-success">
+                </button>   
+            </div>
+
+
+            </div>
+        </div>
+
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="displayFileChoose" 
+    [header]="'AVENENT DE RETRAIT PAR IMPORTATION'"
+    [style]="{width: '50%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid p-justify-between" style="padding: 1rem;">
+
+                  
+                <div class="p-field col p-col-6">    
+                    <button
+                        pButton icon="pi pi-download"
+                        (click)="onCancelIncorporation()"
+                        label="Télécharger le model"
+                        class="p-button-info">
+                    </button>  
+                </div>
+
+                <div class="p-field p-col-6">
+                    <input 
+                       
+                        pInputText
+                        type="file"
+                        name="model"
+                        class="w-full"/>
+                    
+                </div>
+                </div>
+
+
+            </div>
+
+
+    </ng-template>
+</p-dialog>

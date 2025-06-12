@@ -69,6 +69,9 @@ export interface Adherent{
     ordre?:number;
     isPlafondAnnuel?:boolean;
     numeroPrincipal?:string;
+    numeroExercicePost?:Date;
+    telephone?:string;
+    email?:string;
     /**Partie de pagination ajoutée */
     
 }

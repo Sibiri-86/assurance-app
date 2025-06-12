@@ -10,9 +10,11 @@ import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
-import { Police } from 'src/app/store/contrat/police/model';
+import { Police, PoliceList } from 'src/app/store/contrat/police/model';
 import { PoliceService } from 'src/app/store/contrat/police/service';
 import { GenreService } from 'src/app/store/parametrage/genre/service';
+import { ProfessionService } from 'src/app/store/parametrage/profession/service';
+import { QualiteAssureService } from 'src/app/store/parametrage/qualite-assure/service';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -34,6 +36,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
   curentGroupe: Groupe = {};
   curentExercice: Exercice = {};
   adherentFamilleListe: AdherentFamille[] = [];
+   adherent?: Adherent = {};
+   adherentFamille?: Adherent[] = [];
 
   isInValidateDateAvenant = false;
   isInValidateDateEffect = false; 
@@ -43,6 +47,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
   adhrentAJourToSave: Adherent[] = [];
   displayViewContrat = false;
   isToViewImporteExcelFile = false;
+  isToWriteAssure = false;
+  isIncorporationByWrite = false;
 
   adherents: any[] = [];
   families: any[][] = [];
@@ -51,12 +57,16 @@ export class NewAvenantIncorporationComponent implements OnInit {
   entete = '';
 
   policeByTypeGarand: Police [] = [];
+  policeByAffaireNouvelles: Police [] = [];
 
   totalAssure = 0;
   nbAdherents = 0;
   nbConjoints = 0; 
   nbEnfants = 0;
-
+  qualiteAssures: any;
+  professions: any;
+  genres: any;
+  assuresFamille: any[] = [];
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -74,6 +84,16 @@ export class NewAvenantIncorporationComponent implements OnInit {
     { label: 'ENFANT', value: 'ENFANT' }
   ];
 
+qualites = [
+  { label: 'Principal', value: 'PRINCIPAL' },
+  { label: 'Ayant droit', value: 'AYANT_DROIT' }
+];
+
+ajouterFamille() {
+  // logiques d’ajout de famille ici
+  console.log('Ajouter un membre de famille');
+}
+
   constructor(
       private http: HttpClient,
       private router : Router,
@@ -84,6 +104,8 @@ export class NewAvenantIncorporationComponent implements OnInit {
       private messageService: MessageService,
       private confirmationService: ConfirmationService,
       private adherentService: AdherentService,
+      private qualiteAssureService: QualiteAssureService,
+      private professionService: ProfessionService,
       private genreService: GenreService,
     ) {}
 
@@ -98,21 +120,54 @@ export class NewAvenantIncorporationComponent implements OnInit {
           this.onDisplayNewAvenantComposant();
           this.entete = 'Avenant d\'Incorporation';
       }}, 
+
+       {label: 'Incorporation par saisie', icon: 'pi pi-user-plus', command: ($event) => {
+
+          // this.policeSelected = this.policeItem;
+
+          this.onDisplayIncorporationByWrite();
+          this.entete = 'Avenant d\'Incorporation';
+      }}, 
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
-          // this.isAvenantRetrait = true;
+          
+        this.onGetNewAvenantRetraitComponent();
           this.entete = 'Avenant de Retrait';
       }},
 
     ]; 
 
-    this.historiqueAvenant = {
-        observation: 'INCORPORATION'
-      };
-
     this.loadExerciceByPolice();
     this.loadGroupeByPolice();
-    this.onGetPolice();
+    this.onGetPoliceByAffaireNouvelles();
+    this.onGetQualiteAssure();
+    this.onGetProfessions();
+    this.onGetGenre();
+    //this.onGetPolice();
 
+  }
+
+  onGetQualiteAssure(){
+    this.qualiteAssureService.$getQualiteAssures().subscribe(
+      resp => {
+        this.qualiteAssures = resp.typeQualiteAssureDtoList.filter( qualite => qualite.code === 'ADHERENT' );
+      }
+    );
+  }
+  onGetGenre(){
+    this.genreService.$getGenres().subscribe(
+      resp => {
+        this.genres = resp.genreDtoList;      }
+    );
+  }
+
+  onGetProfessions(){
+    this.professionService.$getProfessions().subscribe(
+      resp => {
+        this.professions = resp.typeProfessionDtoList;
+
+        console.log("this.professions", this.professions);
+      }
+    );
   }
 
 
@@ -515,18 +570,45 @@ transformImportData(rawData: any[]): Adherent[] {
     this.isToImporteExcelFile = true;
   }
 
+  onDisplayIncorporationByWrite() {
+    this.isIncorporationByWrite = true;
+  }
+
+  onGetNewAvenantRetraitComponent() {
+
+    this.router.navigateByUrl('contrat/new-avenant-retrait');
+  }
+
   onGetPolice(typeGarandCode?: string){
 
        this.policeService.getPoliceByTypeGarant(typeGarandCode).subscribe(
         resp => {
           if(resp){
 
-            this.policeByTypeGarand = resp;
+            this.policeByTypeGarand = resp;          }
+        }
+       );
+  }
 
-            console.log('policeByTypeGarand', this.policeByTypeGarand);
+  onGetPoliceByAffaireNouvelles(){
+
+       this.policeService.$getPoliceByAffaireNouvelles().subscribe(
+        resp => {
+          if(resp){
+
+            this.policeByAffaireNouvelles = resp.policeDtoList;
           }
         }
        );
   }
+
+  supprimerMembre(index: number) {
+  this.assuresFamille.splice(index, 1);
+}
+  
+onAddFamilyMember() {
+
+  
+}
 
 }
