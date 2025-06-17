@@ -353,7 +353,6 @@
 </p-panel>
 </p-dialog>
 
-
       <p-table #dt [value]="policeByAffaireNouvelles" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
                 [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
@@ -461,9 +460,22 @@
                                       (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
                       <!-- SPlit sans la fonction setPolice -->
 
-                      <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-1" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
-                          (onDropdownClick)="policeItem = police; onGetPoliceSelected(police)">
+                      <p-splitButton 
+                          label="Avenants" 
+                          icon="pi pi-plus" 
+                          [model]="typeActions" 
+                          class="p-ml-1"
+                          (onDropdownClick)="onGetPoliceSelected(police)">
                       </p-splitButton>
+
+  <!--                     <p-splitButton 
+                          label="Avenants" 
+                          icon="pi pi-plus" 
+                          [model]="typeActions" 
+                          class="p-ml-1"
+                          [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
+                          (onDropdownClick)="onGetPoliceSelected(police)">
+                      </p-splitButton> -->
 
 
                   </td>
@@ -594,4 +606,6 @@
     </div>
   </div>
 </p-dialog>
+
+<app-new-avenant-retrait [police]="policeItem"></app-new-avenant-retrait>
 

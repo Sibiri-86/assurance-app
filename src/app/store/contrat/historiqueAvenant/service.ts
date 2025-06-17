@@ -185,6 +185,22 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_INCORPORATION_NEW), historiqueAvenantNewDTO);
 }
 
+/*     saveNewAvenantRetraitService(numeros: any): Observable<any> {
+    return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), numeros);
+} */
+
+saveNewAvenantRetraitService(numeros: any, exerciceId: string, groupeId: string, policeId: string): Observable<any> {
+  const request = {
+    numeros: numeros,
+    exerciceId: exerciceId,
+    groupeId: groupeId,
+    policeId: policeId,
+  };
+
+  return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), request);
+}
+
+
 
 
     compareDate(debut?: Date, fin?: Date): Observable<any> {

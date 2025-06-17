@@ -785,6 +785,11 @@ export class Endpoints {
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
 
+    static readonly SAVE_AVEANT_RETRAIT_NEW = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-avenant-retrait-new`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
+
         
     static readonly CONTRAT_POLICE_GET_BY_GARAND_CODE = {
         prod: `${SERVICE_PREFIX}/contrat/police/get-type-garant-code`,

@@ -36,13 +36,17 @@ export class NewAvenantIncorporationComponent implements OnInit {
   curentGroupe: Groupe = {};
   curentExercice: Exercice = {};
   adherentFamilleListe: AdherentFamille[] = [];
-   adherent?: Adherent = {};
-   adherentFamille?: Adherent[] = [];
+  adherent?: Adherent = {};
+  adherentFamille?: Adherent[] = [];
 
   isInValidateDateAvenant = false;
   isInValidateDateEffect = false; 
+
+
+  police: any; // Objet police courant
+  policeItem: any; // Police sélectionnée à envoyer au composant enfant
+  policeSelected: any;
   
-  @Input() policeSelected: Police;
   @Output() reponseEnvoyee = new EventEmitter<string>();
   adhrentAJourToSave: Adherent[] = [];
   displayViewContrat = false;
@@ -110,7 +114,6 @@ ajouterFamille() {
     ) {}
 
   ngOnInit(): void {
-
     this.typeActions = [
 
        {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
@@ -128,9 +131,10 @@ ajouterFamille() {
           this.onDisplayIncorporationByWrite();
           this.entete = 'Avenant d\'Incorporation';
       }}, 
+
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           
-        this.onGetNewAvenantRetraitComponent();
+          this.onGetNewAvenantRetraitComponent();
           this.entete = 'Avenant de Retrait';
       }},
 
@@ -164,8 +168,6 @@ ajouterFamille() {
     this.professionService.$getProfessions().subscribe(
       resp => {
         this.professions = resp.typeProfessionDtoList;
-
-        console.log("this.professions", this.professions);
       }
     );
   }
@@ -174,6 +176,7 @@ ajouterFamille() {
    onGetPoliceSelected(police){
 
       this.policeSelected = police;
+      this.policeItem = police;
       this.loadExerciceByPolice(police)
       this.loadGroupeByPolice(police)
    }
@@ -576,7 +579,8 @@ transformImportData(rawData: any[]): Adherent[] {
 
   onGetNewAvenantRetraitComponent() {
 
-    this.router.navigateByUrl('contrat/new-avenant-retrait');
+    this.onGetPoliceSelected(this.policeSelected);
+    this.router.navigateByUrl('contrat/new-avenant-retrait/' + this.policeSelected.id);
   }
 
   onGetPolice(typeGarandCode?: string){

@@ -35,6 +35,7 @@
     </ng-template>
 </p-dialog>
 
+
 <p-dialog [(visible)]="displayFileChoose" 
     [header]="'AVENENT DE RETRAIT PAR IMPORTATION'"
     [style]="{width: '50%'}"
@@ -45,26 +46,56 @@
     <ng-template pTemplate="content">
         <div class="card">
             <div class="p-grid p-formgrid p-fluid p-justify-between" style="padding: 1rem;">
-
                   
-                <div class="p-field col p-col-6">    
+                <div class="p-field col p-col-12">    
                     <button
                         pButton icon="pi pi-download"
-                        (click)="onCancelIncorporation()"
+                        (click)="onDownloadModel()"
                         label="Télécharger le model"
                         class="p-button-info">
                     </button>  
                 </div>
 
-                <div class="p-field p-col-6">
-                    <input 
-                       
-                        pInputText
-                        type="file"
-                        name="model"
-                        class="w-full"/>
+                <div class="p-field p-col-4">
+                    <label for="exercice">Choisir l'exercice</label>
+                        <p-dropdown 
+                        (onChange)="onGetSelectedExerciceId($event.value.id)"
+                        inputId="genre" dataKey="id" [filter]="true" showClear="true"
+                           [options]="exercices"
+                            appendTo="body"
+                            [filter]="true" filterBy="nomExo" [showClear]="true"
+                            placeholder="Choisir l'exercice" optionLabel="nomExo">
+                        </p-dropdown>
                     
                 </div>
+
+                <div class="p-field p-col-4">
+                    <label for="groupe">Choisir le groupe</label>
+
+                            <p-dropdown 
+                            (onChange)="onGetSelectedGroupeId($event.value.id)"
+                            inputId="genre" dataKey="id" [filter]="true" showClear="true"
+                                        [options]="groupesByPolicy"
+                                        appendTo="body"
+                                        [filter]="true" filterBy="libelle" [showClear]="true"
+                                        placeholder="Choisir un groupe"
+                                         optionLabel="libelle">
+                            </p-dropdown>
+                    
+                </div>
+
+                <div class="p-field p-col-4">
+                    <label for="exercice">Importer le fichier excel</label>
+                    <input 
+                        (change)="onUploadFile($event)"
+                        type="file"
+                        accept=".xlsx, .xls"
+                        name="model"
+                        class="w-full"
+                    />
+                    
+                </div>
+
                 </div>
 
 
@@ -72,4 +103,85 @@
 
 
     </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="isToDisplayAdherentByFamily" 
+    [header]="'APERCU DES ASSURES A RETIRER' + ' TOTAL: ' + adherentByFamily.length + ' ASSURES '" 
+    [style]="{width: '100%'}"
+     position="bottom" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    (onShow)="accordionIndex = 0"
+    styleClass="p-fluid">
+<p-accordion [multiple]="true" [activeIndex]="accordionIndex">
+  <p-accordionTab *ngFor="let famille of adherentByFamily" 
+                  [header]="'Famille: ' + famille.membres[0].prenom + ' ' + famille.membres[0].nom + ' (' + famille.membres.length + ' membres)'">
+
+    <p-table [value]="famille.membres" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Matricule</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Genre</th>
+          <th>Qualité</th>
+          <th>Lieu</th>
+          <th>Date Naissance</th>
+          <th>Date Incorporation</th>
+          <th>Exercice</th>
+          <th>Police</th>
+<!--           <th>Plafond Annuel</th>
+          <th>Plafond restant</th> -->
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-assure>
+        <tr>
+          <td>{{ assure.numero }}</td>
+          <td>{{ assure.nom }}</td>
+          <td>{{ assure.prenom }}</td>
+          <td>{{ assure.genre?.libelle }}</td>
+          <td>{{ assure.qualiteAssure?.libelle }}</td>
+          <td>{{ assure.lieuNaissance }}</td>
+          <td>{{ assure.dateNaissance }}</td>
+          <td>{{ assure.dateIncorporation }}</td>
+          <td>{{ assure.exercice?.debut | formatTableValue : 'date' }} à {{  assure.exercice?.fin | formatTableValue : 'date' }}</td>
+          <td>{{ assure.groupe?.police?.nom }}</td>
+<!--           <td>{{ assure.montantPlafondAnnuel }}</td>
+          <td>{{ assure.montantPlafondAnnuelRestant }}</td> -->
+
+        </tr>
+      </ng-template>
+
+       
+    </p-table>
+
+  </p-accordionTab>
+</p-accordion>
+
+<ng-template pTemplate="footer">
+
+            <div class="col col-12 p-d-flex p-justify-center">
+            <div class="col col-6">
+
+            <button 
+                    
+                (click)="onExitAdherentByFamilyDialog()"
+                    pButton icon="pi pi-cancel"
+                    label="Quitter"
+                    class="p-button-danger">
+                </button>   
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    (click)="onSaveRetrait()"
+                    pButton icon="pi pi-check"
+                    label="Retirer les assurés"
+                    class="p-button-success">
+                </button>   
+            </div>
+            </div>
+
+       </ng-template>
 </p-dialog>
