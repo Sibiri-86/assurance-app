@@ -784,6 +784,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-incorporation-new`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+    static readonly SAVE_RETRAIT_NEW = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-retrait-new`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
 
     static readonly SAVE_AVEANT_RETRAIT_NEW = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-avenant-retrait-new`,
@@ -793,6 +797,10 @@ export class Endpoints {
         
     static readonly CONTRAT_POLICE_GET_BY_GARAND_CODE = {
         prod: `${SERVICE_PREFIX}/contrat/police/get-type-garant-code`,
+        mock: `assets/mock/contrat/intermediaire.mock.json`
+    };
+    static readonly CONTRAT_POLICE_GET_BY_ID = {
+        prod: `${SERVICE_PREFIX}/contrat/police/get-police-by-id`,
         mock: `assets/mock/contrat/intermediaire.mock.json`
     };
 

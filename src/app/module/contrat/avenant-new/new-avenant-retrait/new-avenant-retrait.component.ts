@@ -8,6 +8,10 @@ import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { ActivatedRoute } from '@angular/router';
+import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { PoliceService } from 'src/app/store/contrat/police/service';
+
 
 @Component({
   selector: 'app-new-avenant-retrait',
@@ -20,6 +24,7 @@ export class NewAvenantRetraitComponent implements OnInit {
   displayFileChoose = false;
   displayWriteChoose = false;
   isToDisplayAdherentByFamily = false;
+  isTodisplayEntetDialogue = false;
   exercices: Exercice[] = [];
   groupesByPolicy: Groupe [] = [];
   
@@ -31,16 +36,30 @@ export class NewAvenantRetraitComponent implements OnInit {
   selectedExerciceId: string = '';
   accordionIndex: number = 0;
 
+  historiqueAvenant: HistoriqueAvenant = {};
+  historiqueAvenantNewDTO: any = {};
+
+  policeByTypeGarand: Police[] = [];
+
  
   // @Output() reponseEnvoyee = new EventEmitter<string>();
 
   adherentByFamily: { familleId: string, membres: any[] }[] = [];
 
+    demandeursList: any = [
+        {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
+        {libelle: 'SOUSCRIPTEUR', value: TypeDemandeur.SOUSCRIPTEUR},
+        {libelle: 'GARANT', value: TypeDemandeur.GARANT}
+        ];
+  
+
   constructor(
      private historiqueAvenantService: HistoriqueAvenantService,
-           private exerciceService: ExerciceService,
-           private groupeService: GroupeService,
-           private route: ActivatedRoute,
+          private exerciceService: ExerciceService,
+          private groupeService: GroupeService,
+          private route: ActivatedRoute,
+          private messageService: MessageService,
+          private policeService: PoliceService,
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +70,7 @@ export class NewAvenantRetraitComponent implements OnInit {
 
       this.loadExerciceByPolice(this.policeSelectedId);
       this.loadGroupeByPolice(this.policeSelectedId);
+      this.onGetPoliceById(this.policeSelectedId);
 
     }
 
@@ -85,7 +105,8 @@ export class NewAvenantRetraitComponent implements OnInit {
   }
 
   showDialog() {
-    this.displayChoose = true;
+    //this.displayChoose = true;
+    this.isTodisplayEntetDialogue = true;
   }
 
   showChoooseFileDialog() {
@@ -167,8 +188,10 @@ onDownloadModel(): void {
   }
 
   onGetAdherentByMatricule(numeros: any){
+
     this.historiqueAvenantService.saveNewAvenantRetraitService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
             (response) => {
+
               this.onCloseDialog();
               this.onDisplayAdherentByFamily(response);
                 this.accordionIndex = 0; 
@@ -215,11 +238,87 @@ onDisplayAdherentByFamily(response: string[]) {
       membres
     }));
 
-    console.log('this.adherentByFamily', this.adherentByFamily);
 }
 
 
+onConfirmRetraitSaved() {
 
+  this.historiqueAvenantNewDTO.aderantsNew = this.adherentByFamily;
+
+    this.historiqueAvenantNewDTO.police = this.policeSelected;
+    this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    this.historiqueAvenantNewDTO.dateSaisie = new Date();
+
+    this.historiqueAvenantService.saveRetraitNewService(this.historiqueAvenantNewDTO).subscribe(
+      resp => {
+        
+        if(resp == true){
+          this.getSucessInfo();
+          this.historiqueAvenant = {};
+          this.historiqueAvenantNewDTO = {};
+
+          this.isToDisplayAdherentByFamily = false;
+          this.onGetPolice();
+        }
+      }
+    );
+
+
+    }
+
+      onGetPolice(typeGarandCode?: string){
+
+       this.policeService.getPoliceByTypeGarant(typeGarandCode).subscribe(
+        resp => {
+          if(resp){
+
+            this.policeByTypeGarand = resp;          }
+        }
+       );
+  }
+
+      onGetPoliceById(policeId?: string){
+
+       this.policeService.getPoliceById(policeId).subscribe(
+        resp => {
+          if(resp){
+
+            this.police = resp;    
+            }
+        }
+       );
+  }
+
+
+    onNextStepp(historiqueAvenant: any){
+
+    historiqueAvenant.police = this.police;
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    historiqueAvenant.dateSaisie = new Date();
+
+    this.historiqueAvenant = historiqueAvenant;
+    this.historiqueAvenantNewDTO = historiqueAvenant;
+
+    console.log('historiqueAvenant', historiqueAvenant);
+
+  }
+
+
+
+
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'AVENANT INCORPORATION', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'AVENANT INCORPORATION', detail: 'Opération annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: 'Opération échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: message});
+      }
 
 
 }

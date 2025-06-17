@@ -610,9 +610,9 @@ transformImportData(rawData: any[]): Adherent[] {
   this.assuresFamille.splice(index, 1);
 }
   
-onAddFamilyMember() {
+    onAddFamilyMember() {
 
-  
-}
+      
+    }
 
 }

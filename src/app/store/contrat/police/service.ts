@@ -194,5 +194,18 @@ export class PoliceService {
             { params }
         );
 }
+    getPoliceById(policeId?: string): Observable<any> {
+        
+        let params = new HttpParams();
+
+        if (policeId) {
+            params = params.set('policeId', policeId);
+        }
+
+        return this.http.get(
+            `${GlobalConfig.getEndpoint(Endpoints.CONTRAT_POLICE_GET_BY_ID)}`,
+            { params }
+        );
+}
 
 }
