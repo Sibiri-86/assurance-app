@@ -41,6 +41,8 @@ export class NewAvenantRetraitComponent implements OnInit {
 
   policeByTypeGarand: Police[] = [];
 
+  allAdherents: any;
+
  
   // @Output() reponseEnvoyee = new EventEmitter<string>();
 
@@ -59,12 +61,13 @@ export class NewAvenantRetraitComponent implements OnInit {
           private groupeService: GroupeService,
           private route: ActivatedRoute,
           private messageService: MessageService,
+          private confirmationService: ConfirmationService,
           private policeService: PoliceService,
   ) { }
 
   ngOnInit(): void {
-     this.policeSelectedId = this.route.snapshot.paramMap.get('id');
-      this.showDialog();
+    this.policeSelectedId = this.route.snapshot.paramMap.get('id');
+    this.showDialog();
 
     if(this.policeSelectedId != null){
 
@@ -211,7 +214,14 @@ onDownloadModel(): void {
   
   onSaveRetrait(){
 
-      this.isToDisplayAdherentByFamily = false;
+          this.confirmationService.confirm({
+          message: 'Voulez-vous procéder au retrait ?',
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.onConfirmRetraitSaved();
+          },
+        });
   }
 
 
@@ -219,7 +229,7 @@ onDownloadModel(): void {
   const grouped = new Map<string, any[]>();
 
   assures.forEach(assure => {
-    const familleId = assure.adherentPrincipal?.id || assure.id; // si pas d'adherentPrincipal, c'est lui-même
+    const familleId = assure.adherentPrincipal?.id || assure.id;
     if (!grouped.has(familleId)) {
       grouped.set(familleId, []);
     }
@@ -232,6 +242,7 @@ onDownloadModel(): void {
 
 
 onDisplayAdherentByFamily(response: string[]) {
+  this.allAdherents = response;
   const groupedMap = this.groupAssuresByFamille(response);
     this.adherentByFamily = Array.from(groupedMap.entries()).map(([familleId, membres]) => ({
       familleId,
@@ -241,27 +252,28 @@ onDisplayAdherentByFamily(response: string[]) {
 }
 
 
+
 onConfirmRetraitSaved() {
 
-  this.historiqueAvenantNewDTO.aderantsNew = this.adherentByFamily;
+    this.historiqueAvenantNewDTO.aderantsNew = this.allAdherents;
 
-    this.historiqueAvenantNewDTO.police = this.policeSelected;
+    this.historiqueAvenantNewDTO.police = this.police;
     this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
     this.historiqueAvenantNewDTO.dateSaisie = new Date();
 
-    this.historiqueAvenantService.saveRetraitNewService(this.historiqueAvenantNewDTO).subscribe(
-      resp => {
-        
+     this.historiqueAvenantService.saveRetraitNewService(this.historiqueAvenantNewDTO).subscribe(
+      resp => {        
         if(resp == true){
           this.getSucessInfo();
           this.historiqueAvenant = {};
           this.historiqueAvenantNewDTO = {};
 
+          this.isTodisplayEntetDialogue = false;
           this.isToDisplayAdherentByFamily = false;
           this.onGetPolice();
         }
       }
-    );
+    ); 
 
 
     }
@@ -298,12 +310,7 @@ onConfirmRetraitSaved() {
 
     this.historiqueAvenant = historiqueAvenant;
     this.historiqueAvenantNewDTO = historiqueAvenant;
-
-    console.log('historiqueAvenant', historiqueAvenant);
-
   }
-
-
 
 
       getSucessInfo(): void {
