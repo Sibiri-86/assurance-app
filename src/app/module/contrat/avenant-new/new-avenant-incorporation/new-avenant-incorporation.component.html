@@ -172,6 +172,16 @@
 
             <div class="col col-6">
                 <button 
+                    [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.observation ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur ||
+                     !historiqueAvenant.fraisAccessoires ||
+                     !historiqueAvenant.fraisAccessoires
+                     "
                     (click)="onNextStepp(historiqueAvenant)"
                     pButton icon="pi pi-arrow-circle-right"
                     label="Continuer"
