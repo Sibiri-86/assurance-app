@@ -191,7 +191,7 @@ import { NewAvenantRetraitComponent } from './module/contrat/avenant-new/new-ave
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production', 'sm_exercice']}},
                     {path: 'contrat/avenant', component: AvenantComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
-                    {path: 'contrat/avenant-new', component: NewAvenantIncorporationComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
+                    {path: 'contrat/new-avenant-incorporation/:id', component: NewAvenantIncorporationComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/new-avenant-retrait/:id', component: NewAvenantRetraitComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/condition-generale', component: ConditionGeneraleComponent,
                     canActivate: [AuthGuard],

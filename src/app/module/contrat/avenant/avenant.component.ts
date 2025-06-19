@@ -124,6 +124,7 @@ import { PlafondService } from 'src/app/store/contrat/plafond/service';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { KeycloakService } from 'keycloak-angular';
 import { Function } from '../../common/config/role.user';
+import { Router } from '@angular/router';
 // import * from 
 
 
@@ -375,6 +376,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
       private plafondService: PlafondService,
       private groupeService: GroupeService,
       private keycloak: KeycloakService,
+      private router : Router,
   ) {
 
     this.plafondForm = this.formBuilder.group({
@@ -821,6 +823,23 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
       this.typeActions = [
 
+
+        {label: 'Incorporation new', icon: 'pi pi-user-plus', command: ($event) => {
+
+          this.etat = 'CREATE';
+          this.policeSelected = this.policeItem;
+
+          // this.onDisplayNewAvenantComposant();
+          this.onGetNewAvenantIncorporationComponent();
+          this.entete = 'Avenant d\'Incorporation';
+      }}, 
+
+      {label: 'Retrait new', icon: 'pi pi-user-minus', command: () => {
+          
+          this.onGetNewAvenantRetraitComponent();
+          this.entete = 'Avenant de Retrait new';
+      }},
+
         {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
           this.addAvenant();
@@ -830,16 +849,6 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.etat = 'CREATE';
       }},
 
-       {label: 'Incorporation new', icon: 'pi pi-user-plus', command: ($event) => {
-
-          console.log("$event$event", $event);
-
-          this.etat = 'CREATE';
-          this.policeSelected = this.policeItem;
-
-          this.onDisplayNewAvenantComposant();
-          this.entete = 'Avenant d\'Incorporation';
-      }}, 
       {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.initDisplayAvenant();
           this.addAvenantRetrait();
@@ -3429,4 +3438,14 @@ export class AvenantComponent implements OnInit, OnDestroy {
     gererReponse(reponse: string) {
     this.reponseDeA = reponse;
   }
+
+
+    onGetNewAvenantRetraitComponent() {
+    this.router.navigateByUrl('contrat/new-avenant-retrait/' + this.policeItem.id);
+  }
+
+    onGetNewAvenantIncorporationComponent() {
+    this.router.navigateByUrl('contrat/new-avenant-incorporation/' + this.policeItem.id);
+  }
+
 }

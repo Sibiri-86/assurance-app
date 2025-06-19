@@ -7,7 +7,7 @@ import { ExerciceService } from 'src/app/store/contrat/exercice/service';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { Groupe } from 'src/app/store/contrat/groupe/model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PoliceService } from 'src/app/store/contrat/police/service';
@@ -66,6 +66,7 @@ export class NewAvenantRetraitComponent implements OnInit {
           private messageService: MessageService,
           private confirmationService: ConfirmationService,
           private policeService: PoliceService,
+          private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -373,6 +374,10 @@ onConfirmRetraitSaved1() {
       getErrorInfo(message: string): void {
         this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: message});
       }
+
+    onCancelRetrait() {
+    this.router.navigateByUrl('contrat/avenant');
+  }
 
 
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Adherent, AdherentFamille } from 'src/app/store/contrat/adherent/model';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
@@ -47,7 +47,6 @@ export class NewAvenantIncorporationComponent implements OnInit {
   policeItem: any; // Police sélectionnée à envoyer au composant enfant
   policeSelected: any;
   
-  @Output() reponseEnvoyee = new EventEmitter<string>();
   adhrentAJourToSave: Adherent[] = [];
   displayViewContrat = false;
   isToViewImporteExcelFile = false;
@@ -71,6 +70,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
   professions: any;
   genres: any;
   assuresFamille: any[] = [];
+  policeSelectedId: string = '';
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -111,42 +111,23 @@ ajouterFamille() {
       private qualiteAssureService: QualiteAssureService,
       private professionService: ProfessionService,
       private genreService: GenreService,
+      private route: ActivatedRoute,
     ) {}
 
   ngOnInit(): void {
-    this.typeActions = [
+    this.onInitIncorporation();
+    this.policeSelectedId = this.route.snapshot.paramMap.get('id');
 
-       {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
+    if(this.policeSelectedId != null){
+      this.onGetPoliceById(this.policeSelectedId);
+    }
 
-          // this.policeSelected = this.policeItem;
-
-          this.onDisplayNewAvenantComposant();
-          this.entete = 'Avenant d\'Incorporation';
-      }}, 
-
-       {label: 'Incorporation par saisie', icon: 'pi pi-user-plus', command: ($event) => {
-
-          // this.policeSelected = this.policeItem;
-
-          this.onDisplayIncorporationByWrite();
-          this.entete = 'Avenant d\'Incorporation';
-      }}, 
-
-      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
-          
-          this.onGetNewAvenantRetraitComponent();
-          this.entete = 'Avenant de Retrait';
-      }},
-
-    ]; 
-
-    this.loadExerciceByPolice();
-    this.loadGroupeByPolice();
+    this.loadExerciceByPolice(this.policeSelectedId);
+    this.loadGroupeByPolice(this.policeSelectedId);
     this.onGetPoliceByAffaireNouvelles();
     this.onGetQualiteAssure();
     this.onGetProfessions();
     this.onGetGenre();
-    //this.onGetPolice();
 
   }
 
@@ -181,10 +162,21 @@ ajouterFamille() {
       this.loadGroupeByPolice(police)
    }
 
+      onGetPoliceById(policeId?: string){
 
-  loadExerciceByPolice(police?: Police){
-    if(police && police.id){
-        this.exerciceService.$getExercices(police.id).subscribe(
+       this.policeService.getPoliceById(policeId).subscribe(
+        resp => {
+          if(resp){
+
+            this.policeSelected = resp;    
+            }
+        }
+       );
+  }
+
+  loadExerciceByPolice(policeId?: string){
+    if(policeId){
+        this.exerciceService.$getExercices(policeId).subscribe(
          res => {
            this.exercices = res;
          }
@@ -192,9 +184,9 @@ ajouterFamille() {
     }
   }
 
-  loadGroupeByPolice(police?: Police){
-    if(police && police.id){
-        this.groupeService.$getGroupes(police.id).subscribe(
+  loadGroupeByPolice(policeId: string){
+    if(policeId){
+        this.groupeService.$getGroupes(policeId).subscribe(
          res => {
            this.groupesByPolicy = res.groupeDtoList;
          }
@@ -334,8 +326,7 @@ ajouterFamille() {
     this.groupesByPolicy = [];
     this.exercices = [];
     this.policeSelected = {};
-
-   // this.router.navigateByUrl('/contrat/avenant');
+    this.router.navigateByUrl('contrat/avenant');
   }
 
   onNextStepp(historiqueAvenant: any){
@@ -415,10 +406,6 @@ ajouterFamille() {
         });
 
 }
-
-  envoyerReponse() {
-    this.reponseEnvoyee.emit("Salut B, j'ai bien reçu ton message !");
-  }
 
       getSucessInfo(): void {
         this.messageService.add({severity: 'success', summary: 'AVENANT INCORPORATION', detail: 'Opération réussie!'});

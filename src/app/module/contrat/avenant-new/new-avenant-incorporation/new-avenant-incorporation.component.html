@@ -1,13 +1,13 @@
-<div class="p-card">
-    <div class="p-fluid p-formgrid p-grid">
-        <div class="p-field p-col-12">
 
 <p-dialog [(visible)]="isToImporteExcelFile" 
-    [header]="'INCORPORATION PAR IMPORATION DE FICHIER'"
     [style]="{width: '80%'}"
-     position="top" [transitionOptions]="'2000ms'" 
+     position="center" [transitionOptions]="'2000ms'" 
     [modal]="true" 
     styleClass="p-fluid">
+
+  <ng-template pTemplate="header">
+    <h5>INCORPORATION PAR IMPORATION DE FICHIER DE LA POLICE :  <span style="color: #188627; font-weight: bold;">{{ policeSelected.nom }}</span>  </h5>
+  </ng-template>
 
     <ng-template pTemplate="content">
         <div class="card">
@@ -168,9 +168,8 @@
 
     </ng-template>
 </p-dialog>
-</div>
-</div>
-</div>
+
+
 
 
 <p-dialog [(visible)]="isToViewImporteExcelFile"
@@ -352,141 +351,6 @@
         </div>
 </p-panel>
 </p-dialog>
-
-      <p-table #dt [value]="policeByAffaireNouvelles" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['numero','garant.nom','intermediaire.nom','nom','taux.taux']"
-                [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
-                currentPageReportTemplate="affichage {first} à {last} de {totalRecords} enregistrement"
-                [showCurrentPageReport]="true">
-          <ng-template pTemplate="caption">
-              <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between table-header">
-                  <h5 class="p-m-0"></h5>
-                  <span class="p-input-icon-left">
-                  <i class="pi pi-search"></i>
-                  <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                          placeholder="Search..."/>
-                  </span>
-              </div>
-          </ng-template>
-          <ng-template pTemplate="header">
-              <tr>
-                  <!-- <th style="width: 3rem">
-                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                  </th> -->
-                  <th pSortableColumn="numero" style="width: 12rem">Numero
-                      <p-sortIcon field="numero"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="nom" style="width: 26rem">Souscripteur
-                      <p-sortIcon field="nom"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="taux" style="width: 16rem">Personne ressource 
-                      <p-sortIcon field="taux.taux"></p-sortIcon></th>
-                  <!--<th pSortableColumn="territorialite" style="width: 14rem">Territorialite
-                      <p-sortIcon field="territorialite.libelle"></p-sortIcon>
-                  </th>-->
-                  <th pSortableColumn="duree" style="width: 6rem">Duree
-                      <p-sortIcon field="duree"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="dateEffet" style="width: 8rem">Date effet
-                      <p-sortIcon field="dateEffet"></p-sortIcon>
-                  </th>
-                  <th pSortableColumn="dateEcheance" style="width: 8rem">Date écheance
-                      <p-sortIcon field="dateEcheance"></p-sortIcon>
-                  </th>
-                  <!-- <th style="width: 12rem">Etat</th> -->
-                  <th></th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-police>
-              <tr>
-                  <!--  <td>
-                      <p-tableCheckbox [value]="police"></p-tableCheckbox>
-                  </td> -->
-
-                  <td><span class="p-column-title">{{police.numero}}</span>
-                  </td>
-                  <td>
-                      <p-badge *ngIf="police.isEnCours" value="{{police.nom}}"  severity="success"></p-badge>
-                      <p-badge *ngIf="!police.isEnCours" value="{{police.nom}}" severity="danger"></p-badge>
-                  </td>
-                  <td><span class="p-column-title">{{police.personneRessource}}</span>
-                  </td>
-                  <!--<td>
-                      <span class="p-column-title" *ngFor="let t of police.territorialite">
-                          {{t.libelle}}
-                      </span>
-                  </td>-->
-                  <td><span class="p-column-title">{{police.duree}}</span>
-                  </td>
-                  <td><span class="p-column-title">{{police.dateEffet | formatTableValue : 'date'}}</span>
-                  </td>
-                  <td>
-                      <span class="p-column-title">{{police.dateEcheance | formatTableValue : 'date'}}</span>
-                  </td>
-                  <!-- <td>
-                      <span class="p-column-title">{{police.dateEcheance | formatTableValue : 'date'}}</span>
-                  </td> -->
-                  <td>
-                      <button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-pencil"
-                              pTooltip="editer" class="p-button-rounded p-button-success p-mr-1"
-                              (click)="editPolice(police)"></button>
-
-                      <button *ngIf="typeAvenantSelected==='modification'" pButton pRipple icon="pi pi-trash"
-                              pTooltip="Supprimer" class="p-button-rounded p-button-warning p-mr-1"
-                              (click)="deletePolice(police)"></button>
-
-                      <button *ngIf="typeAvenantSelected==='incorporation'" pButton pRipple icon="pi pi-angle-up"
-                              pTooltip="voir groupe" class="p-button-rounded p-button-info p-mr-1"
-                              (click)="voirGroupe(police)"></button>
-
-                      <button pButton pRipple icon="pi pi-eye" pTooltip="voir details"
-                              class="p-button-rounded p-button-info" (click)="onRowSelectPolice(police)"></button>
-                      <!--button pButton  pRipple icon="pi pi-times" pTooltip="Invalider police" class="p-button-rounded p-button-info" (click)="invaliderPolice(police)"></button-->
-
-                      <button pButton pRipple icon="pi pi-reply" pTooltip="Rétrograder"
-                              class="p-button-rounded p-button-warning p-ml-1 p-mr-1"
-                              (click)="deValiderPolice1(police)"></button>
-
-                      <!-- <button pButton pRipple icon="pi pi-list" pTooltip="Liste actualisée" 
-                              class="p-button-rounded p-button-info p-mr-2" (click)="loadActualList(police)"></button> -->
-
-                              <button pButton pRipple icon="pi pi-eye" pTooltip="voir statistique"
-                              class="p-button-rounded p-button-info p-mr-2" (click)="getStatistique(police)"></button>
-
-                      <button pButton pRipple icon="pi pi-search p-mr-2" pTooltip="voir contrat"
-                      class="p-button-rounded p-button-info" (click)="voirContrat(police); loadGoupeByPolice1(police); loadActualListByContrat(police)"></button>
-
-                      <!-- <p-splitButton label="Avenants" icon="pi pi-plus" [model]="typeActions" class="p-ml-2" [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0"
-                                      (onDropdownClick)="policeItem = police; setPolice(police); loadGoupeByPolice()"></p-splitButton> -->
-                      <!-- SPlit sans la fonction setPolice -->
-
-                      <p-splitButton 
-                          label="Avenants" 
-                          icon="pi pi-plus" 
-                          [model]="typeActions" 
-                          class="p-ml-1"
-                          (onDropdownClick)="onGetPoliceSelected(police)">
-                      </p-splitButton>
-
-  <!--                     <p-splitButton 
-                          label="Avenants" 
-                          icon="pi pi-plus" 
-                          [model]="typeActions" 
-                          class="p-ml-1"
-                          [disabled]="police.historiqueAvenantListWithoutActiveList?.length > 0 || police.isResilie"
-                          (onDropdownClick)="onGetPoliceSelected(police)">
-                      </p-splitButton> -->
-
-
-                  </td>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="summary">
-              <div class="p-d-flex p-ai-center p-jc-between">
-                  {{policeListFiltrer ? policeListFiltrer.length : 0 }} police(s).
-              </div>
-          </ng-template>
-      </p-table>
 
   <p-toast></p-toast>
 
