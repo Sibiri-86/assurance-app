@@ -329,6 +329,23 @@ ajouterFamille() {
     this.router.navigateByUrl('contrat/avenant');
   }
 
+
+
+  onToGoNextStepp(historiqueAvenant?: any, adherant?:any){
+
+    historiqueAvenant.police = this.policeSelected;
+    historiqueAvenant.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    historiqueAvenant.dateSaisie = new Date();
+
+    this.historiqueAvenant = historiqueAvenant;
+    this.historiqueAvenantNewDTO = historiqueAvenant;
+
+    if(historiqueAvenant != null && adherant.length > 0){
+      this.onNextStepp(historiqueAvenant);
+    }
+
+  }
+
   onNextStepp(historiqueAvenant: any){
 
     historiqueAvenant.police = this.policeSelected;
@@ -385,7 +402,10 @@ ajouterFamille() {
 
           this.isToViewImporteExcelFile = false;
           this.isToImporteExcelFile = false;
-          this.onGetPolice();
+          this.router.navigateByUrl('contrat/avenant');
+          
+
+          //this.onGetPolice();
         }
       }
     );
@@ -482,6 +502,8 @@ groupByOrdre() {
   });
 
    this.totalAssure = this.nbAdherents + this.nbConjoints + this.nbEnfants;
+
+   this.onToGoNextStepp(this.historiqueAvenant, this.adherents);
 }
 
 

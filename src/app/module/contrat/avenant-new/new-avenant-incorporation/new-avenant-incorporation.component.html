@@ -150,7 +150,7 @@
                      !historiqueAvenant.fraisAccessoires ||
                      !historiqueAvenant.fraisAccessoires
                      "
-                    (change)="onGetFiles($event)"
+                    (change)="onGetFiles($event); onToGoNextStepp(historiqueAvenant)"
                         id="excelFile" 
                         type="file" 
                         pInputText 

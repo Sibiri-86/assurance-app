@@ -292,7 +292,8 @@ onConfirmRetraitSaved() {
 
           this.isTodisplayEntetDialogue = false;
           this.isToDisplayAdherentByFamily = false;
-          this.onGetPolice();
+          this.onCancelRetrait();
+          // this.onGetPolice();
         }
       }
     );  
