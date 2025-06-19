@@ -37,6 +37,7 @@
                         Sélectionner l'exercice <span style="color: red;">*</span>
                     </label>
                     <p-dropdown 
+                        [disabled]="!historiqueAvenant.typeDemandeur"
                         dataKey="id" 
                         [filter]="true"
                         showClear="true" 
@@ -61,28 +62,30 @@
                                             [(ngModel)]="historiqueAvenant.groupe"
                                             [filter]="true" filterBy="libelle" [showClear]="true"
                                             placeholder="Choisir un groupe"
+                                            [disabled]="!historiqueAvenant.exercice"
                                             >
                                 </p-dropdown>
                         </div>
 
                          <div class="p-field p-col-12 p-md-4">
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
 
                            
                         </div>
 
                          <div class="p-field p-col-12 p-md-4">
-                                <span class="textDanger" *ngIf="isInValidateDateEffect">La date de paiement doit être antérieure ou égale à celle du jour</span>
+                            
+                            <span class="textDanger" *ngIf=" historiqueAvenant.dateAvenant && historiqueAvenant.dateEffet && historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle de l'avenant</span>
 
                             <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
-                            <input  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
+                            <input [disabled]="!historiqueAvenant.dateAvenant"  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
 
                         </div>
 
                          <div class="p-field p-col-12 p-md-4">
                             <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
-                            <input id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
+                            <input [disabled]="!historiqueAvenant.dateEffet || historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet " id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
                         </div>
 
                                                                 <!-- Motif -->
@@ -95,6 +98,7 @@
                         [(ngModel)]="historiqueAvenant.observation"
                         pInputText
                         class="p-inputtext w-full"
+                        [disabled]="!historiqueAvenant.numeroGarant"
                         
                     />
                 </div>
@@ -103,6 +107,14 @@
                  <div class="p-field p-col-12 p-md-6">
                     <label for="excelFile">Importer le fichier Excel<sup style="color: red;">*</sup></label>
                     <input 
+                    [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.observation ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur
+                     "
                         (click)="onNextStepp(historiqueAvenant)"
                         (change)="onUploadFile($event)"
                         type="file"
