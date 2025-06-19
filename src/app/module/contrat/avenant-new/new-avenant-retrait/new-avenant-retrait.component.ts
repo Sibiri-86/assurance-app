@@ -25,6 +25,7 @@ export class NewAvenantRetraitComponent implements OnInit {
   displayWriteChoose = false;
   isToDisplayAdherentByFamily = false;
   isTodisplayEntetDialogue = false;
+  adherentAndFamilyLength : number = 0;
   exercices: Exercice[] = [];
   groupesByPolicy: Groupe [] = [];
   
@@ -37,7 +38,9 @@ export class NewAvenantRetraitComponent implements OnInit {
   accordionIndex: number = 0;
 
   historiqueAvenant: HistoriqueAvenant = {};
+  historiqueAvenant2: HistoriqueAvenant = {};
   historiqueAvenantNewDTO: any = {};
+  historiqueAvenantAdherants: any = {};
 
   policeByTypeGarand: Police[] = [];
 
@@ -182,8 +185,8 @@ onDownloadModel(): void {
         .map(row => row[0])
         .filter(m => !!m);
 
-      // Envoyer les matricules au backend
       this.onGetAdherentByMatricule(numeros);
+      this.onGetHistoriqueAvenantAdherentService(numeros);
 
     };
 
@@ -195,10 +198,29 @@ onDownloadModel(): void {
     this.historiqueAvenantService.saveNewAvenantRetraitService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
             (response) => {
 
+              this.adherentAndFamilyLength = response.length;
               this.onCloseDialog();
               this.onDisplayAdherentByFamily(response);
                 this.accordionIndex = 0; 
               this.isToDisplayAdherentByFamily = true;
+          },
+          (error) => {
+            console.error('Erreur lors de la recherche des assurés', error);
+          }
+    );
+
+  }
+
+  
+  onGetHistoriqueAvenantAdherentService(numeros: any){
+
+    this.historiqueAvenantService.getHistoriqueAvenantAdherentService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
+            (response) => {
+              
+              console.log('response', response);
+              
+              this.historiqueAvenantAdherants = response;
+
           },
           (error) => {
             console.error('Erreur lors de la recherche des assurés', error);
@@ -256,7 +278,6 @@ onDisplayAdherentByFamily(response: string[]) {
 onConfirmRetraitSaved() {
 
     this.historiqueAvenantNewDTO.aderantsNew = this.allAdherents;
-
     this.historiqueAvenantNewDTO.police = this.police;
     this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
     this.historiqueAvenantNewDTO.dateSaisie = new Date();
@@ -273,8 +294,33 @@ onConfirmRetraitSaved() {
           this.onGetPolice();
         }
       }
-    ); 
+    );  
 
+
+    }
+
+
+onConfirmRetraitSaved1() {
+
+    this.historiqueAvenant2.historiqueAvenantAdherants =  this.historiqueAvenantAdherants;
+
+    this.historiqueAvenant2.police = this.police;
+    this.historiqueAvenant2.typeHistoriqueAvenant = TypeHistoriqueAvenant.RETRAIT;
+    this.historiqueAvenant2.dateSaisie = new Date();
+
+      this.historiqueAvenantService.updateHistoriqueAvenant(this.historiqueAvenant2).subscribe(
+      resp => {        
+        if(resp == true){
+          this.getSucessInfo();
+          this.historiqueAvenant = {};
+          this.historiqueAvenant2 = {};
+
+          this.isTodisplayEntetDialogue = false;
+          this.isToDisplayAdherentByFamily = false;
+          this.onGetPolice();
+        }
+      }
+    ); 
 
     }
 
@@ -310,6 +356,7 @@ onConfirmRetraitSaved() {
 
     this.historiqueAvenant = historiqueAvenant;
     this.historiqueAvenantNewDTO = historiqueAvenant;
+    this.historiqueAvenant2 = historiqueAvenant;
   }
 
 

@@ -203,6 +203,17 @@ saveNewAvenantRetraitService(numeros: any, exerciceId: string, groupeId: string,
   return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), request);
 }
 
+getHistoriqueAvenantAdherentService(numeros: any, exerciceId: string, groupeId: string, policeId: string): Observable<any> {
+  const request = {
+    numeros: numeros,
+    exerciceId: exerciceId,
+    groupeId: groupeId,
+    policeId: policeId,
+  };
+
+  return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.GET_HISTORIQUE_AVENANT_ADHRENT_LIST), request);
+}
+
 
 
 
