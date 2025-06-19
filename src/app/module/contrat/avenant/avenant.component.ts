@@ -358,6 +358,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   isToImporteExcelFile = false;
   isToDisplayAvenantIncorporation = false;
+  displayChoose = false;
 
   policeSelected : any;
   reponseDeA = "";
@@ -830,7 +831,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.policeSelected = this.policeItem;
 
           // this.onDisplayNewAvenantComposant();
-          this.onGetNewAvenantIncorporationComponent();
+          // this.onGetNewAvenantIncorporationComponent();
+          this.showChooseDialog();
           this.entete = 'Avenant d\'Incorporation';
       }}, 
 
@@ -3447,5 +3449,17 @@ export class AvenantComponent implements OnInit, OnDestroy {
     onGetNewAvenantIncorporationComponent() {
     this.router.navigateByUrl('contrat/new-avenant-incorporation/' + this.policeItem.id);
   }
+
+    showChooseFileDialog() {
+    this.router.navigateByUrl('contrat/new-avenant-incorporation/' + this.policeItem.id);
+  }
+
+    showChooseWriteDialog() {
+    this.router.navigateByUrl('contrat/new-avenant-incorporation/' + this.policeItem.id);
+  }
+
+      showChooseDialog(){
+      this.displayChoose = true;
+    }
 
 }

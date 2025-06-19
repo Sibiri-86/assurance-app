@@ -110,6 +110,7 @@ export class AvenantRetraitComponent implements OnInit {
   adherentsList: Adherent[] = [];
 
   isAdherantPrincipalWithFamily = false;
+  displayChoose = false;
   expandedRows: { [key: string]: boolean } = {};
 
  private searchTerms = new Subject<string>(); // Observable pour gérer les termes de recherche.

@@ -5573,3 +5573,44 @@
 </p-dialog>
 
 <app-new-avenant-incorporation *ngIf="isToDisplayAvenantIncorporation" [policeSelected]="policeSelected"></app-new-avenant-incorporation>
+
+
+
+<p-dialog [(visible)]="displayChoose" 
+    [header]="'AVENANT DE D\'INCORPORATION'"
+    [style]="{width: '40%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid p-justify-between" style="padding: 1rem;">
+
+            <div class="col col-6">
+                <button 
+                    
+                (click)="showChooseFileDialog()"
+                    pButton icon="pi pi-file-excel"
+                    label="Par fichier"
+                    class="p-button-success">
+                </button>   
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    (click)="showChooseWriteDialog()"
+                    pButton icon="pi pi-pencil"
+                    label="Par saisie"
+                    class="p-button-warning">
+                </button>   
+            </div>
+
+
+            </div>
+        </div>
+
+    </ng-template>
+</p-dialog>
+
+
