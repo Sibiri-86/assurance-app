@@ -3455,10 +3455,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
   }
 
     showChooseWriteDialog() {
-    this.router.navigateByUrl('contrat/new-avenant-incorporation/' + this.policeItem.id);
+    this.router.navigateByUrl('contrat/new-avenant-incorporation-writting/' + this.policeItem.id);
   }
 
-      showChooseDialog(){
+    showChooseDialog(){
       this.displayChoose = true;
     }
 
