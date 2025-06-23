@@ -3432,15 +3432,9 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.isToDisplayAvenantIncorporation = true;
   }
 
-  getPolice(police: Police){
-
-   // this.monMessage = police;
-  }
-
     gererReponse(reponse: string) {
     this.reponseDeA = reponse;
   }
-
 
     onGetNewAvenantRetraitComponent() {
     this.router.navigateByUrl('contrat/new-avenant-retrait/' + this.policeItem.id);

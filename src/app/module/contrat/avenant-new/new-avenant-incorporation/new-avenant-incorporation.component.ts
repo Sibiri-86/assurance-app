@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Adherent, AdherentFamille } from 'src/app/store/contrat/adherent/model';
@@ -99,7 +98,6 @@ ajouterFamille() {
 }
 
   constructor(
-      private http: HttpClient,
       private router : Router,
       private exerciceService: ExerciceService,
       private groupeService: GroupeService,

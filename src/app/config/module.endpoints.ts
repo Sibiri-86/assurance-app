@@ -686,6 +686,10 @@ export class Endpoints {
             prod: `${SERVICE_PREFIX}/contrat/adherent/by-exercice-and-groupe-paginate`,
             mock: `assets/mock/contrat/adherent.mock.json`
         };
+        static readonly ADHERANT_PRINCIPAL_BY_EXERCICE_AND_POLICE = {
+            prod: `${SERVICE_PREFIX}/contrat/adherent/fecth-adherent-principal-by-exercice-and-police`,
+            mock: `assets/mock/contrat/adherent.mock.json`
+        };
         static readonly ADHERANT_BY_ADHERENT_PRINCIPAL_WITH_FAMILY = {
             prod: `${SERVICE_PREFIX}/contrat/adherent/by-adherent-principal-with-family`,
             mock: `assets/mock/contrat/adherent.mock.json`

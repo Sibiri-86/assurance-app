@@ -453,6 +453,7 @@ import { NewAvenantIncorporationWrittingComponent } from './module/contrat/avena
         KeycloakAngularModule,
         AppCodeModule,
         ReactiveFormsModule,
+        DividerModule,
         StoreModule.forRoot(reducers,
           {metaReducers,
             runtimeChecks: {

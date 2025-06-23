@@ -1,1 +1,247 @@
-<p>new-avenant-incorporation-writting works!</p>
+<p-dialog [(visible)]="isTodisplayEntetDialogue" 
+    [style]="{width: '80%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="header">
+    <h5>RETRAIT PAR SAISIE POUR LA POLICE :  <span style="color: #188627; font-weight: bold;">{{ police.nom }}</span>  </h5>
+  </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
+
+
+                <!-- Initiateur -->
+                <div class="p-field p-col-12 p-md-4">
+                    <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
+                    <p-dropdown 
+                        inputId="typeDemanteur" 
+                        dataKey="id" 
+                        [filter]="true" 
+                        showClear="true"
+                        [options]="demandeursList" 
+                        [(ngModel)]="historiqueAvenant.typeDemandeur"
+                        optionValue="libelle"
+                        placeholder="Sélectionner" 
+                        optionLabel="libelle" 
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
+                <!-- Exercice -->
+                <div class="p-field p-col-12 p-mt-1 p-md-4">
+                    <label for="compteTiers" class="font-bold">
+                        Sélectionner l'exercice <span style="color: red;">*</span>
+                    </label>
+                    <p-dropdown 
+                        [disabled]="!historiqueAvenant.typeDemandeur"
+                        dataKey="id" 
+                        [filter]="true"
+                        showClear="true" 
+                        [options]="exercices"
+                        name="exercice"
+                        [(ngModel)]="historiqueAvenant.exercice"
+                        [autoDisplayFirst]="true" 
+                        appendTo="body"
+                        placeholder="Sélectionnez l'exercice"
+                        (onChange)="onGetSelectedExerciceId($event.value.id)"
+                        optionLabel="nomExo"
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
+                           
+                                <p-dropdown  [options]="groupesByPolicy" optionLabel="libelle"
+                                            name="groupe"
+                                            (onChange)="onGetSelectedGroupeId($event.value.id)"
+                                            [(ngModel)]="historiqueAvenant.groupe"
+                                            [filter]="true" filterBy="libelle" [showClear]="true"
+                                            placeholder="Choisir un groupe"
+                                            [disabled]="!historiqueAvenant.exercice"
+                                            >
+                                </p-dropdown>
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
+                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+
+                           
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            
+                            <span class="textDanger" *ngIf=" historiqueAvenant.dateAvenant && historiqueAvenant.dateEffet && historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle de l'avenant</span>
+
+                            <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
+                            <input [disabled]="!historiqueAvenant.dateAvenant"  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
+
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
+                            <input [disabled]="!historiqueAvenant.dateEffet || historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet " id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
+                        </div>
+
+                                                                <!-- Motif -->
+                <div class="p-field p-col-12 p-md-6 p-mt-1">
+                    <label for="observation">Motif<sup style="color: red;">*</sup></label>
+                    <input 
+                        id="observation"
+                        type="text"
+                        name="observation"
+                        [(ngModel)]="historiqueAvenant.observation"
+                        pInputText
+                        class="p-inputtext w-full"
+                    [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur
+                     "
+                        
+                    />
+                </div>
+            </div>
+
+            </div>
+
+        <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">    
+                <button
+                (click)="onCancelRetrait()"
+                    pButton icon="pi pi-times"
+                    label="Quitter"
+                    class="p-button-danger">
+                </button>  
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.observation ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur
+                     "
+                    (click)="onNextStepp(historiqueAvenant)"
+                    pButton icon="pi pi-arrow-circle-right"
+                    label="Ajouter une famille"
+                    class="p-button-info">
+                </button>      
+            </div> 
+        </div>
+
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="isTodisplayFamilyDialogue" 
+    [style]="{width: '100%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="header">
+    <h5>INCORPORATION: AJOUT DE MEMBRES DE FAMILLE POUR L'ASSURE :  <span style="color: #188627; font-weight: bold;">{{ police.nom }}</span>  </h5>
+  </ng-template>
+
+        <div class="flexCss divBorder p-justify-between">
+
+        <div class="p-col-12 p-md-6">
+            
+    <div class="divBorder p-col-12">
+
+                        <div class="p-col-12">
+                            <p-dropdown 
+                            [options]="adherentsList" 
+                                        optionLabel="fullName"
+                                        placeholder="Sélectionner l'assuré principal"
+                                        [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>   
+
+                            <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                <div class="p-field p-grid">
+
+                                    <div class="p-col-4">
+                                        <label>Nom<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <input  name="nom" type="text" pInputText />
+                                    </div>
+
+                                    <div class="p-col-4">
+                                        <label>Prénom(s) <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <input type="text" pInputText />
+                                    </div>
+                                                                       
+                                    <div class="p-col-4">
+                                        <label >Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <p-dropdown [options]="genres" optionLabel="libelle" placeholder="Genre" [style]="{'width':'100%'}">
+                                                </p-dropdown>
+                                    </div>
+
+                                    <div class="p-col-4">
+                                        <label >Qualité Assuré <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <p-dropdown [options]="qualiteAssures" 
+                                                    optionLabel="libelle"
+                                                    placeholder="Qualité Assuré"
+                                                    [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="p-col-4">
+                                        <label >Date Naisse. <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <input  pInputText/>
+                                    </div>
+
+                                    <div class="p-col-4">
+                                        <label >Date Incorpotration <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
+                                        <input  pInputText/>
+                                    </div>
+
+                                    <div class="p-col-4">
+                                        <label >Date Entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                                        <input  type="date" pInputText />
+                                    </div>
+
+                                    <div class="p-col-4">
+                                        <label>Téléphone <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                                        <p-inputMask  mask="99 99 99 99" >
+                                        </p-inputMask>
+                                    </div>
+
+                                    <div class="p-field p-col-4">
+                                        <label >Numero de l'exercice postérieur <sup style="color: red !important; font-size: 1.4em;"></sup></label>
+                                        <input  type="number" pInputText>
+                                    </div>
+                                    
+
+                                    <div class="p-col-5">
+                                        <button style="margin-top: 31px; margin-left: 56px;" pButton 
+                                        type="button" icon="pi pi-check" label="Ajouter à la liste" class="p-button-success">
+                                        </button>
+                                    </div>
+
+                                    <div class="p-col-5">
+                                        <button style="margin-top: 31px; margin-left: 56px;" pButton 
+                                        type="button" icon="pi pi-check" label="Initialiser pour un autre assuré principal" class="p-button-info">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+            </div>
+
+            <div class="divBorder2 p-col-6">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
+                voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+            </div>
+
+        </div>
+
+</p-dialog>

@@ -178,7 +178,6 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
         }
       }
 
-          // Bircof
         // Rechercher les adhérants par exoId, et groupe
         searchAllAdherentByExerciceAndGroupeByPage (exoId?: string, groupeId?: string, page?: number, size?: number): Observable<Page<Adherent[]>> {
           const params = new HttpParams()
@@ -188,6 +187,16 @@ getHistoriqueAvenantAdherentsByHistoriqueIdAndTypeHistorique(typeHistoriqueAvena
             .set('size', size.toString());
           return this.http.get<Page<Adherent[]>>(
             `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_BY_EXERCICEAND_GROUPE)}`, { params });
+        }
+
+
+        // Rechercher les adhérants par exoId, et groupe
+        searchAdherentPrincipaleByExerciceAndPolice (exerciceId?: string, policeId?: string): Observable<Adherent[]> {
+          const params = new HttpParams()
+            .set('exerciceId', exerciceId)
+            .set('policeId', policeId)
+          return this.http.get<Adherent[]>(
+            `${GlobalConfig.getEndpoint(Endpoints.ADHERANT_PRINCIPAL_BY_EXERCICE_AND_POLICE)}`, { params });
         }
 
 
