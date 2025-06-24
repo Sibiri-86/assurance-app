@@ -108,7 +108,7 @@
                 </div>
 
                     <!-- Import Excel -->
-                 <div class="p-field p-col-12 p-md-6">
+                 <div class="p-field p-col-12 p-md-4">
                     <label for="excelFile">Importer le fichier Excel<sup style="color: red;">*</sup></label>
                     <input 
                     [disabled]="!historiqueAvenant.numeroGarant ||
@@ -129,6 +129,15 @@
                         class=" p-inputtext w-full"
                     />
                 </div>
+
+                    <div class="p-field p-col-12 p-md-2 p-mt-3">
+                        <button
+                        (click)="onDownloadModel()"
+                            pButton icon="pi pi-upload"
+                            label="Modèle"
+                            class="p-button-info p-m-3">
+                        </button>  
+                    </div>
         
             </div>
 

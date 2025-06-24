@@ -222,10 +222,7 @@ onDownloadModel(): void {
   onGetHistoriqueAvenantAdherentService(numeros: any){
 
     this.historiqueAvenantService.getHistoriqueAvenantAdherentService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
-            (response) => {
-              
-              console.log('response', response);
-              
+            (response) => {              
               this.historiqueAvenantAdherants = response;
 
           },
