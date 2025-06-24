@@ -5,6 +5,7 @@ import { Adherent } from 'src/app/store/contrat/adherent/model';
 import { AdherentService } from 'src/app/store/contrat/adherent/service';
 import { Exercice } from 'src/app/store/contrat/exercice/model';
 import { ExerciceService } from 'src/app/store/contrat/exercice/service';
+import { Groupe } from 'src/app/store/contrat/groupe/model';
 import { GroupeService } from 'src/app/store/contrat/groupe/service';
 import { HistoriqueAvenant, TypeDemandeur, TypeHistoriqueAvenant } from 'src/app/store/contrat/historiqueAvenant/model';
 import { HistoriqueAvenantService } from 'src/app/store/contrat/historiqueAvenant/service';
@@ -46,6 +47,7 @@ export class NewAvenantIncorporationWrittingComponent implements OnInit {
   adherantFamily: Adherent [] = [];
   adherantNew: Adherent = {};
   adherentPrincipal: Adherent = {};
+  groupe: Groupe = {};
 
   demandeursList: any = [
     {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -217,9 +219,16 @@ searchAdherentPrincipaleByExerciceAndPolice(exerciceId?: string, policeId?: stri
     this.isTodisplayEntetDialogue = true;
     this.isTodisplayFamilyDialogue = false;
 
-
   }
 
+
+  
+
+    onGetSelectedGroupeId(groupe: Adherent){
+        if(groupe){
+        this.groupe = groupe;
+      }
+    }
     onSelectedAdherent(adherentPrincipal: Adherent){
         if(adherentPrincipal){
         this.adherentPrincipal = adherentPrincipal;
@@ -244,5 +253,62 @@ searchAdherentPrincipaleByExerciceAndPolice(exerciceId?: string, policeId?: stri
       }
     }
 
+    onConfirmIncorporationSaved() {
+
+    this.historiqueAvenantNewDTO.aderantsNew = this.adherantFamily;
+    this.historiqueAvenantNewDTO.police = this.policeSelected;
+    this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
+    this.historiqueAvenantNewDTO.dateSaisie = new Date();
+
+    this.historiqueAvenantService.saveIncorporationWrittingService(this.historiqueAvenantNewDTO).subscribe(
+      resp => {
+        
+        if(resp == true){
+          this.getSucessInfo();
+          this.historiqueAvenant = {};
+          this.historiqueAvenantNewDTO = {};
+
+          this.isTodisplayEntetDialogue = false;
+          this.isTodisplayFamilyDialogue = false;
+          this.router.navigateByUrl('contrat/avenant');
+          
+        }
+      }
+    );
+
+    }
+
+
+    onSaveIncorporation(){
+
+      console.log('historiqueAvenantNewDTO', this.historiqueAvenantNewDTO);
+        this.confirmationService.confirm({
+          message: 'Voulez-vous procéder à l’incorporation ?',
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.onConfirmIncorporationSaved();
+          },
+        });
+
+}
+
+      getSucessInfo(): void {
+        this.messageService.add({severity: 'success', summary: 'AVENANT INCORPORATION', detail: 'Opération réussie!'});
+      }
+      getCancelInfo(): void {
+        this.messageService.add({severity: 'info', summary: 'AVENANT INCORPORATION', detail: 'Opération annulé!'});
+      }
+      getFailledInfo(): void {
+        this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: 'Opération échouée!'});
+      }
+      
+      getErrorInfo(message: string): void {
+        this.messageService.add({severity: 'error', summary: 'AVENANT INCORPORATION', detail: message});
+      }
+
+      onCancelIncorporation(){
+        this.router.navigateByUrl('contrat/avenant');
+      }
 
 }

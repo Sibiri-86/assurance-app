@@ -184,6 +184,9 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     saveIncorporationService(historiqueAvenantNewDTO: any): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_INCORPORATION_NEW), historiqueAvenantNewDTO);
 }
+    saveIncorporationWrittingService(historiqueAvenantNewDTO: any): Observable<any> {
+    return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_INCORPORATION_WRITTING_NEW), historiqueAvenantNewDTO);
+}
     saveRetraitNewService(historiqueAvenantNewDTO: any): Observable<any> {
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_RETRAIT_NEW), historiqueAvenantNewDTO);
 }

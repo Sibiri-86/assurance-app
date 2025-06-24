@@ -1,3 +1,5 @@
+ <p-toast></p-toast>
+ <p-confirmDialog [style]="{width: '450px'}" acceptLabel="Oui" rejectLabel="Non"></p-confirmDialog>
 <p-dialog [(visible)]="isTodisplayEntetDialogue" 
     [style]="{width: '80%'}"
      position="center" [transitionOptions]="'2000ms'" 
@@ -57,7 +59,7 @@
                            
                                 <p-dropdown  [options]="groupesByPolicy" optionLabel="libelle"
                                             name="groupe"
-                                            (onChange)="onGetSelectedGroupeId($event.value.id)"
+                                            (onChange)="onGetSelectedGroupeId($event.value)"
                                             [(ngModel)]="historiqueAvenant.groupe"
                                             [filter]="true" filterBy="libelle" [showClear]="true"
                                             placeholder="Choisir un groupe"
@@ -107,6 +109,33 @@
                         
                     />
                 </div>
+
+                <!-- Frais Badges -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
+                    <input 
+                        [disabled]="!historiqueAvenant.observation" 
+                        pInputText
+                        type="number"
+                        inputId="fraisBadges" 
+                        name="fraisBadges"
+                        [(ngModel)]="historiqueAvenant.fraisBadges"
+                        class="w-full"/>
+                </div>
+
+                <!-- Frais Accessoires -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
+                    <input 
+                        [disabled]="!historiqueAvenant.fraisBadges" 
+                        pInputText
+                        type="number"
+                        inputId="fraisAccessoires" 
+                        name="fraisAccessoires" 
+                         [(ngModel)]="historiqueAvenant.fraisAccessoires"
+                        class="w-full"/>
+                    
+                </div>
             </div>
 
             </div>
@@ -114,7 +143,7 @@
         <div class="p-d-flex p-jc-center p-mt-2">
             <div class="col col-6 p-mr-3">    
                 <button
-                (click)="onCancelRetrait()"
+                (click)="onCancelIncorporation()"
                     pButton icon="pi pi-times"
                     label="Quitter"
                     class="p-button-danger">
@@ -129,6 +158,8 @@
                      !historiqueAvenant.groupe ||
                      !historiqueAvenant.dateAvenant ||
                      !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.fraisBadges ||
+                     !historiqueAvenant.fraisAccessoires ||
                      !historiqueAvenant.typeDemandeur
                      "
                     (click)="onNextStepp(historiqueAvenant)"
@@ -316,6 +347,7 @@
                     <td colspan="8">
                     <div class="flex justify-center py-4">
                         <button 
+                        (click)="onSaveIncorporation()"
                         pButton 
                         type="button" 
                         icon="pi pi-check" 

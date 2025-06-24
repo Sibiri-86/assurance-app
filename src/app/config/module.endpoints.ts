@@ -788,6 +788,10 @@ export class Endpoints {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-incorporation-new`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
     };
+    static readonly SAVE_INCORPORATION_WRITTING_NEW = {
+        prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-incorporation-writting-new`,
+        mock: `assets/mock/contrat/historique-avenant.mock.json`
+    };
     static readonly SAVE_RETRAIT_NEW = {
         prod: `${SERVICE_PREFIX}/contrat/historique-avenant/save-retrait-new`,
         mock: `assets/mock/contrat/historique-avenant.mock.json`
