@@ -235,4 +235,14 @@ searchAdherentPrincipaleByExerciceAndPolice(exerciceId?: string, policeId?: stri
       
     }
 
+    onRetrieveMamber(adherent: Adherent) {
+      if (adherent) {
+        const index = this.adherantFamily.findIndex(a => a === adherent);
+        if (index !== -1) {
+          this.adherantFamily.splice(index, 1);
+        }
+      }
+    }
+
+
 }
