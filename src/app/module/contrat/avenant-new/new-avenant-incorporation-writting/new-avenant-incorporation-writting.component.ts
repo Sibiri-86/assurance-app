@@ -43,6 +43,9 @@ export class NewAvenantIncorporationWrittingComponent implements OnInit {
   police: Police;
   policeItem: Police;
   exerciceId: string;
+  adherantFamily: Adherent [] = [];
+  adherantNew: Adherent = {};
+  adherentPrincipal: Adherent = {};
 
   demandeursList: any = [
     {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -94,7 +97,7 @@ export class NewAvenantIncorporationWrittingComponent implements OnInit {
   onGetQualiteAssure(){
     this.qualiteAssureService.$getQualiteAssures().subscribe(
       resp => {
-        this.qualiteAssures = resp.typeQualiteAssureDtoList.filter( qualite => qualite.code === 'ADHERENT' );
+        this.qualiteAssures = resp.typeQualiteAssureDtoList.filter(notAdherent => notAdherent.code !=='ADHERENT');
       }
     );
   }
@@ -103,6 +106,7 @@ export class NewAvenantIncorporationWrittingComponent implements OnInit {
       resp => {
         this.genres = resp.genreDtoList;      }
     );
+
   }
 
   onGetProfessions(){
@@ -207,4 +211,28 @@ searchAdherentPrincipaleByExerciceAndPolice(exerciceId?: string, policeId?: stri
 
 
   }
+
+    onBackStepp(){
+
+    this.isTodisplayEntetDialogue = true;
+    this.isTodisplayFamilyDialogue = false;
+
+
+  }
+
+    onSelectedAdherent(adherentPrincipal: Adherent){
+        if(adherentPrincipal){
+        this.adherentPrincipal = adherentPrincipal;
+      }
+    }
+
+    onAddMember(adherent: Adherent){
+      if(this.adherentPrincipal && adherent){
+        adherent.adherentPrincipal = this.adherentPrincipal;
+        this.adherantFamily.push(adherent);
+        this.adherantNew = {};
+      }
+      
+    }
+
 }

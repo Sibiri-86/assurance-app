@@ -149,12 +149,12 @@
     styleClass="p-fluid">
 
     <ng-template pTemplate="header">
-    <h5>INCORPORATION: AJOUT DE MEMBRES DE FAMILLE POUR L'ASSURE :  <span style="color: #188627; font-weight: bold;">{{ police.nom }}</span>  </h5>
+    <h5> INCORPORATION: AJOUT DE MEMBRES DE FAMILLE </h5>
   </ng-template>
 
         <div class="flexCss divBorder p-justify-between">
 
-        <div class="p-col-12 p-md-6">
+        <div class="p-col-12 p-md-5">
             
     <div class="divBorder p-col-12">
 
@@ -162,6 +162,7 @@
                             <p-dropdown 
                             [options]="adherentsList" 
                                         optionLabel="fullName"
+                                        (onChange)="onSelectedAdherent($event.value)"
                                         placeholder="Sélectionner l'assuré principal"
                                         [style]="{'width':'100%'}">
                             </p-dropdown>
@@ -170,66 +171,82 @@
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-grid">
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label>Nom<sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                                        <input  name="nom" type="text" pInputText />
+                                        <input 
+                                        [disabled]="!adherentPrincipal"
+                                        [(ngModel)]="adherantNew.nom" name="nom" type="text" pInputText />
                                     </div>
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label>Prénom(s) <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                                        <input type="text" pInputText />
+                                        <input [disabled]="!adherantNew.nom" [(ngModel)]="adherantNew.prenom" name="prenom" type="text" pInputText />
                                     </div>
                                                                        
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label >Genre <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                                        <p-dropdown [options]="genres" optionLabel="libelle" placeholder="Genre" [style]="{'width':'100%'}">
+                                        <p-dropdown [disabled]="!adherantNew.prenom" [(ngModel)]="adherantNew.genre" [options]="genres" optionLabel="libelle" placeholder="Genre" [style]="{'width':'100%'}">
                                                 </p-dropdown>
                                     </div>
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label >Qualité Assuré <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
                                         <p-dropdown [options]="qualiteAssures" 
+                                         [disabled]="!adherantNew.genre"
                                                     optionLabel="libelle"
                                                     placeholder="Qualité Assuré"
+                                                    name="qualiteAssure"
+                                                    [(ngModel)]="adherantNew.qualiteAssure"
                                                     [style]="{'width':'100%'}">
                                         </p-dropdown>
                                     </div>
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label >Date Naisse. <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                                        <input  pInputText/>
+                                        <input [disabled]="!adherantNew.qualiteAssure" type="date" name="dateNaissance" [(ngModel)]="adherantNew.dateNaissance"  pInputText/>
                                     </div>
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
+                                        <span class="textDanger" *ngIf=" adherantNew.dateIncorporation && adherantNew.dateNaissance && adherantNew.dateNaissance > adherantNew.dateIncorporation">La date d'incorporation doit être supérieure ou égale à celle de naissance</span>
                                         <label >Date Incorpotration <sup style="color: red !important; font-size: 1.4em;">*</sup></label>
-                                        <input  pInputText/>
+                                        <input [disabled]="!adherantNew.dateNaissance" type="date" [(ngModel)]="adherantNew.dateIncorporation" name="dateIncorporation" pInputText/>
                                     </div>
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
+                                        <span class="textDanger" *ngIf=" adherantNew.dateIncorporation && adherantNew.dateEntree && adherantNew.dateIncorporation > adherantNew.dateEntree">La date d'entrée doit être supérieure ou égale à celle de l'incorporation</span>
                                         <label >Date Entrée <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                                        <input  type="date" pInputText />
+                                        <input [disabled]="!adherantNew.dateIncorporation"  type="date" [(ngModel)]="adherantNew.dateEntree" name="dateEntree" pInputText />
                                     </div>
 
-                                    <div class="p-col-4">
+                                    <div class="p-col-6">
                                         <label>Téléphone <sup style="color: red !important; font-size: 1.4em;"></sup></label>
-                                        <p-inputMask  mask="99 99 99 99" >
+                                        <p-inputMask  [disabled]="!adherantNew.dateEntree" [(ngModel)]="adherantNew.telephone"  name="telephone"  mask="99 99 99 99" >
                                         </p-inputMask>
                                     </div>
 
-                                    <div class="p-field p-col-4">
+<!--                                     <div class="p-field p-col-4">
                                         <label >Numero de l'exercice postérieur <sup style="color: red !important; font-size: 1.4em;"></sup></label>
                                         <input  type="number" pInputText>
                                     </div>
-                                    
+                                     -->
 
                                     <div class="p-col-5">
-                                        <button style="margin-top: 31px; margin-left: 56px;" pButton 
-                                        type="button" icon="pi pi-check" label="Ajouter à la liste" class="p-button-success">
+                                        <button (click)="onBackStepp()" style="margin-top: 31px; margin-left: 56px;" pButton 
+                                        type="button" icon="pi pi-arrow-circle-left" label="Précédent" class="p-button-info">
                                         </button>
                                     </div>
 
                                     <div class="p-col-5">
-                                        <button style="margin-top: 31px; margin-left: 56px;" pButton 
-                                        type="button" icon="pi pi-check" label="Initialiser pour un autre assuré principal" class="p-button-info">
+                                        <button
+                                          [disabled]="
+                                          !adherantNew.dateEntree ||
+                                          !adherantNew.dateIncorporation ||
+                                          !adherantNew.dateNaissance ||
+                                          !adherantNew.qualiteAssure ||
+                                          !adherantNew.genre ||
+                                          !adherantNew.prenom ||
+                                          !adherantNew.nom" 
+                                        (click)="onAddMember(adherantNew)" style="margin-top: 31px; margin-left: 56px;" pButton 
+                                        type="button" icon="pi pi-check" label="Ajouter à la liste" class="p-button-success">
                                         </button>
                                     </div>
                                 </div>
@@ -237,10 +254,80 @@
                         </div>
             </div>
 
-            <div class="divBorder2 p-col-6">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-                voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-            </div>
+            <div class="divBorder2 p-col-7">
+                
+                <h6 class="textGreen">Famille des assurés</h6>
+                <p-table [value]="adherantFamily"  class="p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                    <th>Nom</th>
+                    <th>Genre</th>
+                    <th>Qualité</th>
+                    <th>Naissance</th>
+                    <th>incorporation</th>
+                    <th>Entrée</th>
+                    <th>Assuré</th>
+                    <th>Retirer</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+
+                        <td>
+                            {{ row.nom }}  {{ row.prenom }}
+                        </td>
+
+                        <td >
+                            {{ row?.genre?.libelle }}
+                        </td>
+                        <td >
+                            {{ row.qualiteAssure?.libelle }}
+                        </td>
+
+                        <td>
+                            {{ row.dateNaissance   }}
+                        </td>
+
+                        <td>
+                            {{ row.dateIncorporation  | formatTableValue : 'date' }}
+
+                        </td>
+                        <td [style]="{width: '3px'}">
+                            {{ row.dateEntree | formatTableValue : 'date' }}
+                        </td>
+
+                    <td [style]="{width: '15px'}">
+                        {{ row?.adherentPrincipal?.nom}} {{ row?.adherentPrincipal?.prenom}}
+                    </td>
+
+                    <td [style]="{width: '3px'}">
+                        <button
+                            pButton 
+                            type="button" icon="pi pi-minus" class="p-button-warning">
+                        </button>  
+                    </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                <tr *ngIf="adherantFamily.length > 0">
+                    <td colspan="8">
+                    <div class="flex justify-center py-4">
+                        <button 
+                        pButton 
+                        type="button" 
+                        icon="pi pi-check" 
+                        label="Incorporer les membres de famille" 
+                        class="p-button-success">
+                        </button>
+                    </div>
+                    </td>
+                </tr>
+                </ng-template>
+
+                </p-table>
+
+        </div>
 
         </div>
 
