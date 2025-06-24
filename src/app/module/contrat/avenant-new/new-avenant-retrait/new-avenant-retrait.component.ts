@@ -35,6 +35,8 @@ export class NewAvenantRetraitComponent implements OnInit {
   policeSelectedId: string = '';
   groupeSelectedId: string = '';
   selectedExerciceId: string = '';
+  dateEffetExercice: Date;
+  dateEcheanceExercice: Date;
   accordionIndex: number = 0;
 
   historiqueAvenant: HistoriqueAvenant = {};
@@ -103,9 +105,13 @@ export class NewAvenantRetraitComponent implements OnInit {
     }
   }
 
-    onGetSelectedExerciceId(selectedExerciceId?: string){
-      this.selectedExerciceId = selectedExerciceId;
+    onGetSelectedExerciceId(selectedExercice?: Exercice){
+      this.selectedExerciceId = selectedExercice.id;
+
+      this.dateEffetExercice = selectedExercice.debut;
+      this.dateEcheanceExercice = selectedExercice.fin;
       }
+
 
     onGetSelectedGroupeId(groupeSelectedId?: string){
       this.groupeSelectedId = groupeSelectedId;

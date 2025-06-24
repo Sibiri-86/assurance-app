@@ -401,13 +401,9 @@ ajouterFamille() {
           this.isToViewImporteExcelFile = false;
           this.isToImporteExcelFile = false;
           this.router.navigateByUrl('contrat/avenant');
-          
-
-          //this.onGetPolice();
         }
       }
     );
-
 
     }
 
