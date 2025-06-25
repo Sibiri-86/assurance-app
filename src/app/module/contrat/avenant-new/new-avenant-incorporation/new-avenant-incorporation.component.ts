@@ -70,6 +70,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
   genres: any;
   assuresFamille: any[] = [];
   policeSelectedId: string = '';
+  activeIndex: number = 0;
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},

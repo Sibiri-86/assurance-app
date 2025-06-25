@@ -84,7 +84,7 @@
 
                          <div class="p-field p-col-12 p-md-3">
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.observation"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+                            <input [disabled]="!historiqueAvenant.observation"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
 
                            
                         </div>
@@ -92,14 +92,14 @@
                          <div class="p-field p-col-12 p-md-3">
                             <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateAvenant && historiqueAvenant.dateAvenant > historiqueAvenant.dateIncorparation">La date d'incorporation doit être supérieure ou égale à celle de l'avenant</span>
                             <label for="nom">Date d'Incorporation<sup style="color: red !important;">*</sup></label>
-                            <input  [disabled]="!historiqueAvenant.dateAvenant"   id="dateIncorparation" name="dateIncorparation" [(ngModel)]="historiqueAvenant.dateIncorparation" type="date"  pInputText (change)="onCompareDateAvenant()">
+                            <input  [disabled]="!historiqueAvenant.dateAvenant"   id="dateIncorparation" name="dateIncorparation" [(ngModel)]="historiqueAvenant.dateIncorparation" type="date"  pInputText>
 
                         </div>
 
                          <div class="p-field p-col-12 p-md-6">
                             <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateEffet && historiqueAvenant.dateIncorparation > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle d'incorporation</span>
                             <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.dateIncorparation"  id="dateEffet" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
+                            <input [disabled]="!historiqueAvenant.dateIncorparation"  id="dateEffet" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText>
 
                         </div>
 
