@@ -41,6 +41,7 @@
                         Sélectionner l'exercice <span style="color: red;">*</span>
                     </label>
                     <p-dropdown 
+                        (onChange)="onGetSelectedExercice($event.value)"
                         [disabled]="!historiqueAvenant.typeDemandeur"
                         inputId="compteTiers" 
                         dataKey="id" 
@@ -145,7 +146,7 @@
         <div class="p-d-flex p-jc-center p-mt-2">
             <div class="col col-6 p-mr-3">    
                 <button
-                (click)="onCancelIncorporation()"
+                (click)="onCancelRenouvelement()"
                     pButton icon="pi pi-times"
                     label="Quitter"
                     class="p-button-danger">
@@ -179,6 +180,9 @@
     <div class="p-col-12 p-md-6">
       <p-fieldset legend="EXERCICE A BASCULER" [toggleable]="false">
         <div class="p-field">
+            <span  *ngIf="historiqueAvenant.exercice && exerciceSelected &&  exerciceSelected == historiqueAvenant.exercice">
+                L'esxercice de migration doit être différent de l'exercice en cours
+            </span>
           <label for="exerciceOrigine" class="font-bold">
             Sélectionner l'exercice <span style="color: red;">*</span>
           </label>
@@ -190,6 +194,7 @@
             [options]="exercices"
             name="exerciceOrigine"
             [autoDisplayFirst]="true"
+            [(ngModel)]="historiqueAvenant.exercice"
             appendTo="body"
             placeholder="Sélectionnez l'exercice"
             optionLabel="nomExo"
@@ -198,7 +203,7 @@
         </div>
         <div class="p-field">
           <label for="exerciceOrigine" class="font-bold">
-            L'exercice <span style="color: red;">*</span>
+            L'exercice actuel<span style="color: red;">*</span>
           </label>
           <p-dropdown
             inputId="exerciceOrigine"
@@ -209,6 +214,8 @@
             name="exerciceOrigine"
             [autoDisplayFirst]="true"
             appendTo="body"
+            [disabled]="exerciceSelected"
+            [(ngModel)]="exerciceSelected"
             placeholder="Sélectionnez l'exercice"
             optionLabel="nomExo"
             class="w-full">
@@ -222,9 +229,10 @@
       <p-fieldset legend="RETRAIT ET INCORPORATION" [toggleable]="false">
         <div class="p-field">
           <label for="exerciceDestination" class="font-bold">
-            RETRAIT : Importer le fichier excel <span style="color: red;">*</span>
+            <span class="textDanger">RETRAIT : </span> Importer le fichier excel <span style="color: red;">*</span>
           </label>
              <input 
+                [disabled]="exerciceSelected == historiqueAvenant.exercice"
                 pInputText
                 type="file"
                 class="w-full"/>
@@ -232,9 +240,10 @@
 
         <div class="p-field">
           <label for="exerciceDestination" class="font-bold">
-           INCOPORATION : Importer le fichier excel <span style="color: red;">*</span>
+           <span class="textGreen">INCOPORATION : </span>Importer le fichier excel <span style="color: red;">*</span>
           </label>
              <input 
+                [disabled]="exerciceSelected == historiqueAvenant.exercice"
                 pInputText
                 type="file"
                 class="w-full"/>
@@ -247,10 +256,10 @@
   <div class="p-d-flex p-jc-center p-mt-2">
     <div class="col col-6 p-mr-3">
       <button
-        (click)="onCancelIncorporation()"
-        pButton icon="pi pi-times"
-        label="Quitter"
-        class="p-button-danger">
+        (click)="onBackStepp()"
+        pButton icon="pi pi-arrow-circle-left"
+        label="Précédent"
+        class="p-button-info">
       </button>
     </div>
 

@@ -45,6 +45,7 @@ export class NewAvenantRenouvelementComponent implements OnInit {
   groupe: Groupe = {};
   policeByAffaireNouvelles: Police [] = [];
   exercices: Exercice[] = [];
+  exerciceSelected: Exercice;
   policeSelectedId: string = '';
   
     demandeursList: any = [
@@ -167,8 +168,9 @@ export class NewAvenantRenouvelementComponent implements OnInit {
   }
 
 
-  onGetSelectedExerciceId(exerciceId: string){
-    this.exerciceId = exerciceId;
+  onGetSelectedExercice(exercice: Exercice){
+    this.exerciceSelected = exercice;
+    this.exerciceId = exercice.id;
 
   }
 
@@ -189,9 +191,13 @@ export class NewAvenantRenouvelementComponent implements OnInit {
     this.activeIndex += 1;
 
   }
-  
-    onBAckStepp(){
+
+    onBackStepp(){
     this.activeIndex -= 1;
+  }
+
+  onCancelRenouvelement() {
+    this.router.navigateByUrl('contrat/avenant');
   }
 
 
