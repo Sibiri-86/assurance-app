@@ -842,6 +842,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.entete = 'Avenant de Retrait new';
       }},
 
+      {label: 'Renouvelement new', icon: 'pi pi-replay', command: () => {
+          
+          this.onGetNewAvenantRenouvelementComponent();
+          this.entete = 'Avenant de Renouvelement new';
+      }},
+
         {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
           this.initDisplayAvenant();
           this.addAvenant();
@@ -3450,6 +3456,10 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
     showChooseWriteDialog() {
     this.router.navigateByUrl('contrat/new-avenant-incorporation-writting/' + this.policeItem.id);
+  }
+
+    onGetNewAvenantRenouvelementComponent() {
+    this.router.navigateByUrl('contrat/new-avenant-renouvelement/' + this.policeItem.id);
   }
 
     showChooseDialog(){

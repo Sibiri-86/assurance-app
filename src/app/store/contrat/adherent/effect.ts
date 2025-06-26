@@ -403,6 +403,8 @@ searchAdherentByDateSoinsAndMatricule$ = createEffect(() =>
     this.actions$.pipe(
         ofType(featureActions.searchAdherentByDateSoinsAndMatricule),
         mergeMap(({dateSoins, matricule}) =>
+            
+            
             this.AdherentService.searchAdherentByDateSoinsAndMatricule(dateSoins, matricule).pipe(
                 switchMap(value => [
                     //GlobalConfig.setStatus(StatusEnum.success, this.successMsg),

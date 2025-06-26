@@ -1,0 +1,498 @@
+
+<p-dialog [(visible)]="isToImporteExcelFile" 
+    [style]="{width: '80%'}"
+     position="center" [transitionOptions]="'2000ms'" 
+    [modal]="true" 
+    styleClass="p-fluid">
+
+  <ng-template pTemplate="header">
+    <h5>INCORPORATION PAR IMPORATION DE FICHIER DE LA POLICE :  <span style="color: #188627; font-weight: bold;">{{ policeSelected.nom }}</span>  </h5>
+  </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="card">
+            <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
+
+
+                <!-- Initiateur -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
+                    <p-dropdown 
+                        inputId="typeDemanteur" 
+                        dataKey="id" 
+                        [filter]="true" 
+                        showClear="true"
+                        [options]="demandeursList" 
+                        [(ngModel)]="historiqueAvenant.typeDemandeur"
+                        optionValue="libelle"
+                        placeholder="Sélectionner" 
+                        optionLabel="libelle" 
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
+                <!-- Exercice -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="compteTiers" class="font-bold">
+                        Sélectionner l'exercice <span style="color: red;">*</span>
+                    </label>
+                    <p-dropdown 
+                        [disabled]="!historiqueAvenant.typeDemandeur"
+                        inputId="compteTiers" 
+                        dataKey="id" 
+                        [filter]="true"
+                        showClear="true" 
+                        [options]="exercices"
+                        name="exercice"
+                        [(ngModel)]="historiqueAvenant.exercice"
+                        [autoDisplayFirst]="true" 
+                        appendTo="body"
+                        placeholder="Sélectionnez l'exercice"
+                        optionLabel="nomExo"
+                        class="w-full">
+                    </p-dropdown>
+                </div>
+
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
+                           
+                                <p-dropdown
+                                [disabled]="!historiqueAvenant.exercice"
+                                [options]="groupesByPolicy" optionLabel="libelle"
+                                            name="groupe"
+                                            [(ngModel)]="historiqueAvenant.groupe"
+                                            [filter]="true" filterBy="libelle" [showClear]="true"
+                                            placeholder="Choisir un groupe"
+                                            >
+                                </p-dropdown>
+                        </div>
+
+                                        <!-- Motif -->
+                <div class="p-field p-col-12 p-md-6">
+                <label for="observation">Motif<sup style="color: red;">*</sup></label>
+                <input 
+                [disabled]="!historiqueAvenant.groupe"
+                    id="observation"
+                    type="text"
+                    name="observation"
+                    [(ngModel)]="historiqueAvenant.observation"
+                    pInputText
+                    class="p-inputtext w-full"
+                    
+                />
+                </div>
+
+                         <div class="p-field p-col-12 p-md-3">
+                            <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
+                            <input [disabled]="!historiqueAvenant.observation"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
+
+                           
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-3">
+                            <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateAvenant && historiqueAvenant.dateAvenant > historiqueAvenant.dateIncorparation">La date d'incorporation doit être supérieure ou égale à celle de l'avenant</span>
+                            <label for="nom">Date d'Incorporation<sup style="color: red !important;">*</sup></label>
+                            <input  [disabled]="!historiqueAvenant.dateAvenant"   id="dateIncorparation" name="dateIncorparation" [(ngModel)]="historiqueAvenant.dateIncorparation" type="date"  pInputText>
+
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateEffet && historiqueAvenant.dateIncorparation > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle d'incorporation</span>
+                            <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
+                            <input [disabled]="!historiqueAvenant.dateIncorparation"  id="dateEffet" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText>
+
+                        </div>
+
+                         <div class="p-field p-col-12 p-md-6">
+                            <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
+                            <input [disabled]="!historiqueAvenant.dateEffet" id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
+                        </div>
+
+                <!-- Frais Badges -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
+                    <input 
+                        [disabled]="!historiqueAvenant.numeroGarant" 
+                        pInputText
+                        type="number"
+                        inputId="fraisBadges" 
+                        name="fraisBadges"
+                        [(ngModel)]="historiqueAvenant.fraisBadges"
+                        class="w-full"/>
+                </div>
+
+                <!-- Frais Accessoires -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
+                    <input 
+                        [disabled]="!historiqueAvenant.fraisBadges" 
+                        pInputText
+                        type="number"
+                        inputId="fraisAccessoires" 
+                        name="fraisAccessoires" 
+                         [(ngModel)]="historiqueAvenant.fraisAccessoires"
+                        class="w-full"/>
+                    
+                </div>
+
+
+                <!-- Import Excel -->
+                <div class="p-field p-col-12 p-md-6">
+                    <label for="excelFile">Importer le fichier Excel</label>
+                    <input 
+                      [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.observation ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur ||
+                     !historiqueAvenant.fraisAccessoires ||
+                     !historiqueAvenant.fraisAccessoires
+                     "
+                    (change)="onGetFiles($event); onToGoNextStepp(historiqueAvenant)"
+                        id="excelFile" 
+                        type="file" 
+                        pInputText 
+                        class="w-full">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">    
+                <button
+                (click)="onCancelIncorporation()"
+                    pButton icon="pi pi-times"
+                    label="Quitter"
+                    class="p-button-danger">
+                </button>  
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    [disabled]="!historiqueAvenant.numeroGarant ||
+                     !historiqueAvenant.exercice ||
+                     !historiqueAvenant.observation ||
+                     !historiqueAvenant.groupe ||
+                     !historiqueAvenant.dateAvenant ||
+                     !historiqueAvenant.dateEffet ||
+                     !historiqueAvenant.typeDemandeur ||
+                     !historiqueAvenant.fraisAccessoires ||
+                     !historiqueAvenant.fraisAccessoires
+                     "
+                    (click)="onNextStepp(historiqueAvenant)"
+                    pButton icon="pi pi-arrow-circle-right"
+                    label="Continuer"
+                    class="p-button-info">
+                </button>   
+            </div>
+        </div>
+
+    </ng-template>
+</p-dialog>
+
+
+
+
+<p-dialog [(visible)]="isToViewImporteExcelFile"
+    *ngIf="families.length > 0" 
+    position="right" [transitionOptions]="'2000ms'" 
+    [header]="'APERCU DES ASSURES PAR FAMILLE'"
+    [style]="{width: '100%'}"
+    [modal]="true"
+    styleClass="p-fluid">
+
+    <ng-template pTemplate="header">
+      <div class="assureCss">
+        <span class="p-mr-2">. Assurés principaux: {{ nbAdherents }} -</span>
+        <span class="p-mr-2">Conjoints: {{ nbConjoints }} -</span>
+        <span class="p-mr-2">Enfants: {{ nbEnfants }} -</span>
+        <span class="p-mr-2">Total: {{ totalAssure }} .</span>
+      </div>
+    </ng-template>
+
+<p-panel *ngIf="families.length > 0">
+ 
+  <div *ngFor="let famille of families; let i = index" class="p-mb-4">
+    <h6 class="textGreen">Famille {{ famille[0].fullName }}</h6>
+    <p-table [value]="famille" editable="true" [editMode]="'cell'" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Genre</th>
+          <th>Qualité</th>
+          <th>matricule Souscricpteur</th>
+          <th>matricule Garant</th>
+          <th>Date Naissance</th>
+          <th>Date incorporation</th>
+          <th>Date Entrée</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [ngClass]="{'principal-row': row['qualiteAssureNew']?.toUpperCase() === 'ADHERENT'}">
+
+
+          <td pEditableColumn>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input [(ngModel)]="row['nom']" type="text" pInputText />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ row['nom'] }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td pEditableColumn>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input [(ngModel)]="row['prenom']" type="text" pInputText />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ row['prenom'] }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown 
+                    [options]="genreOptions"
+                    [(ngModel)]="row['genreNew']"
+                    optionLabel="label"
+                    optionValue="value">
+                  </p-dropdown>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ row['genreNew'] }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown 
+                    [options]="qualiteOptions"
+                    [(ngModel)]="row['qualiteAssureNew']"
+                    optionLabel="label"
+                    optionValue="value">
+                  </p-dropdown>
+                </ng-template>
+                <ng-template pTemplate="output">
+                {{ row['qualiteAssureNew'] }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+          <td pEditableColumn>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input [(ngModel)]="row['matricule']" type="text" pInputText />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ row['matricule'] }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td pEditableColumn>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input [(ngModel)]="row['matriculeGarant']" type="text" pInputText />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ row['matriculeGarant'] }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+
+            <td pEditableColumn>
+                <p-cellEditor>
+                <ng-template pTemplate="input">
+                    <input [(ngModel)]="row['dateNaissanceNew']" type="date" pInputText />
+                </ng-template>
+                <ng-template pTemplate="output">
+                    {{ row['dateNaissanceNew']   }}
+                </ng-template>
+                </p-cellEditor>
+            </td>
+
+            <td pEditableColumn>
+            <p-cellEditor>
+                <ng-template pTemplate="input">
+                <input [(ngModel)]="row['dateIncorporationNew']" type="date" pInputText />
+                </ng-template>
+                <ng-template pTemplate="output">
+                {{ row['dateIncorporationNew']  | formatTableValue : 'date' }}
+                </ng-template>
+            </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+            <p-cellEditor>
+                <ng-template pTemplate="input">
+                <input [(ngModel)]="row['dateEntree']" type="date" pInputText />
+                </ng-template>
+                <ng-template pTemplate="output">
+                {{ row['dateEntree']  | formatTableValue : 'date' }}
+                </ng-template>
+            </p-cellEditor>
+            </td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+          <div class="p-d-flex p-jc-center p-mt-2">
+            <div class="col col-6 p-mr-3">    
+                <button
+                (click)="onCancelIncorporation()"
+                    pButton icon="pi pi-times"
+                    label="Quitter"
+                    class="p-button-danger">
+                </button>  
+            </div>
+
+            <div class="col col-6 p-mr-3">    
+                <button
+                (click)="onBackStepp()"
+                    pButton icon=" pi pi-arrow-circle-left"
+                    label="Retour"
+                    class="p-button-info">
+                </button>  
+            </div>
+
+            <div class="col col-6">
+                <button 
+                    (click)="onConfirmIncorporationSaved()"
+                    pButton icon="pi pi-check"
+                    label="Incorporer"
+                    class="p-button-success">
+                </button>   
+            </div>
+        </div>
+</p-panel>
+</p-dialog>
+
+  <p-toast></p-toast>
+
+
+
+  <p-dialog [(visible)]="isIncorporationByWrite" [modal]="true" [style]="{ width: '80vw' }" [header]="'Avenant d\'Incorporation par saisie'" styleClass="p-fluid">
+
+  <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
+
+          <!-- Ligne de recherche -->
+        <div class="p-field p-col-12 p-md-4">
+          <label>Numéro</label>
+          <input pInputText  placeholder="Numéro">
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label>Nom</label>
+          <input pInputText  placeholder="Nom">
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label>Prénom</label>
+          <input pInputText  placeholder="Prénom">
+        </div>
+
+    <!-- Infos personnelles -->
+    <div class="p-field  p-col-12 p-md-4">
+      <label>Nom *</label>
+      <input pInputText [(ngModel)]="adherent.nom" required>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Prénom(s) *</label>
+      <input pInputText [(ngModel)]="adherent.prenom" required>
+    </div>
+        <!-- Sélections -->
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Qualité assuré *</label>
+      <p-dropdown [options]="qualiteAssures"
+       [(ngModel)]="adherent.qualiteAssure"
+        optionLabel="code" 
+        [disabled]="true"
+        required></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Genre *</label>
+      <p-dropdown
+       [options]="genres"
+        [(ngModel)]="adherent.genre"
+         placeholder="Select"
+         optionLabel="libelle"
+        required></p-dropdown>
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Profession</label>
+      <p-dropdown [options]="professions"
+       [(ngModel)]="adherent.profession"
+       filter="true"
+       optionLabel="libelle"></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Numéro de l'exercice postérieur</label>
+      <input pInputText [(ngModel)]="adherent.numeroExercicePost">
+    </div>
+
+        <div class="p-field p-col-12 p-md-4">
+      <label>Matricule chez le garant</label>
+      <input pInputText [(ngModel)]="adherent.matriculeGarant">
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Matricule chez le souscripteur</label>
+      <input pInputText [(ngModel)]="adherent.matriculeSouscripteur">
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Téléphone *</label>
+      <input pInputText [(ngModel)]="adherent.telephone" required>
+    </div>
+
+    <div class="p-field p-col-12 p-md-4">
+      <label>Email</label>
+      <input pInputText [(ngModel)]="adherent.email">
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Adresse</label>
+      <input pInputText [(ngModel)]="adherent.adresse">
+    </div>
+    <div class="p-field p-col-12 p-md-4">
+      <label>Référence bancaire</label>
+      <input pInputText [(ngModel)]="adherent.referenceBancaire">
+    </div>
+
+    <!-- Dates -->
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date de naissance *</label>
+      <p-calendar [(ngModel)]="adherent.dateNaissance" dateFormat="dd/mm/yy" showIcon required></p-calendar>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Lieu de naissance *</label>
+      <input pInputText [(ngModel)]="adherent.lieuNaissance" required>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date d'entrée</label>
+      <p-calendar [(ngModel)]="adherent.dateEntree" dateFormat="dd/mm/yy" showIcon></p-calendar>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <label>Date d'incorporation *</label>
+      <p-calendar [(ngModel)]="adherent.dateIncorporation" dateFormat="dd/mm/yy" showIcon required></p-calendar>
+    </div>
+
+
+    <!-- Bouton famille -->
+    <div class="p-field p-col-12 p-text-center">
+      <button pButton type="button" icon="pi pi-plus" label="Famille" class="p-button-success" (click)="ajouterFamille()"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<!--   <app-new-avenant-retrait [police]="policeItem"></app-new-avenant-retrait>
+ -->

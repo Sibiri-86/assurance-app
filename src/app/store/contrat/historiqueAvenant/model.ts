@@ -43,6 +43,7 @@ export interface HistoriqueAvenant {
     dateResiliation?: Date;
     isPossible?: boolean;
     dateSaisie?: Date;
+    dateIncorparation?: Date;
     exerciceId?: string;
     groupeId?: string;
     isTerminer?: boolean;

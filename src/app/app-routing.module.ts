@@ -137,6 +137,7 @@ import { ParametrageMailComponent } from './module/prestation/tier-payant/parame
 import { NewAvenantIncorporationComponent } from './module/contrat/avenant-new/new-avenant-incorporation/new-avenant-incorporation.component';
 import { NewAvenantRetraitComponent } from './module/contrat/avenant-new/new-avenant-retrait/new-avenant-retrait.component';
 import { NewAvenantIncorporationWrittingComponent } from './module/contrat/avenant-new/new-avenant-incorporation-writting/new-avenant-incorporation-writting.component';
+import { NewAvenantRenouvelementComponent } from './module/contrat/avenant-new/new-avenant-renouvelement/new-avenant-renouvelement.component';
 
 @NgModule({
     imports: [
@@ -195,6 +196,7 @@ import { NewAvenantIncorporationWrittingComponent } from './module/contrat/avena
                     {path: 'contrat/new-avenant-incorporation-writting/:id', component: NewAvenantIncorporationWrittingComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/new-avenant-incorporation/:id', component: NewAvenantIncorporationComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/new-avenant-retrait/:id', component: NewAvenantRetraitComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
+                    {path: 'contrat/new-avenant-renouvelement/:id', component: NewAvenantRenouvelementComponent, canActivate: [AuthGuard], data: { roles: ['sm_production', 'sm_avenant']}},
                     {path: 'contrat/condition-generale', component: ConditionGeneraleComponent,
                     canActivate: [AuthGuard],
                     data: { roles: ['sm_production']}},
