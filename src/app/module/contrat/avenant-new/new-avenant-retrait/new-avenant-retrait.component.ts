@@ -141,7 +141,7 @@ export class NewAvenantRetraitComponent implements OnInit {
   }
 
 
-   
+ 
 onDownloadModel(): void {
   const worksheetData = [
     ['matricule Assuré'], // en-tête seulement
@@ -193,7 +193,7 @@ onDownloadModel(): void {
         .filter(m => !!m);
 
       this.onGetAdherentByMatricule(numeros);
-      this.onGetHistoriqueAvenantAdherentService(numeros);
+      //this.onGetHistoriqueAvenantAdherentService(numeros);
 
     };
 
@@ -224,7 +224,6 @@ onDownloadModel(): void {
     this.historiqueAvenantService.getHistoriqueAvenantAdherentService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
             (response) => {              
               this.historiqueAvenantAdherants = response;
-
           },
           (error) => {
             console.error('Erreur lors de la recherche des assurés', error);
@@ -266,7 +265,6 @@ onDownloadModel(): void {
 }
 
 
-
 onDisplayAdherentByFamily(response: string[]) {
   this.allAdherents = response;
   const groupedMap = this.groupAssuresByFamille(response);
@@ -287,7 +285,8 @@ onConfirmRetraitSaved() {
     this.historiqueAvenantNewDTO.dateSaisie = new Date();
 
      this.historiqueAvenantService.saveRetraitNewService(this.historiqueAvenantNewDTO).subscribe(
-      resp => {        
+      resp => {    
+          
         if(resp == true){
           this.getSucessInfo();
           this.historiqueAvenant = {};
@@ -296,7 +295,7 @@ onConfirmRetraitSaved() {
           this.isTodisplayEntetDialogue = false;
           this.isToDisplayAdherentByFamily = false;
           this.onCancelRetrait();
-          // this.onGetPolice();
+          this.onGetPolice();
         }
       }
     );  

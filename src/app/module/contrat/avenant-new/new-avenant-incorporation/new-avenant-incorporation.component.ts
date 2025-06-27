@@ -15,6 +15,7 @@ import { GenreService } from 'src/app/store/parametrage/genre/service';
 import { ProfessionService } from 'src/app/store/parametrage/profession/service';
 import { QualiteAssureService } from 'src/app/store/parametrage/qualite-assure/service';
 import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-new-avenant-incorporation',
@@ -390,7 +391,6 @@ ajouterFamille() {
     this.historiqueAvenantNewDTO.police = this.policeSelected;
     this.historiqueAvenantNewDTO.typeHistoriqueAvenant = TypeHistoriqueAvenant.INCORPORATION;
     this.historiqueAvenantNewDTO.dateSaisie = new Date();
-
     this.historiqueAvenantService.saveIncorporationService(this.historiqueAvenantNewDTO).subscribe(
       resp => {
         
@@ -619,4 +619,49 @@ transformImportData(rawData: any[]): Adherent[] {
       
     }
 
+    onDownloadModelIncorporation(): void {
+      const worksheetData = [
+        [
+          'Ordre',
+          'ADHERENT principal',
+          'Nom',
+          'Prénom',
+          'Genre (M ou F)',
+          'matricule chez le souscripteur',
+          'matricule de chez le garant',
+          'date de naissance',
+          'lieu de naissance',
+          'téléphone',
+          'adresse',
+          'Mail',
+          'profession',
+          'référence bancaire',
+          'qualité assuré (ADHERENT, CONJOINT ou ENFANF)',
+          'Date d\'incorporation',
+          'Date d\'entrée',
+          'NUMERO PRINCIPAL'
+        ]
+      ];
+
+    
+      // Création de la feuille
+      const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    
+      // Création du classeur
+      const workbook: XLSX.WorkBook = {
+        Sheets: { 'Modèle': worksheet },
+        SheetNames: ['Modèle']
+      };
+    
+      // Conversion du classeur en buffer
+      const excelBuffer: any = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array'
+      });
+    
+      // Sauvegarde du fichier avec FileSaver
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      FileSaver.saveAs(blob, 'modele_avenant_incorporation.xlsx');
+    }
+    
 }

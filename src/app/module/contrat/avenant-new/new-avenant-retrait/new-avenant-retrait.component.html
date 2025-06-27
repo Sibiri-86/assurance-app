@@ -6,7 +6,7 @@
     styleClass="p-fluid">
 
     <ng-template pTemplate="header">
-    <h5>RETRAIT PAR IMPORATION DE FICHIER POUR LA POLICE :  <span style="color: #188627; font-weight: bold;">{{ police.nom }}</span>  </h5>
+    <h5>RETRAIT PAR IMPORATION DE FICHIER POUR LA POLICE :  <span style="color: #188627; font-weight: bold;">{{ police?.nom }}</span>  </h5>
   </ng-template>
 
     <ng-template pTemplate="content">
@@ -69,7 +69,7 @@
 
                          <div class="p-field p-col-12 p-md-4">
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
 
                            
                         </div>
@@ -80,7 +80,7 @@
                             <span class="textDanger" *ngIf=" dateEffetExercice && dateEcheanceExercice && historiqueAvenant.dateEffet &&  (historiqueAvenant.dateEffet > dateEcheanceExercice || historiqueAvenant.dateEffet < dateEffetExercice)">La date d'effet de l'avenant doit être comprise entre la date d'effet et la date d'echeance de l'exercice</span>
 
                             <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.dateAvenant"  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText (change)="onCompareDateEffect()">
+                            <input [disabled]="!historiqueAvenant.dateAvenant"  id="dateIncorparation" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText>
 
                         </div>
 
