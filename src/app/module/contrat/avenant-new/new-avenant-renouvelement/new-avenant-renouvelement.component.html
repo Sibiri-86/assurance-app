@@ -5,7 +5,7 @@
     styleClass="p-fluid">
 
 <p-fieldset 
-  [legend]="'AVENANT D\'INCORPORATION DE LA POLICE : ' + policeSelected?.nom" 
+  [legend]="'AVENANT DE RENOUVELEMENT DE LA POLICE : ' + policeSelected?.nom" 
   [toggleable]="false">
 
 <div class="card">
@@ -20,19 +20,8 @@
 
       <p-fieldset class="p-mt-3" legend=" INFORMATION SUR L'EXERCICE" [toggleable]="true">
             <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
-                    <div class="p-field p-col-12 p-md-3 p-mb-2">
-                        <label for="debut">Date d'effet<sup style="color: red;">*</sup></label>
-                        <input 
-                            id="debut"
-                            type="date"
-                            name="debut"
-                            [(ngModel)]="exercice.debut"
-                            pInputText
-                            class="p-inputtext w-full"
-                            
-                        />
-                    </div>
-                    <div class="p-field p-col-12 p-md-3">
+
+                        <div class="p-field p-col-12 p-md-3">
                         <label for="typeDuree">Type durée<sup style="color: red;">*</sup></label>
                         <input 
                             id="typeDuree"
@@ -41,9 +30,9 @@
                             [(ngModel)]="exercice.typeDuree"
                             pInputText
                             class="p-inputtext w-full"
-                            
                         />
                     </div>
+
                     <div class="p-field p-col-12 p-md-3">
                         <label for="duree">Durée<sup style="color: red;">*</sup></label>
                         <input 
@@ -54,6 +43,18 @@
                             pInputText
                             class="p-inputtext w-full"
                             
+                        />
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-3 p-mb-2">
+                        <label for="debut">Date d'effet<sup style="color: red;">*</sup></label>
+                        <input 
+                            id="debut"
+                            type="date"
+                            name="debut"
+                            [(ngModel)]="exercice.debut"
+                            pInputText
+                            class="p-inputtext w-full"
                         />
                     </div>
                     <div class="p-field p-col-12 p-md-3">
@@ -75,9 +76,10 @@
             <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
 
                 <!-- Initiateur -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-3">
                     <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
                     <p-dropdown 
+                        [disabled]="!exercice.fin"
                         inputId="typeDemanteur" 
                         dataKey="id" 
                         [filter]="true" 
@@ -90,7 +92,7 @@
                         class="w-full">
                     </p-dropdown>
                 </div>
-
+<!-- 
                         <div class="p-field p-col-12 p-md-4">
                             <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
                            
@@ -103,51 +105,35 @@
                                             placeholder="Choisir un groupe"
                                             >
                                 </p-dropdown>
-                        </div>
+                        </div> -->
 
-                                        <!-- Motif -->
-                <div class="p-field p-col-12 p-md-4">
-                <label for="observation">Motif<sup style="color: red;">*</sup></label>
-                <input 
-                [disabled]="!historiqueAvenant.groupe"
-                    id="observation"
-                    type="text"
-                    name="observation"
-                    [(ngModel)]="historiqueAvenant.observation"
-                    pInputText
-                    class="p-inputtext w-full"
-                    
-                />
-                </div>
-
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.observation"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
+                            <input [disabled]="!historiqueAvenant.typeDemandeur"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
 
-                           
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateAvenant && historiqueAvenant.dateAvenant > historiqueAvenant.dateIncorparation">La date d'incorporation doit être supérieure ou égale à celle de l'avenant</span>
                             <label for="nom">Date d'Incorporation<sup style="color: red !important;">*</sup></label>
                             <input  [disabled]="!historiqueAvenant.dateAvenant"   id="dateIncorparation" name="dateIncorparation" [(ngModel)]="historiqueAvenant.dateIncorparation" type="date"  pInputText>
 
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <span class="textDanger" *ngIf=" historiqueAvenant.dateIncorparation && historiqueAvenant.dateEffet && historiqueAvenant.dateIncorparation > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle d'incorporation</span>
                             <label for="nom">Date d'effet<sup style="color: red !important;">*</sup></label>
                             <input [disabled]="!historiqueAvenant.dateIncorparation"  id="dateEffet" name="dateEffet" [(ngModel)]="historiqueAvenant.dateEffet" type="date"  pInputText>
 
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
                             <input [disabled]="!historiqueAvenant.dateEffet" id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText>
                         </div>
 
                 <!-- Frais Badges -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-3">
                     <label for="fraisBadges">Total Frais Badges <sup style="color: red;">*</sup></label>
                     <input 
                         [disabled]="!historiqueAvenant.numeroGarant" 
@@ -160,7 +146,7 @@
                 </div>
 
                 <!-- Frais Accessoires -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-3">
                     <label for="fraisAccessoires">Total Frais Accessoires <sup style="color: red;">*</sup></label>
                     <input 
                         [disabled]="!historiqueAvenant.fraisBadges" 
@@ -171,6 +157,22 @@
                          [(ngModel)]="historiqueAvenant.fraisAccessoires"
                         class="w-full"/>
                     
+                </div>
+
+                               
+                                        <!-- Motif -->
+                <div class="p-field p-col-12 p-md-3">
+                <label for="observation">Motif<sup style="color: red;">*</sup></label>
+                <input 
+                    [disabled]="!historiqueAvenant.fraisAccessoires"
+                    id="observation"
+                    type="text"
+                    name="observation"
+                    [(ngModel)]="historiqueAvenant.observation"
+                    pInputText
+                    class="p-inputtext w-full"
+                    
+                />
                 </div>
 
             </div>

@@ -358,7 +358,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
   isToImporteExcelFile = false;
   isToDisplayAvenantIncorporation = false;
-  displayChoose = false;
+  displayChooseIncorporation = false;
+  displayChooseRetrait = false;
 
   policeSelected : any;
   reponseDeA = "";
@@ -832,13 +833,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
           // this.onDisplayNewAvenantComposant();
           // this.onGetNewAvenantIncorporationComponent();
-          this.showChooseDialog();
+          this.showChooseIncorporationDialog();
           this.entete = 'Avenant d\'Incorporation';
       }}, 
 
       {label: 'Retrait new', icon: 'pi pi-user-minus', command: () => {
-          
-          this.onGetNewAvenantRetraitComponent();
+          this.showChooseRetraitDialog();
           this.entete = 'Avenant de Retrait new';
       }},
 
@@ -1610,6 +1610,8 @@ export class AvenantComponent implements OnInit, OnDestroy {
   addAvenantRetrait(): void {
     this.dissplayavenant = true;
   }
+
+  
   addAvenantModification(): void {
 
     this.dissplayavenant = true;
@@ -3462,8 +3464,21 @@ export class AvenantComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('contrat/new-avenant-renouvelement/' + this.policeItem.id);
   }
 
-    showChooseDialog(){
-      this.displayChoose = true;
+    showChooseIncorporationDialog(){
+      this.displayChooseIncorporation = true;
+    }
+
+    showChooseRetraitDialog(){
+      this.displayChooseRetrait= true;
+    }
+
+    onChooseWrittingRetraitDialog(){
+          this.initDisplayAvenant();
+          this.addAvenantRetrait();
+          this.isAvenantRetrait = true;
+          this.displayChooseRetrait = false;
+          this.entete = 'Avenant de Retrait';
+          this.etat = 'CREATE';
     }
 
 }
