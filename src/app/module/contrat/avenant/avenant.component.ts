@@ -825,8 +825,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
 
       this.typeActions = [
 
-
-        {label: 'Incorporation new', icon: 'pi pi-user-plus', command: ($event) => {
+        {label: 'Incorporation', icon: 'pi pi-user-plus', command: ($event) => {
 
           this.etat = 'CREATE';
           this.policeSelected = this.policeItem;
@@ -837,12 +836,12 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.entete = 'Avenant d\'Incorporation';
       }}, 
 
-      {label: 'Retrait new', icon: 'pi pi-user-minus', command: () => {
+      {label: 'Retrait', icon: 'pi pi-user-minus', command: () => {
           this.showChooseRetraitDialog();
           this.entete = 'Avenant de Retrait new';
       }},
 
-      {label: 'Renouvelement new', icon: 'pi pi-replay', command: () => {
+      /* {label: 'Renouvelement new', icon: 'pi pi-replay', command: () => {
           
           this.onGetNewAvenantRenouvelementComponent();
           this.entete = 'Avenant de Renouvelement new';
@@ -863,7 +862,7 @@ export class AvenantComponent implements OnInit, OnDestroy {
           this.isAvenantRetrait = true;
           this.entete = 'Avenant de Retrait';
           this.etat = 'CREATE';
-      }},
+      }}, */
       {label: 'Modification', icon: 'pi pi-pencil', command: () => {
           this.initDisplayAvenant();
           this.isAvenantModification = true;
