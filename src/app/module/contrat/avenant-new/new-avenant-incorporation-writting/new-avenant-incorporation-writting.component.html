@@ -192,6 +192,7 @@
                         <div class="p-col-12">
                             <p-dropdown 
                             [options]="adherentsList" 
+                                        filter="true"
                                         optionLabel="fullName"
                                         (onChange)="onSelectedAdherent($event.value)"
                                         placeholder="Sélectionner l'assuré principal"

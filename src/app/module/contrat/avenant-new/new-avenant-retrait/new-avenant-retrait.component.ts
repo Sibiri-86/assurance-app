@@ -47,6 +47,7 @@ export class NewAvenantRetraitComponent implements OnInit {
   policeByTypeGarand: Police[] = [];
 
   allAdherents: any;
+  numeros: string[] = [];
 
  
   // @Output() reponseEnvoyee = new EventEmitter<string>();
@@ -187,12 +188,12 @@ onDownloadModel(): void {
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
 
       // Extraire les matricules, en ignorant la première ligne (en-tête)
-      const numeros: string[] = data
+      this.numeros = data
         .slice(1)
         .map(row => row[0])
         .filter(m => !!m);
 
-      this.onGetAdherentByMatricule(numeros);
+      this.onGetAdherentByMatricule(this.numeros);
       //this.onGetHistoriqueAvenantAdherentService(numeros);
 
     };
@@ -303,6 +304,15 @@ onConfirmRetraitSaved() {
 
     }
 
+    onReimportExcel(){
+      this.numeros = [];
+      this.allAdherents = [];
+      this.adherentByFamily = [];
+      this.displayFileChoose = false;
+      this.isTodisplayEntetDialogue = true;
+      this.isToDisplayAdherentByFamily = false;
+    }
+
 
 onConfirmRetraitSaved1() {
 
@@ -362,6 +372,7 @@ onConfirmRetraitSaved1() {
     this.historiqueAvenantNewDTO = historiqueAvenant;
     this.historiqueAvenant2 = historiqueAvenant;
   }
+
 
 
       getSucessInfo(): void {
