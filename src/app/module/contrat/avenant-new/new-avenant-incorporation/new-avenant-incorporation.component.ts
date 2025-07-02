@@ -72,6 +72,7 @@ export class NewAvenantIncorporationComponent implements OnInit {
   assuresFamille: any[] = [];
   policeSelectedId: string = '';
   activeIndex: number = 0;
+  historiqueAvenants: any[] = [];
 
   demandeursList: any = [
       {libelle: 'VIMSO', value: TypeDemandeur.VIMSO},
@@ -93,6 +94,9 @@ qualites = [
   { label: 'Principal', value: 'PRINCIPAL' },
   { label: 'Ayant droit', value: 'AYANT_DROIT' }
 ];
+
+groupesImport: { groupe: Groupe | null; fichier?: File; adherents?: Adherent[] }[] = [];
+
 
 ajouterFamille() {
   // logiques d’ajout de famille ici
@@ -376,16 +380,14 @@ ajouterFamille() {
     }
   }
 
-    generateRandomNumeroGarant(): string {
-      const prefix = "GAR-";
-      const randomPart = Math.floor(100000 + Math.random() * 900000);
-      return prefix + randomPart;
-    }
-
     onConfirmIncorporationSaved() {
 
     //  const payload = this.families.flat(); // tous les assurés
-    const payload = this.families.reduce((acc, cur) => acc.concat(cur), []);    
+    const payload = this.families.reduce((acc, cur) => acc.concat(cur), []);  
+        payload.forEach( adherent => {
+      adherent.groupe.groupe = null;
+    }); 
+    
     this.historiqueAvenantNewDTO.aderantsNew = payload;
 
     this.historiqueAvenantNewDTO.police = this.policeSelected;
@@ -498,7 +500,7 @@ groupByOrdre() {
 
    this.totalAssure = this.nbAdherents + this.nbConjoints + this.nbEnfants;
 
-   this.onToGoNextStepp(this.historiqueAvenant, this.adherents);
+  // this.onToGoNextStepp(this.historiqueAvenant, this.adherents);
 }
 
 
@@ -522,7 +524,8 @@ mapQualite(qualite: string): any {
   }
 }
 
-onGetFiles(event: any): void {
+onGetFiles(event: any, groupe: any, index: number,): void {
+
   const target: DataTransfer = <DataTransfer>(event.target);
   if (target.files.length !== 1) return;
 
@@ -533,21 +536,27 @@ onGetFiles(event: any): void {
     const wsname: string = wb.SheetNames[0];
     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
     const rawData = XLSX.utils.sheet_to_json(ws, { defval: '' });
-
   
-    this.adherents = this.transformImportData(rawData);
-    this.groupByOrdre();
+    const adherents =  this.transformImportData(rawData, groupe);
+    adherents.forEach( adherent => {
+      adherent.groupe = groupe;
+    });
+
+    this.adherents = [...this.adherents, ...adherents];
+
+     this.groupByOrdre();
   };
   reader.readAsBinaryString(target.files[0]);
 }
 
 
-transformImportData(rawData: any[]): Adherent[] {
+transformImportData(rawData?: any[], groupe?: any): Adherent[] {
   return rawData.map(row => {
     const nom = row['Nom']?.trim() || '';
     const prenom = row['Prénom']?.trim() || '';
 
     return {
+      groupe,
       nom,
       prenom,
       genreNew: row['Genre (M ou F)'] === 'M' ? 'M' : 'F',
@@ -568,7 +577,7 @@ transformImportData(rawData: any[]): Adherent[] {
       adherentPrincipalNew: row['ADHERENT principal'] || null,
       fullName: `${nom} ${prenom}`,
       actif: true,
-      deleted: false
+      deleted: false,
     } as Adherent;
   });
 }
@@ -663,5 +672,57 @@ transformImportData(rawData: any[]): Adherent[] {
       const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
       FileSaver.saveAs(blob, 'modele_avenant_incorporation.xlsx');
     }
+
+
+    removeFormLine(index: number) {
+      this.historiqueAvenants.splice(index, 1);
+    }
+
+    onGetFiles2(event: any, index: number) {
+
+      const file = event.target.files[0];
+      this.historiqueAvenants[index].fichier = file;
+
+
+    }
+
+    onGetGroupeSelected(event: any, index: number) {
+      console.log('event', event);
+      console.log('index', index);
+    }
+
+    onToGoNextStepp2(avenant: any, ) {
+      console.log('Traitement pour ce formulaire', avenant);
+    }
+
+
+  onGetFiles3(event: any, groupe: Groupe, index: number): void {
+  const target: DataTransfer = <DataTransfer>(event.target);
+  if (!target.files || target.files.length !== 1) return;
+
+  const file = target.files[0];
+  const reader: FileReader = new FileReader();
+
+  reader.onload = (e: any) => {
+    const bstr: string = e.target.result;
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+    const rawData = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+    const adherents = this.transformImportData(rawData);
+
+    this.adherents.push(adherents as any);
+
+    // Stocker les données transformées dans le tableau
+    // this.groupesImport[index].adherents = adherents;
+    // this.groupesImport[index].fichier = file;
+
+    this.groupByOrdre(); // si tu veux regrouper tous les adhérents
+  };
+
+  reader.readAsBinaryString(file);
+}
+
     
 }
