@@ -16,7 +16,7 @@
 
 
                 <!-- Initiateur -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-6">
                     <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
                     <p-dropdown 
                         inputId="typeDemanteur" 
@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Exercice -->
-                <div class="p-field p-col-12 p-mt-1 p-md-4">
+                <div class="p-field p-col-12 p-mt-1 p-md-6">
                     <label for="compteTiers" class="font-bold">
                         Sélectionner l'exercice <span style="color: red;">*</span>
                     </label>
@@ -54,23 +54,11 @@
                     </p-dropdown>
                 </div>
 
-                        <div class="p-field p-col-12 p-md-4">
-                            <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
-                           
-                                <p-dropdown  [options]="groupesByPolicy" optionLabel="libelle"
-                                            name="groupe"
-                                            (onChange)="onGetSelectedGroupeId($event.value)"
-                                            [(ngModel)]="historiqueAvenant.groupe"
-                                            [filter]="true" filterBy="libelle" [showClear]="true"
-                                            placeholder="Choisir un groupe"
-                                            [disabled]="!historiqueAvenant.exercice"
-                                            >
-                                </p-dropdown>
-                        </div>
-
                          <div class="p-field p-col-12 p-md-6">
+                        <!-- <span class="textDanger" *ngIf=" historiqueAvenant.exercice && historiqueAvenant.dateAvenant && historiqueAvenant.dateAvenant > historiqueAvenant.exercice">La date de l'avenant doit être comprise dans celle de l'exercice</span> -->
+
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
+                            <input [disabled]="!historiqueAvenant.exercice"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText (change)="onSelectedAvenatDate()">
 
                            
                         </div>
@@ -101,7 +89,6 @@
                         class="p-inputtext w-full"
                     [disabled]="!historiqueAvenant.numeroGarant ||
                      !historiqueAvenant.exercice ||
-                     !historiqueAvenant.groupe ||
                      !historiqueAvenant.dateAvenant ||
                      !historiqueAvenant.dateEffet ||
                      !historiqueAvenant.typeDemandeur
@@ -155,7 +142,6 @@
                     [disabled]="!historiqueAvenant.numeroGarant ||
                      !historiqueAvenant.exercice ||
                      !historiqueAvenant.observation ||
-                     !historiqueAvenant.groupe ||
                      !historiqueAvenant.dateAvenant ||
                      !historiqueAvenant.dateEffet ||
                      !historiqueAvenant.fraisBadges ||
@@ -189,7 +175,8 @@
             
     <div class="divBorder p-col-12">
 
-                        <div class="p-col-12">
+        <div class="p-justify-between">
+            <div class="p-col-6">
                             <p-dropdown 
                             [options]="adherentsList" 
                                         filter="true"
@@ -198,7 +185,17 @@
                                         placeholder="Sélectionner l'assuré principal"
                                         [style]="{'width':'100%'}">
                             </p-dropdown>
-                        </div>   
+                        </div>  
+                        
+                        <div *ngIf="adherentPrincipal.groupe" class="p-col-12 p-md-6">
+                            <button
+                                pButton type="button"
+                                label="Groupe:  {{adherentPrincipal.groupe.libelle}}"
+                                class="p-button-info">
+                            </button>
+                        </div>
+        </div>
+
 
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-grid">

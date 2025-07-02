@@ -231,13 +231,14 @@ searchAdherentPrincipaleByExerciceAndPolice(exerciceId?: string, policeId?: stri
     }
     onSelectedAdherent(adherentPrincipal: Adherent){
         if(adherentPrincipal){
-        this.adherentPrincipal = adherentPrincipal;
+          this.adherentPrincipal = adherentPrincipal;
       }
     }
 
     onAddMember(adherent: Adherent){
       if(this.adherentPrincipal && adherent){
         adherent.adherentPrincipal = this.adherentPrincipal;
+        adherent.groupe = this.adherentPrincipal.groupe;
         this.adherantFamily.push(adherent);
         this.adherantNew = {};
       }
