@@ -174,29 +174,27 @@
         <div class="p-col-12 p-md-5">
             
     <div class="divBorder p-col-12">
+          <div class="p-fluid p-formgrid p-grid p-mb-2">
 
-        <div class="p-justify-between">
-            <div class="p-col-6">
-                            <p-dropdown 
-                            [options]="adherentsList" 
-                                        filter="true"
-                                        optionLabel="fullName"
-                                        (onChange)="onSelectedAdherent($event.value)"
-                                        placeholder="Sélectionner l'assuré principal"
-                                        [style]="{'width':'100%'}">
-                            </p-dropdown>
-                        </div>  
+            <div class="p-col-12 p-md-8">
+                <p-dropdown 
+                [options]="adherentsList" 
+                            filter="true"
+                            optionLabel="fullName"
+                            (onChange)="onSelectedAdherent($event.value)"
+                            placeholder="Sélectionner l'assuré principal"
+                            [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>  
                         
-                        <div *ngIf="adherentPrincipal.groupe" class="p-col-12 p-md-6">
-                            <button
-                                pButton type="button"
-                                label="Groupe:  {{adherentPrincipal.groupe.libelle}}"
-                                class="p-button-info">
-                            </button>
-                        </div>
-        </div>
-
-
+            <div *ngIf="adherentPrincipal.groupe" class="p-col-12 p-md-4">
+                <button
+                    pButton type="button"
+                    label="Groupe:  {{adherentPrincipal.groupe.libelle}}"
+                    class="p-button-info">
+                </button>
+            </div>
+            </div>
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-grid">
 
