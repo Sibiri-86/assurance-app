@@ -203,7 +203,7 @@ onDownloadModel(): void {
 
   onGetAdherentByMatricule(numeros: any){
 
-    this.historiqueAvenantService.saveNewAvenantRetraitService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
+    this.historiqueAvenantService.saveNewAvenantRetraitService(numeros, this.selectedExerciceId, this.policeSelectedId).subscribe(
             (response) => {
 
               this.adherentAndFamilyLength = response.length;
@@ -222,7 +222,7 @@ onDownloadModel(): void {
   
   onGetHistoriqueAvenantAdherentService(numeros: any){
 
-    this.historiqueAvenantService.getHistoriqueAvenantAdherentService(numeros, this.selectedExerciceId, this.groupeSelectedId, this.policeSelectedId).subscribe(
+    this.historiqueAvenantService.getHistoriqueAvenantAdherentService(numeros, this.selectedExerciceId,this.policeSelectedId).subscribe(
             (response) => {              
               this.historiqueAvenantAdherants = response;
           },

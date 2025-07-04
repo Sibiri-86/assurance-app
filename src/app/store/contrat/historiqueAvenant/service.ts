@@ -195,7 +195,16 @@ getHistoriqueAvenantAdherantsByPolice(policeId: string): Observable<HistoriqueAv
     return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), numeros);
 } */
 
-saveNewAvenantRetraitService(numeros: any, exerciceId: string, groupeId: string, policeId: string): Observable<any> {
+saveNewAvenantRetraitService(numeros: any, exerciceId: string, policeId: string): Observable<any> {
+  const request = {
+    numeros: numeros,
+    exerciceId: exerciceId,
+    policeId: policeId,
+  };
+
+  return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), request);
+}
+/* saveNewAvenantRetraitService(numeros: any, exerciceId: string, groupeId: string, policeId: string): Observable<any> {
   const request = {
     numeros: numeros,
     exerciceId: exerciceId,
@@ -205,12 +214,12 @@ saveNewAvenantRetraitService(numeros: any, exerciceId: string, groupeId: string,
 
   return this.http.post<any>(GlobalConfig.getEndpoint(Endpoints.SAVE_AVEANT_RETRAIT_NEW), request);
 }
+ */
 
-getHistoriqueAvenantAdherentService(numeros: any, exerciceId: string, groupeId: string, policeId: string): Observable<any> {
+getHistoriqueAvenantAdherentService(numeros: any, exerciceId:string, policeId: string): Observable<any> {
   const request = {
     numeros: numeros,
     exerciceId: exerciceId,
-    groupeId: groupeId,
     policeId: policeId,
   };
 

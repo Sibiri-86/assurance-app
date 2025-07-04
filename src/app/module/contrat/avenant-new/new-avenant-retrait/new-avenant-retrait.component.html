@@ -15,7 +15,7 @@
             <div class="p-grid p-formgrid p-fluid" style="padding: 1rem;">
 
                 <!-- Initiateur -->
-                <div class="p-field p-col-12 p-md-4">
+                <div class="p-field p-col-12 p-md-3">
                     <label for="typeDemanteur">Initiateur <sup style="color: red;">*</sup></label>
                     <p-dropdown 
                         inputId="typeDemanteur" 
@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Exercice -->
-                <div class="p-field p-col-12 p-mt-1 p-md-4">
+                <div class="p-field p-col-12 p-mt-1 p-md-3">
                     <label for="compteTiers" class="font-bold">
                         Sélectionner l'exercice <span style="color: red;">*</span>
                     </label>
@@ -52,7 +52,7 @@
                         class="w-full">
                     </p-dropdown>
                 </div>
-
+<!-- 
                         <div class="p-field p-col-12 p-md-4">
                             <label for="fraisBadge">Groupe<sup style="color: red !important;">*</sup></label>
                            
@@ -65,16 +65,16 @@
                                             [disabled]="!historiqueAvenant.exercice"
                                             >
                                 </p-dropdown>
-                        </div>
+                        </div> -->
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <label for="nom">Date d'Avenant<sup style="color: red !important;">*</sup></label>
-                            <input [disabled]="!historiqueAvenant.groupe"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
+                            <input [disabled]="!historiqueAvenant.exercice"  id="dateAvenant" type="date" name="dateAvenant" [(ngModel)]="historiqueAvenant.dateAvenant"  pInputText>
 
                            
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             
                             <span class="textDanger" *ngIf=" historiqueAvenant.dateAvenant && historiqueAvenant.dateEffet && historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet">La date d'effet doit être supérieure ou égale à celle de l'avenant</span>
                             <span class="textDanger" *ngIf=" dateEffetExercice && dateEcheanceExercice && historiqueAvenant.dateEffet &&  (historiqueAvenant.dateEffet > dateEcheanceExercice || historiqueAvenant.dateEffet < dateEffetExercice)">La date d'effet de l'avenant doit être comprise entre la date d'effet et la date d'echeance de l'exercice</span>
@@ -84,13 +84,13 @@
 
                         </div>
 
-                         <div class="p-field p-col-12 p-md-4">
+                         <div class="p-field p-col-12 p-md-3">
                             <label for="nom">Numéro de l'avenant garant<sup style="color: red !important;"></sup></label>
                             <input [disabled]="!historiqueAvenant.dateEffet || historiqueAvenant.dateAvenant > historiqueAvenant.dateEffet " id="numero" name="numeroGarant" [(ngModel)]="historiqueAvenant.numeroGarant"  type="number" min="0" pInputText [disabled]="etat === 'VIEW'">
                         </div>
 
                                                                 <!-- Motif -->
-                <div class="p-field p-col-12 p-md-6 p-mt-1">
+                <div class="p-field p-col-12 p-md-3 p-mt-1">
                     <label for="observation">Motif<sup style="color: red;">*</sup></label>
                     <input 
                         id="observation"
@@ -108,13 +108,12 @@
                 </div>
 
                     <!-- Import Excel -->
-                 <div class="p-field p-col-12 p-md-4">
+                 <div class="p-field p-col-12 p-md-3">
                     <label for="excelFile">Importer le fichier Excel<sup style="color: red;">*</sup></label>
                     <input 
                     [disabled]="!historiqueAvenant.numeroGarant ||
                      !historiqueAvenant.exercice ||
                      !historiqueAvenant.observation ||
-                     !historiqueAvenant.groupe ||
                      !historiqueAvenant.dateAvenant ||
                      !historiqueAvenant.dateEffet ||
                      !historiqueAvenant.typeDemandeur || 
@@ -130,7 +129,7 @@
                     />
                 </div>
 
-                    <div class="p-field p-col-12 p-md-2 p-mt-3">
+                    <div class="p-field p-col-12 p-md-3 p-mt-3">
                         <button
                         (click)="onDownloadModel()"
                             pButton icon="pi pi-upload"
@@ -408,6 +407,7 @@
           <th>Prénom</th>
           <th>Genre</th>
           <th>Qualité</th>
+          <th>Groupe</th>
           <th>Lieu</th>
           <th>Date Naissance</th>
           <th>Date Incorporation</th>
@@ -425,6 +425,7 @@
           <td>{{ assure.prenom }}</td>
           <td>{{ assure.genre?.libelle }}</td>
           <td>{{ assure.qualiteAssure?.libelle }}</td>
+          <td>{{ assure.groupe?.libelle }}</td>
           <td>{{ assure.lieuNaissance }}</td>
           <td>{{ assure.dateNaissance }}</td>
           <td>{{ assure.dateIncorporation }}</td>
