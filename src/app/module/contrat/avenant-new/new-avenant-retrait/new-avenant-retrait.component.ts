@@ -168,9 +168,6 @@ onDownloadModel(): void {
   FileSaver.saveAs(blob, 'modele_avenant_retrait.xlsx');
 }
 
-
-
-
   onUploadFile(event: any): void {
     const target: DataTransfer = <DataTransfer>(event.target);
     if (target.files.length !== 1) {
@@ -276,8 +273,6 @@ onDisplayAdherentByFamily(response: string[]) {
 
 }
 
-
-
 onConfirmRetraitSaved() {
 
     this.historiqueAvenantNewDTO.aderantsNew = this.allAdherents;
@@ -300,7 +295,6 @@ onConfirmRetraitSaved() {
         }
       }
     );  
-
 
     }
 

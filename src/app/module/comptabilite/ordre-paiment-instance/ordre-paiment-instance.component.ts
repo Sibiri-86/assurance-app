@@ -1062,11 +1062,12 @@ export class OrdrePaimentInstanceComponent implements OnInit {
           const todayDate = new Date();
           const todayDateFormate = formatDate(todayDate, 'dd/MM/yyyy', 'en-fr');
 
-          if(todayDateFormate <= selectedDateFormate){
-            this.isInValidateDate = false;
+          if(selectedDateFormate > todayDateFormate  ){
+           this.isInValidateDate = true;
           }
-          if(todayDateFormate > selectedDateFormate){
-            this.isInValidateDate = true;
+          if(selectedDateFormate <= todayDateFormate){
+    
+             this.isInValidateDate = false;
           }
     
     

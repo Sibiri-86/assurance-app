@@ -94,8 +94,6 @@ export class NewAvenantIncorporationWrittingComponent implements OnInit {
     this.isTodisplayEntetDialogue = true;
   }
 
-
-
   onGetQualiteAssure(){
     this.qualiteAssureService.$getQualiteAssures().subscribe(
       resp => {
